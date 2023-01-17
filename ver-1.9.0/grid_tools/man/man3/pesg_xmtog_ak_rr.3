@@ -1,0 +1,101 @@
+.TH "pesg::xmtog_ak_rr" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::xmtog_ak_rr
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBxmtog_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, xm, lat, lon, ff)"
+.br
+.RI "For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point\&. "
+.ti -1c
+.RI "subroutine \fBxmtog_ak_rr_m\fP (A, K, plat, plon, pazi, xm, lat, lon, ff)"
+.br
+.RI "Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 53 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::xmtog_ak_rr::xmtog_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) lat, real(dp), intent(out) lon, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point\&. If instead the transformation is invalid for any reason, then return the raised failure flag, FF=\&.true\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameters of the ESG mapping 
+.br
+\fIk\fP parameters of the ESG mapping 
+.br
+\fIplat\fP radians latitude of the projection center of the mapping 
+.br
+\fIplon\fP radians longitude of the projection center of the mapping 
+.br
+\fIpazi\fP Azimuth of the orientation of the mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing grid point in radians 
+.br
+\fIxm\fP grid-space 2-vector coordinates of a point to be mapped 
+.br
+\fIlat\fP radians latitude of the point 
+.br
+\fIlon\fP radians longitude of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2062 of file pesg\&.f90\&.
+.SS "subroutine pesg::xmtog_ak_rr::xmtog_ak_rr_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) lat, real(dp), intent(out) lon, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians)\&. If the transformation is invalid for any reason, return instead with a raised failure flag, FF= \&.true\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameter of an ESG mapping 
+.br
+\fIk\fP parameter of an ESG mapping 
+.br
+\fIplat\fP radians latitude of the projection center of the mapping 
+.br
+\fIplon\fP radians longitude of the projection center of the mapping 
+.br
+\fIpazi\fP Azimuth of orientation of the mapping at its center 
+.br
+\fIxm\fP center-relative 2-vector map space coordinates of a point 
+.br
+\fIlat\fP radians latitude of the point 
+.br
+\fIlon\fP radians longitude of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2014 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

@@ -1,0 +1,162 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atmosphere.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atmosphere.F90 \- Process atmospheric fields\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBatmosphere\fP"
+.br
+.RI "Process atmospheric fields\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBatmosphere::atmosphere_driver\fP (localpet)"
+.br
+.RI "Driver routine to process for atmospheric fields\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::cleanup_all_target_atm_data\fP"
+.br
+.RI "Cleanup target grid atmospheric field objects\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::cleanup_target_atm_b4adj_data\fP"
+.br
+.RI "Cleanup atmospheric field (before adjustment) objects\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::compute_zh\fP"
+.br
+.RI "Compute vertical level height\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::convert_winds\fP"
+.br
+.RI "Convert 3-d component winds to u and v\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::create_atm_b4adj_esmf_fields\fP"
+.br
+.RI "Create target grid field objects to hold data before vertical interpolation\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::create_atm_esmf_fields\fP"
+.br
+.RI "Create target grid field objects\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::horiz_interp_thomp_mp_climo\fP"
+.br
+.RI "Horizontally interpolate thompson microphysics data to the target model grid\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::newpr1\fP (localpet)"
+.br
+.RI "Computes 3-D pressure given an adjusted surface pressure\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::newps\fP (localpet)"
+.br
+.RI "Computes adjusted surface pressure given a new terrain height\&. "
+.ti -1c
+.RI "subroutine, public \fBatmosphere::read_vcoord_info\fP"
+.br
+.RI "Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::RSEARCH\fP (IM, KM1, IXZ1, KXZ1, Z1, KM2, IXZ2, KXZ2, Z2, IXL2, KXL2, L2)"
+.br
+.RI "Search for a surrounding real interval\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::TERP3\fP (IM, IXZ1, IXQ1, IXZ2, IXQ2, NM, NXQ1, NXQ2, KM1, KXZ1, KXQ1, Z1, Q1, KM2, KXZ2, KXQ2, Z2, Q2)"
+.br
+.RI "Cubically interpolate in one dimension\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::VINTG\fP"
+.br
+.RI "Vertically interpolate upper-air fields\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::VINTG_THOMP_MP_CLIMO\fP"
+.br
+.RI "Vertically interpolate atmospheric fields to target FV3 grid\&. "
+.ti -1c
+.RI "subroutine \fBatmosphere::VINTG_WAM\fP (YEAR, MONTH, DAY, HOUR)"
+.br
+.RI "Vertically extend model top into thermosphere for whole atmosphere model\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::dzdt_b4adj_target_grid\fP"
+.br
+.RI "vertical vel before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::pres_b4adj_target_grid\fP"
+.br
+.RI "3-d pres before terrain adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::pres_target_grid\fP"
+.br
+.RI "3-d pressure "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::ps_b4adj_target_grid\fP"
+.br
+.RI "sfc pres before terrain adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::qnifa_climo_b4adj_target_grid\fP"
+.br
+.RI "number concentration of ice friendly aerosols before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::qnwfa_climo_b4adj_target_grid\fP"
+.br
+.RI "number concentration of water friendly aerosols before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::temp_b4adj_target_grid\fP"
+.br
+.RI "temp before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::terrain_interp_to_target_grid\fP"
+.br
+.RI "Input grid terrain interpolated to target grid\&. "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::thomp_pres_climo_b4adj_target_grid\fP"
+.br
+.RI "pressure of each level on target grid "
+.ti -1c
+.RI "type(esmf_field), dimension(:), allocatable \fBatmosphere::tracers_b4adj_target_grid\fP"
+.br
+.RI "tracers before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::wind_b4adj_target_grid\fP"
+.br
+.RI "3-d wind before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::wind_s_target_grid\fP"
+.br
+.RI "3-d wind, 'south' edge "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::wind_target_grid\fP"
+.br
+.RI "3-d wind, grid box center "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::wind_w_target_grid\fP"
+.br
+.RI "3-d wind, 'west' edge "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Process atmospheric fields\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBatmosphere\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

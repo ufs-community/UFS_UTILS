@@ -1,0 +1,230 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/module_ncio.f90" 3 "Tue Jan 17 2023" "Version 1.9.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/module_ncio.f90 \- Functions to read and write netcdf files\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "type \fBmodule_ncio::ncio\fP"
+.br
+.in -1c
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBmodule_ncio\fP"
+.br
+.RI "Functions to read and write netcdf files\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBmodule_ncio::add_new_var_2d\fP (this, varname, dname1, dname2, lname, units)"
+.br
+.RI "Add a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::add_new_var_3d\fP (this, varname, dname1, dname2, dname3, lname, units)"
+.br
+.RI "Add a new variable to sfc_data\&.nc with dimensions (Time, yaxis_1, xaxis_1)\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::close_nc\fP (this)"
+.br
+.RI "Close a netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::convert_theta2t_2dgrid\fP (this, nx, ny, ps, t2)"
+.br
+.RI "Convert theta T (Kelvin) to T (deg C)\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_att_nc_int\fP (this, attname, ival)"
+.br
+.RI "Get integer attribute in wrf netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_att_nc_real\fP (this, attname, rval)"
+.br
+.RI "Get attribute in wrf netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_att_nc_string\fP (this, attname, string)"
+.br
+.RI "Get string attribute in wrf netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_dim_nc\fP (this, dimname, dimvalue)"
+.br
+.RI "Get dimensions in netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_char\fP (this, varname, ilength, field)"
+.br
+.RI "Read in character type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_char_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_char_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_char_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Read in 3D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_double\fP (this, varname, ilength, field)"
+.br
+.RI "Read in double type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_double_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_double_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_double_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Read in 3D double type field\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_int\fP (this, varname, ilength, field)"
+.br
+.RI "Read in integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_int_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D integer variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_int_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_int_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Read in 3D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_real\fP (this, varname, ilength, field)"
+.br
+.RI "Read in real type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_real_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_real_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_real_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Read in 3D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_short\fP (this, varname, ilength, field)"
+.br
+.RI "Read in short type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_short_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D short type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::get_var_nc_short_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D short type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::handle_err\fP (this, status)"
+.br
+.RI "Handle netCDF errors\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::open_nc\fP (this, filename, action, debug_level)"
+.br
+.RI "Open a netcdf file, set initial debug level\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_char\fP (this, varname, ilength, field)"
+.br
+.RI "Replace character type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_char_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Replace 1D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_char_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Replace 2D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_char_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Replace 3D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_double\fP (this, varname, ilength, field)"
+.br
+.RI "Replace double type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_double_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Replace 1D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_double_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Replace 2D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_double_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Replace 3D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_int\fP (this, varname, ilength, field)"
+.br
+.RI "Replace integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_int_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Replace 1D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_int_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Replace 2D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_int_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Replace 3D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_real\fP (this, varname, ilength, field)"
+.br
+.RI "Replace real type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_real_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Replace 1D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_real_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Replace 2D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBmodule_ncio::replace_var_nc_real_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Replace 3D real type variable\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions to read and write netcdf files\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition in file \fBmodule_ncio\&.f90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.

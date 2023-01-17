@@ -1,0 +1,89 @@
+.TH "pmat4::mobius" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::mobius
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcmobius\fP (aa, bb, cc, dd, vz, vw)"
+.br
+.RI "Perform a complex Mobius transformation from cartesian vz to cartesian vw where the transformation coefficients are the standard aa,bb,cc,dd\&. "
+.ti -1c
+.RI "subroutine \fBzmobius\fP (aa, bb, cc, dd, z, infz, w, infw)"
+.br
+.RI "Perform a complex Mobius transformation from (z,infz) to (w,infw) where the transformation coefficients are the standard aa,bb,cc,dd\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 108 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat4::mobius::cmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, real(dp), dimension(3), intent(in) vz, real(dp), dimension(3), intent(out) vw)\fC [private]\fP"
+
+.PP
+Perform a complex Mobius transformation from cartesian vz to cartesian vw where the transformation coefficients are the standard aa,bb,cc,dd\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIaa\fP Mobius transformation coefficient 
+.br
+\fIbb\fP Mobius transformation coefficient 
+.br
+\fIcc\fP Mobius transformation coefficient 
+.br
+\fIdd\fP Mobius transformation coefficient 
+.br
+\fIvz\fP Cartesian unit 3-vector representation of input argument 
+.br
+\fIvw\fP Cartesian unit 3-vector representation of output 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2312 of file pmat4\&.f90\&.
+.SS "subroutine pmat4::mobius::zmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) z, logical, intent(in) infz, complex(dpc), intent(out) w, logical, intent(out) infw)\fC [private]\fP"
+
+.PP
+Perform a complex Mobius transformation from (z,infz) to (w,infw) where the transformation coefficients are the standard aa,bb,cc,dd\&. Infz is \&.TRUE\&. only when z is at complex infinity; likewise infw and w\&. For these infinite cases, it is important that numerical z==(0,0)\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIaa\fP Mobius transformation complex coefficient 
+.br
+\fIbb\fP Mobius transformation complex coefficient 
+.br
+\fIcc\fP Mobius transformation complex coefficient 
+.br
+\fIdd\fP Mobius transformation complex coefficient 
+.br
+\fIz\fP complex input argument of the Mobius transformation 
+.br
+\fIinfz\fP logical indicator for z being a point at infinity 
+.br
+\fIw\fP complex output of the Mobius transformation 
+.br
+\fIinfw\fP logical indicator for w being a point at infinity 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2277 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

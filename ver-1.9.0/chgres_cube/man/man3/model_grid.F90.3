@@ -1,0 +1,198 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/model_grid.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/model_grid.F90 \- Specify input and target model grids\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBmodel_grid\fP"
+.br
+.RI "Sets up the ESMF grid objects for the input data grid and target FV3 grid\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBmodel_grid::cleanup_input_target_grid_data\fP"
+.br
+.RI "Deallocate all esmf grid objects\&. "
+.ti -1c
+.RI "subroutine, public \fBmodel_grid::define_input_grid\fP (localpet, npets)"
+.br
+.RI "Driver routine to setup the esmf grid object for the input grid\&. "
+.ti -1c
+.RI "subroutine \fBmodel_grid::define_input_grid_gaussian\fP (npets)"
+.br
+.RI "Define grid object for input data on global gaussian grids\&. "
+.ti -1c
+.RI "subroutine \fBmodel_grid::define_input_grid_grib2\fP (npets)"
+.br
+.RI "Define input grid object for grib2 input data\&. "
+.ti -1c
+.RI "subroutine \fBmodel_grid::define_input_grid_mosaic\fP (localpet, npets)"
+.br
+.RI "Define input grid for tiled data using the 'mosaic', 'grid' and orography files\&. "
+.ti -1c
+.RI "subroutine, public \fBmodel_grid::define_target_grid\fP (localpet, npets)"
+.br
+.RI "Setup the esmf grid object for the target grid\&. "
+.ti -1c
+.RI "subroutine \fBmodel_grid::gdt_to_gds\fP (igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)"
+.br
+.RI "Convert the GRIB2 grid description template to to the GRIB1 grid description section\&. "
+.ti -1c
+.RI "subroutine \fBmodel_grid::get_model_latlons\fP (mosaic_file, orog_dir, num_tiles, tile, i_tile, j_tile, ip1_tile, jp1_tile, latitude, latitude_s, latitude_w, longitude, longitude_s, longitude_w)"
+.br
+.RI "Read model lat/lons for a single tile from the 'grid' specificaton file\&. "
+.ti -1c
+.RI "subroutine \fBmodel_grid::get_model_mask_terrain\fP (orog_file, idim, jdim, mask, terrain)"
+.br
+.RI "Read the model land mask and terrain for a single tile from the orography file\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, public \fBmodel_grid::i_input\fP"
+.br
+.RI "i-dimension of input grid (or of each global tile) "
+.ti -1c
+.RI "integer, public \fBmodel_grid::i_target\fP"
+.br
+.RI "i dimension of each global tile, or of a nest, target grid\&. "
+.ti -1c
+.RI "type(esmf_grid), public \fBmodel_grid::input_grid\fP"
+.br
+.RI "input grid esmf grid object "
+.ti -1c
+.RI "character(len=50), public \fBmodel_grid::input_grid_type\fP = 'latlon'"
+.br
+.RI "map projection of input grid "
+.ti -1c
+.RI "integer, public \fBmodel_grid::ip1_input\fP"
+.br
+.RI "i_input plus 1 "
+.ti -1c
+.RI "integer, public \fBmodel_grid::ip1_target\fP"
+.br
+.RI "ip1_target plus 1 "
+.ti -1c
+.RI "integer, public \fBmodel_grid::j_input\fP"
+.br
+.RI "j-dimension of input grid (or of each global tile) "
+.ti -1c
+.RI "integer, public \fBmodel_grid::j_target\fP"
+.br
+.RI "j dimension of each global tile, or of a nest, target grid\&. "
+.ti -1c
+.RI "integer, public \fBmodel_grid::jp1_input\fP"
+.br
+.RI "j_input plus 1 "
+.ti -1c
+.RI "integer, public \fBmodel_grid::jp1_target\fP"
+.br
+.RI "jp1_target plus 1 "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::landmask_target_grid\fP"
+.br
+.RI "land mask target grid - '1' land; '0' non-land "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::latitude_input_grid\fP"
+.br
+.RI "latitude of grid center, input grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::latitude_s_input_grid\fP"
+.br
+.RI "latitude of 'south' edge of grid box, input grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::latitude_s_target_grid\fP"
+.br
+.RI "latitude of 'south' edge of grid box, target grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::latitude_target_grid\fP"
+.br
+.RI "latitude of grid center, target grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::latitude_w_input_grid\fP"
+.br
+.RI "latitude of 'west' edge of grid box, input grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::latitude_w_target_grid\fP"
+.br
+.RI "latitude of 'west' edge of grid box, target grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::longitude_input_grid\fP"
+.br
+.RI "longitude of grid center, input grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::longitude_s_input_grid\fP"
+.br
+.RI "longitude of 'south' edge of grid box, input grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::longitude_s_target_grid\fP"
+.br
+.RI "longitude of 'south' edge of grid box, target grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::longitude_target_grid\fP"
+.br
+.RI "longitude of grid center, target grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::longitude_w_input_grid\fP"
+.br
+.RI "longitude of 'west' edge of grid box, input grid "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::longitude_w_target_grid\fP"
+.br
+.RI "longitude of 'west' edge of grid box, target grid "
+.ti -1c
+.RI "integer, public \fBmodel_grid::lsoil_target\fP = 4"
+.br
+.RI "Number of soil layers, target grid\&. "
+.ti -1c
+.RI "integer, public \fBmodel_grid::num_tiles_input_grid\fP"
+.br
+.RI "Number of tiles, input grid\&. "
+.ti -1c
+.RI "integer, public \fBmodel_grid::num_tiles_target_grid\fP"
+.br
+.RI "Number of tiles, target grid\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::seamask_target_grid\fP"
+.br
+.RI "sea mask target grid - '1' non-land; '0' land "
+.ti -1c
+.RI "type(esmf_grid), public \fBmodel_grid::target_grid\fP"
+.br
+.RI "target grid esmf grid object\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::terrain_target_grid\fP"
+.br
+.RI "terrain height target grid "
+.ti -1c
+.RI "character(len=5), dimension(:), allocatable, public \fBmodel_grid::tiles_target_grid\fP"
+.br
+.RI "Tile names of target grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Specify input and target model grids\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBmodel_grid\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

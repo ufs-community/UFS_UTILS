@@ -1,0 +1,1285 @@
+.TH "pmat5" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat5 \- Utility routines for orienting the globe and basic geographical mappings\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBctoc_schm\fP"
+.br
+.ti -1c
+.RI "interface \fBctog\fP"
+.br
+.ti -1c
+.RI "interface \fBctogr\fP"
+.br
+.ti -1c
+.RI "interface \fBframetwist\fP"
+.br
+.ti -1c
+.RI "interface \fBgrtoc\fP"
+.br
+.ti -1c
+.RI "interface \fBgtoc\fP"
+.br
+.ti -1c
+.RI "interface \fBgtoframe\fP"
+.br
+.ti -1c
+.RI "interface \fBininmap\fP"
+.br
+.ti -1c
+.RI "interface \fBinivmap\fP"
+.br
+.ti -1c
+.RI "interface \fBparaframe\fP"
+.br
+.ti -1c
+.RI "interface \fBplctoc\fP"
+.br
+.ti -1c
+.RI "interface \fBplrot\fP"
+.br
+.ti -1c
+.RI "interface \fBplroti\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdctoc\fP (s, xc1, xc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
+.ti -1c
+.RI "subroutine \fBdctocd\fP (s, xc1, xc2, dxc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
+.ti -1c
+.RI "subroutine \fBdctocdd\fP (s, xc1, xc2, dxc2, ddxc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
+.ti -1c
+.RI "subroutine \fBdctog\fP (xe, dlat, dlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBdctogr\fP (xe, rlat, rlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (radians) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBdgrtoc\fP (rlat, rlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates\&. "
+.ti -1c
+.RI "subroutine \fBdgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBdgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBdgtoc\fP (dlat, dlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBdgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBdgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBdininmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.ti -1c
+.RI "subroutine \fBdinivmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) at the viewing nadir\&. "
+.ti -1c
+.RI "subroutine \fBdplrot\fP (rot3, n, x, y, z)"
+.br
+.RI "Apply a constant rotation to a three dimensional polyline\&. "
+.ti -1c
+.RI "subroutine \fBdplroti\fP (rot3, n, x, y, z)"
+.br
+.RI "Invert the rotation of a three-dimensional polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBframetwist\fP (xp, yp, zp, xv, yv, zv, twist)"
+.br
+.RI "Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. "
+.ti -1c
+.RI "subroutine \fBgtoframem\fP (plat, plon, orth)"
+.br
+.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.ti -1c
+.RI "subroutine \fBgtoframev\fP (plat, plon, xp, yp, zp)"
+.br
+.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.ti -1c
+.RI "subroutine, public \fBparaframe\fP (xp, yp, zp, xv, yv, zv)"
+.br
+.RI "Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. "
+.ti -1c
+.RI "subroutine, public \fBplctoc\fP (s, n, x, y, z)"
+.br
+.RI "Perform Schmidt transformation with scaling parameter s to a polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBplrot\fP (rot3, n, x, y, z)"
+.br
+.RI "Apply a constant rotation to a three dimensional polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBplroti\fP (rot3, n, x, y, z)"
+.br
+.RI "Invert the rotation of a three-dimensional polyline\&. "
+.ti -1c
+.RI "subroutine \fBsctoc\fP (s, xc1, xc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
+.ti -1c
+.RI "subroutine \fBsctocd\fP (s, xc1, xc2, dxc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
+.ti -1c
+.RI "subroutine \fBsctocdd\fP (s, xc1, xc2, dxc2, ddxc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
+.ti -1c
+.RI "subroutine \fBsctog\fP (xe, dlat, dlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBsctogr\fP (xe, rlat, rlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (radians) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBsframetwist\fP (sxp, syp, szp, sxv, syv, szv, stwist)"
+.br
+.RI "Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. "
+.ti -1c
+.RI "subroutine \fBsgrtoc\fP (rlat, rlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates\&. "
+.ti -1c
+.RI "subroutine \fBsgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBsgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBsgtoc\fP (dlat, dlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBsgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBsgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBsgtoframem\fP (splat, splon, sorth)"
+.br
+.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.ti -1c
+.RI "subroutine \fBsgtoframev\fP (splat, splon, sxp, syp, szp)"
+.br
+.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.ti -1c
+.RI "subroutine \fBsininmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.ti -1c
+.RI "subroutine \fBsinivmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) at the viewing nadir\&. "
+.ti -1c
+.RI "subroutine \fBsparaframe\fP (sxp, syp, szp, sxv, syv, szv)"
+.br
+.RI "Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utility routines for orienting the globe and basic geographical mappings\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat5::dctoc (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2)"
+
+.PP
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Schmidt scaling parameter\&. 
+.br
+\fIxc1\fP input cartesian 3-vector\&. 
+.br
+\fIxc2\fP output cartesian unit 3-vector\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 916 of file pmat5\&.f90\&.
+.PP
+References pietc::u1, and pietc::u2\&.
+.SS "subroutine pmat5::dctocd (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2, real(dp), dimension(3,3), intent(out) dxc2)"
+
+.PP
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Schmidt scaling parameter\&. 
+.br
+\fIxc1\fP input cartesian 3-vector\&. 
+.br
+\fIxc2\fP output cartesian unit 3-vector\&. 
+.br
+\fIdxc2\fP jacobian 1st derivative, d(xc2)/d(xc1)\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 947 of file pmat5\&.f90\&.
+.PP
+References pietc::u0, pietc::u1, and pietc::u2\&.
+.SS "subroutine pmat5::dctocdd (real(dp), intent(in) s, real(dp), dimension(3), intent(inout) xc1, real(dp), dimension(3), intent(inout) xc2, real(dp), dimension(3,3), intent(out) dxc2, real(dp), dimension(3,3,3), intent(out) ddxc2)"
+
+.PP
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Schmidt scaling parameter\&. 
+.br
+\fIxc1\fP input cartesian 3-vector\&. 
+.br
+\fIxc2\fP output cartesian unit 3-vector\&. 
+.br
+\fIdxc2\fP jacobian 1st derivative, d(xc2)/d(xc1)\&. 
+.br
+\fIddxc2\fP 2nd derivative, d^2(xc2)/(d(xc1)d(xc1))\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 988 of file pmat5\&.f90\&.
+.PP
+References pietc::u0, pietc::u1, and pietc::u2\&.
+.SS "subroutine pmat5::dctog (real(dp), dimension(3), intent(in) xe, real(dp), intent(out) dlat, real(dp), intent(out) dlon)"
+
+.PP
+Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxe\fP Earth-centered cartesian unit 3-vector\&. 
+.br
+\fIdlat\fP degrees latitude\&. 
+.br
+\fIdlon\fP degrees longitude\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 398 of file pmat5\&.f90\&.
+.PP
+References pietc::rtod, and pietc::u0\&.
+.SS "subroutine pmat5::dctogr (real(dp), dimension(3), intent(in) xe, real(dp), intent(out) rlat, real(dp), intent(out) rlon)"
+
+.PP
+Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (radians) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxe\fP Earth-centered cartesian unit 3-vector\&. 
+.br
+\fIrlat\fP radians latitude\&. 
+.br
+\fIrlon\fP radians longitude\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 198 of file pmat5\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine pmat5::dgrtoc (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates\&. Double proecision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 237 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::dgrtocd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.br
+\fIdxedlat\fP Derivative, d(xe)/d(rlat)\&. 
+.br
+\fIdxedlon\fP Derivative, d(xe)/d(rlon)\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 280 of file pmat5\&.f90\&.
+.PP
+References pietc::u0\&.
+.PP
+Referenced by sgrtocd()\&.
+.SS "subroutine pmat5::dgrtocdd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.br
+\fIdxedlat\fP Derivative, d(xe)/d(rlat)\&. 
+.br
+\fIdxedlon\fP Derivative, d(xe)/d(rlon)\&. 
+.br
+\fIddxedlatdlat\fP Derivative, d^2(xe)/(d(rlat)d(rlat))\&. 
+.br
+\fIddxedlatdlon\fP Derivative, d^2(xe)/(d(rlat)d(rlon))\&. 
+.br
+\fIddxedlondlon\fP Derivative, d^2(xe)/(d(rlon)d(rlon))\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 340 of file pmat5\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine pmat5::dgtoc (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe)"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdlat\fP degrees latitude\&. 
+.br
+\fIdlon\fP degrees longitude\&. 
+.br
+\fIxe\fP cartesian unit 3-vector\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 445 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor\&.
+.SS "subroutine pmat5::dgtocd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the partial derivatives of xe wrt latitude and longitude\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdlat\fP degrees latitude\&. 
+.br
+\fIdlon\fP degrees longitude\&. 
+.br
+\fIxe\fP cartesian unit 3-vector\&. 
+.br
+\fIdxedlat\fP derivative, d(xe)/d(dlat)\&. 
+.br
+\fIdxedlon\fP derivative, d(xe)/d(dlon)\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 496 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.PP
+Referenced by sgtocd()\&.
+.SS "subroutine pmat5::dgtocdd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the 1st and 2nd partial derivatives of xe wrt latitude and longitude\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdlat\fP degrees latitude\&. 
+.br
+\fIdlon\fP degrees longitude\&. 
+.br
+\fIxe\fP cartesian unit 3-vector\&. 
+.br
+\fIdxedlat\fP d(xe)/d(dlat)\&. 
+.br
+\fIdxedlon\fP d(xe)/d(dlon)\&. 
+.br
+\fIddxedlatdlat\fP derivative, d^2(xe)/(d(dlat)d(dlat))\&. 
+.br
+\fIddxedlatdlon\fP derivative, d^2(xe)/(d(dlat)d(dlon))\&. 
+.br
+\fIddxedlondlon\fP derivative, d^2(xe)/(d(dlon)d(dlon))\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 565 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.PP
+Referenced by sgrtocdd(), and sgtocdd()\&.
+.SS "subroutine pmat5::dininmap (real(dp), intent(in) alon0, real(dp), intent(in) alat0, real(dp), dimension(3,3), intent(out) rot3)"
+
+.PP
+Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalon0\fP geographical longitude (degrees) of projection center\&. 
+.br
+\fIalat0\fP geographical latitude (degrees) of projection center\&. 
+.br
+\fIrot3\fP rotation matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.SS "subroutine pmat5::dinivmap (real(dp), intent(in) alon0, real(dp), intent(in) alat0, real(dp), dimension(3,3), intent(out) rot3)"
+
+.PP
+Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) at the viewing nadir\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalon0\fP geographical longitude (degrees) of viewing nadir\&. 
+.br
+\fIalat0\fP geographical latitude (degrees) of viewing nadir\&. 
+.br
+\fIrot3\fP rotation matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 140 of file pmat5\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.SS "subroutine pmat5::dplrot (real(dp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(dp), dimension(n), intent(inout) x, real(dp), dimension(n), intent(inout) y, real(dp), dimension(n), intent(inout) z)\fC [private]\fP"
+
+.PP
+Apply a constant rotation to a three dimensional polyline\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrot3\fP rotation matrix\&. 
+.br
+\fIn\fP number of points in the polyline\&. 
+.br
+\fIx\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIy\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIz\fP cartesian components of the three dimensional polyline\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1084 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::dplroti (real(dp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(dp), dimension(n), intent(inout) x, real(dp), dimension(n), intent(inout) y, real(dp), dimension(n), intent(inout) z)\fC [private]\fP"
+
+.PP
+Invert the rotation of a three-dimensional polyline\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrot3\fP rotation to be inverted\&. 
+.br
+\fIn\fP number of points in the polyline\&. 
+.br
+\fIx\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIy\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIz\fP cartesian components of the three dimensional polyline\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1106 of file pmat5\&.f90\&.
+.SS "subroutine, public \fBpmat5::frametwist\fP (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(in) xv, real(dp), dimension(3), intent(in) yv, real(dp), dimension(3), intent(in) zv, real(dp), intent(out) twist)"
+
+.PP
+Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. Note that, by symmetry, transposing P and V leads to the opposite twist\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxp\fP P-frame cartesian X-vector\&. 
+.br
+\fIyp\fP P-frame cartesian Y-vector\&. 
+.br
+\fIzp\fP P-frame cartesian Z-vector\&. 
+.br
+\fIxv\fP V-frame cartesian X-vector\&. 
+.br
+\fIyv\fP V-frame cartesian Y-vector\&. 
+.br
+\fIzv\fP V-frame cartesian Z-vector\&. 
+.br
+\fItwist\fP relative rotation angle (radians) of frames\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 778 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoframem (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3,3), intent(out) orth)\fC [private]\fP"
+
+.PP
+From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIplat\fP latitude (degrees) of point\&. 
+.br
+\fIplon\fP longitude (degrees) of point\&. 
+.br
+\fIorth\fP orthonormal matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 617 of file pmat5\&.f90\&.
+.PP
+References gtoframev()\&.
+.PP
+Referenced by sgtoframem()\&.
+.SS "subroutine pmat5::gtoframev (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3), intent(out) xp, real(dp), dimension(3), intent(out) yp, real(dp), dimension(3), intent(out) zp)\fC [private]\fP"
+
+.PP
+Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIplat\fP latitude (degrees) of point\&. 
+.br
+\fIplon\fP longitude (degrees) of point\&. 
+.br
+\fIxp\fP unit X-basis vector of cartesian frame\&. 
+.br
+\fIyp\fP unit Y-basis vector of cartesian frame\&. 
+.br
+\fIzp\fP unit Z-basis vector of cartesian frame\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 662 of file pmat5\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.PP
+Referenced by gtoframem(), and sgtoframev()\&.
+.SS "subroutine, public \fBpmat5::paraframe\fP (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(out) xv, real(dp), dimension(3), intent(out) yv, real(dp), dimension(3), intent(in) zv)"
+
+.PP
+Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxp\fP reference orthonormal P-frame cartesian X-vector\&. 
+.br
+\fIyp\fP reference orthonormal P-frame cartesian Y-vector\&. 
+.br
+\fIzp\fP reference orthonormal P-frame cartesian Z-vector\&. 
+.br
+\fIxv\fP V-frame cartesian X-vector\&. 
+.br
+\fIyv\fP V-frame cartesian Y-vector\&. 
+.br
+\fIzv\fP dependent point zenith, V-frame cartesian Z-vector\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 719 of file pmat5\&.f90\&.
+.SS "subroutine, public \fBpmat5::plctoc\fP (real(sp), intent(in) s, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
+
+.PP
+Perform Schmidt transformation with scaling parameter s to a polyline\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Schmidt scaling parameter\&. 
+.br
+\fIn\fP number of points in the polyline\&. 
+.br
+\fIx\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIy\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIz\fP cartesian components of the three dimensional polyline\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1128 of file pmat5\&.f90\&.
+.SS "subroutine, public \fBpmat5::plrot\fP (real(sp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
+
+.PP
+Apply a constant rotation to a three dimensional polyline\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrot3\fP rotation matrix\&. 
+.br
+\fIn\fP number of points in the polyline\&. 
+.br
+\fIx\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIy\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIz\fP cartesian components of the three dimensional polyline\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1040 of file pmat5\&.f90\&.
+.PP
+References pietc::t\&.
+.SS "subroutine, public \fBpmat5::plroti\fP (real(sp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)"
+
+.PP
+Invert the rotation of a three-dimensional polyline\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrot3\fP rotation to be inverted\&. 
+.br
+\fIn\fP number of points in the polyline\&. 
+.br
+\fIx\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIy\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIz\fP cartesian components of the three dimensional polyline\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1062 of file pmat5\&.f90\&.
+.PP
+References pietc::t\&.
+.SS "subroutine pmat5::sctoc (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2)\fC [private]\fP"
+
+.PP
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Schmidt scaling parameter 
+.br
+\fIxc1\fP input cartesian 3-vector 
+.br
+\fIxc2\fP output cartesian unit 3-vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 795 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctocd (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2, real(sp), dimension(3,3), intent(out) dxc2)"
+
+.PP
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Schmidt scaling parameter\&. 
+.br
+\fIxc1\fP input cartesian 3-vector\&. 
+.br
+\fIxc2\fP output cartesian unit 3-vector\&. 
+.br
+\fIdxc2\fP jacobian 1st derivative, d(xc2)/d(xc1)\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 825 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctocdd (real(sp), intent(in) s, real(sp), dimension(3), intent(inout) xc1, real(sp), dimension(3), intent(inout) xc2, real(sp), dimension(3,3), intent(out) dxc2, real(sp), dimension(3,3,3), intent(out) ddxc2)"
+
+.PP
+Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Schmidt scaling parameter\&. 
+.br
+\fIxc1\fP input cartesian 3-vector\&. 
+.br
+\fIxc2\fP output cartesian unit 3-vector\&. 
+.br
+\fIdxc2\fP jacobian 1st derivative, d(xc2)/d(xc1)\&. 
+.br
+\fIddxc2\fP 2nd derivative, d^2(xc2)/(d(xc1)d(xc1))\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 866 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctog (real(sp), dimension(3), intent(in) xe, real(sp), intent(out) dlat, real(sp), intent(out) dlon)"
+
+.PP
+Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxe\fP Earth-centered cartesian unit 3-vector\&. 
+.br
+\fIdlat\fP degrees latitude\&. 
+.br
+\fIdlon\fP degrees longitude\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 373 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sctogr (real(sp), dimension(3), intent(in) xe, real(sp), intent(out) rlat, real(sp), intent(out) rlon)"
+
+.PP
+Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (radians) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxe\fP Earth-centered cartesian unit 3-vector\&. 
+.br
+\fIrlat\fP radians latitude\&. 
+.br
+\fIrlon\fP radians longitude\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 173 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sframetwist (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(in) sxv, real(sp), dimension(3), intent(in) syv, real(sp), dimension(3), intent(in) szv, real(sp), intent(out) stwist)"
+
+.PP
+Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. Note that, by symmetry, transposing P and V leads to the opposite twist\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsxp\fP P-frame cartesian X-vector\&. 
+.br
+\fIsyp\fP P-frame cartesian Y-vector\&. 
+.br
+\fIszp\fP P-frame cartesian Z-vector\&. 
+.br
+\fIsxv\fP V-frame cartesian X-vector\&. 
+.br
+\fIsyv\fP V-frame cartesian Y-vector\&. 
+.br
+\fIszv\fP V-frame cartesian Z-vector\&. 
+.br
+\fIstwist\fP relative rotation angle (radians) of frames\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 751 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sgrtoc (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe)"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates\&. Single proecision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 220 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sgrtocd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.br
+\fIdxedlat\fP Derivative, d(xe)/d(rlat)\&. 
+.br
+\fIdxedlon\fP Derivative, d(xe)/d(rlon)\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 257 of file pmat5\&.f90\&.
+.PP
+References dgrtocd()\&.
+.SS "subroutine pmat5::sgrtocdd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.br
+\fIdxedlat\fP Derivative, d(xe)/d(rlat)\&. 
+.br
+\fIdxedlon\fP Derivative, d(xe)/d(rlon)\&. 
+.br
+\fIddxedlatdlat\fP Derivative, d^2(xe)/(d(rlat)d(rlat))\&. 
+.br
+\fIddxedlatdlon\fP Derivative, d^2(xe)/(d(rlat)d(rlon))\&. 
+.br
+\fIddxedlondlon\fP Derivative, d^2(xe)/(d(rlon)d(rlon))\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 307 of file pmat5\&.f90\&.
+.PP
+References dgtocdd()\&.
+.SS "subroutine pmat5::sgtoc (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe)"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdlat\fP degrees latitude\&. 
+.br
+\fIdlon\fP degrees longitude\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 423 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sgtocd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the partial derivatives of xe wrt latitude and longitude\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdlat\fP degrees latitude\&. 
+.br
+\fIdlon\fP degrees longitude\&. 
+.br
+\fIxe\fP cartesian unit 3-vector\&. 
+.br
+\fIdxedlat\fP derivative, d(xe)/d(dlat)\&. 
+.br
+\fIdxedlon\fP derivative, d(xe)/d(dlon)\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 470 of file pmat5\&.f90\&.
+.PP
+References dgtocd()\&.
+.SS "subroutine pmat5::sgtocdd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the 1st and 2nd partial derivatives of xe wrt latitude and longitude\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdlat\fP degrees latitude\&. 
+.br
+\fIdlon\fP degrees longitude\&. 
+.br
+\fIxe\fP cartesian unit 3-vector\&. 
+.br
+\fIdxedlat\fP derivative, d(xe)/d(dlat)\&. 
+.br
+\fIdxedlon\fP derivative, d(xe)/d(dlon)\&. 
+.br
+\fIddxedlatdlat\fP derivative, d^2(xe)/(d(dlat)d(dlat))\&. 
+.br
+\fIddxedlatdlon\fP derivative, d^2(xe)/(d(dlat)d(dlon))\&. 
+.br
+\fIddxedlondlon\fP derivative, d^2(xe)/(d(dlon)d(dlon))\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 528 of file pmat5\&.f90\&.
+.PP
+References dgtocdd()\&.
+.SS "subroutine pmat5::sgtoframem (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3,3), intent(out) sorth)"
+
+.PP
+From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsplat\fP latitude (degrees) of point\&. 
+.br
+\fIsplon\fP longitude (degrees) of point\&. 
+.br
+\fIsorth\fP orthonormal matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 600 of file pmat5\&.f90\&.
+.PP
+References gtoframem()\&.
+.SS "subroutine pmat5::sgtoframev (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3), intent(out) sxp, real(sp), dimension(3), intent(out) syp, real(sp), dimension(3), intent(out) szp)\fC [private]\fP"
+
+.PP
+Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsplat\fP latitude (degrees) of point\&. 
+.br
+\fIsplon\fP longitude (degrees) of point\&. 
+.br
+\fIsxp\fP xp unit X-basis vector of cartesian frame\&. 
+.br
+\fIsyp\fP yp unit Y-basis vector of cartesian frame\&. 
+.br
+\fIszp\fP zp unit Z-basis vector of cartesian frame\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 637 of file pmat5\&.f90\&.
+.PP
+References gtoframev()\&.
+.SS "subroutine pmat5::sininmap (real(sp), intent(in) alon0, real(sp), intent(in) alat0, real(sp), dimension(3,3), intent(out) rot3)\fC [private]\fP"
+
+.PP
+Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalon0\fP geographical longitude (degrees) of projection center\&. 
+.br
+\fIalat0\fP geographical latitude (degrees) of projection center\&. 
+.br
+\fIrot3\fP rotation matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1995 
+.RE
+.PP
+
+.PP
+Definition at line 64 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sinivmap (real(sp), intent(in) alon0, real(sp), intent(in) alat0, real(sp), dimension(3,3), intent(out) rot3)"
+
+.PP
+Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) at the viewing nadir\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalon0\fP geographical longitude (degrees) of viewing nadir\&. 
+.br
+\fIalat0\fP geographical latitude (degrees) of viewing nadir\&. 
+.br
+\fIrot3\fP rotation matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1995 
+.RE
+.PP
+
+.PP
+Definition at line 108 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::sparaframe (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(out) sxv, real(sp), dimension(3), intent(out) syv, real(sp), dimension(3), intent(in) szv)"
+
+.PP
+Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsxp\fP reference orthonormal P-frame cartesian X-vector\&. 
+.br
+\fIsyp\fP reference orthonormal P-frame cartesian Y-vector\&. 
+.br
+\fIszp\fP reference orthonormal P-frame cartesian Z-vector\&. 
+.br
+\fIsxv\fP V-frame cartesian X-vector\&. 
+.br
+\fIsyv\fP V-frame cartesian Y-vector\&. 
+.br
+\fIszv\fP dependent point zenith, V-frame cartesian Z-vector\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 696 of file pmat5\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

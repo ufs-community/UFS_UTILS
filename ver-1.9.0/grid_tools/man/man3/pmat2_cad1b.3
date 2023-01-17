@@ -1,0 +1,56 @@
+.TH "pmat2::cad1b" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::cad1b
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBCAD1B\fP (m1, mah1, mah2, mirror2, a)"
+.br
+.RI "Incorporate operand symmetry and clip near end-1 of a band matrix operator\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 60 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::cad1b::CAD1B (integer(spi), intent(in) m1, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(0:m1\-1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+
+.PP
+Incorporate operand symmetry and clip near end-1 of a band matrix operator\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP Size of implied full matrix 
+.br
+\fImah1\fP Left semi-bandwidths (subdiagonals) of A\&. 
+.br
+\fImah2\fP Right semi-bandwidths (superdiagonals) of A\&. 
+.br
+\fImirror2\fP 2*location of symmetry axis relative to end-1 operand element\&. 
+.br
+\fIa\fP Input operator, output as symmetrized and clipped at end-1 Note: although m2 is not used here, it IS used in companion routines \fBcad2b\fP and \fBcsb2b\fP; it is retained in the interests of uniformity\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 426 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

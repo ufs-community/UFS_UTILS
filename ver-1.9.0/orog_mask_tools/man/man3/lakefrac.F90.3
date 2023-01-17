@@ -1,0 +1,278 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/lake.fd/lakefrac.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/lake.fd/lakefrac.F90 \- Compute lake fraction and depth\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcal_lake_frac_depth\fP (lakestat, cs_lakestat, lakedpth, cs_lakedpth)"
+.br
+.RI "Calculate lake fraction and depth on the model grid from high-resolution data\&. "
+.ti -1c
+.RI "program \fBlake_frac\fP"
+.br
+.RI "This program computes lake fraction and depth numbers for FV3 cubed sphere grid cells, from a high resolution lat/lon data set\&. "
+.ti -1c
+.RI "subroutine \fBnc_opchk\fP (stat, opname)"
+.br
+.RI "Check NetCDF error code\&. "
+.ti -1c
+.RI "subroutine \fBread_cubed_sphere_grid\fP (res, grid)"
+.br
+.RI "Read the latitude and longitude for a cubed-sphere grid from the 'grid' files\&. "
+.ti -1c
+.RI "subroutine \fBread_cubed_sphere_reg_grid\fP (res, grid, halo_depth, res_x, res_y)"
+.br
+.RI "Read the latitude and longitude for a regional grid from the 'grid' file\&. "
+.ti -1c
+.RI "subroutine \fBread_lakedata\fP (lakedata_path, lake_stat, lake_dpth, nlat, nlon)"
+.br
+.RI "Read a high-resolution lake depth dataset, and a corresponding lake status dataset which provides a status code on the reliability of each lake depth point\&. "
+.ti -1c
+.RI "subroutine \fBwrite_lakedata_to_orodata\fP (cs_res, cs_lakestat, cs_lakedpth)"
+.br
+.RI "Write lake depth and fraction to an existing model orography file\&. "
+.ti -1c
+.RI "subroutine \fBwrite_reg_lakedata_to_orodata\fP (cs_res, tile_x_dim, tile_y_dim, cs_lakestat, cs_lakedpth)"
+.br
+.RI "Write lake depth and fraction to an existing model orography file\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Compute lake fraction and depth\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition in file \fBlakefrac\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine lake_frac::cal_lake_frac_depth (integer*1, dimension(:), intent(in) lakestat, real, dimension(:), intent(out) cs_lakestat, integer*2, dimension(:), intent(in) lakedpth, real, dimension(:), intent(out) cs_lakedpth)"
+
+.PP
+Calculate lake fraction and depth on the model grid from high-resolution data\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlakestat\fP High-resolution lake status code\&. 
+.br
+\fIlakedpth\fP High-resolution lake depth\&. 
+.br
+\fIcs_lakestat\fP Lake fraction on the model grid\&. 
+.br
+\fIcs_lakedpth\fP Lake depth on the model grid\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 145 of file lakefrac\&.F90\&.
+.PP
+References find_limit()\&.
+.PP
+Referenced by lake_frac()\&.
+.SS "program lake_frac ()"
+
+.PP
+This program computes lake fraction and depth numbers for FV3 cubed sphere grid cells, from a high resolution lat/lon data set\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+July 2018
+.RE
+.PP
+.IP "\(bu" 2
+Shan Sun, Aug\&. 2018: Added Caspian Sea and Aral Sea to the lake fraction and lake depth fields\&.
+.IP "\(bu" 2
+Shan Sun, Dec\&. 2018: Added round up and round down with respect to a numerical minimum value and a cut-off value, for lake fraction number\&.
+.IP "\(bu" 2
+Ning Wang, Apr\&. 2019: Extended the program to process the same lake data for FV3 stand-alone regional (SAR) model\&.
+.PP
+.PP
+\fBReturns:\fP
+.RS 4
+0 for successful completion and for error\&. 
+.RE
+.PP
+
+.PP
+Definition at line 21 of file lakefrac\&.F90\&.
+.PP
+References cal_lake_frac_depth(), read_cubed_sphere_grid(), read_cubed_sphere_reg_grid(), read_lakedata(), write_lakedata_to_orodata(), and write_reg_lakedata_to_orodata()\&.
+.SS "subroutine lake_frac::nc_opchk (integer stat, character(len=*) opname)"
+
+.PP
+Check NetCDF error code\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstat\fP Error code\&. 
+.br
+\fIopname\fP NetCDF operation that failed\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 952 of file lakefrac\&.F90\&.
+.SS "subroutine lake_frac::read_cubed_sphere_grid (integer, intent(in) res, real, dimension(:,:), intent(out) grid)"
+
+.PP
+Read the latitude and longitude for a cubed-sphere grid from the 'grid' files\&. For global grids, all six sides are returned\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIres\fP The resolution\&. Example: '96' for C96\&. 
+.br
+\fIgrid\fP Array containing the latitude and longitude on the 'supergrid'\&. Multiple tiles are concatenated\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 383 of file lakefrac\&.F90\&.
+.PP
+References nc_opchk()\&.
+.PP
+Referenced by lake_frac()\&.
+.SS "subroutine lake_frac::read_cubed_sphere_reg_grid (integer, intent(in) res, real, dimension(:,:), intent(out), allocatable grid, integer, intent(in) halo_depth, integer, intent(out) res_x, integer, intent(out) res_y)"
+
+.PP
+Read the latitude and longitude for a regional grid from the 'grid' file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIres\fP Resolution of grid\&. Example: '96' for C96\&. 
+.br
+\fIgrid\fP Latitude and longitude on the supergrid\&. 
+.br
+\fIhalo_depth\fP Lateral halo\&. Not used\&. 
+.br
+\fIres_x\fP Number of grid points in the 'x' direction\&. 
+.br
+\fIres_y\fP Number of grid points in the 'y' direction\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 444 of file lakefrac\&.F90\&.
+.PP
+References nc_opchk()\&.
+.PP
+Referenced by lake_frac()\&.
+.SS "subroutine lake_frac::read_lakedata (character(len=256), intent(in) lakedata_path, integer*1, dimension(:), intent(out) lake_stat, integer*2, dimension(:), intent(out) lake_dpth, integer, intent(in) nlat, integer, intent(in) nlon)"
+
+.PP
+Read a high-resolution lake depth dataset, and a corresponding lake status dataset which provides a status code on the reliability of each lake depth point\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlakedata_path\fP Path to the lake depth and lake status dataset\&. 
+.br
+\fIlake_stat\fP Status code\&. 
+.br
+\fIlake_dpth\fP Lake depth\&. 
+.br
+\fInlat\fP 'j' dimension of both datasets\&. 
+.br
+\fInlon\fP 'i' dimension of both datasets\&. 
+.RE
+.PP
+
+.PP
+Definition at line 514 of file lakefrac\&.F90\&.
+.PP
+Referenced by lake_frac()\&.
+.SS "subroutine lake_frac::write_lakedata_to_orodata (integer, intent(in) cs_res, real, dimension(:), intent(in) cs_lakestat, real, dimension(:), intent(in) cs_lakedpth)"
+
+.PP
+Write lake depth and fraction to an existing model orography file\&. Also, perform some quality control checks on the lake data\&. This routine is used for non-regional grids\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcs_res\fP Resolution\&. Example: '96' for C96\&. 
+.br
+\fIcs_lakestat\fP Lake fraction\&. 
+.br
+\fIcs_lakedpth\fP Lake depth\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 546 of file lakefrac\&.F90\&.
+.PP
+References nc_opchk()\&.
+.PP
+Referenced by lake_frac()\&.
+.SS "subroutine lake_frac::write_reg_lakedata_to_orodata (integer, intent(in) cs_res, integer, intent(in) tile_x_dim, integer, intent(in) tile_y_dim, real, dimension(:), intent(in) cs_lakestat, real, dimension(:), intent(in) cs_lakedpth)"
+
+.PP
+Write lake depth and fraction to an existing model orography file\&. Also, perform some quality control checks on the lake data\&. This routine is used for regional grids\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcs_res\fP Resolution\&. Example: '96' for C96\&. 
+.br
+\fIcs_lakestat\fP Lake fraction\&. 
+.br
+\fIcs_lakedpth\fP Lake depth\&. 
+.br
+\fItile_x_dim\fP 'x' dimension of the model grid\&. 
+.br
+\fItile_y_dim\fP 'y' dimension of the model grid\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 745 of file lakefrac\&.F90\&.
+.PP
+References nc_opchk()\&.
+.PP
+Referenced by lake_frac()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.

@@ -1,0 +1,738 @@
+.TH "gettemp_mod" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+gettemp_mod \- Use moduke for common blocks\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real \fBapd\fP"
+.br
+.RI "parameter calcumate for magnetic activity "
+.ti -1c
+.RI "real \fBapdf\fP"
+.br
+.RI "the same as apd "
+.ti -1c
+.RI "real, dimension(4) \fBapt\fP"
+.br
+.RI "daily magnetic activity "
+.ti -1c
+.RI "real \fBc2tloc\fP"
+.br
+.RI "cosine of 2 time location "
+.ti -1c
+.RI "real \fBc3tloc\fP"
+.br
+.RI "cosine of 3 time location "
+.ti -1c
+.RI "real \fBctloc\fP"
+.br
+.RI "cosine of the location "
+.ti -1c
+.RI "real \fBday\fP"
+.br
+.RI "day in a year "
+.ti -1c
+.RI "real \fBdb01\fP"
+.br
+.RI "diffusive density at zlb for g01 "
+.ti -1c
+.RI "real \fBdb04\fP"
+.br
+.RI "diffusive density at zlb for g4 "
+.ti -1c
+.RI "real \fBdb14\fP"
+.br
+.RI "diffusive density at zlb for g14 "
+.ti -1c
+.RI "real \fBdb16\fP"
+.br
+.RI "diffusive density at zlb for g18 "
+.ti -1c
+.RI "real \fBdb28\fP"
+.br
+.RI "diffusive density at zlb for g28 "
+.ti -1c
+.RI "real \fBdb32\fP"
+.br
+.RI "diffusive density at zlb for g32 "
+.ti -1c
+.RI "real \fBdb40\fP"
+.br
+.RI "diffusive density at zlb for g40 "
+.ti -1c
+.RI "real \fBdb48\fP"
+.br
+.RI "diffusive density at zlb for g48 "
+.ti -1c
+.RI "real \fBdd\fP"
+.br
+.RI "diffusive density at alt "
+.ti -1c
+.RI "real \fBdf\fP"
+.br
+.RI "the difference of f10\&.7 effect "
+.ti -1c
+.RI "real \fBdfa\fP"
+.br
+.RI "the difference to reference value "
+.ti -1c
+.RI "real \fBdm01\fP"
+.br
+.RI "mixed density at alt01 "
+.ti -1c
+.RI "real \fBdm04\fP"
+.br
+.RI "mixed density at alt04 "
+.ti -1c
+.RI "real \fBdm14\fP"
+.br
+.RI "mixed density at alt14 "
+.ti -1c
+.RI "real \fBdm16\fP"
+.br
+.RI "mixed density at alt16 "
+.ti -1c
+.RI "real \fBdm28\fP"
+.br
+.RI "mixed density at alt28 "
+.ti -1c
+.RI "real \fBdm32\fP"
+.br
+.RI "mixed density at alt32 "
+.ti -1c
+.RI "real \fBdm40\fP"
+.br
+.RI "mixed density at alt40 "
+.ti -1c
+.RI "real \fBg0\fP"
+.br
+.RI "initial gradient variations "
+.ti -1c
+.RI "real \fBgsurf\fP"
+.br
+.RI "surface gravitation force at given latitude "
+.ti -1c
+.RI "integer \fBisw\fP"
+.br
+.RI "indix for sw "
+.ti -1c
+.RI "integer \fBiyr\fP"
+.br
+.RI "integer for a given year "
+.ti -1c
+.RI "real, dimension(150, 9) \fBpd\fP"
+.br
+.RI "he density "
+.ti -1c
+.RI "real, dimension(25, 2) \fBpdl\fP"
+.br
+.RI "turbo "
+.ti -1c
+.RI "real, dimension(9, 4) \fBplg\fP"
+.br
+.RI "Legendre polynomial points\&. "
+.ti -1c
+.RI "real, dimension(100, 10) \fBpma\fP"
+.br
+.RI "middle and low temperature "
+.ti -1c
+.RI "real, dimension(150) \fBps\fP"
+.br
+.RI "s parameter "
+.ti -1c
+.RI "real, dimension(150) \fBpt\fP"
+.br
+.RI "temperature "
+.ti -1c
+.RI "real, dimension(100, 4) \fBptl\fP"
+.br
+.RI "upper temperature "
+.ti -1c
+.RI "real \fBre\fP"
+.br
+.RI "referenced height related to gsurf "
+.ti -1c
+.RI "real \fBrl\fP"
+.br
+.RI "correction to specified mixing ratio at ground "
+.ti -1c
+.RI "real \fBs\fP"
+.br
+.RI "scale inverse to temperature difference "
+.ti -1c
+.RI "real \fBs2tloc\fP"
+.br
+.RI "sine of 2 time location "
+.ti -1c
+.RI "real \fBs3tloc\fP"
+.br
+.RI "sine of 3 time location "
+.ti -1c
+.RI "real, dimension(100) \fBsam\fP"
+.br
+.RI "semiannual mult sam "
+.ti -1c
+.RI "real \fBstloc\fP"
+.br
+.RI "sine of the location "
+.ti -1c
+.RI "real, dimension(25) \fBsw\fP"
+.br
+.RI "weighting "
+.ti -1c
+.RI "real, dimension(25) \fBswc\fP"
+.br
+.RI "weighting "
+.ti -1c
+.RI "real \fBt0\fP"
+.br
+.RI "initial temperature "
+.ti -1c
+.RI "real, dimension(2) \fBtgn1\fP"
+.br
+.RI "temperature gradient at node 1 (~mesosphere) "
+.ti -1c
+.RI "real, dimension(2) \fBtgn2\fP"
+.br
+.RI "temperature gradient at node 2 (~stratosphere) "
+.ti -1c
+.RI "real, dimension(2) \fBtgn3\fP"
+.br
+.RI "temperature gradient at node 3 (~troposphere) "
+.ti -1c
+.RI "real \fBtinfg\fP"
+.br
+.RI "startinf referenced point for tt "
+.ti -1c
+.RI "real \fBtlb\fP"
+.br
+.RI "labeled temperature "
+.ti -1c
+.RI "real, dimension(5) \fBtn1\fP"
+.br
+.RI "temperature at node 1 (~mesosphere) "
+.ti -1c
+.RI "real, dimension(4) \fBtn2\fP"
+.br
+.RI "temperature at node 2 (~stratosphere) "
+.ti -1c
+.RI "real, dimension(5) \fBtn3\fP"
+.br
+.RI "temperature at node 3 (~troposphere) "
+.ti -1c
+.RI "real \fBtr12\fP"
+.br
+.RI "try factor 1 or 2 "
+.ti -1c
+.RI "real, dimension(15) \fBtt\fP"
+.br
+.RI "referenced temperature "
+.ti -1c
+.RI "real \fBxlong\fP"
+.br
+.RI "a given longitude "
+.ti -1c
+.RI "real \fBz0\fP"
+.br
+.RI "initial height "
+.ti -1c
+.RI "real \fBza\fP"
+.br
+.RI "joining altitude of bates and spline "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Use moduke for common blocks\&. 
+
+All variables under this module are originalyl in common block used for subroutine gettemp and others in this package\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang 
+.RE
+.PP
+
+.SH "Variable Documentation"
+.PP 
+.SS "real gettemp_mod::apd"
+
+.PP
+parameter calcumate for magnetic activity 
+.PP
+Definition at line 941 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by globe7()\&.
+.SS "real gettemp_mod::apdf"
+
+.PP
+the same as apd 
+.PP
+Definition at line 942 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real, dimension(4) gettemp_mod::apt"
+
+.PP
+daily magnetic activity 
+.PP
+Definition at line 943 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real gettemp_mod::c2tloc"
+
+.PP
+cosine of 2 time location 
+.PP
+Definition at line 934 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real gettemp_mod::c3tloc"
+
+.PP
+cosine of 3 time location 
+.PP
+Definition at line 936 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real gettemp_mod::ctloc"
+
+.PP
+cosine of the location 
+.PP
+Definition at line 932 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real gettemp_mod::day"
+
+.PP
+day in a year 
+.PP
+Definition at line 938 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real gettemp_mod::db01"
+
+.PP
+diffusive density at zlb for g01 
+.PP
+Definition at line 889 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::db04"
+
+.PP
+diffusive density at zlb for g4 
+.PP
+Definition at line 883 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::db14"
+
+.PP
+diffusive density at zlb for g14 
+.PP
+Definition at line 896 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::db16"
+
+.PP
+diffusive density at zlb for g18 
+.PP
+Definition at line 884 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::db28"
+
+.PP
+diffusive density at zlb for g28 
+.PP
+Definition at line 885 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::db32"
+
+.PP
+diffusive density at zlb for g32 
+.PP
+Definition at line 886 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::db40"
+
+.PP
+diffusive density at zlb for g40 
+.PP
+Definition at line 887 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::db48"
+
+.PP
+diffusive density at zlb for g48 
+.PP
+Definition at line 888 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::dd"
+
+.PP
+diffusive density at alt 
+.PP
+Definition at line 895 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real gettemp_mod::df"
+
+.PP
+the difference of f10\&.7 effect 
+.PP
+Definition at line 939 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by globe7()\&.
+.SS "real gettemp_mod::dfa"
+
+.PP
+the difference to reference value 
+.PP
+Definition at line 940 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real gettemp_mod::dm01"
+
+.PP
+mixed density at alt01 
+.PP
+Definition at line 922 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::dm04"
+
+.PP
+mixed density at alt04 
+.PP
+Definition at line 917 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::dm14"
+
+.PP
+mixed density at alt14 
+.PP
+Definition at line 923 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::dm16"
+
+.PP
+mixed density at alt16 
+.PP
+Definition at line 918 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::dm28"
+
+.PP
+mixed density at alt28 
+.PP
+Definition at line 919 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real gettemp_mod::dm32"
+
+.PP
+mixed density at alt32 
+.PP
+Definition at line 920 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::dm40"
+
+.PP
+mixed density at alt40 
+.PP
+Definition at line 921 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::g0"
+
+.PP
+initial gradient variations 
+.PP
+Definition at line 893 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::gsurf"
+
+.PP
+surface gravitation force at given latitude 
+.PP
+Definition at line 925 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by densm(), densu(), ghp7(), gtd7(), and scalh()\&.
+.SS "integer gettemp_mod::isw"
+
+.PP
+indix for sw 
+.PP
+Definition at line 946 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by globe7(), gtd7(), and tselec()\&.
+.SS "integer gettemp_mod::iyr"
+
+.PP
+integer for a given year 
+.PP
+Definition at line 947 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by globe7()\&.
+.SS "real, dimension(150,9) gettemp_mod::pd"
+
+.PP
+he density 
+.PP
+Definition at line 907 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real, dimension(25,2) gettemp_mod::pdl"
+
+.PP
+turbo 
+.PP
+Definition at line 909 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real, dimension(9,4) gettemp_mod::plg"
+
+.PP
+Legendre polynomial points\&. 
+.PP
+Definition at line 931 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real, dimension(100,10) gettemp_mod::pma"
+
+.PP
+middle and low temperature 
+.PP
+Definition at line 911 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real, dimension(150) gettemp_mod::ps"
+
+.PP
+s parameter 
+.PP
+Definition at line 908 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real, dimension(150) gettemp_mod::pt"
+
+.PP
+temperature 
+.PP
+Definition at line 906 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real, dimension(100,4) gettemp_mod::ptl"
+
+.PP
+upper temperature 
+.PP
+Definition at line 910 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real gettemp_mod::re"
+
+.PP
+referenced height related to gsurf 
+.PP
+Definition at line 926 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by densm(), densu(), ghp7(), gtd7(), and scalh()\&.
+.SS "real gettemp_mod::rl"
+
+.PP
+correction to specified mixing ratio at ground 
+.PP
+Definition at line 894 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::s"
+
+.PP
+scale inverse to temperature difference 
+.PP
+Definition at line 882 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::s2tloc"
+
+.PP
+sine of 2 time location 
+.PP
+Definition at line 935 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real gettemp_mod::s3tloc"
+
+.PP
+sine of 3 time location 
+.PP
+Definition at line 937 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real, dimension(100) gettemp_mod::sam"
+
+.PP
+semiannual mult sam 
+.PP
+Definition at line 912 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7()\&.
+.SS "real gettemp_mod::stloc"
+
+.PP
+sine of the location 
+.PP
+Definition at line 933 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real, dimension(25) gettemp_mod::sw"
+
+.PP
+weighting 
+.PP
+Definition at line 914 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), globe7(), gtd7(), gts7(), tselec(), and vtst7()\&.
+.SS "real, dimension(25) gettemp_mod::swc"
+
+.PP
+weighting 
+.PP
+Definition at line 915 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), globe7(), tselec(), and vtst7()\&.
+.SS "real gettemp_mod::t0"
+
+.PP
+initial temperature 
+.PP
+Definition at line 891 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real, dimension(2) gettemp_mod::tgn1"
+
+.PP
+temperature gradient at node 1 (~mesosphere) 
+.PP
+Definition at line 902 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real, dimension(2) gettemp_mod::tgn2"
+
+.PP
+temperature gradient at node 2 (~stratosphere) 
+.PP
+Definition at line 903 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7()\&.
+.SS "real, dimension(2) gettemp_mod::tgn3"
+
+.PP
+temperature gradient at node 3 (~troposphere) 
+.PP
+Definition at line 904 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7()\&.
+.SS "real gettemp_mod::tinfg"
+
+.PP
+startinf referenced point for tt 
+.PP
+Definition at line 928 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by globe7()\&.
+.SS "real gettemp_mod::tlb"
+
+.PP
+labeled temperature 
+.PP
+Definition at line 881 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real, dimension(5) gettemp_mod::tn1"
+
+.PP
+temperature at node 1 (~mesosphere) 
+.PP
+Definition at line 899 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7(), and gts7()\&.
+.SS "real, dimension(4) gettemp_mod::tn2"
+
+.PP
+temperature at node 2 (~stratosphere) 
+.PP
+Definition at line 900 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7()\&.
+.SS "real, dimension(5) gettemp_mod::tn3"
+
+.PP
+temperature at node 3 (~troposphere) 
+.PP
+Definition at line 901 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gtd7()\&.
+.SS "real gettemp_mod::tr12"
+
+.PP
+try factor 1 or 2 
+.PP
+Definition at line 897 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real, dimension(15) gettemp_mod::tt"
+
+.PP
+referenced temperature 
+.PP
+Definition at line 929 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by globe7()\&.
+.SS "real gettemp_mod::xlong"
+
+.PP
+a given longitude 
+.PP
+Definition at line 944 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by glob7s(), and globe7()\&.
+.SS "real gettemp_mod::z0"
+
+.PP
+initial height 
+.PP
+Definition at line 892 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SS "real gettemp_mod::za"
+
+.PP
+joining altitude of bates and spline 
+.PP
+Definition at line 890 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gts7()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

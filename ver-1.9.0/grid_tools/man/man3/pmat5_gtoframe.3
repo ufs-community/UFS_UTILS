@@ -1,0 +1,133 @@
+.TH "pmat5::gtoframe" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat5::gtoframe
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgtoframem\fP (plat, plon, orth)"
+.br
+.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.ti -1c
+.RI "subroutine \fBgtoframev\fP (plat, plon, xp, yp, zp)"
+.br
+.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.ti -1c
+.RI "subroutine \fBsgtoframem\fP (splat, splon, sorth)"
+.br
+.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.ti -1c
+.RI "subroutine \fBsgtoframev\fP (splat, splon, sxp, syp, szp)"
+.br
+.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 43 of file pmat5\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat5::gtoframe::gtoframem (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3,3), intent(out) orth)\fC [private]\fP"
+
+.PP
+From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIplat\fP latitude (degrees) of point\&. 
+.br
+\fIplon\fP longitude (degrees) of point\&. 
+.br
+\fIorth\fP orthonormal matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 617 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoframe::gtoframev (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3), intent(out) xp, real(dp), dimension(3), intent(out) yp, real(dp), dimension(3), intent(out) zp)\fC [private]\fP"
+
+.PP
+Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIplat\fP latitude (degrees) of point\&. 
+.br
+\fIplon\fP longitude (degrees) of point\&. 
+.br
+\fIxp\fP unit X-basis vector of cartesian frame\&. 
+.br
+\fIyp\fP unit Y-basis vector of cartesian frame\&. 
+.br
+\fIzp\fP unit Z-basis vector of cartesian frame\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 662 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoframe::sgtoframem (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3,3), intent(out) sorth)\fC [private]\fP"
+
+.PP
+From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsplat\fP latitude (degrees) of point\&. 
+.br
+\fIsplon\fP longitude (degrees) of point\&. 
+.br
+\fIsorth\fP orthonormal matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 600 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoframe::sgtoframev (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3), intent(out) sxp, real(sp), dimension(3), intent(out) syp, real(sp), dimension(3), intent(out) szp)\fC [private]\fP"
+
+.PP
+Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsplat\fP latitude (degrees) of point\&. 
+.br
+\fIsplon\fP longitude (degrees) of point\&. 
+.br
+\fIsxp\fP xp unit X-basis vector of cartesian frame\&. 
+.br
+\fIsyp\fP yp unit Y-basis vector of cartesian frame\&. 
+.br
+\fIszp\fP zp unit Z-basis vector of cartesian frame\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 637 of file pmat5\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

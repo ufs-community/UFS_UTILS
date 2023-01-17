@@ -1,0 +1,144 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90" 3 "Tue Jan 17 2023" "Version 1.9.0" "emcsfc_ice_blend" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90 \- Create blended ice product for gfs/gdas cycles\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "program \fBemcsfc_ice_blend\fP"
+.br
+.RI "Create a global 5-minute blended ice concentration dataset for use by GDAS/GFS\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Create blended ice product for gfs/gdas cycles\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014-03-20 
+.RE
+.PP
+
+.PP
+Definition in file \fBemcsfc_ice_blend\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "program emcsfc_ice_blend ()"
+
+.PP
+Create a global 5-minute blended ice concentration dataset for use by GDAS/GFS\&. This blend is created from National Ice Center Interactive Multisensor Snow and Ice Mapping System (IMS) data, and the NCEP/MMAB global 5-minute ice concentration data\&.
+.PP
+Program History Log
+.IP "\(bu" 2
+2014-03-20 Initial version\&.
+.IP "\(bu" 2
+2014-10-20 Use grib2 for all i/o\&. Mask out 'land' points in the blended analysis using a bitmap instead of the '1\&.57' flag\&.
+.PP
+.PP
+input files:
+.IP "\(bu" 2
+fort\&.11 - NH IMS ice data, interpolated to the 5-minute grid (grib 2)
+.IP "\(bu" 2
+fort\&.15 - global 5-minute MMAB ice concentration file (grib 2)
+.IP "\(bu" 2
+fort\&.17 - global 5-minute MMAB land mask file (grib 2)\&. 
+.br
+ output files:
+.IP "\(bu" 2
+fort\&.51 - global 5-minute blended ice concentration file (grib 2)
+.PP
+.PP
+condition codes:
+.IP "\(bu" 2
+0 - normal run
+.IP "\(bu" 2
+1 - bad open of 5-minute MMAB land mask file
+.IP "\(bu" 2
+2 - bad read of 5-minute MMAB land mask grib record
+.IP "\(bu" 2
+5 - bad open of IMS ice file
+.IP "\(bu" 2
+7 - bad read of IMS ice grib record
+.IP "\(bu" 2
+8 - bad open of 5-minute MMAB ice concentration file
+.IP "\(bu" 2
+9 - bad read of 5-minute MMAB ice concentration grib header
+.IP "\(bu" 2
+10 - bad read of 5-minute MMAB ice concentration grib record
+.IP "\(bu" 2
+16 - bad open of 5-minute blended ice concentration file
+.IP "\(bu" 2
+17 - bad write of 5-minute blended ice concentration file
+.PP
+.PP
+This program creates a sea ice concentration file suitable for use by the GFS global cycle program\&. The 5-minute ice concentration file from MMAB can't be used 'as is' because the MMAB data can't give a reliable analysis for small lakes now resolved by the GFS land mask\&.
+.PP
+This program creates an ice concentration file on the same 5-minute grid as the MMAB data using IMS data from the National Ice Center to fill in small lakes\&. The IMS data is NH only and is a yes/no flag (not a concentration)\&. The IMS data is on a 4km polar stereographic grid and must be interpolated to the MMAB 5-minute grid (NCEP grid 173) before ingest to this program\&. This interpolation may be done using copygb2 as follows:
+.PP
+.PP
+.nf
+
+ grid173='0 0 0 0 0 0 0 0 4320 2160 0 0 89958000 42000 48 -89958000 359958000 83000 83000 0'
+ copygb2 -x -i3 -g '$grid173' ims\&.icec\&.grib2 ims\&.icec\&.5min\&.grib2
+ 
+.fi
+.PP
+.PP
+When using the 'budget' interpolation option (-i3), the IMS yes/no flag will be converted to a pseudo ice concentration\&.
+.PP
+The IMS data contains a land/water mask\&. Ice concentration is only specified at 'water' points\&.
+.PP
+The 5-minute data mask contains 'land', 'coast' and 'water' points\&. Ice concentration is specified at 'coast' and 'water', but 'coast' points have error and are not used here\&.
+.PP
+The blending process is as follows in the NH:
+.IP "1." 4
+If IMS indicates 'land', then the blended value is set to 'land' and is bitmapped out\&.
+.IP "2." 4
+If the IMS is 'water', and the MMAB data point is 'coast' or 'land', the IMS ice concentration is used as the blended value\&.
+.IP "3." 4
+If IMS and MMAB indicate a point as water, then
+.IP "  \(bu" 4
+The blended value is set to zero if the IMS concentration is less than 50%\&.
+.IP "  \(bu" 4
+If the IMS concentration is >=50%, then the neighboring 5-minute data is checked for ice\&. 
+.br
+ * If the 5-minute point is ice free, but at least one of its neighbors has ice, the blended value is set to the IMS ice concentration\&. Examination of the 5-minute showed isolated open water points within large areas of ice\&. This logic attempts to remove these likely wrong points\&.
+.IP "    \(bu" 6
+If (i) is false, then the blended value is set to the 5-minute value or 15%, whichever is greater\&. 15% is the lower threshold in the MMAB 5-minute product\&.
+.PP
+
+.PP
+
+.PP
+.PP
+In the SH, the blended value is simply the 5-minute ice concentration at 'water' points\&. 'Coast' and 'land' points are bitmapped out\&.
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 93 of file emcsfc_ice_blend\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for emcsfc_ice_blend from the source code\&.

@@ -1,0 +1,53 @@
+.TH "psym2::sqrtsym2d_t" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+psym2::sqrtsym2d_t
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBsqrtsym2d_t\fP (x, z, zd)"
+.br
+.RI "Use the Taylor-series method (eigenvalues both fairly close to unity)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 25 of file psym2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine psym2::sqrtsym2d_t::sqrtsym2d_t (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+Use the Taylor-series method (eigenvalues both fairly close to unity)\&. For a 2*2 positive definite symmetric matrix x, try to get both the z=sqrt(x) and dz/dx using the binomial-expansion method applied to the intermediate matrix, 
+.PP
+.nf
+r = (x-1)\&. ie z=sqrt(x) = (1+r)^{1/2} = I + (1/2)*r -(1/8)*r^2 \&.\&.\&.
+  + [(-)^n *(2n)!/{(n+1)! * n! *2^{2*n-1}} ]*r^{n+1}
+.fi
+.PP
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP sqrt(x) result 
+.br
+\fIzd\fP symmetric derivative 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 236 of file psym2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

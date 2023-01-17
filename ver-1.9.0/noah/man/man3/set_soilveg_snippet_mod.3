@@ -1,0 +1,48 @@
+.TH "set_soilveg_snippet_mod" 3 "Tue Jan 17 2023" "Version 1.9.0" "noah" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+set_soilveg_snippet_mod \- Below was extracted from namelist_soilveg\&.f and set_soilveg\&.f (couldn't get above to compile for doxygen)  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBset_soilveg\fP (isot, ivet, maxsmc, bb, satpsi, iret)"
+.br
+.RI "This subroutine initializes soil and vegetation parameters needed in global_cycle/land_increment\&.f90\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Below was extracted from namelist_soilveg\&.f and set_soilveg\&.f (couldn't get above to compile for doxygen) 
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public set_soilveg_snippet_mod::set_soilveg (integer, intent(in) isot, integer, intent(in) ivet, real, dimension(30), intent(out) maxsmc, real, dimension(30), intent(out) bb, real, dimension(30), intent(out) satpsi, integer, intent(out) iret)"
+
+.PP
+This subroutine initializes soil and vegetation parameters needed in global_cycle/land_increment\&.f90\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIisot\fP Soil type 
+.br
+\fIivet\fP Vegetation type 
+.br
+\fImaxsmc\fP Maximum soil moisture for each soil type 
+.br
+\fIbb\fP B exponent for each soil type 
+.br
+\fIsatpsi\fP Saturated matric potential for each soil type 
+.br
+\fIiret\fP Return integer 
+.RE
+.PP
+
+.PP
+Definition at line 27 of file set_soilveg_snippet\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for noah from the source code\&.

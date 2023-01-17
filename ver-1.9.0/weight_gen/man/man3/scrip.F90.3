@@ -1,0 +1,58 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/weight_gen.fd/scrip.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "weight_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/weight_gen.fd/scrip.F90 \- Create ESMF 'scrip' files for a gaussian grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "program \fBscrip\fP"
+.br
+.RI "Create 'scrip' files that describes a gaussian grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Create ESMF 'scrip' files for a gaussian grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBscrip\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "program scrip ()"
+
+.PP
+Create 'scrip' files that describes a gaussian grid\&. These files are used to create ESMF weight files for interpolating from global FV3 grids to gaussian grids\&.
+.PP
+The program expects one argument - the resolution of the FV3 grid\&. It then selects a gaussian grid of comparable resolution\&.
+.PP
+Two files are created: the normal gaussian grid, and one with two extra rows for the N/S poles\&. Both files are NetCDF\&.
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 19 of file scrip\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for weight_gen from the source code\&.

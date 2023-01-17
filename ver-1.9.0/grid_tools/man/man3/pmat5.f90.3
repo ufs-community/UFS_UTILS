@@ -1,0 +1,278 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat5.f90" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat5.f90 \- Handy geographical transformations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBpmat5::ctoc_schm\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::ctog\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::ctogr\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::frametwist\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::grtoc\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::gtoc\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::gtoframe\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::ininmap\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::inivmap\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::paraframe\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::plctoc\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::plrot\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::plroti\fP"
+.br
+.in -1c
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBcstgeo\fP"
+.br
+.RI "Constants for orientation and stretching of map\&. "
+.ti -1c
+.RI "module \fBdcstgeo\fP"
+.br
+.RI "Constants for orientation and stretching of map\&. "
+.ti -1c
+.RI "module \fBpmat5\fP"
+.br
+.RI "Utility routines for orienting the globe and basic geographical mappings\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBpmat5::dctoc\fP (s, xc1, xc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dctocd\fP (s, xc1, xc2, dxc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dctocdd\fP (s, xc1, xc2, dxc2, ddxc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dctog\fP (xe, dlat, dlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dctogr\fP (xe, rlat, rlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (radians) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dgrtoc\fP (rlat, rlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dgtoc\fP (dlat, dlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dininmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dinivmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) at the viewing nadir\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dplrot\fP (rot3, n, x, y, z)"
+.br
+.RI "Apply a constant rotation to a three dimensional polyline\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::dplroti\fP (rot3, n, x, y, z)"
+.br
+.RI "Invert the rotation of a three-dimensional polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat5::frametwist\fP (xp, yp, zp, xv, yv, zv, twist)"
+.br
+.RI "Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::gtoframem\fP (plat, plon, orth)"
+.br
+.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::gtoframev\fP (plat, plon, xp, yp, zp)"
+.br
+.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat5::paraframe\fP (xp, yp, zp, xv, yv, zv)"
+.br
+.RI "Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat5::plctoc\fP (s, n, x, y, z)"
+.br
+.RI "Perform Schmidt transformation with scaling parameter s to a polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat5::plrot\fP (rot3, n, x, y, z)"
+.br
+.RI "Apply a constant rotation to a three dimensional polyline\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat5::plroti\fP (rot3, n, x, y, z)"
+.br
+.RI "Invert the rotation of a three-dimensional polyline\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sctoc\fP (s, xc1, xc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sctocd\fP (s, xc1, xc2, dxc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, and its jacobian, dxc2\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sctocdd\fP (s, xc1, xc2, dxc2, ddxc2)"
+.br
+.RI "Evaluate Schmidt transformation, xc1 --> xc2, with scaling parameter s, its jacobian, dxc2, and its 2nd derivative, ddxc2\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sctog\fP (xe, dlat, dlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sctogr\fP (xe, rlat, rlon)"
+.br
+.RI "Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (radians) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sframetwist\fP (sxp, syp, szp, sxv, syv, szv, stwist)"
+.br
+.RI "Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sgrtoc\fP (rlat, rlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sgtoc\fP (dlat, dlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sgtoframem\fP (splat, splon, sorth)"
+.br
+.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sgtoframev\fP (splat, splon, sxp, syp, szp)"
+.br
+.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sininmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sinivmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) at the viewing nadir\&. "
+.ti -1c
+.RI "subroutine \fBpmat5::sparaframe\fP (sxp, syp, szp, sxv, syv, szv)"
+.br
+.RI "Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real(sp), dimension(3, 3) \fBcstgeo::rotm\fP"
+.br
+.RI "Orthogonal rotation matrix\&. "
+.ti -1c
+.RI "real(dp), dimension(3, 3) \fBdcstgeo::rotm\fP"
+.br
+.RI "Orthogonal rotation matrix\&. "
+.ti -1c
+.RI "real(sp) \fBcstgeo::sc\fP"
+.br
+.RI "Schmidt stretching factor\&. "
+.ti -1c
+.RI "real(dp) \fBdcstgeo::sc\fP"
+.br
+.RI "Schmidt stretching factor\&. "
+.ti -1c
+.RI "real(sp) \fBcstgeo::sci\fP"
+.br
+.RI "Schmidt inverse stretching factor\&. "
+.ti -1c
+.RI "real(dp) \fBdcstgeo::sci\fP"
+.br
+.RI "Schmidt inverse stretching factor\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handy geographical transformations\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition in file \fBpmat5\&.f90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

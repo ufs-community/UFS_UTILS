@@ -1,0 +1,84 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/output.f90" 3 "Tue Jan 17 2023" "Version 1.9.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/output.f90 \- Output model data for a single tile and a single record\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBoutput\fP (data_one_tile, lat_one_tile, lon_one_tile, i_mdl, j_mdl, tile, record, time, field_idx)"
+.br
+.RI "Output model data for a single tile and a single record in netcdf format\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Output model data for a single tile and a single record\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition in file \fBoutput\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine output (real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) data_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) lat_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) lon_one_tile, integer, intent(in) i_mdl, integer, intent(in) j_mdl, integer, intent(in) tile, integer, intent(in) record, integer, intent(in) time, integer, intent(in) field_idx)"
+
+.PP
+Output model data for a single tile and a single record in netcdf format\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdata_one_tile\fP Data to be output (single tile)\&. 
+.br
+\fIlat_one_tile\fP Latitude of tile\&. 
+.br
+\fIlon_one_tile\fP Longitude of tile\&. 
+.br
+\fIfield_idx\fP Index of field within field name array\&. 
+.br
+\fIi_mdl\fP i dimensions of tile\&. 
+.br
+\fIj_mdl\fP j dimensions of tile\&. 
+.br
+\fIrecord\fP Record number to be output\&. 
+.br
+\fItile\fP Tile number\&. 
+.br
+\fItime\fP Time period to be output\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition at line 20 of file output\&.f90\&.
+.PP
+References source_grid::day_of_rec, source_grid::field_names, model_grid::grid_tiles, program_setup::halo, model_grid::missing, utils::netcdf_err(), source_grid::num_fields, source_grid::num_records, source_grid::num_time_recs, and source_grid::source\&.
+.PP
+Referenced by interp()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

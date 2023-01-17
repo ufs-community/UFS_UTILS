@@ -1,0 +1,85 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/topoedits.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "cpld_gridgen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/topoedits.F90 \- Add required topo-edits to adjust the run-time MOM6 land mask\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBtopoedits::add_topoedits\fP (fsrc, fdst)"
+.br
+.RI "Read the existing topoedits file, append required topoedits and write a new topoedits file\&. "
+.ti -1c
+.RI "subroutine, public \fBtopoedits::apply_topoedits\fP (fsrc)"
+.br
+.RI "Read the topoedits file and adjust the bathymetry\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Add required topo-edits to adjust the run-time MOM6 land mask\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module adds the required topo edits to a file for use by MOM6 at run time
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBtopoedits\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public topoedits::add_topoedits (character(len=*), intent(in) fsrc, character(len=*), intent(in) fdst)"
+
+.PP
+Read the existing topoedits file, append required topoedits and write a new topoedits file\&. Use the new topoedits to adjust the land mask used in subsequent steps to match the land mask which will be created at run time
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfsrc\fP the existing topoedits file name 
+.br
+\fIfdst\fP the modified topoedits file name
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 33 of file topoedits\&.F90\&.
+.SS "subroutine, public topoedits::apply_topoedits (character(len=*), intent(in) fsrc)"
+
+.PP
+Read the topoedits file and adjust the bathymetry\&. Apply limits to bathymetry\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfsrc\fP the topoedits file name
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 166 of file topoedits\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for cpld_gridgen from the source code\&.

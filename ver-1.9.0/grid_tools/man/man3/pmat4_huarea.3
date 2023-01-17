@@ -1,0 +1,79 @@
+.TH "pmat4::huarea" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::huarea
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBhuarea_d\fP (sa, sb)"
+.br
+.RI "Spherical area of right-angle triangle whose orthogonal sides have orthographic projection dimensions, sa and sb, sphere of unit radius\&. "
+.ti -1c
+.RI "real(sp) function \fBhuarea_s\fP (sa, sb)"
+.br
+.RI "Spherical area of right-angle triangle whose orthogonal sides have orthographic projection dimensions, sa and sb, sphere of unit radius\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 80 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function pmat4::huarea::huarea_d (real(dp), intent(in) sa, real(dp), intent(in) sb)\fC [private]\fP"
+
+.PP
+Spherical area of right-angle triangle whose orthogonal sides have orthographic projection dimensions, sa and sb, sphere of unit radius\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsa\fP orthographic projection of triangle's side A 
+.br
+\fIsb\fP orthographic projection of triangle's side B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+area (steradians) of the right-angle spherical triangle 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 648 of file pmat4\&.f90\&.
+.SS "real(sp) function pmat4::huarea::huarea_s (real(sp), intent(in) sa, real(sp), intent(in) sb)\fC [private]\fP"
+
+.PP
+Spherical area of right-angle triangle whose orthogonal sides have orthographic projection dimensions, sa and sb, sphere of unit radius\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsa\fP orthographic projection of triangle's side A 
+.br
+\fIsb\fP orthographic projection of triangle's side B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+area (steradians) of the right-angle spherical triangle 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 630 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

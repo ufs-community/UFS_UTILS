@@ -1,0 +1,306 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/program_setup.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/program_setup.F90 \- Set up program execution\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBprogram_setup\fP"
+.br
+.RI "This module contains code to read the setup namelist file, handle the varmap file for GRIB2 data, and calculate the soil parameters\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBprogram_setup::calc_soil_params\fP (num_soil_cats, smlow, smhigh, satdk, maxsmc, bb, satpsi, satdw, refsmc, drysmc, wltsmc)"
+.br
+.RI "Compute soil parameters\&. "
+.ti -1c
+.RI "subroutine, public \fBprogram_setup::calc_soil_params_driver\fP (localpet)"
+.br
+.RI "Driver routine to compute soil parameters for each soil type\&. "
+.ti -1c
+.RI "subroutine, public \fBprogram_setup::get_var_cond\fP (var_name, this_miss_var_method, this_miss_var_value, this_field_var_name, loc)"
+.br
+.RI "Search the variable mapping table to find conditions for handling missing variables\&. "
+.ti -1c
+.RI "subroutine, public \fBprogram_setup::read_setup_namelist\fP (filename)"
+.br
+.RI "Reads program configuration namelist\&. "
+.ti -1c
+.RI "subroutine, public \fBprogram_setup::read_varmap\fP"
+.br
+.RI "Reads the variable mapping table, which is required for initializing with GRIB2 data\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "character(len=500), dimension(7), public \fBprogram_setup::atm_core_files_input_grid\fP = 'NULL'"
+.br
+.RI "File names of input atmospheric restart core files\&. "
+.ti -1c
+.RI "character(len=500), dimension(6), public \fBprogram_setup::atm_files_input_grid\fP = 'NULL'"
+.br
+.RI "File names of input atmospheric data\&. "
+.ti -1c
+.RI "character(len=500), dimension(6), public \fBprogram_setup::atm_tracer_files_input_grid\fP = 'NULL'"
+.br
+.RI "File names of input atmospheric restart tracer files\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::atm_weight_file\fP ='NULL'"
+.br
+.RI "File containing pre-computed weights to horizontally interpolate atmospheric fields\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::bb_target\fP"
+.br
+.RI "Soil 'b' parameter, target grid\&. "
+.ti -1c
+.RI "character(len=20), dimension(:), allocatable, public \fBprogram_setup::chgres_var_names\fP"
+.br
+.RI "Varmap table variable name as recognized by this program\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::convert_atm\fP = \&.false\&."
+.br
+.RI "Convert atmospheric data when true\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::convert_nst\fP = \&.false\&."
+.br
+.RI "Convert nst data when true\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::convert_sfc\fP = \&.false\&."
+.br
+.RI "Convert sfc data when true\&. "
+.ti -1c
+.RI "character(len=6), public \fBprogram_setup::cres_target_grid\fP = 'NULL'"
+.br
+.RI "Target grid resolution, i\&.e\&., C768\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::cycle_day\fP = \-999"
+.br
+.RI "Cycle day\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::cycle_hour\fP = \-999"
+.br
+.RI "Cycle hour\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::cycle_mon\fP = \-999"
+.br
+.RI "Cycle month\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::cycle_year\fP = \-999"
+.br
+.RI "Cycle year\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::data_dir_input_grid\fP = 'NULL'"
+.br
+.RI "Directory containing input atm or sfc files\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::drysmc_input\fP"
+.br
+.RI "Air dry soil moisture content input grid\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::drysmc_target\fP"
+.br
+.RI "Air dry soil moisture content target grid\&. "
+.ti -1c
+.RI "character(len=20), public \fBprogram_setup::external_model\fP ='GFS'"
+.br
+.RI "The model that the input data is derived from\&. "
+.ti -1c
+.RI "character(len=20), dimension(:), allocatable, public \fBprogram_setup::field_var_names\fP"
+.br
+.RI "The GRIB2 variable name in the varmap table\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::fix_dir_target_grid\fP = 'NULL'"
+.br
+.RI "Directory containing target grid pre-computed fixed data (ex: soil type)\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::geogrid_file_input_grid\fP = 'NULL'"
+.br
+.RI "Name of 'geogrid' file, which contains static surface fields on the input grid\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::grib2_file_input_grid\fP = 'NULL'"
+.br
+.RI "REQUIRED\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::halo_blend\fP = 0"
+.br
+.RI "Number of row/cols of blending halo, where model tendencies and lateral boundary tendencies are applied\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::halo_bndy\fP = 0"
+.br
+.RI "Number of row/cols of lateral halo, where pure lateral bndy conditions are applied (regional target grids)\&. "
+.ti -1c
+.RI "character(len=25), public \fBprogram_setup::input_type\fP ='restart'"
+.br
+.RI "Input data type: "
+.ti -1c
+.RI "logical, public \fBprogram_setup::lai_from_climo\fP = \&.true\&."
+.br
+.RI "If false, interpolate leaf area index from the input data to the target grid instead of using data from static data\&. "
+.ti -1c
+.RI "integer, parameter, public \fBprogram_setup::max_tracers\fP =100"
+.br
+.RI "Maximum number of atmospheric tracers processed\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::maxsmc_input\fP"
+.br
+.RI "Maximum soil moisture content input grid\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::maxsmc_target\fP"
+.br
+.RI "Maximum soil moisture content target grid\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::minmax_vgfrc_from_climo\fP = \&.true\&."
+.br
+.RI "If false, interpolate min/max vegetation fraction from the input data to the target grid instead of using data from static data\&. "
+.ti -1c
+.RI "character(len=20), dimension(:), allocatable, public \fBprogram_setup::missing_var_methods\fP"
+.br
+.RI "Method to replace missing GRIB2 input records\&. "
+.ti -1c
+.RI "real(kind=esmf_kind_r4), dimension(:), allocatable, public \fBprogram_setup::missing_var_values\fP"
+.br
+.RI "If input GRIB2 record is missing, the variable is set to this value\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::mosaic_file_input_grid\fP = 'NULL'"
+.br
+.RI "Input grid mosaic file\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::mosaic_file_target_grid\fP = 'NULL'"
+.br
+.RI "Target grid mosaic file\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::nsoill_out\fP = 4"
+.br
+.RI "Number of soil levels desired in the output data\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::nst_files_input_grid\fP = 'NULL'"
+.br
+.RI "File name of input nst data\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::num_tracers\fP"
+.br
+.RI "Number of atmospheric tracers to be processed\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::num_tracers_input\fP"
+.br
+.RI "Number of atmospheric tracers in input file\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::orog_dir_input_grid\fP = 'NULL'"
+.br
+.RI "Directory containing the input grid orography files\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::orog_dir_target_grid\fP = 'NULL'"
+.br
+.RI "Directory containing the target grid orography files\&. "
+.ti -1c
+.RI "character(len=500), dimension(6), public \fBprogram_setup::orog_files_input_grid\fP = 'NULL'"
+.br
+.RI "Input grid orography files\&. "
+.ti -1c
+.RI "character(len=500), dimension(6), public \fBprogram_setup::orog_files_target_grid\fP = 'NULL'"
+.br
+.RI "Target grid orography files\&. "
+.ti -1c
+.RI "logical, dimension(:), allocatable, public \fBprogram_setup::read_from_input\fP"
+.br
+.RI "When false, variable was not read from GRIB2 input file\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::refsmc_input\fP"
+.br
+.RI "Reference soil moisture content input grid (onset of soil moisture stress)\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::refsmc_target\fP"
+.br
+.RI "Reference soil moisture content target grid (onset of soil moisture stress)\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::regional\fP = 0"
+.br
+.RI "For regional target grids\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::satpsi_target\fP"
+.br
+.RI "Saturated soil potential, target grid\&. "
+.ti -1c
+.RI "character(len=500), dimension(6), public \fBprogram_setup::sfc_files_input_grid\fP = 'NULL'"
+.br
+.RI "File names containing input surface data\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::sotyp_from_climo\fP = \&.true\&."
+.br
+.RI "If false, interpolate soil type from the input data to the target grid instead of using data from static data\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::tg3_from_soil\fP = \&.false\&."
+.br
+.RI "If false, use lowest level soil temperature for the base soil temperature instead of using data from static data\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::thomp_mp_climo_file\fP = 'NULL'"
+.br
+.RI "Path/name to the Thompson MP climatology file\&. "
+.ti -1c
+.RI "character(len=20), dimension(max_tracers), public \fBprogram_setup::tracers\fP ='NULL'"
+.br
+.RI "Name of each atmos tracer to be processed\&. "
+.ti -1c
+.RI "character(len=20), dimension(max_tracers), public \fBprogram_setup::tracers_input\fP ='NULL'"
+.br
+.RI "Name of each atmos tracer record in the input file\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::use_thomp_mp_climo\fP =\&.false\&."
+.br
+.RI "When true, read and process Thompson MP climatological tracers\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::varmap_file\fP = 'NULL'"
+.br
+.RI "REQUIRED\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::vcoord_file_target_grid\fP = 'NULL'"
+.br
+.RI "Vertical coordinate definition file\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::vgfrc_from_climo\fP = \&.true\&."
+.br
+.RI "If false, interpolate vegetation fraction from the input data to the target grid instead of using data from static data\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::vgtyp_from_climo\fP = \&.true\&."
+.br
+.RI "If false, interpolate vegetation type from the input data to the target grid instead of using data from static data\&. "
+.ti -1c
+.RI "logical, public \fBprogram_setup::wam_cold_start\fP = \&.false\&."
+.br
+.RI "When true, cold start for whole atmosphere model\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::wltsmc_input\fP"
+.br
+.RI "Plant wilting point soil moisture content input grid\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable, public \fBprogram_setup::wltsmc_target\fP"
+.br
+.RI "Plant wilting point soil moisture content target grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Set up program execution\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBprogram_setup\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

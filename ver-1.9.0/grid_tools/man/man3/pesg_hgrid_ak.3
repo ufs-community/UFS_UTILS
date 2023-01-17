@@ -1,0 +1,135 @@
+.TH "pesg::hgrid_ak" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::hgrid_ak
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBhgrid_ak\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, re, delxre, delyre, glat, glon, garea, ff)"
+.br
+.RI "Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, in dimensional units upon return\&. "
+.ti -1c
+.RI "subroutine \fBhgrid_ak_c\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, re, delxre, delyre, glat, glon, garea, dx, dy, dangle_dx, dangle_dy, ff)"
+.br
+.RI "Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, and the x- and y- grid steps, dx and dy, in dimensional units upon return\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 48 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::hgrid_ak::hgrid_ak (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) re, real(dp), intent(in) delxre, real(dp), intent(in) delyre, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, in dimensional units upon return\&. The gridded lats and lons, glat and glon, remain in radians\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIplat\fP radians latitude of the projection center of the mapping 
+.br
+\fIplon\fP radians longitude of the projection center of the mapping 
+.br
+\fIpazi\fP Azimuth of map orientation at its center 
+.br
+\fIre\fP earth radius 
+.br
+\fIdelxre\fP map-space grid increments in the dimensional units 
+.br
+\fIdelyre\fP map-space grid increments in the dimensional units 
+.br
+\fIglat\fP grid points for latitude 
+.br
+\fIglon\fP grid points for longitude 
+.br
+\fIgarea\fP array of grid-cell areas in dimensional units 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1765 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::hgrid_ak::hgrid_ak_c (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) re, real(dp), intent(in) delxre, real(dp), intent(in) delyre, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny  ), intent(out) dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny\-1), intent(out) dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dy, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, and the x- and y- grid steps, dx and dy, in dimensional units upon return\&. The gridded lats and lons, glat and glon, remain in radians\&. Also, in order for the argument list to remain compatible with an earlier version of this routine, the relative rotations of the steps, dangle_dx and dangle_dy, are returned as degrees instead of radians (all other angles in the argument list, i\&.e\&., plat,plon,pazi,glat,glon, remain radians)\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP number of grid spaces in x 
+.br
+\fIny\fP number of grid spaces in y 
+.br
+\fIa\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIk\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIplat\fP latitude of projection center of the mapping (radians) 
+.br
+\fIplon\fP longitude of projection center of the mapping (radians) 
+.br
+\fIpazi\fP Azimuth of map orientation at its center (radians) 
+.br
+\fIre\fP earth radius in dimensional length units 
+.br
+\fIdelxre\fP map-space grid increments in the dimensional units 
+.br
+\fIdelyre\fP map-space grid increments in the dimensional units 
+.br
+\fIglat\fP gridded lats (radians) 
+.br
+\fIglon\fP gridded lons (radians) 
+.br
+\fIgarea\fP grid cell areas in dimensional units 
+.br
+\fIdx\fP x- grid steps in dimensional units 
+.br
+\fIdy\fP y- grid steps in dimensional units 
+.br
+\fIdangle_dx\fP azimuth rotations of the steps dx (in degrees) 
+.br
+\fIdangle_dy\fP azimuth rotations of the steps dy (in degrees) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1817 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

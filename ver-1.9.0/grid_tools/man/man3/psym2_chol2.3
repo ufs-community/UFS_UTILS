@@ -1,0 +1,47 @@
+.TH "psym2::chol2" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+psym2::chol2
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBchol2\fP (s, c, ff)"
+.br
+.RI "Return the cholesky lower triangular factor, C, of the 2X2 symmetric matrix, S, or raise the failure flag, FF, if S is not positive-definite\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 31 of file psym2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine psym2::chol2::chol2 (real(dp), dimension(2,2), intent(in) s, real(dp), dimension(2,2), intent(out) c, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Return the cholesky lower triangular factor, C, of the 2X2 symmetric matrix, S, or raise the failure flag, FF, if S is not positive-definite\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP 2X2 symmetric matrix 
+.br
+\fIc\fP cholesky lower triangular factor 
+.br
+\fIff\fP raise the failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 455 of file psym2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

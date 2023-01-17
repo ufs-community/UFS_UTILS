@@ -1,0 +1,63 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/mapped_mask.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "cpld_gridgen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/mapped_mask.F90 \- Create the mapped ocean mask files\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBmapped_mask::make_frac_land\fP (src, wgt)"
+.br
+.RI "Use ESMF weights to map the ocean land mask to the FV3 tiles and write the mapped mask to 6 tile files\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Create the mapped ocean mask files\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This writes the mapped ocean mask on the FV3 tiles 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBmapped_mask\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine mapped_mask::make_frac_land (character(len=*), intent(in) src, character(len=*), intent(in) wgt)"
+
+.PP
+Use ESMF weights to map the ocean land mask to the FV3 tiles and write the mapped mask to 6 tile files\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsrc\fP a SCRIP file containing the land mask for the ocean domain 
+.br
+\fIwgt\fP a file containing the ESMF weights to regrid from the ocean domain to the FV3 tile domain
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 27 of file mapped_mask\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for cpld_gridgen from the source code\&.

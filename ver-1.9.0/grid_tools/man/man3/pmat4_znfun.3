@@ -1,0 +1,53 @@
+.TH "pmat4::znfun" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::znfun
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBznfun\fP (n, z, zn, znd, zndd, znddd)"
+.br
+.RI "For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 104 of file pmat4\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat4::znfun::znfun (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn, real(dp), intent(out) znd, real(dp), intent(out) zndd, real(dp), intent(out) znddd)\fC [private]\fP"
+
+.PP
+For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP integer order of the first of the returned derivatives of C\&. 
+.br
+\fIz\fP real input argument in the function C(z) 
+.br
+\fIzn\fP nth-derivative of C(z) 
+.br
+\fIznd\fP (n+1)th-derivative of C(z) 
+.br
+\fIzndd\fP (n+2)th-derivative of C(z) 
+.br
+\fIznddd\fP (n+3)th-derivative of C(z) 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1960 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

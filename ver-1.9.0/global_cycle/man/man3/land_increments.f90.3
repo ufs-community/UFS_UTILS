@@ -1,0 +1,253 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/land_increments.f90" 3 "Tue Jan 17 2023" "Version 1.9.0" "global_cycle" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/land_increments.f90 \- Routines for applyng land DA increments\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBland_increments::add_increment_snow\fP (snd_inc, mask, lensfc, snd)"
+.br
+.RI "Add snow depth increment to model snow depth state, and limit output to be non-negative\&. "
+.ti -1c
+.RI "subroutine, public \fBland_increments::add_increment_soil\fP (rla, rlo, stc_state, soilsnow_tile, soilsnow_fg_tile, lensfc, lsoil, idim, jdim, myrank)"
+.br
+.RI "Read in gsi file with soil state increments (on the gaussian grid), interpolate increments to the cubed-sphere tile, and add to the soil states\&. "
+.ti -1c
+.RI "subroutine, public \fBland_increments::apply_land_da_adjustments_snd\fP (lsm, lensfc, mask, swe_bck, snd_bck, snd_anl, swe_adj)"
+.br
+.RI "Make adjustments to dependent variables after applying land increments\&. "
+.ti -1c
+.RI "subroutine, public \fBland_increments::apply_land_da_adjustments_stc\fP (lsm, isot, ivegsrc, lensfc, lsoil, rsoiltype, mask, stc_bck, stc_anl, smc_adj, slc_adj)"
+.br
+.RI "Make adjustments to dependent variables after applying land increments\&. "
+.ti -1c
+.RI "subroutine, public \fBland_increments::calculate_landinc_mask\fP (smc, swe, vtype, lensfc, veg_type_landice, mask)"
+.br
+.RI "Calculate soil mask for land on model grid\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, parameter \fBland_increments::lsm_noah\fP =1"
+.br
+.RI "flag for NOAH land surface model copied from GFS_typedefs\&.F90 "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Routines for applyng land DA increments\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper ESRL/PSL 
+.RE
+.PP
+
+.PP
+Definition in file \fBland_increments\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public land_increments::add_increment_snow (real, dimension(lensfc), intent(in) snd_inc, integer, dimension(lensfc), intent(in) mask, integer, intent(in) lensfc, real, dimension(lensfc), intent(inout) snd)"
+
+.PP
+Add snow depth increment to model snow depth state, and limit output to be non-negative\&. JEDI increments are calculated globally, so must be screened to land-only locations here\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlensfc\fP Number of land points on this tile 
+.br
+\fIsnd_inc\fP Soil depth increments 
+.br
+\fImask\fP Land mask for increments 
+.br
+\fIsnd\fP Soil depth background (in), and analysis (out)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper\&. 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+August 2021 
+.RE
+.PP
+
+.PP
+Definition at line 315 of file land_increments\&.f90\&.
+.SS "subroutine, public land_increments::add_increment_soil (real, dimension(lensfc), intent(inout) rla, real, dimension(lensfc), intent(inout) rlo, real, dimension(lensfc, lsoil), intent(inout) stc_state, integer, dimension(lensfc), intent(in) soilsnow_tile, integer, dimension(lensfc), intent(in) soilsnow_fg_tile, integer, intent(in) lensfc, integer, intent(in) lsoil, integer, intent(in) idim, integer, intent(in) jdim, integer, intent(in) myrank)"
+
+.PP
+Read in gsi file with soil state increments (on the gaussian grid), interpolate increments to the cubed-sphere tile, and add to the soil states\&. Adapted from adjust_nsst\&. Currently only coded for soil temperature\&. Soil moisture will need the model soil moisture paramaters for regridding\&.
+.PP
+Does not make a temperature update if snow differ between fg and anal (allow correction of snow to address temperature error first), or if snow is present (will eventually updating of snow temperature in this case)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIRLA\fP Latitude on the cubed-sphere tile 
+.br
+\fIRLO\fP Longitude on the cubed-sphere tile 
+.br
+\fISTC_STATE\fP 
+.br
+\fISOILSNOW_TILE\fP Land mask for increments on the cubed-sphere tile 
+.br
+\fISOILSNOW_FG_TILE\fP First guess land mask for increments on the cubed-sphere tile 
+.br
+\fILENSFC\fP Number of land points on a tile 
+.br
+\fILSOIL\fP Number of soil layers 
+.br
+\fIIDIM\fP 'I' dimension of a tile 
+.br
+\fIJDIM\fP 'J' dimension of a tile 
+.br
+\fIMYRANK\fP MPI rank number
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper\&. 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+March 2021 
+.RE
+.PP
+
+.PP
+Definition at line 45 of file land_increments\&.f90\&.
+.SS "subroutine, public land_increments::apply_land_da_adjustments_snd (integer, intent(in) lsm, integer, intent(in) lensfc, integer, dimension(lensfc), intent(in) mask, real, dimension(lensfc), intent(in) swe_bck, real, dimension(lensfc), intent(in) snd_bck, real, dimension(lensfc), intent(in) snd_anl, real, dimension(lensfc), intent(inout) swe_adj)"
+
+.PP
+Make adjustments to dependent variables after applying land increments\&. These adjustments are model-dependent, and are currently only coded for Noah LSM\&. Here: adjust SWE to be consistent with updated SND, using snow density from the forecast\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlsm\fP Integer code for the LSM 
+.br
+\fIlensfc\fP Number of land points for this tile 
+.br
+\fImask\fP Land mask for increments 
+.br
+\fIswe_bck\fP Background SWE 
+.br
+\fIsnd_bck\fP Background snow depth 
+.br
+\fIsnd_anl\fP Analysis snow depth 
+.br
+\fIswe_adj\fP SWE to be adjusted 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+August 2021 
+.RE
+.PP
+
+.PP
+Definition at line 483 of file land_increments\&.f90\&.
+.SS "subroutine, public land_increments::apply_land_da_adjustments_stc (integer, intent(in) lsm, integer, intent(in) isot, integer, intent(in) ivegsrc, integer, intent(in) lensfc, integer, intent(in) lsoil, real, dimension(lensfc), intent(in) rsoiltype, integer, dimension(lensfc), intent(in) mask, real, dimension(lensfc, lsoil), intent(in) stc_bck, real, dimension(lensfc, lsoil), intent(in) stc_anl, real, dimension(lensfc,lsoil), intent(inout) smc_adj, real, dimension(lensfc,lsoil), intent(inout) slc_adj)"
+
+.PP
+Make adjustments to dependent variables after applying land increments\&. These adjustments are model-dependent, and are currently only coded for Noah LSM\&. For Noah LSM, copy relevent code blocks from model code (same as has been done in sfc_sub)\&. Here: adjust (frozen) soil moisture to be consistent with changes in soil temperature from DA 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlsm\fP Integer code for the LSM 
+.br
+\fIisot\fP Integer code for the soil type data set 
+.br
+\fIivegsrc\fP Integer code for the vegetation type data set 
+.br
+\fIlensfc\fP Number of land points for this tile 
+.br
+\fIlsoil\fP Number of soil layers 
+.br
+\fIrsoiltype\fP Array of input soil types 
+.br
+\fImask\fP Mask indicating surface type 
+.br
+\fIstc_bck\fP Background soil temperature states 
+.br
+\fIstc_anl\fP Analysis soil temperature states 
+.br
+\fIsmc_adj\fP Soil moisture state to be adjusted 
+.br
+\fIslc_adj\fP Liquid soil moisture states to be adjusted 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+April 2021 
+.RE
+.PP
+
+.PP
+Definition at line 396 of file land_increments\&.f90\&.
+.PP
+References tfreez()\&.
+.SS "subroutine, public land_increments::calculate_landinc_mask (real, dimension(lensfc), intent(in) smc, real, dimension(lensfc), intent(in) swe, real, dimension(lensfc), intent(in) vtype, integer, intent(in) lensfc, integer, intent(in) veg_type_landice, integer, dimension(lensfc), intent(out) mask)"
+
+.PP
+Calculate soil mask for land on model grid\&. Output is 1 - soil, 2 - snow-covered, 0 - land ice, -1 not land\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlensfc\fP Number of land points for this tile 
+.br
+\fIveg_type_landice\fP Value of vegetion class that indicates land-ice 
+.br
+\fIsmc\fP Model soil moisture\&. 
+.br
+\fIswe\fP Model snow water equivalent 
+.br
+\fIvtype\fP Model vegetation type 
+.br
+\fImask\fP Land mask for increments 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+March 2021 
+.RE
+.PP
+
+.PP
+Definition at line 345 of file land_increments\&.f90\&.
+.SH "Variable Documentation"
+.PP 
+.SS "integer, parameter land_increments::lsm_noah =1\fC [private]\fP"
+
+.PP
+flag for NOAH land surface model copied from GFS_typedefs\&.F90 
+.PP
+Definition at line 15 of file land_increments\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for global_cycle from the source code\&.

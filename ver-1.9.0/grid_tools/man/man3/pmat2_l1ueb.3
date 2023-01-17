@@ -1,0 +1,99 @@
+.TH "pmat2::l1ueb" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::l1ueb
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBDL1UEB\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "Double precision version of L1UEB\&. "
+.ti -1c
+.RI "subroutine \fBL1UEB\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 67 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::l1ueb::DL1UEB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(dp), dimension(0:,\-mah1:), intent(inout) a, real(dp), dimension(:,\-mbh1:), intent(inout) b)\fC [private]\fP"
+
+.PP
+Double precision version of L1UEB\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of rows of band matrices A and B 
+.br
+\fImah1\fP number of subdiagonals of A 
+.br
+\fImah2\fP number of superdiagonals of A 
+.br
+\fImbh1\fP number of subdiagonals of B 
+.br
+\fImbh2\fP number of superdiagonals of B 
+.br
+\fIa\fP Input matrix A; output encoded L, D, U, factors 
+.br
+\fIb\fP Input matrix B; output D**-1 * B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 855 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::l1ueb::L1UEB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(sp), dimension(0:m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m,\-mbh1:mbh2), intent(inout) b)\fC [private]\fP"
+
+.PP
+Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. This is a special adaptation of L1UBB used to process quadrature weights for QEDBV etc in which the initial quadrature value is provided as input instead of being implicitly assumed zero (which is the case for QZDBV etc)\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of rows of B, one less than the rows of A (which has 'row 0') 
+.br
+\fImah1\fP left half-width of fortran array A 
+.br
+\fImah2\fP right half-width of fortran array A 
+.br
+\fImbh1\fP left half-width of fortran array B 
+.br
+\fImbh2\fP right half-width of fortran array B 
+.br
+\fIa\fP input as band matrix, output as lower and upper triangulars with 1s implicitly assumed to lie on the main diagonal\&. The product of these triangular matrices is [D**-1]*[A], where [D] is a diagonal matrix\&. 
+.br
+\fIb\fP in as band matrix, out as same but premultiplied by diagonal [D**-1] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1998 
+.RE
+.PP
+
+.PP
+Definition at line 818 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

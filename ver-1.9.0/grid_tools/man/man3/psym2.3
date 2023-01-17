@@ -1,0 +1,530 @@
+.TH "psym2" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+psym2 \- A suite of routines to perform the eigen-decomposition of symmetric 2*2 matrices and to deliver basic analytic functions, and the derivatives of these functions, of such matrices\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBchol2\fP"
+.br
+.ti -1c
+.RI "interface \fBeigensym2\fP"
+.br
+.ti -1c
+.RI "interface \fBexpsym2\fP"
+.br
+.ti -1c
+.RI "interface \fBexpsym2d_e\fP"
+.br
+.ti -1c
+.RI "interface \fBexpsym2d_t\fP"
+.br
+.ti -1c
+.RI "interface \fBid2222\fP"
+.br
+.ti -1c
+.RI "interface \fBinvsym2\fP"
+.br
+.ti -1c
+.RI "interface \fBlogsym2\fP"
+.br
+.ti -1c
+.RI "interface \fBsqrtsym2\fP"
+.br
+.ti -1c
+.RI "interface \fBsqrtsym2d_e\fP"
+.br
+.ti -1c
+.RI "interface \fBsqrtsym2d_t\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBchol2\fP (s, c, ff)"
+.br
+.RI "Return the cholesky lower triangular factor, C, of the 2X2 symmetric matrix, S, or raise the failure flag, FF, if S is not positive-definite\&. "
+.ti -1c
+.RI "subroutine, public \fBeigensym2\fP (em, vv, oo)"
+.br
+.RI "Get the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo, of the symmetric 2*2 matrix, em\&. "
+.ti -1c
+.RI "subroutine \fBeigensym2d\fP (em, vv, oo, vvd, ood, ff)"
+.br
+.RI "For a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and the diagonal matrix of eigenvalues, oo\&. "
+.ti -1c
+.RI "subroutine, public \fBexpsym2\fP (em, expem)"
+.br
+.RI "Get the exp of a symmetric 2*2 matrix\&. "
+.ti -1c
+.RI "subroutine \fBexpsym2d\fP (x, z, zd)"
+.br
+.RI "Get the exp of a symmetric 2*2 matrix, and its symmetric derivative\&. "
+.ti -1c
+.RI "subroutine \fBexpsym2d_e\fP (x, z, zd)"
+.br
+.RI "Get the exponential and its symmetric derivative for a symmetric 2*2 matrix using eigen-decomposition\&. "
+.ti -1c
+.RI "subroutine \fBexpsym2d_t\fP (x, z, zd)"
+.br
+.RI "Use the Taylor-series method (eigenvalues both fairly close to zero)\&. "
+.ti -1c
+.RI "subroutine, public \fBid2222\fP (em)"
+.br
+.RI "General routine for a symmetrized 4th-rank tensor that acts as an effective identity for operations on symmetric matrices\&. "
+.ti -1c
+.RI "subroutine, public \fBinvsym2\fP (em, z)"
+.br
+.RI "Get the inverse of a 2*2 matrix (need not be symmetric in this case)\&. "
+.ti -1c
+.RI "subroutine \fBinvsym2d\fP (em, z, zd)"
+.br
+.RI "Get the inverse, z,of a 2*2 symmetric matrix, em, and its derivative, zd, with respect to symmetric variations of its components\&. "
+.ti -1c
+.RI "subroutine, public \fBlogsym2\fP (em, logem)"
+.br
+.RI "Get the log of a symmetric positive-definite 2*2 matrix\&. "
+.ti -1c
+.RI "subroutine \fBlogsym2d\fP (x, z, zd)"
+.br
+.RI "General routine to evaluate the logarithm, z=log(x), and the symmetric derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite matrix\&. "
+.ti -1c
+.RI "subroutine, public \fBsqrtsym2\fP (em, z)"
+.br
+.RI "Get the sqrt of a symmetric positive-definite 2*2 matrix\&. "
+.ti -1c
+.RI "subroutine \fBsqrtsym2d\fP (x, z, zd)"
+.br
+.RI "General routine to evaluate z=sqrt(x), and the symmetric derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite matrix\&. "
+.ti -1c
+.RI "subroutine \fBsqrtsym2d_e\fP (x, z, zd)"
+.br
+.RI "Eigen-method\&. "
+.ti -1c
+.RI "subroutine \fBsqrtsym2d_t\fP (x, z, zd)"
+.br
+.RI "Use the Taylor-series method (eigenvalues both fairly close to unity)\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real(dp), dimension(2, 2, 2, 2) \fBid\fP"
+.br
+.RI "ID\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+A suite of routines to perform the eigen-decomposition of symmetric 2*2 matrices and to deliver basic analytic functions, and the derivatives of these functions, of such matrices\&. 
+
+In addition, we include a simple cholesky routine\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public \fBpsym2::chol2\fP (real(dp), dimension(2,2), intent(in) s, real(dp), dimension(2,2), intent(out) c, logical, intent(out) ff)"
+
+.PP
+Return the cholesky lower triangular factor, C, of the 2X2 symmetric matrix, S, or raise the failure flag, FF, if S is not positive-definite\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP 2X2 symmetric matrix 
+.br
+\fIc\fP cholesky lower triangular factor 
+.br
+\fIff\fP raise the failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 455 of file psym2\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine, public \fBpsym2::eigensym2\fP (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) vv, real(dp), dimension(2,2), intent(out) oo)"
+
+.PP
+Get the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo, of the symmetric 2*2 matrix, em\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP symmetric 2*2 matrix 
+.br
+\fIvv\fP orthogonal eigenvectors 
+.br
+\fIoo\fP diagonal matrix of eigenvalues 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 43 of file psym2\&.f90\&.
+.PP
+References pietc::o2, pietc::u0, and pietc::u1\&.
+.SS "subroutine psym2::eigensym2d (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) vv, real(dp), dimension(2,2), intent(out) oo, real(dp), dimension(2,2,2,2), intent(out) vvd, real(dp), dimension(2,2,2,2), intent(out) ood, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+For a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and the diagonal matrix of eigenvalues, oo\&. If the two eigenvalues are equal, proceed no further and raise the logical failure flag, ff, to \&.true\&.; otherwise, return with vvd=d(vv)/d(em) and ood=d(oo)/d(em) and ff=\&.false\&., and maintain the symmetries between the last two of the indices of these derivatives\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP symmetric 2*2 matrix 
+.br
+\fIvv\fP normalized eigenvectors 
+.br
+\fIoo\fP diagonal matrix of eigenvalues 
+.br
+\fIvvd\fP vvd=d(vv)/d(em) 
+.br
+\fIood\fP ood=d(oo)/d(em) 
+.br
+\fIff\fP logical failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 76 of file psym2\&.f90\&.
+.PP
+References pietc::o2, pietc::u0, and pietc::u1\&.
+.SS "subroutine, public \fBpsym2::expsym2\fP (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) expem)"
+
+.PP
+Get the exp of a symmetric 2*2 matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP symmetric 2*2 matrix 
+.br
+\fIexpem\fP exp of a symmetric 2*2 matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 277 of file psym2\&.f90\&.
+.SS "subroutine psym2::expsym2d (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+Get the exp of a symmetric 2*2 matrix, and its symmetric derivative\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP exp of symmetric 2*2 matrix x 
+.br
+\fIzd\fP symmetric derivative wrt x of exp of x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 294 of file psym2\&.f90\&.
+.PP
+References pietc::o2\&.
+.SS "subroutine \fBpsym2::expsym2d_e\fP (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+Get the exponential and its symmetric derivative for a symmetric 2*2 matrix using eigen-decomposition\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP exp of symmetrix matrix x 
+.br
+\fIzd\fP symmetric derivative of z wrt x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 317 of file psym2\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine \fBpsym2::expsym2d_t\fP (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+Use the Taylor-series method (eigenvalues both fairly close to zero)\&. For a 2*2 symmetric matrix x, try to get both the z=exp(x) and dz/dx using the Taylor series expansion method\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP Taylor series expansion method exp(x) 
+.br
+\fIzd\fP symmetric derivative 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 347 of file psym2\&.f90\&.
+.PP
+References id, and pietc::u1\&.
+.SS "subroutine, public \fBpsym2::id2222\fP (real(dp), dimension(2,2,2,2), intent(out) em)"
+
+.PP
+General routine for a symmetrized 4th-rank tensor that acts as an effective identity for operations on symmetric matrices\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP symmetrized effective identity in space of symmetrix matrices\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 439 of file psym2\&.f90\&.
+.PP
+References id\&.
+.SS "subroutine, public \fBpsym2::invsym2\fP (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) z)"
+
+.PP
+Get the inverse of a 2*2 matrix (need not be symmetric in this case)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP 2*2 matrix 
+.br
+\fIz\fP inverse of a 2*2 matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 112 of file psym2\&.f90\&.
+.SS "subroutine psym2::invsym2d (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+Get the inverse, z,of a 2*2 symmetric matrix, em, and its derivative, zd, with respect to symmetric variations of its components\&. I\&.e\&., for a symmetric infinitesimal change, delta_em, in em, the resulting infinitesimal change in z would be: 
+.PP
+.nf
+delta_z(i,j) = matmul(zd(i,j,:,:),delta_em)
+.fi
+.PP
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP 2*2 symmetric matrix 
+.br
+\fIz\fP inverse of a 2*2 symmetric matrix 
+.br
+\fIzd\fP derivative of the 2*2 symmetric matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 132 of file psym2\&.f90\&.
+.SS "subroutine, public \fBpsym2::logsym2\fP (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) logem)"
+
+.PP
+Get the log of a symmetric positive-definite 2*2 matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP symmetric 2*2 matrix 
+.br
+\fIlogem\fP log of a symmetric positive-definite 2*2 matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 387 of file psym2\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine psym2::logsym2d (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+General routine to evaluate the logarithm, z=log(x), and the symmetric derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIzd\fP the symmetric derivative 
+.br
+\fIx\fP a symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP evaluate the logarithm log(x) 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 409 of file psym2\&.f90\&.
+.PP
+References pietc::o2, pietc::u0, and pietc::u1\&.
+.SS "subroutine, public \fBpsym2::sqrtsym2\fP (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) z)"
+
+.PP
+Get the sqrt of a symmetric positive-definite 2*2 matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP 2*2 symmetric matrix 
+.br
+\fIz\fP sqrt of a symmetric positive-definite 2*2 matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 150 of file psym2\&.f90\&.
+.SS "subroutine psym2::sqrtsym2d (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+General routine to evaluate z=sqrt(x), and the symmetric derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite matrix\&. If the eigenvalues are very close together, extract their geometric mean for 'preconditioning' a scaled version, px, of x, whose sqrt, and hence its derivative, can be easily obtained by the series expansion method\&. Otherwise, use the eigen-method (which entails dividing by the difference in the eignevalues to get zd, and which therefore fails when the eigenvalues become too similar)\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP sqrt(x) result 
+.br
+\fIzd\fP symmetric derivative 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 177 of file psym2\&.f90\&.
+.PP
+References pietc::u1\&.
+.SS "subroutine \fBpsym2::sqrtsym2d_e\fP (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+Eigen-method\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP sqrt(x) result 
+.br
+\fIzd\fP symmetric derivative 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 203 of file psym2\&.f90\&.
+.PP
+References pietc::o2, pietc::u0, and pietc::u1\&.
+.SS "subroutine \fBpsym2::sqrtsym2d_t\fP (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+Use the Taylor-series method (eigenvalues both fairly close to unity)\&. For a 2*2 positive definite symmetric matrix x, try to get both the z=sqrt(x) and dz/dx using the binomial-expansion method applied to the intermediate matrix, 
+.PP
+.nf
+r = (x-1)\&. ie z=sqrt(x) = (1+r)^{1/2} = I + (1/2)*r -(1/8)*r^2 \&.\&.\&.
+  + [(-)^n *(2n)!/{(n+1)! * n! *2^{2*n-1}} ]*r^{n+1}
+.fi
+.PP
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP sqrt(x) result 
+.br
+\fIzd\fP symmetric derivative 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 236 of file psym2\&.f90\&.
+.PP
+References id, pietc::o2, pietc::u0, and pietc::u1\&.
+.SH "Variable Documentation"
+.PP 
+.SS "real(dp), dimension(2,2,2,2) psym2::id\fC [private]\fP"
+
+.PP
+ID\&. 
+.PP
+Definition at line 18 of file psym2\&.f90\&.
+.PP
+Referenced by expsym2d_t(), id2222(), and sqrtsym2d_t()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

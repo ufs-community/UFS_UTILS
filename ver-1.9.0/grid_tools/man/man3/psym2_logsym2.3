@@ -1,0 +1,73 @@
+.TH "psym2::logsym2" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+psym2::logsym2
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBlogsym2\fP (em, logem)"
+.br
+.RI "Get the log of a symmetric positive-definite 2*2 matrix\&. "
+.ti -1c
+.RI "subroutine \fBlogsym2d\fP (x, z, zd)"
+.br
+.RI "General routine to evaluate the logarithm, z=log(x), and the symmetric derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite matrix\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 29 of file psym2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine psym2::logsym2::logsym2 (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) logem)\fC [private]\fP"
+
+.PP
+Get the log of a symmetric positive-definite 2*2 matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP symmetric 2*2 matrix 
+.br
+\fIlogem\fP log of a symmetric positive-definite 2*2 matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 387 of file psym2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine psym2::logsym2::logsym2d (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+
+.PP
+General routine to evaluate the logarithm, z=log(x), and the symmetric derivative, zd = dz/dx, where x is a symmetric 2*2 positive-definite matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIzd\fP the symmetric derivative 
+.br
+\fIx\fP a symmetric 2*2 positive-definite matrix 
+.br
+\fIz\fP evaluate the logarithm log(x) 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 409 of file psym2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

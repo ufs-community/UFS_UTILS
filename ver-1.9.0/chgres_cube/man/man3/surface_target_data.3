@@ -1,0 +1,522 @@
+.TH "surface_target_data" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+surface_target_data \- Module to hold ESMF fields associated with the target grid surface data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBcleanup_target_nst_data\fP"
+.br
+.RI "Free up memory once the target grid nst fields are no longer needed\&. "
+.ti -1c
+.RI "subroutine, public \fBcleanup_target_sfc_data\fP"
+.br
+.RI "Free up memory once the target grid surface fields are no longer needed\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBc_0_target_grid\fP"
+.br
+.RI "Coefficient 1 to calculate d(tz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBc_d_target_grid\fP"
+.br
+.RI "Coefficient 2 to calculate d(tz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBcanopy_mc_target_grid\fP"
+.br
+.RI "Canopy moisture content\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBd_conv_target_grid\fP"
+.br
+.RI "Thickness of free convection layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBdt_cool_target_grid\fP"
+.br
+.RI "Sub-layer cooling amount\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBf10m_target_grid\fP"
+.br
+.RI "log((z0+10)*1/z0) See sfc_diff\&.f for details\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBffmm_target_grid\fP"
+.br
+.RI "log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBifd_target_grid\fP"
+.br
+.RI "Model mode index\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBlai_target_grid\fP"
+.br
+.RI "Leaf area index\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBq2m_target_grid\fP"
+.br
+.RI "2-m specific humidity\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBqrain_target_grid\fP"
+.br
+.RI "Sensible heat flux due to rainfall\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_depth_target_grid\fP"
+.br
+.RI "Sea ice depth\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_fract_target_grid\fP"
+.br
+.RI "Sea ice fraction\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_skin_temp_target_grid\fP"
+.br
+.RI "Sea ice skin temperature\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBskin_temp_target_grid\fP"
+.br
+.RI "Skin temperature/sst\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsnow_depth_target_grid\fP"
+.br
+.RI "Physical snow depth\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsnow_liq_equiv_target_grid\fP"
+.br
+.RI "Liquid equivalent snow depth\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsoil_temp_target_grid\fP"
+.br
+.RI "3-d soil temperature\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsoilm_liq_target_grid\fP"
+.br
+.RI "3-d liquid soil moisture\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsoilm_tot_target_grid\fP"
+.br
+.RI "3-d total soil moisture\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsrflag_target_grid\fP"
+.br
+.RI "Snow/rain flag\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBt2m_target_grid\fP"
+.br
+.RI "2-m temperatrure\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBtprcp_target_grid\fP"
+.br
+.RI "Precipitation\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBtref_target_grid\fP"
+.br
+.RI "Reference temperature\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBustar_target_grid\fP"
+.br
+.RI "Friction velocity\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBw_0_target_grid\fP"
+.br
+.RI "Coefficient 3 to calculate d(tz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBw_d_target_grid\fP"
+.br
+.RI "Coefficient 4 to calculate d(tz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBxs_target_grid\fP"
+.br
+.RI "Salinity content in diurnal thermocline layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBxt_target_grid\fP"
+.br
+.RI "Heat content in diurnal thermocline layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBxtts_target_grid\fP"
+.br
+.RI "d(xt)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBxu_target_grid\fP"
+.br
+.RI "u-current content in diurnal thermocline layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBxv_target_grid\fP"
+.br
+.RI "v-current content in diurnal thermocline layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBxz_target_grid\fP"
+.br
+.RI "Diurnal thermocline layer thickness\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBxzts_target_grid\fP"
+.br
+.RI "d(xz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBz0_target_grid\fP"
+.br
+.RI "Roughness length\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBz_c_target_grid\fP"
+.br
+.RI "Sub-layer cooling thickness\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBzm_target_grid\fP"
+.br
+.RI "Oceanic mixed layer depth\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Module to hold ESMF fields associated with the target grid surface data\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public surface_target_data::cleanup_target_nst_data ()"
+
+.PP
+Free up memory once the target grid nst fields are no longer needed\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 145 of file surface_target_data\&.F90\&.
+.PP
+References c_0_target_grid, c_d_target_grid, d_conv_target_grid, dt_cool_target_grid, ifd_target_grid, qrain_target_grid, tref_target_grid, w_0_target_grid, w_d_target_grid, xs_target_grid, xt_target_grid, xtts_target_grid, xu_target_grid, xv_target_grid, xz_target_grid, xzts_target_grid, z_c_target_grid, and zm_target_grid\&.
+.PP
+Referenced by surface::surface_driver()\&.
+.SS "subroutine, public surface_target_data::cleanup_target_sfc_data ()"
+
+.PP
+Free up memory once the target grid surface fields are no longer needed\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 112 of file surface_target_data\&.F90\&.
+.PP
+References canopy_mc_target_grid, f10m_target_grid, ffmm_target_grid, lai_target_grid, q2m_target_grid, seaice_depth_target_grid, seaice_fract_target_grid, seaice_skin_temp_target_grid, skin_temp_target_grid, snow_depth_target_grid, snow_liq_equiv_target_grid, soil_temp_target_grid, soilm_liq_target_grid, soilm_tot_target_grid, srflag_target_grid, t2m_target_grid, tprcp_target_grid, ustar_target_grid, and z0_target_grid\&.
+.PP
+Referenced by surface::cleanup_all_target_sfc_data()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "type(esmf_field), public surface_target_data::c_0_target_grid"
+
+.PP
+Coefficient 1 to calculate d(tz)/d(ts)\&. 
+.PP
+Definition at line 62 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::c_d_target_grid"
+
+.PP
+Coefficient 2 to calculate d(tz)/d(ts)\&. 
+.PP
+Definition at line 60 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::canopy_mc_target_grid"
+
+.PP
+Canopy moisture content\&. 
+.PP
+Definition at line 18 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::d_conv_target_grid"
+
+.PP
+Thickness of free convection layer\&. 
+.PP
+Definition at line 64 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::dt_cool_target_grid"
+
+.PP
+Sub-layer cooling amount\&. 
+.PP
+Definition at line 66 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::f10m_target_grid"
+
+.PP
+log((z0+10)*1/z0) See sfc_diff\&.f for details\&. 
+.PP
+Definition at line 20 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::ffmm_target_grid"
+
+.PP
+log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. 
+.PP
+Definition at line 23 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::ifd_target_grid"
+
+.PP
+Model mode index\&. 0-diurnal model not started; 1-diurnal model started\&. 
+.PP
+Definition at line 68 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), surface::regrid_many(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::lai_target_grid"
+
+.PP
+Leaf area index\&. 
+.PP
+Definition at line 56 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::q2m_target_grid"
+
+.PP
+2-m specific humidity\&. 
+.PP
+Definition at line 26 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::qrain_target_grid"
+
+.PP
+Sensible heat flux due to rainfall\&. 
+.PP
+Definition at line 71 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::seaice_depth_target_grid"
+
+.PP
+Sea ice depth\&. 
+.PP
+Definition at line 28 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::seaice_fract_target_grid"
+
+.PP
+Sea ice fraction\&. 
+.PP
+Definition at line 30 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::seaice_skin_temp_target_grid"
+
+.PP
+Sea ice skin temperature\&. 
+.PP
+Definition at line 32 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::skin_temp_target_grid"
+
+.PP
+Skin temperature/sst\&. 
+.PP
+Definition at line 34 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::nst_land_fill(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::snow_depth_target_grid"
+
+.PP
+Physical snow depth\&. 
+.PP
+Definition at line 40 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::snow_liq_equiv_target_grid"
+
+.PP
+Liquid equivalent snow depth\&. 
+.PP
+Definition at line 38 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::soil_temp_target_grid"
+
+.PP
+3-d soil temperature\&. 
+.PP
+Definition at line 42 of file surface_target_data\&.F90\&.
+.PP
+Referenced by surface::adjust_soilt_for_terrain(), surface::calc_liq_soil_moisture(), cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::soilm_liq_target_grid"
+
+.PP
+3-d liquid soil moisture\&. 
+.PP
+Definition at line 44 of file surface_target_data\&.F90\&.
+.PP
+Referenced by surface::calc_liq_soil_moisture(), cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::qc_check(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::soilm_tot_target_grid"
+
+.PP
+3-d total soil moisture\&. 
+.PP
+Definition at line 46 of file surface_target_data\&.F90\&.
+.PP
+Referenced by surface::calc_liq_soil_moisture(), cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::qc_check(), surface::rescale_soil_moisture(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::srflag_target_grid"
+
+.PP
+Snow/rain flag\&. 
+.PP
+Definition at line 36 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::t2m_target_grid"
+
+.PP
+2-m temperatrure\&. 
+.PP
+Definition at line 48 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::tprcp_target_grid"
+
+.PP
+Precipitation\&. 
+.PP
+Definition at line 50 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::tref_target_grid"
+
+.PP
+Reference temperature\&. 
+.PP
+Definition at line 73 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::ustar_target_grid"
+
+.PP
+Friction velocity\&. 
+.PP
+Definition at line 52 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::w_0_target_grid"
+
+.PP
+Coefficient 3 to calculate d(tz)/d(ts)\&. 
+.PP
+Definition at line 77 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::w_d_target_grid"
+
+.PP
+Coefficient 4 to calculate d(tz)/d(ts)\&. 
+.PP
+Definition at line 75 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::xs_target_grid"
+
+.PP
+Salinity content in diurnal thermocline layer\&. 
+.PP
+Definition at line 79 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::xt_target_grid"
+
+.PP
+Heat content in diurnal thermocline layer\&. 
+.PP
+Definition at line 82 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::xtts_target_grid"
+
+.PP
+d(xt)/d(ts)\&. 
+.PP
+Definition at line 93 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::xu_target_grid"
+
+.PP
+u-current content in diurnal thermocline layer\&. 
+.PP
+Definition at line 85 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::xv_target_grid"
+
+.PP
+v-current content in diurnal thermocline layer\&. 
+.PP
+Definition at line 88 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::xz_target_grid"
+
+.PP
+Diurnal thermocline layer thickness\&. 
+.PP
+Definition at line 91 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::xzts_target_grid"
+
+.PP
+d(xz)/d(ts)\&. 
+.PP
+Definition at line 95 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::z0_target_grid"
+
+.PP
+Roughness length\&. 
+.PP
+Definition at line 54 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_sfc_data(), surface::create_surface_esmf_fields(), surface::interp(), surface::roughness(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::z_c_target_grid"
+
+.PP
+Sub-layer cooling thickness\&. 
+.PP
+Definition at line 97 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "type(esmf_field), public surface_target_data::zm_target_grid"
+
+.PP
+Oceanic mixed layer depth\&. 
+.PP
+Definition at line 99 of file surface_target_data\&.F90\&.
+.PP
+Referenced by cleanup_target_nst_data(), surface::create_nst_esmf_fields(), surface::interp(), surface::nst_land_fill(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

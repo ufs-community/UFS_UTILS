@@ -1,0 +1,110 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atmosphere_target_data.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atmosphere_target_data.F90 \- Define atmospheric target data variables\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBatmosphere_target_data\fP"
+.br
+.RI "Module to hold variables and ESMF fields associated with the target grid atmospheric data\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBatmosphere_target_data::cleanup_atmosphere_target_data\fP"
+.br
+.RI "Free up memory for fields and variables in this module\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::delp_target_grid\fP"
+.br
+.RI "Pressure thickness\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::dzdt_target_grid\fP"
+.br
+.RI "Vertical velocity\&. "
+.ti -1c
+.RI "integer, public \fBatmosphere_target_data::lev_target\fP"
+.br
+.RI "Number of vertical levels\&. "
+.ti -1c
+.RI "integer, public \fBatmosphere_target_data::levp1_target\fP"
+.br
+.RI "Number of vertical levels plus 1\&. "
+.ti -1c
+.RI "integer, public \fBatmosphere_target_data::nvcoord_target\fP"
+.br
+.RI "Number of vertical coordinate variables\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::ps_target_grid\fP"
+.br
+.RI "Surface pressure\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::qnifa_climo_target_grid\fP"
+.br
+.RI "Number concentration of ice friendly aerosols\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::qnwfa_climo_target_grid\fP"
+.br
+.RI "Number concentration of water friendly aerosols\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::temp_target_grid\fP"
+.br
+.RI "Temperautre\&. "
+.ti -1c
+.RI "type(esmf_field), dimension(:), allocatable, public \fBatmosphere_target_data::tracers_target_grid\fP"
+.br
+.RI "Tracers\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::u_s_target_grid\fP"
+.br
+.RI "U-wind, 'south' edge of grid cell\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::u_w_target_grid\fP"
+.br
+.RI "U-wind, 'west' edge of grid cell\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::v_s_target_grid\fP"
+.br
+.RI "V-wind, 'south' edge of grid cell\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::v_w_target_grid\fP"
+.br
+.RI "V-wind, 'west' edge of grid cell\&. "
+.ti -1c
+.RI "real(esmf_kind_r8), dimension(:,:), allocatable, public \fBatmosphere_target_data::vcoord_target\fP"
+.br
+.RI "Vertical coordinate\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatmosphere_target_data::zh_target_grid\fP"
+.br
+.RI "3-d height\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Define atmospheric target data variables\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBatmosphere_target_data\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

@@ -1,0 +1,54 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/grib2_util.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/grib2_util.F90 \- Utilities for use when reading grib2 data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBgrib2_util\fP"
+.br
+.RI "Utilities for use when reading grib2 data\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBgrib2_util::convert_omega\fP (omega, p, t, q, clb, cub)"
+.br
+.RI "Convert omega to vertical velocity\&. "
+.ti -1c
+.RI "elemental real function, public \fBgrib2_util::fpvsnew\fP (t)"
+.br
+.RI "Compute saturation vapor pressure\&. "
+.ti -1c
+.RI "subroutine, public \fBgrib2_util::rh2spfh\fP (rh_sphum, p, t)"
+.br
+.RI "Convert relative humidity to specific humidity\&. "
+.ti -1c
+.RI "subroutine, public \fBgrib2_util::rh2spfh_gfs\fP (rh_sphum, p, t)"
+.br
+.RI "Convert relative humidity to specific humidity (GFS formula) Calculation of saturation water vapor pressure is based on GFS function fvpsnew (Phillips 1982)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utilities for use when reading grib2 data\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBgrib2_util\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.
