@@ -52,13 +52,17 @@ am_ver=${am_ver:-20220805}
 orog_ver=${orog_ver:-20220805}
 sfc_climo_ver=${sfc_climo_ver:-20221017}
 
-for dir in am orog sfc_climo; do
+for dir in am orog orog_raw sfc_climo; do
     if [ -d $dir ]; then
       [[ $RUN_ENVIR = nco ]] && chmod -R 755 $dir
       rm -rf $dir
     fi
-    fix_ver="${dir}_ver"
-    $LINK $FIX_DIR/$dir/${!fix_ver} ${dir}
+    if [ $dir = "orog_raw" ]; then
+      $LINK $FIX_DIR/raw/orog ${dir}
+    else
+      fix_ver="${dir}_ver"
+      $LINK $FIX_DIR/$dir/${!fix_ver} ${dir}
+    fi
 done
 
 exit 0
