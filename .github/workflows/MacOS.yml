@@ -97,7 +97,7 @@ jobs:
         wget https://github.com/esmf-org/esmf/archive/ESMF_8_2_0.tar.gz &> /dev/null
         tar zxf ESMF_8_2_0.tar.gz
         cd esmf-ESMF_8_2_0
-        export ESMF_COMM=mpich
+        export ESMF_COMM=mpich3
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
         export ESMF_INSTALL_MODDIR=mod
