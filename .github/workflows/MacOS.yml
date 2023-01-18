@@ -101,7 +101,7 @@ jobs:
         export ESMF_INSTALL_BINDIR=bin
         export ESMF_INSTALL_LIBDIR=lib
         export ESMF_INSTALL_MODDIR=mod
-        export ESMF_COMPILER=intel
+        export ESMF_COMPILER=gfortran
         export ESMF_INSTALL_PREFIX=~/esmf
         export ESMF_NETCDF=split
         export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
