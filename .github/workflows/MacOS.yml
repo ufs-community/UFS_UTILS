@@ -107,6 +107,7 @@ jobs:
         export ESMF_NETCDF_INCLUDE=${HOME}/netcdf/include
         export ESMF_NETCDF_LIBPATH=${HOME}/netcdf/lib
         export ESMF_NETCDF_LIBS="-lnetcdff -lnetcdf -lhdf5_hl -lhdf5 -lz"
+        make info
         make -j2
         make install
 
