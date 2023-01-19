@@ -79,7 +79,7 @@
  character(len=20), allocatable, public      :: chgres_var_names(:) !< Varmap table variable name as recognized
                                                                     !! by this program.
  character(len=20), allocatable, public      :: field_var_names(:)  !< The GRIB2 variable name in the varmap table.
- 
+ character(len=500), public                  :: parm_file="msis21.parm"
  
  integer, public                 :: cycle_year = -999 !< Cycle year.
  integer, public                 :: cycle_mon = -999 !< Cycle month.
@@ -186,6 +186,7 @@
                    lai_from_climo, tg3_from_soil, &
                    regional, input_type, &
                    external_model, &
+                   parm_file, &
                    atm_weight_file, tracers, &
                    tracers_input, &
                    halo_bndy, & 

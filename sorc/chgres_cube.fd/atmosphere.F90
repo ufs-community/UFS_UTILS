@@ -49,7 +49,7 @@
                                        terrain_target_grid
 
  use program_setup, only             : vcoord_file_target_grid, &
-                                       wam_cold_start, & 
+                                       wam_cold_start, parm_file, & 
                                        cycle_year, cycle_mon,     &
                                        cycle_day, cycle_hour,     &
                                        regional, &
@@ -320,7 +320,7 @@
  call vintg
 
  if( wam_cold_start ) then 
-   call vintg_wam (cycle_year,cycle_mon,cycle_day,cycle_hour)
+   call vintg_wam (cycle_year,cycle_mon,cycle_day,cycle_hour,parm_file)
  endif
 
 !-----------------------------------------------------------------------------------
@@ -1365,13 +1365,14 @@
 !! @param [in] hour  initial hour
 !!
 !! @author Hann-Ming Henry Juang NCEP/EMC
- SUBROUTINE VINTG_WAM (YEAR,MONTH,DAY,HOUR)
+ SUBROUTINE VINTG_WAM (YEAR,MONTH,DAY,HOUR,PF)
 
  IMPLICIT NONE
 
  include 'mpif.h'
 
  INTEGER, INTENT(IN)             :: YEAR,MONTH,DAY,HOUR
+ CHARACTER(*), INTENT(IN)        :: PF
 
  REAL(ESMF_KIND_R8), PARAMETER   :: AMO  = 15.9994  ! molecular weight of o
  REAL(ESMF_KIND_R8), PARAMETER   :: AMO2 = 31.999   !molecular weight of o2
@@ -1479,11 +1480,9 @@
      DO K=1,LEV_TARGET
        IF(P2PTR(I,J,K).le.P1PTR(I,J,LEV_INPUT)) THEN
          KREF     =K-1
-!x       print*,'VINTG_WAM: KREF P1 P2 ',KREF,P1PTR(I,J,LEV_INPUT),P2PTR(I,J,K)
-         GO TO 11
+         EXIT
        ENDIF
      ENDDO
- 11  CONTINUE
 !
      DO K=KREF,LEV_TARGET
        COE = P2PTR(I,J,K) / P2PTR(I,J,KREF)
@@ -1512,10 +1511,9 @@
        DO K=1,LEV_TARGET
          IF(P2PTR(I,J,K).le.P1PTR(I,J,LEV_INPUT)) THEN
            KREF     =K-1
-           GO TO 22
+           EXIT
          ENDIF
        ENDDO
- 22    CONTINUE
 !
        DO K=KREF,LEV_TARGET
          COE = MIN(1.0, P2PTR(I,J,K) / P2PTR(I,J,KREF) )
@@ -1541,7 +1539,7 @@
      DO K=1,LEV_TARGET
        PRMB(K) = P2PTR(I,J,K) * 0.01
      ENDDO
-     CALL GETTEMP(ICDAY,1,DEGLAT,1,PRMB,LEV_TARGET,TEMP,ON,O2N,N2N)
+     CALL GETTEMP(ICDAY,1,DEGLAT,1,PRMB,LEV_TARGET,PF,TEMP,ON,O2N,N2N)
 !
      DO K=1,LEV_TARGET
        SUMMASS = ON(K)*AMO+O2N(K)*AMO2+N2N(K)*AMN2
@@ -1559,10 +1557,9 @@
      DO K=1,LEV_TARGET
        IF(P2PTR(I,J,K).le.P1PTR(I,J,LEV_INPUT)) THEN
          KREF     =K-1
-         GO TO 33
+         EXIT
        ENDIF
      ENDDO
- 33  CONTINUE
 !
      DO K=KREF,LEV_TARGET
        T2PTR(I,J,K) = TEMP(K)
