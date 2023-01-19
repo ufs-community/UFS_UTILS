@@ -29,84 +29,84 @@
    module wam_gtd7bk_mod
 !          msise-00 01-feb-02                                           
 !
-      real :: pt1(50)	!< block space data for temperature
-      real :: pt2(50)	!< block space data for temperature
-      real :: pt3(50)	!< block space data for temperature
-      real :: pa1(50)	!< block space data for he denisity
-      real :: pa2(50)	!< block space data for he denisity
-      real :: pa3(50)	!< block space data for he denisity
-      real :: pb1(50)	!< block space data for o density
-      real :: pb2(50)	!< block space data for o density
-      real :: pb3(50)	!< block space data for o density
-      real :: pc1(50)	!< block space data for n2 density
-      real :: pc2(50)	!< block space data for n2 density
-      real :: pc3(50)	!< block space data for n2 density
-      real :: pd1(50)	!< block space data for tlb
-      real :: pd2(50)	!< block space data for tlb
-      real :: pd3(50)	!< block space data for tlb
-      real :: pe1(50)	!< block space data for o2 density
-      real :: pe2(50)	!< block space data for o2 density
-      real :: pe3(50)	!< block space data for o2 density
-      real :: pf1(50)	!< block space data for ar density
-      real :: pf2(50)	!< block space data for ar density
-      real :: pf3(50)	!< block space data for ar density
-      real :: pg1(50)	!< block space data for h density
-      real :: pg2(50)	!< block space data for h density
-      real :: pg3(50)	!< block space data for h density
-      real :: ph1(50)	!< block space data for n density
-      real :: ph2(50)	!< block space data for n density
-      real :: ph3(50)	!< block space data for n density
-      real :: pi1(50)	!< block space data for hot o density
-      real :: pi2(50)	!< block space data for hot o density
-      real :: pi3(50)	!< block space data for hot o density
-      real :: pj1(50)	!< block space data for s param
-      real :: pj2(50)	!< block space data for s param
-      real :: pj3(50)	!< block space data for s param
-      real :: pk1(50)	!< block space data for turbo
-      real :: pl1(50)	!< block space data for tn1(2)
-      real :: pl2(50)	!< block space data for tn1(2)
-      real :: pm1(50)	!< block space data for tn1(3)
-      real :: pm2(50)	!< block space data for tn1(3)
-      real :: pn1(50)	!< block space data for tn1(4)
-      real :: pn2(50)	!< block space data for tn1(4)
-      real :: po1(50)	!< block space data for tn1(5)  tn2(1)
-      real :: po2(50)	!< block space data for tn1(5)  tn2(1)
-      real :: pp1(50)	!< block space data for tn2(2)
-      real :: pp2(50)	!< block space data for tn2(2)
-      real :: pq1(50)	!< block space data for tn2(3)
-      real :: pq2(50)	!< block space data for tn2(3)
-      real :: pr1(50)	!< block space data for tn2(4) tn3(1)
-      real :: pr2(50)	!< block space data for tn2(4) tn3(1)
-      real :: ps1(50)	!< block space data for tn3(2)
-      real :: ps2(50)	!< block space data for tn3(2)
-      real :: pu1(50)	!< block space data for tn3(3)
-      real :: pu2(50)	!< block space data for tn3(3)
-      real :: pv1(50)	!< block space data for tn3(4)
-      real :: pv2(50)	!< block space data for tn3(4)
-      real :: pw1(50)	!< block space data for tn3(5)  surface temperature tsl
-      real :: pw2(50)	!< block space data for tn3(5)  surface temperature tsl
-      real :: px1(50)	!< block space data for tgn3(2) surface grad tslg
-      real :: px2(50)	!< block space data for tgn3(2) surface grad tslg
-      real :: py1(50)	!< block space data for tgn2(1) tgn1(2)
-      real :: py2(50)	!< block space data for tgn2(1) tgn1(2)
-      real :: pz1(50)	!< block space data for tgn3(1) tgn2(2)
-      real :: pz2(50)	!< block space data for tgn3(1) tgn2(2)
-      real :: paa1(50)	!< block space data for semiannual mult sam
-      real :: paa2(50) 	!< block space data for semiannual mult sam
+      real :: pt1(50) !< block space data for temperature
+      real :: pt2(50) !< block space data for temperature
+      real :: pt3(50) !< block space data for temperature
+      real :: pa1(50) !< block space data for he denisity
+      real :: pa2(50) !< block space data for he denisity
+      real :: pa3(50) !< block space data for he denisity
+      real :: pb1(50) !< block space data for o density
+      real :: pb2(50) !< block space data for o density
+      real :: pb3(50) !< block space data for o density
+      real :: pc1(50) !< block space data for n2 density
+      real :: pc2(50) !< block space data for n2 density
+      real :: pc3(50) !< block space data for n2 density
+      real :: pd1(50) !< block space data for tlb
+      real :: pd2(50) !< block space data for tlb
+      real :: pd3(50) !< block space data for tlb
+      real :: pe1(50) !< block space data for o2 density
+      real :: pe2(50) !< block space data for o2 density
+      real :: pe3(50) !< block space data for o2 density
+      real :: pf1(50) !< block space data for ar density
+      real :: pf2(50) !< block space data for ar density
+      real :: pf3(50) !< block space data for ar density
+      real :: pg1(50) !< block space data for h density
+      real :: pg2(50) !< block space data for h density
+      real :: pg3(50) !< block space data for h density
+      real :: ph1(50) !< block space data for n density
+      real :: ph2(50) !< block space data for n density
+      real :: ph3(50) !< block space data for n density
+      real :: pi1(50) !< block space data for hot o density
+      real :: pi2(50) !< block space data for hot o density
+      real :: pi3(50) !< block space data for hot o density
+      real :: pj1(50) !< block space data for s param
+      real :: pj2(50) !< block space data for s param
+      real :: pj3(50) !< block space data for s param
+      real :: pk1(50) !< block space data for turbo
+      real :: pl1(50) !< block space data for tn1(2)
+      real :: pl2(50) !< block space data for tn1(2)
+      real :: pm1(50) !< block space data for tn1(3)
+      real :: pm2(50) !< block space data for tn1(3)
+      real :: pn1(50) !< block space data for tn1(4)
+      real :: pn2(50) !< block space data for tn1(4)
+      real :: po1(50) !< block space data for tn1(5)  tn2(1)
+      real :: po2(50) !< block space data for tn1(5)  tn2(1)
+      real :: pp1(50) !< block space data for tn2(2)
+      real :: pp2(50) !< block space data for tn2(2)
+      real :: pq1(50) !< block space data for tn2(3)
+      real :: pq2(50) !< block space data for tn2(3)
+      real :: pr1(50) !< block space data for tn2(4) tn3(1)
+      real :: pr2(50) !< block space data for tn2(4) tn3(1)
+      real :: ps1(50) !< block space data for tn3(2)
+      real :: ps2(50) !< block space data for tn3(2)
+      real :: pu1(50) !< block space data for tn3(3)
+      real :: pu2(50) !< block space data for tn3(3)
+      real :: pv1(50) !< block space data for tn3(4)
+      real :: pv2(50) !< block space data for tn3(4)
+      real :: pw1(50) !< block space data for tn3(5)  surface temperature tsl
+      real :: pw2(50) !< block space data for tn3(5)  surface temperature tsl
+      real :: px1(50) !< block space data for tgn3(2) surface grad tslg
+      real :: px2(50) !< block space data for tgn3(2) surface grad tslg
+      real :: py1(50) !< block space data for tgn2(1) tgn1(2)
+      real :: py2(50) !< block space data for tgn2(1) tgn1(2)
+      real :: pz1(50) !< block space data for tgn3(1) tgn2(2)
+      real :: pz2(50) !< block space data for tgn3(1) tgn2(2)
+      real :: paa1(50) !< block space data for semiannual mult sam
+      real :: paa2(50) !< block space data for semiannual mult sam
 !
-      real :: ptm(10)	!< block space data for lower boundary
-      real :: pdm(10,8)	!< block space data for lower boundary
+      real :: ptm(10)   !< block space data for lower boundary
+      real :: pdm(10,8) !< block space data for lower boundary
 !
       real :: pavgm(10) !< block space data for middle atmosphere averages
 !
-      character*4:: isdate(3)	!< define date
-      character*4:: istime(2)	!< define time
-      character*4:: name(2) 	!< define data name
+      character*4:: isdate(3) !< define date
+      character*4:: istime(2) !< define time
+      character*4:: name(2)   !< define data name
 !
-      integer ::  imr 		!< define version
+      integer ::  imr         !< define version
 !
-      real ::     pr65(2,65)	!< define pressures
-      real ::     pr151(2,151) 	!< define pressures
+      real ::     pr65(2,65)   !< define pressures
+      real ::     pr151(2,151) !< define pressures
 
       data imr/0/ 
       data isdate/'01-f','eb-0','2   '/,istime/'15:4','9:27'/ 
@@ -878,73 +878,73 @@
 !! @author Hann-Ming Henry Juang
    module gettemp_mod
 !
-      real ::   tlb	!< labeled temperature
-      real ::   s	!< scale inverse to temperature difference
-      real ::   db04	!< diffusive density at zlb for g4
-      real ::   db16	!< diffusive density at zlb for g18
-      real ::   db28	!< diffusive density at zlb for g28
-      real ::   db32	!< diffusive density at zlb for g32
-      real ::   db40	!< diffusive density at zlb for g40
-      real ::   db48	!< diffusive density at zlb for g48
-      real ::   db01	!< diffusive density at zlb for g01
-      real ::   za	!< joining altitude of bates and spline
-      real ::   t0	!< initial temperature
-      real ::   z0	!< initial height
-      real ::   g0	!< initial gradient variations
-      real ::   rl	!< correction to specified mixing ratio at ground
-      real ::   dd	!< diffusive density at alt
-      real ::   db14	!< diffusive density at zlb for g14
-      real ::   tr12	!< try factor 1 or 2
+      real ::   tlb    !< labeled temperature
+      real ::   s      !< scale inverse to temperature difference
+      real ::   db04   !< diffusive density at zlb for g4
+      real ::   db16   !< diffusive density at zlb for g18
+      real ::   db28   !< diffusive density at zlb for g28
+      real ::   db32   !< diffusive density at zlb for g32
+      real ::   db40   !< diffusive density at zlb for g40
+      real ::   db48   !< diffusive density at zlb for g48
+      real ::   db01   !< diffusive density at zlb for g01
+      real ::   za     !< joining altitude of bates and spline
+      real ::   t0     !< initial temperature
+      real ::   z0     !< initial height
+      real ::   g0     !< initial gradient variations
+      real ::   rl     !< correction to specified mixing ratio at ground
+      real ::   dd     !< diffusive density at alt
+      real ::   db14   !< diffusive density at zlb for g14
+      real ::   tr12   !< try factor 1 or 2
 !
-      real ::   tn1(5)	!< temperature at node 1 (~mesosphere)
-      real ::   tn2(4)	!< temperature at node 2 (~stratosphere)
-      real ::   tn3(5)	!< temperature at node 3 (~troposphere)
-      real ::   tgn1(2)	!< temperature gradient at node 1 (~mesosphere)
-      real ::   tgn2(2)	!< temperature gradient at node 2 (~stratosphere)
-      real ::   tgn3(2)	!< temperature gradient at node 3 (~troposphere)
+      real ::   tn1(5)  !< temperature at node 1 (~mesosphere)
+      real ::   tn2(4)  !< temperature at node 2 (~stratosphere)
+      real ::   tn3(5)  !< temperature at node 3 (~troposphere)
+      real ::   tgn1(2) !< temperature gradient at node 1 (~mesosphere)
+      real ::   tgn2(2) !< temperature gradient at node 2 (~stratosphere)
+      real ::   tgn3(2) !< temperature gradient at node 3 (~troposphere)
 !
-      real ::   pt(150)		!< temperature
-      real ::   pd(150,9)	!< he density
-      real ::   ps(150)		!<  s parameter
-      real ::   pdl(25,2)	!< turbo
-      real ::   ptl(100,4)	!< upper temperature
-      real ::   pma(100,10)	!< middle and low temperature
-      real ::   sam(100)  	!< semiannual mult sam
+      real ::   pt(150)     !< temperature
+      real ::   pd(150,9)   !< he density
+      real ::   ps(150)     !<  s parameter
+      real ::   pdl(25,2)   !< turbo
+      real ::   ptl(100,4)  !< upper temperature
+      real ::   pma(100,10) !< middle and low temperature
+      real ::   sam(100)    !< semiannual mult sam
 !
-      real ::   sw(25)		!< weighting
-      real ::   swc(25)		!< weighting 
+      real ::   sw(25)    !< weighting
+      real ::   swc(25)   !< weighting 
 !
-      real ::   dm04	!< mixed density at alt04
-      real ::   dm16	!< mixed density at alt16
-      real ::   dm28	!< mixed density at alt28
-      real ::   dm32	!< mixed density at alt32
-      real ::   dm40	!< mixed density at alt40
-      real ::   dm01	!< mixed density at alt01
-      real ::   dm14 	!< mixed density at alt14
+      real ::   dm04  !< mixed density at alt04
+      real ::   dm16  !< mixed density at alt16
+      real ::   dm28  !< mixed density at alt28
+      real ::   dm32  !< mixed density at alt32
+      real ::   dm40  !< mixed density at alt40
+      real ::   dm01  !< mixed density at alt01
+      real ::   dm14  !< mixed density at alt14
 !
-      real ::   gsurf	!< surface gravitation force at given latitude
-      real ::   re 	!< referenced height related to gsurf
+      real ::   gsurf   !< surface gravitation force at given latitude
+      real ::   re      !< referenced height related to gsurf
 !
-      real ::   tinfg	!< startinf referenced point for tt
-      real ::   tt(15) 	!< referenced temperature
+      real ::   tinfg   !< startinf referenced point for tt
+      real ::   tt(15)  !< referenced temperature
 !
-      real ::   plg(9,4)	!< Legendre polynomial points
-      real ::   ctloc	!< cosine of the location
-      real ::   stloc	!< sine of the location
-      real ::   c2tloc	!< cosine of 2 time location
-      real ::   s2tloc	!< sine of 2 time location
-      real ::   c3tloc	!< cosine of 3 time location
-      real ::   s3tloc	!< sine of 3 time location
-      real ::   day	!< day in a year
-      real ::   df	!<  the difference of f10.7 effect
-      real ::   dfa	!< the difference to reference value
-      real ::   apd	!< parameter calcumate for magnetic activity 
-      real ::   apdf	!< the same as apd
-      real ::   apt(4)	!< daily magnetic activity
-      real ::   xlong	!< a given longitude
+      real ::   plg(9,4)  !< Legendre polynomial points
+      real ::   ctloc     !< cosine of the location
+      real ::   stloc     !< sine of the location
+      real ::   c2tloc    !< cosine of 2 time location
+      real ::   s2tloc    !< sine of 2 time location
+      real ::   c3tloc    !< cosine of 3 time location
+      real ::   s3tloc    !< sine of 3 time location
+      real ::   day       !< day in a year
+      real ::   df        !<  the difference of f10.7 effect
+      real ::   dfa       !< the difference to reference value
+      real ::   apd       !< parameter calcumate for magnetic activity 
+      real ::   apdf      !< the same as apd
+      real ::   apt(4)    !< daily magnetic activity
+      real ::   xlong     !< a given longitude
 !
-      integer :: isw	!< indix for sw
-      integer :: iyr	!< integer for a given year
+      integer :: isw      !< indix for sw
+      integer :: iyr      !< integer for a given year
 !
    end module gettemp_mod
 
@@ -1265,7 +1265,6 @@
 !      **** o density ****                                              
         d(2)=0 
         d(9)=0 
-  216   continue 
 !      ***** o2 density ****                                            
         d(4)=0 
         if(mass.ne.32.and.mass.ne.48) goto 232 
@@ -2055,7 +2054,7 @@
    10 end do 
       if(sw(9).gt.0) sw9=1. 
       if(sw(9).lt.0) sw9=-1. 
-      iyr = yrd/1000. 
+      iyr = nint(yrd/1000.)
       day = yrd - iyr*1000. 
       xlong=long 
 !      eq. a22 (remainder of code)                                      

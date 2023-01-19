@@ -21,7 +21,7 @@ void set_output_metadata (int ntiles_in, int nfiles, const File_config *file1_in
 			  const Field_config *scalar_in, const Field_config *u_in, const Field_config *v_in,
 			  int ntiles_out, File_config *file1_out, File_config *file2_out, Field_config *scalar_out,
 			  Field_config *u_out, Field_config *v_out, const Grid_config *grid_out, const VGrid_config *vgrid_out, 
-                          const char *history, const char *tagname, unsigned int opcode);
+                          const char *history, const char *tagname, unsigned int opcode, int deflation, int shuffle);
 void get_field_attribute( int ntiles, Field_config *field);
 void copy_field_attribute( int ntiles_out, Field_config *field_in, Field_config *field_out);
 void set_remap_file( int ntiles, const char *mosaic_file, const char *remap_file, Interp_config *interp, unsigned int *opcode, int save_weight_only);
