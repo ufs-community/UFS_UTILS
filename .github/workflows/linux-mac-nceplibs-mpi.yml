@@ -1,5 +1,15 @@
 name: linux-mac-mpi-nceplibs
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
+  pull_request:
+    branches:
+    - develop
+    paths-ignore:
+    - README.md
 
 defaults:
   run:
@@ -13,8 +23,9 @@ jobs:
       FC: gfortran-9
       CXX: g++-9
     strategy:
+      fail-fast: true      
       matrix:
-        os: [macos-10.15, ubuntu-20.04]
+        os: [macos-11, ubuntu-latest]
         compiler: [gcc-9]
         nceplibs_version: [develop, 1.4.0]
         mpi_type: [mpich, openmpi]
@@ -25,20 +36,20 @@ jobs:
     - name: install-dependencies
       run: |
         echo "$HOME/mpi/bin" >> $GITHUB_PATH
-        if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
+        if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
           sudo apt-get update
           sudo apt-get install libpng-dev
           sudo apt-get install libjpeg-dev
-        elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
-            brew update
+        elif [[ ${{ matrix.os }} == "macos-11" ]]; then
+          brew update
           brew install wget
+          brew install jpeg-turbo
           if [[ ${{ matrix.compiler }} == "gcc-9" ]]; then
             sudo ln -sf /usr/local/bin/gfortran-9 /usr/local/bin/gfortran
           elif  [[ ${{ matrix.compiler }} == "gcc-10" ]]; then
             sudo ln -sf /usr/local/bin/gfortran-10 /usr/local/bin/gfortran
           fi
         fi
-        python3 -m pip install gcovr
 
     - name: cache-mpi
       id: cache-mpi
@@ -61,9 +72,9 @@ jobs:
           wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.1.tar.gz &> /dev/null
           tar -xzf openmpi-4.1.1.tar.gz
           cd openmpi-4.1.1
-          if [[ ${{ matrix.os }} == "ubuntu-20.04" ]]; then
+          if [[ ${{ matrix.os }} == "ubuntu-latest" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx
-          elif [[ ${{ matrix.os }} == "macos-10.15" ]]; then
+          elif [[ ${{ matrix.os }} == "macos-11" ]]; then
             ./configure --prefix=$HOME/mpi --enable-mpi-fortran --enable-mpi-cxx --enable-two-level-namespace
           fi
           make -j2
@@ -207,6 +218,13 @@ jobs:
         path: ufs_utils
         submodules: recursive
 
+    - name: cache-data
+      id: cache-data
+      uses: actions/cache@v2
+      with:
+        path: ~/data
+        key: data-2
+
     - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
@@ -217,7 +235,7 @@ jobs:
         export FC=mpifort
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
         export DYLD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake .. -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf'
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~/jasper;~/nceplibs;~/netcdf' ..
         make -j2
 
     - name: test
@@ -226,3 +244,16 @@ jobs:
         # Oversubscribe for OpenMPI to run more processes than CPUs
         export OMPI_MCA_rmaps_base_oversubscribe=1
         ctest --rerun-failed --output-on-failure
+
+    - name: cache-data
+      if: steps.cache-data.outputs.cache-hit != 'true'
+      run: |
+        mkdir ~/data
+        cp ufs_utils/build/tests/chgres_cube/data/* ~/data
+        cp ufs_utils/build/tests/sfc_climo_gen/data/* ~/data
+        cp ufs_utils/build/tests/cpld_gridgen/data/* ~/data
+        cp ufs_utils/tests/filter_topo/data/* ~/data
+        cp ufs_utils/tests/emcsfc_snow2mdl/data/* ~/data
+        cp ufs_utils/tests/chgres_cube/data/* ~/data
+        ls -l ~/data
+        

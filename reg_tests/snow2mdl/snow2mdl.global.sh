@@ -12,10 +12,10 @@ export AFWA_NH_FILE=""
 export AFWA_SH_FILE=""
 export AFWA_GLOBAL_FILE="$HOMEreg/input_data/afwa.global.grb2"
 
-export MODEL_LATITUDE_FILE=$HOMEgfs/fix/fix_am/global_latitudes.t1534.3072.1536.grb
-export MODEL_LONGITUDE_FILE=$HOMEgfs/fix/fix_am/global_longitudes.t1534.3072.1536.grb
-export MODEL_SLMASK_FILE=$HOMEgfs/fix/fix_am/global_slmask.t1534.3072.1536.grb
-export GFS_LONSPERLAT_FILE=$HOMEgfs/fix/fix_am/global_lonsperlat.t1534.3072.1536.txt
+export MODEL_LATITUDE_FILE=$HOMEgfs/fix/am/global_latitudes.t1534.3072.1536.grb
+export MODEL_LONGITUDE_FILE=$HOMEgfs/fix/am/global_longitudes.t1534.3072.1536.grb
+export MODEL_SLMASK_FILE=$HOMEgfs/fix/am/global_slmask.t1534.3072.1536.grb
+export GFS_LONSPERLAT_FILE=$HOMEgfs/fix/am/global_lonsperlat.t1534.3072.1536.txt
 
 export OMP_NUM_THREADS=1
 export OUTPUT_GRIB2=.false.

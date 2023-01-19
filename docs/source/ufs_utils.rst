@@ -502,6 +502,7 @@ Program execution is controlled via a namelist.  The namelist variables are:
       * input_snowfree_albedo_file - path/name of input snow-free albedo data
       * input_slope_type_file - path/name of input global slope type data
       * input_soil_type_file - path/name of input soil type data
+      * input_soil_color_file - path/name of input soil color data
       * input_vegetation_type_file - path/name of vegetation type data
       * input_vegetation_greenness_file - path/name of monthly vegetation greenness data
       * mosaic_file_mdl - path/name of the model mosaic file
@@ -524,18 +525,27 @@ The surface climatological data is located here `./fix/fix_sfc_climo <https://no
       * Global 2.6 x 1.5-degree soil substrate temperature - substrate_temperature.2.6x1.5.nc
       * Global 0.05-degree four component monthly snow-free albedo - snowfree_albedo.4comp.0.05.nc
       * Global 1.0-degree categorical slope type - slope_type.1.0.nc
+      * Global 0.05-degree CLM soil color (Lawrence and Chase, 2007 JGR) - soil_color.clm.0.05.nc
       * Categorical STATSGO soil type
-             * Global 0.03-degree - soil_type.statsgo.0.03.nc
              * Global 0.05-degree - soil_type.statsgo.0.05.nc
-             * CONUS 0.01-degree - soil_type.statsgo.conus.0.01.nc
+             * Global 0.03-degree - soil_type.statsgo.0.03.nc
+             * CONUS 30 sec - soil_type.statsgo.conus.30s.nc
+             * N Hemis 30 sec - soil_type.statsgo.nh.30s.nc
+             * Global 30 sec - soil_type.statsgo.30s.nc
+      * Categorical BNU soil type
+             * Global 30-second - soil_type.bnu.30s.nc
       * Categorical IGBP vegetation type
-             * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
              * MODIS-based global 0.05-degree - vegetation_type.modis.igbp.0.05.nc
-             * MODIS-based CONUS 0.01-degree - vegetation_type.modis.igbp.conus.0.01.nc
-             * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
+             * MODIS-based global 0.03-degree - vegetation_type.modis.igbp.0.03.nc
+             * MODIS-based CONUS 30 sec - vegetation_type.modis.igbp.conus.30s.nc
+             * MODIS-based N Hemis 30 sec - vegetation_type.modis.igbp.nh.30s.nc
+             * MODIS-based global 30 sec - vegetation_type.modis.igbp.30s.nc
+             * NESDIS VIIRS-based global 0.10-degree - vegetation_type.viirs.igbp.0.1.nc
              * NESDIS VIIRS-based global 0.05-degree - vegetation_type.viirs.igbp.0.05.nc
-             * NESDIS VIIRS-based global 0.1-degree - vegetation_type.viirs.igbp.0.1.nc
-             * NESDIS VIIRS-based CONUS 0.01-degree - vegetation_type.viirs.igbp.conus.0.01.nc
+             * NESDIS VIIRS-based global 0.03-degree - vegetation_type.viirs.igbp.0.03.nc
+             * NESDIS VIIRS-based CONUS 30-second - vegetation_type.viirs.igbp.conus.30s.nc
+             * NESDIS VIIRS-based N HEMIS 30-second - vegetation_type.viirs.igbp.nh.30s.nc
+             * NESDIS VIIRS-based global 30-second - vegetation_type.viirs.igbp.30s.nc
       * Global 0.144-degree monthly vegetation greenness in percent - vegetation_greenness.0.144.nc
 
 The files that define the model grid. All NetCDF.
@@ -554,6 +564,7 @@ All files with and without halo (all NetCDF).
       * Snow free albedo - CRES_snowfree_albedo.tile#.halo#.nc
       * Slope type - CRES_slope_type.tile#.halo#.nc
       * Soil type - CRES_soil_type.tile#.halo#.nc
+      * Soil color - CRES_soil_color.tile#.halo#.nc
       * Vegetation type - CRES_vegetation_type.tile#.halo#.nc
       * Vegetation greenness - CRES_vegetation_greenness.tile#.halo#.nc
 
@@ -600,3 +611,51 @@ Run script
 ----------
 
 To run, use script ./util/vcoord_gen/run.sh
+
+weight_gen   
+==========
+
+Introduction
+------------
+
+Creates ESMF 'scrip' files for gaussian grids. 
+
+Code structure
+--------------
+
+Location of the source code: ./sorc/weight_gen.fd.
+
+Program inputs
+--------------
+
+The global FV3 grid resolution from standard output. Valid choices are:
+
+     * C48
+     * C96
+     * C128
+     * C192
+     * C384
+     * C768
+     * C1152
+     * C3072
+
+Program outputs
+---------------
+
+Two gaussian grid 'scrip' files in NetCDF format. One includes two extra rows for the poles.
+
+     * C48  => 192x94 and 192x96 gaussian files
+     * C96  => 384x192 and 384x194 gaussian files
+     * C128 => 512x256 and 512x258 gaussian files
+     * C192 => 768x384 and 768x386 gaussian files
+     * C384 => 1536x768 and 1536x770 gaussian files
+     * C768 => 3072x1536 and 3072x1538 gaussian files
+     * C1152 => 4608x2304 and 4608x2406 gaussian files
+     * C3072 => 12288x6144 and 12288x6146 gaussian files
+
+Files contain center and corner point latitude and longitudes.
+
+Run script
+----------
+
+To run, use the machine-dependent script under ./util/weight_gen

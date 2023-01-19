@@ -1,6 +1,6 @@
  program ftst_dint2p
 
- use input_data
+ use utilities 
 
  implicit none
 

@@ -1,10 +1,10 @@
 #-----------------------------------------------------------
 #
 #  1) Compile the chgres_cube program.  Invoke 
-#     ./sorc/build_chgres_cube.sh
+#     ../../build_all.sh
 #
 #  2) Ensure links to the 'fixed' directories are
-#     set.  See the ./sorc/link_fixdirs.sh script prolog
+#     set.  See the ../../fix/link_fixdirs.sh script prolog
 #     for details.
 #
 #  3) Set all config variables.  See definitions 
@@ -47,17 +47,17 @@
 #
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/lfs4/HFIP/emcda/$USER/stmp/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
+EXTRACT_DATA=no
 
-RUN_CHGRES=no
+RUN_CHGRES=yes
 
-yy=2021
-mm=03
-dd=21
+yy=2022
+mm=05
+dd=06
 hh=06
 
-use_v16retro=yes
+use_v16retro=no
 
 LEVS=65
 
@@ -68,7 +68,7 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/lfs4/HFIP/emcda/$USER/stmp/gdas.init/output
+OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.

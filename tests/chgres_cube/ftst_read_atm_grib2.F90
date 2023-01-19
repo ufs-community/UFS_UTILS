@@ -11,7 +11,7 @@
 
  use esmf
 
- use input_data, only    :  read_input_atm_data, &
+ use atm_input_data, only    :  read_input_atm_data, &
                             lev_input, &
                             levp1_input, &
                             temp_input_grid, tracers_input_grid, &

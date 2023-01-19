@@ -34,4 +34,4 @@ endif()
 
 target_link_libraries(orog PRIVATE orog_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})

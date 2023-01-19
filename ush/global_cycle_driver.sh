@@ -8,8 +8,6 @@ set -eux
 # Rahul Mahajan, 10/11/2017
 #-------------------------------------------------------------------------------------------------
 
-export machine=${machine:-"WCOSS_C"}
-
 export CASE=${CASE:-C768}                    # resolution of tile: 48, 96, 192, 384, 768, 1152, 3072
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...
 export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
@@ -19,8 +17,8 @@ pwd=$(pwd)
 export NWPROD=${NWPROD:-$pwd}
 export DMPDIR=${DMPDIR:-$NWPROD}
 export HOMEgfs=${HOMEgfs:-$NWPROD/gfs.v15.0.0}
-export FIXam=${FIXam:-$HOMEgfs/fix/fix_am}   
-export FIXfv3=${FIXfv3:-$HOMEgfs/fix/fix_fv3_gmted2010}
+export FIXam=${FIXam:-$HOMEgfs/fix/am}   
+export FIXfv3=${FIXfv3:-$HOMEgfs/fix/orog}
 
 ntiles=${ntiles:-6}
 DONST=${DONST:-"NO"}

@@ -1,13 +1,15 @@
 # This is the CMake build file for the chgres_cube utility in the
 # UFS_UTILS package.
 #
-# George Gayno, Mark Potts, Kyle Gerheiser
+# George Gayno, Mark Potts, Kyle Gerheiser, Larissa Reames
 
 set(lib_src
     atmosphere.F90
     atmosphere_target_data.F90
     grib2_util.F90
-    input_data.F90
+    atm_input_data.F90
+    sfc_input_data.F90
+    nst_input_data.F90
     model_grid.F90
     program_setup.F90
     search_util.F90
@@ -62,7 +64,7 @@ endif()
 
 target_link_libraries(${exe_name} PRIVATE chgres_cube_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
