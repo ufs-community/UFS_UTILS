@@ -712,14 +712,16 @@ ENDIF
 ! WRITE OUT UPDATED SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- CALL WRITE_DATA(SLIFCS,TSFFCS,SWEFCS,TG3FCS,ZORFCS,         &
-                 ALBFCS,ALFFCS,VEGFCS,CNPFCS,F10M,           &
-                 T2M,Q2M,VETFCS,SOTFCS,USTAR,FMM,FHH,        &
-                 SICFCS,SIHFCS,SITFCS,                       &
-                 TPRCP,SRFLAG,SNDFCS,                        &
-                 VMNFCS,VMXFCS,SLPFCS,ABSFCS,                &
-                 SLCFCS,SMCFCS,STCFCS,                       &
-                 IDIM,JDIM,LENSFC,LSOIL,DO_NSST,NSST)
+ CALL WRITE_DATA_SELECTED_RECORDS(VEGFCS,LENSFC,IDIM,JDIM)
+
+!CALL WRITE_DATA(SLIFCS,TSFFCS,SWEFCS,TG3FCS,ZORFCS,         &
+!                ALBFCS,ALFFCS,VEGFCS,CNPFCS,F10M,           &
+!                T2M,Q2M,VETFCS,SOTFCS,USTAR,FMM,FHH,        &
+!                SICFCS,SIHFCS,SITFCS,                       &
+!                TPRCP,SRFLAG,SNDFCS,                        &
+!                VMNFCS,VMXFCS,SLPFCS,ABSFCS,                &
+!                SLCFCS,SMCFCS,STCFCS,                       &
+!                IDIM,JDIM,LENSFC,LSOIL,DO_NSST,NSST)
 
  IF (DO_NSST) THEN
    DEALLOCATE(NSST%C_0)

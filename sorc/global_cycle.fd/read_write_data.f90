@@ -58,6 +58,7 @@ MODULE READ_WRITE_DATA
  PUBLIC :: READ_GSI_DATA
  PUBLIC :: READ_LAT_LON_OROG
  PUBLIC :: WRITE_DATA
+ PUBLIC :: WRITE_DATA_SELECTED_RECORDS
  public :: read_tf_clim_grb,get_tf_clm_dim
  public :: read_salclm_gfs_nc,get_dim_nc
 
@@ -114,6 +115,50 @@ MODULE READ_WRITE_DATA
    !! @param[in] nsst Data structure containing nsst fields.
    !!
    !! @author George Gayno NOAA/EMC
+
+!> Write out selected surface records to a pre-existing
+!! model restart file (in netcdf).
+ subroutine write_data_selected_records(vegfcs,lensfc,idim,jdim)
+
+ use mpi
+
+ implicit none
+
+ integer, intent(in)              :: lensfc
+ integer, intent(in)              :: idim, jdim
+
+ real, intent(in)                 :: vegfcs(lensfc)
+
+ real :: dum2d(idim,jdim)
+
+ character(len=50) :: fnbgso
+ character(len=3)  :: rankch
+
+ integer           :: myrank, error, ncid, id_var
+
+ call mpi_comm_rank(mpi_comm_world, myrank, error)
+
+ write(rankch, '(i3.3)') (myrank+1)
+
+ fnbgso = "./fnbgso." // rankch
+
+ print*
+ print*,"update OUTPUT SFC DATA TO: ",trim(fnbgso)
+
+ ERROR=NF90_OPEN(TRIM(fnbgso),NF90_WRITE,NCID)
+ CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(fnbgso) )
+
+ ERROR=NF90_INQ_VARID(NCID, "vfrac", ID_VAR)
+ CALL NETCDF_ERR(ERROR, 'READING vfrac ID' )
+
+ dum2d = reshape(vegfcs, (/idim,jdim/))
+ error = nf90_put_var( ncid, id_var, dum2d)
+ call netcdf_err(error, 'WRITING vegfcs RECORD' )
+
+ error = nf90_close(ncid)
+
+ end subroutine write_data_selected_records
+
  subroutine write_data(slifcs,tsffcs,swefcs,tg3fcs,zorfcs, &
                        albfcs,alffcs,vegfcs,cnpfcs,f10m, &
                        t2m,q2m,vetfcs,sotfcs,ustar,fmm,fhh, &
