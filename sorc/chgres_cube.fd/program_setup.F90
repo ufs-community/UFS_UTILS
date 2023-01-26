@@ -8,6 +8,9 @@
 !! @author George Gayno NCEP/EMC
  module program_setup
 
+ use esmf
+ use utilities, only                    : error_handler, to_lower
+
  implicit none
 
  private
@@ -137,10 +140,9 @@
  real, allocatable, public       :: wltsmc_target(:) !< Plant wilting point soil moisture content target grid.
  real, allocatable, public       :: bb_target(:)  !<  Soil 'b' parameter, target grid
  real, allocatable, public       :: satpsi_target(:) !<   Saturated soil potential, target grid
- real, allocatable, public       :: missing_var_values(:) !< If input GRIB2 record is missing, the variable
-                                                          !! is set to this value.
+ real(kind=esmf_kind_r4), allocatable, public :: missing_var_values(:) !< If input GRIB2 record is missing, the variable
+                                                                       !! is set to this value.
  
-
  public :: read_setup_namelist
  public :: calc_soil_params_driver
  public :: read_varmap
@@ -150,15 +152,14 @@
 
 !> Reads program configuration namelist.
 !!
-!! @param filename the name of the configuration file (defaults to
+!! @param filename The name of the configuration file (defaults to
 !! ./fort.41).
 !! @author George Gayno NCEP/EMC
  subroutine read_setup_namelist(filename)
  implicit none
 
  character(len=*), intent(in), optional :: filename
- character(:), allocatable :: filename_to_use
- 
+ character(len=250), allocatable :: filename_to_use
 
  integer                     :: is, ie, ierr
 
@@ -202,12 +203,12 @@
  print*,"- READ SETUP NAMELIST"
 
  if (present(filename)) then
-    filename_to_use = filename
+   filename_to_use = filename
  else
-    filename_to_use = "./fort.41"
+   filename_to_use = "./fort.41"
  endif
 
- open(41, file=filename_to_use, iostat=ierr)
+ open(41, file=trim(filename_to_use), iostat=ierr)
  if (ierr /= 0) call error_handler("OPENING SETUP NAMELIST.", ierr)
  read(41, nml=config, iostat=ierr)
  if (ierr /= 0) call error_handler("READING SETUP NAMELIST.", ierr)
@@ -311,9 +312,9 @@
 !-------------------------------------------------------------------------
 
  if (trim(input_type) == "grib2") then
-	 if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
-		 call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID", 1)
-	 endif
+   if (trim(grib2_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+     call error_handler("FOR GRIB2 DATA, PLEASE PROVIDE GRIB2_FILE_INPUT_GRID", 1)
+   endif
  endif
 
  !-------------------------------------------------------------------------
@@ -321,14 +322,14 @@
 !-------------------------------------------------------------------------
 
  if (trim(input_type) == "grib2") then
-	 if (.not. any((/character(4)::"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
-		 call error_handler( "KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. " // &
-		 "IF YOU WISH TO PROCESS GRIB2 DATA FROM ANOTHER MODEL, YOU MAY ATTEMPT TO DO SO AT YOUR OWN RISK. " // &
-		 "ONE WAY TO DO THIS IS PROVIDE NAM FOR external_model AS IT IS A RELATIVELY STRAIGHT-" // &
-		 "FORWARD REGIONAL GRIB2 FILE. YOU MAY ALSO COMMENT OUT THIS ERROR MESSAGE IN " // &
-		 "program_setup.f90 LINE 389. NO GUARANTEE IS PROVIDED THAT THE CODE WILL WORK OR "// &
-		 "THAT THE RESULTING DATA WILL BE CORRECT OR WORK WITH THE ATMOSPHERIC MODEL.", 1)
-	 endif
+   if (.not. any((/character(4)::"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
+     call error_handler( "KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. " // &
+    "IF YOU WISH TO PROCESS GRIB2 DATA FROM ANOTHER MODEL, YOU MAY ATTEMPT TO DO SO AT YOUR OWN RISK. " // &
+    "ONE WAY TO DO THIS IS PROVIDE NAM FOR external_model AS IT IS A RELATIVELY STRAIGHT-" // &
+    "FORWARD REGIONAL GRIB2 FILE. YOU MAY ALSO COMMENT OUT THIS ERROR MESSAGE IN " // &
+    "program_setup.f90 LINE 389. NO GUARANTEE IS PROVIDED THAT THE CODE WILL WORK OR "// &
+    "THAT THE RESULTING DATA WILL BE CORRECT OR WORK WITH THE ATMOSPHERIC MODEL.", 1)
+   endif
  endif
 
 !-------------------------------------------------------------------------
@@ -337,11 +338,10 @@
 !-------------------------------------------------------------------------
 
  if (trim(input_type) == "grib2" .and. trim(external_model)=="HRRR") then
-	 if (trim(geogrid_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
-		 print*, "HRRR DATA DOES NOT CONTAIN SOIL TYPE INFORMATION. WITHOUT &
-			GEOGRID_FILE_INPUT_GRID SPECIFIED, SOIL MOISTURE INTERPOLATION MAY BE LESS &
-			ACCURATE. "
-	 endif
+   if (trim(geogrid_file_input_grid) == "NULL" .or. trim(grib2_file_input_grid) == "") then
+     print*, "HRRR DATA DOES NOT CONTAIN SOIL TYPE INFORMATION. WITHOUT"
+     print*, "GEOGRID_FILE_INPUT_GRID SPECIFIED, SOIL MOISTURE INTERPOLATION MAY BE LESS ACCURATE."
+   endif
  endif
  
  if (trim(thomp_mp_climo_file) /= "NULL") then
@@ -455,7 +455,6 @@ end subroutine read_varmap
 !! @author Jeff Beck
 subroutine get_var_cond(var_name,this_miss_var_method,this_miss_var_value, &
                             this_field_var_name, loc)
-  use esmf
   
   implicit none
   character(len=20), intent(in) :: var_name

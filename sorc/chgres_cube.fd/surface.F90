@@ -50,6 +50,8 @@
 
  use write_data, only : write_fv3_sfc_data_netcdf
 
+ use utilities, only  : error_handler
+
  implicit none
 
  private
@@ -110,9 +112,10 @@
 !! @author George Gayno NCEP/EMC
  subroutine surface_driver(localpet)
 
- use input_data, only                : cleanup_input_sfc_data, &
-                                       cleanup_input_nst_data, &
-                                       read_input_sfc_data, &
+ use sfc_input_data, only            : cleanup_input_sfc_data, &
+                                       read_input_sfc_data
+
+ use nst_input_data, only            : cleanup_input_nst_data, &
                                        read_input_nst_data
 
  use program_setup, only             : calc_soil_params_driver, &
@@ -122,6 +125,8 @@
                                        cleanup_static_fields
 
  use surface_target_data, only       : cleanup_target_nst_data
+
+ use utilities, only                 : error_handler
 
  implicit none
 
@@ -254,7 +259,7 @@
  use mpi
  use esmf
 
- use input_data, only                : canopy_mc_input_grid,  &
+ use sfc_input_data, only            : canopy_mc_input_grid,  &
                                        f10m_input_grid,  &
                                        ffmm_input_grid,  &
                                        landsea_mask_input_grid, &
@@ -274,7 +279,13 @@
                                        ustar_input_grid,  &
                                        veg_type_input_grid, &
                                        z0_input_grid, &
-                                       c_d_input_grid, &
+                                       veg_type_landice_input, &
+                                       veg_greenness_input_grid, &
+                                       max_veg_greenness_input_grid, &
+                                       min_veg_greenness_input_grid, &
+                                       lai_input_grid
+
+ use nst_input_data, only           :  c_d_input_grid, &
                                        c_0_input_grid, &
                                        d_conv_input_grid, &
                                        dt_cool_input_grid, &
@@ -291,12 +302,9 @@
                                        xtts_input_grid, &
                                        xzts_input_grid, &
                                        z_c_input_grid, &
-                                       zm_input_grid, terrain_input_grid, &
-                                       veg_type_landice_input, &
-                                       veg_greenness_input_grid, &
-                                       max_veg_greenness_input_grid, &
-                                       min_veg_greenness_input_grid, &
-                                       lai_input_grid
+                                       zm_input_grid
+
+ use atm_input_data, only            : terrain_input_grid
 
  use model_grid, only                : input_grid, target_grid, &
                                        i_target, j_target, &
@@ -666,7 +674,7 @@
 ! and '1' for non-land points. For fractional grids, 'seamask_target_ptr'
 ! will be '0' if all land and '1' is at least some non-land.
 
- mask_target_ptr = seamask_target_ptr
+ mask_target_ptr = int(seamask_target_ptr,kind=esmf_kind_i4)
 
  method=ESMF_REGRIDMETHOD_CONSERVE
 
@@ -2107,11 +2115,12 @@
 !! @author Jeff Beck
  subroutine adjust_soil_levels(localpet)
  use model_grid, only       : lsoil_target, i_input, j_input, input_grid
- use input_data, only       : lsoil_input, soil_temp_input_grid, &
+ use sfc_input_data, only   : lsoil_input, soil_temp_input_grid, &
                               soilm_liq_input_grid, soilm_tot_input_grid
  implicit none
  integer, intent(in)                   :: localpet
- character(len=1000)      :: msg
+ character(len=500)       :: msg
+ character(len=2)         :: lsoil_input_ch, lsoil_target_ch
  integer                  :: rc
  real(esmf_kind_r8)          :: tmp(i_input,j_input), &
                                 data_one_tile(i_input,j_input,lsoil_input), &
@@ -2206,12 +2215,11 @@
  
  elseif (lsoil_input /= lsoil_target) then
   rc = -1
-  
-  write(msg,'("NUMBER OF SOIL LEVELS IN INPUT (",I2,") and OUPUT &
-               (",I2,") MUST EITHER BE EQUAL OR 9 AND 4, RESPECTIVELY")') &
-               lsoil_input, lsoil_target
-
-  call error_handler(trim(msg), rc)
+  write(lsoil_input_ch, '(i2)') lsoil_input
+  write(lsoil_target_ch, '(i2)') lsoil_target
+  msg="NUMBER OF SOIL LEVELS IN INPUT " // lsoil_input_ch // " AND OUTPUT " &
+      // lsoil_target_ch // " MUST EITHER BE EQUAL OR 9 AND 4 RESPECTIVELY."
+  call error_handler(msg, rc)
  endif
  
  end subroutine adjust_soil_levels

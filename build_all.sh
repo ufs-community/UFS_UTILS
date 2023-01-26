@@ -3,6 +3,7 @@
 # This build script is only used on officially supported machines.  All other
 # users should set module files as needed, and build directly with CMake.
 #
+#
 # George Gayno
 
 set -eux
@@ -31,7 +32,7 @@ fi
 # Those with access to the EMC ftp site are: Orion and Hera.
 
 if [[ "$target" == "hera" || "$target" == "orion" || "$target" == "wcoss2" ]]; then
-  CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DBUILD_TESTING=OFF"
+   CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DBUILD_TESTING=OFF"
    #CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DBUILD_TESTING=ON"
    #CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DENABLE_DOCS=ON -DBUILD_TESTING=ON"
 else
@@ -47,7 +48,7 @@ cmake .. ${CMAKE_FLAGS}
 make -j 8 VERBOSE=1
 make install
 
-#make test
+#ctest
 #ctest -I 4,5
 
 exit

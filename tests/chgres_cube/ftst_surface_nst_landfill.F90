@@ -38,6 +38,8 @@
                      zm_target_grid, &
                      cleanup_target_nst_data
 
+ use utilities, only : error_handler
+
  implicit none
 
  integer, parameter           :: IPTS_TARGET=4
