@@ -14,7 +14,7 @@
                         latitude_input_grid, &
                         longitude_input_grid
 
- use input_data, only : lev_input, convert_winds, &
+ use atm_input_data, only : lev_input, convert_winds, &
                         wind_input_grid, &
                         u_input_grid, &
                         v_input_grid
