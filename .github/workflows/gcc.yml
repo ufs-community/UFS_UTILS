@@ -107,5 +107,5 @@ jobs:
           mkdir -p build && cd build
           cmake -DCMAKE_INSTALL_PREFIX=../install ..
           make -j2 VERBOSE=1
-          make -j2 test
+          ctest --verbose --output-on-failure --rerun-failed
           make install
