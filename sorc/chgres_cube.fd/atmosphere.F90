@@ -458,7 +458,7 @@
 ! Convert from 3-d to 2-d cartesian winds.
 !-----------------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_uv
  
 !-----------------------------------------------------------------------------------
 ! If selected, process thompson microphysics climatological fields.
@@ -776,7 +776,7 @@
 !> Convert 3-d component winds to u and v.
 !!
 !! @author George Gayno
- subroutine convert_winds
+ subroutine convert_winds_to_uv
  
  implicit none
 
@@ -912,7 +912,7 @@
    enddo
  enddo
 
- end subroutine convert_winds
+ end subroutine convert_winds_to_uv
 
 !> Computes 3-D pressure given an adjusted surface pressure.
 !!                                                                       

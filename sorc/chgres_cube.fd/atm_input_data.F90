@@ -66,7 +66,7 @@ implicit none
 
  public :: read_input_atm_data
  public :: cleanup_input_atm_data
- public :: convert_winds
+ public :: convert_winds_to_xyz
  
  contains
  
@@ -428,7 +428,7 @@ implicit none
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute 3-d pressure from 'ak' and 'bk'.
@@ -688,7 +688,7 @@ implicit none
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute 3-d pressure from 'ak' and 'bk'.
@@ -953,7 +953,7 @@ implicit none
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute 3-d pressure.  Mid-layer and surface pressure are computed
@@ -1237,7 +1237,7 @@ implicit none
 ! Convert from 2-d to 3-d cartesian winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute pressures
@@ -1607,7 +1607,7 @@ implicit none
 ! Convert from 2-d to 3-d cartesian winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute pressure.
@@ -1913,7 +1913,7 @@ implicit none
 ! Convert from 2-d to 3-d cartesian winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute pressure.
@@ -2868,7 +2868,7 @@ else ! is native coordinate (hybrid).
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
  
 !---------------------------------------------------------------------------
 ! Convert dpdt to dzdt if needed
@@ -3103,7 +3103,7 @@ end subroutine read_winds
 !> Convert winds from 2-d to 3-d components.
 !!
 !! @author George Gayno NCEP/EMC   
- subroutine convert_winds
+ subroutine convert_winds_to_xyz
 
  implicit none
 
@@ -3168,11 +3168,8 @@ end subroutine read_winds
      latrad = latptr(i,j) * acos(-1.) / 180.0
      lonrad = lonptr(i,j) * acos(-1.) / 180.0
      do k = clb(3), cub(3)
-!      windptr(i,j,k,1) = uptr(i,j,k) * cos(lonrad) - vptr(i,j,k) * sin(latrad) * sin(lonrad)
        xptr(i,j,k) = uptr(i,j,k) * cos(lonrad) - vptr(i,j,k) * sin(latrad) * sin(lonrad)
-!      windptr(i,j,k,2) = uptr(i,j,k) * sin(lonrad) + vptr(i,j,k) * sin(latrad) * cos(lonrad)
        yptr(i,j,k) = uptr(i,j,k) * sin(lonrad) + vptr(i,j,k) * sin(latrad) * cos(lonrad)
-!      windptr(i,j,k,3) = vptr(i,j,k) * cos(latrad)
        zptr(i,j,k) = vptr(i,j,k) * cos(latrad)
      enddo
    enddo
@@ -3181,7 +3178,7 @@ end subroutine read_winds
  call ESMF_FieldDestroy(u_input_grid, rc=rc)
  call ESMF_FieldDestroy(v_input_grid, rc=rc)
 
- end subroutine convert_winds
+ end subroutine convert_winds_to_xyz
  
 !> Compute grid rotation angle for non-latlon grids.
 !!
