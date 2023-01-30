@@ -8,7 +8,7 @@
 #SBATCH --nodes=1 --ntasks-per-node=24
 ##SBATCH --partition=bigmem
 #SBATCH -q debug
-#SBATCH -t 00:10:00
+#SBATCH -t 00:20:00
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on Hera.
@@ -24,8 +24,9 @@
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes. The orography code
-#       benefits from threads.
+#       tasks spread across multiple nodes or to be run on
+#       'bigmem' nodes (#SBATCH --partition=bigmem). The 
+#       orography code benefits from threads.
 #
 # To run, do the following:
 #
