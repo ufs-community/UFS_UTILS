@@ -72,6 +72,7 @@
                                        write_fv3_atm_data_netcdf
 
  use utilities, only                 : error_handler
+
  implicit none
 
  private
@@ -83,24 +84,18 @@
  type(esmf_field)                       :: pres_b4adj_target_grid !< 3-d pres before terrain adj
  type(esmf_field)                       :: temp_b4adj_target_grid !< temp before vert adj
  type(esmf_field)                       :: terrain_interp_to_target_grid !< Input grid terrain interpolated to target grid.   
-!type(esmf_field)                       :: wind_target_grid !< 3-d wind, grid box center
- type(esmf_field)                       :: xwind_target_grid !< 3-d wind, grid box center
- type(esmf_field)                       :: ywind_target_grid !< 3-d wind, grid box center
- type(esmf_field)                       :: zwind_target_grid !< 3-d wind, grid box center
-!type(esmf_field)                       :: wind_b4adj_target_grid !< 3-d wind before vert adj
- type(esmf_field)                       :: xwind_b4adj_target_grid !< 3-d wind before vert adj
- type(esmf_field)                       :: ywind_b4adj_target_grid !< 3-d wind before vert adj
- type(esmf_field)                       :: zwind_b4adj_target_grid !< 3-d wind before vert adj
-!type(esmf_field)                       :: wind_s_target_grid !< 3-d wind, 'south' edge
- type(esmf_field)                       :: xwind_s_target_grid !< 3-d wind, 'south' edge
- type(esmf_field)                       :: ywind_s_target_grid !< 3-d wind, 'south' edge
- type(esmf_field)                       :: zwind_s_target_grid !< 3-d wind, 'south' edge
-!type(esmf_field), public               :: u_w_target_grid !< u-wind, 'west' edge
-!type(esmf_field), public               :: v_w_target_grid !< v-wind, 'west' edge
-!type(esmf_field)                       :: wind_w_target_grid !< 3-d wind, 'west' edge
- type(esmf_field)                       :: xwind_w_target_grid !< 3-d wind, 'west' edge
- type(esmf_field)                       :: ywind_w_target_grid !< 3-d wind, 'west' edge
- type(esmf_field)                       :: zwind_w_target_grid !< 3-d wind, 'west' edge
+ type(esmf_field)                       :: xwind_target_grid !< x-component wind, grid box center
+ type(esmf_field)                       :: ywind_target_grid !< y-component wind, grid box center
+ type(esmf_field)                       :: zwind_target_grid !< z-component wind, grid box center
+ type(esmf_field)                       :: xwind_b4adj_target_grid !< x-component wind, before vert adj
+ type(esmf_field)                       :: ywind_b4adj_target_grid !< y-component wind, before vert adj
+ type(esmf_field)                       :: zwind_b4adj_target_grid !< z-component wind, before vert adj
+ type(esmf_field)                       :: xwind_s_target_grid !< x-component wind, 'south' edge
+ type(esmf_field)                       :: ywind_s_target_grid !< y-component wind, 'south' edge
+ type(esmf_field)                       :: zwind_s_target_grid !< z-component wind, 'south' edge
+ type(esmf_field)                       :: xwind_w_target_grid !< x-component wind, 'west' edge
+ type(esmf_field)                       :: ywind_w_target_grid !< y-component wind, 'west' edge
+ type(esmf_field)                       :: zwind_w_target_grid !< z-component wind, 'west' edge
 
 ! Fields associated with thompson microphysics climatological tracers.
 
@@ -143,9 +138,6 @@
  real(esmf_kind_r8), parameter      :: one_over_exponent = 1.0 / exponent
 
  real(esmf_kind_r8), pointer        :: psptr(:,:), tempptr(:,:,:)
-
- type(esmf_fieldbundle)             :: wind_target_grid
- type(esmf_fieldbundle)             :: wind_w_target_grid
 
 !-----------------------------------------------------------------------------------
 ! Read atmospheric fields on the input grid.
@@ -295,14 +287,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldRegrid", rc)
 
-!print*,"- CALL Field_Regrid FOR 3-D WIND."
-!call ESMF_FieldRegrid(wind_input_grid, &
-!                      wind_b4adj_target_grid, &
-!                      routehandle=regrid_bl, &
-!                      termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!     call error_handler("IN FieldRegrid", rc)
-
  print*,"- CALL Field_Regrid FOR x WIND."
  call ESMF_FieldRegrid(xwind_input_grid, &
                        xwind_b4adj_target_grid, &
@@ -384,28 +368,12 @@
 ! Interpolate winds to 'd' grid.
 !-----------------------------------------------------------------------------------
 
- wind_target_grid = ESMF_FieldBundleCreate(name="wind_target_grid", rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegridStore", rc)
-
- call ESMF_FieldBundleAdd(wind_target_grid, (/xwind_target_grid,ywind_target_grid,zwind_target_grid/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegridStore", rc)
-
- wind_w_target_grid = ESMF_FieldBundleCreate(name="wind_w_target_grid", rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegridStore", rc)
-
- call ESMF_FieldBundleAdd(wind_w_target_grid, (/xwind_w_target_grid,ywind_w_target_grid,zwind_w_target_grid/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldRegridStore", rc)
-
  isrctermprocessing = 1
  method=ESMF_REGRIDMETHOD_BILINEAR
 
  print*,"- CALL FieldRegridStore FOR 3D-WIND WEST EDGE."
- call ESMF_FieldBundleRegridStore(wind_target_grid, &
-                            wind_w_target_grid, &
+ call ESMF_FieldRegridStore(xwind_target_grid, &
+                            xwind_w_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
                             srctermprocessing=isrctermprocessing, &
                             routehandle=regrid_bl, &
@@ -414,39 +382,29 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
-!print*,"- CALL Field_Regrid FOR 3-D WIND WEST EDGE."
- call ESMF_FieldBundleRegrid(wind_target_grid, &
-                       wind_w_target_grid, &
+ print*,"- CALL Field_Regrid FOR xWIND WEST EDGE."
+ call ESMF_FieldRegrid(xwind_target_grid, &
+                       xwind_w_target_grid, &
                        routehandle=regrid_bl, &
-                       termorderflag=(/ESMF_TERMORDER_SRCSEQ/), rc=rc)
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
-!print*,"- CALL Field_Regrid FOR xWIND WEST EDGE."
-!call ESMF_FieldRegrid(xwind_target_grid, &
-!                      xwind_w_target_grid, &
-!                      routehandle=regrid_bl, &
-!                      termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldRegrid", rc)
+ print*,"- CALL Field_Regrid FOR yWIND WEST EDGE."
+ call ESMF_FieldRegrid(ywind_target_grid, &
+                       ywind_w_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
 
-!print*,"- CALL Field_Regrid FOR yWIND WEST EDGE."
-!call ESMF_FieldRegrid(ywind_target_grid, &
-!                      ywind_w_target_grid, &
-!                      routehandle=regrid_bl, &
-!                      termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldRegrid", rc)
-
-!print*,"- CALL Field_Regrid FOR zWIND WEST EDGE."
-!call ESMF_FieldRegrid(zwind_target_grid, &
-!                      zwind_w_target_grid, &
-!                      routehandle=regrid_bl, &
-!                      termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldRegrid", rc)
-
-
+ print*,"- CALL Field_Regrid FOR zWIND WEST EDGE."
+ call ESMF_FieldRegrid(zwind_target_grid, &
+                       zwind_w_target_grid, &
+                       routehandle=regrid_bl, &
+                       termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_bl, rc=rc)
@@ -466,14 +424,6 @@
                             regridmethod=method, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
-
-!print*,"- CALL Field_Regrid FOR 3-D WIND SOUTH EDGE."
-!call ESMF_FieldRegrid(wind_target_grid, &
-!                      wind_s_target_grid, &
-!                      routehandle=regrid_bl, &
-!                      termorderflag=ESMF_TERMORDER_SRCSEQ, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldRegrid", rc)
 
  print*,"- CALL Field_Regrid FOR xWIND SOUTH EDGE."
  call ESMF_FieldRegrid(xwind_target_grid, &
@@ -614,15 +564,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
-!print*,"- CALL FieldCreate FOR TARGET GRID UNSTAGGERED WINDS BEFORE ADJUSTMENT."
-!wind_b4adj_target_grid = ESMF_FieldCreate(target_grid, &
-!                                  typekind=ESMF_TYPEKIND_R8, &
-!                                  staggerloc=ESMF_STAGGERLOC_CENTER, &
-!                                  ungriddedLBound=(/1,1/), &
-!                                  ungriddedUBound=(/lev_input,3/), rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldCreate", rc)
-
  print*,"- CALL FieldCreate FOR TARGET TERRAIN."
  terrain_interp_to_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -733,15 +674,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
-!print*,"- CALL FieldCreate FOR TARGET UNSTAGGERED 3D-WIND."
-!wind_target_grid = ESMF_FieldCreate(target_grid, &
-!                                  typekind=ESMF_TYPEKIND_R8, &
-!                                  staggerloc=ESMF_STAGGERLOC_CENTER, &
-!                                  ungriddedLBound=(/1,1/), &
-!                                  ungriddedUBound=(/lev_target,3/), rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldCreate", rc)
-
  print*,"- CALL FieldCreate FOR TARGET U_S."
  u_s_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -786,15 +718,6 @@
                                    ungriddedUBound=(/lev_target/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
-
-!print*,"- CALL FieldCreate FOR TARGET 3D-WIND_S."
-!wind_s_target_grid = ESMF_FieldCreate(target_grid, &
-!                                  typekind=ESMF_TYPEKIND_R8, &
-!                                  staggerloc=ESMF_STAGGERLOC_EDGE2, &
-!                                  ungriddedLBound=(/1,1/), &
-!                                  ungriddedUBound=(/lev_target,3/), rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR TARGET U_W."
  u_w_target_grid = ESMF_FieldCreate(target_grid, &
@@ -841,15 +764,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
-!print*,"- CALL FieldCreate FOR TARGET 3D-WIND_W."
-!wind_w_target_grid = ESMF_FieldCreate(target_grid, &
-!                                  typekind=ESMF_TYPEKIND_R8, &
-!                                  staggerloc=ESMF_STAGGERLOC_EDGE1, &
-!                                  ungriddedLBound=(/1,1/), &
-!                                  ungriddedUBound=(/lev_target,3/), rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldCreate", rc)
-
  print*,"- CALL FieldCreate FOR TARGET SURFACE PRESSURE."
  ps_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
@@ -873,7 +787,6 @@
  real(esmf_kind_r8), pointer     :: lonptr(:,:)
  real(esmf_kind_r8), pointer     :: uptr(:,:,:)
  real(esmf_kind_r8), pointer     :: vptr(:,:,:)
-!real(esmf_kind_r8), pointer     :: windptr(:,:,:,:)
  real(esmf_kind_r8), pointer     :: xwindptr(:,:,:)
  real(esmf_kind_r8), pointer     :: ywindptr(:,:,:)
  real(esmf_kind_r8), pointer     :: zwindptr(:,:,:)
@@ -884,14 +797,6 @@
 !-----------------------------------------------------------------------------------
 
  print*,'- CONVERT WINDS.'
-
-!print*,"- CALL FieldGet FOR 3-D WIND_S."
-!call ESMF_FieldGet(wind_s_target_grid, &
-!                   computationalLBound=clb, &
-!                   computationalUBound=cub, &
-!                   farrayPtr=windptr, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR xwind_S."
  call ESMF_FieldGet(xwind_s_target_grid, &
@@ -942,26 +847,13 @@
      latrad = latptr(i,j) * acos(-1.) / 180.0
      lonrad = lonptr(i,j) * acos(-1.) / 180.0
      do k = clb(3), cub(3)
-!      uptr(i,j,k) = windptr(i,j,k,1) * cos(lonrad) + windptr(i,j,k,2) * sin(lonrad)
        uptr(i,j,k) = xwindptr(i,j,k) * cos(lonrad) + ywindptr(i,j,k) * sin(lonrad)
-!      vptr(i,j,k) = -windptr(i,j,k,1) * sin(latrad) * sin(lonrad) + &
-!                     windptr(i,j,k,2) * sin(latrad) * cos(lonrad) + &
-!                     windptr(i,j,k,3) * cos(latrad)
        vptr(i,j,k) = -xwindptr(i,j,k) * sin(latrad) * sin(lonrad) + &
                       ywindptr(i,j,k) * sin(latrad) * cos(lonrad) + &
                       zwindptr(i,j,k) * cos(latrad)
      enddo
    enddo
  enddo
- 
-
-!print*,"- CALL FieldGet FOR 3-D WIND_W."
-!call ESMF_FieldGet(wind_w_target_grid, &
-!                   computationalLBound=clb, &
-!                   computationalUBound=cub, &
-!                   farrayPtr=windptr, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR xwind_w."
  call ESMF_FieldGet(xwind_w_target_grid, &
@@ -1012,11 +904,7 @@
      latrad = latptr(i,j) * acos(-1.) / 180.0
      lonrad = lonptr(i,j) * acos(-1.) / 180.0
      do k = clb(3), cub(3)
-!      uptr(i,j,k) = windptr(i,j,k,1) * cos(lonrad) + windptr(i,j,k,2) * sin(lonrad)
        uptr(i,j,k) = xwindptr(i,j,k) * cos(lonrad) + ywindptr(i,j,k) * sin(lonrad)
-!      vptr(i,j,k) = -windptr(i,j,k,1) * sin(latrad) * sin(lonrad) + &
-!                     windptr(i,j,k,2) * sin(latrad) * cos(lonrad) + &
-!                     windptr(i,j,k,3) * cos(latrad)
        vptr(i,j,k) = -xwindptr(i,j,k) * sin(latrad) * sin(lonrad) + &
                       ywindptr(i,j,k) * sin(latrad) * cos(lonrad) + &
                       zwindptr(i,j,k) * cos(latrad)
@@ -1738,10 +1626,6 @@
 
 ! wind
  print*,"VINTG_WAM:- CALL FieldGet FOR 3-D ADJUSTED WIND."
-!call ESMF_FieldGet(wind_target_grid, &
-!                   farrayPtr=WIND2PTR, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!        call error_handler("IN FieldGet", rc)
 
  call ESMF_FieldGet(xwind_target_grid, &
                     farrayPtr=xWIND2PTR, rc=rc)
@@ -1950,16 +1834,6 @@
          call error_handler("IN FieldGet", rc)
 
  Z2 = -LOG(P2PTR)
-
-!print*,"- CALL FieldGet FOR 3-D WIND."
-!call ESMF_FieldGet(wind_b4adj_target_grid, &
-!                   farrayPtr=WIND1PTR, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!        call error_handler("IN FieldGet", rc)
-
-!C1(:,:,:,1) =  WIND1PTR(:,:,:,1)
-!C1(:,:,:,2) =  WIND1PTR(:,:,:,2)
-!C1(:,:,:,3) =  WIND1PTR(:,:,:,3)
  
  print*,"- CALL FieldGet FOR x WIND."
  call ESMF_FieldGet(xwind_b4adj_target_grid, &
@@ -2063,21 +1937,12 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
-!print*,"- CALL FieldGet FOR 3-D ADJUSTED WIND."
-!call ESMF_FieldGet(wind_target_grid, &
-!                   farrayPtr=WIND2PTR, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!        call error_handler("IN FieldGet", rc)
-
  DO K=1,LEV_TARGET
    DO I=CLB(1),CUB(1)
    DO J=CLB(2),CUB(2)
      xWIND2PTR(I,J,K)=C2(I,J,K,1)
      yWIND2PTR(I,J,K)=C2(I,J,K,2)
      zWIND2PTR(I,J,K)=C2(I,J,K,3)
-!    WIND2PTR(I,J,K,1)=C2(I,J,K,1)
-!    WIND2PTR(I,J,K,2)=C2(I,J,K,2)
-!    WIND2PTR(I,J,K,3)=C2(I,J,K,3)
      DZDT2PTR(I,J,K)=C2(I,J,K,4)
      DZ=Z2(I,J,K)-Z1(I,J,1)
      IF(DZ.GE.0) THEN
@@ -2506,7 +2371,6 @@
 
  print*,"- DESTROY TARGET GRID ATMOSPHERIC BEFORE ADJUSTMENT FIELDS."
 
-!call ESMF_FieldDestroy(wind_b4adj_target_grid, rc=rc)
  call ESMF_FieldDestroy(xwind_b4adj_target_grid, rc=rc)
  call ESMF_FieldDestroy(ywind_b4adj_target_grid, rc=rc)
  call ESMF_FieldDestroy(zwind_b4adj_target_grid, rc=rc)

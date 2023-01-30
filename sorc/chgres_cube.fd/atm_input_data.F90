@@ -54,10 +54,9 @@ implicit none
 
  type(esmf_field), public              :: u_input_grid          !< u/v wind at grid
  type(esmf_field), public              :: v_input_grid          !< box center
-!type(esmf_field), public              :: wind_input_grid       !< 3-component wind
- type(esmf_field), public              :: xwind_input_grid       !< 3-component wind
- type(esmf_field), public              :: ywind_input_grid       !< 3-component wind
- type(esmf_field), public              :: zwind_input_grid       !< 3-component wind
+ type(esmf_field), public              :: xwind_input_grid       !< x-component wind
+ type(esmf_field), public              :: ywind_input_grid       !< y-component wind
+ type(esmf_field), public              :: zwind_input_grid       !< z-component wind
  type(esmf_field), allocatable, public :: tracers_input_grid(:) !< tracers
 
  integer, public                 :: lev_input      !< number of atmospheric layers
@@ -152,15 +151,6 @@ implicit none
  integer                                  :: i, rc
 
  print*,"- INITIALIZE ATMOSPHERIC ESMF FIELDS."
-
-!print*,"- CALL FieldCreate FOR INPUT GRID 3-D WIND."
-!wind_input_grid = ESMF_FieldCreate(input_grid, &
-!                                  typekind=ESMF_TYPEKIND_R8, &
-!                                  staggerloc=ESMF_STAGGERLOC_CENTER, &
-!                                  ungriddedLBound=(/1,1/), &
-!                                  ungriddedUBound=(/lev_input,3/), rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldCreate", rc)
 
  print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
  ps_input_grid = ESMF_FieldCreate(input_grid, &
@@ -3121,7 +3111,6 @@ end subroutine read_winds
  integer                         :: i, j, k, rc
 
  real(esmf_kind_r8)              :: latrad, lonrad
-!real(esmf_kind_r8), pointer     :: windptr(:,:,:,:)
  real(esmf_kind_r8), pointer     :: xptr(:,:,:)
  real(esmf_kind_r8), pointer     :: yptr(:,:,:)
  real(esmf_kind_r8), pointer     :: zptr(:,:,:)
@@ -3129,14 +3118,6 @@ end subroutine read_winds
  real(esmf_kind_r8), pointer     :: vptr(:,:,:)
  real(esmf_kind_r8), pointer     :: latptr(:,:)
  real(esmf_kind_r8), pointer     :: lonptr(:,:)
-
-!print*,"- CALL FieldGet FOR 3-D WIND."
-!call ESMF_FieldGet(wind_input_grid, &
-!                   computationalLBound=clb, &
-!                   computationalUBound=cub, &
-!                   farrayPtr=windptr, rc=rc)
-!if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!   call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR x."
  call ESMF_FieldGet(xwind_input_grid, &
@@ -3307,7 +3288,6 @@ subroutine cleanup_input_atm_data
  call ESMF_FieldDestroy(pres_input_grid, rc=rc)
  call ESMF_FieldDestroy(dzdt_input_grid, rc=rc)
  call ESMF_FieldDestroy(temp_input_grid, rc=rc)
-!call ESMF_FieldDestroy(wind_input_grid, rc=rc)
  call ESMF_FieldDestroy(xwind_input_grid, rc=rc)
  call ESMF_FieldDestroy(ywind_input_grid, rc=rc)
  call ESMF_FieldDestroy(zwind_input_grid, rc=rc)
