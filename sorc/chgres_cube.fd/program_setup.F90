@@ -296,6 +296,8 @@
      print*,'- INPUT DATA FROM FV3 GAUSSIAN NETCDF FILE.'
    case ("grib2")
      print*,'- INPUT DATA FROM A GRIB2 FILE'
+   case ("ifs_latlon_netcdf")
+     print*,'- INPUT DATA FROM A LATLON NETCDF FILE'
    case default
      call error_handler("UNRECOGNIZED INPUT DATA TYPE.", 1)
  end select

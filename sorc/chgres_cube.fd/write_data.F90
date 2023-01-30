@@ -542,6 +542,9 @@
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NETCDF FILE')
    elseif (trim(input_type) == "grib2") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GRIB2 FILE')
+!--- not defined right just to avoide the FV3 code change
+   elseif (trim(input_type) == "ifs_latlon_netcdf") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NETCDF FILE' )
    endif
 
    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
@@ -1322,6 +1325,9 @@
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS TILED RESTART FILE')
    elseif (trim(input_type) == "grib2") then
      error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GRIB2 FILE')
+!--- not defined right just to avoide the FV3 code change
+   elseif (trim(input_type) == "ifs_latlon_netcdf") then
+     error = nf90_put_att(ncid, nf90_global, 'source', 'FV3GFS GAUSSIAN NETCDF FILE' )
    endif
 
 !--- define field
