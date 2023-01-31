@@ -1552,10 +1552,9 @@
  REAL(ESMF_KIND_R8), POINTER     :: QOPTR(:,:,:)       ! output tracer
  REAL(ESMF_KIND_R8), POINTER     :: O2PTR(:,:,:)       ! output tracer
  REAL(ESMF_KIND_R8), POINTER     :: O3PTR(:,:,:)       ! output tracer
-!REAL(ESMF_KIND_R8), POINTER     :: WIND2PTR(:,:,:,:)  ! output wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: xWIND2PTR(:,:,:)  ! output wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: yWIND2PTR(:,:,:)  ! output wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: zWIND2PTR(:,:,:)  ! output wind (x,y,z components)
+ REAL(ESMF_KIND_R8), POINTER     :: XWIND2PTR(:,:,:)  ! output wind (x component)
+ REAL(ESMF_KIND_R8), POINTER     :: YWIND2PTR(:,:,:)  ! output wind (y component)
+ REAL(ESMF_KIND_R8), POINTER     :: ZWIND2PTR(:,:,:)  ! output wind (z component)
  
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1628,17 +1627,17 @@
  print*,"VINTG_WAM:- CALL FieldGet FOR 3-D ADJUSTED WIND."
 
  call ESMF_FieldGet(xwind_target_grid, &
-                    farrayPtr=xWIND2PTR, rc=rc)
+                    farrayPtr=XWIND2PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  call ESMF_FieldGet(ywind_target_grid, &
-                    farrayPtr=yWIND2PTR, rc=rc)
+                    farrayPtr=YWIND2PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  call ESMF_FieldGet(zwind_target_grid, &
-                    farrayPtr=zWIND2PTR, rc=rc)
+                    farrayPtr=ZWIND2PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
@@ -1659,12 +1658,9 @@
 !
      DO K=KREF,LEV_TARGET
        COE = P2PTR(I,J,K) / P2PTR(I,J,KREF)
-       xWIND2PTR(I,J,K) = COE*xWIND2PTR(I,J,K)
-       yWIND2PTR(I,J,K) = COE*yWIND2PTR(I,J,K)
-       zWIND2PTR(I,J,K) = COE*zWIND2PTR(I,J,K)
-!      WIND2PTR(I,J,K,1) = COE*WIND2PTR(I,J,K,1)
-!      WIND2PTR(I,J,K,2) = COE*WIND2PTR(I,J,K,2)
-!      WIND2PTR(I,J,K,3) = COE*WIND2PTR(I,J,K,3)
+       XWIND2PTR(I,J,K) = COE*XWIND2PTR(I,J,K)
+       YWIND2PTR(I,J,K) = COE*YWIND2PTR(I,J,K)
+       ZWIND2PTR(I,J,K) = COE*ZWIND2PTR(I,J,K)
        DZDT2PTR(I,J,K)   = COE*DZDT2PTR(I,J,K)
      ENDDO
 
@@ -1790,14 +1786,12 @@
  REAL(ESMF_KIND_R8), POINTER     :: T2PTR(:,:,:)       ! output temperature
  REAL(ESMF_KIND_R8), POINTER     :: Q1PTR(:,:,:)       ! input tracer
  REAL(ESMF_KIND_R8), POINTER     :: Q2PTR(:,:,:)       ! output tracer
- REAL(ESMF_KIND_R8), POINTER     :: WIND1PTR(:,:,:,:)  ! input wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: xWIND1PTR(:,:,:)  ! input wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: yWIND1PTR(:,:,:)  ! input wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: zWIND1PTR(:,:,:)  ! input wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: WIND2PTR(:,:,:,:)  ! input wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: xWIND2PTR(:,:,:)  ! input wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: yWIND2PTR(:,:,:)  ! input wind (x,y,z components)
- REAL(ESMF_KIND_R8), POINTER     :: zWIND2PTR(:,:,:)  ! input wind (x,y,z components)
+ REAL(ESMF_KIND_R8), POINTER     :: XWIND1PTR(:,:,:)  ! input wind (x component)
+ REAL(ESMF_KIND_R8), POINTER     :: YWIND1PTR(:,:,:)  ! input wind (y component)
+ REAL(ESMF_KIND_R8), POINTER     :: ZWIND1PTR(:,:,:)  ! input wind (z component)
+ REAL(ESMF_KIND_R8), POINTER     :: XWIND2PTR(:,:,:)  ! output wind (x component)
+ REAL(ESMF_KIND_R8), POINTER     :: YWIND2PTR(:,:,:)  ! output wind (y component)
+ REAL(ESMF_KIND_R8), POINTER     :: ZWIND2PTR(:,:,:)  ! output wind (z component)
  
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  COMPUTE LOG PRESSURE INTERPOLATING COORDINATE
@@ -1837,27 +1831,27 @@
  
  print*,"- CALL FieldGet FOR x WIND."
  call ESMF_FieldGet(xwind_b4adj_target_grid, &
-                    farrayPtr=xWIND1PTR, rc=rc)
+                    farrayPtr=XWIND1PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
- C1(:,:,:,1) =  xWIND1PTR(:,:,:)
+ C1(:,:,:,1) =  XWIND1PTR(:,:,:)
 
  print*,"- CALL FieldGet FOR y WIND."
  call ESMF_FieldGet(ywind_b4adj_target_grid, &
-                    farrayPtr=yWIND1PTR, rc=rc)
+                    farrayPtr=YWIND1PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
- C1(:,:,:,2) =  yWIND1PTR(:,:,:)
+ C1(:,:,:,2) =  YWIND1PTR(:,:,:)
 
  print*,"- CALL FieldGet FOR z WIND."
  call ESMF_FieldGet(zwind_b4adj_target_grid, &
-                    farrayPtr=zWIND1PTR, rc=rc)
+                    farrayPtr=ZWIND1PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
- C1(:,:,:,3) =  zWIND1PTR(:,:,:)
+ C1(:,:,:,3) =  ZWIND1PTR(:,:,:)
 
  print*,"- CALL FieldGet FOR VERTICAL VELOCITY."
  call ESMF_FieldGet(dzdt_b4adj_target_grid, &
@@ -1921,28 +1915,28 @@
 
  print*,"- CALL FieldGet FOR ADJUSTED xwind."
  call ESMF_FieldGet(xwind_target_grid, &
-                    farrayPtr=xwind2PTR, rc=rc)
+                    farrayPtr=XWIND2PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR ADJUSTED ywind."
  call ESMF_FieldGet(ywind_target_grid, &
-                    farrayPtr=ywind2PTR, rc=rc)
+                    farrayPtr=YWIND2PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  print*,"- CALL FieldGet FOR ADJUSTED zwind."
  call ESMF_FieldGet(zwind_target_grid, &
-                    farrayPtr=zwind2PTR, rc=rc)
+                    farrayPtr=ZWIND2PTR, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  DO K=1,LEV_TARGET
    DO I=CLB(1),CUB(1)
    DO J=CLB(2),CUB(2)
-     xWIND2PTR(I,J,K)=C2(I,J,K,1)
-     yWIND2PTR(I,J,K)=C2(I,J,K,2)
-     zWIND2PTR(I,J,K)=C2(I,J,K,3)
+     XWIND2PTR(I,J,K)=C2(I,J,K,1)
+     YWIND2PTR(I,J,K)=C2(I,J,K,2)
+     ZWIND2PTR(I,J,K)=C2(I,J,K,3)
      DZDT2PTR(I,J,K)=C2(I,J,K,4)
      DZ=Z2(I,J,K)-Z1(I,J,1)
      IF(DZ.GE.0) THEN
