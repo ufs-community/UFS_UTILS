@@ -23,7 +23,7 @@ set(lib_src
 
 set(exe_src chgres.F90)
 
-include(cmake/msis2.cmake)
+add_subdirectory(msis2.1)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -assume byterecl")

@@ -1,3 +1,6 @@
+! This software incorporates the MSIS empirical atmospheric model software
+! designed and provided by NRL. Use is governbed by the Open Source Academic
+! research License Agreement contained in the file msis2.1/nrlmsis2.1_license..txt
   subroutine gettemp(iday,nday,xlat,nlat,pr,np,pf,temp,n_o,n_o2,n_n2)
     use msis_init,      only: msisinit
     use msis_constants, only: rp
