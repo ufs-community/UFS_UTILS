@@ -3119,7 +3119,7 @@ end subroutine read_winds
  real(esmf_kind_r8), pointer     :: latptr(:,:)
  real(esmf_kind_r8), pointer     :: lonptr(:,:)
 
- print*,"- CALL FieldGet FOR x."
+ print*,"- CALL FieldGet FOR xwind."
  call ESMF_FieldGet(xwind_input_grid, &
                     computationalLBound=clb, &
                     computationalUBound=cub, &
@@ -3127,13 +3127,13 @@ end subroutine read_winds
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- CALL FieldGet FOR y."
+ print*,"- CALL FieldGet FOR ywind."
  call ESMF_FieldGet(ywind_input_grid, &
                     farrayPtr=yptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- CALL FieldGet FOR z."
+ print*,"- CALL FieldGet FOR zwind."
  call ESMF_FieldGet(zwind_input_grid, &
                     farrayPtr=zptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &

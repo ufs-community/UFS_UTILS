@@ -57,13 +57,13 @@ mm=03
 dd=01
 hh=00
 
-use_v16retro=yes
+use_v16retro=no
 
-LEVS=128
+LEVS=65
 
 CDUMP=gfs
 
-CRES_HIRES=C3072
+CRES_HIRES=C192
 CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
