@@ -127,10 +127,15 @@ if [ $RUN_CHGRES == yes ]; then
   if [ $CRES_HIRES == 'C768' ] ; then
     MEM=250GB
   elif [ $CRES_HIRES == 'C1152' ] ; then
-    MEM=350GB
+    MEM=500GB
     NODES=1
     TASKS_PER_NODE=48
     WALLT="0:20:00"
+  elif [ $CRES_HIRES == 'C3072' ] ; then
+    MEM=500GB
+    NODES=8
+    TASKS_PER_NODE=18
+    WALLT="0:45:00"
   fi
   NCPUS=${TASKS_PER_NODE}
   (( TASKS = NODES * TASKS_PER_NODE ))
