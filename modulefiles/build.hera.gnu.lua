@@ -22,7 +22,7 @@ load(pathJoin("hpc-mpich", mpich_ver))
 netcdf_ver=os.getenv("netcdf_ver") or "4.7.4"
 load(pathJoin("netcdf", netcdf_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8.2.1b04"
+esmf_ver=os.getenv("esmf_ver") or "8.4.0b08"
 load(pathJoin("esmf", esmf_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"

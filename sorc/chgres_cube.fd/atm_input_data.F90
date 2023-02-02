@@ -54,7 +54,9 @@ implicit none
 
  type(esmf_field), public              :: u_input_grid          !< u/v wind at grid
  type(esmf_field), public              :: v_input_grid          !< box center
- type(esmf_field), public              :: wind_input_grid       !< 3-component wind
+ type(esmf_field), public              :: xwind_input_grid       !< x-component wind
+ type(esmf_field), public              :: ywind_input_grid       !< y-component wind
+ type(esmf_field), public              :: zwind_input_grid       !< z-component wind
  type(esmf_field), allocatable, public :: tracers_input_grid(:) !< tracers
 
  integer, public                 :: lev_input      !< number of atmospheric layers
@@ -64,7 +66,7 @@ implicit none
 
  public :: read_input_atm_data
  public :: cleanup_input_atm_data
- public :: convert_winds
+ public :: convert_winds_to_xyz
  
  contains
  
@@ -150,15 +152,6 @@ implicit none
 
  print*,"- INITIALIZE ATMOSPHERIC ESMF FIELDS."
 
- print*,"- CALL FieldCreate FOR INPUT GRID 3-D WIND."
- wind_input_grid = ESMF_FieldCreate(input_grid, &
-                                   typekind=ESMF_TYPEKIND_R8, &
-                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1,1/), &
-                                   ungriddedUBound=(/lev_input,3/), rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
  print*,"- CALL FieldCreate FOR INPUT GRID SURFACE PRESSURE."
  ps_input_grid = ESMF_FieldCreate(input_grid, &
                                   typekind=ESMF_TYPEKIND_R8, &
@@ -170,6 +163,33 @@ implicit none
  terrain_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR INPUT GRID xwind."
+ xwind_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_input/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR INPUT GRID ywind."
+ ywind_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_input/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- CALL FieldCreate FOR INPUT GRID zwind."
+ zwind_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_input/), rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
@@ -408,7 +428,7 @@ implicit none
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute 3-d pressure from 'ak' and 'bk'.
@@ -668,7 +688,7 @@ implicit none
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute 3-d pressure from 'ak' and 'bk'.
@@ -933,7 +953,7 @@ implicit none
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute 3-d pressure.  Mid-layer and surface pressure are computed
@@ -1217,7 +1237,7 @@ implicit none
 ! Convert from 2-d to 3-d cartesian winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute pressures
@@ -1587,7 +1607,7 @@ implicit none
 ! Convert from 2-d to 3-d cartesian winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute pressure.
@@ -1893,7 +1913,7 @@ implicit none
 ! Convert from 2-d to 3-d cartesian winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute pressure.
@@ -2854,7 +2874,7 @@ else ! is native coordinate (hybrid).
 ! Convert from 2-d to 3-d component winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
  
 !---------------------------------------------------------------------------
 ! Convert dpdt to dzdt if needed
@@ -3089,25 +3109,39 @@ end subroutine read_winds
 !> Convert winds from 2-d to 3-d components.
 !!
 !! @author George Gayno NCEP/EMC   
- subroutine convert_winds
+ subroutine convert_winds_to_xyz
 
  implicit none
 
- integer                         :: clb(4), cub(4)
+ integer                         :: clb(3), cub(3)
  integer                         :: i, j, k, rc
 
  real(esmf_kind_r8)              :: latrad, lonrad
- real(esmf_kind_r8), pointer     :: windptr(:,:,:,:)
+ real(esmf_kind_r8), pointer     :: xptr(:,:,:)
+ real(esmf_kind_r8), pointer     :: yptr(:,:,:)
+ real(esmf_kind_r8), pointer     :: zptr(:,:,:)
  real(esmf_kind_r8), pointer     :: uptr(:,:,:)
  real(esmf_kind_r8), pointer     :: vptr(:,:,:)
  real(esmf_kind_r8), pointer     :: latptr(:,:)
  real(esmf_kind_r8), pointer     :: lonptr(:,:)
 
- print*,"- CALL FieldGet FOR 3-D WIND."
- call ESMF_FieldGet(wind_input_grid, &
+ print*,"- CALL FieldGet FOR xwind."
+ call ESMF_FieldGet(xwind_input_grid, &
                     computationalLBound=clb, &
                     computationalUBound=cub, &
-                    farrayPtr=windptr, rc=rc)
+                    farrayPtr=xptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR ywind."
+ call ESMF_FieldGet(ywind_input_grid, &
+                    farrayPtr=yptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR zwind."
+ call ESMF_FieldGet(zwind_input_grid, &
+                    farrayPtr=zptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
@@ -3140,9 +3174,9 @@ end subroutine read_winds
      latrad = latptr(i,j) * acos(-1.) / 180.0
      lonrad = lonptr(i,j) * acos(-1.) / 180.0
      do k = clb(3), cub(3)
-       windptr(i,j,k,1) = uptr(i,j,k) * cos(lonrad) - vptr(i,j,k) * sin(latrad) * sin(lonrad)
-       windptr(i,j,k,2) = uptr(i,j,k) * sin(lonrad) + vptr(i,j,k) * sin(latrad) * cos(lonrad)
-       windptr(i,j,k,3) = vptr(i,j,k) * cos(latrad)
+       xptr(i,j,k) = uptr(i,j,k) * cos(lonrad) - vptr(i,j,k) * sin(latrad) * sin(lonrad)
+       yptr(i,j,k) = uptr(i,j,k) * sin(lonrad) + vptr(i,j,k) * sin(latrad) * cos(lonrad)
+       zptr(i,j,k) = vptr(i,j,k) * cos(latrad)
      enddo
    enddo
  enddo
@@ -3150,7 +3184,7 @@ end subroutine read_winds
  call ESMF_FieldDestroy(u_input_grid, rc=rc)
  call ESMF_FieldDestroy(v_input_grid, rc=rc)
 
- end subroutine convert_winds
+ end subroutine convert_winds_to_xyz
  
 !> Compute grid rotation angle for non-latlon grids.
 !!
@@ -3257,7 +3291,9 @@ subroutine cleanup_input_atm_data
  call ESMF_FieldDestroy(pres_input_grid, rc=rc)
  call ESMF_FieldDestroy(dzdt_input_grid, rc=rc)
  call ESMF_FieldDestroy(temp_input_grid, rc=rc)
- call ESMF_FieldDestroy(wind_input_grid, rc=rc)
+ call ESMF_FieldDestroy(xwind_input_grid, rc=rc)
+ call ESMF_FieldDestroy(ywind_input_grid, rc=rc)
+ call ESMF_FieldDestroy(zwind_input_grid, rc=rc)
  call ESMF_FieldDestroy(ps_input_grid, rc=rc)
 
  do n = 1, num_tracers_input

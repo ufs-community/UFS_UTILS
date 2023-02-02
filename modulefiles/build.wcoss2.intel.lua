@@ -72,7 +72,7 @@ load(pathJoin("nco", nco_ver))
 setenv("HPC_OPT","/apps/ops/para/libs")
 prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/compiler/intel/19.1.3.304")
 prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/mpi/intel/19.1.3.304/cray-mpich/8.1.7")
-esmf_ver=os.getenv("esmf_ver") or "8.2.1b04"
+esmf_ver=os.getenv("esmf_ver") or "8.4.0b08"
 load(pathJoin("esmf", esmf_ver))
 
 prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/mpi/intel/19.1.3.304/cray-mpich/8.1.9")
