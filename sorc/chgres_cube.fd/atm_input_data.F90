@@ -2174,13 +2174,19 @@ implicit none
 
  call quicksort(rlevs,1,lev_input)
 
- do i = 1, lev_input
+ do i = 1, lev_input     
    if (isnative) then
      write(slevs(i), '(i6)') nint(rlevs(i))
      slevs(i) = trim(slevs(i)) // " hybrid"
+     if (i>1) then
+       if (any(slevs(1:i-1)==slevs(i))) call error_handler("Duplicate vertical level entries found.",1)
+     endif
    else
      write(slevs(i), '(f11.2)') rlevs(i)
      slevs(i) = trim(slevs(i)) // " Pa"
+     if (i>1) then
+       if (any(slevs(1:i-1)==slevs(i))) call error_handler("Duplicate vertical level entries found.",1)
+     endif
    endif
  enddo
 
