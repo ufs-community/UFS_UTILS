@@ -14,8 +14,10 @@
                         latitude_input_grid, &
                         longitude_input_grid
 
- use atm_input_data, only : lev_input, convert_winds, &
-                        wind_input_grid, &
+ use atm_input_data, only : lev_input, convert_winds_to_xyz, &
+                        xwind_input_grid, &
+                        ywind_input_grid, &
+                        zwind_input_grid, &
                         u_input_grid, &
                         v_input_grid
 
@@ -26,7 +28,7 @@
 
  real, parameter              :: EPSILON=0.0001
 
- integer                      :: clb(4), cub(4)
+ integer                      :: clb(3), cub(3)
  integer                      :: ierr, localpet, npets, rc
  integer                      :: i, j, k
 
@@ -34,7 +36,9 @@
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
  real(esmf_kind_r8), allocatable  :: u_wind(:,:,:)
  real(esmf_kind_r8), allocatable  :: v_wind(:,:,:)
- real(esmf_kind_r8), pointer      :: windptr(:,:,:,:)
+ real(esmf_kind_r8), pointer      :: xwindptr(:,:,:)
+ real(esmf_kind_r8), pointer      :: ywindptr(:,:,:)
+ real(esmf_kind_r8), pointer      :: zwindptr(:,:,:)
 
  real :: expected_x_component(IPTS,JPTS)
  real :: expected_y_component(IPTS,JPTS)
@@ -95,11 +99,23 @@
                                    name="input_grid_longitude", &
                                    rc=rc)
 
- wind_input_grid = ESMF_FieldCreate(input_grid, &
+ xwind_input_grid = ESMF_FieldCreate(input_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
-                                   ungriddedLBound=(/1,1/), &
-                                   ungriddedUBound=(/lev_input,3/), rc=rc)
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_input/), rc=rc)
+
+ ywind_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_input/), rc=rc)
+
+ zwind_input_grid = ESMF_FieldCreate(input_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lev_input/), rc=rc)
 
  u_input_grid = ESMF_FieldCreate(input_grid, &
                                  typekind=ESMF_TYPEKIND_R8, &
@@ -210,21 +226,31 @@
 
 ! Call the routine to unit test.
 
- call convert_winds
+ call convert_winds_to_xyz
 
- call ESMF_FieldGet(wind_input_grid, &
+ call ESMF_FieldGet(xwind_input_grid, &
                     computationalLBound=clb, &
                     computationalUBound=cub, &
-                    farrayPtr=windptr, rc=rc)
+                    farrayPtr=xwindptr, rc=rc)
+
+ call ESMF_FieldGet(ywind_input_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=ywindptr, rc=rc)
+
+ call ESMF_FieldGet(zwind_input_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=zwindptr, rc=rc)
 
  print*,"Check results."
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
  do k = clb(3), cub(3)
-   if (abs(windptr(i,j,k,1) - expected_x_component(i,j)) > EPSILON) stop 2
-   if (abs(windptr(i,j,k,2) - expected_y_component(i,j)) > EPSILON) stop 3
-   if (abs(windptr(i,j,k,3) - expected_z_component(i,j)) > EPSILON) stop 4
+   if (abs(xwindptr(i,j,k) - expected_x_component(i,j)) > EPSILON) stop 2
+   if (abs(ywindptr(i,j,k) - expected_y_component(i,j)) > EPSILON) stop 3
+   if (abs(zwindptr(i,j,k) - expected_z_component(i,j)) > EPSILON) stop 4
  enddo
  enddo
  enddo
