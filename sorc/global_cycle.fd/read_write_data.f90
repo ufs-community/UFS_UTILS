@@ -1247,6 +1247,7 @@ MODULE READ_WRITE_DATA
  !! @param[in] DO_NSST When true, nsst fields are read.
  !! @param[in] INC_FILE When true, read from an increment file.
  !!                     False reads from a restart file.
+ !! @param[out] IS_NOAHMP When true, process for the Noah-MP LSM.
  !! @param[out] TSFFCS Skin Temperature.
  !! @param[out] SMCFCS Total volumetric soil moisture.
  !! @param[out] SWEFCS Snow water equivalent.
@@ -1286,7 +1287,8 @@ MODULE READ_WRITE_DATA
  !! @param[out] ZSOIL Soil layer thickness.
  !! @param[out] NSST Data structure containing nsst fields.
  !! @author George Gayno NOAA/EMC
- SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,INC_FILE,TSFFCS,SMCFCS,SWEFCS,STCFCS, &
+ SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,INC_FILE,IS_NOAHMP, &
+                      TSFFCS,SMCFCS,SWEFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
                       CVFCS,CVBFCS,CVTFCS,ALBFCS, &
                       VEGFCS,SLIFCS,CNPFCS,F10M, &
@@ -1303,6 +1305,8 @@ MODULE READ_WRITE_DATA
 
  INTEGER, INTENT(IN)       :: LSOIL, LENSFC
  LOGICAL, INTENT(IN)       :: DO_NSST, INC_FILE
+
+ LOGICAL, OPTIONAL, INTENT(OUT)      :: IS_NOAHMP
 
  REAL, OPTIONAL, INTENT(OUT)         :: CVFCS(LENSFC), CVBFCS(LENSFC)
  REAL, OPTIONAL, INTENT(OUT)         :: CVTFCS(LENSFC), ALBFCS(LENSFC,4)
@@ -1330,7 +1334,7 @@ MODULE READ_WRITE_DATA
  CHARACTER(LEN=50)         :: FNBGSI
  CHARACTER(LEN=3)          :: RANKCH
 
- INTEGER                   :: ERROR, NCID, MYRANK
+ INTEGER                   :: ERROR, ERROR2, NCID, MYRANK
  INTEGER                   :: IDIM, JDIM, ID_DIM
  INTEGER                   :: ID_VAR, IERR
 
@@ -1365,6 +1369,19 @@ MODULE READ_WRITE_DATA
  IF ((IDIM*JDIM) /= LENSFC) THEN
    PRINT*,'FATAL ERROR: DIMENSIONS WRONG.'
    CALL MPI_ABORT(MPI_COMM_WORLD, 88, IERR)
+ ENDIF
+
+! Check for records that indicate the restart file is
+! for the Noah-MP land surface model.
+
+ IF(PRESENT(IS_NOAHMP))THEN
+   ERROR=NF90_INQ_VARID(NCID, "canliqxy", ID_VAR)
+   ERROR2=NF90_INQ_VARID(NCID, "tsnoxy", ID_VAR)
+   IS_NOAHMP=.FALSE.
+   IF(ERROR == 0 .AND. ERROR2 == 0) THEN
+     IS_NOAHMP=.TRUE.
+     print*,"- WILL PROCESS FOR NOAH-MP LSM."
+   ENDIF
  ENDIF
 
  ALLOCATE(DUMMY(IDIM,JDIM))

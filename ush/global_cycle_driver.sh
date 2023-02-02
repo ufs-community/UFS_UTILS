@@ -76,6 +76,7 @@ for n in $(seq 1 $ntiles); do
 # Make a copy of the input restart file in the working directory.
 # global_cycle will update the required records for noah-mp.
   cp $COMIN/$PDY.${cyc}0000.sfc_data.tile${n}.nc $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
+  chmod 644  $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
   ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
 
   ln -fs $FIXfv3/C${CRES}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
