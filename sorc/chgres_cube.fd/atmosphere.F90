@@ -371,7 +371,7 @@
  isrctermprocessing = 1
  method=ESMF_REGRIDMETHOD_BILINEAR
 
- print*,"- CALL FieldRegridStore FOR 3D-WIND WEST EDGE."
+ print*,"- CALL FieldRegridStore FOR X-WIND WEST EDGE."
  call ESMF_FieldRegridStore(xwind_target_grid, &
                             xwind_w_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
@@ -382,7 +382,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
- print*,"- CALL Field_Regrid FOR xWIND WEST EDGE."
+ print*,"- CALL Field_Regrid FOR X-WIND WEST EDGE."
  call ESMF_FieldRegrid(xwind_target_grid, &
                        xwind_w_target_grid, &
                        routehandle=regrid_bl, &
@@ -390,7 +390,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
- print*,"- CALL Field_Regrid FOR yWIND WEST EDGE."
+ print*,"- CALL Field_Regrid FOR Y-WIND WEST EDGE."
  call ESMF_FieldRegrid(ywind_target_grid, &
                        ywind_w_target_grid, &
                        routehandle=regrid_bl, &
@@ -398,7 +398,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
- print*,"- CALL Field_Regrid FOR zWIND WEST EDGE."
+ print*,"- CALL Field_Regrid FOR Z-WIND WEST EDGE."
  call ESMF_FieldRegrid(zwind_target_grid, &
                        zwind_w_target_grid, &
                        routehandle=regrid_bl, &
@@ -414,7 +414,7 @@
  isrctermprocessing = 1
  method=ESMF_REGRIDMETHOD_BILINEAR
 
- print*,"- CALL FieldRegridStore FOR 3D-WIND SOUTH EDGE."
+ print*,"- CALL FieldRegridStore FOR X-WIND SOUTH EDGE."
  call ESMF_FieldRegridStore(xwind_target_grid, &
                             xwind_s_target_grid, &
                             polemethod=ESMF_POLEMETHOD_ALLAVG, &
@@ -425,7 +425,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
- print*,"- CALL Field_Regrid FOR xWIND SOUTH EDGE."
+ print*,"- CALL Field_Regrid FOR X-WIND SOUTH EDGE."
  call ESMF_FieldRegrid(xwind_target_grid, &
                        xwind_s_target_grid, &
                        routehandle=regrid_bl, &
@@ -433,7 +433,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
- print*,"- CALL Field_Regrid FOR yWIND SOUTH EDGE."
+ print*,"- CALL Field_Regrid FOR Y-WIND SOUTH EDGE."
  call ESMF_FieldRegrid(ywind_target_grid, &
                        ywind_s_target_grid, &
                        routehandle=regrid_bl, &
@@ -441,7 +441,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegrid", rc)
 
- print*,"- CALL Field_Regrid FOR zWIND SOUTH EDGE."
+ print*,"- CALL Field_Regrid FOR Z-WIND SOUTH EDGE."
  call ESMF_FieldRegrid(zwind_target_grid, &
                        zwind_s_target_grid, &
                        routehandle=regrid_bl, &
@@ -1624,7 +1624,7 @@
          call error_handler("IN FieldGet", rc)
 
 ! wind
- print*,"VINTG_WAM:- CALL FieldGet FOR 3-D ADJUSTED WIND."
+ print*,"VINTG_WAM:- CALL FieldGet FOR ADJUSTED WIND COMPONENTS."
 
  call ESMF_FieldGet(xwind_target_grid, &
                     farrayPtr=XWIND2PTR, rc=rc)
