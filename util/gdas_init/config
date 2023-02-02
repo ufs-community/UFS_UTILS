@@ -52,16 +52,16 @@ EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
-yy=2021
-mm=03
-dd=01
-hh=00
+yy=2022
+mm=05
+dd=06
+hh=06
 
 use_v16retro=no
 
 LEVS=65
 
-CDUMP=gfs
+CDUMP=gdas
 
 CRES_HIRES=C192
 CRES_ENKF=C96
