@@ -82,7 +82,7 @@ TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       -o $LOG_FILE3 -e $LOG_FILE3 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
-# ESG regional grid (output dominate soil/vegetation type).
+# ESG regional grid (output dominant soil/vegetation type).
 #-----------------------------------------------------------------------------
 
 LOG_FILE4=${LOG_FILE}04
@@ -91,7 +91,7 @@ TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
 
 #-----------------------------------------------------------------------------
 # ESG regional grid (output percent of each soil and vegetation type and
-# the dominate category).
+# the dominant category).
 #-----------------------------------------------------------------------------
 
 LOG_FILE5=${LOG_FILE}05

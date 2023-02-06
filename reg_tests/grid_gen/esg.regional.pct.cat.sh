@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #-----------------------------------------------------------------------
-# Create a regional esg grid. Output dominate soil and vegetation
+# Create a regional esg grid. Output dominant soil and vegetation
 # categories and well as the percentage of each category. 
 # Compare output to a set of baseline files using the 'nccmp'
 # utility.  This script is run by the machine specific driver script.
@@ -21,7 +21,7 @@ export jdim=600              # Dimension of grid in 'j' direction
 export delx=0.0145           # Grid spacing in degrees in 'i' direction
 export dely=0.0145           # Grid spacing in degrees in 'j' direction
 export halo=3
-export vegsoilt_frac=.true.  # Output dominate soil/veg categories as well
+export vegsoilt_frac=.true.  # Output dominant soil/veg categories as well
                              # as the percentage of each category.
 
 NCCMP=${NCCMP:-$(which nccmp)}

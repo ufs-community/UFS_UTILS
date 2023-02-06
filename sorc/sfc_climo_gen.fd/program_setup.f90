@@ -49,7 +49,7 @@
                                           !! boundary halo. Used for regional nests.
 
  logical, public              :: fract_vegsoil_type = .false. !< When true, output the percentage of each soil
-                                                             !! and vegetation type category, and the dominate
+                                                             !! and vegetation type category, and the dominant
                                                              !! category within a model grid box.
 
  public :: read_setup_namelist

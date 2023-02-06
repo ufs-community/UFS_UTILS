@@ -87,7 +87,7 @@ TEST3=$(qsub -V -o $LOG_FILE3 -e $LOG_FILE3 -q $QUEUE -A $PROJECT_CODE -l wallti
         -N gfdl.regional -l select=1:ncpus=30:mem=40GB  $PWD/gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
-# ESG regional grid (output dominate soil/vegetation type).
+# ESG regional grid (output dominant soil/vegetation type).
 #-----------------------------------------------------------------------------
 
 LOG_FILE4=${LOG_FILE}04
@@ -96,7 +96,7 @@ TEST4=$(qsub -V -o $LOG_FILE4 -e $LOG_FILE4 -q $QUEUE -A $PROJECT_CODE -l wallti
 
 #-----------------------------------------------------------------------------
 # ESG regional grid (output percent of each soil and vegetation type and
-# the dominate category).
+# the dominant category).
 #-----------------------------------------------------------------------------
 
 LOG_FILE5=${LOG_FILE}05

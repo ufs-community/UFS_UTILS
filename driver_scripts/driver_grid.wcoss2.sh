@@ -78,8 +78,8 @@ export make_gsl_orog=false     # When 'true' will output 'oro' files for
 
 export vegsoilt_frac='.false.'  # When true, outputs percent of each
                                # soil and veg type category and a 
-                               # dominate category. When false, only
-                               # outputs the dominate category. A
+                               # dominant category. When false, only
+                               # outputs the dominant category. A
                                # Fortran logical, so include the dots.
 
 export veg_type_src="modis.igbp.0.05" #  Vegetation type data.

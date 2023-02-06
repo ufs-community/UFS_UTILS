@@ -4,7 +4,7 @@
 
 !> Output categorical data such as vegetation type. Include
 !! percentage of each category within a model grid box and
-!! the dominate category.
+!! the dominant category.
 !!
 !! @author George Gayno NCEP/EMC @date 2022
  module output_frac_cats
@@ -20,7 +20,7 @@
 !> Driver routine to output model categorical data.
 !!
 !! @param[in] data_one_tile The percentage of each category within a model grid cell.
-!! @param[in] dom_cat_one_tile The dominate category within a model grid cell.
+!! @param[in] dom_cat_one_tile The dominant category within a model grid cell.
 !! @param[in] lat_one_tile Latitude of each model grid cell.
 !! @param[in] lon_one_tile Longitude of each model grid cell.
 !! @param[in] i_mdl i dimension of model grid.
@@ -108,9 +108,9 @@
 !! @param[in] latitude Latitude of data.
 !! @param[in] longitude Longitude of data.
 !! @param[in] data_pct Percentage of each category in each model grid cell.
-!! @param[in] dominate_cat Dominate category in each model grid cell.
+!! @param[in] dominant_cat Dominant category in each model grid cell.
  subroutine writeit(out_file, iout, jout, num_categories, &
-                    latitude, longitude, data_pct, dominate_cat)
+                    latitude, longitude, data_pct, dominant_cat)
 
  use esmf
  use netcdf
@@ -126,7 +126,7 @@
  real(esmf_kind_r4), intent(in)  :: latitude(iout,jout)
  real(esmf_kind_r4), intent(in)  :: longitude(iout,jout)
  real(esmf_kind_r4), intent(in)  :: data_pct(iout,jout,num_categories)
- real(esmf_kind_r4), intent(in)  :: dominate_cat(iout,jout)
+ real(esmf_kind_r4), intent(in)  :: dominant_cat(iout,jout)
 
  character(len=200)  :: field_names_pct
  integer             :: header_buffer_val = 16384
@@ -182,7 +182,7 @@
 
  error = nf90_def_var(ncid, trim(field_names(1)), NF90_FLOAT, (/dim_x,dim_y,dim_time/), id_data_dom_cat)
  call netcdf_err(error, 'DEFINING FIELD' )
- error = nf90_put_att(ncid, id_data_dom_cat, "units", "dominate category")
+ error = nf90_put_att(ncid, id_data_dom_cat, "units", "dominant category")
  call netcdf_err(error, 'DEFINING FIELD ATTRIBUTE' )
  error = nf90_put_att(ncid, id_data_dom_cat, "coordinates", "geolon geolat")
  call netcdf_err(error, 'DEFINING COORD ATTRIBUTE' )
@@ -204,7 +204,7 @@
  error = nf90_put_var( ncid, id_data_pct, data_pct)
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
   
- error = nf90_put_var( ncid, id_data_dom_cat, dominate_cat)
+ error = nf90_put_var( ncid, id_data_dom_cat, dominant_cat)
  call netcdf_err(error, 'IN NF90_PUT_VAR' )
 
 ! Temporary output of sum of %.

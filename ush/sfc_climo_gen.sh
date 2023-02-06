@@ -25,10 +25,10 @@
 # WORK_DIR                      Temporary working directory
 # SOIL_TYPE_FILE                Path/name of input soil type data.
 # VEG_TYPE_FILE                 Path/name of input vegetation type data.
-# vegsoilt_frac                 When true, outputs dominate soil and
+# vegsoilt_frac                 When true, outputs dominant soil and
 #                               vegetation type category and the 
 #                               fractional value of each category.
-#                               When false, outputs dominate category.
+#                               When false, outputs dominant category.
 #-------------------------------------------------------------------------
 
 set -eux

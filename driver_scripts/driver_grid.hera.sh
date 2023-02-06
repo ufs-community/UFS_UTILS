@@ -80,10 +80,10 @@ export gtype=uniform           # 'uniform', 'stretch', 'nest',
 export make_gsl_orog=false     # When 'true' will output 'oro' files for
                                # the GSL orographic drag suite.
 
-export vegsoilt_frac='.false.' # When .false., output dominate soil and 
+export vegsoilt_frac='.false.' # When .false., output dominant soil and 
                                # vegetation type category. When .true.,
                                # output fraction of each category and
-                               # the dominate category. A Fortran logical,
+                               # the dominant category. A Fortran logical,
                                # so include the dots.
 
 export veg_type_src="modis.igbp.0.05" #  Vegetation type data.

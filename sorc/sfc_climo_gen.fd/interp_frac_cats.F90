@@ -6,7 +6,7 @@
 
 !> Read the input source data and interpolate it to the
 !! model grid. Outputs the percentage of each category
-!! within a model grid box and the dominate category.
+!! within a model grid box and the dominant category.
 !!
 !! @param[in] localpet this mpi task
 !! @param[in] input_file filename of input source data.
@@ -259,12 +259,10 @@
          endif
        enddo
        enddo
-       print*,'after  rescale ',tile,land_frac_mdl_one_tile(42,82),data_mdl_one_tile(42,82,:)
      else ! non-fractonal grids.
        dom_cat_mdl_one_tile = 0.0
        dom_cat_mdl_one_tile = maxloc(data_mdl_one_tile,dim=3)
      endif
-     print*,'dominate cat ',tile,dom_cat_mdl_one_tile(42,82)
      call output_driver (data_mdl_one_tile, dom_cat_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, num_categories, tile)
    endif
 
