@@ -721,14 +721,26 @@ ENDIF
 
  ELSE
 
-   CALL WRITE_DATA(SLIFCS,TSFFCS,SWEFCS,TG3FCS,ZORFCS,         &
-                 ALBFCS,ALFFCS,VEGFCS,CNPFCS,F10M,           &
-                 T2M,Q2M,VETFCS,SOTFCS,USTAR,FMM,FHH,        &
-                 SICFCS,SIHFCS,SITFCS,                       &
-                 TPRCP,SRFLAG,SNDFCS,                        &
-                 VMNFCS,VMXFCS,SLPFCS,ABSFCS,                &
-                 SLCFCS,SMCFCS,STCFCS,                       &
-                 IDIM,JDIM,LENSFC,LSOIL,DO_NSST,NSST)
+   CALL WRITE_DATA_SELECTED_RECORDS2(LENSFC,IDIM,JDIM,LSOIL, &
+                   SLIFCS=SLIFCS,TSFFCS=TSFFCS,VEGFCS=VEGFCS, &
+                   SWEFCS=SWEFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS, &
+                   ALBFCS=ALBFCS,ALFFCS=ALFFCS,CNPFCS=CNPFCS, &
+                   F10M=F10M,T2M=T2M,Q2M=Q2M,VETFCS=VETFCS, &
+                   SOTFCS=SOTFCS,USTAR=USTAR,FMM=FMM,FHH=FHH, &
+                   SICFCS=SICFCS,SIHFCS=SIHFCS,TPRCP=TPRCP, &
+                   SRFLAG=SRFLAG,SWDFCS=SNDFCS,VMNFCS=VMNFCS, &
+                   VMXFCS=VMXFCS,SLPFCS=SLPFCS,ABSFCS=ABSFCS, &
+                   SLCFCS=SLCFCS,SMCFCS=SMCFCS,STCFCS=STCFCS)
+
+!  CALL WRITE_DATA(SLIFCS,TSFFCS,SWEFCS,TG3FCS,ZORFCS,         &
+!                ALBFCS,ALFFCS,VEGFCS,CNPFCS,F10M,           &
+!                T2M,Q2M,VETFCS,SOTFCS,USTAR,FMM,FHH,        &
+!                SICFCS,SIHFCS,SITFCS,                       &
+!                TPRCP,SRFLAG,SNDFCS,                        &
+!                VMNFCS,VMXFCS,SLPFCS,ABSFCS,                &
+!                SLCFCS,SMCFCS,STCFCS,                       &
+!                IDIM,JDIM,LENSFC,LSOIL,DO_NSST,NSST)
+
  ENDIF
 
  IF (DO_NSST) THEN
