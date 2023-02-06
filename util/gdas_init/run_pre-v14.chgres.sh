@@ -31,7 +31,7 @@ else
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
-  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}
+  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}/atmos
   ATMFILE="siganl_${yy}${mm}${dd}${hh}_mem${MEMBER}"
   SFCFILE="sfcanl_${yy}${mm}${dd}${hh}_mem${MEMBER}"
 fi
