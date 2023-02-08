@@ -53,7 +53,6 @@ MODULE READ_WRITE_DATA
                                                      !! on the gaussian grid. 
                                                       
 
-
  PUBLIC :: READ_DATA
  PUBLIC :: READ_GSI_DATA
  PUBLIC :: READ_LAT_LON_OROG
@@ -118,7 +117,7 @@ MODULE READ_WRITE_DATA
    !! @author George Gayno NOAA/EMC
 
  subroutine write_data_selected_records2(lensfc,idim,jdim,lsoil, &
-                                slifcs,tsffcs,vegfcs,swefcs, &
+                                do_nsst,nsst,slifcs,tsffcs,vegfcs,swefcs, &
                                 tg3fcs,zorfcs,albfcs,alffcs, &
                                 cnpfcs,f10m,t2m,q2m,vetfcs, &
                                 sotfcs,ustar,fmm,fhh,sicfcs, &
@@ -132,6 +131,8 @@ MODULE READ_WRITE_DATA
 
  integer, intent(in)              :: lensfc, lsoil
  integer, intent(in)              :: idim, jdim
+
+ logical, intent(in)              :: do_nsst
 
  real, intent(in), optional       :: slifcs(lensfc),tsffcs(lensfc)
  real, intent(in), optional       :: swefcs(lensfc),tg3fcs(lensfc)
@@ -149,8 +150,12 @@ MODULE READ_WRITE_DATA
  real, intent(in), optional       :: absfcs(lensfc), slcfcs(lensfc,lsoil)
  real, intent(in), optional       :: smcfcs(lensfc,lsoil), stcfcs(lensfc,lsoil)
 
- real :: dum2d(idim,jdim), dum3d(idim,jdim,lsoil)
+ type(nsst_data), intent(in)      :: nsst
 
+ integer :: dim_x, dim_y, dim_time, dims_3d(3)
+
+ real :: dum2d(idim,jdim), dum3d(idim,jdim,lsoil)
+ 
  character(len=50) :: fnbgso
  character(len=3)  :: rankch
 
@@ -426,6 +431,147 @@ MODULE READ_WRITE_DATA
    dum3d = reshape(stcfcs, (/idim,jdim,lsoil/))
    error = nf90_put_var( ncid, id_var, dum3d)
    call netcdf_err(error, 'writing stc record' )
+ endif
+
+ if(do_nsst) then
+
+   error=nf90_inq_varid(ncid, "tref", id_var)
+   call netcdf_err(error, 'reading tref id' )
+   dum2d = reshape(nsst%tref, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING TREF RECORD' )
+
+   error=nf90_inq_varid(ncid, "z_c", id_var)
+   call netcdf_err(error, 'reading z_c id' )
+   dum2d = reshape(nsst%z_c, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING Z_C RECORD' )
+
+   error=nf90_inq_varid(ncid, "c_0", id_var)
+   call netcdf_err(error, 'reading c_0 id' )
+   dum2d = reshape(nsst%c_0, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING C_0 RECORD' )
+
+   error=nf90_inq_varid(ncid, "c_d", id_var)
+   call netcdf_err(error, 'reading c_d id' )
+   dum2d = reshape(nsst%c_d, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING C_D RECORD' )
+
+   error=nf90_inq_varid(ncid, "w_0", id_var)
+   call netcdf_err(error, 'reading w_0 id' )
+   dum2d = reshape(nsst%w_0, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING W_0 RECORD' )
+
+   error=nf90_inq_varid(ncid, "w_d", id_var)
+   call netcdf_err(error, 'reading w_d id' )
+   dum2d = reshape(nsst%w_d, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING W_D RECORD' )
+
+   error=nf90_inq_varid(ncid, "xt", id_var)
+   call netcdf_err(error, 'reading xt id' )
+   dum2d = reshape(nsst%xt, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING XT RECORD' )
+
+   error=nf90_inq_varid(ncid, "xs", id_var)
+   call netcdf_err(error, 'reading xs id' )
+   dum2d = reshape(nsst%xs, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING XS RECORD' )
+
+   error=nf90_inq_varid(ncid, "xu", id_var)
+   call netcdf_err(error, 'reading xu id' )
+   dum2d = reshape(nsst%xu, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING XU RECORD' )
+
+   error=nf90_inq_varid(ncid, "xv", id_var)
+   call netcdf_err(error, 'reading xv id' )
+   dum2d = reshape(nsst%xv, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING XV RECORD' )
+
+   error=nf90_inq_varid(ncid, "xz", id_var)
+   call netcdf_err(error, 'reading xz id' )
+   dum2d = reshape(nsst%xz, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING XZ RECORD' )
+
+   error=nf90_inq_varid(ncid, "zm", id_var)
+   call netcdf_err(error, 'reading zm id' )
+   dum2d = reshape(nsst%zm, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING ZM RECORD' )
+
+   error=nf90_inq_varid(ncid, "xtts", id_var)
+   call netcdf_err(error, 'reading xtts id' )
+   dum2d = reshape(nsst%xtts, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING XTTS RECORD' )
+
+   error=nf90_inq_varid(ncid, "xzts", id_var)
+   call netcdf_err(error, 'reading xzts id' )
+   dum2d = reshape(nsst%xzts, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING XZTS RECORD' )
+
+   error=nf90_inq_varid(ncid, "d_conv", id_var)
+   call netcdf_err(error, 'reading d_conv id' )
+   dum2d = reshape(nsst%d_conv, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING D_CONV RECORD' )
+
+   error=nf90_inq_varid(ncid, "ifd", id_var)
+   call netcdf_err(error, 'reading idf id' )
+   dum2d = reshape(nsst%ifd, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING IFD RECORD' )
+
+   error=nf90_inq_varid(ncid, "dt_cool", id_var)
+   call netcdf_err(error, 'reading dt_cool id' )
+   dum2d = reshape(nsst%dt_cool, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING DT_COOL RECORD' )
+
+   error=nf90_inq_varid(ncid, "qrain", id_var)
+   call netcdf_err(error, 'reading qrain id' )
+   dum2d = reshape(nsst%qrain, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING QRAIN RECORD' )
+
+! Ask if 'tfinc' field is just diagnostic. 
+! If not, then include logic to add it to restart
+! files if necessary. 
+
+   error=nf90_inq_varid(ncid, "tfinc", id_var)
+   if (error /= 0) then
+     error=nf90_inq_dimid(ncid, "xaxis_1", dim_x)
+     call netcdf_err(error, 'finding xaxis_1' )
+     error=nf90_inq_dimid(ncid, "yaxis_1", dim_y)
+     call netcdf_err(error, 'finding yaxis_1' )
+     error=nf90_inq_dimid(ncid, "Time", dim_time)
+     call netcdf_err(error, 'finding Time' )
+     dims_3d(1) = dim_x
+     dims_3d(2) = dim_y
+     dims_3d(3) = dim_time
+     error=nf90_redef(ncid)
+     error = nf90_def_var(ncid, 'tfinc', NF90_DOUBLE, dims_3d, id_var)
+     call netcdf_err(error, 'DEFINING tfinc' )
+     error = nf90_put_att(ncid, id_var, "long_name", "tfinc")
+     call netcdf_err(error, 'DEFINING tfinc LONG NAME' )
+     error = nf90_put_att(ncid, id_var, "units", "none")
+     call netcdf_err(error, 'DEFINING tfinc UNITS' )
+     error=nf90_enddef(ncid)
+   endif
+
+   dum2d = reshape(nsst%tfinc, (/idim,jdim/))
+   error = nf90_put_var( ncid, id_var, dum2d)
+   call netcdf_err(error, 'WRITING TFINC RECORD' )
+
  endif
 
  error = nf90_close(ncid)
