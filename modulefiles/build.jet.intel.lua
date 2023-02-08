@@ -8,7 +8,7 @@ load(pathJoin("cmake", cmake_ver))
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
-prepend_path("MODULEPATH", "/lfs4/HFIP/hfv3gfs/nwprod/hpc-stack/libs/modulefiles/stack")
+prepend_path("MODULEPATH", "/lfs4/HFIP/hfv3gfs/role.epic/hpc-stack/libs/intel-2022.1.2/modulefiles/stack")
 
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
@@ -37,7 +37,7 @@ load(pathJoin("w3nco", w3nco_ver))
 sp_ver=os.getenv("sp_ver") or "2.3.3"
 load(pathJoin("sp", sp_ver))
 
-ip_ver=os.getenv("ip_ver") or "3.3.3"
+ip_ver=os.getenv("ip_ver") or "4.0.0"
 load(pathJoin("ip", ip_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
