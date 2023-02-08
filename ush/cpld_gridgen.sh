@@ -41,10 +41,15 @@ elif [[ $MOSAICRES == C048 ]]; then
   export MOSAICRES=C48
   export NPX=48
 fi
-export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
+if [ $RESNAME = 500 ]; then
+  export FIXDIR_PATH=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805/500/
+else
+  export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
+fi
+
 APRUN=${APRUN:-"srun"}
 
-if [ $RESNAME = 400 ]; then
+if [ $RESNAME = 500 ]; then
     export NI=72
     export NJ=35
     export TOPOGFILE=ocean_topog.nc

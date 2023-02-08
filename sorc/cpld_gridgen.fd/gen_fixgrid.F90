@@ -463,9 +463,9 @@ program gen_fixgrid
   print '(a)',trim(logmsg)
 
   call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
-       weightFile=trim(fwgt), regridmethod=method, &
-       unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
-       ignoreDegenerate=.true., &
+       weightFile=trim(fwgt), regridmethod=method,                 &
+       unmappedaction=ESMF_UNMAPPEDACTION_IGNORE,                  &
+       ignoreDegenerate=.true., netcdf4fileFlag=.true.,              &
        tileFilePath=trim(fv3dir)//'/'//trim(atmres)//'/', rc=rc)
   if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
        line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
@@ -491,8 +491,8 @@ program gen_fixgrid
         print '(a)',trim(logmsg)
 
         call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
-             weightFile=trim(fwgt), regridmethod=method, &
-             ignoreDegenerate=.true., &
+             weightFile=trim(fwgt), regridmethod=method,                 &
+             ignoreDegenerate=.true.,                                    &
              unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
              line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)

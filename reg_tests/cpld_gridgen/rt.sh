@@ -107,6 +107,12 @@ export PATHTR
 TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
+# for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
+WLCLK_dflt=10
+export WLCLK=$WLCLK_dflt
+MEM_dflt="--mem=12g"
+export MEM=$MEM_dflt
+
 cd $PATHRT
 export compiler=${compiler:-intel}
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
@@ -253,7 +259,7 @@ while read -r line || [ "$line" ]; do
 	#   rm -f $RUNDIR/bad.${TEST_NAME}
 
 	TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-		    -Wblock=true -l walltime=00:05:00 -N $TEST_NAME -l select=1:ncpus=1:mem=8GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
+	    -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
 
 	#   qsub -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
 	    # -Wblock=true -l walltime=00:01:00 -N chgres_summary -l select=1:ncpus=1:mem=100MB -W depend=afternotok:$TEST << EOF
@@ -265,9 +271,9 @@ while read -r line || [ "$line" ]; do
 	#   fi
 
     else
-	sbatch --wait --ntasks-per-node=1 --nodes=1 --exclusive -t 1:00:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-	       --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-	       --wrap "$SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
+	sbatch --wait --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+	    --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
+	    --wrap "time $SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
 
 	if [[ d -ne 0 ]]; then
 	    error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
