@@ -1,18 +1,5 @@
 #!/bin/bash
 
-copy_data()
-{
-
-mkdir -p $SAVEDIR
-cp gfs_ctrl.nc $SAVEDIR
-
-for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
-do
-  cp out.atm.${tile}.nc  ${SAVEDIR}/gfs_data.${tile}.nc
-  cp out.sfc.${tile}.nc  ${SAVEDIR}/sfc_data.${tile}.nc 
-done
-}
-
 #---------------------------------------------------------------------------
 # Run chgres using v16 netcdf history data as input.  These history
 # files are part of the OPS v16 gfs/gdas/enkf tarballs, and the
@@ -89,19 +76,7 @@ if [ $rc != 0 ]; then
   exit $rc
 fi
 
-if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
-  SAVEDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos/INPUT
-  copy_data
-  touch $SAVEDIR/../${MEMBER}.t${hh}z.loginc.txt
-  if [ ${MEMBER} == 'gdas' ]; then
-    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR/..
-    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR/..
-  fi
-else  
-  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}/atmos/INPUT
-  copy_data
-  touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
-fi
+$UFS_DIR/util/gdas_init/copy_coldstart_files.sh $MEMBER $OUTDIR $yy $mm $dd $hh $INPUT_DATA_DIR
 
 rm -fr $WORKDIR
 
