@@ -56,7 +56,7 @@ check_results() {
 		echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
 		test_status=FAIL
 	    else
-		$NCCMP -dmfqS $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
+		$NCCMP -dmfqS -w format $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
 		if [[ $d -ne 0 ]]; then
 		    echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
 		    test_status=FAIL
