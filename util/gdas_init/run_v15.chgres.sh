@@ -27,22 +27,16 @@ if [ ${MEMBER} == 'gdas' ]; then
   CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
-  OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
 else  
   CINP=${CINP:-"C384"}
   CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/mem${MEMBER}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
-  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}/atmos
 fi
 
 rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
-
-rm -fr $OUTDIR
-mkdir -p $OUTDIR
-mkdir -p $OUTDIR/INPUT
 
 cat << EOF > fort.41
 
@@ -77,20 +71,7 @@ if [ $rc != 0 ]; then
   exit $rc
 fi
 
-mv gfs_ctrl.nc ${OUTDIR}/INPUT
-
-for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
-do
-  mv out.atm.${tile}.nc  ${OUTDIR}/INPUT/gfs_data.${tile}.nc
-  mv out.sfc.${tile}.nc  ${OUTDIR}/INPUT/sfc_data.${tile}.nc 
-done
-
-if [ ${MEMBER} == 'gdas' ]; then
-  cp ${RADSTAT_DATA_DIR}/* $OUTDIR
-  touch $OUTDIR/gdas.t${hh}z.loginc.txt
-else
-  touch $OUTDIR/enkfgdas.t${hh}z.loginc.txt
-fi
+$UFS_DIR/util/gdas_init/copy_coldstart_files.sh $MEMBER $OUTDIR $yy $mm $dd $hh $RADSTAT_DATA_DIR
 
 rm -fr $WORKDIR
 

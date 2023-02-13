@@ -15,17 +15,12 @@ WORKDIR=${WORKDIR:-$OUTDIR/work.gfs}
 
 CTAR=${CRES_HIRES}
 INPUT_DATA_DIR="${EXTRACT_DIR}/gfs.${yy}${mm}${dd}/${hh}"
-OUTDIR=$OUTDIR/gfs.${yy}${mm}${dd}/${hh}/atmos
 ATMFILE="gfs.t${hh}z.atmanl.nemsio"
 SFCFILE="gfs.t${hh}z.sfcanl.nemsio"
 
 rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
-
-rm -fr $OUTDIR
-mkdir -p $OUTDIR
-mkdir -p $OUTDIR/INPUT
 
 cat << EOF > fort.41
 
@@ -57,15 +52,7 @@ if [ $rc != 0 ]; then
   exit $rc
 fi
 
-mv gfs_ctrl.nc ${OUTDIR}/INPUT
-
-for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
-do
-  mv out.atm.${tile}.nc  ${OUTDIR}/INPUT/gfs_data.${tile}.nc
-  mv out.sfc.${tile}.nc  ${OUTDIR}/INPUT/sfc_data.${tile}.nc 
-done
-
-touch $OUTDIR/gfs.t${hh}z.loginc.txt
+$UFS_DIR/util/gdas_init/copy_coldstart_files.sh gfs $OUTDIR $yy $mm $dd $hh $INPUT_DATA_DIR
 
 rm -fr $WORKDIR
 

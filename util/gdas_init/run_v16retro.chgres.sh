@@ -1,18 +1,5 @@
 #!/bin/bash
 
-copy_data()
-{
-
-mkdir -p $SAVEDIR
-cp gfs_ctrl.nc $SAVEDIR
-
-for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
-do
-  cp out.atm.${tile}.nc  ${SAVEDIR}/gfs_data.${tile}.nc
-  cp out.sfc.${tile}.nc  ${SAVEDIR}/sfc_data.${tile}.nc 
-done
-}
-
 #---------------------------------------------------------------------------
 # Run chgres for gdas/enkf members using v16 parallel data as input.
 # The enkf data is not saved.  So the coldstart files for all
@@ -102,26 +89,7 @@ if [ $rc != 0 ]; then
   exit $rc
 fi
 
-if [ ${MEMBER} == 'hires' ]; then
-  SAVEDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos/INPUT
-  copy_data
-  cp $RADSTAT_DATA_DIR/*abias* $SAVEDIR/..
-  cp $RADSTAT_DATA_DIR/*radstat $SAVEDIR/..
-  touch $SAVEDIR/../gdas.t${hh}z.loginc.txt
-else  
-  MEMBER=1
-  while [ $MEMBER -le 80 ]; do
-  if [ $MEMBER -lt 10 ]; then
-    MEMBER_CH="00${MEMBER}"
-  else
-    MEMBER_CH="0${MEMBER}"
-  fi
-  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER_CH}/atmos/INPUT
-  copy_data
-  touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
-  MEMBER=$(( $MEMBER + 1 ))
-  done
-fi
+$UFS_DIR/util/gdas_init/copy_coldstart_files.sh $MEMBER $OUTDIR $yy $mm $dd $hh $RADSTAT_DATA_DIR
 
 rm -fr $WORKDIR
 
