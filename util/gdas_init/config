@@ -48,11 +48,11 @@
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
-yy=2017
+yy=2022
 mm=05
 dd=06
 hh=06
