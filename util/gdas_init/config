@@ -48,11 +48,11 @@
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
-EXTRACT_DATA=no
+EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
 
-yy=2022
+yy=2017
 mm=05
 dd=06
 hh=06
@@ -62,6 +62,8 @@ use_v16retro=no
 LEVS=65
 
 CDUMP=gdas
+
+FRAC_ORO=no
 
 CRES_HIRES=C192
 CRES_ENKF=C96
@@ -73,6 +75,28 @@ OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 #---------------------------------------------------------
 # Dont touch anything below here.
 #---------------------------------------------------------
+if [ ${CDUMP} == 'gdas' ] || [ ${CDUMP} == 'gfs' ] || [ ${CDUMP} == 'hires' ] ; then
+  CTAR=${CRES_HIRES}
+else
+  CTAR=${CRES_ENKF}
+fi
+
+if [ "${FRAC_ORO:-"NO"}" = "yes" ]; then
+  if  [ ${CTAR} == 'C48' ] ; then
+    OCNRES='400'
+  elif [ ${CTAR} == 'C96' ] ; then
+    OCNRES='100'
+  elif [ ${CTAR} == 'C192' ] ; then
+    OCNRES='050'
+  elif [ ${CTAR} == 'C384' ] || [ ${CTAR} == 'C768' ] || [ ${CTAR} == 'C1152' ]; then
+    OCNRES='025'
+  fi
+  ORO_DIR="${CTAR}.mx${OCNRES}_frac"
+  ORO_NAME="oro_${CTAR}.mx${OCNRES}"
+else
+  ORO_DIR="${CTAR}"
+  ORO_NAME="${CTAR}_oro_data"
+fi
 
 if [ "$use_v16retro" = "yes" ]; then
 
@@ -109,3 +133,4 @@ fi
 
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
 export LEVS gfs_ver
+export ORO_DIR ORO_NAME CTAR

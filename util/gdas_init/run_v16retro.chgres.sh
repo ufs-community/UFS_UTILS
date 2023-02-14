@@ -44,10 +44,8 @@ WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
 if [ ${MEMBER} == 'hires' ]; then
   CINP=${CINP:-"C768"}
-  CTAR=${CRES_HIRES}
 else  
   CINP=${CINP:-"C768"}
-  CTAR=${CRES_ENKF}
 fi
 
 # Some parallel tarballs have 'atmos' in their directory path.  And

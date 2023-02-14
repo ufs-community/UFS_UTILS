@@ -16,7 +16,6 @@ FIX_AM=${FIX_FV3}/am
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
 if [ "${MEMBER}" = "gdas" ] || [ "${MEMBER}" = "gfs" ]; then
-  CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
   OUTDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos
@@ -28,7 +27,6 @@ if [ "${MEMBER}" = "gdas" ] || [ "${MEMBER}" = "gfs" ]; then
     SFCFILE="gfs.t${hh}z.sfcanl"
   fi
 else  
-  CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}
@@ -47,10 +45,10 @@ mkdir -p $OUTDIR/INPUT
 cat << EOF > fort.41
 
 &config
- fix_dir_target_grid="${FIX_ORO}/${CTAR}/fix_sfc"
- mosaic_file_target_grid="${FIX_ORO}/${CTAR}/${CTAR}_mosaic.nc"
- orog_dir_target_grid="${FIX_ORO}/${CTAR}"
- orog_files_target_grid="${CTAR}_oro_data.tile1.nc","${CTAR}_oro_data.tile2.nc","${CTAR}_oro_data.tile3.nc","${CTAR}_oro_data.tile4.nc","${CTAR}_oro_data.tile5.nc","${CTAR}_oro_data.tile6.nc"
+ fix_dir_target_grid="${FIX_ORO}/${ORO_DIR}/fix_sfc"
+ mosaic_file_target_grid="${FIX_ORO}/${ORO_DIR}/${CTAR}_mosaic.nc"
+ orog_dir_target_grid="${FIX_ORO}/${ORO_DIR}"
+ orog_files_target_grid="${ORO_NAME}.tile1.nc","${ORO_NAME}.tile2.nc","${ORO_NAME}.tile3.nc","${ORO_NAME}.tile4.nc","${ORO_NAME}.tile5.nc","${ORO_NAME}.tile6.nc"
  data_dir_input_grid="${INPUT_DATA_DIR}"
  atm_files_input_grid="$ATMFILE"
  sfc_files_input_grid="$SFCFILE"

@@ -32,7 +32,6 @@ FIX_AM=${FIX_FV3}/am
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
 if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ] ; then
-  CTAR=${CRES_HIRES}
 #---------------------------------------------------------------------------
 # Some gfs tarballs from the v16 retro parallels dont have 'atmos'
 # in their path.  Account for this.
@@ -49,7 +48,6 @@ else
   mm_d=$(echo $date10 | cut -c5-6)
   dd_d=$(echo $date10 | cut -c7-8)
   hh_d=$(echo $date10 | cut -c9-10)
-  CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/mem${MEMBER}"
   ATMFILE="gdas.t${hh_d}z.atmf006.nc"
   SFCFILE="gdas.t${hh_d}z.sfcf006.nc"
@@ -58,23 +56,6 @@ fi
 rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
-
-if [ "${FRAC_ORO:-"NO"}" = "YES" ]; then
-  if  [ ${CTAR} == 'C48' ] ; then
-    OCNRES='400'
-  elif [ ${CTAR} == 'C96' ] ; then
-    OCNRES='100'
-  elif [ ${CTAR} == 'C192' ] ; then
-    OCNRES='050'
-  elif [ ${CTAR} == 'C384' ] || [ ${CTAR} == 'C768' ] || [ ${CTAR} == 'C1152' ]; then
-    OCNRES='025'
-  fi
-  ORO_DIR="${CTAR}.mx${OCNRES}_frac"
-  ORO_NAME="oro_${CTAR}.mx${OCNRES}"
-else
-  ORO_DIR="${CTAR}"
-  ORO_NAME="${CTAR}_oro_data"
-fi
 
 cat << EOF > fort.41
 
