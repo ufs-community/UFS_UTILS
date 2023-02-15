@@ -29,8 +29,9 @@ if [ ${MEMBER} == 'hires' ]; then
   MEMBER='gdas'
 fi
 
-echo 'in new script'
-echo $MEMBER $OUTDIR
+set +x
+echo 'COPY DATA TO OUTPUT DIRECTORY'
+set -x
 
 if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
   SUBDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}
