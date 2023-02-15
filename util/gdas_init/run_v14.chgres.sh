@@ -24,7 +24,7 @@ if [ "${MEMBER}" = "gdas" ] || [ "${MEMBER}" = "gfs" ]; then
 else  
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
-  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}
+  OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}/atmos
   ATMFILE="gdas.t${hh}z.ratmanl.mem${MEMBER}.nemsio"
   SFCFILE="gdas.t${hh}z.sfcanl.mem${MEMBER}.nemsio"
   NSTFILE="gdas.t${hh}z.nstanl.mem${MEMBER}.nemsio"

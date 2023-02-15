@@ -114,7 +114,7 @@ else
   else
     MEMBER_CH="0${MEMBER}"
   fi
-  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER_CH}/INPUT
+  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER_CH}/atmos/INPUT
   copy_data
   touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
   MEMBER=$(( $MEMBER + 1 ))

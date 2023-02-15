@@ -96,7 +96,7 @@ if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
     cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR/..
   fi
 else  
-  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/atmos/mem${MEMBER}/INPUT
+  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}/atmos/INPUT
   copy_data
   touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
 fi

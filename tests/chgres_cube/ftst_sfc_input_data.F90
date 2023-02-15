@@ -10,9 +10,9 @@
 
  use mpi
  use esmf
- use input_data
+ use utilities
  use model_grid
-
+ use sfc_input_data, only : lsoil_input
  implicit none
 
  integer :: ierr
@@ -25,7 +25,7 @@
  real(esmf_kind_r8), allocatable    :: cnwat_bad(:,:), &
                                        cnwat_updated(:,:), &
                                        cnwat_correct(:,:)
-
+ real :: ICET_DEFAULT = 265.0
  call mpi_init(ierr)
 
 !--------------------------------------------------------!
@@ -87,7 +87,7 @@
  print*,"Starting test of check_soilt subroutine."
 
  soilt_updated = soilt_bad
- call check_soilt(soilt_updated,mask,skint)
+ call check_soilt(soilt_updated,mask,skint,ICET_DEFAULT,i_input,j_input,lsoil_input)
 
  if (any(soilt_updated /= soilt_correct)) then
    print*,'SOILT TEST FAILED '
@@ -123,7 +123,7 @@
  print*,"Starting test of check_cnwat subroutine."
 
  cnwat_updated = cnwat_bad
- call check_cnwat(cnwat_updated)
+ call check_cnwat(cnwat_updated,i_input,j_input)
 
  if (any(cnwat_updated /= cnwat_correct)) then
    print*,'CNWAT TEST FAILED '

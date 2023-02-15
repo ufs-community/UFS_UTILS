@@ -1,4 +1,9 @@
-name: intel
+# UFS_UTILS test workflow.
+#
+# This workflow tests UFS_UTILS with the Intel compiler.
+#
+# Ed Hartnett 12/14/22
+name: Intel1
 on:
   push:
     branches:
@@ -12,21 +17,17 @@ on:
     - README.md
 
 # Use custom shell with -l so .bash_profile is sourced which loads intel/oneapi/setvars.sh
-# without having to do it in manually every step
+# without having to do it in manually every step. 
 defaults:
   run:
     shell: bash -leo pipefail {0}
 
 jobs:
-  intel-build-and-test:
-    runs-on: ${{ matrix.os }}
+  Intel:
+    runs-on: ubuntu-latest
     env:
       CC: icc
       FC: ifort
-      CXX: icpc
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
 
     steps:
 
@@ -47,7 +48,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/netcdf
-        key: netcdf-c-$4.7.4-{{ runner.os }}-intel3
+        key: Intel-netcdf-c-$4.7.4-{{ runner.os }}-intel3
 
     - name: build-hdf5
       if: steps.cache-netcdf.outputs.cache-hit != 'true'
@@ -95,7 +96,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/esmf
-        key: esmf-8.2.0-${{ runner.os }}-intel3
+        key: Intel-esmf-8.2.0-${{ runner.os }}-intel3
 
     - name: build-esmf
       if: steps.cache-esmf.outputs.cache-hit != 'true'
@@ -123,7 +124,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/jasper
-        key: jasper-2.0.25-${{ runner.os }}-intel3
+        key: Intel-jasper-2.0.25-${{ runner.os }}-intel3
 
     - name: build-jasper
       if: steps.cache-jasper.outputs.cache-hit != 'true'
@@ -147,7 +148,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/nceplibs
-        key: nceplibs-1.4.0-${{ runner.os }}-intel3
+        key: Intel-nceplibs-1.4.0-${{ runner.os }}-intel3
 
     - name: build-nceplibs
       if: steps.cache-nceplibs.outputs.cache-hit != 'true'
@@ -166,16 +167,36 @@ jobs:
         path: ufs_utils
         submodules: recursive
 
+    - name: cache-data
+      id: cache-data
+      uses: actions/cache@v2
+      with:
+        path: ~/data
+        key: data-1
+
     - name: build
       run: |
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd ufs_utils
         mkdir build && cd build
         export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:~/jasper/lib;~/jasper/lib64"
-        cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf'
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH='~;~/jasper;~/nceplibs;~/netcdf' ..
         make -j2
     
     - name: test
       run: |
         cd ufs_utils/build
         ctest --rerun-failed --output-on-failure
+
+    - name: cache-data
+      if: steps.cache-data.outputs.cache-hit != 'true'
+      run: |
+        mkdir ~/data
+        cp ufs_utils/build/tests/chgres_cube/data/* ~/data
+        cp ufs_utils/build/tests/sfc_climo_gen/data/* ~/data
+        cp ufs_utils/build/tests/cpld_gridgen/data/* ~/data
+        cp ufs_utils/tests/filter_topo/data/* ~/data
+        cp ufs_utils/tests/emcsfc_snow2mdl/data/* ~/data
+        cp ufs_utils/tests/chgres_cube/data/* ~/data
+        ls -l ~/data
+        

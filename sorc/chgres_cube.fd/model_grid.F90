@@ -11,6 +11,7 @@
  use esmf
  use ESMF_LogPublicMod
 
+ use utilities, only                    : error_handler, netcdf_err
  implicit none
 
  private
@@ -124,9 +125,9 @@
      trim(input_type) == "gfs_gaussian_nemsio" .or. &
      trim(input_type) == "gfs_sigio" .or. &
      trim(input_type) == "gaussian_netcdf") then
-   call define_input_grid_gaussian(localpet, npets)
+   call define_input_grid_gaussian(npets)
  elseif (trim(input_type) == "grib2") then
-   call define_input_grid_grib2(localpet,npets)
+   call define_input_grid_grib2(npets)
  else
    call define_input_grid_mosaic(localpet, npets)
  endif
@@ -141,10 +142,9 @@
 !!  - spectral gfs sigio  (prior to July 19, 2017)
 !!  - spectral gfs sfcio  (prior to July 19, 2017)
 !!
-!! @param [in] localpet ESMF local persistent execution thread 
 !! @param [in] npets  Number of  persistent execution threads.
 !! @author George Gayno NCEP/EMC   
- subroutine define_input_grid_gaussian(localpet, npets)
+ subroutine define_input_grid_gaussian(npets)
 
  use nemsio_module
 
@@ -160,7 +160,7 @@
 
  implicit none
 
- integer, intent(in)              :: localpet, npets
+ integer, intent(in)              :: npets
 
  character(len=250)               :: the_file
 
@@ -607,12 +607,11 @@
 
 !> Define input grid object for grib2 input data.
 !!
-!! @param [in] localpet ESMF local persistent execution thread 
 !! @param [in] npets  Number of persistent execution threads
 !! @author Larissa Reames
 !! @author Jeff Beck
 !! @author George Gayno
- subroutine define_input_grid_grib2(localpet,npets)
+ subroutine define_input_grid_grib2(npets)
 
  use grib_mod
  use gdswzd_mod
@@ -620,7 +619,7 @@
 
  implicit none
 
- integer, intent(in)              :: localpet, npets
+ integer, intent(in)              :: npets
 
  character(len=500)               :: the_file
 

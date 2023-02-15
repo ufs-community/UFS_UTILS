@@ -56,7 +56,7 @@ contains
   !print *, 'es = ', es
   e = rh * es / 100.0
   !print *, 'e = ', e
-  rh_sphum = 0.622 * e / p
+  rh_sphum = real((0.622 * e / p),kind=esmf_kind_r4)
   !print *, 'q = ', sphum
   
   !if (P .eq. 100000.0) THEN
@@ -110,7 +110,7 @@ do j=1,j_input
   do i=1,i_input
     ES = MIN(FPVSNEW(T(I,J)),P)
     QC(i,j) = CON_EPS*ES/(P+CON_EPSM1*ES)
-    rh_sphum(i,j) = rh(i,j)*QC(i,j)/100.0
+    rh_sphum(i,j) = real((rh(i,j)*QC(i,j)/100.0),kind=esmf_kind_r4)
   end do
 end do
 
@@ -169,7 +169,7 @@ end subroutine RH2SPFH_GFS
       c1xpvs=1.-xmin*c2xpvs
 !    xj=min(max(c1xpvs+c2xpvs*t,1.0),real(nxpvs,krealfp))
       xj=min(max(c1xpvs+c2xpvs*t,1.0),float(nxpvs))
-      jx=min(xj,float(nxpvs)-1.0)
+      jx=int(min(xj,float(nxpvs)-1.0))
       x=xmin+(jx-1)*xinc
 
       tr=con_ttp/x

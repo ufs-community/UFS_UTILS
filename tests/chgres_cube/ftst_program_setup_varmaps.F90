@@ -4,6 +4,7 @@
 
 program ftst_program_setup_varmaps
   use mpi
+  use esmf
   use program_setup
   implicit none
   integer :: my_rank, nprocs
@@ -19,7 +20,7 @@ program ftst_program_setup_varmaps
   character(len=MAX_NAME_LEN) :: expected_missing_var_methods(EXPECTED_NUM_VARS) = [character(len=20):: 'set_to_fill', 'set_to_fill', &
        'set_to_fill', 'set_to_fill', 'set_to_fill', 'set_to_fill', 'set_to_fill', 'set_to_fill', 'skip', 'skip', 'skip', 'set_to_fill', 'set_to_fill', &
        'set_to_fill', 'set_to_fill', 'set_to_fill', 'stop', 'set_to_fill', 'stop', 'set_to_fill', 'set_to_fill', 'set_to_fill', 'set_to_fill']
-  real :: expected_missing_var_values(EXPECTED_NUM_VARS) = (/ 0.0, 1E-7, 0.0, 1E-7, 0.0, 0.0, 0.0, 0.0, 0.0, &
+  real(kind=esmf_kind_r4) :: expected_missing_var_values(EXPECTED_NUM_VARS) = (/ 0.0, 1E-7, 0.0, 1E-7, 0.0, 0.0, 0.0, 0.0, 0.0, &
        0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.5, 0.0, 0.0 /)
   character(len=MAX_NAME_LEN) :: expected_tracers_input(EXPECTED_NUM_TRACERS) = [character(len=20):: 'sphum', 'liq_wat', &
        'o3mr', 'ice_wat', 'rainwat', 'snowwat', 'graupel']
