@@ -8,7 +8,7 @@ load(pathJoin("cmake", cmake_ver))
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
-prepend_path("MODULEPATH", "/lfs4/HFIP/hfv3gfs/nwprod/hpc-stack/libs/modulefiles/stack")
+prepend_path("MODULEPATH", "/lfs4/HFIP/hfv3gfs/role.epic/hpc-stack/libs/intel-2022.1.2/modulefiles/stack")
 
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
@@ -28,7 +28,7 @@ load(pathJoin("netcdf", netcdf_ver))
 nccmp_ver=os.getenv("nccmp_ver") or "1.8.9.0"
 load(pathJoin("nccmp", nccmp_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8.2.0"
+esmf_ver=os.getenv("esmf_ver") or "8.4.0b08"
 load(pathJoin("esmf", esmf_ver))
 
 w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
