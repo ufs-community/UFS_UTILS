@@ -51,20 +51,19 @@ MODULE READ_WRITE_DATA
 
  REAL, ALLOCATABLE, PUBLIC    :: STC_INC_GAUS(:,:,:) !< GSI soil temperature increments 
                                                      !! on the gaussian grid. 
-                                                      
 
  PUBLIC :: READ_DATA
  PUBLIC :: READ_GSI_DATA
  PUBLIC :: READ_LAT_LON_OROG
  PUBLIC :: WRITE_DATA
- PUBLIC :: WRITE_DATA_SELECTED_RECORDS
  public :: read_tf_clim_grb,get_tf_clm_dim
  public :: read_salclm_gfs_nc,get_dim_nc
 
  CONTAINS
 
-   !> Write out all surface records - and nsst records if selected -
-   !! on a single cubed-sphere tile to a model restart file (in netcdf).
+   !> Update surface records - and nsst records if selected -
+   !! on a single cubed-sphere tile to a pre-existing model 
+   !! restart file (in netcdf).
    !! 
    !! @note The model restart files contain an additional snow field -
    !! snow cover (snocvr). That field is required for bit identical
@@ -72,15 +71,21 @@ MODULE READ_WRITE_DATA
    !! compute it as an initialization step. Because this program does not
    !! contain the snow cover algorithm, it will let the model compute it.
    !!
+   !! @param[in] idim 'i' dimension of a tile.
+   !! @param[in] jdim 'j' dimension of a tile.
+   !! @param[in] lensfc Total number of points on a tile.
+   !! @param[in] lsoil Number of soil layers.
+   !! @param[in] do_nsst When true, nsst fields were processed.
+   !! @param[in] nsst Data structure containing nsst fields.
    !! @param[in] slifcs Land-sea mask.
    !! @param[in] tsffcs Skin temperature.
+   !! @param[in] vegfcs Vegetation greenness.
    !! @param[in] swefcs Snow water equivalent
    !! @param[in] tg3fcs Soil substrate temperature.
    !! @param[in] zorfcs Roughness length.
    !! @param[in] albfcs Snow-free albedo.
    !! @param[in] alffcs Fractional coverage for strong/weak zenith angle
    !! dependent albedo.
-   !! @param[in] vegfcs Vegetation greenness.
    !! @param[in] cnpfcs Plant canopy moisture content.
    !! @param[in] f10m log((z0+10)/z0). See model routine sfc_diff.f for
    !! details.
@@ -106,23 +111,17 @@ MODULE READ_WRITE_DATA
    !! @param[in] slcfcs Liquid portion of volumetric soil moisture.
    !! @param[in] smcfcs Total volumetric soil moisture.
    !! @param[in] stcfcs Soil temperature.
-   !! @param[in] idim 'i' dimension of a tile.
-   !! @param[in] jdim 'j' dimension of a tile.
-   !! @param[in] lensfc Total number of points on a tile.
-   !! @param[in] lsoil Number of soil layers.
-   !! @param[in] do_nsst When true, nsst fields were processed.
-   !! @param[in] nsst Data structure containing nsst fields.
    !!
    !! @author George Gayno NOAA/EMC
 
- subroutine write_data_selected_records(lensfc,idim,jdim,lsoil, &
-                                do_nsst,nsst,slifcs,tsffcs,vegfcs,swefcs, &
-                                tg3fcs,zorfcs,albfcs,alffcs, &
-                                cnpfcs,f10m,t2m,q2m,vetfcs, &
-                                sotfcs,ustar,fmm,fhh,sicfcs, &
-                                sihfcs,sitfcs,tprcp,srflag,  &
-                                swdfcs,vmnfcs,vmxfcs,slpfcs, &
-                                absfcs,slcfcs,smcfcs,stcfcs)
+ subroutine write_data(lensfc,idim,jdim,lsoil, &
+                       do_nsst,nsst,slifcs,tsffcs,vegfcs,swefcs, &
+                       tg3fcs,zorfcs,albfcs,alffcs, &
+                       cnpfcs,f10m,t2m,q2m,vetfcs, &
+                       sotfcs,ustar,fmm,fhh,sicfcs, &
+                       sihfcs,sitfcs,tprcp,srflag,  &
+                       swdfcs,vmnfcs,vmxfcs,slpfcs, &
+                       absfcs,slcfcs,smcfcs,stcfcs)
 
  use mpi
 
@@ -542,10 +541,8 @@ MODULE READ_WRITE_DATA
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING QRAIN RECORD' )
 
-! Ask if 'tfinc' field is just diagnostic. 
-! If not, then include logic to add it to restart
-! files if necessary. 
-
+! Some files don't include 'tfinc', which is just diagnostic. 
+! If missing, then add it to the restart file.
    error=nf90_inq_varid(ncid, "tfinc", id_var)
    if (error /= 0) then
      error=nf90_inq_dimid(ncid, "xaxis_1", dim_x)
@@ -566,7 +563,6 @@ MODULE READ_WRITE_DATA
      call netcdf_err(error, 'DEFINING tfinc UNITS' )
      error=nf90_enddef(ncid)
    endif
-
    dum2d = reshape(nsst%tfinc, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING TFINC RECORD' )
@@ -575,7 +571,7 @@ MODULE READ_WRITE_DATA
 
  error = nf90_close(ncid)
 
- end subroutine write_data_selected_records
+ end subroutine write_data
 
  !> Read latitude and longitude for the cubed-sphere tile from the
  !! 'grid' file.  Read the filtered and unfiltered orography from
