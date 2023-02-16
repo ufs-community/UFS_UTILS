@@ -79,7 +79,7 @@
  character(len=20), allocatable, public      :: chgres_var_names(:) !< Varmap table variable name as recognized
                                                                     !! by this program.
  character(len=20), allocatable, public      :: field_var_names(:)  !< The GRIB2 variable name in the varmap table.
- character(len=500), public                  :: parm_file="msis21.parm"
+ character(len=500), public                  :: parm_file="msis21.parm" !< Full path to msis21.parm for WAM initialization
  
  integer, public                 :: cycle_year = -999 !< Cycle year.
  integer, public                 :: cycle_mon = -999 !< Cycle month.
