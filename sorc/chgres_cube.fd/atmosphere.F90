@@ -1521,6 +1521,7 @@
 !! @param [in] month  initial month
 !! @param [in] day  initial day
 !! @param [in] hour  initial hour
+!! @param [in] pf    path to MSIS2.1 parm file
 !!
 !! @author Hann-Ming Henry Juang NCEP/EMC
  SUBROUTINE VINTG_WAM (YEAR,MONTH,DAY,HOUR,PF)
