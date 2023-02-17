@@ -36,6 +36,7 @@ if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ] ; then
 # Some gfs tarballs from the v16 retro parallels dont have 'atmos'
 # in their path.  Account for this.
 #---------------------------------------------------------------------------
+  CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos"
   if [ ! -d ${INPUT_DATA_DIR} ]; then
     INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
@@ -48,6 +49,7 @@ else
   mm_d=$(echo $date10 | cut -c5-6)
   dd_d=$(echo $date10 | cut -c7-8)
   hh_d=$(echo $date10 | cut -c9-10)
+  CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/atmos/mem${MEMBER}"
   ATMFILE="gdas.t${hh_d}z.atmf006.nc"
   SFCFILE="gdas.t${hh_d}z.sfcf006.nc"
@@ -56,6 +58,8 @@ fi
 rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
+
+source $UFS_DIR/util/gdas_init/set_fixed_files.sh
 
 cat << EOF > fort.41
 

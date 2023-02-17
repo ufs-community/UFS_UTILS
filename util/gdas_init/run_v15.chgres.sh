@@ -24,11 +24,13 @@ WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
 if [ ${MEMBER} == 'gdas' ]; then
   CINP=${CINP:-"C768"}
+  CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy}${mm}${dd}/${hh}"
   OUTDIR=$OUTDIR/gdas.${yy}${mm}${dd}/${hh}/atmos
 else  
   CINP=${CINP:-"C384"}
+  CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy_d}${mm_d}${dd_d}/${hh_d}/mem${MEMBER}/RESTART"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}/atmos
@@ -41,6 +43,8 @@ cd $WORKDIR
 rm -fr $OUTDIR
 mkdir -p $OUTDIR
 mkdir -p $OUTDIR/INPUT
+
+source $UFS_DIR/util/gdas_init/set_fixed_files.sh
 
 cat << EOF > fort.41
 

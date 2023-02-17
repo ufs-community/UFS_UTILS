@@ -44,11 +44,15 @@
 #                or incomplete. So this option may not
 #                always work. Contact george.gayno@noaa.gov
 #                if you encounter problems.
+# FRAC_ORO     - To use the latest orographic data, 
+#                set to 'yes', otherwise, set to 'no'.
+#                Note that: the latest orographic data
+#                support both frac_grid and none frac_grid in the UFS 
 #
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
-EXTRACT_DATA=no
+EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
 
@@ -63,7 +67,7 @@ LEVS=65
 
 CDUMP=gdas
 
-FRAC_ORO=no
+FRAC_ORO=yes
 
 CRES_HIRES=C192
 CRES_ENKF=C96
@@ -75,29 +79,6 @@ OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 #---------------------------------------------------------
 # Dont touch anything below here.
 #---------------------------------------------------------
-if [ ${CDUMP} == 'gdas' ] || [ ${CDUMP} == 'gfs' ] || [ ${CDUMP} == 'hires' ] ; then
-  CTAR=${CRES_HIRES}
-else
-  CTAR=${CRES_ENKF}
-fi
-
-if [ "${FRAC_ORO:-"NO"}" = "yes" ]; then
-  if  [ ${CTAR} == 'C48' ] ; then
-    OCNRES='400'
-  elif [ ${CTAR} == 'C96' ] ; then
-    OCNRES='100'
-  elif [ ${CTAR} == 'C192' ] ; then
-    OCNRES='050'
-  elif [ ${CTAR} == 'C384' ] || [ ${CTAR} == 'C768' ] || [ ${CTAR} == 'C1152' ]; then
-    OCNRES='025'
-  fi
-  ORO_DIR="${CTAR}.mx${OCNRES}_frac"
-  ORO_NAME="oro_${CTAR}.mx${OCNRES}"
-else
-  ORO_DIR="${CTAR}"
-  ORO_NAME="${CTAR}_oro_data"
-fi
-
 if [ "$use_v16retro" = "yes" ]; then
 
   gfs_ver=v16retro
@@ -131,6 +112,5 @@ else
 
 fi
 
-export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF FRAC_ORO
 export LEVS gfs_ver
-export ORO_DIR ORO_NAME CTAR

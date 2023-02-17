@@ -13,6 +13,7 @@ FIX_AM=${FIX_FV3}/am
 
 WORKDIR=${WORKDIR:-$OUTDIR/work.gfs}
 
+CTAR=${CRES_HIRES}
 INPUT_DATA_DIR="${EXTRACT_DIR}/gfs.${yy}${mm}${dd}/${hh}"
 OUTDIR=$OUTDIR/gfs.${yy}${mm}${dd}/${hh}/atmos
 ATMFILE="gfs.t${hh}z.atmanl.nemsio"
@@ -25,6 +26,8 @@ cd $WORKDIR
 rm -fr $OUTDIR
 mkdir -p $OUTDIR
 mkdir -p $OUTDIR/INPUT
+
+source $UFS_DIR/util/gdas_init/set_fixed_files.sh
 
 cat << EOF > fort.41
 

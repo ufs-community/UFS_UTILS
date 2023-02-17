@@ -15,6 +15,7 @@ FIX_AM=${FIX_FV3}/am
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
 if [ "${MEMBER}" = "gdas" ] || [ "${MEMBER}" = "gfs" ]; then
+  CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
   OUTDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos
@@ -22,6 +23,7 @@ if [ "${MEMBER}" = "gdas" ] || [ "${MEMBER}" = "gfs" ]; then
   SFCFILE="${MEMBER}.t${hh}z.sfcanl.nemsio"
   NSTFILE="${MEMBER}.t${hh}z.nstanl.nemsio"
 else  
+  CTAR=${CRES_ENKF}
   INPUT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   RADSTAT_DATA_DIR="${EXTRACT_DIR}/enkf.${yy}${mm}${dd}/${hh}/mem${MEMBER}"
   OUTDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}/atmos
@@ -37,6 +39,8 @@ cd $WORKDIR
 rm -fr $OUTDIR
 mkdir -p $OUTDIR
 mkdir -p $OUTDIR/INPUT
+
+source $UFS_DIR/util/gdas_init/set_fixed_files.sh
 
 cat << EOF > fort.41
 
