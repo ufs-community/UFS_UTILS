@@ -52,7 +52,7 @@
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 

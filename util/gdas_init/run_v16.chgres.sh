@@ -32,11 +32,11 @@ FIX_AM=${FIX_FV3}/am
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
 if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ] ; then
+  CTAR=${CRES_HIRES}
 #---------------------------------------------------------------------------
 # Some gfs tarballs from the v16 retro parallels dont have 'atmos'
 # in their path.  Account for this.
 #---------------------------------------------------------------------------
-  CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos"
   if [ ! -d ${INPUT_DATA_DIR} ]; then
     INPUT_DATA_DIR="${EXTRACT_DIR}/${MEMBER}.${yy}${mm}${dd}/${hh}"
