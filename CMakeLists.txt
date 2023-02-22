@@ -15,6 +15,39 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # User options.
 option(OPENMP "use OpenMP threading" ON)
 option(ENABLE_DOCS "Enable generation of doxygen-based documentation." OFF)
+
+# Utilities to be built (Default: ALL)
+option(ICEBLEND "Enable building emcsfc_ice_blend.fd" ON)
+option(SNOW2MDL "Enable building emcsfc_snow2mdl.fd" ON)
+option(GCYCLE "Enable building global_cycle.fd" ON)
+option(FRENCTOOLS "Enable building fre-nctools.fd" ON)
+option(GRIDTOOLS "Enable building grid_tools.fd" ON)
+option(CHGRES "Enable building chgres_cube.fd" ON)
+option(OROG_MASK_TOOLS "Enable building orog_mask_tools.fd" ON)
+option(SFC_CLIMO_GEN "Enable building sfc_climo_gen.fd" ON)
+option(VCOORD_GEN "Enable building vcoord_gen.fd" ON)
+option(FVCOMTOOLS "Enable building fvcom_tools.fd" ON)
+option(GBLEVENTS "Enable building gblevents.fd" ON)
+option(CPLD_GRIDGEN "Enable building cpld_gridgen.fd" ON)
+option(WEIGHT_GEN "Enable building weight_gen.fd" ON)
+
+# Option to build application specific utilities
+option(GFS "Enable building GFS-only utilities" OFF)
+
+# When building the GFS, the following need not be built
+if(GFS)
+  message(STATUS "Building utilities specific to the GFS")
+  set(FRENCTOOLS OFF CACHE BOOL "Disable building fre-nctools.fd" FORCE)
+  set(GRIDTOOLS OFF CACHE BOOL "Disable building grid_tools.fd" FORCE)
+  set(OROG_MASK_TOOLS OFF CACHE BOOL "Disable building orog_mask_tools.fd" FORCE)
+  set(SFC_CLIMO_GEN OFF CACHE BOOL "Disable building sfc_climo_gen.fd" FORCE)
+  set(VCOORD_GEN OFF CACHE BOOL "Disable building vcoord_gen.fd" FORCE)
+  set(FVCOMTOOLS OFF CACHE BOOL "Disable building fvcom_tools.fd" FORCE)
+  set(GBLEVENTS OFF CACHE BOOL "Disable building gblevents.fd" FORCE)
+  set(CPLD_GRIDGEN OFF CACHE BOOL "Disable building cpld_gridgen.fd" FORCE)
+  set(WEIGHT_GEN OFF CACHE BOOL "Disable building weight_gen.fd" FORCE)
+endif()
+
 SET(TEST_FILE_DIR "." CACHE STRING "Check this directory for test files before using FTP.")
 
 # Set the build type.
@@ -80,7 +113,7 @@ find_package(sigio 2.3.0 REQUIRED)
 if(ENABLE_DOCS)
   find_package(Doxygen REQUIRED)
   set(abs_top_srcdir "${CMAKE_SOURCE_DIR}")
-  add_subdirectory(docs)  
+  add_subdirectory(docs)
 endif()
 
 add_subdirectory(sorc)
