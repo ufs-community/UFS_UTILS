@@ -157,22 +157,29 @@
  subroutine interp
  use gdswzd_mod
 
+! Required when using iplib v4.0 or higher.
+#ifdef IP_V4
+ use ipolates_mod
+#endif
+
  implicit none
+
+ integer, parameter        :: km=1
 
  integer                   :: i, j, ii, jj, ij
  integer                   :: ijmdl2, istart, iend, imid, iii
  integer, allocatable      :: idum(:,:)
- integer                   :: int_opt, ipopt(20)
+ integer                   :: int_opt, ipopt(20), ibi(km)
  integer                   :: kgds_mdl_tmp(200)
- integer                   :: no, ibo, iret, nret
+ integer                   :: no, ibo(km), iret, nret
 
- logical*1, allocatable    :: bitmap_mdl(:)
+ logical*1, allocatable    :: bitmap_mdl(:,:)
 
- real                      :: gridi(1)
- real                      :: gridj(1)
+ real                      :: gridi(1), gridj(1)
+ real                      :: lats(1), lons(1)
  real, allocatable         :: lsmask_1d(:)
- real, allocatable         :: snow_cvr_mdl_1d(:)
- real, allocatable         :: snow_dep_mdl_tmp(:) 
+ real, allocatable         :: snow_cvr_mdl_1d(:,:)
+ real, allocatable         :: snow_dep_mdl_tmp(:,:) 
  real                      :: sumc, sumd, x1, r, fraction, gridis, gridie
  real, parameter           :: undefined_value = -999.
 
@@ -229,6 +236,7 @@
  NESDIS_IMS : if (use_nesdis) then
 
    ipopt = 0
+   ibi = 1
    if (nesdis_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE NH NESDIS/IMS DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=2  ! break model grid cell into 25 points.
@@ -248,16 +256,17 @@
      no = ijmdl  ! an input when kgds(1) < 0 (subset of grid)
    end if
 
-   allocate (snow_cvr_mdl_1d(ijmdl))
+   allocate (snow_cvr_mdl_1d(ijmdl,km))
    snow_cvr_mdl_1d = 0.0
 
-   allocate (bitmap_mdl(ijmdl))
+   allocate (bitmap_mdl(ijmdl,km))
    bitmap_mdl=.false.  ! if interpolation routine can't find data
                        ! at a point, this flag is false.
 
+ 
    call ipolates(int_opt, ipopt, kgds_nesdis, kgds_mdl_tmp,   &
                 (inesdis*jnesdis), ijmdl,               &
-                 1, 1, bitmap_nesdis, snow_cvr_nesdis,  &
+                 km, ibi, bitmap_nesdis, snow_cvr_nesdis,  &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_cvr_mdl_1d, iret)
 
@@ -279,22 +288,24 @@
 
    do ij = 1, ijmdl
      if (lats_mdl(ij) < 0.0) cycle  ! only consider nh model points
-     if (.not. bitmap_mdl(ij)) then 
+     if (.not. bitmap_mdl(ij,km)) then 
        if (lats_mdl(ij) <= lat_threshold) then
-         snow_cvr_mdl_1d(ij) = 0.0
+         snow_cvr_mdl_1d(ij,km) = 0.0
        else 
+         lats(1)=lats_mdl(ij)
+         lons(1)=lons_mdl(ij)
          call gdswzd(kgds_nesdis,-1,1,undefined_value,gridi,gridj, &
-                     lons_mdl(ij),lats_mdl(ij),nret) 
+                     lons,lats,nret) 
          if (nret /= 1) then
            print*,"- WARNING: MODEL POINT OUTSIDE NESDIS/IMS GRID: ", ipts_mdl(ij), jpts_mdl(ij)
-           snow_cvr_mdl_1d(ij) = 0.0
+           snow_cvr_mdl_1d(ij,km) = 0.0
          else
            ii = nint(gridi(1))
            jj = nint(gridj(1))
            if (sea_ice_nesdis(ii,jj) == 1) then
-             snow_cvr_mdl_1d(ij) = 100.0
+             snow_cvr_mdl_1d(ij,km) = 100.0
            else
-             snow_cvr_mdl_1d(ij) = 0.0
+             snow_cvr_mdl_1d(ij,km) = 0.0
            end if
          end if
        end if
@@ -318,6 +329,7 @@
 !----------------------------------------------------------------------
 
    ipopt = 0
+   ibi = 1
    if (afwa_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE GLOBAL AFWA DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=-1  ! break model grid cell into 25 points.
@@ -336,15 +348,15 @@
      no = ijmdl  ! an input when kgds(1) < 0 (subset of grid)
    end if
 
-   allocate (snow_dep_mdl_tmp(ijmdl))
+   allocate (snow_dep_mdl_tmp(ijmdl,km))
    snow_dep_mdl_tmp = 0.0
 
-   allocate (bitmap_mdl(ijmdl))
+   allocate (bitmap_mdl(ijmdl,km))
    bitmap_mdl = .false.
 
    call ipolates(int_opt, ipopt, kgds_afwa_global, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_global, snow_dep_afwa_global, &
+                 km, ibi, bitmap_afwa_global, snow_dep_afwa_global, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 
@@ -364,11 +376,11 @@
 !----------------------------------------------------------------------
 
    do ij = 1, ijmdl
-     if (.not. bitmap_mdl(ij)) then
+     if (.not. bitmap_mdl(ij,km)) then
        if (abs(lats_mdl(ij)) >= lat_threshold) then
-         snow_dep_mdl_tmp(ij) = min_snow_depth
+         snow_dep_mdl_tmp(ij,km) = min_snow_depth
        else
-         snow_dep_mdl_tmp(ij) = 0.0
+         snow_dep_mdl_tmp(ij,km) = 0.0
        endif
      endif
    enddo
@@ -389,6 +401,7 @@
 !----------------------------------------------------------------------
 
    ipopt = 0
+   ibi = 1
    if (afwa_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE NH AFWA DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=-1  ! break model grid cell into 25 points.
@@ -407,15 +420,15 @@
      no = ijmdl  ! an input when kgds(1) < 0 (subset of grid)
    end if
 
-   allocate (snow_dep_mdl_tmp(ijmdl))
+   allocate (snow_dep_mdl_tmp(ijmdl,km))
    snow_dep_mdl_tmp = 0.0
 
-   allocate (bitmap_mdl(ijmdl))
+   allocate (bitmap_mdl(ijmdl,km))
    bitmap_mdl = .false.
 
    call ipolates(int_opt, ipopt, kgds_afwa_nh, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_nh, snow_dep_afwa_nh, &
+                 1, ibi, bitmap_afwa_nh, snow_dep_afwa_nh, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 
@@ -436,11 +449,11 @@
 
    do ij = 1, ijmdl
      if (lats_mdl(ij) >= 0.) then  ! only consider model pts in n hemi.
-       if (.not. bitmap_mdl(ij)) then
+       if (.not. bitmap_mdl(ij,km)) then
          if (abs(lats_mdl(ij)) >= lat_threshold) then
-           snow_dep_mdl_tmp(ij) = min_snow_depth
+           snow_dep_mdl_tmp(ij,km) = min_snow_depth
          else
-           snow_dep_mdl_tmp(ij) = 0.0
+           snow_dep_mdl_tmp(ij,km) = 0.0
          endif
        endif
      endif
@@ -464,11 +477,11 @@
    print*,"- BLEND NESDIS/IMS AND AFWA DATA IN NH."
    do ij = 1, ijmdl
      if (lats_mdl(ij) >= 0.0) then
-       if (snow_cvr_mdl_1d(ij) >= snow_cvr_threshold) then
+       if (snow_cvr_mdl_1d(ij,km) >= snow_cvr_threshold) then
          snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) =   &
-                      max(snow_dep_mdl_tmp(ij), min_snow_depth)
+                      max(snow_dep_mdl_tmp(ij,km), min_snow_depth)
        endif   
-       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij)
+       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij,km)
      endif
    enddo
    deallocate (snow_cvr_mdl_1d)
@@ -476,11 +489,11 @@
    print*,"- BLEND NESDIS/IMS AND AFWA DATA IN NH."
    do ij = 1, ijmdl
      if (lats_mdl(ij) >= 0.0) then
-       if (snow_cvr_mdl_1d(ij) >= snow_cvr_threshold) then
+       if (snow_cvr_mdl_1d(ij,km) >= snow_cvr_threshold) then
          snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) =   &
-                      max(snow_dep_mdl_tmp(ij), min_snow_depth)
+                      max(snow_dep_mdl_tmp(ij,km), min_snow_depth)
        endif   
-       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij)
+       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij,km)
      endif
    enddo
    deallocate (snow_cvr_mdl_1d)
@@ -489,9 +502,9 @@
    print*,"- SET DEPTH/COVER FROM AFWA DATA IN NH."
    do ij = 1, ijmdl
      if (lats_mdl(ij) >= 0.0) then
-       if (snow_dep_mdl_tmp(ij) > 0.0) then
+       if (snow_dep_mdl_tmp(ij,km) > 0.0) then
          snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = 100.0
-         snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_dep_mdl_tmp(ij)
+         snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_dep_mdl_tmp(ij,km)
        endif
      endif
    enddo
@@ -499,9 +512,9 @@
    print*,"- SET DEPTH/COVER FROM AFWA DATA IN NH."
    do ij = 1, ijmdl
      if (lats_mdl(ij) >= 0.0) then
-       if (snow_dep_mdl_tmp(ij) > 0.0) then
+       if (snow_dep_mdl_tmp(ij,km) > 0.0) then
          snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = 100.0
-         snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_dep_mdl_tmp(ij)
+         snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_dep_mdl_tmp(ij,km)
        endif
      endif
    enddo
@@ -510,10 +523,10 @@
    print*,"- SET DEPTH/COVER FROM NESDIS/IMS DATA IN NH."
    do ij = 1, ijmdl
      if (lats_mdl(ij) >= 0.0) then
-       if (snow_cvr_mdl_1d(ij) >= snow_cvr_threshold) then
+       if (snow_cvr_mdl_1d(ij,km) >= snow_cvr_threshold) then
          snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) = min_snow_depth
        endif   
-       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij)
+       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij,km)
      endif
    enddo
    deallocate (snow_cvr_mdl_1d)
@@ -526,6 +539,7 @@
  AUTOSNOW : if (use_autosnow) then
 
    ipopt = 0
+   ibi = 1
    if (autosnow_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE AUTOSNOW DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=2    ! break model grid cell into 25 points.
@@ -545,16 +559,16 @@
      no = ijmdl  ! an input when kgds(1) < 0 (subset of grid)
    end if
 
-   allocate (snow_cvr_mdl_1d(ijmdl))
+   allocate (snow_cvr_mdl_1d(ijmdl,km))
    snow_cvr_mdl_1d = 0.0
 
-   allocate (bitmap_mdl(ijmdl))
+   allocate (bitmap_mdl(ijmdl,km))
    bitmap_mdl=.false.  ! if interpolation routine can't find data
                        ! at a point, this flag is false.
 
    call ipolates(int_opt, ipopt, kgds_autosnow, kgds_mdl_tmp,   &
                 (iautosnow*jautosnow), ijmdl,               &
-                 1, 1, bitmap_autosnow, snow_cvr_autosnow,  &
+                 1, ibi, bitmap_autosnow, snow_cvr_autosnow,  &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_cvr_mdl_1d, iret)
 
@@ -573,11 +587,11 @@
 
    do ij = 1, ijmdl
      if (lats_mdl(ij) < 0.0) then
-       if (.not. bitmap_mdl(ij)) then
+       if (.not. bitmap_mdl(ij,km)) then
          if (abs(lats_mdl(ij)) <= lat_threshold) then
-           snow_cvr_mdl_1d(ij) = 0.0
+           snow_cvr_mdl_1d(ij,km) = 0.0
          else 
-           snow_cvr_mdl_1d(ij) = 100.0
+           snow_cvr_mdl_1d(ij,km) = 100.0
          end if
        end if
      end if
@@ -599,6 +613,7 @@
 !----------------------------------------------------------------------
 
    ipopt = 0
+   ibi = 1
    if (afwa_res < (0.5*resol_mdl)) then
      print*,"- INTERPOLATE SH AFWA DATA TO MODEL GRID USING BUDGET METHOD."
      ipopt(1)=-1  ! break model grid cell into 25 points.
@@ -617,15 +632,15 @@
      no = ijmdl  ! an input when kgds(1) < 0 (subset of grid)
    end if
 
-   allocate (snow_dep_mdl_tmp(ijmdl))
+   allocate (snow_dep_mdl_tmp(ijmdl,km))
    snow_dep_mdl_tmp = 0.0
 
-   allocate (bitmap_mdl(ijmdl))
+   allocate (bitmap_mdl(ijmdl,km))
    bitmap_mdl = .false.
 
    call ipolates(int_opt, ipopt, kgds_afwa_sh, kgds_mdl_tmp,    &
                 (iafwa*jafwa), ijmdl,  &
-                 1, 1, bitmap_afwa_sh, snow_dep_afwa_sh, &
+                 1, ibi, bitmap_afwa_sh, snow_dep_afwa_sh, &
                  no, lats_mdl, lons_mdl, ibo, bitmap_mdl,     &
                  snow_dep_mdl_tmp, iret)
 
@@ -644,11 +659,11 @@
 
    do ij = 1, ijmdl
      if (lats_mdl(ij) < 0.) then
-       if (.not. bitmap_mdl(ij)) then
+       if (.not. bitmap_mdl(ij,km)) then
          if (abs(lats_mdl(ij)) >= lat_threshold) then
-           snow_dep_mdl_tmp(ij) = min_snow_depth
+           snow_dep_mdl_tmp(ij,km) = min_snow_depth
          else
-           snow_dep_mdl_tmp(ij) = 0.0
+           snow_dep_mdl_tmp(ij,km) = 0.0
          endif
        endif
      endif
@@ -667,11 +682,11 @@
    print*,"- BLEND AUTOSNOW AND AFWA DATA IN SH."
    do ij = 1, ijmdl
      if (lats_mdl(ij) < 0.0) then
-       if (snow_cvr_mdl_1d(ij) >= snow_cvr_threshold) then
+       if (snow_cvr_mdl_1d(ij,km) >= snow_cvr_threshold) then
          snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) =   &
-                      max(snow_dep_mdl_tmp(ij), min_snow_depth)
+                      max(snow_dep_mdl_tmp(ij,km), min_snow_depth)
        endif   
-       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij)
+       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij,km)
      endif
    enddo
    deallocate (snow_cvr_mdl_1d)
@@ -680,9 +695,9 @@
    print*,"- SET DEPTH/COVER FROM AFWA DATA IN SH."
    do ij = 1, ijmdl
      if (lats_mdl(ij) < 0.0) then
-       if (snow_dep_mdl_tmp(ij) > 0.0) then
+       if (snow_dep_mdl_tmp(ij,km) > 0.0) then
          snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = 100.0
-         snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_dep_mdl_tmp(ij)
+         snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_dep_mdl_tmp(ij,km)
        endif
      endif
    enddo
@@ -691,10 +706,10 @@
    print*,"- SET DEPTH/COVER FROM AUTOSNOW IN SH."
    do ij = 1, ijmdl
      if (lats_mdl(ij) < 0.0) then
-       if (snow_cvr_mdl_1d(ij) >= snow_cvr_threshold) then
+       if (snow_cvr_mdl_1d(ij,km) >= snow_cvr_threshold) then
          snow_dep_mdl(ipts_mdl(ij),jpts_mdl(ij)) = min_snow_depth
        endif   
-       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij)
+       snow_cvr_mdl(ipts_mdl(ij),jpts_mdl(ij)) = snow_cvr_mdl_1d(ij,km)
      endif
    enddo
    deallocate (snow_cvr_mdl_1d)
@@ -709,9 +724,9 @@
  if (kgds_mdl(1) == 4 .and. thinned) then
 
    ijmdl2 = sum(lonsperlat_mdl) * 2
-   allocate (snow_cvr_mdl_1d(ijmdl2))
+   allocate (snow_cvr_mdl_1d(ijmdl2,km))
    allocate (lsmask_1d(ijmdl2))
-   allocate (snow_dep_mdl_tmp(ijmdl2))
+   allocate (snow_dep_mdl_tmp(ijmdl2,km))
 
    lsmask_1d = 0.0
    snow_cvr_mdl_1d = 0.0
@@ -748,10 +763,10 @@
          sumc = sumc + fraction * snow_cvr_mdl(iii,j)
          sumd = sumd + fraction * snow_dep_mdl(iii,j)
        enddo
-       snow_cvr_mdl_1d(ij) = sumc / r
-       snow_dep_mdl_tmp(ij) = 0.0
-       if (snow_cvr_mdl_1d(ij) > snow_cvr_threshold) then
-         snow_dep_mdl_tmp(ij) = max(sumd / r,min_snow_depth)
+       snow_cvr_mdl_1d(ij,km) = sumc / r
+       snow_dep_mdl_tmp(ij,km) = 0.0
+       if (snow_cvr_mdl_1d(ij,km) > snow_cvr_threshold) then
+         snow_dep_mdl_tmp(ij,km) = max(sumd / r,min_snow_depth)
        end if
     enddo
    enddo
@@ -765,9 +780,9 @@
    allocate (idum(imdl,jmdl))
    idum = 0
    call uninterpred(1, idum, lsmask_1d, lsmask_mdl, imdl, jmdl, ijmdl2, lonsperlat_mdl)
-   call uninterpred(1, idum, snow_cvr_mdl_1d, snow_cvr_mdl, imdl, jmdl, ijmdl2, lonsperlat_mdl)
+   call uninterpred(1, idum, snow_cvr_mdl_1d(:,km), snow_cvr_mdl, imdl, jmdl, ijmdl2, lonsperlat_mdl)
    deallocate(snow_cvr_mdl_1d)
-   call uninterpred(1, idum, snow_dep_mdl_tmp, snow_dep_mdl, imdl, jmdl, ijmdl2, lonsperlat_mdl)
+   call uninterpred(1, idum, snow_dep_mdl_tmp(:,km), snow_dep_mdl, imdl, jmdl, ijmdl2, lonsperlat_mdl)
    deallocate(snow_dep_mdl_tmp)
    deallocate(idum)
 
