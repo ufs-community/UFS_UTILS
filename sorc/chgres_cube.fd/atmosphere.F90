@@ -51,7 +51,7 @@
                                        terrain_target_grid
 
  use program_setup, only             : vcoord_file_target_grid, &
-                                       wam_cold_start, parm_file, & 
+                                       wam_cold_start, wam_parm_file, & 
                                        cycle_year, cycle_mon,     &
                                        cycle_day, cycle_hour,     &
                                        regional, &
@@ -349,7 +349,7 @@
  call vintg
 
  if( wam_cold_start ) then 
-   call vintg_wam (cycle_year,cycle_mon,cycle_day,cycle_hour,parm_file)
+   call vintg_wam (cycle_year,cycle_mon,cycle_day,cycle_hour,wam_parm_file)
  endif
 
 !-----------------------------------------------------------------------------------

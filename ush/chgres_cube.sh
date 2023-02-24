@@ -158,6 +158,8 @@ GEOGRID_FILE_INPUT=${GEOGRID_FILE_INPUT:-NULL}
 # THOMPSON_AEROSOL_FILE = Location of Thompson aerosol climatology file.
 #----------------------------------------------------------------------------
 
+WAM_PARM_FILE=${WAM_PARM_FILE:-NULL}
+
 VARMAP_FILE=${VARMAP_FILE:-NULL}
 
 TRACERS_TARGET=${TRACERS_TARGET:-'"sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"'}
@@ -262,6 +264,7 @@ cat << EOF > ./fort.41
   grib2_file_input_grid="${GRIB2_FILE_INPUT}"
   geogrid_file_input_grid="${GEOGRID_FILE_INPUT}"
   varmap_file="${VARMAP_FILE}"
+  wam_parm_file="${WAM_PARM_FILE}"
   cycle_year=$iy
   cycle_mon=$im
   cycle_day=$id

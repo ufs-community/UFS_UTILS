@@ -172,7 +172,7 @@ contains
     logical, intent(in), optional             :: lN2_msis00               !Flag for retrieving NRLMSISE-00 thermospheric N2 variations
 
     character(len=128)                        :: parmpath1
-    character(len=128)                        :: parmfile1
+    character(len=300)                        :: parmfile1
     integer                                   :: iun1
 
     ! Path to parameter file
