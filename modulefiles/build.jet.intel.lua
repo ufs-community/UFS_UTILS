@@ -37,7 +37,7 @@ load(pathJoin("w3nco", w3nco_ver))
 sp_ver=os.getenv("sp_ver") or "2.3.3"
 load(pathJoin("sp", sp_ver))
 
-ip_ver=os.getenv("ip_ver") or "3.3.3"
+ip_ver=os.getenv("ip_ver") or "4.0.0"
 load(pathJoin("ip", ip_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"

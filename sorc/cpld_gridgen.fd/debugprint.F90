@@ -18,22 +18,22 @@ module debugprint
   private
 
   public :: checkseam, checkxlatlon, checkpoint
- 
-  contains
-!> Print values across the tripole seam
-!!
-!! @author Denise.Worthen@noaa.gov
-  
+
+contains
+  !> Print values across the tripole seam
+  !!
+  !! @author Denise.Worthen@noaa.gov
+
   subroutine checkseam
 
-   ! local variables
-   integer :: j,i1,i2
+    ! local variables
+    integer :: j,i1,i2
 
     j = nj
     i1 = ipole(1); i2 = ipole(2)+1
 
     !htn must be the same along seam
-     j = nj
+    j = nj
     i1 = ipole(1); i2 = ipole(2)+1
     print *,'HTN across seam '
     print *,htn(i1-2,j),htn(i2+2,j)
@@ -41,21 +41,21 @@ module debugprint
     print *,htn(i1,  j),htn(i2,  j)
     print *,htn(i1+1,j),htn(i2-1,j)
     print *,htn(i1+2,j),htn(i2-2,j)
-  
+
     print *,'latCv across seam '
     print *,latCv(i1-2,j),latCv(i2+2,j)
     print *,latCv(i1-1,j),latCv(i2+1,j)
     print *,latCv(i1,  j),latCv(i2,  j)
     print *,latCv(i1+1,j),latCv(i2-1,j)
     print *,latCv(i1+2,j),latCv(i2-2,j)
-  
+
     print *,'lonCv across seam '
     print *,lonCv(i1-2,j),lonCv(i2+2,j)
     print *,lonCv(i1-1,j),lonCv(i2+1,j)
     print *,lonCv(i1,  j),lonCv(i2,  j)
     print *,lonCv(i1+1,j),lonCv(i2-1,j)
     print *,lonCv(i1+2,j),lonCv(i2-2,j)
-  
+
     print *,'angleT across seam '
     print *,angleT(i1-2,j),angleT(i2+2,j)
     print *,angleT(i1-1,j),angleT(i2+1,j)
@@ -100,38 +100,38 @@ module debugprint
     print *,lonCt(i1+3,j),lonCt(i2-3,j)
     print *
   end subroutine checkseam
-  
+
   !> Print values near the poles and along the domain edges
   !!
   !! @author Denise.Worthen@noaa.gov
-  
+
   subroutine checkxlatlon
- 
-  ! local variables
-  integer :: i
+
+    ! local variables
+    integer :: i
 
     print *,'============== Ct grid ==============='
     print *,'============== Left pole ============'
     do i = ipole(1)-3,ipole(1)+3
-      print '(i5,6f12.5)',i,lonCt(i,nj),xlonCt(i),lonCt(i,nj)+xlonCt(i),latCt(i,nj),xlatCt(i),latCt(i,nj)-xlatCt(i)
+       print '(i5,6f12.5)',i,lonCt(i,nj),xlonCt(i),lonCt(i,nj)+xlonCt(i),latCt(i,nj),xlatCt(i),latCt(i,nj)-xlatCt(i)
     enddo
     print *
 
     print *,'============ Right pole ============'
     do i = ipole(2)-3,ipole(2)+3
-      print '(i5,6f12.5)',i,lonCt(i,nj),xlonCt(i),lonCt(i,nj)+xlonCt(i),latCt(i,nj),xlatCt(i),latCt(i,nj)-xlatCt(i)
+       print '(i5,6f12.5)',i,lonCt(i,nj),xlonCt(i),lonCt(i,nj)+xlonCt(i),latCt(i,nj),xlatCt(i),latCt(i,nj)-xlatCt(i)
     enddo
     print *
 
     print *,'============== Ct grid ==============='
     print *,'============== Left edge ============'
     do i = 1,5
-      print '(i5,6f12.5)',i,lonCt(i,nj),xlonCt(i),lonCt(i,nj)+xlonCt(i),latCt(i,nj),xlatCt(i),latCt(i,nj)-xlatCt(i)
+       print '(i5,6f12.5)',i,lonCt(i,nj),xlonCt(i),lonCt(i,nj)+xlonCt(i),latCt(i,nj),xlatCt(i),latCt(i,nj)-xlatCt(i)
     enddo
     print *
     print *,'============== Right edge ==========='
     do i = ni-4,ni
-      print '(i5,6f12.5)',i,lonCt(i,nj),xlonCt(i),lonCt(i,nj)+xlonCt(i),latCt(i,nj),xlatCt(i),latCt(i,nj)-xlatCt(i)
+       print '(i5,6f12.5)',i,lonCt(i,nj),xlonCt(i),lonCt(i,nj)+xlonCt(i),latCt(i,nj),xlatCt(i),latCt(i,nj)-xlatCt(i)
     enddo
     print *
 
@@ -139,38 +139,38 @@ module debugprint
     print *,'============== Cu grid ==============='
     print *,'============== Left pole ============='
     do i = ipole(1)-3,ipole(1)+3
-      print '(i5,6f12.5)',i,lonCu(i,nj),xlonCu(i),lonCu(i,nj)+xlonCu(i),latCu(i,nj),xlatCu(i),latCu(i,nj)-xlatCu(i)
+       print '(i5,6f12.5)',i,lonCu(i,nj),xlonCu(i),lonCu(i,nj)+xlonCu(i),latCu(i,nj),xlatCu(i),latCu(i,nj)-xlatCu(i)
     enddo
     print *
 
     print *,'============ Right pole ============'
     do i = ipole(2)-3,ipole(2)+3
-      print '(i5,6f12.5)',i,lonCu(i,nj),xlonCu(i),lonCu(i,nj)+xlonCu(i),latCu(i,nj),xlatCu(i),latCu(i,nj)-xlatCu(i)
+       print '(i5,6f12.5)',i,lonCu(i,nj),xlonCu(i),lonCu(i,nj)+xlonCu(i),latCu(i,nj),xlatCu(i),latCu(i,nj)-xlatCu(i)
     enddo
     print *
 
     print *,'============== Cu grid ==============='
     print *,'============== Left edge ============'
     do i = 1,5
-      print '(i5,6f12.5)',i,lonCu(i,nj),xlonCu(i),lonCu(i,nj)+xlonCu(i),latCu(i,nj),xlatCu(i),latCu(i,nj)-xlatCu(i)
+       print '(i5,6f12.5)',i,lonCu(i,nj),xlonCu(i),lonCu(i,nj)+xlonCu(i),latCu(i,nj),xlatCu(i),latCu(i,nj)-xlatCu(i)
     enddo
     print *
     print *,'============== Right edge ==========='
     do i = ni-4,ni
-      print '(i5,6f12.5)',i,lonCu(i,nj),xlonCu(i),lonCu(i,nj)+xlonCu(i),latCu(i,nj),xlatCu(i),latCu(i,nj)-xlatCu(i)
+       print '(i5,6f12.5)',i,lonCu(i,nj),xlonCu(i),lonCu(i,nj)+xlonCu(i),latCu(i,nj),xlatCu(i),latCu(i,nj)-xlatCu(i)
     enddo
     print *
 
   end subroutine checkxlatlon
-  
-!> Print values at specified point
-!!
-!! @author Denise.Worthen@noaa.gov
-  
+
+  !> Print values at specified point
+  !!
+  !! @author Denise.Worthen@noaa.gov
+
   subroutine checkpoint
 
-   ! local variables
-   integer :: i,j
+    ! local variables
+    integer :: i,j
 
     ! check
     i = 1; j = nj
@@ -183,7 +183,7 @@ module debugprint
     print '(f12.5,a,f12.5)',lonBu_vert(i,j,3),'        ',lonBu_vert(i,j,4)
     print *
     print *
-   ! check
+    ! check
     print '(f12.5,a,f12.5)',latCv_vert(i,j,2),'        ',latCv_vert(i,j,1)
     print '(a12,f12.5)','          ',latCv(i,j)
     print '(f12.5,a,f12.5)',latCv_vert(i,j,3),'        ',latCv_vert(i,j,4)
@@ -239,9 +239,9 @@ module debugprint
     print *,"latCv minmax ",minval(latCv),maxval(latCv)
     print *,"latBu minmax ",minval(latBu),maxval(latBu)
 
- !   print *,minval(latCt_vert),maxval(latCt_vert)
- !   print *,minval(lonCt_vert),maxval(lonCt_vert)
- !   print *,minval(latBu_vert),maxval(latBu_vert)
- !   print *,minval(lonBu_vert),maxval(lonBu_vert)
+    !   print *,minval(latCt_vert),maxval(latCt_vert)
+    !   print *,minval(lonCt_vert),maxval(lonCt_vert)
+    !   print *,minval(latBu_vert),maxval(latBu_vert)
+    !   print *,minval(lonBu_vert),maxval(lonBu_vert)
   end subroutine checkpoint
 end module debugprint

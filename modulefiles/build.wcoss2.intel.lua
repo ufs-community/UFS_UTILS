@@ -17,7 +17,6 @@ load(pathJoin("intel", intel_ver))
 cray_mpich_ver=os.getenv("cray_mpich_ver") or "8.1.7"
 load(pathJoin("cray-mpich", cray_mpich_ver))
 
-
 libjpeg_ver=os.getenv("libjpeg_ver") or "9c"
 load(pathJoin("libjpeg", libjpeg_ver))
 
@@ -51,7 +50,7 @@ load(pathJoin("sigio", sigio_ver))
 sp_ver=os.getenv("sp_ver") or "2.3.3"
 load(pathJoin("sp", sp_ver))
 
-ip_ver=os.getenv("ip_ver") or "3.3.3"
+ip_ver=os.getenv("ip_ver") or "4.0.0"
 load(pathJoin("ip", ip_ver))
 
 g2_ver=os.getenv("g2_ver") or "3.4.5"
