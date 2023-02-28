@@ -44,6 +44,10 @@
 #                or incomplete. So this option may not
 #                always work. Contact george.gayno@noaa.gov
 #                if you encounter problems.
+# FRAC_ORO     - To use the latest orographic data, 
+#                set to 'yes', otherwise, set to 'no'.
+#                Note that: the latest orographic data
+#                support both frac_grid and none frac_grid in the UFS 
 #
 #-----------------------------------------------------------
 
@@ -63,6 +67,8 @@ LEVS=65
 
 CDUMP=gdas
 
+FRAC_ORO=yes
+
 CRES_HIRES=C192
 CRES_ENKF=C96
 
@@ -73,7 +79,6 @@ OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 #---------------------------------------------------------
 # Dont touch anything below here.
 #---------------------------------------------------------
-
 if [ "$use_v16retro" = "yes" ]; then
 
   gfs_ver=v16retro
@@ -107,5 +112,5 @@ else
 
 fi
 
-export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF FRAC_ORO
 export LEVS gfs_ver
