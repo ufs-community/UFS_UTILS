@@ -36,13 +36,15 @@ rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
 
+source $UFS_DIR/util/gdas_init/set_fixed_files.sh
+
 cat << EOF > fort.41
 
 &config
- fix_dir_target_grid="${FIX_ORO}/${CTAR}/fix_sfc"
- mosaic_file_target_grid="${FIX_ORO}/${CTAR}/${CTAR}_mosaic.nc"
- orog_dir_target_grid="${FIX_ORO}/${CTAR}"
- orog_files_target_grid="${CTAR}_oro_data.tile1.nc","${CTAR}_oro_data.tile2.nc","${CTAR}_oro_data.tile3.nc","${CTAR}_oro_data.tile4.nc","${CTAR}_oro_data.tile5.nc","${CTAR}_oro_data.tile6.nc"
+ fix_dir_target_grid="${FIX_ORO}/${ORO_DIR}/fix_sfc"
+ mosaic_file_target_grid="${FIX_ORO}/${ORO_DIR}/${CTAR}_mosaic.nc"
+ orog_dir_target_grid="${FIX_ORO}/${ORO_DIR}"
+ orog_files_target_grid="${ORO_NAME}.tile1.nc","${ORO_NAME}.tile2.nc","${ORO_NAME}.tile3.nc","${ORO_NAME}.tile4.nc","${ORO_NAME}.tile5.nc","${ORO_NAME}.tile6.nc"
  data_dir_input_grid="${INPUT_DATA_DIR}"
  atm_files_input_grid="$ATMFILE"
  sfc_files_input_grid="$SFCFILE"
