@@ -22,7 +22,7 @@ rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
 
-source $UFS_DIR/util/gdas_init/set_fixed_files.sh
+source $GDAS_INIT_DIR/set_fixed_files.sh
 
 cat << EOF > fort.41
 
@@ -47,14 +47,14 @@ cat << EOF > fort.41
 /
 EOF
 
-$APRUN $UFS_DIR/exec/chgres_cube
+$APRUN $EXEC_DIR/chgres_cube
 rc=$?
 
 if [ $rc != 0 ]; then
   exit $rc
 fi
 
-$UFS_DIR/util/gdas_init/copy_coldstart_files.sh gfs $OUTDIR $yy $mm $dd $hh $INPUT_DATA_DIR
+$GDAS_INIT_DIR/copy_coldstart_files.sh gfs $OUTDIR $yy $mm $dd $hh $INPUT_DATA_DIR
 
 rm -fr $WORKDIR
 
