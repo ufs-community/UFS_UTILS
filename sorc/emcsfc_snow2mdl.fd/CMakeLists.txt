@@ -17,6 +17,9 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8 -fconvert=big-endian")
 endif()
+if(ip_VERSION GREATER_EQUAL 4.0.0)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DIP_V4")
+endif()
 
 set(exe_name emcsfc_snow2mdl)
 
