@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copy files from the working directory to the
+# output directory.
+
 copy_data()
 {
 
