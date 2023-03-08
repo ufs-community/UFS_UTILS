@@ -79,6 +79,10 @@ OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 #---------------------------------------------------------
 # Dont touch anything below here.
 #---------------------------------------------------------
+
+GDAS_INIT_DIR=$UFS_DIR/util/gdas_init
+EXEC_DIR=$UFS_DIR/exec
+
 if [ "$use_v16retro" = "yes" ]; then
 
   gfs_ver=v16retro
@@ -113,4 +117,4 @@ else
 fi
 
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF FRAC_ORO
-export LEVS gfs_ver
+export LEVS gfs_ver EXEC_DIR GDAS_INIT_DIR
