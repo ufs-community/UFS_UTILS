@@ -19,7 +19,7 @@ export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export INPUT_TYPE="gaussian_netcdf"
 export CONVERT_SFC=".false."
 export CONVERT_NST=".false."
-export WAM_PARM_FILE=${HOMEufs}/sorc/chgres_cube.fd/msis2.1/msis21.parm
+export WAM_PARM_FILE=${HOMEufs}/parm/msis_lib/msis21.parm
 
 export CDATE=2020020200
 
