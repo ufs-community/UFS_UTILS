@@ -370,6 +370,8 @@ contains
   !==================================================================================================
   subroutine loadparmset(name,iun)
 
+    use mpi
+
     use msis_constants, only      : maxnbf, csfxmod
 
     implicit none
@@ -378,6 +380,7 @@ contains
     integer, intent(in)          :: iun
 
     integer                      :: i0, i1
+    integer                      :: ierr
     logical                      :: havefile
     real(8), allocatable         :: parmin(:,:)
 
@@ -386,8 +389,8 @@ contains
     if (havefile) then
        open(unit=iun,file=trim(name),status='old',access='stream',convert='little_endian')
     else
-       print *,"MSIS parameter set ",trim(name)," not found. Stopping."
-       stop
+       print *,"FATAL ERROR: MSIS parameter set ",trim(name)," not found. Stopping."
+       call mpi_abort(mpi_comm_world, 999, ierr)
     endif
 
     ! Read in parameter values into temporary double-precision array
