@@ -9,11 +9,7 @@ if(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
   target_compile_options(msis2 PRIVATE -std=legacy)
 endif()
 
-if(BUILD_TESTING)
-  add_executable(msis2test msis2.1_test.F90)
-  target_link_libraries(msis2test PRIVATE msis2)
-
-  add_test(NAME MSIS2
-    COMMAND $<TARGET_FILE:msis2test>
-    WORKING_DIRECTORY ${msis2proj_SOURCE_DIR})
-endif()
+target_link_libraries(
+  msis2
+  PUBLIC
+  MPI::MPI_Fortran)
