@@ -45,7 +45,7 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_SOURCE_DIR}/parm/msis_lib/msis21.parm ${CMAKE_CURRENT_BINARY_DIR}/data/msis21.parm)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/msis2.1_test_in.txt ${CMAKE_CURRENT_BINARY_DIR}/data/msis2.1_test_in.txt)
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/msis2.1_test_ref_dp.txt ${CMAKE_CURRENT_BINARY_DIR}/data/msis2.1_test_ref_dp.txt)
 # This one does not end up in the data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
