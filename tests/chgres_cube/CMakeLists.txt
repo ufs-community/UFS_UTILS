@@ -226,11 +226,11 @@ add_executable(ftst_read_vcoord ftst_read_vcoord.F90)
 target_link_libraries(ftst_read_vcoord chgres_cube_lib)
 add_test(NAME chgres_cube-ftst_read_vcoord COMMAND ftst_read_vcoord)
 
-add_executable(ftst_msis msis2.1_test.F90)
-target_link_libraries(ftst_msis msis2)
+add_executable(ftst_msis_lib ftst_msis2.1_lib.F90)
+target_link_libraries(ftst_msis_lib msis2)
 # Cause test to be run with MPI.
-add_mpi_test(chgres_cube-ftst_msis
-  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_msis
+add_mpi_test(chgres_cube-ftst_msis_lib
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_msis_lib
   NUMPROCS 1
   TIMEOUT 60)
 
