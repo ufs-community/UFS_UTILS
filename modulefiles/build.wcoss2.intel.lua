@@ -39,9 +39,6 @@ load(pathJoin("bacio", bacio_ver))
 sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
 load(pathJoin("sfcio", sfcio_ver))
 
-w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
-load(pathJoin("w3nco", w3nco_ver))
-
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.2"
 load(pathJoin("nemsio", nemsio_ver))
 
@@ -70,10 +67,10 @@ load(pathJoin("gsl", gsl_ver))
 nco_ver=os.getenv("nco_ver") or "4.9.7"
 load(pathJoin("nco", nco_ver))
 
-setenv("HPC_OPT","/apps/ops/para/libs")
-prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/compiler/intel/19.1.3.304")
-prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/mpi/intel/19.1.3.304/cray-mpich/8.1.7")
-esmf_ver=os.getenv("esmf_ver") or "8.2.1b04"
+prepend_path("MODULEPATH", "/apps/dev/lmodules/intel/19.1.3.304")
+prepend_path("MODULEPATH", "/apps/dev/modulefiles/mpi/intel/19.1.3.304/cray-mpich/8.1.9")
+
+esmf_ver=os.getenv("esmf_ver") or "8.3.0b09"
 load(pathJoin("esmf", esmf_ver))
 
 whatis("Description: UFS_UTILS build environment")
