@@ -177,6 +177,9 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(slifcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing slmsk record' )
+
+   call remove_checksum(ncid, id_var)
+   
  endif
 
  if(present(tsffcs)) then
@@ -572,6 +575,31 @@ MODULE READ_WRITE_DATA
  error = nf90_close(ncid)
 
  end subroutine write_data
+
+ subroutine remove_checksum(ncid, id_var)
+
+ implicit none
+
+ integer, intent(in)       :: ncid, id_var
+
+ integer                   :: error
+
+ error=nf90_inquire_attribute(ncid, id_var, 'checksum')
+
+ if (error == 0) then ! attribute was found
+
+   error = nf90_redef(ncid)
+   call netcdf_err(error, 'entering define mode' )
+
+   error=nf90_del_att(ncid, id_var, 'checksum')
+   call netcdf_err(error, 'deleting checksum' )
+
+   error= nf90_enddef(ncid)
+   call netcdf_err(error, 'ending define mode' )
+
+ endif
+
+ end subroutine remove_checksum
 
  !> Read latitude and longitude for the cubed-sphere tile from the
  !! 'grid' file.  Read the filtered and unfiltered orography from
