@@ -348,7 +348,7 @@ jobs:
       run: |
         cd ufs_utils/build
         ctest --verbose --rerun-failed --output-on-failure
-        gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
+        gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html
 
     - name: cache-data
       if: steps.cache-data.outputs.cache-hit != 'true'
