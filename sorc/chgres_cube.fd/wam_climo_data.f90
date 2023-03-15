@@ -1,6 +1,25 @@
-! This software incorporates the MSIS empirical atmospheric model software
-! designed and provided by NRL. Use is governed by the Open Source Academic
-! research License Agreement contained in the file msis2.1/nrlmsis2.1_license.txt
+!> @file
+!! @brief Process vertical profile climatologic data for WAM.
+!!
+!! This software incorporates the MSIS empirical atmospheric model software
+!! designed and provided by NRL. Use is governed by the Open Source Academic
+!! research License Agreement contained in the file msis2.1/nrlmsis2.1_license.txt
+!!
+!! @author Adam Kubaryk NCEP/EMC
+
+!> Routine that computes ????
+!!
+!! @param[in] iday Calendar day.
+!! @param[in] xlat Latitude (degrees).
+!! @param[in] pr Pressure in hPa.
+!! @param[in] pf Path to parmfile for msisinit.
+!! @param[in] np Number of pressure layers.
+!! @param[out] temp Temperature (K).
+!! @param[out] n_o Number density of o.
+!! @param[out] n_o2 Number density of o2.
+!! @param[out] n_n2 Number density of n2
+!!
+!! @author Adam Kubaryk NCEP/EMC
   subroutine gettemp(iday,xlat,pr,np,pf,temp,n_o,n_o2,n_n2)
     use msis_init,      only: msisinit
     use msis_constants, only: rp
@@ -20,7 +39,7 @@
 ! Local variables
     real(kind=rp), parameter :: alt=100, ut=0, f107=150, f107a=150, ap(7)=9, xlong=0
     real(kind=rp) :: t, d(10), zkm
-    integer       :: k,il,ip
+    integer       :: ip
     real(4)       :: switch_legacy(1:25)
 
 ! set swich 7,8,10,14 to zero to avoid diurnal changes in output tempe
@@ -46,12 +65,27 @@
 
   end subroutine gettemp
 
+!> Routine that computes ????
+!!
+!! @param[in] day Calendar day.
+!! @param[in] utsec ???
+!! @param[in] z0 ???
+!! @param[in] glat ???
+!! @param[in] glon ???
+!! @param[in] f107a ???
+!! @param[in] f107 ???
+!! @param[in] ap ???
+!! @param[in] pres ???
+!! @param[out] alt ???
+!! @param[out] dn ???
+!! @param[out] tn ???
+!!
+!! @author Adam Kubaryk NCEP/EMC
   subroutine ghp8(day,utsec,z0,glat,glon,f107a,f107,ap,pres,alt,dn,tn)
 
     use msis_constants, only: kB, NA, g0, rp
     use msis_calc,      only: msiscalc
     use msis_utils,     only: alt2gph
-    use esmf,           only: esmf_kind_r8
 
     implicit none
 
