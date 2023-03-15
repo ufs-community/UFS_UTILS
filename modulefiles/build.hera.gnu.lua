@@ -31,7 +31,7 @@ load(pathJoin("bacio", bacio_ver))
 g2_ver=os.getenv("g2_ver") or "3.4.3"
 load(pathJoin("g2", g2_ver))
 
-ip_ver=os.getenv("ip_ver") or "3.3.3"
+ip_ver=os.getenv("ip_ver") or "4.0.0"
 load(pathJoin("ip", ip_ver))
 
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.2"

@@ -1,18 +1,5 @@
 #!/bin/bash
 
-copy_data()
-{
-
-mkdir -p $SAVEDIR
-cp gfs_ctrl.nc $SAVEDIR
-
-for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
-do
-  cp out.atm.${tile}.nc  ${SAVEDIR}/gfs_data.${tile}.nc
-  cp out.sfc.${tile}.nc  ${SAVEDIR}/sfc_data.${tile}.nc 
-done
-}
-
 #---------------------------------------------------------------------------
 # Run chgres using v16 netcdf history data as input.  These history
 # files are part of the OPS v16 gfs/gdas/enkf tarballs, and the
@@ -59,13 +46,15 @@ rm -fr $WORKDIR
 mkdir -p $WORKDIR
 cd $WORKDIR
 
+source $GDAS_INIT_DIR/set_fixed_files.sh
+
 cat << EOF > fort.41
 
 &config
- fix_dir_target_grid="${FIX_ORO}/${CTAR}/fix_sfc"
- mosaic_file_target_grid="${FIX_ORO}/${CTAR}/${CTAR}_mosaic.nc"
- orog_dir_target_grid="${FIX_ORO}/${CTAR}"
- orog_files_target_grid="${CTAR}_oro_data.tile1.nc","${CTAR}_oro_data.tile2.nc","${CTAR}_oro_data.tile3.nc","${CTAR}_oro_data.tile4.nc","${CTAR}_oro_data.tile5.nc","${CTAR}_oro_data.tile6.nc"
+ fix_dir_target_grid="${FIX_ORO}/${ORO_DIR}/fix_sfc"
+ mosaic_file_target_grid="${FIX_ORO}/${ORO_DIR}/${CTAR}_mosaic.nc"
+ orog_dir_target_grid="${FIX_ORO}/${ORO_DIR}"
+ orog_files_target_grid="${ORO_NAME}.tile1.nc","${ORO_NAME}.tile2.nc","${ORO_NAME}.tile3.nc","${ORO_NAME}.tile4.nc","${ORO_NAME}.tile5.nc","${ORO_NAME}.tile6.nc"
  data_dir_input_grid="${INPUT_DATA_DIR}"
  atm_files_input_grid="${ATMFILE}"
  sfc_files_input_grid="${SFCFILE}"
@@ -82,26 +71,14 @@ cat << EOF > fort.41
 /
 EOF
 
-$APRUN $UFS_DIR/exec/chgres_cube
+$APRUN $EXEC_DIR/chgres_cube
 rc=$?
 
 if [ $rc != 0 ]; then
   exit $rc
 fi
 
-if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
-  SAVEDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}/atmos/INPUT
-  copy_data
-  touch $SAVEDIR/../${MEMBER}.t${hh}z.loginc.txt
-  if [ ${MEMBER} == 'gdas' ]; then
-    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR/..
-    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR/..
-  fi
-else  
-  SAVEDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}/atmos/INPUT
-  copy_data
-  touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
-fi
+$GDAS_INIT_DIR/copy_coldstart_files.sh $MEMBER $OUTDIR $yy $mm $dd $hh $INPUT_DATA_DIR
 
 rm -fr $WORKDIR
 
