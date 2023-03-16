@@ -5,9 +5,9 @@
 !! designed and provided by NRL. Use is governed by the Open Source Academic
 !! research License Agreement contained in the file msis2.1/nrlmsis2.1_license.txt
 !!
-!! @author Adam Kubaryk NCEP/EMC
+!! @author Adam Kubaryk NCEP/SWPC
 
-!> Routine that computes ????
+!> Routine that computes temperature and neutral density values utilizing MSIS 2.1.
 !!
 !! @param[in] iday Calendar day.
 !! @param[in] xlat Latitude (degrees).
@@ -19,7 +19,7 @@
 !! @param[out] n_o2 Number density of o2.
 !! @param[out] n_n2 Number density of n2
 !!
-!! @author Adam Kubaryk NCEP/EMC
+!! @author Adam Kubaryk NCEP/SWPC
   subroutine gettemp(iday,xlat,pr,np,pf,temp,n_o,n_o2,n_n2)
     use msis_init,      only: msisinit
     use msis_constants, only: rp
@@ -65,22 +65,23 @@
 
   end subroutine gettemp
 
-!> Routine that computes ????
+!> Wrapper routine for calls to MSIS 2.1 for computing temperature and neutral density at
+!> a given pressure level.
 !!
 !! @param[in] day Calendar day.
-!! @param[in] utsec ???
-!! @param[in] z0 ???
-!! @param[in] glat ???
-!! @param[in] glon ???
-!! @param[in] f107a ???
-!! @param[in] f107 ???
-!! @param[in] ap ???
-!! @param[in] pres ???
-!! @param[out] alt ???
-!! @param[out] dn ???
-!! @param[out] tn ???
+!! @param[in] utsec Seconds into UTC day.
+!! @param[in] z0 Initial guess for altitude in km.
+!! @param[in] glat Latitude in degrees east.
+!! @param[in] glon Longitude in degrees north.
+!! @param[in] f107a 41-day average of F10.7 Solar Flux.
+!! @param[in] f107 Current day F10.7 Solar Flux.
+!! @param[in] ap Array of Ap inputs to MSIS 2.1, documented within MSIS 2.1.
+!! @param[in] pres Pressure level at which to solve for temp/den values.
+!! @param[out] alt Altitude at which the outputs are valid.
+!! @param[out] dn Array of neutral density values, documented within MSIS 2.1.
+!! @param[out] tn Temperature in K.
 !!
-!! @author Adam Kubaryk NCEP/EMC
+!! @author Adam Kubaryk NCEP/SWPC
   subroutine ghp8(day,utsec,z0,glat,glon,f107a,f107,ap,pres,alt,dn,tn)
 
     use msis_constants, only: kB, NA, g0, rp
