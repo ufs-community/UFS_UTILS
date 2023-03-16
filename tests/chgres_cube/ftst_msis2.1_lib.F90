@@ -40,6 +40,8 @@ program msistest
   real(4)                     :: sec, alt, glat, glong, stl, f107a, f107, ap(7), apd
   real(4)                     :: d(10), t(2), d_check(10), t_check
 
+  print*,'Starting test of msis library.'
+
   !Initialize model
   call msisinit(parmpath='./data/',parmfile='msis21.parm')
 
@@ -74,35 +76,37 @@ program msistest
  
     call gtd8d(iyd,sec,alt,glat,glong,stl,f107a,f107,ap,mass,d,t)
 
+    print*,'Check case ',i
+
 ! Check He number density
-     call checkit(d(1), d_check(1), 2)
+     call checkit(d(1), d_check(1), 'He')
 
 ! Check O number density.
-     call checkit(d(2), d_check(2), 4)
+     call checkit(d(2), d_check(2), 'O')
 
 ! Check N2 number density.
-     call checkit(d(3), d_check(3), 6)
+     call checkit(d(3), d_check(3), 'N2')
 
 ! Check O2 number density.
-     call checkit(d(4), d_check(4), 8)
+     call checkit(d(4), d_check(4), 'O2')
 
 ! Check Ar number density.
-     call checkit(d(5), d_check(5), 10)
+     call checkit(d(5), d_check(5), 'Ar')
 
 ! Check Total mass density.
-     call checkit(d(6), d_check(6), 12)
+     call checkit(d(6), d_check(6), 'TMD')
 
 ! Check H number density.
-     call checkit(d(7), d_check(7), 14)
+     call checkit(d(7), d_check(7), 'H')
 
 ! Check N number density.
-     call checkit(d(8), d_check(8), 16)
+     call checkit(d(8), d_check(8), 'N')
 
 ! Check Anomalous oxygen number density.
-     call checkit(d(9), d_check(9), 18)
+     call checkit(d(9), d_check(9), 'AO')
 
 ! Check NO number density.
-     call checkit(d(10), d_check(10), 20)
+     call checkit(d(10), d_check(10), 'NO')
 
 ! Check temperature at altitude.
      if ( abs(t(2)-t_check) > 0.01) stop 28
@@ -120,11 +124,11 @@ end program msistest
 ! check values. A percentage threshold is used. Some
 ! fields contain missing values (flag value 9.99e-38). 
 
-subroutine checkit(calc_val, check_val, istat)
+subroutine checkit(calc_val, check_val, field)
 
  implicit none
 
- integer, intent(in) :: istat
+ character(len=*), intent(in) :: field
 
  real(4), intent(in) :: calc_val, check_val
 
@@ -132,9 +136,15 @@ subroutine checkit(calc_val, check_val, istat)
 
  if (check_val > 1) then  ! Check value is not missing.
    epsilon =  abs(calc_val-check_val) / check_val
-   if (epsilon > 0.001) stop istat
+   if (epsilon > 0.001) then
+     print*,'Bad value of ', field
+     stop 8
+   endif
  else ! Check value is missing. Is computed value also missing?
-   if (calc_val > 1) stop istat
+   if (calc_val > 1) then
+     print*,'Value not missing for field ', field
+     stop 9
+   endif
  endif
 
 end subroutine checkit
