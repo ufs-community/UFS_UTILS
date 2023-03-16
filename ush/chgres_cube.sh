@@ -156,6 +156,11 @@ GEOGRID_FILE_INPUT=${GEOGRID_FILE_INPUT:-NULL}
 #                          be located in FIXfv3.
 #
 # THOMPSON_AEROSOL_FILE = Location of Thompson aerosol climatology file.
+#
+# WAM_COLD_START = Set to .true. if coldstarting for the Whole Atmosphere
+#                  Model (WAM).
+#
+# WAM_PARM_FILE = Location of the parameter file used by the WAM function.
 #----------------------------------------------------------------------------
 
 WAM_PARM_FILE=${WAM_PARM_FILE:-NULL}
