@@ -177,9 +177,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(slifcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing slmsk record' )
-
    call remove_checksum(ncid, id_var)
-   
  endif
 
  if(present(tsffcs)) then
@@ -188,6 +186,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(tsffcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing tsea record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(swefcs)) then
@@ -196,6 +195,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(swefcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing sheleg record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(tg3fcs)) then
@@ -204,6 +204,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(tg3fcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing tg3 record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(zorfcs)) then
@@ -212,6 +213,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(zorfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing zorl record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(albfcs)) then
@@ -220,21 +222,28 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(albfcs(:,1), (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing alvsf record' )
+   call remove_checksum(ncid, id_var)
+
    error=nf90_inq_varid(ncid, "alvwf", id_var)
    call netcdf_err(error, 'reading alvwf id' )
    dum2d = reshape(albfcs(:,2), (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing alvwf record' )
+   call remove_checksum(ncid, id_var)
+
    error=nf90_inq_varid(ncid, "alnsf", id_var)
    call netcdf_err(error, 'reading alnsf id' )
    dum2d = reshape(albfcs(:,3), (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing alnsf record' )
+   call remove_checksum(ncid, id_var)
+
    error=nf90_inq_varid(ncid, "alnwf", id_var)
    call netcdf_err(error, 'reading alnwf id' )
    dum2d = reshape(albfcs(:,4), (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing alnwf record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(alffcs)) then
@@ -243,11 +252,14 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(alffcs(:,1), (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing facsf record' )
+   call remove_checksum(ncid, id_var)
+
    error=nf90_inq_varid(ncid, "facwf", id_var)
    call netcdf_err(error, 'reading facwf id' )
    dum2d = reshape(alffcs(:,2), (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing facwf record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(vegfcs)) then
@@ -256,6 +268,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(vegfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing vegfcs record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(cnpfcs)) then
@@ -264,6 +277,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(cnpfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing canopy record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(f10m)) then
@@ -272,6 +286,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(f10m, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing f10m record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(t2m)) then
@@ -280,6 +295,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(t2m, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing t2m record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(q2m)) then
@@ -288,6 +304,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(q2m, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing q2m record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(vetfcs)) then
@@ -296,6 +313,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(vetfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing vtype record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(sotfcs)) then
@@ -304,6 +322,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(sotfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing stype record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(ustar)) then
@@ -312,6 +331,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(ustar, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing uustar record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(fmm)) then
@@ -320,6 +340,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(fmm, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing ffmm record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(fhh)) then
@@ -328,6 +349,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(fhh, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing ffhh record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(sicfcs)) then
@@ -336,6 +358,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(sicfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing fice record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(sihfcs)) then
@@ -344,6 +367,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(sihfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing hice record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(sitfcs)) then
@@ -352,6 +376,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(sitfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing tisfc record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(tprcp)) then
@@ -360,6 +385,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(tprcp, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing tprcp record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(srflag)) then
@@ -368,6 +394,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(srflag, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing srflag record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(swdfcs)) then
@@ -376,6 +403,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(swdfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing snwdph record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(vmnfcs)) then
@@ -384,6 +412,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(vmnfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing shdmin record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(vmxfcs)) then
@@ -392,6 +421,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(vmxfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing shdmax record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(slpfcs)) then
@@ -400,6 +430,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(slpfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing slope record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(absfcs)) then
@@ -408,6 +439,7 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(absfcs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'writing snoalb record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(slcfcs)) then
@@ -416,6 +448,7 @@ MODULE READ_WRITE_DATA
    dum3d = reshape(slcfcs, (/idim,jdim,lsoil/))
    error = nf90_put_var( ncid, id_var, dum3d)
    call netcdf_err(error, 'writing slc record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(smcfcs)) then
@@ -424,6 +457,7 @@ MODULE READ_WRITE_DATA
    dum3d = reshape(smcfcs, (/idim,jdim,lsoil/))
    error = nf90_put_var( ncid, id_var, dum3d)
    call netcdf_err(error, 'writing smc record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(present(stcfcs)) then
@@ -432,6 +466,7 @@ MODULE READ_WRITE_DATA
    dum3d = reshape(stcfcs, (/idim,jdim,lsoil/))
    error = nf90_put_var( ncid, id_var, dum3d)
    call netcdf_err(error, 'writing stc record' )
+   call remove_checksum(ncid, id_var)
  endif
 
  if(do_nsst) then
@@ -441,108 +476,126 @@ MODULE READ_WRITE_DATA
    dum2d = reshape(nsst%tref, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING TREF RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "z_c", id_var)
    call netcdf_err(error, 'reading z_c id' )
    dum2d = reshape(nsst%z_c, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING Z_C RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "c_0", id_var)
    call netcdf_err(error, 'reading c_0 id' )
    dum2d = reshape(nsst%c_0, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING C_0 RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "c_d", id_var)
    call netcdf_err(error, 'reading c_d id' )
    dum2d = reshape(nsst%c_d, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING C_D RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "w_0", id_var)
    call netcdf_err(error, 'reading w_0 id' )
    dum2d = reshape(nsst%w_0, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING W_0 RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "w_d", id_var)
    call netcdf_err(error, 'reading w_d id' )
    dum2d = reshape(nsst%w_d, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING W_D RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "xt", id_var)
    call netcdf_err(error, 'reading xt id' )
    dum2d = reshape(nsst%xt, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING XT RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "xs", id_var)
    call netcdf_err(error, 'reading xs id' )
    dum2d = reshape(nsst%xs, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING XS RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "xu", id_var)
    call netcdf_err(error, 'reading xu id' )
    dum2d = reshape(nsst%xu, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING XU RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "xv", id_var)
    call netcdf_err(error, 'reading xv id' )
    dum2d = reshape(nsst%xv, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING XV RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "xz", id_var)
    call netcdf_err(error, 'reading xz id' )
    dum2d = reshape(nsst%xz, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING XZ RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "zm", id_var)
    call netcdf_err(error, 'reading zm id' )
    dum2d = reshape(nsst%zm, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING ZM RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "xtts", id_var)
    call netcdf_err(error, 'reading xtts id' )
    dum2d = reshape(nsst%xtts, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING XTTS RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "xzts", id_var)
    call netcdf_err(error, 'reading xzts id' )
    dum2d = reshape(nsst%xzts, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING XZTS RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "d_conv", id_var)
    call netcdf_err(error, 'reading d_conv id' )
    dum2d = reshape(nsst%d_conv, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING D_CONV RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "ifd", id_var)
    call netcdf_err(error, 'reading idf id' )
    dum2d = reshape(nsst%ifd, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING IFD RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "dt_cool", id_var)
    call netcdf_err(error, 'reading dt_cool id' )
    dum2d = reshape(nsst%dt_cool, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING DT_COOL RECORD' )
+   call remove_checksum(ncid, id_var)
 
    error=nf90_inq_varid(ncid, "qrain", id_var)
    call netcdf_err(error, 'reading qrain id' )
    dum2d = reshape(nsst%qrain, (/idim,jdim/))
    error = nf90_put_var( ncid, id_var, dum2d)
    call netcdf_err(error, 'WRITING QRAIN RECORD' )
+   call remove_checksum(ncid, id_var)
 
 ! Some files don't include 'tfinc', which is just diagnostic. 
 ! If missing, then add it to the restart file.
@@ -576,6 +629,12 @@ MODULE READ_WRITE_DATA
 
  end subroutine write_data
 
+!> Remove the checksum attribute from a netcdf record.
+!!
+!! @param[in] ncid netcdf file id
+!! @param[in] id_var netcdf variable id.
+!!
+!! @author George Gayno NCEP/EMC
  subroutine remove_checksum(ncid, id_var)
 
  implicit none
