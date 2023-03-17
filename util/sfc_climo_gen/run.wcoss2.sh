@@ -31,7 +31,8 @@ module list
 # Set model resolution.
 #-------------------------------------
 
-export res=384
+#export res=384
+export res=384.mx025
 
 #-------------------------------------
 # Where the model "grid", "mosaic" and "oro" files reside.
@@ -96,6 +97,9 @@ if [[ $GRIDTYPE = "regional" ]]; then
   ln -fs $FIX_FV3/C${res}_grid.tile7.halo${HALO}.nc $FIX_FV3/C${res}_grid.tile7.nc
   ln -fs $FIX_FV3/C${res}_oro_data.tile7.halo${HALO}.nc $FIX_FV3/C${res}_oro_data.tile7.nc
 fi
+
+res2=${res//".mx"*}
+export mosaic_file=$FIX_FV3/C${res2}_mosaic.nc
 
 export input_sfc_climo_dir=${BASE_DIR}/fix/sfc_climo
 
