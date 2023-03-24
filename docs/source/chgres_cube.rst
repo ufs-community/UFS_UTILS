@@ -141,6 +141,22 @@ Initializing global domains with GRIB2 data - some caveats
       * Soil moisture in the GRIB2 files is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types.  Could result in poor latent/sensible heat fluxes.
       * Ozone is not available at all isobaric levels.  Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
       * Only tested with GRIB2 data from GFS v14 and v15 (from 12z July 19, 2017 to current).  May not work with older GFS data.  Will not work with GRIB2 data from other models.
+      * Note that when concatenating grib2 files for use in initialization of global simulations, it is possible to inadvertently introduce duplicate variables and levels into the subsequent grib2 files.  Chgres_cube will automatically fail with a warning message indicating that the grib2 file used contains these duplicate entries.  Prior to continuing it will be necessary to strip out duplicate entries.  Users can remove these entries through use of wgrib2, such as in the following command:
+              * wgrib2 IN.grb -submsg 1 | unique.pl | wgrib2 -i IN.grb -GRIB OUT.grb, where IN.grb is the original concatenated grib2 file, and OUT.grb is the resulting grib2 file, with duplicates removed.  The "unique.pl" Perl script is as follows, taken from the `Tricks for wgrib2 <https://www.ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/tricks.wgrib2>`_ website:
+                       * ----------------------- unique.pl ------------------------
+                         #!/usr/bin/perl -w
+                         # print only lines where fields 3..N are different
+                         # 
+                         while (<STDIN>) {
+                            chomp;
+                            $line = $_;
+                            $_ =~ s/^[0-9.]*:[0-9]*://;
+                            if (! defined $inv{$_}) { 
+                              $inv{$_} = 1;
+                              print "$line\n";
+                            }
+                         }
+                         --------------------- end unique.pl ----------------------
 
 Near Sea Surface Temperature (NSST) data and GRIB2 initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -304,6 +320,22 @@ Keep these things in mind when using FV3GFS GRIB2 data for model initialization:
       * For FV3GFS GRIB2 data, soil moisture is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types. Could result in poor latent/sensible heat fluxes.
       * Ozone is not available at all isobaric levels. Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
       * Only tested with GRIB2 data from FV3GFS, RAP, NAM, and HRRR data. May not work with GRIB2 data from other models. Use these at your own risk.
+      * Note that when concatenating grib2 files for use in initialization of global simulations, it is possible to inadvertently introduce duplicate variables and levels into the subsequent grib2 files.  Chgres_cube will automatically fail with a warning message indicating that the grib2 file used contains these duplicate entries.  Prior to continuing it will be necessary to strip out duplicate entries.  Users can remove these entries through use of wgrib2, such as in the following command:
+              * wgrib2 IN.grb -submsg 1 | unique.pl | wgrib2 -i IN.grb -GRIB OUT.grb, where IN.grb is the original concatenated grib2 file, and OUT.grb is the resulting grib2 file, with duplicates removed.  The "unique.pl" Perl script is as follows, taken from the `Tricks for wgrib2 <https://www.ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/tricks.wgrib2>`_ website:
+                       * ----------------------- unique.pl ------------------------
+                         #!/usr/bin/perl -w
+                         # print only lines where fields 3..N are different
+                         #
+                         while (<STDIN>) {
+                            chomp;
+                            $line = $_;
+                            $_ =~ s/^[0-9.]*:[0-9]*://;
+                            if (! defined $inv{$_}) {
+                              $inv{$_} = 1;
+                              print "$line\n";
+                            }
+                         }
+                         --------------------- end unique.pl ----------------------
 
 Regional chgres_cube namelist options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
