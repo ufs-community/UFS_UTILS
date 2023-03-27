@@ -145,7 +145,6 @@ Initializing global domains with GRIB2 data - some caveats
               * ``wgrib2 IN.grb -submsg 1 | unique.pl | wgrib2 -i IN.grb -GRIB OUT.grb``, where IN.grb is the original concatenated grib2 file, and OUT.grb is the resulting grib2 file, with duplicates removed.  The "unique.pl" Perl script is as follows, taken from the `Tricks for wgrib2 <https://www.ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/tricks.wgrib2>`_ website:
 
                       .. code-block:: console
-                         :width: #px
 
                          ----------------------- unique.pl ------------------------
                          #!/usr/bin/perl -w
@@ -328,7 +327,6 @@ Keep these things in mind when using FV3GFS GRIB2 data for model initialization:
               * ``wgrib2 IN.grb -submsg 1 | unique.pl | wgrib2 -i IN.grb -GRIB OUT.grb``, where IN.grb is the original concatenated grib2 file, and OUT.grb is the resulting grib2 file, with duplicates removed.  The "unique.pl" Perl script is as follows, taken from the `Tricks for wgrib2 <https://www.ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/tricks.wgrib2>`_ website:
                       
                       .. code-block:: console
-                         :width: #px
                             
                          ----------------------- unique.pl ------------------------
                          #!/usr/bin/perl -w

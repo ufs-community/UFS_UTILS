@@ -105,6 +105,7 @@ html_static_path = ['_static']
 
 def setup(app):
     app.add_css_file('custom.css')  # may also be an URL
+    app.add_css_file('theme_overrides.css')  # may also be a URL
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
