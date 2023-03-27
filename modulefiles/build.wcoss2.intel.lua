@@ -5,10 +5,10 @@ Load environment to compile UFS_UTILS on WCOSS2
 cmake_ver=os.getenv("cmake_ver") or "3.20.2"
 load(pathJoin("cmake", cmake_ver))
 
-PrgEnv_intel_ver=os.getenv("PrgEnv_intel_ver") or "8.1.0"
+PrgEnv_intel_ver=os.getenv("PrgEnv_intel_ver") or "8.3.3"
 load(pathJoin("PrgEnv-intel", PrgEnv_intel_ver))
 
-craype_ver=os.getenv("craype_ver") or "2.7.13"
+craype_ver=os.getenv("craype_ver") or "2.7.17"
 load(pathJoin("craype", craype_ver))
 
 intel_ver=os.getenv("intel_ver") or "19.1.3.304"
@@ -57,7 +57,7 @@ g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
 -- for mpiexec command
-cray_pals_ver=os.getenv("cray_pals_ver") or "1.0.12"
+cray_pals_ver=os.getenv("cray_pals_ver") or "1.2.2"
 load(pathJoin("cray-pals", cray_pals_ver))
 
 udunits_ver=os.getenv("udunits_ver") or "2.2.28"
