@@ -37,7 +37,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev doxygen libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config        
-        python3 -m pip install gcovr
+    #   python3 -m pip install gcovr
 
     - name: cache-esmf
       id: cache-esmf
@@ -348,7 +348,7 @@ jobs:
       run: |
         cd ufs_utils/build
         ctest --verbose --rerun-failed --output-on-failure
-        gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
+    #   gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
 
     - name: cache-data
       if: steps.cache-data.outputs.cache-hit != 'true'
