@@ -8,7 +8,7 @@ load(pathJoin("cmake", cmake_ver))
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
-prepend_path("MODULEPATH", "/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack")
+prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/intel-2022.1.2/modulefiles/stack")
 
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
@@ -25,7 +25,7 @@ load(pathJoin("bacio", bacio_ver))
 g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
-ip_ver=os.getenv("ip_ver") or "4.0.0"
+ip_ver=os.getenv("ip_ver") or "3.3.3"
 load(pathJoin("ip", ip_ver))
 
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.4"
@@ -46,7 +46,7 @@ load(pathJoin("sigio", sigio_ver))
 zlib_ver=os.getenv("zlib_ver") or "1.2.11"
 load(pathJoin("zlib", zlib_ver))
 
-png_ver=os.getenv("png_ver") or "1.6.35"
+png_ver=os.getenv("png_ver") or "1.6.37"
 load(pathJoin("libpng", png_ver))
 
 hdf5_ver=os.getenv("hdf5_ver") or "1.10.6"
