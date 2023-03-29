@@ -8,15 +8,19 @@ load(pathJoin("cmake", cmake_ver))
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
+hpc_intel_ver="2022.1.2"
+load(pathJoin("intel", hpc_intel_ver))
+
+impi_ver="2022.1.2"
+load(pathJoin("impi", impi_ver))
+
 prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/intel-2022.1.2_ncdf49/modulefiles/stack")
 
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
 
-hpc_intel_ver=os.getenv("hpc_intel_ver") or "2022.1.2"
 load(pathJoin("hpc-intel", hpc_intel_ver))
 
-impi_ver=os.getenv("impi_ver") or "2022.1.2"
 load(pathJoin("hpc-impi", impi_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
