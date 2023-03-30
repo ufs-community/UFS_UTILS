@@ -2,16 +2,16 @@ help([[
 Load environment to compile UFS_UTILS on Hera using Intel
 ]])
 
-cmake_ver=os.getenv("cmake_ver") or "3.16.1"
+cmake_ver=os.getenv("cmake_ver") or "3.20.1"
 load(pathJoin("cmake", cmake_ver))
 
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
-hpc_intel_ver="2022.1.2"
-load(pathJoin("intel", hpc_intel_ver))
+intel_ver=os.getenv("intel_ver") or "2022.1.2"
+load(pathJoin("intel", intel_ver))
 
-impi_ver="2022.1.2"
+impi_ver=os.getenv("impi_ver") or "2022.1.2"
 load(pathJoin("impi", impi_ver))
 
 prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/intel-2022.1.2_ncdf49/modulefiles/stack")
@@ -19,7 +19,7 @@ prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/inte
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
 
-load(pathJoin("hpc-intel", hpc_intel_ver))
+load(pathJoin("hpc-intel", intel_ver))
 
 load(pathJoin("hpc-impi", impi_ver))
 
@@ -47,13 +47,13 @@ load(pathJoin("sfcio", sfcio_ver))
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
 
-zlib_ver=os.getenv("zlib_ver") or "1.2.11"
+zlib_ver=os.getenv("zlib_ver") or "1.2.13"
 load(pathJoin("zlib", zlib_ver))
 
 png_ver=os.getenv("png_ver") or "1.6.37"
 load(pathJoin("libpng", png_ver))
 
-hdf5_ver=os.getenv("hdf5_ver") or "1.10.6"
+hdf5_ver=os.getenv("hdf5_ver") or "1.14.0"
 load(pathJoin("hdf5", hdf5_ver))
 
 netcdf_ver=os.getenv("netcdf_ver") or "4.9.1"
@@ -65,7 +65,7 @@ load(pathJoin("nccmp", nccmp_ver))
 esmf_ver=os.getenv("esmf_ver") or "8.4.1"
 load(pathJoin("esmf", esmf_ver))
 
-nco_ver=os.getenv("nco_ver") or "4.9.1"
+nco_ver=os.getenv("nco_ver") or "5.1.4"
 load(pathJoin("nco", nco_ver))
 
 whatis("Description: UFS_UTILS build environment")
