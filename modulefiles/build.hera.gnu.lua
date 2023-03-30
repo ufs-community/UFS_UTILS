@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS on Hera using Gnu
 ]])
 
-cmake_ver=os.getenv("cmake_ver") or "3.16.1"
+cmake_ver=os.getenv("cmake_ver") or "3.20.1"
 load(pathJoin("cmake", cmake_ver))
 
 hpss_ver=os.getenv("hpss_ver") or ""
@@ -55,7 +55,7 @@ load(pathJoin("sfcio", sfcio_ver))
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
 
-nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
+nccmp_ver=os.getenv("nccmp_ver") or "1.8.9.0"
 load(pathJoin("nccmp", nccmp_ver))
 
 zlib_ver=os.getenv("zlib_ver") or "1.2.11"
