@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS on Orion
 ]])
 
-cmake_ver=os.getenv("cmake_ver") or "3.17.3"
+cmake_ver=os.getenv("cmake_ver") or "3.22.1"
 load(pathJoin("cmake", cmake_ver))
 
 prepend_path("MODULEPATH", "/work/noaa/epic-ps/role-epic-ps/miniconda3/modulefiles")
@@ -15,11 +15,11 @@ prepend_path("MODULEPATH", "/work/noaa/epic-ps/role-epic-ps/hpc-stack/libs/intel
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
 
-hpc_intel_ver="2022.1.2"
+hpc_intel_ver=os.getenv("hpc_intel_ver") or "2022.1.2"
 load(pathJoin("hpc-intel", hpc_intel_ver))
 
-impi_ver="2022.1.2"
-load(pathJoin("hpc-impi", impi_ver))
+hpc_impi_ver=os.getenv("hpc_impi_ver") or "2022.1.2"
+load(pathJoin("hpc-impi", hpc_impi_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
@@ -51,7 +51,7 @@ load(pathJoin("zlib", zlib_ver))
 png_ver=os.getenv("png_ver") or "1.6.37"
 load(pathJoin("libpng", png_ver))
 
-hdf5_ver=os.getenv("hdf5_ver") or "1.10.6"
+hdf5_ver=os.getenv("hdf5_ver") or "1.14.0"
 load(pathJoin("hdf5", hdf5_ver))
 
 netcdf_ver=os.getenv("netcdf_ver") or "4.9.1"
