@@ -69,10 +69,8 @@ load(pathJoin("gsl", gsl_ver))
 nco_ver=os.getenv("nco_ver") or "4.9.7"
 load(pathJoin("nco", nco_ver))
 
-setenv("HPC_OPT","/apps/ops/para/libs")
-prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/compiler/intel/19.1.3.304")
-prepend_path("MODULEPATH", "/apps/ops/para/libs/modulefiles/mpi/intel/19.1.3.304/cray-mpich/8.1.7")
-esmf_ver=os.getenv("esmf_ver") or "8.4.0b08"
+prepend_path("MODULEPATH", "/apps/dev/lmodules/intel_cray_mpich/19.1.3.304/cray-mpich/8.1.4")
+esmf_ver=os.getenv("esmf_ver") or "8.4.1"
 load(pathJoin("esmf", esmf_ver))
 
 whatis("Description: UFS_UTILS build environment")
