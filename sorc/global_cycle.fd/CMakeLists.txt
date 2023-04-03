@@ -36,7 +36,7 @@ target_include_directories(global_cycle_lib INTERFACE ${mod_dir})
 target_link_libraries(
   global_cycle_lib
   PUBLIC
-  w3nco::w3nco_d
+  w3emc::w3emc_d
   bacio::bacio_4
   ip::ip_d
   sp::sp_d

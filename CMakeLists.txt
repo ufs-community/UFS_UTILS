@@ -98,7 +98,7 @@ if(OPENMP)
 endif()
 
 find_package(sfcio 1.4.0 REQUIRED)
-find_package(w3nco 2.4.0 REQUIRED)
+find_package(w3emc 2.9.0 REQUIRED)
 find_package(bacio 2.4.0 REQUIRED)
 find_package(nemsio 2.5.0 REQUIRED)
 find_package(sigio 2.3.0 REQUIRED)
