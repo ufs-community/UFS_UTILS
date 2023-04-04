@@ -406,13 +406,14 @@ real(dp),dimension(3,2,2),intent(out):: xcd1
 logical,                  intent(out):: ff
 real(dp),dimension(3,2,2):: xcdd
 real(dp),dimension(2,2,2):: xsd1,xsdd
-real(dp),dimension(2,2)  :: xtd,xsd,xs1,xtd1,xsdk
+real(dp),dimension(2,2)  :: xtd,xsd,xs1,xtd1,xsdk,mat22
 real(dp),dimension(2)    :: xt,xt1,xs,xsk
 integer(spi)             :: i
 call xmtoxt1(ak(1),xm,xt,xtd,xt1,xtd1,ff);      if(ff)return
 call xttoxs1(ak(2),xt,xs,xsd,xsdd,xsk,xsdk,ff); if(ff)return
 xs1(:,2)=xsk; xs1(:,1)=matmul(xsd,xt1)
-xsd1(:,:,1)=matmul(xsd,xtd1)+matmul(xsdd(:,:,1)*xt1(1)+xsdd(:,:,2)*xt1(2),xtd)
+mat22=xsdd(:,:,1)*xt1(1)+xsdd(:,:,2)*xt1(2)
+xsd1(:,:,1)=matmul(xsd,xtd1)+matmul(mat22,xtd)
 xsd1(:,:,2)=matmul(xsdk,xtd)
 xsd=matmul(xsd,xtd)
 call xstoxc(xs,xc,xcd,xcdd)
