@@ -27,6 +27,9 @@
 # GRIDTYPE - set to 'regional' for regional grids. Otherwise,
 #            comment out.
 #
+# FIX_REG  - For regional grids. Hold links to the 'grid' and 'orog' files
+#            with names expected by the program.
+#
 # HALO     - The number of halo rows/cols. Only for regional grids.
 #            Otherwise, comment out.
 #
@@ -60,11 +63,14 @@
 #                   - "bnu.30s" for global 30s data
 #-----------------------------------------------------------------------
 
-#export res=384
-export res=384.mx025
+set -x
 
-##HALO=3
-##export GRIDTYPE=regional
+#export res=96
+export res=96.mx100
+
+#HALO=4
+#export GRIDTYPE=regional
+#FIX_REG=/lfs/h2/emc/stmp/$LOGNAME/fix.reg
 
 export veg_type_src="modis.igbp.0.05"
 
@@ -81,15 +87,19 @@ export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
 
-if [[ $GRIDTYPE = "regional" ]]; then
+if [[ "$GRIDTYPE" = "regional" ]]; then
+  mkdir -p $FIX_REG
+  ln -fs $FIX_FV3/C${res}_grid.tile7.halo${HALO}.nc $FIX_REG/C${res}_grid.tile7.halo${HALO}.nc
+  ln -fs $FIX_FV3/C${res}_oro_data.tile7.halo${HALO}.nc $FIX_REG/C${res}_oro_data.tile7.nc
+  ln -fs $FIX_FV3/C${res}_mosaic.nc $FIX_REG/C${res}_mosaic.nc
+  export mosaic_file=$FIX_REG/C${res}_mosaic.nc
+  export FIX_FV3=$FIX_REG
   HALO=$(( $HALO + 1 ))
   export HALO
-  ln -fs $FIX_FV3/C${res}_grid.tile7.halo${HALO}.nc $FIX_FV3/C${res}_grid.tile7.nc
-  ln -fs $FIX_FV3/C${res}_oro_data.tile7.halo${HALO}.nc $FIX_FV3/C${res}_oro_data.tile7.nc
+else
+  res2=${res//".mx"*}
+  export mosaic_file=$FIX_FV3/C${res2}_mosaic.nc
 fi
-
-res2=${res//".mx"*}
-export mosaic_file=$FIX_FV3/C${res2}_mosaic.nc
 
 export input_sfc_climo_dir=${BASE_DIR}/fix/sfc_climo
 
