@@ -2,7 +2,8 @@
 
 #------------------------------------------------------------
 # Run the sfc_climo_gen program stand-alone on WCOSS2 using
-# pre-exiting 'grid' and 'orography files.
+# pre-exiting 'grid' and 'orography files. See the
+# sfc_gen.sh script for details.
 #
 # Set the configuration variables in sfc_gen.sh. Then,
 # run this script as follows: 'qsub $script'

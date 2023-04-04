@@ -8,6 +8,22 @@
 #
 # res      - Grid resolution. Example: 384 or 384.mx025.
 #
+# FIX_FV3  - Location of the pre-existing 'grid' and 'orography'
+#            files. Defaults to ${BASE_DIR}/fix/orog/C${res}, where
+#            BASE_DIR is the location of the checked out repository.
+#
+#            The required files are:
+#
+#            'mosaic' file - C${res}_mosaic.nc (Note: 'res' without
+#                                               the 'mx' extension.)
+#
+#            'grid' files - C${res}_grid.tile7.halo${HALO}.nc (regional grids).
+#                           C${res}_grid.tile[1-6].nc (global grids).
+#                           Note: 'res' without the 'mx' extension.
+#          
+#            'orog' files - C${res}_oro_data.tile7.halo${HALO}.nc (regional grids).
+#                           C${res}_oro_data.tile[1-6].nc (global grids).
+#
 # GRIDTYPE - set to 'regional' for regional grids. Otherwise,
 #            comment out.
 #
@@ -57,13 +73,13 @@ export soil_type_src="statsgo.0.05"
 export WORK_DIR=/lfs/h2/emc/stmp/$LOGNAME/work.sfc
 export SAVE_DIR=/lfs/h2/emc/stmp/$LOGNAME/sfc.C${res}
 
+export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
+
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
 # Should not have to touch anything below here.
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
-
-export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
 if [[ $GRIDTYPE = "regional" ]]; then
   HALO=$(( $HALO + 1 ))
