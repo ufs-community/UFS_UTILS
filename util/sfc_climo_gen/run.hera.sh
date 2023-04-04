@@ -2,7 +2,7 @@
 
 #------------------------------------------------------------
 # Run the sfc_climo_gen program stand-alone on Hera using
-# pre-exiting 'grid' and 'orography files.
+# pre-exiting 'grid' and 'orography' files.
 #
 # Set the configuration variables in sfc_gen.sh. Then
 # run this script as follows: 'sbatch $script'
