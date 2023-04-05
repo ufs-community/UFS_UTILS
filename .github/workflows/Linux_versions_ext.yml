@@ -35,7 +35,7 @@ jobs:
         g2_version: [3.4.3]
         sp_version: [2.3.3]
         ip_version: [3.3.3]
-        w3nco_version: [2.4.0]
+        w3emc_version: [2.9.3]
         nemsio_version: [2.5.0]
         sfcio_version: [1.4.0]
         sigio_version: [2.3.0]
@@ -210,22 +210,6 @@ jobs:
         make -j2
         make install
 
-    # - name: checkout-w3emc
-    #   uses: actions/checkout@v2
-    #   with:
-    #     repository: NOAA-EMC/NCEPLIBS-w3emc
-    #     path: w3emc
-    #     ref: develop
-
-    # - name: build-w3emc
-    #   run: |
-    #     cd w3emc
-    #     mkdir build
-    #     cd build
-    #     cmake -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc ..
-    #     make -j2
-    #     make install
-
     # - name: checkout-g2c
     #   uses: actions/checkout@v2
     #   with:
@@ -267,28 +251,28 @@ jobs:
         make -j2
         make install
 
-    - name: cache-w3nco
-      id: cache-w3nco
+    - name: cache-w3emc
+      id: cache-w3emc
       uses: actions/cache@v2
       with:
-        path: ~/w3nco
-        key: Linux_versions-w3nco-${{ runner.os }}-${{ matrix.w3nco_version }}
+        path: ~/w3emc
+        key: Linux_versions-w3emc-${{ runner.os }}-${{ matrix.w3emc_version }}
 
-    - name: checkout-w3nco
-      if: steps.cache-w3nco.outputs.cache-hit != 'true'
+    - name: checkout-w3emc
+      if: steps.cache-w3emc.outputs.cache-hit != 'true'
       uses: actions/checkout@v2
       with:
-        repository: NOAA-EMC/NCEPLIBS-w3nco
-        path: w3nco
-        ref: v${{ matrix.w3nco_version }}
+        repository: NOAA-EMC/NCEPLIBS-w3emc
+        path: w3emc
+        ref: v${{ matrix.w3emc_version }}
 
-    - name: build-w3nco
-      if: steps.cache-w3nco.outputs.cache-hit != 'true'
+    - name: build-w3emc
+      if: steps.cache-w3emc.outputs.cache-hit != 'true'
       run: |
-        cd w3nco
+        cd w3emc
         mkdir build
         cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/w3nco
+        cmake .. -DCMAKE_INSTALL_PREFIX=~/w3emc -DCMAKE_PREFIX_PATH=~/bacio
         make -j2
         make install
 
@@ -313,7 +297,7 @@ jobs:
         cd nemsio
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=~/nemsio -DCMAKE_PREFIX_PATH="~/bacio;~/w3nco" ..
+        cmake -DCMAKE_INSTALL_PREFIX=~/nemsio -DCMAKE_PREFIX_PATH="~/bacio;~/w3emc" ..
         make -j2
         make install
 
@@ -362,7 +346,7 @@ jobs:
         mkdir build
         cd build
         export ESMFMKFILE=~/esmf/lib/esmf.mk
-        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
+        cmake -DTEST_FILE_DIR=/home/runner/data -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3emc;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" ..
         make -j2 VERBOSE=1
 
     - name: test
