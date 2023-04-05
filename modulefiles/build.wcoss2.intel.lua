@@ -38,6 +38,9 @@ load(pathJoin("bacio", bacio_ver))
 sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
 load(pathJoin("sfcio", sfcio_ver))
 
+w3emc_ver=os.getenv("w3emc_ver") or "2.9.2"
+load(pathJoin("w3emc", w3emc_ver))
+
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.2"
 load(pathJoin("nemsio", nemsio_ver))
 
