@@ -35,7 +35,7 @@ UFS_UTILS Code managers: George Gayno, Jeff Beck, Larissa Reames
 
 This package uses the [hpc-stack](https://github.com/NOAA-EMC/hpc-stack) for the following NCEPLIBS packages:
  - [NCEPLIBS-sfcio](https://github.com/NOAA-EMC/NCEPLIBS-sfcio)
- - [NCEPLIBS-w3nco](https://github.com/NOAA-EMC/NCEPLIBS-w3nco)
+ - [NCEPLIBS-w3emc](https://github.com/NOAA-EMC/NCEPLIBS-w3emc)
  - [NCEPLIBS-bacio](https://github.com/NOAA-EMC/NCEPLIBS-bacio)
  - [NCEPLIBS-nemsio](https://github.com/NOAA-EMC/NCEPLIBS-nemsio)
  - [NCEPLIBS-sigio](https://github.com/NOAA-EMC/NCEPLIBS-sigio)
@@ -91,7 +91,7 @@ are called from driver scripts.
 
 The `util` directory contains utility scripts.
 
-The `parm` directory contains variable mapping parameter tables used by
+The `parm` directory contains parameter files used by
 the chgres_cube program.
 
 The `driver_scripts` directory contains high-level driver scripts to

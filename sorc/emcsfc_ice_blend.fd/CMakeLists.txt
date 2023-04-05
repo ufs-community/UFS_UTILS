@@ -12,7 +12,7 @@ target_link_libraries(
   ${exe_name}
   bacio::bacio_4
   g2::g2_4
-  w3nco::w3nco_4)
+  w3emc::w3emc_4)
 
 install(TARGETS ${exe_name})
 

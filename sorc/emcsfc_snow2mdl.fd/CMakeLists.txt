@@ -36,7 +36,7 @@ target_link_libraries(snow2mdl_lib
   ip::ip_d
   sp::sp_d
   bacio::bacio_4
-  w3nco::w3nco_d)
+  w3emc::w3emc_d)
 
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} PUBLIC OpenMP::OpenMP_Fortran)

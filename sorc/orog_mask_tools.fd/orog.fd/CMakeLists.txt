@@ -26,7 +26,7 @@ target_link_libraries(
   orog_lib
   PUBLIC
   bacio::bacio_4
-  w3nco::w3nco_d
+  w3emc::w3emc_d
   ip::ip_d
   sp::sp_d
   NetCDF::NetCDF_Fortran)
