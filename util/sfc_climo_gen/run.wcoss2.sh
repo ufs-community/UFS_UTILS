@@ -15,7 +15,7 @@
 #PBS -A GFS-DEV
 #PBS -N grid_fv3
 #PBS -l walltime=00:10:00
-#PBS -l select=1:ncpus=24:mem=75GB
+#PBS -l select=1:ncpus=24:mem=250GB
 
 set -x
 

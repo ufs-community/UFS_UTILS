@@ -76,6 +76,12 @@ export gtype=regional_esg      # 'uniform', 'stretch', 'nest',
 export make_gsl_orog=false     # When 'true' will output 'oro' files for
                                # the GSL orographic drag suite.
 
+export vegsoilt_frac='.false.'  # When true, outputs percent of each
+                               # soil and veg type category and a 
+                               # dominant category. When false, only
+                               # outputs the dominant category. A
+                               # Fortran logical, so include the dots.
+
 export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
                                 # 1) "viirs.igbp.0.1" for global 0.10-deg data
