@@ -61,6 +61,11 @@
 #                   - "statsgo.30s" for global 30s data
 #                   For Beijing Norm. Univ. soil type data
 #                   - "bnu.30s" for global 30s data
+#
+# vegsoilt_frac - When .true., output the fraction of each
+#                 vegetation and soil type and the dominant
+#                 category. When .false., output dominant
+#                 category only.
 #-----------------------------------------------------------------------
 
 set -x
@@ -80,6 +85,8 @@ export WORK_DIR=/lfs/h2/emc/stmp/$LOGNAME/work.sfc
 export SAVE_DIR=/lfs/h2/emc/stmp/$LOGNAME/sfc.C${res}
 
 export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
+
+export vegsoilt_frac=.true.
 
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
