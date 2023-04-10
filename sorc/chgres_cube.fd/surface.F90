@@ -851,11 +851,13 @@
    if (localpet == 0) then   
      where(mask_target_one_tile == 1) mask_target_one_tile = 0
      where(mask_target_one_tile == 2) mask_target_one_tile = 1
+     call search_many(num_fields,bundle_seaice_target,data_one_tile, tile, search_nums,localpet, &
+                    field_data_3d=data_one_tile_3d, mask=mask_target_one_tile)
+   else
+     call search_many(num_fields,bundle_seaice_target,data_one_tile, tile,search_nums,localpet, &
+                    field_data_3d=data_one_tile_3d)
    endif
 
-
-   call search_many(num_fields,bundle_seaice_target,data_one_tile, mask_target_one_tile,tile,search_nums,localpet, &
-                    field_data_3d=data_one_tile_3d)
  enddo
 
  deallocate(search_nums)
@@ -977,10 +979,13 @@
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
      where(mask_target_one_tile == 0) water_target_one_tile = 1
-   endif
 
-   call search_many(num_fields,bundle_water_target,data_one_tile, water_target_one_tile,& 
-                    tile,search_nums,localpet,latitude=latitude_one_tile)
+     call search_many(num_fields,bundle_water_target,data_one_tile, tile,search_nums,localpet, &
+                latitude=latitude_one_tile,mask=water_target_one_tile)
+   else
+     call search_many(num_fields,bundle_water_target,data_one_tile, tile,search_nums,localpet, &
+                latitude=latitude_one_tile)
+   endif
 
    if (localpet == 0) deallocate(water_target_one_tile)
 
@@ -1068,10 +1073,12 @@
      allocate(land_target_one_tile(i_target,j_target))
      land_target_one_tile = 0
      where(mask_target_one_tile == 1) land_target_one_tile = 1
-   endif
    
-   call search_many(num_fields,bundle_allland_target,data_one_tile, land_target_one_tile,& 
-                    tile,search_nums,localpet)
+     call search_many(num_fields,bundle_allland_target,data_one_tile, &
+                    tile,search_nums,localpet, mask=land_target_one_tile)
+   else
+     call search_many(num_fields,bundle_allland_target,data_one_tile, tile,search_nums,localpet)
+   endif
 
    if (localpet == 0) deallocate(land_target_one_tile)   
  enddo
@@ -1202,8 +1209,13 @@
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
        call error_handler("IN FieldGather", rc)
 
-   call search_many(num_fields,bundle_landice_target,data_one_tile, land_target_one_tile,& 
-                    tile,search_nums,localpet,terrain_land=data_one_tile2,field_data_3d=data_one_tile_3d)
+   if (localpet==0) then
+      call search_many(num_fields,bundle_landice_target,data_one_tile, tile,search_nums,localpet,&
+                terrain_land=data_one_tile2,field_data_3d=data_one_tile_3d,mask=land_target_one_tile)
+   else
+      call search_many(num_fields,bundle_landice_target,data_one_tile, tile,search_nums,localpet,&
+                terrain_land=data_one_tile2,field_data_3d=data_one_tile_3d)
+   endif
  enddo
 
  deallocate (veg_type_target_one_tile)
@@ -1416,9 +1428,13 @@
    call ESMF_FieldGather(soil_type_target_grid, data_one_tile2, rootPet=0,tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldGather", rc)
-      
-   call search_many(num_fields,bundle_nolandice_target,data_one_tile, mask_target_one_tile,& 
-                    tile,search_nums,localpet,soilt_climo=data_one_tile2, field_data_3d=data_one_tile_3d)
+   if (localpet==0) then 
+      call search_many(num_fields,bundle_nolandice_target,data_one_tile, tile,search_nums,localpet, &
+                soilt_climo=data_one_tile2, field_data_3d=data_one_tile_3d,mask=mask_target_one_tile)
+   else
+      call search_many(num_fields,bundle_nolandice_target,data_one_tile, tile,search_nums,localpet, &
+                soilt_climo=data_one_tile2, field_data_3d=data_one_tile_3d)
+   endif
    
    print*,"- CALL FieldGather FOR TARGET GRID TOTAL SOIL MOISTURE, TILE: ", tile
    call ESMF_FieldGather(soilm_tot_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=rc)
@@ -3301,9 +3317,9 @@
 !! @param[in]  soilt_climo  (optional) A real array size i_target,j_target of climatological soil type on the target grid 
 !! @param[in]  field_data_3d (optional) An empty real array of size i_target,j_target,lsoil_target to temporarily hold soil data for searching 
 !! @author Larissa Reames, OU CIMMS/NOAA/NSSL
- subroutine search_many(num_field,bundle_target,field_data_2d,mask, tile, &
+ subroutine search_many(num_field,bundle_target,field_data_2d, tile, &
                          search_nums,localpet,latitude,terrain_land,soilt_climo,&
-                         field_data_3d)
+                         field_data_3d,mask)
 
  use model_grid, only                  : i_target,j_target, lsoil_target
  use program_setup, only               : external_model, input_type
@@ -3318,7 +3334,7 @@
  real(esmf_kind_r8), intent(inout), optional :: latitude(i_target,j_target)
  real(esmf_kind_r8), intent(inout), optional :: terrain_land(i_target,j_target)
  real(esmf_kind_r8), intent(inout), optional :: soilt_climo(i_target,j_target)
- integer(esmf_kind_i8), intent(inout)        :: mask(i_target,j_target)
+ integer(esmf_kind_i8), intent(inout), optional  :: mask(i_target,j_target)
  
     
  integer, intent(in)             :: tile,localpet
