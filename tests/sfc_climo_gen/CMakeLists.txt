@@ -33,10 +33,20 @@ include_directories(${PROJECT_SOURCE_DIR})
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/LSanSuppress.supp ${CMAKE_CURRENT_BINARY_DIR}/LSanSuppress.supp)
 
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/fort.41 ${CMAKE_CURRENT_BINARY_DIR}/fort.41)
+
 add_executable(ftst_interp ftst_interp.F90)
 target_link_libraries(ftst_interp sfc_climo_gen_lib)
 
-# Cause test to be run with MPI.
+add_executable(ftst_pgm_setup ftst_program_setup.F90)
+target_link_libraries(ftst_pgm_setup sfc_climo_gen_lib)
+
+add_mpi_test(sfc_climo_gen-ftst_pgm_setup
+  EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_pgm_setup
+  NUMPROCS 1
+  TIMEOUT 60)
+
 add_mpi_test(sfc_climo_gen-ftst_interp
   EXECUTABLE ${CMAKE_CURRENT_BINARY_DIR}/ftst_interp
   NUMPROCS 1
