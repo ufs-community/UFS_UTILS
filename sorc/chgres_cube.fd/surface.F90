@@ -3302,16 +3302,15 @@
 !!
 !! @param[in] num_field  Number of fields to process.
 !! @param[inout] bundle_target  ESMF FieldBundle holding target fields to search
-!! @param[inout] field_data_2d  A real array of size i_target,j_target to temporarily hold data for searching
-!! @param[inout] mask  An integer array of size i_target,j_target that holds masked (0) and unmasked (1) 
-!!                     values indicating where to execute search (only at unmasked points).
 !! @param[in] tile  Current cubed sphere tile.
 !! @param[inout]  search_nums  Array length num_field holding search field numbers corresponding to each field provided for searching.
 !! @param[in]  localpet  ESMF local persistent execution thread.
 !! @param[in]  latitude  (optional) A real array size i_target,j_target of latitude on the target grid 
 !! @param[in]  terrain_land  (optional) A real array size i_target,j_target of terrain height (m) on the target grid 
 !! @param[in]  soilt_climo  (optional) A real array size i_target,j_target of climatological soil type on the target grid 
-!! @param[in]  field_data_3d (optional) An empty real array of size i_target,j_target,lsoil_target to temporarily hold soil data for searching 
+!! @param[inout] mask  (optional) An integer array of size i_target,j_target that holds masked (0) and unmasked (1)
+!!                     values indicating where to execute search (only at
+!unmasked points).
 !! @author Larissa Reames, OU CIMMS/NOAA/NSSL
  subroutine search_many(num_field,bundle_target,tile,search_nums,localpet,latitude, &
                         terrain_land,soilt_climo, mask)
