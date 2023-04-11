@@ -3352,12 +3352,12 @@
    call ESMF_FieldGet(temp_field, name=fname, dimcount=ndims,rc=rc)
         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
           call error_handler("IN FieldGet", rc)
+   if (localpet==0) then
+       allocate(field_data_2d(i_target,j_target))
+   else
+       allocate(field_data_2d(0,0))
+   endif
    if (ndims .eq. 2) then
-       if (localpet==0) then
-          allocate(field_data_2d(i_target,j_target))
-       else
-          allocate(field_data_2d(0,0))
-       endif
        call ESMF_FieldGather(temp_field,field_data_2d,rootPet=0,tile=tile, rc=rc)
        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldGather", rc)
@@ -3395,7 +3395,6 @@
      call ESMF_FieldScatter(temp_field, field_data_2d, rootPet=0, tile=tile,rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldScatter", rc)
-     deallocate(field_data_2d)
    else
      if (localpet==0) then
          allocate(field_data_3d(i_target,j_target,lsoil_target))
@@ -3420,6 +3419,7 @@
         call error_handler("IN FieldScatter", rc)
      deallocate(field_data_3d)
    endif !ndims
+   deallocate(field_data_2d)
  end do !fields
 
  end subroutine search_many
