@@ -13,7 +13,7 @@
 #PBS -A GFS-DEV
 #PBS -N grid_fv3
 #PBS -l walltime=00:10:00
-#PBS -l select=1:ncpus=24:mem=75GB
+#PBS -l select=1:ncpus=24:mem=250GB
 
 set -x
 
@@ -78,6 +78,12 @@ export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 export veg_type_src="modis.igbp.0.05"
 
 export soil_type_src="statsgo.0.05"
+
+export vegsoilt_frac='.false.'  # When true, outputs percent of each
+                               # soil and veg type category and a 
+                               # dominate category. When false, only
+                               # outputs the dominate category. A
+                               # Fortran logical, so include the dots.
 
 #-------------------------------------
 # Set working directory and directory where output files will be saved.
