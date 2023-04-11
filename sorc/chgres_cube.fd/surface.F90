@@ -852,9 +852,9 @@
      where(mask_target_one_tile == 1) mask_target_one_tile = 0
      where(mask_target_one_tile == 2) mask_target_one_tile = 1
      call search_many(num_fields,bundle_seaice_target,tile, search_nums,localpet, &
-                    field_data_3d=data_one_tile_3d, mask=mask_target_one_tile)
+                    mask=mask_target_one_tile)
    else
-     call search_many(num_fields,bundle_seaice_target, tile,search_nums,localpet))
+     call search_many(num_fields,bundle_seaice_target, tile,search_nums,localpet)
    endif
 
  enddo
@@ -1072,7 +1072,7 @@
      land_target_one_tile = 0
      where(mask_target_one_tile == 1) land_target_one_tile = 1
    
-     call search_many(num_fields,bundle_allland_target,, &
+     call search_many(num_fields,bundle_allland_target, &
                     tile,search_nums,localpet, mask=land_target_one_tile)
    else
      call search_many(num_fields,bundle_allland_target, tile,search_nums,localpet)
@@ -3316,7 +3316,7 @@
 !! @param[in]  field_data_3d (optional) An empty real array of size i_target,j_target,lsoil_target to temporarily hold soil data for searching 
 !! @author Larissa Reames, OU CIMMS/NOAA/NSSL
  subroutine search_many(num_field,bundle_target,tile,search_nums,localpet,latitude, &
- 						terrain_land,soilt_climo, mask)
+                        terrain_land,soilt_climo, mask)
 
  use model_grid, only                  : i_target,j_target, lsoil_target
  use program_setup, only               : external_model, input_type
@@ -3333,8 +3333,7 @@
  integer(esmf_kind_i8), intent(inout), optional  :: mask(i_target,j_target)
  
  real(esmf_kind_r8), allocatable :: field_data_2d(:,:)   
- real(esmf_kind_r8), allocatable :: field_data_3d(:,:,:
- )  
+ real(esmf_kind_r8), allocatable :: field_data_3d(:,:,:)  
  integer, intent(in)             :: tile,localpet
  integer, intent(inout)          :: search_nums(num_field)
  
@@ -3355,10 +3354,10 @@
           call error_handler("IN FieldGet", rc)
    if (ndims .eq. 2) then
        if (localpet==0) then
-		  allocate(field_data_2d(i_target,j_target))
-	   else
-	      allocate(field_data_2d(0,0))
-	   endif
+          allocate(field_data_2d(i_target,j_target))
+       else
+          allocate(field_data_2d(0,0))
+       endif
        call ESMF_FieldGather(temp_field,field_data_2d,rootPet=0,tile=tile, rc=rc)
        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldGather", rc)
@@ -3398,17 +3397,17 @@
         call error_handler("IN FieldScatter", rc)
      deallocate(field_data_2d)
    else
+     if (localpet==0) then
+         allocate(field_data_3d(i_target,j_target,lsoil_target))
+     else
+         allocate(field_data_3d(0,0,0))
+     endif
+ 
      ! Process 3d fields soil temperature, moisture, and liquid
      call ESMF_FieldGather(temp_field,field_data_3d,rootPet=0,tile=tile,rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldGather", rc)
         
-     if (localpet==0) then
-		  allocate(field_data_3d(i_target,j_target,lsoil_target))
-	 else
-	      allocate(field_data_3d(0,0,0))
-	 endif
-	   
      if (localpet==0) then 
        do j = 1, lsoil_target
          field_data_2d = field_data_3d(:,:,j)
