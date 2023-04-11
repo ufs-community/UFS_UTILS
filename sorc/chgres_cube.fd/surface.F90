@@ -1211,8 +1211,7 @@
       call search_many(num_fields,bundle_landice_target,tile,search_nums,localpet,&
                 terrain_land=data_one_tile2,mask=land_target_one_tile)
    else
-      call search_many(num_fields,bundle_landice_target,tile,search_nums,localpet,&
-                terrain_land=data_one_tile2)
+      call search_many(num_fields,bundle_landice_target,tile,search_nums,localpet)
    endif
  enddo
 
@@ -1430,8 +1429,7 @@
       call search_many(num_fields,bundle_nolandice_target,tile,search_nums,localpet, &
                 soilt_climo=data_one_tile2, mask=mask_target_one_tile)
    else
-      call search_many(num_fields,bundle_nolandice_target, tile,search_nums,localpet, &
-                soilt_climo=data_one_tile2)
+      call search_many(num_fields,bundle_nolandice_target, tile,search_nums,localpet)
    endif
    
    print*,"- CALL FieldGather FOR TARGET GRID TOTAL SOIL MOISTURE, TILE: ", tile
