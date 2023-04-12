@@ -295,8 +295,8 @@
  input_type="restart"
 
  !Call the search many routine to test search and replace
- call search_many(num_fields,bundle_search1,dummy_2d,mask_target_search,1,field_nums,localpet, &
-                  soilt_climo=soilt_climo)
+ call search_many(num_fields,bundle_search1,1,field_nums,localpet, &
+                  soilt_climo=soilt_climo,mask=mask_target_search)
 
  call ESMF_FieldBundleDestroy(bundle_search1,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -342,8 +342,8 @@
  external_model="HRRR"
 
  !Call the search many routine to test search and replace
- call search_many(num_fields,bundle_search2,dummy_2d,mask_target_search,1,field_nums,localpet, &
-         soilt_climo=soilt_climo)
+  call search_many(num_fields,bundle_search2,1,field_nums,localpet, &
+         soilt_climo=soilt_climo,mask=mask_target_search)
 
  call ESMF_FieldBundleDestroy(bundle_search2,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -385,8 +385,8 @@
  allocate(field_nums(num_fields))
  field_nums = (/11,7,224/)
  !Call the search many routine to test some branches of default behavior
- call search_many(num_fields,bundle_default1,dummy_2d,mask_default,1,field_nums,localpet, &
-      latitude=latitude_default,terrain_land=terrain_land,soilt_climo=soilt_climo)
+ call search_many(num_fields,bundle_default1,1,field_nums,localpet, &
+      latitude=latitude_default,terrain_land=terrain_land,soilt_climo=soilt_climo,mask=mask_default)
 
  print*,"Check results for bundle_default1."
 
@@ -441,8 +441,8 @@
  input_type="grib2"
  external_model="GFS"
  !Call the search many routine to test behavior for GFS grib2 soil type
- call search_many(num_fields,bundle_default2,dummy_2d,mask_default,1,field_nums,localpet,&
-      soilt_climo=soilt_climo)
+ call search_many(num_fields,bundle_default2,1,field_nums,localpet,&
+      soilt_climo=soilt_climo,mask=mask_default)
 
  call ESMF_FieldBundleDestroy(bundle_default2,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
@@ -478,8 +478,7 @@
  field_nums(:) = (/21/)
 
  !Call the search many routine to test behavior for GFS grib2 soil type
- call search_many(num_fields,bundle_3d_search,dummy_2d,mask_target_search,1,field_nums,localpet,&
-      field_data_3d=dummy_3d)
+ call search_many(num_fields,bundle_3d_search,1,field_nums,localpet,mask=mask_target_search)
 
  call ESMF_FieldBundleDestroy(bundle_3d_search,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
