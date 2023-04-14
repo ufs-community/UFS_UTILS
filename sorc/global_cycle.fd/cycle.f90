@@ -114,12 +114,12 @@
  INTEGER :: ISOT, IVEGSRC, LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
  INTEGER :: NPROCS, MYRANK, NUM_THREADS, NUM_PARTHDS, MAX_TASKS
  REAL    :: FH, DELTSFC, ZSEA1, ZSEA2
- LOGICAL :: USE_UFO, DO_NSST, DO_LNDINC, DO_SFCCYCLE
+ LOGICAL :: USE_UFO, DO_NSST, DO_LNDINC, DO_SFCCYCLE, FRAC_GRID
 !
  NAMELIST/NAMCYC/ IDIM,JDIM,LSM,LSOIL,LUGB,IY,IM,ID,IH,FH,&
                   DELTSFC,IALB,USE_UFO,DONST,             &
                   DO_SFCCYCLE,ISOT,IVEGSRC,ZSEA1_MM,      &
-                  ZSEA2_MM, MAX_TASKS, DO_LNDINC
+                  ZSEA2_MM, MAX_TASKS, DO_LNDINC, FRAC_GRID
 !
  DATA IDIM,JDIM,LSM,LSOIL/96,96,1,4/
  DATA IY,IM,ID,IH,FH/1997,8,2,0,0./
@@ -143,13 +143,14 @@
  DONST   = "NO"
  DO_LNDINC   = .FALSE.
  DO_SFCCYCLE = .TRUE.
+ FRAC_GRID = .FALSE.
 
  PRINT*
  PRINT*,"READ NAMCYC NAMELIST."
 
  CALL BAOPENR(36, "fort.36", IERR)
  READ(36, NML=NAMCYC)
- !IF (MYRANK==0) WRITE(6,NAMCYC)
+!IF (MYRANK==0) WRITE(6,NAMCYC)
 
  IF (MAX_TASKS < 99999 .AND. MYRANK > (MAX_TASKS - 1)) THEN
    PRINT*,"USER SPECIFIED MAX NUMBER OF TASKS: ", MAX_TASKS
@@ -175,7 +176,7 @@
  CALL SFCDRV(LUGB,IDIM,JDIM,LSM,LENSFC,LSOIL,DELTSFC,  &
              IY,IM,ID,IH,FH,IALB,                  &
              USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LNDINC, &
-             ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
+             FRAC_GRID,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
  
  PRINT*
  PRINT*,'CYCLE PROGRAM COMPLETED NORMALLY ON RANK: ', MYRANK
@@ -293,6 +294,7 @@
  !! @param[in] DO_SFCCYCLE Call sfccycle routine to update surface fields
  !! @param[in] DO_LNDINC Read in land increment files, and add increments to
  !!            requested states.
+ !! @param[in] FRAC_GRID When true, run with fractional grid.
  !! @param[in] ZSEA1 When running NSST model, this is the lower bound
  !!            of depth of sea temperature.  In whole mm.
  !! @param[in] ZSEA2 When running NSST model, this is the upper bound
@@ -304,7 +306,7 @@
  SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LSM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
                    USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LNDINC,&
-                   ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
+                   FRAC_GRID,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
  use machine
@@ -322,7 +324,7 @@
  INTEGER, INTENT(IN) :: ISOT, IVEGSRC, MYRANK
 
  LOGICAL, INTENT(IN) :: USE_UFO, DO_NSST,DO_SFCCYCLE
- LOGICAL, INTENT(IN) :: DO_LNDINC
+ LOGICAL, INTENT(IN) :: DO_LNDINC, FRAC_GRID
  
  REAL, INTENT(IN)    :: FH, DELTSFC, ZSEA1, ZSEA2
 
@@ -339,8 +341,6 @@
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
 ! integer :: ichk, jchk, ijchk
-
- logical             :: frac_grid
 
  LOGICAL             :: IS_NOAHMP=.FALSE.
 
@@ -395,9 +395,6 @@
  DO_SNO_INC = .FALSE.
  DO_SOI_INC = .FALSE.
  
- frac_grid=.true.
-!frac_grid=.false.
-
  SIG1T = 0.0            ! Not a dead start!
 
  INPUT_NML_FILE = "NULL"
@@ -413,6 +410,7 @@
 !--------------------------------------------------------------------------------
 
  IF(FRAC_GRID) THEN
+   PRINT*,'- RUNNING WITH FRACTIONAL GRID.'
    ALLOCATE(LANDFRAC(LENSFC))
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC,LANDFRAC=LANDFRAC)
  ELSE

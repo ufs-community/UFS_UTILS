@@ -53,6 +53,7 @@ export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
 export DO_LNDINC=${DO_LNDINC:-".false."}
 export LND_SOI_FILE=${LND_SOI_FILE:-"NULL"}
 export DO_SNO_INC=${DO_SNO_INC:-".false."}
+export FRAC_GRID=${FRAC_GRID:-".false."}
 
 CRES=$(echo $CASE | cut -c 2-)
 JCAP_CASE=$((2*CRES-2))
