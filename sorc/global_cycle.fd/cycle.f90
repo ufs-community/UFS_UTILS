@@ -338,7 +338,7 @@
  INTEGER             :: I_INDEX(LENSFC), J_INDEX(LENSFC)
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
- integer :: ichk, jchk, ijchk
+! integer :: ichk, jchk, ijchk
 
  logical             :: frac_grid
 
@@ -396,6 +396,7 @@
  DO_SOI_INC = .FALSE.
  
  frac_grid=.true.
+!frac_grid=.false.
 
  SIG1T = 0.0            ! Not a dead start!
 
@@ -456,6 +457,10 @@
  ENDIF
 
 IF (DO_LNDINC) THEN
+   IF (FRAC_GRID) THEN
+     print *, 'FATAL ERROR: land increment update does not work with fractional grids.'
+     call MPI_ABORT(MPI_COMM_WORLD, 17, IERR)
+   ENDIF
    ! identify variables to be updates, and allocate arrays.
    IF  (TRIM(LND_SOI_FILE) .NE. "NULL") THEN
        DO_SOI_INC = .TRUE.
@@ -498,25 +503,30 @@ ENDIF
                 ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
                 ZSOIL=ZSOIL,   NSST=NSST)
 
+
+ print*,'is noahmp/fract grid ',is_noahmp, frac_grid
+
+ IF (FRAC_GRID .AND. .NOT. IS_NOAHMP) THEN
+   print *, 'FATAL ERROR: NOAH lsm update does not work with fractional grids.'
+   call MPI_ABORT(MPI_COMM_WORLD, 18, IERR)
+ ENDIF
+
  ALBFCS=-9.
 
- ichk = 282
- jchk = 362
- ijchk = (jchk-1) * idim + ichk
+!ichk = 282
+!jchk = 362
+!ijchk = (jchk-1) * idim + ichk
+!print*,'chk point after read_data ',tile_num,landfrac(ijchk),slmask(ijchk),vetfcs(ijchk),vegfcs(ijchk)
 
- ijchk=116571
-
- print*,'chk point after read_data ',tile_num,landfrac(ijchk),slmask(ijchk),vetfcs(ijchk),vegfcs(ijchk)
-
- print*,'vegfcs check ',maxval(vegfcs),minval(vegfcs)
- do i=1,lensfc
-   if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
-     print*,'bad point 1 ',tile_num,i,landfrac(i),vegfcs(i)
-   endif
-   if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
-     print*,'bad point 2 ',tile_num,i,landfrac(i),vegfcs(i)
-   endif
- enddo
+!print*,'vegfcs check ',maxval(vegfcs),minval(vegfcs)
+!do i=1,lensfc
+!  if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
+!    print*,'bad point 1 ',tile_num,i,landfrac(i),vegfcs(i)
+!  endif
+!  if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
+!    print*,'bad point 2 ',tile_num,i,landfrac(i),vegfcs(i)
+!  endif
+!enddo
 
  IF (USE_UFO) THEN
    PRINT*
@@ -624,20 +634,22 @@ ENDIF
                min_ice, &
                IALB,ISOT,IVEGSRC,TILE_NUM,I_INDEX,J_INDEX)
 
-   print*,'after call to sfccycle '
+!  print*,'after call to sfccycle '
 
-   print*,'chk point after sfccycle ',tile_num,landfrac(ijchk),slmask(ijchk),vetfcs(ijchk),vegfcs(ijchk)
+!  print*,'chk point after sfccycle ',tile_num,landfrac(ijchk),slmask(ijchk),vetfcs(ijchk),vegfcs(ijchk)
+
+    goto 20
+
      DO I=1,LENSFC
-
        if(nint(slmaskl(i)) == 1 .and. vegfcs(i) == 0.0) then
           if (nint(vetfcs(i)) /= 15) then
         print*,'bad point 5 ',tile_num,i,landfrac(i),slmaskl(i),vegfcs(i)
           endif
        endif
+        print*,'in loop after first if'
        if(nint(slmaskl(i)) == 0 .and. vegfcs(i) > 0.0) then
         print*,'bad point 6 ',tile_num,i,landfrac(i),slmaskw(i),vegfcs(i)
        endif
-
        if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
           if (nint(vetfcs(i)) /= 15) then
         print*,'bad point 7 ',tile_num,i,landfrac(i),vegfcs(i)
@@ -646,15 +658,18 @@ ENDIF
        if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
         print*,'bad point 8 ',tile_num,i,landfrac(i),vegfcs(i)
        endif
-
        if(nint(slmaskw(i)) == 1 .and. sicfcs(i) > 0.0) then
         print*,'bad ice point ',tile_num,i,landfrac(i),sicfcs(i)
        endif
 
      ENDDO
 
+ 20 continue
+
    DEALLOCATE(SLMASKL, SLMASKW)
  ENDIF
+
+ IF(FRAC_GRID) DEALLOCATE(LANDFRAC)
 
 !--------------------------------------------------------------------------------
 ! IF RUNNING WITH NSST, READ IN GSI FILE WITH THE UPDATED INCREMENTS (ON THE
@@ -813,10 +828,6 @@ ENDIF
 
    CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,NSST,VEGFCS=VEGFCS)
 
-! add this to remove conflict. comment out for now.
-!elseif (frac_grid) then 
-!  call write_data(lensfc,idim,jdim,lsoil,do_nsst,nsst, &
-!                  vegfcs=vegfcs,sicfcs=sicfcs,lensfc,idim,jdim)
 
  ELSE
 
