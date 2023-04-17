@@ -1194,7 +1194,7 @@
  real(esmf_kind_r8), intent(out)   :: longitude_s(i_tile, jp1_tile)
  real(esmf_kind_r8), intent(out)   :: longitude_w(ip1_tile, j_tile)
 
- character(len=25)                 :: grid_files(num_tiles)
+ character(len=50)                 :: grid_files(num_tiles)
  character(len=255)                :: grid_file
 
  integer                           :: error, id_var, ncid
