@@ -8,7 +8,7 @@
 
 - Use the "Preview" tab to see what your PR will look like when you hit "Create pull request"
 
-# --- Delete this line and those above before hitting "Create pull request" ---
+## --- Delete this line and those above before hitting "Create pull request" ---
 
 ## DESCRIPTION OF CHANGES: 
 One or more paragraphs describing the problem, solution, and required changes.
