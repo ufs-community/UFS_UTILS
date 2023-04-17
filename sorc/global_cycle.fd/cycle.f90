@@ -509,8 +509,6 @@ ENDIF
    call MPI_ABORT(MPI_COMM_WORLD, 18, IERR)
  ENDIF
 
- ALBFCS=-9.
-
 !ichk = 282
 !jchk = 362
 !ijchk = (jchk-1) * idim + ichk
