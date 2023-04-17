@@ -1,4 +1,4 @@
-.TH "module_nwp" 3 "Tue Jan 17 2023" "Version 1.9.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_nwp" 3 "Mon Apr 17 2023" "Version 1.10.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,9 +12,6 @@ module_nwp \- This module defines FV3LAM and FVCOM forecast data structure and t
 .in +1c
 .ti -1c
 .RI "type \fBfcst_nwp\fP"
-.br
-.ti -1c
-.RI "type \fBnwp_type\fP"
 .br
 .in -1c
 .SS "Functions/Subroutines"
@@ -91,7 +88,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 440 of file module_nwp\&.f90\&.
+Definition at line 426 of file module_nwp\&.f90\&.
 .SS "subroutine module_nwp::get_time_ind_nwp (class(\fBfcst_nwp\fP) this, character(len=*), intent(in) filename, character(len=*), intent(in) instr, integer, intent(out) outindex)\fC [private]\fP"
 
 .PP
@@ -115,7 +112,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 502 of file module_nwp\&.f90\&.
+Definition at line 474 of file module_nwp\&.f90\&.
 .PP
 References ncdata\&.
 .SS "subroutine module_nwp::initial_nwp (class(\fBfcst_nwp\fP) this, character(len=6), intent(in) itype, character(len=4), intent(in) wcstart)\fC [private]\fP"
@@ -139,7 +136,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 100 of file module_nwp\&.f90\&.
+Definition at line 89 of file module_nwp\&.f90\&.
 .SS "subroutine module_nwp::list_initial_nwp (class(\fBfcst_nwp\fP) this)\fC [private]\fP"
 
 .PP
@@ -157,7 +154,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 229 of file module_nwp\&.f90\&.
+Definition at line 215 of file module_nwp\&.f90\&.
 .SS "subroutine module_nwp::read_nwp (class(\fBfcst_nwp\fP) this, character(len=*), intent(in) filename, character(len=6), intent(in) itype, character(len=4), intent(in) wcstart, integer, intent(inout) numlon, integer, intent(inout) numlat, integer, intent(inout) numtimes, integer, intent(in) time_to_get, real(r_kind), dimension(:,:), intent(inout) mask, real(r_kind), dimension(:,:), intent(inout) sst, real(r_kind), dimension(:,:), intent(inout) ice, real(r_kind), dimension(:,:), intent(inout) sfcT, real(r_kind), dimension(:,:), intent(inout) iceT, real(r_kind), dimension(:,:), intent(inout) sfcTl, real(r_kind), dimension(:,:), intent(inout) zorl, real(r_kind), dimension(:,:), intent(inout) hice, integer, intent(in) ybegin, integer, intent(in) yend)\fC [private]\fP"
 
 .PP
@@ -209,7 +206,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 273 of file module_nwp\&.f90\&.
+Definition at line 259 of file module_nwp\&.f90\&.
 .PP
 References ncdata\&.
 .SH "Variable Documentation"
@@ -219,7 +216,7 @@ References ncdata\&.
 .PP
 Wrapper object for netCDF data file\&. 
 .PP
-Definition at line 86 of file module_nwp\&.f90\&.
+Definition at line 75 of file module_nwp\&.f90\&.
 .PP
 Referenced by get_time_ind_nwp(), and read_nwp()\&.
 .SH "Author"

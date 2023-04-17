@@ -1,4 +1,4 @@
-.TH "program_setup" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.TH "program_setup" 3 "Mon Apr 17 2023" "Version 1.10.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -271,6 +271,10 @@ program_setup \- This module contains code to read the setup namelist file, hand
 .br
 .RI "When true, cold start for whole atmosphere model\&. "
 .ti -1c
+.RI "character(len=500), public \fBwam_parm_file\fP ='msis21\&.parm'"
+.br
+.RI "Full path to msis21\&.parm for WAM initialization\&. "
+.ti -1c
 .RI "real, dimension(:), allocatable, public \fBwltsmc_input\fP"
 .br
 .RI "Plant wilting point soil moisture content input grid\&. "
@@ -330,7 +334,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 676 of file program_setup\&.F90\&.
+Definition at line 678 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver()\&.
 .SS "subroutine, public program_setup::calc_soil_params_driver (integer, intent(in) localpet)"
@@ -362,7 +366,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 515 of file program_setup\&.F90\&.
+Definition at line 517 of file program_setup\&.F90\&.
 .PP
 References bb_target, calc_soil_params(), drysmc_input, drysmc_target, input_type, maxsmc_input, maxsmc_target, refsmc_input, refsmc_target, satpsi_target, wltsmc_input, and wltsmc_target\&.
 .PP
@@ -394,7 +398,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 445 of file program_setup\&.F90\&.
+Definition at line 447 of file program_setup\&.F90\&.
 .PP
 References chgres_var_names, field_var_names, missing_var_methods, and missing_var_values\&.
 .PP
@@ -416,9 +420,9 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 153 of file program_setup\&.F90\&.
+Definition at line 154 of file program_setup\&.F90\&.
 .PP
-References atm_core_files_input_grid, atm_files_input_grid, atm_tracer_files_input_grid, atm_weight_file, convert_atm, convert_nst, convert_sfc, cres_target_grid, cycle_day, cycle_hour, cycle_mon, cycle_year, data_dir_input_grid, external_model, fix_dir_target_grid, geogrid_file_input_grid, grib2_file_input_grid, halo_blend, halo_bndy, input_type, lai_from_climo, max_tracers, minmax_vgfrc_from_climo, mosaic_file_input_grid, mosaic_file_target_grid, nsoill_out, nst_files_input_grid, num_tracers, num_tracers_input, orog_dir_input_grid, orog_dir_target_grid, orog_files_input_grid, orog_files_target_grid, regional, sfc_files_input_grid, sotyp_from_climo, tg3_from_soil, thomp_mp_climo_file, tracers, tracers_input, use_thomp_mp_climo, varmap_file, vcoord_file_target_grid, vgfrc_from_climo, vgtyp_from_climo, and wam_cold_start\&.
+References atm_core_files_input_grid, atm_files_input_grid, atm_tracer_files_input_grid, atm_weight_file, convert_atm, convert_nst, convert_sfc, cres_target_grid, cycle_day, cycle_hour, cycle_mon, cycle_year, data_dir_input_grid, external_model, fix_dir_target_grid, geogrid_file_input_grid, grib2_file_input_grid, halo_blend, halo_bndy, input_type, lai_from_climo, max_tracers, minmax_vgfrc_from_climo, mosaic_file_input_grid, mosaic_file_target_grid, nsoill_out, nst_files_input_grid, num_tracers, num_tracers_input, orog_dir_input_grid, orog_dir_target_grid, orog_files_input_grid, orog_files_target_grid, regional, sfc_files_input_grid, sotyp_from_climo, tg3_from_soil, thomp_mp_climo_file, tracers, tracers_input, use_thomp_mp_climo, varmap_file, vcoord_file_target_grid, vgfrc_from_climo, vgtyp_from_climo, wam_cold_start, and wam_parm_file\&.
 .PP
 Referenced by chgres()\&.
 .SS "subroutine, public program_setup::read_varmap ()"
@@ -461,7 +465,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 374 of file program_setup\&.F90\&.
+Definition at line 376 of file program_setup\&.F90\&.
 .PP
 References chgres_var_names, field_var_names, input_type, missing_var_methods, missing_var_values, num_tracers, num_tracers_input, read_from_input, thomp_mp_climo_file, tracers_input, and varmap_file\&.
 .PP
@@ -505,7 +509,7 @@ Referenced by atmosphere::atmosphere_driver(), and read_setup_namelist()\&.
 .PP
 Soil 'b' parameter, target grid\&. 
 .PP
-Definition at line 135 of file program_setup\&.F90\&.
+Definition at line 136 of file program_setup\&.F90\&.
 .PP
 Referenced by surface::calc_liq_soil_moisture(), and calc_soil_params_driver()\&.
 .SS "character(len=20), dimension(:), allocatable, public program_setup::chgres_var_names"
@@ -521,7 +525,7 @@ Referenced by get_var_cond(), and read_varmap()\&.
 .PP
 Convert atmospheric data when true\&. 
 .PP
-Definition at line 94 of file program_setup\&.F90\&.
+Definition at line 95 of file program_setup\&.F90\&.
 .PP
 Referenced by chgres(), model_grid::define_input_grid_gaussian(), and read_setup_namelist()\&.
 .SS "logical, public program_setup::convert_nst = \&.false\&."
@@ -529,7 +533,7 @@ Referenced by chgres(), model_grid::define_input_grid_gaussian(), and read_setup
 .PP
 Convert nst data when true\&. 
 .PP
-Definition at line 95 of file program_setup\&.F90\&.
+Definition at line 96 of file program_setup\&.F90\&.
 .PP
 Referenced by sfc_input_data::cleanup_input_sfc_data(), surface::interp(), read_setup_namelist(), surface::regrid_many(), surface::surface_driver(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "logical, public program_setup::convert_sfc = \&.false\&."
@@ -537,7 +541,7 @@ Referenced by sfc_input_data::cleanup_input_sfc_data(), surface::interp(), read_
 .PP
 Convert sfc data when true\&. 
 .PP
-Definition at line 96 of file program_setup\&.F90\&.
+Definition at line 97 of file program_setup\&.F90\&.
 .PP
 Referenced by chgres(), model_grid::define_input_grid_gaussian(), and read_setup_namelist()\&.
 .SS "character(len=6), public program_setup::cres_target_grid = 'NULL'"
@@ -553,7 +557,7 @@ Referenced by read_setup_namelist(), and static_data::read_static_file()\&.
 .PP
 Cycle day\&. 
 .PP
-Definition at line 86 of file program_setup\&.F90\&.
+Definition at line 87 of file program_setup\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), static_data::read_static_file(), and thompson_mp_climo_data::read_thomp_mp_climo_data()\&.
 .SS "integer, public program_setup::cycle_hour = \-999"
@@ -561,7 +565,7 @@ Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), static_dat
 .PP
 Cycle hour\&. 
 .PP
-Definition at line 87 of file program_setup\&.F90\&.
+Definition at line 88 of file program_setup\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), static_data::read_static_file(), and thompson_mp_climo_data::read_thomp_mp_climo_data()\&.
 .SS "integer, public program_setup::cycle_mon = \-999"
@@ -569,7 +573,7 @@ Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), static_dat
 .PP
 Cycle month\&. 
 .PP
-Definition at line 85 of file program_setup\&.F90\&.
+Definition at line 86 of file program_setup\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), static_data::read_static_file(), and thompson_mp_climo_data::read_thomp_mp_climo_data()\&.
 .SS "integer, public program_setup::cycle_year = \-999"
@@ -577,7 +581,7 @@ Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), static_dat
 .PP
 Cycle year\&. 
 .PP
-Definition at line 84 of file program_setup\&.F90\&.
+Definition at line 85 of file program_setup\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::data_dir_input_grid = 'NULL'"
@@ -593,7 +597,7 @@ Referenced by model_grid::define_input_grid_gaussian(), model_grid::define_input
 .PP
 Air dry soil moisture content input grid\&. 
 .PP
-Definition at line 127 of file program_setup\&.F90\&.
+Definition at line 128 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .SS "real, dimension(:), allocatable, public program_setup::drysmc_target"
@@ -601,7 +605,7 @@ Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .PP
 Air dry soil moisture content target grid\&. 
 .PP
-Definition at line 128 of file program_setup\&.F90\&.
+Definition at line 129 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .SS "character(len=20), public program_setup::external_model ='GFS'"
@@ -649,7 +653,7 @@ Referenced by model_grid::define_input_grid_grib2(), atm_input_data::read_input_
 .PP
 Number of row/cols of blending halo, where model tendencies and lateral boundary tendencies are applied\&. Regional target grids only\&. 
 .PP
-Definition at line 91 of file program_setup\&.F90\&.
+Definition at line 92 of file program_setup\&.F90\&.
 .PP
 Referenced by read_setup_namelist(), and write_data::write_fv3_atm_bndy_data_netcdf()\&.
 .SS "integer, public program_setup::halo_bndy = 0"
@@ -657,7 +661,7 @@ Referenced by read_setup_namelist(), and write_data::write_fv3_atm_bndy_data_net
 .PP
 Number of row/cols of lateral halo, where pure lateral bndy conditions are applied (regional target grids)\&. 
 .PP
-Definition at line 90 of file program_setup\&.F90\&.
+Definition at line 91 of file program_setup\&.F90\&.
 .PP
 Referenced by read_setup_namelist(), write_data::write_fv3_atm_bndy_data_netcdf(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "character(len=25), public program_setup::input_type ='restart'"
@@ -689,7 +693,7 @@ Referenced by calc_soil_params_driver(), model_grid::define_input_grid(), model_
 .PP
 If false, interpolate leaf area index from the input data to the target grid instead of using data from static data\&. Default: True\&. 
 .PP
-Definition at line 119 of file program_setup\&.F90\&.
+Definition at line 120 of file program_setup\&.F90\&.
 .PP
 Referenced by sfc_input_data::cleanup_input_sfc_data(), sfc_input_data::init_sfc_esmf_fields(), surface::interp(), read_setup_namelist(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "integer, parameter, public program_setup::max_tracers =100"
@@ -705,7 +709,7 @@ Referenced by read_setup_namelist()\&.
 .PP
 Maximum soil moisture content input grid\&. 
 .PP
-Definition at line 129 of file program_setup\&.F90\&.
+Definition at line 130 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .SS "real, dimension(:), allocatable, public program_setup::maxsmc_target"
@@ -713,7 +717,7 @@ Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .PP
 Maximum soil moisture content target grid\&. 
 .PP
-Definition at line 130 of file program_setup\&.F90\&.
+Definition at line 131 of file program_setup\&.F90\&.
 .PP
 Referenced by surface::calc_liq_soil_moisture(), calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .SS "logical, public program_setup::minmax_vgfrc_from_climo = \&.true\&."
@@ -721,7 +725,7 @@ Referenced by surface::calc_liq_soil_moisture(), calc_soil_params_driver(), and 
 .PP
 If false, interpolate min/max vegetation fraction from the input data to the target grid instead of using data from static data\&. Use with caution as vegetation categories can vary\&. Default: True\&. 
 .PP
-Definition at line 115 of file program_setup\&.F90\&.
+Definition at line 116 of file program_setup\&.F90\&.
 .PP
 Referenced by sfc_input_data::cleanup_input_sfc_data(), sfc_input_data::init_sfc_esmf_fields(), surface::interp(), and read_setup_namelist()\&.
 .SS "character(len=20), dimension(:), allocatable, public program_setup::missing_var_methods"
@@ -737,7 +741,7 @@ Referenced by get_var_cond(), and read_varmap()\&.
 .PP
 If input GRIB2 record is missing, the variable is set to this value\&. 
 .PP
-Definition at line 137 of file program_setup\&.F90\&.
+Definition at line 138 of file program_setup\&.F90\&.
 .PP
 Referenced by get_var_cond(), and read_varmap()\&.
 .SS "character(len=500), public program_setup::mosaic_file_input_grid = 'NULL'"
@@ -761,7 +765,7 @@ Referenced by model_grid::define_target_grid(), and read_setup_namelist()\&.
 .PP
 Number of soil levels desired in the output data\&. chgres_cube can interpolate from 9 input to 4 output levels\&. DEFAULT: 4\&. 
 .PP
-Definition at line 92 of file program_setup\&.F90\&.
+Definition at line 93 of file program_setup\&.F90\&.
 .PP
 Referenced by model_grid::define_target_grid(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::nst_files_input_grid = 'NULL'"
@@ -833,7 +837,7 @@ Referenced by sfc_input_data::read_grib_soil(), atm_input_data::read_input_atm_g
 .PP
 Reference soil moisture content input grid (onset of soil moisture stress)\&. 
 .PP
-Definition at line 131 of file program_setup\&.F90\&.
+Definition at line 132 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .SS "real, dimension(:), allocatable, public program_setup::refsmc_target"
@@ -841,7 +845,7 @@ Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .PP
 Reference soil moisture content target grid (onset of soil moisture stress)\&. 
 .PP
-Definition at line 132 of file program_setup\&.F90\&.
+Definition at line 133 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .SS "integer, public program_setup::regional = 0"
@@ -849,7 +853,7 @@ Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .PP
 For regional target grids\&. When '1' remove boundary halo region from atmospheric/surface data and output atmospheric boundary file\&. When '2' output boundary file only\&. Default is '0' (global grids)\&. 
 .PP
-Definition at line 88 of file program_setup\&.F90\&.
+Definition at line 89 of file program_setup\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "real, dimension(:), allocatable, public program_setup::satpsi_target"
@@ -857,7 +861,7 @@ Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), write_data
 .PP
 Saturated soil potential, target grid\&. 
 .PP
-Definition at line 136 of file program_setup\&.F90\&.
+Definition at line 137 of file program_setup\&.F90\&.
 .PP
 Referenced by surface::calc_liq_soil_moisture(), and calc_soil_params_driver()\&.
 .SS "character(len=500), dimension(6), public program_setup::sfc_files_input_grid = 'NULL'"
@@ -873,7 +877,7 @@ Referenced by model_grid::define_input_grid_gaussian(), sfc_input_data::READ_FV3
 .PP
 If false, interpolate soil type from the input data to the target grid instead of using data from static data\&. Use with caution as the code assumes input soil type use STATSGO soil categories\&. Default: True\&. 
 .PP
-Definition at line 105 of file program_setup\&.F90\&.
+Definition at line 106 of file program_setup\&.F90\&.
 .PP
 Referenced by surface::interp(), sfc_input_data::read_input_sfc_grib2_file(), and read_setup_namelist()\&.
 .SS "logical, public program_setup::tg3_from_soil = \&.false\&."
@@ -881,7 +885,7 @@ Referenced by surface::interp(), sfc_input_data::read_input_sfc_grib2_file(), an
 .PP
 If false, use lowest level soil temperature for the base soil temperature instead of using data from static data\&. Default: False\&. 
 .PP
-Definition at line 122 of file program_setup\&.F90\&.
+Definition at line 123 of file program_setup\&.F90\&.
 .PP
 Referenced by surface::interp(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::thomp_mp_climo_file = 'NULL'"
@@ -913,7 +917,7 @@ Referenced by atm_input_data::init_atm_esmf_fields(), atm_input_data::read_input
 .PP
 When true, read and process Thompson MP climatological tracers\&. False, when 'thomp_mp_climo_file' is NULL\&. 
 .PP
-Definition at line 125 of file program_setup\&.F90\&.
+Definition at line 126 of file program_setup\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), read_setup_namelist(), write_data::write_fv3_atm_bndy_data_netcdf(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_atm_header_netcdf()\&.
 .SS "character(len=500), public program_setup::varmap_file = 'NULL'"
@@ -937,7 +941,7 @@ Referenced by read_setup_namelist(), and atmosphere::read_vcoord_info()\&.
 .PP
 If false, interpolate vegetation fraction from the input data to the target grid instead of using data from static data\&. Use with caution as vegetation categories can vary\&. Default: True\&. 
 .PP
-Definition at line 110 of file program_setup\&.F90\&.
+Definition at line 111 of file program_setup\&.F90\&.
 .PP
 Referenced by sfc_input_data::cleanup_input_sfc_data(), sfc_input_data::init_sfc_esmf_fields(), surface::interp(), and read_setup_namelist()\&.
 .SS "logical, public program_setup::vgtyp_from_climo = \&.true\&."
@@ -945,7 +949,7 @@ Referenced by sfc_input_data::cleanup_input_sfc_data(), sfc_input_data::init_sfc
 .PP
 If false, interpolate vegetation type from the input data to the target grid instead of using data from static data\&. Use with caution as vegetation categories can vary\&. Default: True\&. 
 .PP
-Definition at line 101 of file program_setup\&.F90\&.
+Definition at line 102 of file program_setup\&.F90\&.
 .PP
 Referenced by surface::interp(), sfc_input_data::read_input_sfc_grib2_file(), and read_setup_namelist()\&.
 .SS "logical, public program_setup::wam_cold_start = \&.false\&."
@@ -953,7 +957,15 @@ Referenced by surface::interp(), sfc_input_data::read_input_sfc_grib2_file(), an
 .PP
 When true, cold start for whole atmosphere model\&. 
 .PP
-Definition at line 97 of file program_setup\&.F90\&.
+Definition at line 98 of file program_setup\&.F90\&.
+.PP
+Referenced by atmosphere::atmosphere_driver(), and read_setup_namelist()\&.
+.SS "character(len=500), public program_setup::wam_parm_file ='msis21\&.parm'"
+
+.PP
+Full path to msis21\&.parm for WAM initialization\&. 
+.PP
+Definition at line 83 of file program_setup\&.F90\&.
 .PP
 Referenced by atmosphere::atmosphere_driver(), and read_setup_namelist()\&.
 .SS "real, dimension(:), allocatable, public program_setup::wltsmc_input"
@@ -961,7 +973,7 @@ Referenced by atmosphere::atmosphere_driver(), and read_setup_namelist()\&.
 .PP
 Plant wilting point soil moisture content input grid\&. 
 .PP
-Definition at line 133 of file program_setup\&.F90\&.
+Definition at line 134 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .SS "real, dimension(:), allocatable, public program_setup::wltsmc_target"
@@ -969,7 +981,7 @@ Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .PP
 Plant wilting point soil moisture content target grid\&. 
 .PP
-Definition at line 134 of file program_setup\&.F90\&.
+Definition at line 135 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver(), and surface::rescale_soil_moisture()\&.
 .SH "Author"

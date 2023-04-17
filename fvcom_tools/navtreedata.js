@@ -40,7 +40,6 @@ var NAVTREE =
     ] ],
     [ "Data Types List", "annotated.html", [
       [ "Data Types List", "annotated.html", "annotated_dup" ],
-      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Data Fields", "functions.html", [
         [ "All", "functions.html", null ],
         [ "Functions/Subroutines", "functions_func.html", null ],

@@ -1,4 +1,4 @@
-.TH "surface" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.TH "surface" 3 "Mon Apr 17 2023" "Version 1.10.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -77,7 +77,7 @@ surface \- Process surface and nst fields\&.
 .br
 .RI "Set roughness length at land and sea ice\&. "
 .ti -1c
-.RI "subroutine, public \fBsearch_many\fP (num_field, bundle_target, field_data_2d, mask, tile, search_nums, localpet, latitude, terrain_land, soilt_climo, field_data_3d)"
+.RI "subroutine, public \fBsearch_many\fP (num_field, bundle_target, tile, search_nums, localpet, latitude, terrain_land, soilt_climo, mask)"
 .br
 .RI "Execute the search function for multple fields\&. "
 .ti -1c
@@ -162,7 +162,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 2016 of file surface\&.F90\&.
+Definition at line 2028 of file surface\&.F90\&.
 .PP
 References model_grid::i_input, model_grid::input_grid, model_grid::j_input, and model_grid::lsoil_target\&.
 .PP
@@ -179,7 +179,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1940 of file surface\&.F90\&.
+Definition at line 1952 of file surface\&.F90\&.
 .PP
 References model_grid::landmask_target_grid, surface_target_data::soil_temp_target_grid, terrain_from_input_grid, model_grid::terrain_target_grid, veg_type_landice_target, and static_data::veg_type_target_grid\&.
 .PP
@@ -196,7 +196,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1490 of file surface\&.F90\&.
+Definition at line 1502 of file surface\&.F90\&.
 .PP
 References program_setup::bb_target, blim, frz_h2o, grav, hlice, model_grid::landmask_target_grid, program_setup::maxsmc_target, program_setup::satpsi_target, surface_target_data::soil_temp_target_grid, static_data::soil_type_target_grid, surface_target_data::soilm_liq_target_grid, surface_target_data::soilm_tot_target_grid, veg_type_landice_target, and static_data::veg_type_target_grid\&.
 .PP
@@ -213,7 +213,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3413 of file surface\&.F90\&.
+Definition at line 3429 of file surface\&.F90\&.
 .PP
 References surface_target_data::cleanup_target_sfc_data(), soil_type_from_input_grid, terrain_from_input_grid, and terrain_from_input_grid_land\&.
 .PP
@@ -230,7 +230,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2962 of file surface\&.F90\&.
+Definition at line 2974 of file surface\&.F90\&.
 .PP
 References surface_target_data::c_0_target_grid, surface_target_data::c_d_target_grid, surface_target_data::d_conv_target_grid, surface_target_data::dt_cool_target_grid, surface_target_data::ifd_target_grid, surface_target_data::qrain_target_grid, model_grid::target_grid, surface_target_data::tref_target_grid, surface_target_data::w_0_target_grid, surface_target_data::w_d_target_grid, surface_target_data::xs_target_grid, surface_target_data::xt_target_grid, surface_target_data::xtts_target_grid, surface_target_data::xu_target_grid, surface_target_data::xv_target_grid, surface_target_data::xz_target_grid, surface_target_data::xzts_target_grid, surface_target_data::z_c_target_grid, and surface_target_data::zm_target_grid\&.
 .PP
@@ -247,7 +247,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2604 of file surface\&.F90\&.
+Definition at line 2616 of file surface\&.F90\&.
 .PP
 References surface_target_data::canopy_mc_target_grid, surface_target_data::f10m_target_grid, surface_target_data::ffmm_target_grid, surface_target_data::lai_target_grid, model_grid::lsoil_target, surface_target_data::q2m_target_grid, surface_target_data::seaice_depth_target_grid, surface_target_data::seaice_fract_target_grid, surface_target_data::seaice_skin_temp_target_grid, surface_target_data::skin_temp_target_grid, surface_target_data::snow_depth_target_grid, surface_target_data::snow_liq_equiv_target_grid, surface_target_data::soil_temp_target_grid, soil_type_from_input_grid, surface_target_data::soilm_liq_target_grid, surface_target_data::soilm_tot_target_grid, surface_target_data::srflag_target_grid, surface_target_data::t2m_target_grid, model_grid::target_grid, terrain_from_input_grid, surface_target_data::tprcp_target_grid, surface_target_data::ustar_target_grid, and surface_target_data::z0_target_grid\&.
 .PP
@@ -291,7 +291,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1634 of file surface\&.F90\&.
+Definition at line 1646 of file surface\&.F90\&.
 .PP
 References blim, frz_h2o, grav, and hlice\&.
 .SS "subroutine surface::ij_to_i_j (integer(esmf_kind_i4), intent(in) ij, integer, intent(in) itile, integer, intent(in) jtile, integer, intent(out) i, integer, intent(out) j)"
@@ -319,7 +319,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3124 of file surface\&.F90\&.
+Definition at line 3136 of file surface\&.F90\&.
 .PP
 Referenced by interp(), and regrid_many()\&.
 .SS "subroutine, public surface::interp (integer, intent(in) localpet)"
@@ -356,7 +356,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2521 of file surface\&.F90\&.
+Definition at line 2533 of file surface\&.F90\&.
 .PP
 References surface_target_data::c_0_target_grid, surface_target_data::c_d_target_grid, surface_target_data::d_conv_target_grid, surface_target_data::dt_cool_target_grid, surface_target_data::ifd_target_grid, model_grid::landmask_target_grid, surface_target_data::qrain_target_grid, surface_target_data::skin_temp_target_grid, surface_target_data::tref_target_grid, surface_target_data::w_0_target_grid, surface_target_data::w_d_target_grid, surface_target_data::xs_target_grid, surface_target_data::xt_target_grid, surface_target_data::xtts_target_grid, surface_target_data::xu_target_grid, surface_target_data::xv_target_grid, surface_target_data::xz_target_grid, surface_target_data::xzts_target_grid, surface_target_data::z_c_target_grid, and surface_target_data::zm_target_grid\&.
 .PP
@@ -373,7 +373,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2186 of file surface\&.F90\&.
+Definition at line 2198 of file surface\&.F90\&.
 .PP
 References static_data::alnsf_target_grid, static_data::alnwf_target_grid, static_data::alvsf_target_grid, static_data::alvwf_target_grid, surface_target_data::canopy_mc_target_grid, static_data::facsf_target_grid, static_data::facwf_target_grid, frz_ice, model_grid::landmask_target_grid, static_data::max_veg_greenness_target_grid, static_data::min_veg_greenness_target_grid, static_data::mxsno_albedo_target_grid, surface_target_data::seaice_depth_target_grid, surface_target_data::seaice_fract_target_grid, surface_target_data::seaice_skin_temp_target_grid, surface_target_data::skin_temp_target_grid, static_data::slope_type_target_grid, surface_target_data::snow_depth_target_grid, surface_target_data::snow_liq_equiv_target_grid, surface_target_data::soil_temp_target_grid, static_data::soil_type_target_grid, surface_target_data::soilm_liq_target_grid, surface_target_data::soilm_tot_target_grid, static_data::substrate_temp_target_grid, static_data::veg_greenness_target_grid, veg_type_landice_target, and static_data::veg_type_target_grid\&.
 .PP
@@ -407,7 +407,7 @@ Larissa Reames, OU CIMMS/NOAA/NSSL
 .PP
 
 .PP
-Definition at line 3160 of file surface\&.F90\&.
+Definition at line 3172 of file surface\&.F90\&.
 .PP
 References program_setup::convert_nst, model_grid::i_target, surface_target_data::ifd_target_grid, ij_to_i_j(), and model_grid::j_target\&.
 .PP
@@ -424,7 +424,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1772 of file surface\&.F90\&.
+Definition at line 1784 of file surface\&.F90\&.
 .PP
 References program_setup::drysmc_input, program_setup::drysmc_target, model_grid::landmask_target_grid, program_setup::maxsmc_input, program_setup::maxsmc_target, program_setup::refsmc_input, program_setup::refsmc_target, soil_type_from_input_grid, static_data::soil_type_target_grid, surface_target_data::soilm_tot_target_grid, static_data::veg_greenness_target_grid, veg_type_landice_target, static_data::veg_type_target_grid, program_setup::wltsmc_input, and program_setup::wltsmc_target\&.
 .PP
@@ -441,12 +441,12 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2132 of file surface\&.F90\&.
+Definition at line 2144 of file surface\&.F90\&.
 .PP
 References model_grid::landmask_target_grid, static_data::veg_type_target_grid, and surface_target_data::z0_target_grid\&.
 .PP
 Referenced by surface_driver()\&.
-.SS "subroutine, public surface::search_many (integer, intent(in) num_field, type(esmf_fieldbundle), intent(inout) bundle_target, real(esmf_kind_r8), dimension(i_target,j_target), intent(inout) field_data_2d, integer(esmf_kind_i8), dimension(i_target,j_target), intent(inout) mask, integer, intent(in) tile, integer, dimension(num_field), intent(inout) search_nums, integer, intent(in) localpet, real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional latitude, real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional terrain_land, real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional soilt_climo, real(esmf_kind_r8), dimension(i_target,j_target,lsoil_target), intent(inout), optional field_data_3d)"
+.SS "subroutine, public surface::search_many (integer, intent(in) num_field, type(esmf_fieldbundle), intent(inout) bundle_target, integer, intent(in) tile, integer, dimension(num_field), intent(inout) search_nums, integer, intent(in) localpet, real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional latitude, real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional terrain_land, real(esmf_kind_r8), dimension(i_target,j_target), intent(inout), optional soilt_climo, integer(esmf_kind_i8), dimension(i_target,j_target), intent(inout), optional mask)"
 
 .PP
 Execute the search function for multple fields\&. 
@@ -456,10 +456,6 @@ Execute the search function for multple fields\&.
 \fInum_field\fP Number of fields to process\&. 
 .br
 \fIbundle_target\fP ESMF FieldBundle holding target fields to search 
-.br
-\fIfield_data_2d\fP A real array of size i_target,j_target to temporarily hold data for searching 
-.br
-\fImask\fP An integer array of size i_target,j_target that holds masked (0) and unmasked (1) values indicating where to execute search (only at unmasked points)\&. 
 .br
 \fItile\fP Current cubed sphere tile\&. 
 .br
@@ -473,17 +469,12 @@ Execute the search function for multple fields\&.
 .br
 \fIsoilt_climo\fP (optional) A real array size i_target,j_target of climatological soil type on the target grid 
 .br
-\fIfield_data_3d\fP (optional) An empty real array of size i_target,j_target,lsoil_target to temporarily hold soil data for searching 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-Larissa Reames, OU CIMMS/NOAA/NSSL 
+\fImask\fP (optional) An integer array of size i_target,j_target that holds masked (0) and unmasked (1) values indicating where to execute search (only at 
 .RE
 .PP
 
 .PP
-Definition at line 3307 of file surface\&.F90\&.
+Definition at line 3317 of file surface\&.F90\&.
 .PP
 References program_setup::external_model, model_grid::i_target, program_setup::input_type, model_grid::j_target, model_grid::lsoil_target, and search_util::search()\&.
 .PP

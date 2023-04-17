@@ -1,7 +1,6 @@
 var module__nwp_8f90 =
 [
     [ "fcst_nwp", "structmodule__nwp_1_1fcst__nwp.html", "structmodule__nwp_1_1fcst__nwp" ],
-    [ "nwp_type", "structmodule__nwp_1_1nwp__type.html", "structmodule__nwp_1_1nwp__type" ],
     [ "finish_nwp", "module__nwp_8f90.html#ad98dc62d45549b7716f3f62b59c63474", null ],
     [ "get_time_ind_nwp", "module__nwp_8f90.html#aaae0ecd9fdd67b6c0fd661f5034e183a", null ],
     [ "initial_nwp", "module__nwp_8f90.html#ae8abd781460c305e506ef99e82e54dfb", null ],

@@ -1,4 +1,4 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/grdvars.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/grdvars.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -183,10 +183,6 @@
 .br
 .RI "The masking depth for MOM6\&. "
 .ti -1c
-.RI "logical \fBgrdvars::mastertask\fP"
-.br
-.RI "flag indicating whether this is the mastertask "
-.ti -1c
 .RI "real(kind=real_kind), parameter \fBgrdvars::maximum_depth\fP = 6500\&.0"
 .br
 .RI "The maximum depth for MOM6\&. "
@@ -234,6 +230,10 @@
 .RI "integer \fBgrdvars::ny\fP"
 .br
 .RI "j-dimension of MOM6 supergrid "
+.ti -1c
+.RI "logical \fBgrdvars::roottask\fP"
+.br
+.RI "flag indicating whether this is the roottask "
 .ti -1c
 .RI "real(dbl_kind) \fBgrdvars::sg_maxlat\fP"
 .br
@@ -571,12 +571,6 @@ Definition at line 114 of file grdvars\&.F90\&.
 The masking depth for MOM6\&. Depths shallower than minimum_depth but deeper than masking_depth are rounded to minimum_depth 
 .PP
 Definition at line 163 of file grdvars\&.F90\&.
-.SS "logical grdvars::mastertask"
-
-.PP
-flag indicating whether this is the mastertask 
-.PP
-Definition at line 29 of file grdvars\&.F90\&.
 .SS "real(kind=real_kind), parameter grdvars::maximum_depth = 6500\&.0"
 
 .PP
@@ -649,6 +643,12 @@ Definition at line 18 of file grdvars\&.F90\&.
 j-dimension of MOM6 supergrid 
 .PP
 Definition at line 19 of file grdvars\&.F90\&.
+.SS "logical grdvars::roottask"
+
+.PP
+flag indicating whether this is the roottask 
+.PP
+Definition at line 29 of file grdvars\&.F90\&.
 .SS "real(dbl_kind) grdvars::sg_maxlat"
 
 .PP

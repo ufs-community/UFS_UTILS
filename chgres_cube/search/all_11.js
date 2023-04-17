@@ -1,11 +1,6 @@
 var searchData=
 [
-  ['s',['s',['../namespacegettemp__mod.html#aeb0d0886c18841daeb323f6a985e5f90',1,'gettemp_mod']]],
-  ['s2tloc',['s2tloc',['../namespacegettemp__mod.html#af9bd6aed3b357e234b1801311cb2b6dd',1,'gettemp_mod']]],
-  ['s3tloc',['s3tloc',['../namespacegettemp__mod.html#aa399aed291a2ae1a0d7a30d4e106eedd',1,'gettemp_mod']]],
-  ['sam',['sam',['../namespacegettemp__mod.html#a4cbcb018041bd156bd9a0a97929d0d75',1,'gettemp_mod']]],
   ['satpsi_5ftarget',['satpsi_target',['../namespaceprogram__setup.html#acbfd03fbdfd369b859cd851342b024da',1,'program_setup']]],
-  ['scalh',['scalh',['../wam__climo__data_8f90.html#a38a4030496d7ad5e89480444e7952df5',1,'wam_climo_data.f90']]],
   ['seaice_5fdepth_5finput_5fgrid',['seaice_depth_input_grid',['../sfc__input__data_8F90.html#a5e40ecb3e2fd650812e4a94afe890291',1,'sfc_input_data']]],
   ['seaice_5fdepth_5ftarget_5fgrid',['seaice_depth_target_grid',['../namespacesurface__target__data.html#a87ef0089b12975b9996f9f2f195a8fc4',1,'surface_target_data']]],
   ['seaice_5ffract_5finput_5fgrid',['seaice_fract_input_grid',['../sfc__input__data_8F90.html#aaf0bae249b613e7274c0afae94e8bf37',1,'sfc_input_data']]],
@@ -14,7 +9,7 @@ var searchData=
   ['seaice_5fskin_5ftemp_5ftarget_5fgrid',['seaice_skin_temp_target_grid',['../namespacesurface__target__data.html#a931f6effdfab16836f7ab66c7c03e364',1,'surface_target_data']]],
   ['seamask_5ftarget_5fgrid',['seamask_target_grid',['../namespacemodel__grid.html#ac603676e21495133afd160bf36c70068',1,'model_grid']]],
   ['search',['search',['../namespacesearch__util.html#a4a511a55b3ce58a03cc053d19cecc458',1,'search_util']]],
-  ['search_5fmany',['search_many',['../namespacesurface.html#a3b0d48d8c08655b2f2e1050050543a33',1,'surface']]],
+  ['search_5fmany',['search_many',['../namespacesurface.html#afc2c63e91ef5af4cefca13d9673d4acc',1,'surface']]],
   ['search_5futil',['search_util',['../namespacesearch__util.html',1,'']]],
   ['search_5futil_2ef90',['search_util.F90',['../search__util_8F90.html',1,'']]],
   ['sfc_5ffiles_5finput_5fgrid',['sfc_files_input_grid',['../namespaceprogram__setup.html#a1ac8f9f39991ff6eda54d9189661900d',1,'program_setup']]],
@@ -37,21 +32,15 @@ var searchData=
   ['soilm_5ftot_5finput_5fgrid',['soilm_tot_input_grid',['../sfc__input__data_8F90.html#a65a014a55a08e3e439ebe6ec238ac2cf',1,'sfc_input_data']]],
   ['soilm_5ftot_5ftarget_5fgrid',['soilm_tot_target_grid',['../namespacesurface__target__data.html#a7a65fcefb1e2cd01cc934a3cd7c69e10',1,'surface_target_data']]],
   ['sotyp_5ffrom_5fclimo',['sotyp_from_climo',['../namespaceprogram__setup.html#ad6b23f6d8cacb48240a2afd72ff1d5ef',1,'program_setup']]],
-  ['spline',['spline',['../wam__climo__data_8f90.html#a9fb12537c97e20c3a73e1dfdc7d60060',1,'wam_climo_data.f90']]],
-  ['splini',['splini',['../wam__climo__data_8f90.html#ae253f31ca84d4f22f498a60b5cace125',1,'wam_climo_data.f90']]],
-  ['splint',['splint',['../wam__climo__data_8f90.html#a04a3b53fc281e9b91b7c6c89b2b69b19',1,'wam_climo_data.f90']]],
   ['srflag_5finput_5fgrid',['srflag_input_grid',['../sfc__input__data_8F90.html#a08c0a47498901872edbdec10a8569c48',1,'sfc_input_data']]],
   ['srflag_5ftarget_5fgrid',['srflag_target_grid',['../namespacesurface__target__data.html#ae1176ee763ee9dcec7878f8549bbf87b',1,'surface_target_data']]],
   ['sst_5fguess',['sst_guess',['../namespacesearch__util.html#a5f5cd2507060bc834d1fd8a08a4c31ba',1,'search_util']]],
   ['static_5fdata',['static_data',['../namespacestatic__data.html',1,'']]],
   ['static_5fdata_2ef90',['static_data.F90',['../static__data_8F90.html',1,'']]],
-  ['stloc',['stloc',['../namespacegettemp__mod.html#a5ea5543b6a9d5084c3a98300dfc74599',1,'gettemp_mod']]],
   ['substrate_5ftemp_5ftarget_5fgrid',['substrate_temp_target_grid',['../namespacestatic__data.html#a4dfed22f54d51ff598ae12a208cb197c',1,'static_data']]],
   ['surface',['surface',['../namespacesurface.html',1,'']]],
   ['surface_2ef90',['surface.F90',['../surface_8F90.html',1,'']]],
   ['surface_5fdriver',['surface_driver',['../namespacesurface.html#a0707121ff6af9350608125b1750e32f5',1,'surface']]],
   ['surface_5ftarget_5fdata',['surface_target_data',['../namespacesurface__target__data.html',1,'']]],
-  ['surface_5ftarget_5fdata_2ef90',['surface_target_data.F90',['../surface__target__data_8F90.html',1,'']]],
-  ['sw',['sw',['../namespacegettemp__mod.html#a90f4bced3c406a9e1b88e9d7d97d4f6f',1,'gettemp_mod']]],
-  ['swc',['swc',['../namespacegettemp__mod.html#abe1bbf792d769f6fbd1cce3deabb81a1',1,'gettemp_mod']]]
+  ['surface_5ftarget_5fdata_2ef90',['surface_target_data.F90',['../surface__target__data_8F90.html',1,'']]]
 ];

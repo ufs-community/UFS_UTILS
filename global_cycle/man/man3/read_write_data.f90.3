@@ -1,4 +1,4 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/read_write_data.f90" 3 "Tue Jan 17 2023" "Version 1.9.0" "global_cycle" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/read_write_data.f90" 3 "Mon Apr 17 2023" "Version 1.10.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -42,7 +42,7 @@
 .br
 .RI "If a NetCDF call returns an error, print out a user-supplied message and the NetCDF library message\&. "
 .ti -1c
-.RI "subroutine, public \fBREAD_WRITE_DATA::READ_DATA\fP (LSOIL, LENSFC, DO_NSST, INC_FILE, TSFFCS, SMCFCS, SWEFCS, STCFCS, TG3FCS, ZORFCS, CVFCS, CVBFCS, CVTFCS, ALBFCS, VEGFCS, SLIFCS, CNPFCS, F10M, VETFCS, SOTFCS, ALFFCS, USTAR, FMM, FHH, SIHFCS, SICFCS, SITFCS, TPRCP, SRFLAG, SNDFCS, VMNFCS, VMXFCS, SLCFCS, SLPFCS, ABSFCS, T2M, Q2M, SLMASK, ZSOIL, NSST)"
+.RI "subroutine, public \fBREAD_WRITE_DATA::READ_DATA\fP (LSOIL, LENSFC, DO_NSST, INC_FILE, IS_NOAHMP, TSFFCS, SMCFCS, SWEFCS, STCFCS, TG3FCS, ZORFCS, CVFCS, CVBFCS, CVTFCS, ALBFCS, VEGFCS, SLIFCS, CNPFCS, F10M, VETFCS, SOTFCS, ALFFCS, USTAR, FMM, FHH, SIHFCS, SICFCS, SITFCS, TPRCP, SRFLAG, SNDFCS, VMNFCS, VMXFCS, SLCFCS, SLPFCS, ABSFCS, T2M, Q2M, SLMASK, ZSOIL, NSST)"
 .br
 .RI "Read the first guess surface records and nsst records (if selected) for a single cubed-sphere tile\&. "
 .ti -1c
@@ -62,9 +62,13 @@
 .br
 .RI "Read a GRIB1 sst climatological analysis file\&. "
 .ti -1c
-.RI "subroutine, public \fBREAD_WRITE_DATA::write_data\fP (slifcs, tsffcs, swefcs, tg3fcs, zorfcs, albfcs, alffcs, vegfcs, cnpfcs, f10m, t2m, q2m, vetfcs, sotfcs, ustar, fmm, fhh, sicfcs, sihfcs, sitfcs, tprcp, srflag, swdfcs, vmnfcs, vmxfcs, slpfcs, absfcs, slcfcs, smcfcs, stcfcs, idim, jdim, lensfc, lsoil, do_nsst, nsst)"
+.RI "subroutine \fBREAD_WRITE_DATA::remove_checksum\fP (ncid, id_var)"
 .br
-.RI "Write out all surface records - and nsst records if selected - on a single cubed-sphere tile to a model restart file (in netcdf)\&. "
+.RI "Remove the checksum attribute from a netcdf record\&. "
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::write_data\fP (lensfc, idim, jdim, lsoil, do_nsst, nsst, slifcs, tsffcs, vegfcs, swefcs, tg3fcs, zorfcs, albfcs, alffcs, cnpfcs, f10m, t2m, q2m, vetfcs, sotfcs, ustar, fmm, fhh, sicfcs, sihfcs, sitfcs, tprcp, srflag, swdfcs, vmnfcs, vmxfcs, slpfcs, absfcs, slcfcs, smcfcs, stcfcs)"
+.br
+.RI "Update surface records - and nsst records if selected - on a single cubed-sphere tile to a pre-existing model restart file (in netcdf)\&. "
 .in -1c
 .SS "Variables"
 

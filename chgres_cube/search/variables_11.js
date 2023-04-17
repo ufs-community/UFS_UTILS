@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['s',['s',['../namespacegettemp__mod.html#aeb0d0886c18841daeb323f6a985e5f90',1,'gettemp_mod']]],
-  ['s2tloc',['s2tloc',['../namespacegettemp__mod.html#af9bd6aed3b357e234b1801311cb2b6dd',1,'gettemp_mod']]],
-  ['s3tloc',['s3tloc',['../namespacegettemp__mod.html#aa399aed291a2ae1a0d7a30d4e106eedd',1,'gettemp_mod']]],
-  ['sam',['sam',['../namespacegettemp__mod.html#a4cbcb018041bd156bd9a0a97929d0d75',1,'gettemp_mod']]],
   ['satpsi_5ftarget',['satpsi_target',['../namespaceprogram__setup.html#acbfd03fbdfd369b859cd851342b024da',1,'program_setup']]],
   ['seaice_5fdepth_5finput_5fgrid',['seaice_depth_input_grid',['../sfc__input__data_8F90.html#a5e40ecb3e2fd650812e4a94afe890291',1,'sfc_input_data']]],
   ['seaice_5fdepth_5ftarget_5fgrid',['seaice_depth_target_grid',['../namespacesurface__target__data.html#a87ef0089b12975b9996f9f2f195a8fc4',1,'surface_target_data']]],
@@ -33,8 +29,5 @@ var searchData=
   ['sotyp_5ffrom_5fclimo',['sotyp_from_climo',['../namespaceprogram__setup.html#ad6b23f6d8cacb48240a2afd72ff1d5ef',1,'program_setup']]],
   ['srflag_5finput_5fgrid',['srflag_input_grid',['../sfc__input__data_8F90.html#a08c0a47498901872edbdec10a8569c48',1,'sfc_input_data']]],
   ['srflag_5ftarget_5fgrid',['srflag_target_grid',['../namespacesurface__target__data.html#ae1176ee763ee9dcec7878f8549bbf87b',1,'surface_target_data']]],
-  ['stloc',['stloc',['../namespacegettemp__mod.html#a5ea5543b6a9d5084c3a98300dfc74599',1,'gettemp_mod']]],
-  ['substrate_5ftemp_5ftarget_5fgrid',['substrate_temp_target_grid',['../namespacestatic__data.html#a4dfed22f54d51ff598ae12a208cb197c',1,'static_data']]],
-  ['sw',['sw',['../namespacegettemp__mod.html#a90f4bced3c406a9e1b88e9d7d97d4f6f',1,'gettemp_mod']]],
-  ['swc',['swc',['../namespacegettemp__mod.html#abe1bbf792d769f6fbd1cce3deabb81a1',1,'gettemp_mod']]]
+  ['substrate_5ftemp_5ftarget_5fgrid',['substrate_temp_target_grid',['../namespacestatic__data.html#a4dfed22f54d51ff598ae12a208cb197c',1,'static_data']]]
 ];

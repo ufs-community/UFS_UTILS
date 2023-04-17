@@ -1,4 +1,4 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atm_input_data.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atm_input_data.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,7 +27,7 @@
 .br
 .RI "Free up memory associated with atm data\&. "
 .ti -1c
-.RI "subroutine, public \fBatm_input_data::convert_winds\fP"
+.RI "subroutine, public \fBatm_input_data::convert_winds_to_xyz\fP"
 .br
 .RI "Convert winds from 2-d to 3-d components\&. "
 .ti -1c
@@ -127,9 +127,17 @@
 .br
 .RI "box center "
 .ti -1c
-.RI "type(esmf_field), public \fBatm_input_data::wind_input_grid\fP"
+.RI "type(esmf_field), public \fBatm_input_data::xwind_input_grid\fP"
 .br
-.RI "3-component wind "
+.RI "x-component wind "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::ywind_input_grid\fP"
+.br
+.RI "y-component wind "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::zwind_input_grid\fP"
+.br
+.RI "z-component wind "
 .in -1c
 .SH "Detailed Description"
 .PP 

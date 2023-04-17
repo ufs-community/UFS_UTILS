@@ -2,7 +2,7 @@ var atm__input__data_8F90 =
 [
     [ "calcalpha_rotlatlon", "atm__input__data_8F90.html#a51cca8f975601a1b1150c2f4d18847aa", null ],
     [ "cleanup_input_atm_data", "atm__input__data_8F90.html#a9cb9a7c1cc8d4adfb3607fcc42e68e8c", null ],
-    [ "convert_winds", "atm__input__data_8F90.html#aa3aa3c36066ebef6cf13f43e75242a46", null ],
+    [ "convert_winds_to_xyz", "atm__input__data_8F90.html#a538a770a36fda1271efee63a5e29a510", null ],
     [ "gridrot", "atm__input__data_8F90.html#a955d043afabaa621cebd6e0bb1851f48", null ],
     [ "init_atm_esmf_fields", "atm__input__data_8F90.html#a5f7d910189f475a311bcbaa9e9c0a400", null ],
     [ "read_input_atm_data", "atm__input__data_8F90.html#ae81beb7035413010a27c9cd30c1599ab", null ],
@@ -26,5 +26,7 @@ var atm__input__data_8F90 =
     [ "tracers_input_grid", "atm__input__data_8F90.html#a756505eb6868536f71558fdbb1c4fb77", null ],
     [ "u_input_grid", "atm__input__data_8F90.html#a51d4d356554796e850432af8ca90b1f0", null ],
     [ "v_input_grid", "atm__input__data_8F90.html#aaa4196ca1738565c877f41c551bf581d", null ],
-    [ "wind_input_grid", "atm__input__data_8F90.html#aeb5d8f1eb93706cb7e603eb9ed34e7e6", null ]
+    [ "xwind_input_grid", "atm__input__data_8F90.html#a542b1160c5f872263938bacfee0b7361", null ],
+    [ "ywind_input_grid", "atm__input__data_8F90.html#aad0fa7d30aed9c516b94914bcd2d7801", null ],
+    [ "zwind_input_grid", "atm__input__data_8F90.html#a34e522f4cea6c96e6a9bd2b89355494d", null ]
 ];

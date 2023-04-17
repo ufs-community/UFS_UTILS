@@ -1,4 +1,4 @@
-.TH "pesg" 3 "Tue Jan 17 2023" "Version 1.9.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -330,7 +330,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 902 of file pesg\&.f90\&.
+Definition at line 903 of file pesg\&.f90\&.
 .PP
 References pietc::ms18, pietc::ms36, pietc::ms54, pietc::ms72, pietc::o5, pietc::s18, pietc::s36, pietc::s54, pietc::s72, and pietc::u5\&.
 .SS "subroutine, public \fBpesg::bestesg_map\fP (real(dp), intent(in) lam, real(dp), intent(in) marcx, real(dp), intent(in) marcy, real(dp), intent(out) a, real(dp), intent(out) k, real(dp), intent(out) garcx, real(dp), intent(out) garcy, real(dp), intent(out) q, logical, intent(out) ff)"
@@ -370,7 +370,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1072 of file pesg\&.f90\&.
+Definition at line 1073 of file pesg\&.f90\&.
 .PP
 References pietc::ms18, pietc::ms36, pietc::ms54, pietc::ms72, pietc::o5, pietc::s18, pietc::s36, pietc::s54, pietc::s72, and pietc::u5\&.
 .SS "subroutine \fBpesg::gaulegh\fP (integer(spi), intent(in) m, real(dp), dimension(m), intent(out) x, real(dp), dimension(m), intent(out) w)\fC [private]\fP"
@@ -394,7 +394,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1851 of file pesg\&.f90\&.
+Definition at line 1852 of file pesg\&.f90\&.
 .PP
 References pietc::pih, pietc::u0, pietc::u1, and pietc::u2\&.
 .SS "subroutine, public \fBpesg::get_edges\fP (real(dp), intent(in) arcx, real(dp), intent(in) arcy, real(dp), dimension(3), intent(out) edgex, real(dp), dimension(3), intent(out) edgey)"
@@ -420,7 +420,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 488 of file pesg\&.f90\&.
+Definition at line 489 of file pesg\&.f90\&.
 .PP
 References pietc::dtor, and pietc::u0\&.
 .SS "subroutine pesg::get_meanqd (integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) ma, real(dp), intent(out) q, real(dp), dimension(2), intent(out) qdak, real(dp), dimension(2), intent(out) qdma, real(dp), dimension(2), intent(out) ga, real(dp), dimension(2,2), intent(out) gadak, real(dp), dimension(2,2), intent(out) gadma, logical, intent(out) ff)"
@@ -468,7 +468,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 603 of file pesg\&.f90\&.
+Definition at line 604 of file pesg\&.f90\&.
 .PP
 References pietc::rtod, and pietc::u0\&.
 .SS "subroutine pesg::get_meanqs (integer(spi), intent(in) n, integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2,n), intent(in) aks, real(dp), dimension(2,n), intent(in) mas, real(dp), dimension(n), intent(out) qs, logical, intent(out) ff)\fC [private]\fP"
@@ -504,7 +504,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 681 of file pesg\&.f90\&.
+Definition at line 682 of file pesg\&.f90\&.
 .PP
 References pietc::u0\&.
 .SS "subroutine \fBpesg::get_qofv\fP (real(dp), intent(in) lam, real(dp), intent(in) v1, real(dp), intent(in) v2, real(dp), intent(in) v3, real(dp), intent(in) v4, real(dp), intent(out) q)\fC [private]\fP"
@@ -534,7 +534,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 728 of file pesg\&.f90\&.
+Definition at line 729 of file pesg\&.f90\&.
 .PP
 References pietc::u1\&.
 .SS "subroutine pesg::get_qofvd (real(dp), intent(in) lam, real(dp), intent(in) v2, real(dp), intent(in) v3, real(dp), dimension(2), intent(in) v1d, real(dp), dimension(2), intent(in) v2d, real(dp), dimension(2), intent(in) v3d, real(dp), dimension(2), intent(in) v4d, real(dp), dimension(2), intent(out) qd)\fC [private]\fP"
@@ -568,7 +568,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 750 of file pesg\&.f90\&.
+Definition at line 751 of file pesg\&.f90\&.
 .PP
 References pietc::u1, and pietc::u2\&.
 .SS "subroutine pesg::get_qsofvs (integer(spi), intent(in) n, real(dp), intent(in) lam, real(dp), dimension(n), intent(in) v1s, real(dp), dimension(n), intent(in) v2s, real(dp), dimension(n), intent(in) v3s, real(dp), dimension(n), intent(in) v4s, real(dp), dimension(n), intent(out) qs)\fC [private]\fP"
@@ -600,7 +600,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 770 of file pesg\&.f90\&.
+Definition at line 771 of file pesg\&.f90\&.
 .PP
 References pietc::u1\&.
 .SS "subroutine \fBpesg::get_qx\fP (real(dp), dimension(3,2), intent(in) j0, real(dp), intent(out) v1, real(dp), intent(out) v2, real(dp), intent(out) v3, real(dp), intent(out) v4)\fC [private]\fP"
@@ -628,7 +628,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 511 of file pesg\&.f90\&.
+Definition at line 512 of file pesg\&.f90\&.
 .PP
 References pietc::o2, and pietc::u2\&.
 .SS "subroutine pesg::get_qxd (real(dp), dimension(3,2), intent(in) j0, real(dp), dimension(3,2,2), intent(in) j0d, real(dp), intent(out) v1, real(dp), intent(out) v2, real(dp), intent(out) v3, real(dp), intent(out) v4, real(dp), dimension(2), intent(out) v1d, real(dp), dimension(2), intent(out) v2d, real(dp), dimension(2), intent(out) v3d, real(dp), dimension(2), intent(out) v4d)"
@@ -666,7 +666,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 541 of file pesg\&.f90\&.
+Definition at line 542 of file pesg\&.f90\&.
 .PP
 References pietc::o2, pietc::u0, and pietc::u2\&.
 .SS "subroutine pesg::gtoxm_ak_dd_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
@@ -706,7 +706,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1983 of file pesg\&.f90\&.
+Definition at line 1984 of file pesg\&.f90\&.
 .PP
 References pietc::dtor, and gtoxm_ak_rr_g()\&.
 .SS "subroutine pesg::gtoxm_ak_dd_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
@@ -742,7 +742,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1954 of file pesg\&.f90\&.
+Definition at line 1955 of file pesg\&.f90\&.
 .PP
 References pietc::dtor, and gtoxm_ak_rr_m()\&.
 .SS "subroutine pesg::gtoxm_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)"
@@ -782,7 +782,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1932 of file pesg\&.f90\&.
+Definition at line 1933 of file pesg\&.f90\&.
 .PP
 References gtoxm_ak_rr_m()\&.
 .PP
@@ -820,7 +820,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1887 of file pesg\&.f90\&.
+Definition at line 1888 of file pesg\&.f90\&.
 .PP
 References pietc::u0, and pietc::u1\&.
 .PP
@@ -846,7 +846,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 808 of file pesg\&.f90\&.
+Definition at line 809 of file pesg\&.f90\&.
 .SS "subroutine \fBpesg::guessak_map\fP (real(dp), intent(in) asp, real(dp), intent(in) tmarcx, real(dp), dimension(2), intent(out) ak)\fC [private]\fP"
 
 .PP
@@ -868,7 +868,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 790 of file pesg\&.f90\&.
+Definition at line 791 of file pesg\&.f90\&.
 .PP
 References pietc::rtod\&.
 .SS "subroutine, public \fBpesg::hgrid_ak\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) re, real(dp), intent(in) delxre, real(dp), intent(in) delyre, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
@@ -918,7 +918,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1765 of file pesg\&.f90\&.
+Definition at line 1766 of file pesg\&.f90\&.
 .SS "subroutine pesg::hgrid_ak_c (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) re, real(dp), intent(in) delxre, real(dp), intent(in) delyre, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny  ), intent(out) dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny\-1), intent(out) dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dy, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
@@ -974,7 +974,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1817 of file pesg\&.f90\&.
+Definition at line 1818 of file pesg\&.f90\&.
 .PP
 References hgrid_ak_rr_c(), and pietc::rtod\&.
 .SS "subroutine, public \fBpesg::hgrid_ak_dc\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(3,  lx:lx+nx  ,ly:ly+ny  ), intent(out) xc, real(dp), dimension(3,2,lx:lx+nx  ,ly:ly+ny  ), intent(out) xcd, real(dp), dimension(    lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
@@ -1022,7 +1022,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1723 of file pesg\&.f90\&.
+Definition at line 1724 of file pesg\&.f90\&.
 .PP
 References pietc::dtor\&.
 .SS "subroutine, public \fBpesg::hgrid_ak_dd\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) gdlat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) gdlon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
@@ -1070,7 +1070,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1629 of file pesg\&.f90\&.
+Definition at line 1630 of file pesg\&.f90\&.
 .PP
 References pietc::dtor, and pietc::rtod\&.
 .SS "subroutine pesg::hgrid_ak_dd_c (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) gdlat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) gdlon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny  ), intent(out) dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny\-1), intent(out) dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dy, logical, intent(out) ff)\fC [private]\fP"
@@ -1126,7 +1126,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1672 of file pesg\&.f90\&.
+Definition at line 1673 of file pesg\&.f90\&.
 .PP
 References pietc::dtor, hgrid_ak_rr_c(), and pietc::rtod\&.
 .SS "subroutine, public \fBpesg::hgrid_ak_rc\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(3,  lx:lx+nx  ,ly:ly+ny  ), intent(out) xc, real(dp), dimension(3,2,lx:lx+nx  ,ly:ly+ny  ), intent(out) xcd, real(dp), dimension(    lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
@@ -1176,7 +1176,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1540 of file pesg\&.f90\&.
+Definition at line 1541 of file pesg\&.f90\&.
 .PP
 References pietc::u0, and pietc::u1\&.
 .SS "subroutine, public \fBpesg::hgrid_ak_rr\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
@@ -1226,7 +1226,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1220 of file pesg\&.f90\&.
+Definition at line 1221 of file pesg\&.f90\&.
 .PP
 References pietc::u0, and pietc::u1\&.
 .SS "subroutine pesg::hgrid_ak_rr_c (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny  ), intent(out) dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny\-1), intent(out) dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) angle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) angle_dy, logical, intent(out) ff)"
@@ -1286,7 +1286,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1337 of file pesg\&.f90\&.
+Definition at line 1338 of file pesg\&.f90\&.
 .PP
 References pietc::u0, and pietc::u1\&.
 .PP
@@ -1316,7 +1316,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 465 of file pesg\&.f90\&.
+Definition at line 466 of file pesg\&.f90\&.
 .PP
 References pietc::f\&.
 .SS "subroutine \fBpesg::xctoxs\fP (real(dp), dimension(3), intent(in) xc, real(dp), dimension(2), intent(out) xs)\fC [private]\fP"
@@ -1378,7 +1378,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2117 of file pesg\&.f90\&.
+Definition at line 2118 of file pesg\&.f90\&.
 .PP
 References pietc::dtor, pietc::rtod, and xmtog_ak_rr_m()\&.
 .SS "subroutine pesg::xmtog_ak_dd_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) dlat, real(dp), intent(out) dlon, logical, intent(out) ff)\fC [private]\fP"
@@ -1414,7 +1414,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2086 of file pesg\&.f90\&.
+Definition at line 2087 of file pesg\&.f90\&.
 .PP
 References pietc::dtor, pietc::rtod, and xmtog_ak_rr_m()\&.
 .SS "subroutine pesg::xmtog_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) lat, real(dp), intent(out) lon, logical, intent(out) ff)"
@@ -1454,7 +1454,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2062 of file pesg\&.f90\&.
+Definition at line 2063 of file pesg\&.f90\&.
 .PP
 References xmtog_ak_rr_m()\&.
 .SS "subroutine pesg::xmtog_ak_rr_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) lat, real(dp), intent(out) lon, logical, intent(out) ff)\fC [private]\fP"
@@ -1490,7 +1490,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2014 of file pesg\&.f90\&.
+Definition at line 2015 of file pesg\&.f90\&.
 .PP
 References pietc::u0, and pietc::u1\&.
 .PP
@@ -1522,7 +1522,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 439 of file pesg\&.f90\&.
+Definition at line 440 of file pesg\&.f90\&.
 .SS "subroutine pesg::xmtoxc_vak (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)"
 
 .PP

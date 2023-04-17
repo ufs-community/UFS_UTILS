@@ -1,4 +1,4 @@
-.TH "program_setup" 3 "Tue Jan 17 2023" "Version 1.9.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "program_setup" 3 "Mon Apr 17 2023" "Version 1.10.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,6 +18,10 @@ program_setup \- Set up program execution\&.
 .SS "Variables"
 
 .in +1c
+.ti -1c
+.RI "logical, public \fBfract_vegsoil_type\fP = \&.false\&."
+.br
+.RI "When true, output the percentage of each soil and vegetation type category, and the dominant category within a model grid box\&. "
 .ti -1c
 .RI "integer, public \fBhalo\fP = 0"
 .br
@@ -136,21 +140,29 @@ George Gayno
 .PP
 
 .PP
-Definition at line 56 of file program_setup\&.f90\&.
+Definition at line 64 of file program_setup\&.f90\&.
 .PP
-References halo, input_facsf_file, input_leaf_area_index_file, input_maximum_snow_albedo_file, input_slope_type_file, input_snowfree_albedo_file, input_soil_color_file, input_soil_type_file, input_substrate_temperature_file, input_vegetation_greenness_file, input_vegetation_type_file, leaf_area_index_method, maximum_snow_albedo_method, mosaic_file_mdl, orog_dir_mdl, orog_files_mdl, snowfree_albedo_method, and vegetation_greenness_method\&.
+References fract_vegsoil_type, halo, input_facsf_file, input_leaf_area_index_file, input_maximum_snow_albedo_file, input_slope_type_file, input_snowfree_albedo_file, input_soil_color_file, input_soil_type_file, input_substrate_temperature_file, input_vegetation_greenness_file, input_vegetation_type_file, leaf_area_index_method, maximum_snow_albedo_method, mosaic_file_mdl, orog_dir_mdl, orog_files_mdl, snowfree_albedo_method, and vegetation_greenness_method\&.
 .PP
 Referenced by driver()\&.
 .SH "Variable Documentation"
 .PP 
+.SS "logical, public program_setup::fract_vegsoil_type = \&.false\&."
+
+.PP
+When true, output the percentage of each soil and vegetation type category, and the dominant category within a model grid box\&. 
+.PP
+Definition at line 51 of file program_setup\&.f90\&.
+.PP
+Referenced by model_grid::define_model_grid(), driver(), interp(), and read_setup_namelist()\&.
 .SS "integer, public program_setup::halo = 0"
 
 .PP
 Number of row/cols defining the lateral boundary halo\&. Used for regional nests\&. 
 .PP
-Definition at line 44 of file program_setup\&.f90\&.
+Definition at line 48 of file program_setup\&.f90\&.
 .PP
-Referenced by output(), and read_setup_namelist()\&.
+Referenced by output(), output_frac_cats::output_driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_facsf_file = 'NULL'"
 
 .PP
@@ -244,7 +256,7 @@ Referenced by driver(), and read_setup_namelist()\&.
 .PP
 Interpolation method for max snow albedo\&. Conservative or bilinear (default)\&. 
 .PP
-Definition at line 40 of file program_setup\&.f90\&.
+Definition at line 41 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::mosaic_file_mdl = 'NULL'"
@@ -276,7 +288,7 @@ Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .PP
 Interpolation method for snowfree albedo\&. Conservative or bilinear (default)\&. 
 .PP
-Definition at line 41 of file program_setup\&.f90\&.
+Definition at line 43 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::vegetation_greenness_method ='bilinear'"
@@ -284,7 +296,7 @@ Referenced by driver(), and read_setup_namelist()\&.
 .PP
 Interpolation method for vegetation greenness\&. Conservative or bilinear (default)\&. 
 .PP
-Definition at line 42 of file program_setup\&.f90\&.
+Definition at line 45 of file program_setup\&.f90\&.
 .PP
 Referenced by driver(), and read_setup_namelist()\&.
 .SH "Author"

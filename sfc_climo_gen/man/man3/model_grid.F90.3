@@ -1,4 +1,4 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/model_grid.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/model_grid.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -23,7 +23,7 @@
 .br
 .RI "Define model grid\&. "
 .ti -1c
-.RI "subroutine \fBmodel_grid::get_model_info\fP (orog_file, mask, lat2d, lon2d, idim, jdim)"
+.RI "subroutine \fBmodel_grid::get_model_info\fP (orog_file, mask, land_frac, lat2d, lon2d, idim, jdim)"
 .br
 .RI "Get model information\&. "
 .ti -1c
@@ -58,6 +58,10 @@
 .RI "integer, public \fBmodel_grid::j_mdl\fP"
 .br
 .RI "j dimension of model tile\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::land_frac_field_mdl\fP"
+.br
+.RI "ESMF field object that holds the model land fraction\&. "
 .ti -1c
 .RI "type(esmf_field), public \fBmodel_grid::latitude_field_mdl\fP"
 .br

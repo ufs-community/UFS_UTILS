@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">cpld_gridgen
-   &#160;<span id="projectnumber">1.9.0</span>
+   &#160;<span id="projectnumber">1.10.0</span>
    </div>
   </td>
  </tr>
@@ -230,9 +230,6 @@ Variables</h2></td></tr>
 <tr class="memitem:a435598dba041e0bc7d08df4b38d9bbdd"><td class="memItemLeft" align="right" valign="top">real(kind=real_kind), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a435598dba041e0bc7d08df4b38d9bbdd">grdvars::masking_depth</a> = 0.0</td></tr>
 <tr class="memdesc:a435598dba041e0bc7d08df4b38d9bbdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The masking depth for MOM6.  <a href="grdvars_8F90.html#a435598dba041e0bc7d08df4b38d9bbdd">More...</a><br /></td></tr>
 <tr class="separator:a435598dba041e0bc7d08df4b38d9bbdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56bb242b243d23e413bedceb59eb80ed"><td class="memItemLeft" align="right" valign="top">logical&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a56bb242b243d23e413bedceb59eb80ed">grdvars::mastertask</a></td></tr>
-<tr class="memdesc:a56bb242b243d23e413bedceb59eb80ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">flag indicating whether this is the mastertask  <a href="grdvars_8F90.html#a56bb242b243d23e413bedceb59eb80ed">More...</a><br /></td></tr>
-<tr class="separator:a56bb242b243d23e413bedceb59eb80ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87e55332b7fbdf58eb6d358e9a83db62"><td class="memItemLeft" align="right" valign="top">real(kind=real_kind), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a87e55332b7fbdf58eb6d358e9a83db62">grdvars::maximum_depth</a> = 6500.0</td></tr>
 <tr class="memdesc:a87e55332b7fbdf58eb6d358e9a83db62"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum depth for MOM6.  <a href="grdvars_8F90.html#a87e55332b7fbdf58eb6d358e9a83db62">More...</a><br /></td></tr>
 <tr class="separator:a87e55332b7fbdf58eb6d358e9a83db62"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -269,6 +266,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a0ee0447ff5535317aa9de6202e53ebc4"><td class="memItemLeft" align="right" valign="top">integer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a0ee0447ff5535317aa9de6202e53ebc4">grdvars::ny</a></td></tr>
 <tr class="memdesc:a0ee0447ff5535317aa9de6202e53ebc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">j-dimension of MOM6 supergrid  <a href="grdvars_8F90.html#a0ee0447ff5535317aa9de6202e53ebc4">More...</a><br /></td></tr>
 <tr class="separator:a0ee0447ff5535317aa9de6202e53ebc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e159c25718a8413af83ebc172c01516"><td class="memItemLeft" align="right" valign="top">logical&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a4e159c25718a8413af83ebc172c01516">grdvars::roottask</a></td></tr>
+<tr class="memdesc:a4e159c25718a8413af83ebc172c01516"><td class="mdescLeft">&#160;</td><td class="mdescRight">flag indicating whether this is the roottask  <a href="grdvars_8F90.html#a4e159c25718a8413af83ebc172c01516">More...</a><br /></td></tr>
+<tr class="separator:a4e159c25718a8413af83ebc172c01516"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d2757edca0e0dc8bfb70d63debcba95"><td class="memItemLeft" align="right" valign="top">real(dbl_kind)&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a3d2757edca0e0dc8bfb70d63debcba95">grdvars::sg_maxlat</a></td></tr>
 <tr class="memdesc:a3d2757edca0e0dc8bfb70d63debcba95"><td class="mdescLeft">&#160;</td><td class="mdescRight">the maximum latitute present in the supergrid file  <a href="grdvars_8F90.html#a3d2757edca0e0dc8bfb70d63debcba95">More...</a><br /></td></tr>
 <tr class="separator:a3d2757edca0e0dc8bfb70d63debcba95"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1082,24 +1082,6 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="file_a56bb242b243d23e413bedceb59eb80ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#file_a56bb242b243d23e413bedceb59eb80ed">&#9670;&nbsp;</a></span>mastertask</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">logical grdvars::mastertask</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>flag indicating whether this is the mastertask </p>
-
-<p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00029">29</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
-
-</div>
-</div>
 <a id="file_a87e55332b7fbdf58eb6d358e9a83db62"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#file_a87e55332b7fbdf58eb6d358e9a83db62">&#9670;&nbsp;</a></span>maximum_depth</h2>
 
@@ -1313,6 +1295,24 @@ Variables</h2></td></tr>
 <p>j-dimension of MOM6 supergrid </p>
 
 <p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00019">19</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
+
+</div>
+</div>
+<a id="file_a4e159c25718a8413af83ebc172c01516"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a4e159c25718a8413af83ebc172c01516">&#9670;&nbsp;</a></span>roottask</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">logical grdvars::roottask</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>flag indicating whether this is the roottask </p>
+
+<p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00029">29</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
 
 </div>
 </div>

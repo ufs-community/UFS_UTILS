@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">chgres_cube
-   &#160;<span id="projectnumber">1.9.0</span>
+   &#160;<span id="projectnumber">1.10.0</span>
    </div>
   </td>
  </tr>
@@ -149,9 +149,9 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:ab18f8cebd46379b7b81a69829326eed0"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesurface.html#ab18f8cebd46379b7b81a69829326eed0">roughness</a></td></tr>
 <tr class="memdesc:ab18f8cebd46379b7b81a69829326eed0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set roughness length at land and sea ice.  <a href="#ab18f8cebd46379b7b81a69829326eed0">More...</a><br /></td></tr>
 <tr class="separator:ab18f8cebd46379b7b81a69829326eed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b0d48d8c08655b2f2e1050050543a33"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesurface.html#a3b0d48d8c08655b2f2e1050050543a33">search_many</a> (num_field, bundle_target, field_data_2d, mask, tile, search_nums, localpet, latitude, terrain_land, soilt_climo, field_data_3d)</td></tr>
-<tr class="memdesc:a3b0d48d8c08655b2f2e1050050543a33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the search function for multple fields.  <a href="#a3b0d48d8c08655b2f2e1050050543a33">More...</a><br /></td></tr>
-<tr class="separator:a3b0d48d8c08655b2f2e1050050543a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc2c63e91ef5af4cefca13d9673d4acc"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesurface.html#afc2c63e91ef5af4cefca13d9673d4acc">search_many</a> (num_field, bundle_target, tile, search_nums, localpet, latitude, terrain_land, soilt_climo, mask)</td></tr>
+<tr class="memdesc:afc2c63e91ef5af4cefca13d9673d4acc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute the search function for multple fields.  <a href="#afc2c63e91ef5af4cefca13d9673d4acc">More...</a><br /></td></tr>
+<tr class="separator:afc2c63e91ef5af4cefca13d9673d4acc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0707121ff6af9350608125b1750e32f5"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacesurface.html#a0707121ff6af9350608125b1750e32f5">surface_driver</a> (localpet)</td></tr>
 <tr class="memdesc:a0707121ff6af9350608125b1750e32f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Driver routine to process surface/nst data.  <a href="#a0707121ff6af9350608125b1750e32f5">More...</a><br /></td></tr>
 <tr class="separator:a0707121ff6af9350608125b1750e32f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,7 +221,7 @@ Variables</h2></td></tr>
 <dd>
 Jeff Beck </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02016">2016</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02028">2028</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="model__grid_8F90_source.html#l00027">model_grid::i_input</a>, <a class="el" href="model__grid_8F90_source.html#l00052">model_grid::input_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00030">model_grid::j_input</a>, and <a class="el" href="model__grid_8F90_source.html#l00025">model_grid::lsoil_target</a>.</p>
 
@@ -247,7 +247,7 @@ Jeff Beck </dd></dl>
 <p>Adjust soil temperature for changes in terrain height between the input and target grids. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l01940">1940</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l01952">1952</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00042">surface_target_data::soil_temp_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00062">terrain_from_input_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00096">model_grid::terrain_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00053">veg_type_landice_target</a>, and <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>.</p>
 
@@ -273,9 +273,9 @@ Jeff Beck </dd></dl>
 <p>Compute liquid portion of the total soil moisture. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l01490">1490</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l01502">1502</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00135">program_setup::bb_target</a>, <a class="el" href="surface_8F90_source.html#l00069">blim</a>, <a class="el" href="surface_8F90_source.html#l00071">frz_h2o</a>, <a class="el" href="surface_8F90_source.html#l00075">grav</a>, <a class="el" href="surface_8F90_source.html#l00077">hlice</a>, <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00130">program_setup::maxsmc_target</a>, <a class="el" href="program__setup_8F90_source.html#l00136">program_setup::satpsi_target</a>, <a class="el" href="surface__target__data_8F90_source.html#l00042">surface_target_data::soil_temp_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">static_data::soil_type_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00044">surface_target_data::soilm_liq_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00046">surface_target_data::soilm_tot_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00053">veg_type_landice_target</a>, and <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>.</p>
+<p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00136">program_setup::bb_target</a>, <a class="el" href="surface_8F90_source.html#l00069">blim</a>, <a class="el" href="surface_8F90_source.html#l00071">frz_h2o</a>, <a class="el" href="surface_8F90_source.html#l00075">grav</a>, <a class="el" href="surface_8F90_source.html#l00077">hlice</a>, <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00131">program_setup::maxsmc_target</a>, <a class="el" href="program__setup_8F90_source.html#l00137">program_setup::satpsi_target</a>, <a class="el" href="surface__target__data_8F90_source.html#l00042">surface_target_data::soil_temp_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">static_data::soil_type_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00044">surface_target_data::soilm_liq_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00046">surface_target_data::soilm_tot_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00053">veg_type_landice_target</a>, and <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00108">surface_driver()</a>.</p>
 
@@ -299,7 +299,7 @@ Jeff Beck </dd></dl>
 <p>Free up memory once the target grid surface fields are no longer needed. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l03413">3413</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l03429">3429</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="surface__target__data_8F90_source.html#l00112">surface_target_data::cleanup_target_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l00059">soil_type_from_input_grid</a>, <a class="el" href="surface_8F90_source.html#l00062">terrain_from_input_grid</a>, and <a class="el" href="surface_8F90_source.html#l00065">terrain_from_input_grid_land</a>.</p>
 
@@ -325,7 +325,7 @@ Jeff Beck </dd></dl>
 <p>Create ESMF fields for the target grid nst variables. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02962">2962</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02974">2974</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="surface__target__data_8F90_source.html#l00062">surface_target_data::c_0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00060">surface_target_data::c_d_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00064">surface_target_data::d_conv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00066">surface_target_data::dt_cool_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00068">surface_target_data::ifd_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00071">surface_target_data::qrain_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00054">model_grid::target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00073">surface_target_data::tref_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00077">surface_target_data::w_0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00075">surface_target_data::w_d_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00079">surface_target_data::xs_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00082">surface_target_data::xt_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00093">surface_target_data::xtts_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00085">surface_target_data::xu_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00088">surface_target_data::xv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00091">surface_target_data::xz_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00095">surface_target_data::xzts_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00097">surface_target_data::z_c_target_grid</a>, and <a class="el" href="surface__target__data_8F90_source.html#l00099">surface_target_data::zm_target_grid</a>.</p>
 
@@ -351,7 +351,7 @@ Jeff Beck </dd></dl>
 <p>Create ESMF fields for the target grid surface variables. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02604">2604</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02616">2616</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="surface__target__data_8F90_source.html#l00018">surface_target_data::canopy_mc_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00020">surface_target_data::f10m_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00023">surface_target_data::ffmm_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00056">surface_target_data::lai_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00025">model_grid::lsoil_target</a>, <a class="el" href="surface__target__data_8F90_source.html#l00026">surface_target_data::q2m_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00028">surface_target_data::seaice_depth_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00030">surface_target_data::seaice_fract_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00032">surface_target_data::seaice_skin_temp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00034">surface_target_data::skin_temp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00040">surface_target_data::snow_depth_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00038">surface_target_data::snow_liq_equiv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00042">surface_target_data::soil_temp_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00059">soil_type_from_input_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00044">surface_target_data::soilm_liq_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00046">surface_target_data::soilm_tot_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00036">surface_target_data::srflag_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00048">surface_target_data::t2m_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00054">model_grid::target_grid</a>, <a class="el" href="surface_8F90_source.html#l00062">terrain_from_input_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00050">surface_target_data::tprcp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00052">surface_target_data::ustar_target_grid</a>, and <a class="el" href="surface__target__data_8F90_source.html#l00054">surface_target_data::z0_target_grid</a>.</p>
 
@@ -427,7 +427,7 @@ Jeff Beck </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2005-05-20 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l01634">1634</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l01646">1646</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="surface_8F90_source.html#l00069">blim</a>, <a class="el" href="surface_8F90_source.html#l00071">frz_h2o</a>, <a class="el" href="surface_8F90_source.html#l00075">grav</a>, and <a class="el" href="surface_8F90_source.html#l00077">hlice</a>.</p>
 
@@ -490,9 +490,9 @@ Jeff Beck </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l03124">3124</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l03136">3136</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00249">interp()</a>, and <a class="el" href="surface_8F90_source.html#l03160">regrid_many()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00249">interp()</a>, and <a class="el" href="surface_8F90_source.html#l03172">regrid_many()</a>.</p>
 
 </div>
 </div>
@@ -523,7 +523,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00249">249</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="surface__target__data_8F90_source.html#l00062">surface_target_data::c_0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00060">surface_target_data::c_d_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00018">surface_target_data::canopy_mc_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00095">program_setup::convert_nst</a>, <a class="el" href="surface__target__data_8F90_source.html#l00064">surface_target_data::d_conv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00066">surface_target_data::dt_cool_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00020">surface_target_data::f10m_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00023">surface_target_data::ffmm_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00037">model_grid::i_target</a>, <a class="el" href="surface__target__data_8F90_source.html#l00068">surface_target_data::ifd_target_grid</a>, <a class="el" href="surface_8F90_source.html#l03124">ij_to_i_j()</a>, <a class="el" href="model__grid_8F90_source.html#l00052">model_grid::input_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00040">model_grid::j_target</a>, <a class="el" href="program__setup_8F90_source.html#l00119">program_setup::lai_from_climo</a>, <a class="el" href="surface__target__data_8F90_source.html#l00056">surface_target_data::lai_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00077">model_grid::latitude_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00025">model_grid::lsoil_target</a>, <a class="el" href="static__data_8F90_source.html#l00029">static_data::max_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00030">static_data::min_veg_greenness_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00115">program_setup::minmax_vgfrc_from_climo</a>, <a class="el" href="model__grid_8F90_source.html#l00049">model_grid::num_tiles_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00026">surface_target_data::q2m_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00071">surface_target_data::qrain_target_grid</a>, <a class="el" href="surface_8F90_source.html#l03160">regrid_many()</a>, <a class="el" href="surface__target__data_8F90_source.html#l00028">surface_target_data::seaice_depth_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00030">surface_target_data::seaice_fract_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00032">surface_target_data::seaice_skin_temp_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00093">model_grid::seamask_target_grid</a>, <a class="el" href="search__util_8F90_source.html#l00047">search_util::search()</a>, <a class="el" href="surface_8F90_source.html#l03307">search_many()</a>, <a class="el" href="surface__target__data_8F90_source.html#l00034">surface_target_data::skin_temp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00040">surface_target_data::snow_depth_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00038">surface_target_data::snow_liq_equiv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00042">surface_target_data::soil_temp_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00059">soil_type_from_input_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">static_data::soil_type_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00046">surface_target_data::soilm_tot_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00105">program_setup::sotyp_from_climo</a>, <a class="el" href="surface__target__data_8F90_source.html#l00036">surface_target_data::srflag_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00034">static_data::substrate_temp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00048">surface_target_data::t2m_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00054">model_grid::target_grid</a>, <a class="el" href="surface_8F90_source.html#l00062">terrain_from_input_grid</a>, <a class="el" href="surface_8F90_source.html#l00065">terrain_from_input_grid_land</a>, <a class="el" href="atm__input__data_8F90_source.html#l00052">atm_input_data::terrain_input_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00122">program_setup::tg3_from_soil</a>, <a class="el" href="surface__target__data_8F90_source.html#l00050">surface_target_data::tprcp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00073">surface_target_data::tref_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00052">surface_target_data::ustar_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00035">static_data::veg_greenness_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00053">veg_type_landice_target</a>, <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00110">program_setup::vgfrc_from_climo</a>, <a class="el" href="program__setup_8F90_source.html#l00101">program_setup::vgtyp_from_climo</a>, <a class="el" href="surface__target__data_8F90_source.html#l00077">surface_target_data::w_0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00075">surface_target_data::w_d_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00079">surface_target_data::xs_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00082">surface_target_data::xt_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00093">surface_target_data::xtts_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00085">surface_target_data::xu_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00088">surface_target_data::xv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00091">surface_target_data::xz_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00095">surface_target_data::xzts_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00054">surface_target_data::z0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00097">surface_target_data::z_c_target_grid</a>, and <a class="el" href="surface__target__data_8F90_source.html#l00099">surface_target_data::zm_target_grid</a>.</p>
+<p class="reference">References <a class="el" href="surface__target__data_8F90_source.html#l00062">surface_target_data::c_0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00060">surface_target_data::c_d_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00018">surface_target_data::canopy_mc_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00096">program_setup::convert_nst</a>, <a class="el" href="surface__target__data_8F90_source.html#l00064">surface_target_data::d_conv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00066">surface_target_data::dt_cool_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00020">surface_target_data::f10m_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00023">surface_target_data::ffmm_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00037">model_grid::i_target</a>, <a class="el" href="surface__target__data_8F90_source.html#l00068">surface_target_data::ifd_target_grid</a>, <a class="el" href="surface_8F90_source.html#l03136">ij_to_i_j()</a>, <a class="el" href="model__grid_8F90_source.html#l00052">model_grid::input_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00040">model_grid::j_target</a>, <a class="el" href="program__setup_8F90_source.html#l00120">program_setup::lai_from_climo</a>, <a class="el" href="surface__target__data_8F90_source.html#l00056">surface_target_data::lai_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00077">model_grid::latitude_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00025">model_grid::lsoil_target</a>, <a class="el" href="static__data_8F90_source.html#l00029">static_data::max_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00030">static_data::min_veg_greenness_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00116">program_setup::minmax_vgfrc_from_climo</a>, <a class="el" href="model__grid_8F90_source.html#l00049">model_grid::num_tiles_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00026">surface_target_data::q2m_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00071">surface_target_data::qrain_target_grid</a>, <a class="el" href="surface_8F90_source.html#l03172">regrid_many()</a>, <a class="el" href="surface__target__data_8F90_source.html#l00028">surface_target_data::seaice_depth_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00030">surface_target_data::seaice_fract_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00032">surface_target_data::seaice_skin_temp_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00093">model_grid::seamask_target_grid</a>, <a class="el" href="search__util_8F90_source.html#l00047">search_util::search()</a>, <a class="el" href="surface_8F90_source.html#l03317">search_many()</a>, <a class="el" href="surface__target__data_8F90_source.html#l00034">surface_target_data::skin_temp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00040">surface_target_data::snow_depth_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00038">surface_target_data::snow_liq_equiv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00042">surface_target_data::soil_temp_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00059">soil_type_from_input_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">static_data::soil_type_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00046">surface_target_data::soilm_tot_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00106">program_setup::sotyp_from_climo</a>, <a class="el" href="surface__target__data_8F90_source.html#l00036">surface_target_data::srflag_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00034">static_data::substrate_temp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00048">surface_target_data::t2m_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00054">model_grid::target_grid</a>, <a class="el" href="surface_8F90_source.html#l00062">terrain_from_input_grid</a>, <a class="el" href="surface_8F90_source.html#l00065">terrain_from_input_grid_land</a>, <a class="el" href="atm__input__data_8F90_source.html#l00052">atm_input_data::terrain_input_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00123">program_setup::tg3_from_soil</a>, <a class="el" href="surface__target__data_8F90_source.html#l00050">surface_target_data::tprcp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00073">surface_target_data::tref_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00052">surface_target_data::ustar_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00035">static_data::veg_greenness_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00053">veg_type_landice_target</a>, <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00111">program_setup::vgfrc_from_climo</a>, <a class="el" href="program__setup_8F90_source.html#l00102">program_setup::vgtyp_from_climo</a>, <a class="el" href="surface__target__data_8F90_source.html#l00077">surface_target_data::w_0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00075">surface_target_data::w_d_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00079">surface_target_data::xs_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00082">surface_target_data::xt_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00093">surface_target_data::xtts_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00085">surface_target_data::xu_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00088">surface_target_data::xv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00091">surface_target_data::xz_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00095">surface_target_data::xzts_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00054">surface_target_data::z0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00097">surface_target_data::z_c_target_grid</a>, and <a class="el" href="surface__target__data_8F90_source.html#l00099">surface_target_data::zm_target_grid</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00108">surface_driver()</a>.</p>
 
@@ -548,7 +548,7 @@ Jeff Beck </dd></dl>
 <p>Set nst fields to flag values at these points.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02521">2521</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02533">2533</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="surface__target__data_8F90_source.html#l00062">surface_target_data::c_0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00060">surface_target_data::c_d_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00064">surface_target_data::d_conv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00066">surface_target_data::dt_cool_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00068">surface_target_data::ifd_target_grid</a>, <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00071">surface_target_data::qrain_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00034">surface_target_data::skin_temp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00073">surface_target_data::tref_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00077">surface_target_data::w_0_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00075">surface_target_data::w_d_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00079">surface_target_data::xs_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00082">surface_target_data::xt_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00093">surface_target_data::xtts_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00085">surface_target_data::xu_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00088">surface_target_data::xv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00091">surface_target_data::xz_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00095">surface_target_data::xzts_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00097">surface_target_data::z_c_target_grid</a>, and <a class="el" href="surface__target__data_8F90_source.html#l00099">surface_target_data::zm_target_grid</a>.</p>
 
@@ -574,7 +574,7 @@ Jeff Beck </dd></dl>
 <p>Perform some quality control checks before output. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02186">2186</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02198">2198</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="static__data_8F90_source.html#l00025">static_data::alnsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00026">static_data::alnwf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00023">static_data::alvsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00024">static_data::alvwf_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00018">surface_target_data::canopy_mc_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00027">static_data::facsf_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00028">static_data::facwf_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00073">frz_ice</a>, <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00029">static_data::max_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00030">static_data::min_veg_greenness_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00031">static_data::mxsno_albedo_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00028">surface_target_data::seaice_depth_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00030">surface_target_data::seaice_fract_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00032">surface_target_data::seaice_skin_temp_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00034">surface_target_data::skin_temp_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00032">static_data::slope_type_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00040">surface_target_data::snow_depth_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00038">surface_target_data::snow_liq_equiv_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00042">surface_target_data::soil_temp_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">static_data::soil_type_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00044">surface_target_data::soilm_liq_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00046">surface_target_data::soilm_tot_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00034">static_data::substrate_temp_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00035">static_data::veg_greenness_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00053">veg_type_landice_target</a>, and <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>.</p>
 
@@ -653,9 +653,9 @@ Jeff Beck </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Larissa Reames, OU CIMMS/NOAA/NSSL </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l03160">3160</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l03172">3172</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00095">program_setup::convert_nst</a>, <a class="el" href="model__grid_8F90_source.html#l00037">model_grid::i_target</a>, <a class="el" href="surface__target__data_8F90_source.html#l00068">surface_target_data::ifd_target_grid</a>, <a class="el" href="surface_8F90_source.html#l03124">ij_to_i_j()</a>, and <a class="el" href="model__grid_8F90_source.html#l00040">model_grid::j_target</a>.</p>
+<p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00096">program_setup::convert_nst</a>, <a class="el" href="model__grid_8F90_source.html#l00037">model_grid::i_target</a>, <a class="el" href="surface__target__data_8F90_source.html#l00068">surface_target_data::ifd_target_grid</a>, <a class="el" href="surface_8F90_source.html#l03136">ij_to_i_j()</a>, and <a class="el" href="model__grid_8F90_source.html#l00040">model_grid::j_target</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00249">interp()</a>.</p>
 
@@ -680,9 +680,9 @@ Jeff Beck </dd></dl>
 <p>Works for Noah land model only. Required to preserve latent/sensible heat fluxes.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l01772">1772</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l01784">1784</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00127">program_setup::drysmc_input</a>, <a class="el" href="program__setup_8F90_source.html#l00128">program_setup::drysmc_target</a>, <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00129">program_setup::maxsmc_input</a>, <a class="el" href="program__setup_8F90_source.html#l00130">program_setup::maxsmc_target</a>, <a class="el" href="program__setup_8F90_source.html#l00131">program_setup::refsmc_input</a>, <a class="el" href="program__setup_8F90_source.html#l00132">program_setup::refsmc_target</a>, <a class="el" href="surface_8F90_source.html#l00059">soil_type_from_input_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">static_data::soil_type_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00046">surface_target_data::soilm_tot_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00035">static_data::veg_greenness_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00053">veg_type_landice_target</a>, <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00133">program_setup::wltsmc_input</a>, and <a class="el" href="program__setup_8F90_source.html#l00134">program_setup::wltsmc_target</a>.</p>
+<p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00128">program_setup::drysmc_input</a>, <a class="el" href="program__setup_8F90_source.html#l00129">program_setup::drysmc_target</a>, <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00130">program_setup::maxsmc_input</a>, <a class="el" href="program__setup_8F90_source.html#l00131">program_setup::maxsmc_target</a>, <a class="el" href="program__setup_8F90_source.html#l00132">program_setup::refsmc_input</a>, <a class="el" href="program__setup_8F90_source.html#l00133">program_setup::refsmc_target</a>, <a class="el" href="surface_8F90_source.html#l00059">soil_type_from_input_grid</a>, <a class="el" href="static__data_8F90_source.html#l00033">static_data::soil_type_target_grid</a>, <a class="el" href="surface__target__data_8F90_source.html#l00046">surface_target_data::soilm_tot_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00035">static_data::veg_greenness_target_grid</a>, <a class="el" href="surface_8F90_source.html#l00053">veg_type_landice_target</a>, <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>, <a class="el" href="program__setup_8F90_source.html#l00134">program_setup::wltsmc_input</a>, and <a class="el" href="program__setup_8F90_source.html#l00135">program_setup::wltsmc_target</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l00108">surface_driver()</a>.</p>
 
@@ -707,7 +707,7 @@ Jeff Beck </dd></dl>
 <p>At land, roughness is set from a lookup table based on the vegetation type. At sea ice, roughness is set to 1 cm.</p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NOAA/EMC </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02132">2132</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l02144">2144</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="model__grid_8F90_source.html#l00074">model_grid::landmask_target_grid</a>, <a class="el" href="static__data_8F90_source.html#l00036">static_data::veg_type_target_grid</a>, and <a class="el" href="surface__target__data_8F90_source.html#l00054">surface_target_data::z0_target_grid</a>.</p>
 
@@ -715,8 +715,8 @@ Jeff Beck </dd></dl>
 
 </div>
 </div>
-<a id="a3b0d48d8c08655b2f2e1050050543a33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b0d48d8c08655b2f2e1050050543a33">&#9670;&nbsp;</a></span>search_many()</h2>
+<a id="afc2c63e91ef5af4cefca13d9673d4acc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc2c63e91ef5af4cefca13d9673d4acc">&#9670;&nbsp;</a></span>search_many()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -732,18 +732,6 @@ Jeff Beck </dd></dl>
           <td></td>
           <td class="paramtype">type(esmf_fieldbundle), intent(inout)&#160;</td>
           <td class="paramname"><em>bundle_target</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real(esmf_kind_r8), dimension(i_target,j_target), intent(inout)&#160;</td>
-          <td class="paramname"><em>field_data_2d</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">integer(esmf_kind_i8), dimension(i_target,j_target), intent(inout)&#160;</td>
-          <td class="paramname"><em>mask</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -784,8 +772,8 @@ Jeff Beck </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">real(esmf_kind_r8), dimension(i_target,j_target,lsoil_target), intent(inout), optional&#160;</td>
-          <td class="paramname"><em>field_data_3d</em>&#160;</td>
+          <td class="paramtype">integer(esmf_kind_i8), dimension(i_target,j_target), intent(inout), optional&#160;</td>
+          <td class="paramname"><em>mask</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -800,21 +788,18 @@ Jeff Beck </dd></dl>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">num_field</td><td>Number of fields to process. </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">bundle_target</td><td>ESMF FieldBundle holding target fields to search </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">field_data_2d</td><td>A real array of size i_target,j_target to temporarily hold data for searching </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">mask</td><td>An integer array of size i_target,j_target that holds masked (0) and unmasked (1) values indicating where to execute search (only at unmasked points). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">tile</td><td>Current cubed sphere tile. </td></tr>
     <tr><td class="paramdir">[in,out]</td><td class="paramname">search_nums</td><td>Array length num_field holding search field numbers corresponding to each field provided for searching. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">localpet</td><td>ESMF local persistent execution thread. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">latitude</td><td>(optional) A real array size i_target,j_target of latitude on the target grid </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">terrain_land</td><td>(optional) A real array size i_target,j_target of terrain height (m) on the target grid </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">soilt_climo</td><td>(optional) A real array size i_target,j_target of climatological soil type on the target grid </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">field_data_3d</td><td>(optional) An empty real array of size i_target,j_target,lsoil_target to temporarily hold soil data for searching </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">mask</td><td>(optional) An integer array of size i_target,j_target that holds masked (0) and unmasked (1) values indicating where to execute search (only at </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section author"><dt>Author</dt><dd>Larissa Reames, OU CIMMS/NOAA/NSSL </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l03307">3307</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l03317">3317</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
 <p class="reference">References <a class="el" href="program__setup_8F90_source.html#l00057">program_setup::external_model</a>, <a class="el" href="model__grid_8F90_source.html#l00037">model_grid::i_target</a>, <a class="el" href="program__setup_8F90_source.html#l00043">program_setup::input_type</a>, <a class="el" href="model__grid_8F90_source.html#l00040">model_grid::j_target</a>, <a class="el" href="model__grid_8F90_source.html#l00025">model_grid::lsoil_target</a>, and <a class="el" href="search__util_8F90_source.html#l00047">search_util::search()</a>.</p>
 
@@ -849,7 +834,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00108">108</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">References <a class="el" href="surface_8F90_source.html#l02016">adjust_soil_levels()</a>, <a class="el" href="surface_8F90_source.html#l01940">adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l01490">calc_liq_soil_moisture()</a>, <a class="el" href="program__setup_8F90_source.html#l00515">program_setup::calc_soil_params_driver()</a>, <a class="el" href="surface_8F90_source.html#l03413">cleanup_all_target_sfc_data()</a>, <a class="el" href="static__data_8F90_source.html#l00510">static_data::cleanup_static_fields()</a>, <a class="el" href="surface__target__data_8F90_source.html#l00145">surface_target_data::cleanup_target_nst_data()</a>, <a class="el" href="program__setup_8F90_source.html#l00095">program_setup::convert_nst</a>, <a class="el" href="surface_8F90_source.html#l02962">create_nst_esmf_fields()</a>, <a class="el" href="surface_8F90_source.html#l02604">create_surface_esmf_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00050">static_data::get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00249">interp()</a>, <a class="el" href="surface_8F90_source.html#l02521">nst_land_fill()</a>, <a class="el" href="surface_8F90_source.html#l02186">qc_check()</a>, <a class="el" href="surface_8F90_source.html#l01772">rescale_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l02132">roughness()</a>.</p>
+<p class="reference">References <a class="el" href="surface_8F90_source.html#l02028">adjust_soil_levels()</a>, <a class="el" href="surface_8F90_source.html#l01952">adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l01502">calc_liq_soil_moisture()</a>, <a class="el" href="program__setup_8F90_source.html#l00517">program_setup::calc_soil_params_driver()</a>, <a class="el" href="surface_8F90_source.html#l03429">cleanup_all_target_sfc_data()</a>, <a class="el" href="static__data_8F90_source.html#l00510">static_data::cleanup_static_fields()</a>, <a class="el" href="surface__target__data_8F90_source.html#l00145">surface_target_data::cleanup_target_nst_data()</a>, <a class="el" href="program__setup_8F90_source.html#l00096">program_setup::convert_nst</a>, <a class="el" href="surface_8F90_source.html#l02974">create_nst_esmf_fields()</a>, <a class="el" href="surface_8F90_source.html#l02616">create_surface_esmf_fields()</a>, <a class="el" href="static__data_8F90_source.html#l00050">static_data::get_static_fields()</a>, <a class="el" href="surface_8F90_source.html#l00249">interp()</a>, <a class="el" href="surface_8F90_source.html#l02533">nst_land_fill()</a>, <a class="el" href="surface_8F90_source.html#l02198">qc_check()</a>, <a class="el" href="surface_8F90_source.html#l01784">rescale_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l02144">roughness()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="chgres_8F90_source.html#l00024">chgres()</a>.</p>
 
@@ -880,7 +865,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00069">69</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01490">calc_liq_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l01634">FRH2O()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01502">calc_liq_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l01646">FRH2O()</a>.</p>
 
 </div>
 </div>
@@ -908,7 +893,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00071">71</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01490">calc_liq_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l01634">FRH2O()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01502">calc_liq_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l01646">FRH2O()</a>.</p>
 
 </div>
 </div>
@@ -936,7 +921,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00073">73</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02186">qc_check()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l02198">qc_check()</a>.</p>
 
 </div>
 </div>
@@ -964,7 +949,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00075">75</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01490">calc_liq_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l01634">FRH2O()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01502">calc_liq_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l01646">FRH2O()</a>.</p>
 
 </div>
 </div>
@@ -992,7 +977,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00077">77</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01490">calc_liq_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l01634">FRH2O()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01502">calc_liq_soil_moisture()</a>, and <a class="el" href="surface_8F90_source.html#l01646">FRH2O()</a>.</p>
 
 </div>
 </div>
@@ -1020,7 +1005,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00059">59</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l03413">cleanup_all_target_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l02604">create_surface_esmf_fields()</a>, <a class="el" href="surface_8F90_source.html#l00249">interp()</a>, and <a class="el" href="surface_8F90_source.html#l01772">rescale_soil_moisture()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l03429">cleanup_all_target_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l02616">create_surface_esmf_fields()</a>, <a class="el" href="surface_8F90_source.html#l00249">interp()</a>, and <a class="el" href="surface_8F90_source.html#l01784">rescale_soil_moisture()</a>.</p>
 
 </div>
 </div>
@@ -1048,7 +1033,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00062">62</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01940">adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l03413">cleanup_all_target_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l02604">create_surface_esmf_fields()</a>, and <a class="el" href="surface_8F90_source.html#l00249">interp()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01952">adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l03429">cleanup_all_target_sfc_data()</a>, <a class="el" href="surface_8F90_source.html#l02616">create_surface_esmf_fields()</a>, and <a class="el" href="surface_8F90_source.html#l00249">interp()</a>.</p>
 
 </div>
 </div>
@@ -1076,7 +1061,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00065">65</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l03413">cleanup_all_target_sfc_data()</a>, and <a class="el" href="surface_8F90_source.html#l00249">interp()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l03429">cleanup_all_target_sfc_data()</a>, and <a class="el" href="surface_8F90_source.html#l00249">interp()</a>.</p>
 
 </div>
 </div>
@@ -1105,7 +1090,7 @@ Jeff Beck </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="surface_8F90_source.html#l00053">53</a> of file <a class="el" href="surface_8F90_source.html">surface.F90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01940">adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l01490">calc_liq_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l00249">interp()</a>, <a class="el" href="surface_8F90_source.html#l02186">qc_check()</a>, and <a class="el" href="surface_8F90_source.html#l01772">rescale_soil_moisture()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="surface_8F90_source.html#l01952">adjust_soilt_for_terrain()</a>, <a class="el" href="surface_8F90_source.html#l01502">calc_liq_soil_moisture()</a>, <a class="el" href="surface_8F90_source.html#l00249">interp()</a>, <a class="el" href="surface_8F90_source.html#l02198">qc_check()</a>, and <a class="el" href="surface_8F90_source.html#l01784">rescale_soil_moisture()</a>.</p>
 
 </div>
 </div>

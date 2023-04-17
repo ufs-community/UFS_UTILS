@@ -1,4 +1,4 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atmosphere.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atmosphere.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,7 +35,7 @@
 .br
 .RI "Compute vertical level height\&. "
 .ti -1c
-.RI "subroutine \fBatmosphere::convert_winds\fP"
+.RI "subroutine \fBatmosphere::convert_winds_to_uv\fP"
 .br
 .RI "Convert 3-d component winds to u and v\&. "
 .ti -1c
@@ -79,7 +79,7 @@
 .br
 .RI "Vertically interpolate atmospheric fields to target FV3 grid\&. "
 .ti -1c
-.RI "subroutine \fBatmosphere::VINTG_WAM\fP (YEAR, MONTH, DAY, HOUR)"
+.RI "subroutine \fBatmosphere::VINTG_WAM\fP (YEAR, MONTH, DAY, HOUR, PF)"
 .br
 .RI "Vertically extend model top into thermosphere for whole atmosphere model\&. "
 .in -1c
@@ -127,21 +127,53 @@
 .br
 .RI "tracers before vert adj "
 .ti -1c
-.RI "type(esmf_field) \fBatmosphere::wind_b4adj_target_grid\fP"
+.RI "type(esmf_field) \fBatmosphere::xwind_b4adj_target_grid\fP"
 .br
-.RI "3-d wind before vert adj "
+.RI "x-component wind, before vert adj "
 .ti -1c
-.RI "type(esmf_field) \fBatmosphere::wind_s_target_grid\fP"
+.RI "type(esmf_field) \fBatmosphere::xwind_s_target_grid\fP"
 .br
-.RI "3-d wind, 'south' edge "
+.RI "x-component wind, 'south' edge "
 .ti -1c
-.RI "type(esmf_field) \fBatmosphere::wind_target_grid\fP"
+.RI "type(esmf_field) \fBatmosphere::xwind_target_grid\fP"
 .br
-.RI "3-d wind, grid box center "
+.RI "x-component wind, grid box center "
 .ti -1c
-.RI "type(esmf_field) \fBatmosphere::wind_w_target_grid\fP"
+.RI "type(esmf_field) \fBatmosphere::xwind_w_target_grid\fP"
 .br
-.RI "3-d wind, 'west' edge "
+.RI "x-component wind, 'west' edge "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::ywind_b4adj_target_grid\fP"
+.br
+.RI "y-component wind, before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::ywind_s_target_grid\fP"
+.br
+.RI "y-component wind, 'south' edge "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::ywind_target_grid\fP"
+.br
+.RI "y-component wind, grid box center "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::ywind_w_target_grid\fP"
+.br
+.RI "y-component wind, 'west' edge "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::zwind_b4adj_target_grid\fP"
+.br
+.RI "z-component wind, before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::zwind_s_target_grid\fP"
+.br
+.RI "z-component wind, 'south' edge "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::zwind_target_grid\fP"
+.br
+.RI "z-component wind, grid box center "
+.ti -1c
+.RI "type(esmf_field) \fBatmosphere::zwind_w_target_grid\fP"
+.br
+.RI "z-component wind, 'west' edge "
 .in -1c
 .SH "Detailed Description"
 .PP 

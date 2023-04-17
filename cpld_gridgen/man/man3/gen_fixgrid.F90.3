@@ -1,4 +1,4 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/gen_fixgrid.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/gen_fixgrid.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -34,7 +34,7 @@ Definition in file \fBgen_fixgrid\&.F90\fP\&.
 .SS "program gen_fixgrid ()"
 
 .PP
-Generate fixed grid files required for coupled model using the MOM6 super grid file and ocean mask file\&. It creates a master grid file which is then used to create subsequent files which are required to create the fix and IC files required for the S2S or S2SW application\&.
+Generate fixed grid files required for coupled model using the MOM6 super grid file and ocean mask file\&. It creates a main grid file which is then used to create subsequent files which are required to create the fix and IC files required for the S2S or S2SW application\&.
 .PP
 This executable created with this source code runs within the shell scrip cpld_gridgen\&.sh in \&.\&./\&.\&./ush, which utilizes both NCO (netCDF Operators) and ESMF command line functions\&. The shell script creates a run-time grid\&.nml from grid\&.nml\&.IN
 .PP

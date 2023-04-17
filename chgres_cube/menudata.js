@@ -50,6 +50,7 @@ var menudata={children:[
 {text:"v",url:"namespacemembers_v.html#index_v"},
 {text:"w",url:"namespacemembers_w.html#index_w"},
 {text:"x",url:"namespacemembers_x.html#index_x"},
+{text:"y",url:"namespacemembers_y.html#index_y"},
 {text:"z",url:"namespacemembers_z.html#index_z"}]},
 {text:"Functions/Subroutines",url:"namespacemembers_func.html",children:[
 {text:"a",url:"namespacemembers_func.html#index_a"},
@@ -89,6 +90,7 @@ var menudata={children:[
 {text:"v",url:"namespacemembers_vars_v.html#index_v"},
 {text:"w",url:"namespacemembers_vars_w.html#index_w"},
 {text:"x",url:"namespacemembers_vars_x.html#index_x"},
+{text:"y",url:"namespacemembers_vars_y.html#index_y"},
 {text:"z",url:"namespacemembers_vars_z.html#index_z"}]}]}]},
 {text:"Data Types List",url:"annotated.html",children:[
 {text:"Data Types List",url:"annotated.html"},

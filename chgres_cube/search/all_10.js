@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['re',['re',['../namespacegettemp__mod.html#ace295554f697be3670354015b7099987',1,'gettemp_mod']]],
   ['read_5ffrom_5finput',['read_from_input',['../namespaceprogram__setup.html#a1ffec9219f0a5e00b4c285f62904eca7',1,'program_setup']]],
   ['read_5ffv3_5fgrid_5fdata_5fnetcdf',['READ_FV3_GRID_DATA_NETCDF',['../sfc__input__data_8F90.html#a6c873511baf197c0f7766a28fc99c229',1,'sfc_input_data']]],
   ['read_5fgrib_5fsoil',['read_grib_soil',['../sfc__input__data_8F90.html#aceae825b0d75b9702e89065ccec45ea9',1,'sfc_input_data']]],
@@ -37,7 +36,6 @@ var searchData=
   ['rescale_5fsoil_5fmoisture',['rescale_soil_moisture',['../namespacesurface.html#a63fb2a0ed00bdec5e4f0b3360a5709a6',1,'surface']]],
   ['rh2spfh',['rh2spfh',['../namespacegrib2__util.html#ab4a2b2171e318712bd819dffa1648fa0',1,'grib2_util']]],
   ['rh2spfh_5fgfs',['rh2spfh_gfs',['../namespacegrib2__util.html#ac4d873e3a137ec2abcaeb7f735b021ae',1,'grib2_util']]],
-  ['rl',['rl',['../namespacegettemp__mod.html#aa72dc8ce90e67db68511126deeec149e',1,'gettemp_mod']]],
   ['roughness',['roughness',['../namespacesurface.html#ab18f8cebd46379b7b81a69829326eed0',1,'surface']]],
   ['rsearch',['RSEARCH',['../namespaceatmosphere.html#a1793890ef3e504c7c6cadb96e11f70d5',1,'atmosphere']]]
 ];

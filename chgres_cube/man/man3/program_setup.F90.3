@@ -1,4 +1,4 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/program_setup.F90" 3 "Tue Jan 17 2023" "Version 1.9.0" "chgres_cube" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/program_setup.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -278,6 +278,10 @@
 .RI "logical, public \fBprogram_setup::wam_cold_start\fP = \&.false\&."
 .br
 .RI "When true, cold start for whole atmosphere model\&. "
+.ti -1c
+.RI "character(len=500), public \fBprogram_setup::wam_parm_file\fP ='msis21\&.parm'"
+.br
+.RI "Full path to msis21\&.parm for WAM initialization\&. "
 .ti -1c
 .RI "real, dimension(:), allocatable, public \fBprogram_setup::wltsmc_input\fP"
 .br

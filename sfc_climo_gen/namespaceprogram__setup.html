@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">sfc_climo_gen
-   &#160;<span id="projectnumber">1.9.0</span>
+   &#160;<span id="projectnumber">1.10.0</span>
    </div>
   </td>
  </tr>
@@ -105,6 +105,9 @@ Functions/Subroutines</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr class="memitem:a3527d76f3ac67af0a2c673d510b003a2"><td class="memItemLeft" align="right" valign="top">logical, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceprogram__setup.html#a3527d76f3ac67af0a2c673d510b003a2">fract_vegsoil_type</a> = .false.</td></tr>
+<tr class="memdesc:a3527d76f3ac67af0a2c673d510b003a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true, output the percentage of each soil and vegetation type category, and the dominant category within a model grid box.  <a href="#a3527d76f3ac67af0a2c673d510b003a2">More...</a><br /></td></tr>
+<tr class="separator:a3527d76f3ac67af0a2c673d510b003a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69b3b78e03ab0ff3b84518a357f63b49"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceprogram__setup.html#a69b3b78e03ab0ff3b84518a357f63b49">halo</a> = 0</td></tr>
 <tr class="memdesc:a69b3b78e03ab0ff3b84518a357f63b49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of row/cols defining the lateral boundary halo.  <a href="#a69b3b78e03ab0ff3b84518a357f63b49">More...</a><br /></td></tr>
 <tr class="separator:a69b3b78e03ab0ff3b84518a357f63b49"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,15 +197,35 @@ Variables</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>George Gayno </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>2018 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00056">56</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00064">64</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">References <a class="el" href="program__setup_8f90_source.html#l00044">halo</a>, <a class="el" href="program__setup_8f90_source.html#l00024">input_facsf_file</a>, <a class="el" href="program__setup_8f90_source.html#l00023">input_leaf_area_index_file</a>, <a class="el" href="program__setup_8f90_source.html#l00028">input_maximum_snow_albedo_file</a>, <a class="el" href="program__setup_8f90_source.html#l00030">input_slope_type_file</a>, <a class="el" href="program__setup_8f90_source.html#l00029">input_snowfree_albedo_file</a>, <a class="el" href="program__setup_8f90_source.html#l00032">input_soil_color_file</a>, <a class="el" href="program__setup_8f90_source.html#l00031">input_soil_type_file</a>, <a class="el" href="program__setup_8f90_source.html#l00027">input_substrate_temperature_file</a>, <a class="el" href="program__setup_8f90_source.html#l00034">input_vegetation_greenness_file</a>, <a class="el" href="program__setup_8f90_source.html#l00033">input_vegetation_type_file</a>, <a class="el" href="program__setup_8f90_source.html#l00039">leaf_area_index_method</a>, <a class="el" href="program__setup_8f90_source.html#l00040">maximum_snow_albedo_method</a>, <a class="el" href="program__setup_8f90_source.html#l00035">mosaic_file_mdl</a>, <a class="el" href="program__setup_8f90_source.html#l00036">orog_dir_mdl</a>, <a class="el" href="program__setup_8f90_source.html#l00037">orog_files_mdl</a>, <a class="el" href="program__setup_8f90_source.html#l00041">snowfree_albedo_method</a>, and <a class="el" href="program__setup_8f90_source.html#l00042">vegetation_greenness_method</a>.</p>
+<p class="reference">References <a class="el" href="program__setup_8f90_source.html#l00051">fract_vegsoil_type</a>, <a class="el" href="program__setup_8f90_source.html#l00048">halo</a>, <a class="el" href="program__setup_8f90_source.html#l00024">input_facsf_file</a>, <a class="el" href="program__setup_8f90_source.html#l00023">input_leaf_area_index_file</a>, <a class="el" href="program__setup_8f90_source.html#l00028">input_maximum_snow_albedo_file</a>, <a class="el" href="program__setup_8f90_source.html#l00030">input_slope_type_file</a>, <a class="el" href="program__setup_8f90_source.html#l00029">input_snowfree_albedo_file</a>, <a class="el" href="program__setup_8f90_source.html#l00032">input_soil_color_file</a>, <a class="el" href="program__setup_8f90_source.html#l00031">input_soil_type_file</a>, <a class="el" href="program__setup_8f90_source.html#l00027">input_substrate_temperature_file</a>, <a class="el" href="program__setup_8f90_source.html#l00034">input_vegetation_greenness_file</a>, <a class="el" href="program__setup_8f90_source.html#l00033">input_vegetation_type_file</a>, <a class="el" href="program__setup_8f90_source.html#l00039">leaf_area_index_method</a>, <a class="el" href="program__setup_8f90_source.html#l00041">maximum_snow_albedo_method</a>, <a class="el" href="program__setup_8f90_source.html#l00035">mosaic_file_mdl</a>, <a class="el" href="program__setup_8f90_source.html#l00036">orog_dir_mdl</a>, <a class="el" href="program__setup_8f90_source.html#l00037">orog_files_mdl</a>, <a class="el" href="program__setup_8f90_source.html#l00043">snowfree_albedo_method</a>, and <a class="el" href="program__setup_8f90_source.html#l00045">vegetation_greenness_method</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a3527d76f3ac67af0a2c673d510b003a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3527d76f3ac67af0a2c673d510b003a2">&#9670;&nbsp;</a></span>fract_vegsoil_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">logical, public program_setup::fract_vegsoil_type = .false.</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>When true, output the percentage of each soil and vegetation type category, and the dominant category within a model grid box. </p>
+
+<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00051">51</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="model__grid_8F90_source.html#l00062">model_grid::define_model_grid()</a>, <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, <a class="el" href="interp_8F90_source.html#l00014">interp()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
+
+</div>
+</div>
 <a id="a69b3b78e03ab0ff3b84518a357f63b49"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a69b3b78e03ab0ff3b84518a357f63b49">&#9670;&nbsp;</a></span>halo</h2>
 
@@ -218,9 +241,9 @@ Variables</h2></td></tr>
 <p>Number of row/cols defining the lateral boundary halo. </p>
 <p>Used for regional nests. </p>
 
-<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00044">44</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00048">48</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="output_8f90_source.html#l00020">output()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="output_8f90_source.html#l00020">output()</a>, <a class="el" href="output__frac__cats_8F90_source.html#l00033">output_frac_cats::output_driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -240,7 +263,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00024">24</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -260,7 +283,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00023">23</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -280,7 +303,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00028">28</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -300,7 +323,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00030">30</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -320,7 +343,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00029">29</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -340,7 +363,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00032">32</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -360,7 +383,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00031">31</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -380,7 +403,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00027">27</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -400,7 +423,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00034">34</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -420,7 +443,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00033">33</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -441,7 +464,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00039">39</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -460,9 +483,9 @@ Variables</h2></td></tr>
 <p>Interpolation method for max snow albedo. </p>
 <p>Conservative or bilinear (default). </p>
 
-<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00040">40</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00041">41</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -482,7 +505,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00035">35</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="model__grid_8F90_source.html#l00054">model_grid::define_model_grid()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="model__grid_8F90_source.html#l00062">model_grid::define_model_grid()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -502,7 +525,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00036">36</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="model__grid_8F90_source.html#l00054">model_grid::define_model_grid()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="model__grid_8F90_source.html#l00062">model_grid::define_model_grid()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -522,7 +545,7 @@ Variables</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00037">37</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="model__grid_8F90_source.html#l00054">model_grid::define_model_grid()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="model__grid_8F90_source.html#l00062">model_grid::define_model_grid()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -541,9 +564,9 @@ Variables</h2></td></tr>
 <p>Interpolation method for snowfree albedo. </p>
 <p>Conservative or bilinear (default). </p>
 
-<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00041">41</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00043">43</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>
@@ -562,9 +585,9 @@ Variables</h2></td></tr>
 <p>Interpolation method for vegetation greenness. </p>
 <p>Conservative or bilinear (default). </p>
 
-<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00042">42</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="program__setup_8f90_source.html#l00045">45</a> of file <a class="el" href="program__setup_8f90_source.html">program_setup.f90</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00056">read_setup_namelist()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="driver_8F90_source.html#l00024">driver()</a>, and <a class="el" href="program__setup_8f90_source.html#l00064">read_setup_namelist()</a>.</p>
 
 </div>
 </div>

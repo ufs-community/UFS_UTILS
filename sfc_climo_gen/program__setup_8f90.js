@@ -1,6 +1,7 @@
 var program__setup_8f90 =
 [
     [ "read_setup_namelist", "program__setup_8f90.html#ac52f11da9f12e0cf9ff87fae136f0cde", null ],
+    [ "fract_vegsoil_type", "program__setup_8f90.html#a3527d76f3ac67af0a2c673d510b003a2", null ],
     [ "halo", "program__setup_8f90.html#a69b3b78e03ab0ff3b84518a357f63b49", null ],
     [ "input_facsf_file", "program__setup_8f90.html#aa40975450e88c9b31a0dda4831cc582b", null ],
     [ "input_leaf_area_index_file", "program__setup_8f90.html#a16ba1e0dcfb41cb431fd4efeb6263af3", null ],

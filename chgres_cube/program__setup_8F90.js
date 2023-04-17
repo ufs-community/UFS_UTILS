@@ -64,6 +64,7 @@ var program__setup_8F90 =
     [ "vgfrc_from_climo", "program__setup_8F90.html#a8caa284c1052597bed42205d1cac0339", null ],
     [ "vgtyp_from_climo", "program__setup_8F90.html#ad85f196d847aa9ac1edaa07d4377cc72", null ],
     [ "wam_cold_start", "program__setup_8F90.html#a975eb110cebfc2491c4773cb53cd85c7", null ],
+    [ "wam_parm_file", "program__setup_8F90.html#a497c9dd0f9c405c839bed2dfc491eafb", null ],
     [ "wltsmc_input", "program__setup_8F90.html#a4a0cb4c7fd9eb848647e59a6d20d9fd6", null ],
     [ "wltsmc_target", "program__setup_8F90.html#a40f629a2883fb6000377db3bc8088db5", null ]
 ];

@@ -1,8 +1,22 @@
 var searchData=
 [
-  ['lat',['lat',['../structmodule__nwp__base_1_1nwplocation.html#adbce9a82c869beff33bf116f724056c2',1,'module_nwp_base::nwplocation']]],
-  ['latname',['latname',['../structmodule__nwp_1_1nwp__type.html#a3ea896569fe9e8b9665ba1035ea2a880',1,'module_nwp::nwp_type']]],
-  ['len_5fsta_5fname',['len_sta_name',['../namespacekinds.html#a2e35624b3e7919d10ccf50acf9bb1a6b',1,'kinds']]],
-  ['lon',['lon',['../structmodule__nwp__base_1_1nwplocation.html#a7a68896ae3d121869317a8b6ffbb2b95',1,'module_nwp_base::nwplocation']]],
-  ['lonname',['lonname',['../structmodule__nwp_1_1nwp__type.html#a2e46e14674c8f3805a9da0d5f6f81bb8',1,'module_nwp::nwp_type']]]
+  ['ncdata',['ncdata',['../namespacemodule__nwp.html#af103c9fe9d0bfa17cc2c55e1cf463cdd',1,'module_nwp']]],
+  ['ncid',['ncid',['../structmodule__ncio_1_1ncio.html#a4fd65e0d85fc05d062edde67e44e529c',1,'module_ncio::ncio']]],
+  ['ndims',['ndims',['../structmodule__ncio_1_1ncio.html#a136bcb35ff9c5504d550f2c0448b2f7f',1,'module_ncio::ncio']]],
+  ['numvar',['numvar',['../structmodule__nwp_1_1fcst__nwp.html#a506430ac3f18b6b3699b67ac3b4781f1',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fhice_5fc',['nwp_hice_c',['../structmodule__nwp_1_1fcst__nwp.html#a667933ad1a3b762985e5771ff3c1f48d',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fhice_5fw',['nwp_hice_w',['../structmodule__nwp_1_1fcst__nwp.html#aeb3253040f091ff6f7a1a0e0b65c5409',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fice_5fc',['nwp_ice_c',['../structmodule__nwp_1_1fcst__nwp.html#a1e0100f960338f1997566495311954bf',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fice_5fw',['nwp_ice_w',['../structmodule__nwp_1_1fcst__nwp.html#ada3b1c55fab45f7d3b5ef087a38d4444',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5ficet_5fc',['nwp_icet_c',['../structmodule__nwp_1_1fcst__nwp.html#aed6e774a703aca58584fa061e592142e',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5ficet_5fw',['nwp_icet_w',['../structmodule__nwp_1_1fcst__nwp.html#ab51aa68a45d152f2307fd24c5072a962',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fmask_5fc',['nwp_mask_c',['../structmodule__nwp_1_1fcst__nwp.html#acce51e265790f059f864b03ad60365ab',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fmask_5fw',['nwp_mask_w',['../structmodule__nwp_1_1fcst__nwp.html#a1a7c7089249144cb70fcdebfe0b33e1b',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fsfct_5fc',['nwp_sfct_c',['../structmodule__nwp_1_1fcst__nwp.html#ae43d389b1508e2303ee9c88f6b509c93',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fsfct_5fw',['nwp_sfct_w',['../structmodule__nwp_1_1fcst__nwp.html#a69723775a27557e7e897ef22fbdfdb2a',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fsfctl_5fw',['nwp_sfctl_w',['../structmodule__nwp_1_1fcst__nwp.html#ad88738b38cb9253425932336022c9451',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fsst_5fc',['nwp_sst_c',['../structmodule__nwp_1_1fcst__nwp.html#a7cd61b12ce807741c20d57095fdb7dc8',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fsst_5fw',['nwp_sst_w',['../structmodule__nwp_1_1fcst__nwp.html#ab9c80b591d9a4a73d4462c3f1d762cee',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fzorl_5fc',['nwp_zorl_c',['../structmodule__nwp_1_1fcst__nwp.html#a5d8540d67e00ac35cdf974b36f463967',1,'module_nwp::fcst_nwp']]],
+  ['nwp_5fzorl_5fw',['nwp_zorl_w',['../structmodule__nwp_1_1fcst__nwp.html#aa22cb02d37ffd75a1eab6019392fe4bc',1,'module_nwp::fcst_nwp']]]
 ];

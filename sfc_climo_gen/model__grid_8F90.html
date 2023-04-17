@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">sfc_climo_gen
-   &#160;<span id="projectnumber">1.9.0</span>
+   &#160;<span id="projectnumber">1.10.0</span>
    </div>
   </td>
  </tr>
@@ -111,9 +111,9 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a11dce144a9b8c63f8a84a495c6543237"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#a11dce144a9b8c63f8a84a495c6543237">model_grid::define_model_grid</a> (localpet, npets)</td></tr>
 <tr class="memdesc:a11dce144a9b8c63f8a84a495c6543237"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define model grid.  <a href="namespacemodel__grid.html#a11dce144a9b8c63f8a84a495c6543237">More...</a><br /></td></tr>
 <tr class="separator:a11dce144a9b8c63f8a84a495c6543237"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb10237ba4e5bada1d8b61456c4d620b"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#acb10237ba4e5bada1d8b61456c4d620b">model_grid::get_model_info</a> (orog_file, mask, lat2d, lon2d, idim, jdim)</td></tr>
-<tr class="memdesc:acb10237ba4e5bada1d8b61456c4d620b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get model information.  <a href="namespacemodel__grid.html#acb10237ba4e5bada1d8b61456c4d620b">More...</a><br /></td></tr>
-<tr class="separator:acb10237ba4e5bada1d8b61456c4d620b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a77c8a8857921648c9f6955dbde1c5e"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#a6a77c8a8857921648c9f6955dbde1c5e">model_grid::get_model_info</a> (orog_file, mask, land_frac, lat2d, lon2d, idim, jdim)</td></tr>
+<tr class="memdesc:a6a77c8a8857921648c9f6955dbde1c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get model information.  <a href="namespacemodel__grid.html#a6a77c8a8857921648c9f6955dbde1c5e">More...</a><br /></td></tr>
+<tr class="separator:a6a77c8a8857921648c9f6955dbde1c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab82613aa1b639c003cdb59a592953d7b"><td class="memItemLeft" align="right" valign="top">subroutine, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#ab82613aa1b639c003cdb59a592953d7b">model_grid::model_grid_cleanup</a></td></tr>
 <tr class="memdesc:ab82613aa1b639c003cdb59a592953d7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Model grid cleanup.  <a href="namespacemodel__grid.html#ab82613aa1b639c003cdb59a592953d7b">More...</a><br /></td></tr>
 <tr class="separator:ab82613aa1b639c003cdb59a592953d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,6 +138,9 @@ Variables</h2></td></tr>
 <tr class="memitem:aaa39c3958814b0d75c55bf1e92769c21"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#aaa39c3958814b0d75c55bf1e92769c21">model_grid::j_mdl</a></td></tr>
 <tr class="memdesc:aaa39c3958814b0d75c55bf1e92769c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">j dimension of model tile.  <a href="namespacemodel__grid.html#aaa39c3958814b0d75c55bf1e92769c21">More...</a><br /></td></tr>
 <tr class="separator:aaa39c3958814b0d75c55bf1e92769c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0a27b6ede1bf89a3c15623b8423d625"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#ad0a27b6ede1bf89a3c15623b8423d625">model_grid::land_frac_field_mdl</a></td></tr>
+<tr class="memdesc:ad0a27b6ede1bf89a3c15623b8423d625"><td class="mdescLeft">&#160;</td><td class="mdescRight">ESMF field object that holds the model land fraction.  <a href="namespacemodel__grid.html#ad0a27b6ede1bf89a3c15623b8423d625">More...</a><br /></td></tr>
+<tr class="separator:ad0a27b6ede1bf89a3c15623b8423d625"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2503a3f282d19f2a5c0bb1562174ee2"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacemodel__grid.html#aa2503a3f282d19f2a5c0bb1562174ee2">model_grid::latitude_field_mdl</a></td></tr>
 <tr class="memdesc:aa2503a3f282d19f2a5c0bb1562174ee2"><td class="mdescLeft">&#160;</td><td class="mdescRight">ESMF field object that holds the model grid latitude.  <a href="namespacemodel__grid.html#aa2503a3f282d19f2a5c0bb1562174ee2">More...</a><br /></td></tr>
 <tr class="separator:aa2503a3f282d19f2a5c0bb1562174ee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
