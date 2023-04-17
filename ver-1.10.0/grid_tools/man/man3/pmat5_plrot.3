@@ -1,0 +1,83 @@
+.TH "pmat5::plrot" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat5::plrot
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBplrot\fP (rot3, n, x, y, z)"
+.br
+.RI "Apply a constant rotation to a three dimensional polyline\&. "
+.ti -1c
+.RI "subroutine \fBdplrot\fP (rot3, n, x, y, z)"
+.br
+.RI "Apply a constant rotation to a three dimensional polyline\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 49 of file pmat5\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat5::plrot::plrot (real(sp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(sp), dimension(n), intent(inout) x, real(sp), dimension(n), intent(inout) y, real(sp), dimension(n), intent(inout) z)\fC [private]\fP"
+
+.PP
+Apply a constant rotation to a three dimensional polyline\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrot3\fP rotation matrix\&. 
+.br
+\fIn\fP number of points in the polyline\&. 
+.br
+\fIx\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIy\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIz\fP cartesian components of the three dimensional polyline\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1040 of file pmat5\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat5::plrot::dplrot (real(dp), dimension(3,3), intent(in) rot3, integer, intent(in) n, real(dp), dimension(n), intent(inout) x, real(dp), dimension(n), intent(inout) y, real(dp), dimension(n), intent(inout) z)\fC [private]\fP"
+
+.PP
+Apply a constant rotation to a three dimensional polyline\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrot3\fP rotation matrix\&. 
+.br
+\fIn\fP number of points in the polyline\&. 
+.br
+\fIx\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIy\fP cartesian components of the three dimensional polyline\&. 
+.br
+\fIz\fP cartesian components of the three dimensional polyline\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1084 of file pmat5\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

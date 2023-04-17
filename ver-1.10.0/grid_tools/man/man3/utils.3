@@ -1,0 +1,229 @@
+.TH "utils" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils \- Module that contains general utility routines\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBfill_regional_halo\fP (data, halo)"
+.br
+.RI "This routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid\&. "
+.ti -1c
+.RI "subroutine \fBhandle_err\fP (status, string)"
+.br
+.RI "Prints an error message to standard output, then halts program execution with a bad status\&. "
+.ti -1c
+.RI "subroutine \fBread_namelist\fP"
+.br
+.RI "Read the program namelist file\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "character(len=512) \fBgrid_file\fP = 'atmos_mosaic\&.nc'"
+.br
+.RI "Path/name of the grid mosaic file\&. "
+.ti -1c
+.RI "integer \fBgrid_type\fP = 0"
+.br
+.RI "Grid type\&. "
+.ti -1c
+.RI "character(len=128) \fBmask_field\fP = 'slmsk'"
+.br
+.RI "NetCDF record name of the land/sea mask\&. "
+.ti -1c
+.RI "logical \fBnested\fP = \&.false\&."
+.br
+.RI "If true, process a global grid with a nest\&. "
+.ti -1c
+.RI "logical \fBregional\fP = \&.false\&."
+.br
+.RI "If true, process a stand-alone regional grid\&. "
+.ti -1c
+.RI "real \fBres\fP = 48\&."
+.br
+.RI "The 'CRES' resolution\&. "
+.ti -1c
+.RI "real \fBstretch_fac\fP = 1\&.0"
+.br
+.RI "Grid stretching factor\&. "
+.ti -1c
+.RI "character(len=128) \fBtopo_field\fP = 'orog_filt'"
+.br
+.RI "NetCDF record name of the filtered topography (or orography)\&. "
+.ti -1c
+.RI "character(len=512) \fBtopo_file\fP = 'orog'"
+.br
+.RI "Path/name of the topography (or orography) file\&. "
+.ti -1c
+.RI "logical \fBzero_ocean\fP = \&.true\&."
+.br
+.RI "If true, no diffusive flux into water/ocean area (preserve islands)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Module that contains general utility routines\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+GFDL programmer 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils::fill_regional_halo (real, dimension(1\-halo:,1\-halo:,:), intent(inout) data, integer, intent(in) halo)"
+
+.PP
+This routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid\&. Halo points are needed for dxc and dyc calculation\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdata\fP - field to be extrapolated 
+.br
+\fIhalo\fP - number of halo rows/columns 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ratko Vasic (NCEP/EMC) 
+.RE
+.PP
+
+.PP
+Definition at line 71 of file utils\&.F90\&.
+.PP
+Referenced by read_grid_file()\&.
+.SS "subroutine utils::handle_err (integer, intent(in) status, character(len=*), intent(in) string)"
+
+.PP
+Prints an error message to standard output, then halts program execution with a bad status\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstatus\fP Error status code\&. 
+.br
+\fIstring\fP Error message\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+GFDL Programmer 
+.RE
+.PP
+
+.PP
+Definition at line 107 of file utils\&.F90\&.
+.PP
+Referenced by read_grid_file(), and read_namelist()\&.
+.SS "subroutine utils::read_namelist ()"
+
+.PP
+Read the program namelist file\&. Then, write the namelist variables to standard output\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+GFDL Programmer 
+.RE
+.PP
+
+.PP
+Definition at line 37 of file utils\&.F90\&.
+.PP
+References grid_file, grid_type, handle_err(), mask_field, nested, regional, res, stretch_fac, topo_field, topo_file, and zero_ocean\&.
+.PP
+Referenced by filter_topo()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "character(len=512) utils::grid_file = 'atmos_mosaic\&.nc'"
+
+.PP
+Path/name of the grid mosaic file\&. 
+.PP
+Definition at line 18 of file utils\&.F90\&.
+.PP
+Referenced by read_grid_file(), and read_namelist()\&.
+.SS "integer utils::grid_type = 0"
+
+.PP
+Grid type\&. 0 for a gnomonic grid\&. 
+.PP
+Definition at line 25 of file utils\&.F90\&.
+.PP
+Referenced by filter_topo(), and read_namelist()\&.
+.SS "character(len=128) utils::mask_field = 'slmsk'"
+
+.PP
+NetCDF record name of the land/sea mask\&. 
+.PP
+Definition at line 17 of file utils\&.F90\&.
+.PP
+Referenced by read_namelist()\&.
+.SS "logical utils::nested = \&.false\&."
+
+.PP
+If true, process a global grid with a nest\&. 
+.PP
+Definition at line 22 of file utils\&.F90\&.
+.PP
+Referenced by filter_topo(), read_grid_file(), and read_namelist()\&.
+.SS "logical utils::regional = \&.false\&."
+
+.PP
+If true, process a stand-alone regional grid\&. 
+.PP
+Definition at line 23 of file utils\&.F90\&.
+.PP
+Referenced by filter_topo(), read_grid_file(), and read_namelist()\&.
+.SS "real utils::res = 48\&."
+
+.PP
+The 'CRES' resolution\&. 
+.PP
+Definition at line 28 of file utils\&.F90\&.
+.PP
+Referenced by read_namelist()\&.
+.SS "real utils::stretch_fac = 1\&.0"
+
+.PP
+Grid stretching factor\&. 
+.PP
+Definition at line 27 of file utils\&.F90\&.
+.PP
+Referenced by filter_topo(), and read_namelist()\&.
+.SS "character(len=128) utils::topo_field = 'orog_filt'"
+
+.PP
+NetCDF record name of the filtered topography (or orography)\&. 
+.PP
+Definition at line 15 of file utils\&.F90\&.
+.PP
+Referenced by read_namelist()\&.
+.SS "character(len=512) utils::topo_file = 'orog'"
+
+.PP
+Path/name of the topography (or orography) file\&. 
+.PP
+Definition at line 14 of file utils\&.F90\&.
+.PP
+Referenced by read_namelist()\&.
+.SS "logical utils::zero_ocean = \&.true\&."
+
+.PP
+If true, no diffusive flux into water/ocean area (preserve islands)\&. 
+.PP
+Definition at line 20 of file utils\&.F90\&.
+.PP
+Referenced by read_namelist()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

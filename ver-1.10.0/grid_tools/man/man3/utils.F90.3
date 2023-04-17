@@ -1,0 +1,97 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/filter_topo.fd/utils.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/filter_topo.fd/utils.F90 \- Utility routines\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <netcdf\&.inc>\fP
+.br
+
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fButils\fP"
+.br
+.RI "Module that contains general utility routines\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fButils::fill_regional_halo\fP (data, halo)"
+.br
+.RI "This routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid\&. "
+.ti -1c
+.RI "subroutine \fButils::handle_err\fP (status, string)"
+.br
+.RI "Prints an error message to standard output, then halts program execution with a bad status\&. "
+.ti -1c
+.RI "subroutine \fButils::read_namelist\fP"
+.br
+.RI "Read the program namelist file\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "character(len=512) \fButils::grid_file\fP = 'atmos_mosaic\&.nc'"
+.br
+.RI "Path/name of the grid mosaic file\&. "
+.ti -1c
+.RI "integer \fButils::grid_type\fP = 0"
+.br
+.RI "Grid type\&. "
+.ti -1c
+.RI "character(len=128) \fButils::mask_field\fP = 'slmsk'"
+.br
+.RI "NetCDF record name of the land/sea mask\&. "
+.ti -1c
+.RI "logical \fButils::nested\fP = \&.false\&."
+.br
+.RI "If true, process a global grid with a nest\&. "
+.ti -1c
+.RI "logical \fButils::regional\fP = \&.false\&."
+.br
+.RI "If true, process a stand-alone regional grid\&. "
+.ti -1c
+.RI "real \fButils::res\fP = 48\&."
+.br
+.RI "The 'CRES' resolution\&. "
+.ti -1c
+.RI "real \fButils::stretch_fac\fP = 1\&.0"
+.br
+.RI "Grid stretching factor\&. "
+.ti -1c
+.RI "character(len=128) \fButils::topo_field\fP = 'orog_filt'"
+.br
+.RI "NetCDF record name of the filtered topography (or orography)\&. "
+.ti -1c
+.RI "character(len=512) \fButils::topo_file\fP = 'orog'"
+.br
+.RI "Path/name of the topography (or orography) file\&. "
+.ti -1c
+.RI "logical \fButils::zero_ocean\fP = \&.true\&."
+.br
+.RI "If true, no diffusive flux into water/ocean area (preserve islands)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utility routines\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+GFDL programmer 
+.RE
+.PP
+
+.PP
+Definition in file \fButils\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

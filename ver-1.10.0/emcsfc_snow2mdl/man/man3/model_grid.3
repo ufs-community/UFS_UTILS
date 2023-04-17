@@ -1,0 +1,332 @@
+.TH "model_grid" 3 "Mon Apr 17 2023" "Version 1.10.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+model_grid \- Read in data defining the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBmodel_grid_cleanup\fP"
+.br
+.RI "Clean up allocatable arrays\&. "
+.ti -1c
+.RI "subroutine \fBread_mdl_grid_info\fP"
+.br
+.RI "Read mdl grid\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer \fBgrid_id_mdl\fP"
+.br
+.RI "grib id of model grid, 4-gaussian, 203-egrid "
+.ti -1c
+.RI "integer \fBijmdl\fP"
+.br
+.RI "total number of model land points "
+.ti -1c
+.RI "integer \fBimdl\fP"
+.br
+.RI "i-dimension of model grid "
+.ti -1c
+.RI "integer, dimension(:), allocatable \fBipts_mdl\fP"
+.br
+.RI "i index of point on full grid "
+.ti -1c
+.RI "integer \fBjmdl\fP"
+.br
+.RI "j-dimension of model grid "
+.ti -1c
+.RI "integer, dimension(:), allocatable \fBjpts_mdl\fP"
+.br
+.RI "j index of point on full grid "
+.ti -1c
+.RI "integer, dimension(200) \fBkgds_mdl\fP"
+.br
+.RI "holds grib gds info of model grid "
+.ti -1c
+.RI "real \fBlat11\fP"
+.br
+.RI "Corner point latitude (1,1) of model grid\&. "
+.ti -1c
+.RI "real \fBlatlast\fP"
+.br
+.RI "Corner point latitude (imdl,jmdl) of model grid\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable \fBlats_mdl\fP"
+.br
+.RI "Latitudes of model grid points\&. "
+.ti -1c
+.RI "real \fBlon11\fP"
+.br
+.RI "Corner point longitude (1,1) of model grid\&. "
+.ti -1c
+.RI "real \fBlonlast\fP"
+.br
+.RI "Corner point longitude (imdl,jmdl) of model grid\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable \fBlons_mdl\fP"
+.br
+.RI "longitudes of model grid points "
+.ti -1c
+.RI "integer, dimension(:), allocatable \fBlonsperlat_mdl\fP"
+.br
+.RI "Number of longitudes (i-points) for each latitude (row)\&. "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBlsmask_mdl\fP"
+.br
+.RI "land mask of model grid (0 - non land, 1-land) for global grids run thinned, will contain a modified version of the original mask that has land at all points encompassed by a thinned point "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBlsmask_mdl_sav\fP"
+.br
+.RI "saved copy of land mask of model grid (0 - non land, 1-land) only used for global thinned grids\&. "
+.ti -1c
+.RI "real \fBresol_mdl\fP"
+.br
+.RI "approximate model resolution in km\&. "
+.ti -1c
+.RI "logical \fBthinned\fP"
+.br
+.RI "When true, global grids will run thinned (number of i points decrease toward pole) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read in data defining the model grid\&. 
+
+program history log:
+.IP "\(bu" 2
+2005-dec-16 gayno - initial version
+.IP "\(bu" 2
+2007-nov-30 gayno - improved method for thinning gfs grids\&. added nam b-grids\&.
+.IP "\(bu" 2
+2014-sep-29 gayno - add option to read model lat, lon and landmask data in grib2\&.
+.PP
+.PP
+variable definitions:
+.IP "\(bu" 2
+lonsperlat - for global grids, the number of i points in each row (decrease toward pole)
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2005-Dec-16 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine model_grid::model_grid_cleanup ()"
+
+.PP
+Clean up allocatable arrays\&. This deallocate this module's allocatable array\&.
+.PP
+program history log: 2005-dec-16 gayno - initial version
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+Dec 16, 2005 
+.RE
+.PP
+
+.PP
+Definition at line 578 of file model_grid\&.F90\&.
+.PP
+References ipts_mdl, jpts_mdl, lats_mdl, lons_mdl, lonsperlat_mdl, and lsmask_mdl\&.
+.PP
+Referenced by driver()\&.
+.SS "subroutine model_grid::read_mdl_grid_info ()"
+
+.PP
+Read mdl grid\&. program history log: 2005-dec-16 gayno - initial version 2007-nov-30 gayno - Improved method for thinning gfs grids\&. Added nam b-grids\&. 2014-sep-29 gayno - Add option to read lat,lon and mask data in grib2\&. files: inputs:
+.IP "\(bu" 2
+model latitudes (grib 1 or grib 2)
+.IP "\(bu" 2
+model longitudes (grib 1 or grib 2)
+.IP "\(bu" 2
+model landmask (grib 1 or grib 2)
+.IP "\(bu" 2
+number pts per row, gfs grid (the 'lonsperlat' file, ascii) condition codes: all fatal 76 - bad open/read gfs 'lonsperlat' file 79 - unrecognized model grid 80 - bad open model latitude file 81 - bad read of model latitude grib 1 header 82 - bad read of model latitude data 83 - bad open model longitude file 82 - bad read of model longitude data 85 - bad open model landmask file 86 - bad read of model landmask data 90 - model latitude file not grib 1 or grib 2 91 - model longitude file not grib 1 or grib 2 92 - model landmask file not grib 1 or grib 2
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2005-dec-16 
+.RE
+.PP
+
+.PP
+Definition at line 85 of file model_grid\&.F90\&.
+.PP
+References gdt_to_gds(), program_setup::gfs_lpl_file, grib2_free(), grib2_null(), grib_check(), grid_id_mdl, ijmdl, imdl, ipts_mdl, jmdl, jpts_mdl, kgds_mdl, lat11, latlast, lats_mdl, lon11, lonlast, lons_mdl, lonsperlat_mdl, lsmask_mdl, lsmask_mdl_sav, program_setup::model_lat_file, program_setup::model_lon_file, program_setup::model_lsmask_file, resol_mdl, and thinned\&.
+.PP
+Referenced by driver()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "integer model_grid::grid_id_mdl"
+
+.PP
+grib id of model grid, 4-gaussian, 203-egrid 
+.PP
+Definition at line 26 of file model_grid\&.F90\&.
+.PP
+Referenced by read_mdl_grid_info(), and snow2mdl::write_grib1()\&.
+.SS "integer model_grid::ijmdl"
+
+.PP
+total number of model land points 
+.PP
+Definition at line 29 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), and read_mdl_grid_info()\&.
+.SS "integer model_grid::imdl"
+
+.PP
+i-dimension of model grid 
+.PP
+Definition at line 27 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), read_mdl_grid_info(), and snow2mdl::write_grib2()\&.
+.SS "integer, dimension(:), allocatable model_grid::ipts_mdl"
+
+.PP
+i index of point on full grid 
+.PP
+Definition at line 30 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), model_grid_cleanup(), and read_mdl_grid_info()\&.
+.SS "integer model_grid::jmdl"
+
+.PP
+j-dimension of model grid 
+.PP
+Definition at line 28 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), read_mdl_grid_info(), and snow2mdl::write_grib2()\&.
+.SS "integer, dimension(:), allocatable model_grid::jpts_mdl"
+
+.PP
+j index of point on full grid 
+.PP
+Definition at line 31 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), model_grid_cleanup(), and read_mdl_grid_info()\&.
+.SS "integer, dimension(200) model_grid::kgds_mdl"
+
+.PP
+holds grib gds info of model grid 
+.PP
+Definition at line 33 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), read_mdl_grid_info(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+.SS "real model_grid::lat11"
+
+.PP
+Corner point latitude (1,1) of model grid\&. 
+.PP
+Definition at line 42 of file model_grid\&.F90\&.
+.PP
+Referenced by read_mdl_grid_info(), and snow2mdl::write_grib2()\&.
+.SS "real model_grid::latlast"
+
+.PP
+Corner point latitude (imdl,jmdl) of model grid\&. 
+.PP
+Definition at line 43 of file model_grid\&.F90\&.
+.PP
+Referenced by read_mdl_grid_info(), and snow2mdl::write_grib2()\&.
+.SS "real, dimension(:), allocatable model_grid::lats_mdl"
+
+.PP
+Latitudes of model grid points\&. 
+.PP
+Definition at line 41 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), model_grid_cleanup(), and read_mdl_grid_info()\&.
+.SS "real model_grid::lon11"
+
+.PP
+Corner point longitude (1,1) of model grid\&. 
+.PP
+Definition at line 44 of file model_grid\&.F90\&.
+.PP
+Referenced by read_mdl_grid_info(), and snow2mdl::write_grib2()\&.
+.SS "real model_grid::lonlast"
+
+.PP
+Corner point longitude (imdl,jmdl) of model grid\&. 
+.PP
+Definition at line 45 of file model_grid\&.F90\&.
+.PP
+Referenced by read_mdl_grid_info(), and snow2mdl::write_grib2()\&.
+.SS "real, dimension(:), allocatable model_grid::lons_mdl"
+
+.PP
+longitudes of model grid points 
+.PP
+Definition at line 46 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), model_grid_cleanup(), and read_mdl_grid_info()\&.
+.SS "integer, dimension (:), allocatable model_grid::lonsperlat_mdl"
+
+.PP
+Number of longitudes (i-points) for each latitude (row)\&. Used for global thinned (reduced) grids\&. 
+.PP
+Definition at line 34 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), model_grid_cleanup(), and read_mdl_grid_info()\&.
+.SS "real, dimension(:,:), allocatable model_grid::lsmask_mdl"
+
+.PP
+land mask of model grid (0 - non land, 1-land) for global grids run thinned, will contain a modified version of the original mask that has land at all points encompassed by a thinned point 
+.PP
+Definition at line 47 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), model_grid_cleanup(), read_mdl_grid_info(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+.SS "real, dimension(:,:), allocatable model_grid::lsmask_mdl_sav"
+
+.PP
+saved copy of land mask of model grid (0 - non land, 1-land) only used for global thinned grids\&. 
+.PP
+Definition at line 50 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), and read_mdl_grid_info()\&.
+.SS "real model_grid::resol_mdl"
+
+.PP
+approximate model resolution in km\&. 
+.PP
+Definition at line 52 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), and read_mdl_grid_info()\&.
+.SS "logical model_grid::thinned"
+
+.PP
+When true, global grids will run thinned (number of i points decrease toward pole) 
+.PP
+Definition at line 38 of file model_grid\&.F90\&.
+.PP
+Referenced by snow2mdl::interp(), and read_mdl_grid_info()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for emcsfc_snow2mdl from the source code\&.

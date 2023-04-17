@@ -1,0 +1,771 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/cycle.f90" 3 "Mon Apr 17 2023" "Version 1.10.0" "global_cycle" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/cycle.f90 \- Update surface and NSST fields\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBADJUST_NSST\fP (RLA, RLO, SLMSK_TILE, SLMSK_FG_TILE, SKINT_TILE, SICET_TILE, sice_tile, SOILT_TILE, NSST, LENSFC, LSOIL, IDIM, JDIM, ZSEA1, ZSEA2, MON, DAY, DELTSFC, tf_clm_tile, tf_trd_tile, sal_clm_tile)"
+.br
+.RI "Read in gsi file with the updated reference temperature increments (on the gaussian grid), interpolate increments to the cubed-sphere tile, and perform required nsst adjustments and qc\&. "
+.ti -1c
+.RI "subroutine \fBCLIMO_TREND\fP (LATITUDE, MON, DAY, DELTSFC, DTREF)"
+.br
+.RI "If the tile point is an isolated water point that has no corresponding gsi water point, then tref is updated using the rtg sst climo trend\&. "
+.ti -1c
+.RI "subroutine \fBDTZM_POINT\fP (XT, XZ, DT_COOL, ZC, Z1, Z2, DTZM)"
+.br
+.RI "Compute the vertical mean of the NSST t-profile\&. "
+.ti -1c
+.RI "subroutine \fBget_sal_clm\fP (xlats_ij, xlons_ij, ny, nx, iy, im, id, ih, sal_clm)"
+.br
+.RI "Get salinity climatology at the valid time on the target grid\&. "
+.ti -1c
+.RI "subroutine \fBget_sal_clm_ta\fP (sal_clm_ta, xlats, xlons, nlat, nlon, mon1, mon2, wei1, wei2)"
+.br
+.RI "Get climatological salinity at the analysis time\&. "
+.ti -1c
+.RI "subroutine \fBget_tf_clm\fP (xlats_ij, xlons_ij, ny, nx, iy, im, id, ih, tf_clm, tf_trd)"
+.br
+.RI "Get the sst climatology at the valid time and on the target grid\&. "
+.ti -1c
+.RI "subroutine \fBget_tf_clm_ta\fP (tf_clm_ta, tf_clm_trend, xlats, xlons, nlat, nlon, mon1, mon2, wei1, wei2)"
+.br
+.RI "Get the reference temperature/sst climatology and its trend at analysis time\&. "
+.ti -1c
+.RI "subroutine \fBget_tim_wei\fP (iy, im, id, ih, mon1, mon2, wei1, wei2)"
+.br
+.RI "For a given date, determine the bounding months and the linear time interpolation weights\&. "
+.ti -1c
+.RI "subroutine \fBintp_tile\fP (tf_lalo, dlats_lalo, dlons_lalo, jdim_lalo, idim_lalo, tf_tile, xlats_tile, xlons_tile, jdim_tile, idim_tile)"
+.br
+.RI "Interpolate lon/lat grid data to the fv3 native grid (tf_lalo => tf_tile)\&. "
+.ti -1c
+.RI "subroutine \fBnsst_water_reset\fP (nsst, ij, tf_thaw)"
+.br
+.RI "If the first guess was sea ice, but the analysis is open water, reset all nsst variables\&. "
+.ti -1c
+.RI "program \fBSFC_DRV\fP"
+.br
+.RI "Stand alone surface/NSST cycle driver for the cubed-sphere grid\&. "
+.ti -1c
+.RI "subroutine \fBSFCDRV\fP (LUGB, IDIM, JDIM, LSM, LENSFC, LSOIL, DELTSFC, IY, IM, ID, IH, FH, IALB, USE_UFO, DO_NSST, DO_SFCCYCLE, DO_LNDINC, ZSEA1, ZSEA2, ISOT, IVEGSRC, MYRANK)"
+.br
+.RI "Driver routine for updating the surface fields\&. "
+.ti -1c
+.RI "subroutine \fBtf_thaw_set\fP (tf_ij, mask_ij, itile, jtile, tice, tclm, tf_thaw, nx, ny, nset_thaw_s, nset_thaw_i, nset_thaw_c)"
+.br
+.RI "Set the background reference temperature (tf) for points where the ice has just melted\&. "
+.ti -1c
+.RI "real function \fBtfreez\fP (salinity)"
+.br
+.RI "Compute the freezing point of water as a function of salinity\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Update surface and NSST fields\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBcycle\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine ADJUST_NSST (real, dimension(lensfc), intent(inout) RLA, real, dimension(lensfc), intent(inout) RLO, real, dimension(lensfc), intent(in) SLMSK_TILE, real, dimension(lensfc), intent(in) SLMSK_FG_TILE, real, dimension(lensfc), intent(inout) SKINT_TILE, real, dimension(lensfc), intent(inout) SICET_TILE, real, dimension(lensfc), intent(inout) sice_tile, real, dimension(lensfc,lsoil), intent(inout) SOILT_TILE, type(nsst_data) NSST, integer, intent(in) LENSFC, integer, intent(in) LSOIL, integer, intent(in) IDIM, integer, intent(in) JDIM, real, intent(in) ZSEA1, real, intent(in) ZSEA2, integer, intent(in) MON, integer, intent(in) DAY, real, intent(in) DELTSFC, real, dimension(lensfc), intent(in) tf_clm_tile, real, dimension(lensfc), intent(in) tf_trd_tile, real, dimension(lensfc), intent(in) sal_clm_tile)"
+
+.PP
+Read in gsi file with the updated reference temperature increments (on the gaussian grid), interpolate increments to the cubed-sphere tile, and perform required nsst adjustments and qc\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIRLA\fP Latitude on the cubed-sphere tile 
+.br
+\fIRLO\fP Longitude on the cubed-sphere tile 
+.br
+\fISLMSK_TILE\fP Land-sea mask on the cubed-sphere tile 
+.br
+\fISLMSK_FG_TILE\fP First guess land-sea mask on the cubed-sphere tile 
+.br
+\fISKINT_TILE\fP Skin temperature on the cubed-sphere tile 
+.br
+\fISICET_TILE\fP Ice temperature on the cubed-sphere tile 
+.br
+\fIsice_tile\fP Ice concentration on the cubed-sphere tile 
+.br
+\fISOILT_TILE\fP Soil temperature on the cubed-sphere tile 
+.br
+\fINSST\fP Data structure holding nsst fields 
+.br
+\fILENSFC\fP Number of points on a tile 
+.br
+\fILSOIL\fP Number of soil layers 
+.br
+\fIIDIM\fP 'I' dimension of a tile 
+.br
+\fIJDIM\fP 'J' dimension of a tile 
+.br
+\fIZSEA1\fP When running nsst model, this is the lower bound of depth of sea temperature\&. In whole mm\&. 
+.br
+\fIZSEA2\fP When running nsst model, this is the upper bound of depth of sea temperature\&. In whole mm\&. 
+.br
+\fIMON\fP Month 
+.br
+\fIDAY\fP Day 
+.br
+\fIDELTSFC\fP Cycling frequency in hours 
+.br
+\fItf_clm_tile\fP Climatological reference temperature on the cubed-sphere tile\&. 
+.br
+\fItf_trd_tile\fP Climatolocial reference temperature trend on the cubed-sphere tile\&. 
+.br
+\fIsal_clm_tile\fP Climatological salinity on the cubed-sphere tile\&.
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li, George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 799 of file cycle\&.f90\&.
+.PP
+References nsst_water_reset(), and tf_thaw_set()\&.
+.SS "subroutine CLIMO_TREND (real, intent(in) LATITUDE, integer, intent(in) MON, integer, intent(in) DAY, real, intent(in) DELTSFC, real, intent(out) DTREF)"
+
+.PP
+If the tile point is an isolated water point that has no corresponding gsi water point, then tref is updated using the rtg sst climo trend\&. This monthly trend is sorted by latitude band\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fILATITUDE\fP Latitude of tile point 
+.br
+\fIMON\fP Month 
+.br
+\fIDAY\fP Day 
+.br
+\fIDELTSFC\fP Cycling frequency in hours 
+.br
+\fIDTREF\fP Monthly trend of reference temperature 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li, George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 1205 of file cycle\&.f90\&.
+.SS "subroutine DTZM_POINT (real, intent(in) XT, real, intent(in) XZ, real, intent(in) DT_COOL, real, intent(in) ZC, real, intent(in) Z1, real, intent(in) Z2, real, intent(out) DTZM)"
+
+.PP
+Compute the vertical mean of the NSST t-profile\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxt\fP Heat content in the diurnal thermocline layer\&. 
+.br
+\fIxz\fP Thickness of the diurnal thermocline layer\&. 
+.br
+\fIdt_cool\fP Skin-layer cooling amount\&. 
+.br
+\fIzc\fP Thickness of skin-layer\&. 
+.br
+\fIz1\fP Lower bound of depth of sea temperature\&. 
+.br
+\fIz2\fP Upper bound of depth of sea temperature\&. 
+.br
+\fIdtzm\fP Mean of the NSST t-profile from z1 to z2\&.
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2015 
+.RE
+.PP
+
+.PP
+Definition at line 1358 of file cycle\&.f90\&.
+.SS "subroutine get_sal_clm (real, dimension(nx*ny), intent(in) xlats_ij, real, dimension(nx*ny), intent(in) xlons_ij, integer, intent(in) ny, integer, intent(in) nx, integer, intent(in) iy, integer, intent(in) im, integer, intent(in) id, integer, intent(in) ih, real, dimension(nx,ny), intent(out) sal_clm)"
+
+.PP
+Get salinity climatology at the valid time on the target grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxlats_ij\fP Latitudes of target grid 
+.br
+\fIxlons_ij\fP Longitudes of target grid 
+.br
+\fIny\fP 'j' dimension of target grid 
+.br
+\fInx\fP 'i' dimension of target grid 
+.br
+\fIiy\fP Year 
+.br
+\fIim\fP Month 
+.br
+\fIid\fP Day 
+.br
+\fIih\fP Hour 
+.br
+\fIsal_clm\fP Salinity climatology on the target grid at the valid time 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+
+.PP
+Definition at line 1684 of file cycle\&.f90\&.
+.PP
+References get_sal_clm_ta(), get_tim_wei(), and intp_tile()\&.
+.PP
+Referenced by SFCDRV()\&.
+.SS "subroutine get_sal_clm_ta (real, dimension(nlon,nlat), intent(out) sal_clm_ta, real, dimension(nlat), intent(out) xlats, real, dimension(nlon), intent(out) xlons, integer, intent(in) nlat, integer, intent(in) nlon, integer, intent(in) mon1, integer, intent(in) mon2, real, intent(in) wei1, real, intent(in) wei2)"
+
+.PP
+Get climatological salinity at the analysis time\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fInlat\fP 'j' dimension of climatological data 
+.br
+\fInlon\fP 'i' dimension of climatological data 
+.br
+\fImon1\fP First bounding month 
+.br
+\fImon2\fP Second bounding month 
+.br
+\fIwei1\fP Weight of first bounding month 
+.br
+\fIwei2\fP Weight of second bounding month 
+.br
+\fIsal_clm_ta\fP Climatological salinity at the analysis time 
+.br
+\fIxlats\fP Latitudes on the climatological grid 
+.br
+\fIxlons\fP Longitudes on the climatological grid 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+March 2019 
+.RE
+.PP
+
+.PP
+Definition at line 1744 of file cycle\&.f90\&.
+.PP
+Referenced by get_sal_clm()\&.
+.SS "subroutine get_tf_clm (real, dimension(nx*ny), intent(in) xlats_ij, real, dimension(nx*ny), intent(in) xlons_ij, integer, intent(in) ny, integer, intent(in) nx, integer, intent(in) iy, integer, intent(in) im, integer, intent(in) id, integer, intent(in) ih, real, dimension(nx,ny), intent(out) tf_clm, real, dimension(nx,ny), intent(out) tf_trd)"
+
+.PP
+Get the sst climatology at the valid time and on the target grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxlats_ij\fP latitude of target grid 
+.br
+\fIxlons_ij\fP longitude of target grid 
+.br
+\fIny\fP 'j' dimension of target grid 
+.br
+\fInx\fP 'i' dimension of target grid 
+.br
+\fIiy\fP Year 
+.br
+\fIim\fP Month 
+.br
+\fIid\fP Day 
+.br
+\fIih\fP Hour 
+.br
+\fItf_clm\fP sst climatology at the valid time and on the target grid 
+.br
+\fItf_trd\fP 6-hourly sst climatology tendency at the valid time and on the target grid\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+
+.PP
+Definition at line 1567 of file cycle\&.f90\&.
+.PP
+References get_tf_clm_ta(), get_tim_wei(), and intp_tile()\&.
+.PP
+Referenced by SFCDRV()\&.
+.SS "subroutine get_tf_clm_ta (real, dimension(nlon,nlat), intent(out) tf_clm_ta, real, dimension(nlon,nlat), intent(out) tf_clm_trend, real, dimension(nlat), intent(out) xlats, real, dimension(nlon), intent(out) xlons, integer, intent(in) nlat, integer, intent(in) nlon, integer, intent(in) mon1, integer, intent(in) mon2, real, intent(in) wei1, real, intent(in) wei2)"
+
+.PP
+Get the reference temperature/sst climatology and its trend at analysis time\&. The data is time interpolated between two bounding months\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fItf_clm_ta\fP Climatological tf/sst at analysis time 
+.br
+\fItf_clm_trend\fP Climatological tf/sst trend at analysis time 
+.br
+\fIxlats\fP Latitudes on the climatological data grid 
+.br
+\fIxlons\fP Longitudes on the climatological data grid 
+.br
+\fInlat\fP 'j' dimension on the climatological grid 
+.br
+\fInlon\fP 'i' dimension on the climatological grid 
+.br
+\fImon1\fP First bounding month 
+.br
+\fImon2\fP Second bounding month 
+.br
+\fIwei1\fP Weighting of first bounding month 
+.br
+\fIwei2\fP Weighting of second bounding month 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+March 2019 
+.RE
+.PP
+
+.PP
+Definition at line 1636 of file cycle\&.f90\&.
+.PP
+Referenced by get_tf_clm()\&.
+.SS "subroutine get_tim_wei (integer, intent(in) iy, integer, intent(in) im, integer, intent(in) id, integer, intent(in) ih, integer, intent(out) mon1, integer, intent(out) mon2, real, intent(out) wei1, real, intent(out) wei2)"
+
+.PP
+For a given date, determine the bounding months and the linear time interpolation weights\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiy\fP The year 
+.br
+\fIim\fP The month 
+.br
+\fIid\fP The day 
+.br
+\fIih\fP The hour 
+.br
+\fImon1\fP First bounding month 
+.br
+\fImon2\fP Second bounding month 
+.br
+\fIwei1\fP Weighting of first bounding month 
+.br
+\fIwei2\fP Weighting of second bounding month 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+March 2019 
+.RE
+.PP
+
+.PP
+Definition at line 1879 of file cycle\&.f90\&.
+.PP
+Referenced by get_sal_clm(), and get_tf_clm()\&.
+.SS "subroutine intp_tile (real, dimension(idim_lalo,jdim_lalo), intent(in) tf_lalo, real, dimension(jdim_lalo), intent(in) dlats_lalo, real, dimension(idim_lalo), intent(in) dlons_lalo, integer, intent(in) jdim_lalo, integer, intent(in) idim_lalo, real, dimension(jdim_tile*idim_tile), intent(out) tf_tile, real, dimension(jdim_tile*idim_tile), intent(in) xlats_tile, real, dimension(jdim_tile*idim_tile), intent(in) xlons_tile, integer, intent(in) jdim_tile, integer, intent(in) idim_tile)"
+
+.PP
+Interpolate lon/lat grid data to the fv3 native grid (tf_lalo => tf_tile)\&. Does not account for a mask\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fItf_lalo\fP (idim_lalo,idim_lalo) field on the lat/lon regular grid\&. 
+.br
+\fIdlats_lalo\fP (jdim_lalo) latitudes along y direction of lat/lon regular grid points\&. 
+.br
+\fIdlons_lalo\fP (idim_lalo) longitudes along x direction of lat/lon regular grid points\&. 
+.br
+\fIjdim_lalo\fP number of y dimension of tf_lalo\&. 
+.br
+\fIidim_lalo\fP number of x dimension of tf_lalo\&. 
+.br
+\fIxlats_tile\fP (jdim_tile*idim_tile) latitudes of all tile grid points\&. 
+.br
+\fIxlons_tile\fP (jdim_tile*idim_tile) longitudes of all tile grid points\&. 
+.br
+\fIjdim_tile\fP number of y dimension of tf_tile\&. 
+.br
+\fIidim_tile\fP number of x dimension of tf_tile\&. 
+.br
+\fItf_tile\fP (jdim_tile*idim_tile) field on the cubed sphere grid\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+
+.PP
+Definition at line 1790 of file cycle\&.f90\&.
+.PP
+Referenced by get_sal_clm(), and get_tf_clm()\&.
+.SS "subroutine nsst_water_reset (type(nsst_data), intent(inout) nsst, integer, intent(in) ij, real, intent(in) tf_thaw)"
+
+.PP
+If the first guess was sea ice, but the analysis is open water, reset all nsst variables\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fInsst\fP Data structure that holds the nsst fields 
+.br
+\fIij\fP Index of point to be updated 
+.br
+\fItf_thaw\fP Reference temperature for former ice points 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+
+.PP
+Definition at line 1521 of file cycle\&.f90\&.
+.PP
+Referenced by ADJUST_NSST()\&.
+.SS "program SFC_DRV ()"
+
+.PP
+Stand alone surface/NSST cycle driver for the cubed-sphere grid\&. Each cubed-sphere tile runs independently on its own mpi task\&. The surface update component runs with threads\&. The NSST update component in not threaded\&.
+.PP
+There are three main options (which can be called in combination):
+.IP "1." 4
+Update the surface fields with sfccylce (do_sfccycle = \&.true\&.)
+.IP "2." 4
+Update the land states with increments read in from file (do_lndinc = \&.true\&.) Designed to work with either: 2a\&. A land increment file created by the GSI on the Gaussian grid\&. The increments are interpolated here to the model grid, using the same method as for the NST increments\&. This is currently implemented for applying soil temperature increments calculated from the EnKF assimilation of T2m (but this is not a requirement - any GSI-generated soil temperature increment file can be applied here)\&. 2b\&. A land increment file created by JEDI, on the native model grid (cube sphere tiles)\&. This is currently implemented for snow depth updates for the Noah model\&.
+.IP "3." 4
+Update the NSST field, several options:
+.PP
+.PP
+3a\&. Update the NSST TREF field using GSI increments on the Gaussian grid\&. All other NSST fields are cycled\&. Invoke this option by setting namelist variable DONST=\&.true\&. and NST_FILE to the name of the GSI increment file\&.
+.PP
+3b\&. Run with NSST, but postpone the TREF update\&. Here all NSST fields are cycled\&. But the NSST IFD field is used to flag points that flipped from ice to open water\&. To invoke this option, set DONST=\&.true\&. and NST_FILE='NULL'\&.
+.PP
+INPUT FILES:
+.IP "\(bu" 2
+fngrid\&.$NNN The cubed-sphere grid file (contains grid point latitude and longitdue)\&.
+.IP "\(bu" 2
+fnorog\&.$NNN The cubed-sphere orography file (contains land mask and orography)\&.
+.IP "\(bu" 2
+fnbgsi\&.$NNN The cubed-sphere input sfc/nsst restart file\&.
+.IP "\(bu" 2
+$NST_FILE Gaussian GSI file which contains NSST TREF increments
+.IP "\(bu" 2
+$LND_SOI_FILE Gaussian GSI file which contains soil state increments
+.IP "\(bu" 2
+xainc\&.$NNN The cubed-sphere increment file (contains increments calculated by JEDI on the native model grid)\&.
+.PP
+.PP
+OUTPUT FILES:
+.IP "\(bu" 2
+fnbgso\&.$NNN The updated sfc/nsst restart file\&.
+.PP
+.PP
+NOTE: $NNN corresponds to (mpi rank + 1)
+.PP
+NAMELIST VARIABLE DEFINITIONS:
+.PP
+.IP "\(bu" 2
+IDIM,JDIM i/j dimension of a cubed-sphere tile\&.
+.IP "\(bu" 2
+LUGB Unit number used in the sfccycle subprogram to read input datasets\&. Next four should match the gfs_physics_nml
+.IP "\(bu" 2
+LSM Integer code for LSM (as in GFS_TYPES) 1 - Noah (note: added for land_da_adjust layers, however sfcsub routine (and likely others) assume the noah lsm
+.IP "\(bu" 2
+LSOIL Number of soil layers\&.
+.IP "\(bu" 2
+IY,IM,ID,IH Year, month, day, and hour of initial state\&.
+.IP "\(bu" 2
+FH Forecast hour
+.IP "\(bu" 2
+DELTSFC Cycling frequency in hours\&.
+.IP "\(bu" 2
+IALB Use modis albedo when '1'\&. Use brigleb when '0'\&.
+.IP "\(bu" 2
+USE_UFO Adjust sst and soil substrate temperature for differences between the filtered and unfiltered terrain\&. -DONST Process NSST records\&. -DO_SFCCYCLE Call sfccycle routine to update surface fields -DO_LNDINC Read in land increment files, and add increments to relevant states\&. -DO_SOI_INC Do land increments to soil states\&. -DO_SNO_INC Do land increments to snow states\&.
+.IP "\(bu" 2
+ISOT Use statsgo soil type when '1'\&. Use zobler when '0'\&.
+.IP "\(bu" 2
+IVEGSRC Use igbp veg type when '1'\&. Use sib when '2'\&.
+.IP "\(bu" 2
+ZSEA1/2_MM When running with NSST model, this is the lower/ upper bound of depth of sea temperature\&. In whole mm\&.
+.IP "\(bu" 2
+MAX_TASKS Normally, program should be run with a number of mpi tasks equal to the number of cubed-sphere tiles being processed\&. However, the current parallel scripts may over-specify the number of tasks\&. Set this variable to not process any ranks > (max_tasks-1)\&. -NST_FILE path/name of the gaussian GSI file which contains NSST TREF increments\&. -LND_SOI_FILE path/name of the gaussian GSI file which contains soil state increments\&.
+.PP
+.PP
+-2005-02-03: Iredell for global_analysis -2014-11-30: xuli add nst_anl -2015-05-26: Hang Lei Added NEMSIO read/write function in the code -2017-08-08: Gayno Modify to work on cubed-sphere grid\&. Added processing of NSST and TREF update\&. Added mpi directives\&. -2020-02-17: Clara Draper Added soil state increments capability\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell NOAA/EMC 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 106 of file cycle\&.f90\&.
+.PP
+References num_parthds()\&.
+.SS "subroutine SFCDRV (integer, intent(in) LUGB, integer, intent(in) IDIM, integer, intent(in) JDIM, integer, intent(in) LSM, integer, intent(in) LENSFC, integer, intent(in) LSOIL, real, intent(in) DELTSFC, integer, intent(in) IY, integer, intent(in) IM, integer, intent(in) ID, integer, intent(in) IH, real, intent(in) FH, integer, intent(in) IALB, logical, intent(in) USE_UFO, logical, intent(in) DO_NSST, logical, intent(in) DO_SFCCYCLE, logical, intent(in) DO_LNDINC, real, intent(in) ZSEA1, real, intent(in) ZSEA2, integer, intent(in) ISOT, integer, intent(in) IVEGSRC, integer, intent(in) MYRANK)"
+
+.PP
+Driver routine for updating the surface fields\&. This program runs in two different modes:
+.PP
+.IP "1." 4
+Analysis mode (FH=0\&.)
+.PP
+This program merges climatology, analysis and forecast guess to create new surface fields\&. If analysis file is given, the program uses it if date of the analysis matches with IY,IM,ID,IH (see Note below)\&.
+.IP "2." 4
+Forecast mode (FH\&.GT\&.0\&.)
+.PP
+This program interpolates climatology to the date corresponding to the forecast hour\&. If surface analysis file is given, for the corresponding dates, the program will use it\&. This is forcing-by-observation experiment\&.
+.PP
+.PP
+If the date of the analysis does not match given IY,IM,ID,IH, (and FH), the program searches an old analysis by going back 6 hours, then 12 hours, then one day upto NREPMX days (parameter statement in the SUBROTINE FIXRD\&. Now defined as 15)\&. This allows the user to provide non-daily analysis to be used\&. If matching field is not found, the forecast guess will be used\&.
+.PP
+Variable naming convention for this program:
+.PP
+.IP "\(bu" 2
+OROG \&.\&. Orography
+.IP "\(bu" 2
+ALB \&.\&. Snow-free albedo
+.IP "\(bu" 2
+SWE \&.\&. Snow water equivalent
+.IP "\(bu" 2
+ZOR \&.\&. Surface roughness length
+.IP "\(bu" 2
+VET \&.\&. Vegetation type
+.IP "\(bu" 2
+TSF \&.\&. Surface skin temperature\&. Sea surface temp\&. over ocean\&.
+.IP "\(bu" 2
+TG3 \&.\&. Deep soil temperature (at 500cm)
+.IP "\(bu" 2
+STC \&.\&. Soil temperature (LSOIL layrs)
+.IP "\(bu" 2
+SMC \&.\&. Total soil moisture (LSOIL layrs)
+.IP "\(bu" 2
+AIS \&.\&. Sea ice mask (0 or 1)
+.IP "\(bu" 2
+CNP \&.\&. Canopy water content
+.IP "\(bu" 2
+CV \&.\&. Convective cloud cover
+.IP "\(bu" 2
+CVB \&.\&. Convective cloud base
+.IP "\(bu" 2
+CVT \&.\&. Convective cloud top
+.IP "\(bu" 2
+SLI \&.\&. LAND/SEA/SEA-ICE mask\&. (1/0/2 respectively)
+.IP "\(bu" 2
+VEG \&.\&. Vegetation cover
+.IP "\(bu" 2
+SOT \&.\&. Soil type
+.IP "\(bu" 2
+SIH \&.\&. Sea ice thickness
+.IP "\(bu" 2
+SIC \&.\&. Sea ice concentration
+.IP "\(bu" 2
+SND \&.\&. Snow depth
+.IP "\(bu" 2
+SLC \&.\&. Liquid soil moisture (LSOIL layers)
+.IP "\(bu" 2
+VMN \&.\&. Vegetation cover minimum
+.IP "\(bu" 2
+VMX \&.\&. Vegetation cover maximum
+.IP "\(bu" 2
+SLP \&.\&. Slope type
+.IP "\(bu" 2
+ABS \&.\&. Maximum snow albedo
+.IP "\(bu" 2
+T2M \&.\&. 2m Temperature
+.IP "\(bu" 2
+Q2M \&.\&. 2m Specific Humidity
+.IP "\(bu" 2
+TICE \&.\&. Ice Temperature
+.IP "\(bu" 2
+OROG_UF \&.\&. Orography unfiltered
+.PP
+.PP
+Most fields have a blending coefficient\&. This controls the blending of the forecast (first guess) and interpolated climatology or analyzed fields\&. When it is equal to 1\&.0, the pure forecast is used\&. When the coefficient is equal to 0, the pure climatology or analysis is used\&. The default values are set as follows:
+.PP
+Variables  Land  Sea ----------   Surface temperature  Forecast  Analysis   Albedo  Analysis  Analysis   Sea-ice  Analysis  Analysis   Snow  Analysis  Forecast (over sea ice)   Roughness  Analysis  Forecast   Plant resistance  Analysis  Analysis   Soil moisture  Weighted average  Analysis   Soil temperature  Forecast  Analysis   Canopy waver content  Forecast  Forecast   Convective cloud cover  Forecast  Forecast   Convective cloud bottm  Forecast  Forecast   Convective cloud top  Forecast  Forecast   Vegetation greenness  Analysis  Analysis   Vegetation type  Analysis  Analysis   Soil type  Analysis  Analysis   
+.PP
+\fBParameters:\fP
+.RS 4
+\fILUGB\fP Fortran unit number uses in sfccycle subprogram to read input datasets\&. 
+.br
+\fIIDIM\fP 'i' dimension of the cubed-sphere tile 
+.br
+\fIJDIM\fP 'j' dimension of the cubed-sphere tile 
+.br
+\fILENSFC\fP Total numberof points for the cubed-sphere tile 
+.br
+\fILSM\fP Integer code for the land surface model 1 - Noah 
+.br
+\fILSOIL\fP Number of soil layers 
+.br
+\fIDELTSFC\fP Cycling frequency in hours 
+.br
+\fIIY\fP Year of initial state 
+.br
+\fIIM\fP Month of initial state 
+.br
+\fIID\fP Day of initial state 
+.br
+\fIIH\fP Hour of initial state 
+.br
+\fIFH\fP Forecast hour 
+.br
+\fIIALB\fP Use modis albedo when '1'\&. Use brigleb when '0'\&. 
+.br
+\fIUSE_UFO\fP When true, adjust SST and soil temperature for differences between the filtered and unfiltered terrain\&. 
+.br
+\fIDO_NSST\fP When true, process NSST records\&. 
+.br
+\fIDO_SFCCYCLE\fP Call sfccycle routine to update surface fields 
+.br
+\fIDO_LNDINC\fP Read in land increment files, and add increments to requested states\&. 
+.br
+\fIZSEA1\fP When running NSST model, this is the lower bound of depth of sea temperature\&. In whole mm\&. 
+.br
+\fIZSEA2\fP When running NSST model, this is the upper bound of depth of sea temperature\&. In whole mm\&. 
+.br
+\fIISOT\fP Use STATSGO soil type when '1'\&. Use Zobler when '0'\&. 
+.br
+\fIIVEGSRC\fP Use IGBP vegetation type when '1'\&. Use SIB when '2'\&. 
+.br
+\fIMYRANK\fP MPI rank number 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell, George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 308 of file cycle\&.f90\&.
+.PP
+References get_sal_clm(), and get_tf_clm()\&.
+.SS "subroutine tf_thaw_set (real, dimension(nx*ny), intent(in) tf_ij, integer, dimension(nx*ny), intent(in) mask_ij, integer, intent(in) itile, integer, intent(in) jtile, real, intent(in) tice, real, intent(in) tclm, real, intent(out) tf_thaw, integer, intent(in) nx, integer, intent(in) ny, integer, intent(inout) nset_thaw_s, integer, intent(inout) nset_thaw_i, integer, intent(inout) nset_thaw_c)"
+
+.PP
+Set the background reference temperature (tf) for points where the ice has just melted\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItf_ij\fP Foundation temperature background on FV3 native grids\&. 
+.br
+\fImask_ij\fP Mask of the tile (FV3 native grids)\&. 
+.br
+\fIitile\fP Location index in the 'i' direction\&. 
+.br
+\fIjtile\fP Location index in the 'j' direction\&. 
+.br
+\fItice\fP Water temperature (calulated with a salinity formula)\&. 
+.br
+\fItclm\fP SST climatology valid at the analysis time\&. 
+.br
+\fItf_thaw\fP Foundation temperature of thawed points\&. 
+.br
+\fInx\fP 'i' dimension of tf_ij 
+.br
+\fIny\fP 'j' dimension of tf_ij 
+.br
+\fInset_thaw_s\fP Number of foundation temperature points filled via a search\&. 
+.br
+\fInset_thaw_i\fP Number of ice points filled with a calculated tice\&. 
+.br
+\fInset_thaw_c\fP Number of points filled with a weighted average of tice and tclm\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+
+.PP
+Definition at line 1431 of file cycle\&.f90\&.
+.PP
+Referenced by ADJUST_NSST()\&.
+.SS "real function tfreez (real salinity)"
+
+.PP
+Compute the freezing point of water as a function of salinity\&. Constants taken from Gill, 1982\&.
+.PP
+\fBDate:\fP
+.RS 4
+21 September 1994\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Robert Grumbine
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsalinity\fP The salinity\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+tfreez The freezing point of water\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1946 of file cycle\&.f90\&.
+.PP
+Referenced by land_increments::apply_land_da_adjustments_stc()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for global_cycle from the source code\&.

@@ -1,0 +1,83 @@
+.TH "pmat4::triple_product" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::triple_product
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBtriple_product_d\fP (a, b, c)"
+.br
+.RI "Return the triple product of three double precision real 3-vectors\&. "
+.ti -1c
+.RI "real(sp) function \fBtriple_product_s\fP (a, b, c)"
+.br
+.RI "Return the triple product of three single precision real 3-vectors\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 70 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function pmat4::triple_product::triple_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b, real(dp), dimension(3), intent(in) c)\fC [private]\fP"
+
+.PP
+Return the triple product of three double precision real 3-vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input 3-vector 
+.br
+\fIb\fP real type input 3-vector 
+.br
+\fIc\fP real type input 3-vector 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+tripleproduct result, scalar triple product 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 336 of file pmat4\&.f90\&.
+.SS "real(sp) function pmat4::triple_product::triple_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b, real(sp), dimension(3), intent(in) c)\fC [private]\fP"
+
+.PP
+Return the triple product of three single precision real 3-vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input 3-vector 
+.br
+\fIb\fP real type input 3-vector 
+.br
+\fIc\fP real type input 3-vector 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+tripleproduct result, scalar triple product 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 322 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

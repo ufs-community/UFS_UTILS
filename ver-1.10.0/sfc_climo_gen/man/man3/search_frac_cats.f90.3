@@ -1,0 +1,81 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/search_frac_cats.f90" 3 "Mon Apr 17 2023" "Version 1.10.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/search_frac_cats.f90 \- Replace undefined values on the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBsearch_frac_cats\fP (field, mask, idim, jdim, num_categories, tile, field_name)"
+.br
+.RI "Replace undefined values on the model grid with valid values at a nearby neighbor\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Replace undefined values on the model grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition in file \fBsearch_frac_cats\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine search_frac_cats (real(esmf_kind_r4), dimension(idim,jdim,num_categories), intent(inout) field, integer(esmf_kind_i4), dimension(idim,jdim), intent(in) mask, integer, intent(in) idim, integer, intent(in) jdim, integer, intent(in) num_categories, integer, intent(in) tile, character(len=*) field_name)"
+
+.PP
+Replace undefined values on the model grid with valid values at a nearby neighbor\&. Undefined values are typically associated with isolated islands where there is no source data\&. Routine searches a neighborhood with a radius of 100 grid points\&. If no valid values are found, a default value is used\&. This routine works for one tile of a cubed sphere grid\&. It does not consider valid values at adjacent faces\&. This routine works for fractional categorical fields, such as soil type\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfield\fP - input: Field before missing values are replaced\&.
+.IP "\(bu" 2
+output: Field after missing values are replaced\&. 
+.PP
+.br
+\fImask\fP Field bitmap\&. Field defined where mask=1\&. 
+.br
+\fIidim\fP i dimension of tile\&. 
+.br
+\fIjdim\fP j dimension of tile\&. 
+.br
+\fInum_categories\fP Number of veg/soil categories\&. 
+.br
+\fItile\fP Tile number\&. 
+.br
+\fIfield_name\fP Field name\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition at line 25 of file search_frac_cats\&.f90\&.
+.PP
+Referenced by interp_frac_cats()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

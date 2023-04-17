@@ -1,0 +1,212 @@
+.TH "source_grid" 3 "Mon Apr 17 2023" "Version 1.10.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+source_grid \- Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBdefine_source_grid\fP (localpet, npets, input_file)"
+.br
+.RI "Defines esmf grid object for source grid\&. "
+.ti -1c
+.RI "subroutine, public \fBsource_grid_cleanup\fP"
+.br
+.RI "Free up memory associated with this module\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, dimension(:), allocatable, public \fBday_of_rec\fP"
+.br
+.RI "Day of each time record with respect to Jan 1\&. "
+.ti -1c
+.RI "character(len=50), dimension(:), allocatable, public \fBfield_names\fP"
+.br
+.RI "Names of fields to be processed\&. "
+.ti -1c
+.RI "type(esmf_grid), public \fBgrid_src\fP"
+.br
+.RI "ESMF grid object for the source grid\&. "
+.ti -1c
+.RI "integer, public \fBi_src\fP"
+.br
+.RI "i dimension of the source grid\&. "
+.ti -1c
+.RI "integer, public \fBj_src\fP"
+.br
+.RI "j dimension of the source grid\&. "
+.ti -1c
+.RI "integer, public \fBnum_fields\fP"
+.br
+.RI "Number of fields in the file\&. "
+.ti -1c
+.RI "integer, public \fBnum_records\fP"
+.br
+.RI "Number of fields times time records\&. "
+.ti -1c
+.RI "integer, public \fBnum_time_recs\fP"
+.br
+.RI "Number of time records\&. "
+.ti -1c
+.RI "character(len=75), public \fBsource\fP"
+.br
+.RI "Original source of the data\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&. 
+
+Also, sets up the ESMF grid object for the source grid\&. Source grid is assumed to be global lat/lon\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public source_grid::define_source_grid (integer, intent(in) localpet, integer, intent(in) npets, character(len=*), intent(in) input_file)"
+
+.PP
+Defines esmf grid object for source grid\&. Retrieves date and field information from source file\&.
+.PP
+Read date information from input source data file\&. Create esmf grid object for the source grid\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP mpi task number 
+.br
+\fInpets\fP total number mpi tasks 
+.br
+\fIinput_file\fP file containing the source grid data\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition at line 52 of file source_grid\&.F90\&.
+.PP
+References day_of_rec, utils::error_handler(), field_names, grid_src, i_src, j_src, utils::netcdf_err(), num_fields, num_records, num_time_recs, and source\&.
+.PP
+Referenced by driver()\&.
+.SS "subroutine, public source_grid::source_grid_cleanup ()"
+
+.PP
+Free up memory associated with this module\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition at line 393 of file source_grid\&.F90\&.
+.PP
+References day_of_rec, field_names, and grid_src\&.
+.PP
+Referenced by driver()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "integer, dimension(:), allocatable, public source_grid::day_of_rec"
+
+.PP
+Day of each time record with respect to Jan 1\&. 
+.PP
+Definition at line 31 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), output(), source_grid_cleanup(), and output_frac_cats::writeit()\&.
+.SS "character(len=50), dimension(:), allocatable, public source_grid::field_names"
+
+.PP
+Names of fields to be processed\&. 
+.PP
+Definition at line 21 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), interp(), interp_frac_cats(), output(), output_frac_cats::output_driver(), source_grid_cleanup(), and output_frac_cats::writeit()\&.
+.SS "type(esmf_grid), public source_grid::grid_src"
+
+.PP
+ESMF grid object for the source grid\&. 
+.PP
+Definition at line 34 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), interp(), interp_frac_cats(), and source_grid_cleanup()\&.
+.SS "integer, public source_grid::i_src"
+
+.PP
+i dimension of the source grid\&. 
+.PP
+Definition at line 24 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), interp(), and interp_frac_cats()\&.
+.SS "integer, public source_grid::j_src"
+
+.PP
+j dimension of the source grid\&. 
+.PP
+Definition at line 25 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), interp(), and interp_frac_cats()\&.
+.SS "integer, public source_grid::num_fields"
+
+.PP
+Number of fields in the file\&. Some files have more than one (ex: the 4-component albedo)\&. 
+.PP
+Definition at line 28 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), interp(), and output()\&.
+.SS "integer, public source_grid::num_records"
+
+.PP
+Number of fields times time records\&. 
+.PP
+Definition at line 26 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), and output()\&.
+.SS "integer, public source_grid::num_time_recs"
+
+.PP
+Number of time records\&. 
+.PP
+Definition at line 27 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), interp(), output(), and output_frac_cats::writeit()\&.
+.SS "character(len=75), public source_grid::source"
+
+.PP
+Original source of the data\&. 
+.PP
+Definition at line 22 of file source_grid\&.F90\&.
+.PP
+Referenced by define_source_grid(), output(), and output_frac_cats::writeit()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

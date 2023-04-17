@@ -1,0 +1,59 @@
+.TH "pmat4::ctoz" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::ctoz
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBctoz\fP (v, z, infz)"
+.br
+.RI "Utility codes for various Mobius transformations\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 105 of file pmat4\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat4::ctoz::ctoz (real(dp), dimension(3), intent(in) v, complex(dpc), intent(out) z, logical, intent(out) infz)\fC [private]\fP"
+
+.PP
+Utility codes for various Mobius transformations\&. If aa1,bb1,cc1,dd1 are the coefficients for one transformation, and aa2,bb2,cc2,dd2 are the coefficients for a second one, then the coefficients for the mapping of a test point, zz, by aa1 etc to zw, followed by a mapping of zw, by aa2 etc to zv, is equivalent to a single mapping zz-->zv by the transformatn with coefficients aa3,bb3,cc3,dd3, such that, as 2*2 complex matrices:
+.PP
+.PP
+.nf
+
+ [ aa3, bb3 ]   [ aa2, bb2 ]   [ aa1, bb1 ]
+ [          ] = [          ] * [          ]
+ [ cc3, dd3 ]   [ cc2, dd2 ]   [ cc1, dd1 ] \&.
+ 
+.fi
+.PP
+.PP
+Note that the determinant of these matrices is always +1\&. Given a cartesian 3-vector representation of a point on the Riemann unit sphere, return the stereographically equivalent complex number\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP cartesian 3-vector representation of point on Riemann sphere 
+.br
+\fIz\fP complex point stereographically equivalent to v 
+.br
+\fIinfz\fP logical indicator for z being the point at infinity 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2027 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

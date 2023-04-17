@@ -1,0 +1,81 @@
+.TH "psym2::eigensym2" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+psym2::eigensym2
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBeigensym2\fP (em, vv, oo)"
+.br
+.RI "Get the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo, of the symmetric 2*2 matrix, em\&. "
+.ti -1c
+.RI "subroutine \fBeigensym2d\fP (em, vv, oo, vvd, ood, ff)"
+.br
+.RI "For a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and the diagonal matrix of eigenvalues, oo\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 21 of file psym2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine psym2::eigensym2::eigensym2 (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) vv, real(dp), dimension(2,2), intent(out) oo)\fC [private]\fP"
+
+.PP
+Get the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo, of the symmetric 2*2 matrix, em\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP symmetric 2*2 matrix 
+.br
+\fIvv\fP orthogonal eigenvectors 
+.br
+\fIoo\fP diagonal matrix of eigenvalues 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 43 of file psym2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine psym2::eigensym2::eigensym2d (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) vv, real(dp), dimension(2,2), intent(out) oo, real(dp), dimension(2,2,2,2), intent(out) vvd, real(dp), dimension(2,2,2,2), intent(out) ood, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+For a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and the diagonal matrix of eigenvalues, oo\&. If the two eigenvalues are equal, proceed no further and raise the logical failure flag, ff, to \&.true\&.; otherwise, return with vvd=d(vv)/d(em) and ood=d(oo)/d(em) and ff=\&.false\&., and maintain the symmetries between the last two of the indices of these derivatives\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIem\fP symmetric 2*2 matrix 
+.br
+\fIvv\fP normalized eigenvectors 
+.br
+\fIoo\fP diagonal matrix of eigenvalues 
+.br
+\fIvvd\fP vvd=d(vv)/d(em) 
+.br
+\fIood\fP ood=d(oo)/d(em) 
+.br
+\fIff\fP logical failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 76 of file psym2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

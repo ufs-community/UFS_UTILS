@@ -1,0 +1,184 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/read_write_data.f90" 3 "Mon Apr 17 2023" "Version 1.10.0" "global_cycle" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/read_write_data.f90 \- Contains utility routines that read and write data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "type \fBREAD_WRITE_DATA::NSST_DATA\fP"
+.br
+.in -1c
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBREAD_WRITE_DATA\fP"
+.br
+.RI "This module contains routines that read and write data\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::get_dim_nc\fP (filename, nlat, nlon)"
+.br
+.RI "Get the i/j dimensions of the data from a NetCDF file\&. "
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::get_tf_clm_dim\fP (file_sst, mlat_sst, mlon_sst)"
+.br
+.RI "Get the i/j dimensions of RTG SST climatology file\&. "
+.ti -1c
+.RI "subroutine \fBREAD_WRITE_DATA::nc_check\fP (status)"
+.br
+.RI "Check the NetCDF status code\&. "
+.ti -1c
+.RI "subroutine \fBREAD_WRITE_DATA::NETCDF_ERR\fP (ERR, STRING)"
+.br
+.RI "If a NetCDF call returns an error, print out a user-supplied message and the NetCDF library message\&. "
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::READ_DATA\fP (LSOIL, LENSFC, DO_NSST, INC_FILE, IS_NOAHMP, TSFFCS, SMCFCS, SWEFCS, STCFCS, TG3FCS, ZORFCS, CVFCS, CVBFCS, CVTFCS, ALBFCS, VEGFCS, SLIFCS, CNPFCS, F10M, VETFCS, SOTFCS, ALFFCS, USTAR, FMM, FHH, SIHFCS, SICFCS, SITFCS, TPRCP, SRFLAG, SNDFCS, VMNFCS, VMXFCS, SLCFCS, SLPFCS, ABSFCS, T2M, Q2M, SLMASK, ZSOIL, NSST)"
+.br
+.RI "Read the first guess surface records and nsst records (if selected) for a single cubed-sphere tile\&. "
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::READ_GSI_DATA\fP (GSI_FILE, FILE_TYPE, LSOIL)"
+.br
+.RI "Read increment file from the GSI containing either the foundation temperature increments and mask, or the soil increments\&. "
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::READ_LAT_LON_OROG\fP (RLA, RLO, OROG, OROG_UF, TILE_NUM, IDIM, JDIM, IJDIM)"
+.br
+.RI "Read latitude and longitude for the cubed-sphere tile from the 'grid' file\&. "
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::read_salclm_gfs_nc\fP (filename, sal, xlats, xlons, nlat, nlon, itime)"
+.br
+.RI "Read the woa05 salinity monthly climatology file\&. "
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::read_tf_clim_grb\fP (file_sst, sst, rlats_sst, rlons_sst, mlat_sst, mlon_sst, mon)"
+.br
+.RI "Read a GRIB1 sst climatological analysis file\&. "
+.ti -1c
+.RI "subroutine \fBREAD_WRITE_DATA::remove_checksum\fP (ncid, id_var)"
+.br
+.RI "Remove the checksum attribute from a netcdf record\&. "
+.ti -1c
+.RI "subroutine, public \fBREAD_WRITE_DATA::write_data\fP (lensfc, idim, jdim, lsoil, do_nsst, nsst, slifcs, tsffcs, vegfcs, swefcs, tg3fcs, zorfcs, albfcs, alffcs, cnpfcs, f10m, t2m, q2m, vetfcs, sotfcs, ustar, fmm, fhh, sicfcs, sihfcs, sitfcs, tprcp, srflag, swdfcs, vmnfcs, vmxfcs, slpfcs, absfcs, slcfcs, smcfcs, stcfcs)"
+.br
+.RI "Update surface records - and nsst records if selected - on a single cubed-sphere tile to a pre-existing model restart file (in netcdf)\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real, dimension(:,:), allocatable, public \fBREAD_WRITE_DATA::dtref_gaus\fP"
+.br
+.RI "GSI foundation temperature increment on the gaussian grid\&. "
+.ti -1c
+.RI "integer, public \fBREAD_WRITE_DATA::idim_gaus\fP"
+.br
+.RI "'i' dimension of GSI gaussian grid\&. "
+.ti -1c
+.RI "integer, public \fBREAD_WRITE_DATA::jdim_gaus\fP"
+.br
+.RI "'j' dimension of GSI gaussian grid\&. "
+.ti -1c
+.RI "integer, dimension(:,:), allocatable, public \fBREAD_WRITE_DATA::slmsk_gaus\fP"
+.br
+.RI "GSI land mask on the gaussian grid\&. "
+.ti -1c
+.RI "integer, dimension(:,:), allocatable, public \fBREAD_WRITE_DATA::soilsnow_gaus\fP"
+.br
+.RI "GSI soil / snow mask for land on the gaussian grid\&. "
+.ti -1c
+.RI "real, dimension(:,:,:), allocatable, public \fBREAD_WRITE_DATA::stc_inc_gaus\fP"
+.br
+.RI "GSI soil temperature increments on the gaussian grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Contains utility routines that read and write data\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li, Hang Lei, George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBread_write_data\&.f90\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "type READ_WRITE_DATA::NSST_DATA"
+.PP 
+Definition at line 16 of file read_write_data\&.f90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+real, dimension(:), allocatable \fIc_0\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIc_d\fP 
+.br
+.PP
+real, dimension(:), allocatable \fId_conv\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIdt_cool\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIifd\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIqrain\fP 
+.br
+.PP
+real, dimension(:), allocatable \fItfinc\fP 
+.br
+.PP
+real, dimension(:), allocatable \fItref\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIw_0\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIw_d\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIxs\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIxt\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIxtts\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIxu\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIxv\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIxz\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIxzts\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIz_c\fP 
+.br
+.PP
+real, dimension(:), allocatable \fIzm\fP 
+.br
+.PP
+.RE
+.PP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for global_cycle from the source code\&.

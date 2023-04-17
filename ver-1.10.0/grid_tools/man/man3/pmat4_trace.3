@@ -1,0 +1,102 @@
+.TH "pmat4::trace" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::trace
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBtrace_d\fP (b)"
+.br
+.RI "Return the trace of a given double precision real matrix\&. "
+.ti -1c
+.RI "integer(spi) function \fBtrace_i\fP (b)"
+.br
+.RI "Return the trace of a given integer matrix\&. "
+.ti -1c
+.RI "real(sp) function \fBtrace_s\fP (b)"
+.br
+.RI "Return the trace of a given single precision real matrix\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 78 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function pmat4::trace::trace_d (real(dp), dimension(:,:), intent(in) b)\fC [private]\fP"
+
+.PP
+Return the trace of a given double precision real matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP real type input matrix B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+s result, trace, or sum of diagonal elements, of B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 579 of file pmat4\&.f90\&.
+.SS "integer(spi) function pmat4::trace::trace_i (integer(spi), dimension(:,:), intent(in) b)\fC [private]\fP"
+
+.PP
+Return the trace of a given integer matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP integer type input matrix B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+s result, trace, or sum of diagonal elements, of B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 591 of file pmat4\&.f90\&.
+.SS "real(sp) function pmat4::trace::trace_s (real(sp), dimension(:,:), intent(in) b)\fC [private]\fP"
+
+.PP
+Return the trace of a given single precision real matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP real type input matrix B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+s result, trace, or sum of diagonal elements, of B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 567 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

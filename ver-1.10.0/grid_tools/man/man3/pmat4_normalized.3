@@ -1,0 +1,75 @@
+.TH "pmat4::normalized" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::normalized
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function, dimension(size(a)) \fBnormalized_d\fP (a)"
+.br
+.RI "Return the normalized version of a double precision real vector\&. "
+.ti -1c
+.RI "real(sp) function, dimension(size(a)) \fBnormalized_s\fP (a)"
+.br
+.RI "Return the normalized version of a single precision real vector\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 61 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function, dimension(size(a)) pmat4::normalized::normalized_d (real(dp), dimension(:), intent(in) a)\fC [private]\fP"
+
+.PP
+Return the normalized version of a double precision real vector\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input vector 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+b result, double precision real vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 157 of file pmat4\&.f90\&.
+.SS "real(sp) function, dimension(size(a)) pmat4::normalized::normalized_s (real(sp), dimension(:), intent(in) a)\fC [private]\fP"
+
+.PP
+Return the normalized version of a single precision real vector\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input vector 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+b result, single precision real vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 143 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

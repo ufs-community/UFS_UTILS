@@ -1,0 +1,113 @@
+.TH "pmat::invl" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat::invl
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdinvl\fP (a)"
+.br
+.RI "Invert lower triangular matrix in place\&. "
+.ti -1c
+.RI "subroutine \fBdlinlv\fP (a, u)"
+.br
+.RI "Solve linear system involving lower triangular system matrix\&. "
+.ti -1c
+.RI "subroutine \fBsinvl\fP (a)"
+.br
+.RI "Invert lower triangular matrix in place\&. "
+.ti -1c
+.RI "subroutine \fBslinlv\fP (a, u)"
+.br
+.RI "Solve linear system involving lower triangular system matrix\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 39 of file pmat\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat::invl::dinvl (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert lower triangular matrix in place\&. Double precision\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP lower triangular matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1154 of file pmat\&.f90\&.
+.SS "subroutine pmat::invl::dlinlv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fC [private]\fP"
+
+.PP
+Solve linear system involving lower triangular system matrix\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP lower triangular matrix\&. 
+.br
+\fIu\fP input RHS vector, output solution vector\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1189 of file pmat\&.f90\&.
+.SS "subroutine pmat::invl::sinvl (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+
+.PP
+Invert lower triangular matrix in place\&. Single precision\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP lower triangular matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1136 of file pmat\&.f90\&.
+.SS "subroutine pmat::invl::slinlv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)\fC [private]\fP"
+
+.PP
+Solve linear system involving lower triangular system matrix\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP lower triangular matrix\&. 
+.br
+\fIu\fP input RHS vector, output solution vector\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1174 of file pmat\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

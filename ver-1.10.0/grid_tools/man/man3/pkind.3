@@ -1,0 +1,96 @@
+.TH "pkind" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pkind \- Standard integer, real, and complex single and double precision kinds\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, parameter \fBdp\fP =selected_real_kind(15, 300)"
+.br
+.RI "Double precision real kind\&. "
+.ti -1c
+.RI "integer, parameter \fBdpc\fP =\fBdp\fP"
+.br
+.RI "Double precision real kind\&. "
+.ti -1c
+.RI "integer, parameter \fBdpi\fP =selected_int_kind(12)"
+.br
+.RI "Double precision integer kind\&. "
+.ti -1c
+.RI "integer, parameter \fBsp\fP =selected_real_kind(6, 30)"
+.br
+.RI "Single precision real kind\&. "
+.ti -1c
+.RI "integer, parameter \fBspc\fP =\fBsp\fP"
+.br
+.RI "Single precision real kind\&. "
+.ti -1c
+.RI "integer, parameter \fBspi\fP =selected_int_kind(6)"
+.br
+.RI "Single precision integer kind\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Standard integer, real, and complex single and double precision kinds\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.SH "Variable Documentation"
+.PP 
+.SS "integer, parameter pkind::dp =selected_real_kind(15, 300)"
+
+.PP
+Double precision real kind\&. 
+.PP
+Definition at line 11 of file pkind\&.f90\&.
+.PP
+Referenced by pmat4::det_id(), and regional_grid()\&.
+.SS "integer, parameter pkind::dpc =\fBdp\fP"
+
+.PP
+Double precision real kind\&. 
+.PP
+Definition at line 13 of file pkind\&.f90\&.
+.PP
+Referenced by pmat4::ctoz(), and pmat4::ztocd()\&.
+.SS "integer, parameter pkind::dpi =selected_int_kind(12)"
+
+.PP
+Double precision integer kind\&. 
+.PP
+Definition at line 9 of file pkind\&.f90\&.
+.PP
+Referenced by pmat4::det_id()\&.
+.SS "integer, parameter pkind::sp =selected_real_kind(6, 30)"
+
+.PP
+Single precision real kind\&. 
+.PP
+Definition at line 10 of file pkind\&.f90\&.
+.SS "integer, parameter pkind::spc =\fBsp\fP"
+
+.PP
+Single precision real kind\&. 
+.PP
+Definition at line 12 of file pkind\&.f90\&.
+.SS "integer, parameter pkind::spi =selected_int_kind(6)"
+
+.PP
+Single precision integer kind\&. 
+.PP
+Definition at line 8 of file pkind\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

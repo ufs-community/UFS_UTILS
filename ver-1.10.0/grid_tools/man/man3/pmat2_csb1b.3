@@ -1,0 +1,56 @@
+.TH "pmat2::csb1b" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::csb1b
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBCSB1B\fP (m1, mah1, mah2, mirror2, a)"
+.br
+.RI "Like \fBcad1b\fP, but for antisymmetric operand\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 61 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::csb1b::CSB1B (integer(spi), intent(in) m1, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(0:m1\-1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+
+.PP
+Like \fBcad1b\fP, but for antisymmetric operand\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP Size of implied full matrix 
+.br
+\fImah1\fP Left semi-bandwidths (subdiagonals) of A\&. 
+.br
+\fImah2\fP Right semi-bandwidths (superdiagonals) of A\&. 
+.br
+\fImirror2\fP 2*location of symmetry axis relative to end-1 operand element\&. 
+.br
+\fIa\fP Input operator, output as clipped antisymmetric at end-1\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 451 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

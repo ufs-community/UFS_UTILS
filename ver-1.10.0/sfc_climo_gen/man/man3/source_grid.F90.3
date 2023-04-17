@@ -1,0 +1,91 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/source_grid.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/source_grid.F90 \- Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBsource_grid\fP"
+.br
+.RI "Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBsource_grid::define_source_grid\fP (localpet, npets, input_file)"
+.br
+.RI "Defines esmf grid object for source grid\&. "
+.ti -1c
+.RI "subroutine, public \fBsource_grid::source_grid_cleanup\fP"
+.br
+.RI "Free up memory associated with this module\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, dimension(:), allocatable, public \fBsource_grid::day_of_rec\fP"
+.br
+.RI "Day of each time record with respect to Jan 1\&. "
+.ti -1c
+.RI "character(len=50), dimension(:), allocatable, public \fBsource_grid::field_names\fP"
+.br
+.RI "Names of fields to be processed\&. "
+.ti -1c
+.RI "type(esmf_grid), public \fBsource_grid::grid_src\fP"
+.br
+.RI "ESMF grid object for the source grid\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::i_src\fP"
+.br
+.RI "i dimension of the source grid\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::j_src\fP"
+.br
+.RI "j dimension of the source grid\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::num_fields\fP"
+.br
+.RI "Number of fields in the file\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::num_records\fP"
+.br
+.RI "Number of fields times time records\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::num_time_recs\fP"
+.br
+.RI "Number of time records\&. "
+.ti -1c
+.RI "character(len=75), public \fBsource_grid::source\fP"
+.br
+.RI "Original source of the data\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition in file \fBsource_grid\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

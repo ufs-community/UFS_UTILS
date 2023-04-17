@@ -1,0 +1,114 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/static_data.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/static_data.F90 \- Process static surface data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBstatic_data\fP"
+.br
+.RI "Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type)\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBstatic_data::cleanup_static_fields\fP"
+.br
+.RI "Free up memory for fields in this module\&. "
+.ti -1c
+.RI "subroutine, public \fBstatic_data::create_static_fields\fP"
+.br
+.RI "Create ESMF fields for static target grid data\&. "
+.ti -1c
+.RI "subroutine, public \fBstatic_data::get_static_fields\fP (localpet)"
+.br
+.RI "Driver routine to read/time interpolate static/climo fields on the fv3 target grid\&. "
+.ti -1c
+.RI "subroutine \fBstatic_data::read_static_file\fP (field, i_target, j_target, tile, data_one_tile, max_data_one_tile, min_data_one_tile)"
+.br
+.RI "Read static climatological data file\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::alnsf_target_grid\fP"
+.br
+.RI "near ir black sky albedo "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::alnwf_target_grid\fP"
+.br
+.RI "near ir white sky albedo "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::alvsf_target_grid\fP"
+.br
+.RI "visible black sky albedo "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::alvwf_target_grid\fP"
+.br
+.RI "visible white sky albedo "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::facsf_target_grid\fP"
+.br
+.RI "fractional coverage for strong zenith angle dependent albedo "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::facwf_target_grid\fP"
+.br
+.RI "fractional coverage for weak zenith angle dependent albedo "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::max_veg_greenness_target_grid\fP"
+.br
+.RI "maximum annual greenness fraction "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::min_veg_greenness_target_grid\fP"
+.br
+.RI "minimum annual greenness fraction "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::mxsno_albedo_target_grid\fP"
+.br
+.RI "maximum snow albedo "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::slope_type_target_grid\fP"
+.br
+.RI "slope type "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::soil_type_target_grid\fP"
+.br
+.RI "soil type "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::substrate_temp_target_grid\fP"
+.br
+.RI "soil subtrate temperature "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::veg_greenness_target_grid\fP"
+.br
+.RI "vegetation greenness fraction "
+.ti -1c
+.RI "type(esmf_field), public \fBstatic_data::veg_type_target_grid\fP"
+.br
+.RI "vegetation type "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Process static surface data\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBstatic_data\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

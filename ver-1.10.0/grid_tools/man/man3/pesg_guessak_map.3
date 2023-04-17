@@ -1,0 +1,47 @@
+.TH "pesg::guessak_map" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::guessak_map
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBguessak_map\fP (asp, tmarcx, ak)"
+.br
+.RI "Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space nondimensional units, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 40 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::guessak_map::guessak_map (real(dp), intent(in) asp, real(dp), intent(in) tmarcx, real(dp), dimension(2), intent(out) ak)\fC [private]\fP"
+
+.PP
+Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space nondimensional units, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIasp\fP aspect ratio 
+.br
+\fItmarcx\fP 
+.br
+\fIak\fP first guess for the parameter vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 791 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

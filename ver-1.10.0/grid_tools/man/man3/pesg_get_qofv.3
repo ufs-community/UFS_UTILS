@@ -1,0 +1,125 @@
+.TH "pesg::get_qofv" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::get_qofv
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBget_qofv\fP (lam, v1, v2, v3, v4, q)"
+.br
+.RI "The quadratic quantity Q depends linearly on v1 and v4 (which are already quadratic diagnostics of EL) and quadratically on v2 and v3 (which are linear diagnostics of EL)\&. "
+.ti -1c
+.RI "subroutine \fBget_qofvd\fP (lam, v2, v3, v1d, v2d, v3d, v4d, qd)"
+.br
+.RI "Like \fBget_qofv\fP, but for (only) the 2-vector derivatives of Q\&. "
+.ti -1c
+.RI "subroutine \fBget_qsofvs\fP (n, lam, v1s, v2s, v3s, v4s, qs)"
+.br
+.RI "General util to convert value\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 38 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::get_qofv::get_qofv (real(dp), intent(in) lam, real(dp), intent(in) v1, real(dp), intent(in) v2, real(dp), intent(in) v3, real(dp), intent(in) v4, real(dp), intent(out) q)\fC [private]\fP"
+
+.PP
+The quadratic quantity Q depends linearly on v1 and v4 (which are already quadratic diagnostics of EL) and quadratically on v2 and v3 (which are linear diagnostics of EL)\&. EL = (1/2)log(G), where G=J^T\&.J, J the jacobian\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlam\fP 
+.br
+\fIv1\fP quadratic diagnostics of EL 
+.br
+\fIv2\fP linear diagnostics of EL 
+.br
+\fIv3\fP linear diagnostics of EL 
+.br
+\fIv4\fP quadratic diagnostics of EL 
+.br
+\fIq\fP quadratic quantity 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 729 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::get_qofv::get_qofvd (real(dp), intent(in) lam, real(dp), intent(in) v2, real(dp), intent(in) v3, real(dp), dimension(2), intent(in) v1d, real(dp), dimension(2), intent(in) v2d, real(dp), dimension(2), intent(in) v3d, real(dp), dimension(2), intent(in) v4d, real(dp), dimension(2), intent(out) qd)\fC [private]\fP"
+
+.PP
+Like \fBget_qofv\fP, but for (only) the 2-vector derivatives of Q\&. Note that the quadratic diagnostics v1 and v4 do not participate in this formula\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlam\fP 
+.br
+\fIv2\fP 
+.br
+\fIv3\fP 
+.br
+\fIv1d\fP 
+.br
+\fIv2d\fP 
+.br
+\fIv3d\fP 
+.br
+\fIv4d\fP 
+.br
+\fIqd\fP 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 751 of file pesg\&.f90\&.
+.SS "subroutine pesg::get_qofv::get_qsofvs (integer(spi), intent(in) n, real(dp), intent(in) lam, real(dp), dimension(n), intent(in) v1s, real(dp), dimension(n), intent(in) v2s, real(dp), dimension(n), intent(in) v3s, real(dp), dimension(n), intent(in) v4s, real(dp), dimension(n), intent(out) qs)\fC [private]\fP"
+
+.PP
+General util to convert value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP 
+.br
+\fIlam\fP 
+.br
+\fIv1s\fP 
+.br
+\fIv2s\fP 
+.br
+\fIv3s\fP 
+.br
+\fIv4s\fP 
+.br
+\fIqs\fP 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 771 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

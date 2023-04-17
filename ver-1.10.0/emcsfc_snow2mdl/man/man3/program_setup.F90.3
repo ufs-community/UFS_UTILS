@@ -1,0 +1,143 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/program_setup.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/program_setup.F90 \- This module reads in data from the program's configuration\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBprogram_setup\fP"
+.br
+.RI "This module reads in data from the program's configuration namelist\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBprogram_setup::read_config_nml\fP"
+.br
+.RI "Read namelist control\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "character *200, public \fBprogram_setup::afwa_lsmask_nh_file\fP"
+.br
+.RI "path/name afwa n hemis land/sea mask "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::afwa_lsmask_sh_file\fP"
+.br
+.RI "path/name afwa s hemis land/sea mask "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::afwa_snow_global_file\fP"
+.br
+.RI "global afwa snow file\&. "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::afwa_snow_nh_file\fP"
+.br
+.RI "path/name afwa n hemis snow depth "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::afwa_snow_sh_file\fP"
+.br
+.RI "path/name afwa s hemis snow depth "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::autosnow_file\fP"
+.br
+.RI "path/name s hemis autosnow file "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::climo_qc_file\fP"
+.br
+.RI "Climatological snow cover file\&. "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::gfs_lpl_file\fP"
+.br
+.RI "GFS gaussian thinned (reduced) grid definition file\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::grib_century\fP"
+.br
+.RI "date of the final merged snow product that will be placed in grib header\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::grib_day\fP"
+.br
+.RI "date of the final merged snow product that will be placed in grib header\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::grib_hour\fP"
+.br
+.RI "date of the final merged snow product that will be placed in grib header\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::grib_month\fP"
+.br
+.RI "date of the final merged snow product that will be placed in grib header\&. "
+.ti -1c
+.RI "integer, public \fBprogram_setup::grib_year\fP"
+.br
+.RI "date of the final merged snow product that will be placed in grib header\&. "
+.ti -1c
+.RI "real, public \fBprogram_setup::lat_threshold\fP"
+.br
+.RI "equatorward of this latitude, model points with undefined cover or depth (because the interpolation routines could not find valid snow data) are set to a default value of zero\&. "
+.ti -1c
+.RI "real, public \fBprogram_setup::min_snow_depth\fP"
+.br
+.RI "minimum snow depth in meters at model points with coverage exceeding threshold\&. "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::model_lat_file\fP"
+.br
+.RI "path/name lats on the model grid "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::model_lon_file\fP"
+.br
+.RI "path/name lons on the model grid "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::model_lsmask_file\fP"
+.br
+.RI "path/name nesdis/ims land mask "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::model_snow_file\fP"
+.br
+.RI "path/name nesdis/ims snow cover "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::nesdis_lsmask_file\fP"
+.br
+.RI "nesdis/ims land mask file "
+.ti -1c
+.RI "character *200, public \fBprogram_setup::nesdis_snow_file\fP"
+.br
+.RI "nesdis/ims snow file "
+.ti -1c
+.RI "logical, public \fBprogram_setup::output_grib2\fP"
+.br
+.RI "when true, output model snow analysis is grib 2\&. "
+.ti -1c
+.RI "real, public \fBprogram_setup::snow_cvr_threshold\fP"
+.br
+.RI "if percent coverage according to nesdis/ims or autosnow exceeds this value, then non-zero snow depth is assigned\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+This module reads in data from the program's configuration\&. 
+
+namelist\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2005-DEC-16 
+.RE
+.PP
+
+.PP
+Definition in file \fBprogram_setup\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for emcsfc_snow2mdl from the source code\&.

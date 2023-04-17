@@ -1,0 +1,120 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90" 3 "Mon Apr 17 2023" "Version 1.10.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90 \- Process vertical profile climatologic data for WAM\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgettemp\fP (iday, xlat, pr, np, pf, temp, n_o, n_o2, n_n2)"
+.br
+.RI "Routine that computes temperature and neutral density values utilizing MSIS 2\&.1\&. "
+.ti -1c
+.RI "subroutine \fBghp8\fP (day, utsec, z0, glat, glon, f107a, f107, ap, pres, alt, dn, tn)"
+.br
+.RI "Wrapper routine for calls to MSIS 2\&.1 for computing temperature and neutral density at a given pressure level\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Process vertical profile climatologic data for WAM\&. 
+
+This software incorporates the MSIS empirical atmospheric model software designed and provided by NRL\&. Use is governed by the Open Source Academic research License Agreement contained in the file msis2\&.1/nrlmsis2\&.1_license\&.txt
+.PP
+\fBAuthor:\fP
+.RS 4
+Adam Kubaryk NCEP/SWPC 
+.RE
+.PP
+
+.PP
+Definition in file \fBwam_climo_data\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine gettemp (integer, intent(in) iday, real(kind=esmf_kind_r8), intent(in) xlat, real(kind=esmf_kind_r8), dimension(np), intent(in) pr, integer, intent(in) np, character(*), intent(in) pf, real(kind=esmf_kind_r8), dimension(np), intent(out) temp, real(kind=esmf_kind_r8), dimension(np), intent(out) n_o, real(kind=esmf_kind_r8), dimension(np), intent(out) n_o2, real(kind=esmf_kind_r8), dimension(np), intent(out) n_n2)"
+
+.PP
+Routine that computes temperature and neutral density values utilizing MSIS 2\&.1\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIiday\fP Calendar day\&. 
+.br
+\fIxlat\fP Latitude (degrees)\&. 
+.br
+\fIpr\fP Pressure in hPa\&. 
+.br
+\fIpf\fP Path to parmfile for msisinit\&. 
+.br
+\fInp\fP Number of pressure layers\&. 
+.br
+\fItemp\fP Temperature (K)\&. 
+.br
+\fIn_o\fP Number density of o\&. 
+.br
+\fIn_o2\fP Number density of o2\&. 
+.br
+\fIn_n2\fP Number density of n2
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Adam Kubaryk NCEP/SWPC 
+.RE
+.PP
+
+.PP
+Definition at line 24 of file wam_climo_data\&.f90\&.
+.PP
+References ghp8()\&.
+.PP
+Referenced by atmosphere::VINTG_WAM()\&.
+.SS "subroutine ghp8 (real(kind=rp), intent(in) day, real(kind=rp), intent(in) utsec, real(kind=rp), intent(in) z0, real(kind=rp), intent(in) glat, real(kind=rp), intent(in) glon, real(kind=rp), intent(in) f107a, real(kind=rp), intent(in) f107, real(kind=rp), dimension(7), intent(in) ap, real(kind=rp), intent(in) pres, real(kind=rp), intent(out) alt, real(kind=rp), dimension(10), intent(out) dn, real(kind=rp), intent(out) tn)"
+
+.PP
+Wrapper routine for calls to MSIS 2\&.1 for computing temperature and neutral density at a given pressure level\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIday\fP Calendar day\&. 
+.br
+\fIutsec\fP Seconds into UTC day\&. 
+.br
+\fIz0\fP Initial guess for altitude in km\&. 
+.br
+\fIglat\fP Latitude in degrees east\&. 
+.br
+\fIglon\fP Longitude in degrees north\&. 
+.br
+\fIf107a\fP 41-day average of F10\&.7 Solar Flux\&. 
+.br
+\fIf107\fP Current day F10\&.7 Solar Flux\&. 
+.br
+\fIap\fP Array of Ap inputs to MSIS 2\&.1, documented within MSIS 2\&.1\&. 
+.br
+\fIpres\fP Pressure level at which to solve for temp/den values\&. 
+.br
+\fIalt\fP Altitude at which the outputs are valid\&. 
+.br
+\fIdn\fP Array of neutral density values, documented within MSIS 2\&.1\&. 
+.br
+\fItn\fP Temperature in K\&.
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Adam Kubaryk NCEP/SWPC 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file wam_climo_data\&.f90\&.
+.PP
+Referenced by gettemp()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

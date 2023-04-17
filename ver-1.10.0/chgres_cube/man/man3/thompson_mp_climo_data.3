@@ -1,0 +1,162 @@
+.TH "thompson_mp_climo_data" 3 "Mon Apr 17 2023" "Version 1.10.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+thompson_mp_climo_data \- Module to read the Thompson climatological MP data file and set up the associated esmf field and grid objects\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBcleanup_thomp_mp_climo_input_data\fP"
+.br
+.RI "Free up memory associated with this module\&. "
+.ti -1c
+.RI "subroutine, public \fBread_thomp_mp_climo_data\fP"
+.br
+.RI "Read Thompson climatological MP data file and time interpolate data to current cycle time\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer \fBi_thomp_mp_climo\fP"
+.br
+.RI "i-dimension of Thompson climo data "
+.ti -1c
+.RI "integer \fBj_thomp_mp_climo\fP"
+.br
+.RI "j-dimension of Thompson climo data "
+.ti -1c
+.RI "integer, public \fBlev_thomp_mp_climo\fP"
+.br
+.RI "number of vert lvls of Thompson climo data "
+.ti -1c
+.RI "type(esmf_field), public \fBqnifa_climo_input_grid\fP"
+.br
+.RI "number concentration of ice friendly nuclei\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBqnwfa_climo_input_grid\fP"
+.br
+.RI "number concentration of water friendly nuclei\&. "
+.ti -1c
+.RI "type(esmf_grid) \fBthomp_mp_climo_grid\fP"
+.br
+.RI "esmf grid object for Thompson data grid "
+.ti -1c
+.RI "type(esmf_field), public \fBthomp_pres_climo_input_grid\fP"
+.br
+.RI "3-d pressure of the Thompson climo data points "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Module to read the Thompson climatological MP data file and set up the associated esmf field and grid objects\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public thompson_mp_climo_data::cleanup_thomp_mp_climo_input_data ()"
+
+.PP
+Free up memory associated with this module\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 329 of file thompson_mp_climo_data\&.F90\&.
+.PP
+References qnifa_climo_input_grid, qnwfa_climo_input_grid, thomp_mp_climo_grid, and thomp_pres_climo_input_grid\&.
+.PP
+Referenced by atmosphere::horiz_interp_thomp_mp_climo()\&.
+.SS "subroutine, public thompson_mp_climo_data::read_thomp_mp_climo_data ()"
+
+.PP
+Read Thompson climatological MP data file and time interpolate data to current cycle time\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 51 of file thompson_mp_climo_data\&.F90\&.
+.PP
+References program_setup::cycle_day, program_setup::cycle_hour, program_setup::cycle_mon, i_thomp_mp_climo, j_thomp_mp_climo, lev_thomp_mp_climo, qnifa_climo_input_grid, qnwfa_climo_input_grid, program_setup::thomp_mp_climo_file, thomp_mp_climo_grid, and thomp_pres_climo_input_grid\&.
+.PP
+Referenced by atmosphere::atmosphere_driver()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "integer thompson_mp_climo_data::i_thomp_mp_climo\fC [private]\fP"
+
+.PP
+i-dimension of Thompson climo data 
+.PP
+Definition at line 21 of file thompson_mp_climo_data\&.F90\&.
+.PP
+Referenced by read_thomp_mp_climo_data()\&.
+.SS "integer thompson_mp_climo_data::j_thomp_mp_climo\fC [private]\fP"
+
+.PP
+j-dimension of Thompson climo data 
+.PP
+Definition at line 23 of file thompson_mp_climo_data\&.F90\&.
+.PP
+Referenced by read_thomp_mp_climo_data()\&.
+.SS "integer, public thompson_mp_climo_data::lev_thomp_mp_climo"
+
+.PP
+number of vert lvls of Thompson climo data 
+.PP
+Definition at line 25 of file thompson_mp_climo_data\&.F90\&.
+.PP
+Referenced by atmosphere::horiz_interp_thomp_mp_climo(), read_thomp_mp_climo_data(), and atmosphere::VINTG_THOMP_MP_CLIMO()\&.
+.SS "type(esmf_field), public thompson_mp_climo_data::qnifa_climo_input_grid"
+
+.PP
+number concentration of ice friendly nuclei\&. 
+.PP
+Definition at line 31 of file thompson_mp_climo_data\&.F90\&.
+.PP
+Referenced by cleanup_thomp_mp_climo_input_data(), atmosphere::horiz_interp_thomp_mp_climo(), and read_thomp_mp_climo_data()\&.
+.SS "type(esmf_field), public thompson_mp_climo_data::qnwfa_climo_input_grid"
+
+.PP
+number concentration of water friendly nuclei\&. 
+.PP
+Definition at line 34 of file thompson_mp_climo_data\&.F90\&.
+.PP
+Referenced by cleanup_thomp_mp_climo_input_data(), atmosphere::horiz_interp_thomp_mp_climo(), and read_thomp_mp_climo_data()\&.
+.SS "type(esmf_grid) thompson_mp_climo_data::thomp_mp_climo_grid\fC [private]\fP"
+
+.PP
+esmf grid object for Thompson data grid 
+.PP
+Definition at line 28 of file thompson_mp_climo_data\&.F90\&.
+.PP
+Referenced by cleanup_thomp_mp_climo_input_data(), and read_thomp_mp_climo_data()\&.
+.SS "type(esmf_field), public thompson_mp_climo_data::thomp_pres_climo_input_grid"
+
+.PP
+3-d pressure of the Thompson climo data points 
+.PP
+Definition at line 37 of file thompson_mp_climo_data\&.F90\&.
+.PP
+Referenced by cleanup_thomp_mp_climo_input_data(), atmosphere::horiz_interp_thomp_mp_climo(), and read_thomp_mp_climo_data()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

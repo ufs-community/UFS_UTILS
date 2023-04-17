@@ -1,0 +1,71 @@
+.TH "pesg::hgrid_ak_dc" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::hgrid_ak_dc
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBhgrid_ak_dc\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, xc, xcd, garea, ff)"
+.br
+.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 47 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::hgrid_ak_dc::hgrid_ak_dc (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(3,  lx:lx+nx  ,ly:ly+ny  ), intent(out) xc, real(dp), dimension(3,2,lx:lx+nx  ,ly:ly+ny  ), intent(out) xcd, real(dp), dimension(    lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. Like hgrid_ak_rx, return the grid points' cartesians xc and Jacobian matrices, xcd\&. Garea, the area of each grid cell, is also returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure occurs anywhere in these calculations\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIpdlat\fP degrees latitude of the projection center of the mapping 
+.br
+\fIpdlon\fP degrees longitude of the projection center of the mapping 
+.br
+\fIpdazi\fP azimuth of the orientation of the mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing of the grid in radians 
+.br
+\fIxc\fP grid points' earth-centered unit cartesians 
+.br
+\fIxcd\fP Jacobian matrices, d(xc)/d(xm) 
+.br
+\fIgarea\fP array of grid-cell areas (steradians) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1724 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

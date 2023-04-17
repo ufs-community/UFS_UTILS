@@ -1,0 +1,49 @@
+.TH "pesg::get_edges" 3 "Mon Apr 17 2023" "Version 1.10.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::get_edges
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBget_edges\fP (arcx, arcy, edgex, edgey)"
+.br
+.RI "For angles (degrees) of the arcs spanning the halfwidths between the region's center and its x and y edges, get the two cartesian vectors that represent the locations of these edge midpoints in the positive x and y directions\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 36 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::get_edges::get_edges (real(dp), intent(in) arcx, real(dp), intent(in) arcy, real(dp), dimension(3), intent(out) edgex, real(dp), dimension(3), intent(out) edgey)\fC [private]\fP"
+
+.PP
+For angles (degrees) of the arcs spanning the halfwidths between the region's center and its x and y edges, get the two cartesian vectors that represent the locations of these edge midpoints in the positive x and y directions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIarcx\fP Center-relative angle (degrees) of edge midpoint in +x 
+.br
+\fIarcy\fP Center-relative angle (degrees) of edge midpoint in +y 
+.br
+\fIedgex\fP region's +x edge midpoint as cartesian unit 3-vector 
+.br
+\fIedgey\fP region's +y edge midpoint as cartesian unit 3-vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 489 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

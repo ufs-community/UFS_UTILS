@@ -1,0 +1,99 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/angles.F90" 3 "Mon Apr 17 2023" "Version 1.10.0" "cpld_gridgen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/angles.F90 \- Determine the rotation angle on center and corner points\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBangles::find_ang\fP"
+.br
+.RI "Find the rotation angle on center (Ct) grid points\&. "
+.ti -1c
+.RI "subroutine \fBangles::find_angq\fP"
+.br
+.RI "Find the rotation angle on corner grid (Bu) points using the full MOM6 supergrid\&. "
+.ti -1c
+.RI "real(dbl_kind) function \fBangles::modulo_around_point\fP (x, xc, Lx)"
+.br
+.RI "Return the modulo value of x in an interval [xc-(Lx/2) xc+(Lx/2)] If Lx<=0, then it returns x without applying modulo arithmetic\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Determine the rotation angle on center and corner points\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module finds the rotation angle for at both center and corner points It utilizes the MOM6 function modulo_around_point 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBangles\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine angles::find_ang ()"
+
+.PP
+Find the rotation angle on center (Ct) grid points\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 132 of file angles\&.F90\&.
+.SS "subroutine angles::find_angq ()"
+
+.PP
+Find the rotation angle on corner grid (Bu) points using the full MOM6 supergrid\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 26 of file angles\&.F90\&.
+.SS "real(dbl_kind) function angles::modulo_around_point (real(dbl_kind), intent(in) x, real(dbl_kind), intent(in) xc, real(dbl_kind), intent(in) Lx)"
+
+.PP
+Return the modulo value of x in an interval [xc-(Lx/2) xc+(Lx/2)] If Lx<=0, then it returns x without applying modulo arithmetic\&. From src/initialization/MOM_shared_initialization\&.F90: 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP Value to which to apply modulo arithmetic 
+.br
+\fIxc\fP Center of modulo range 
+.br
+\fILx\fP Modulo range width 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+x_mod Value x shifted by an integer multiple of Lx to be close to xc 
+.RE
+.PP
+
+.PP
+Definition at line 189 of file angles\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for cpld_gridgen from the source code\&.
