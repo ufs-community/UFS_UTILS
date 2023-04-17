@@ -8,15 +8,21 @@
 
 - Use the "Preview" tab to see what your PR will look like when you hit "Create pull request"
 
-## --- Delete this line and those above before hitting "Create pull request" ---
+## -- Delete this line and those above before hitting "Create pull request" --
 
 ## DESCRIPTION OF CHANGES: 
 One or more paragraphs describing the problem, solution, and required changes.
 
 ## TESTS CONDUCTED: 
-The tests below must be conducted before merging. 
+The tests below must be conducted before merging. Contact a repository manager if you need assistance.
 
 - [ ] Compile branch on all Tier 1 machines using Intel (Orion, Jet, Hera and WCOSS2).
+- [ ] Compile branch on Hera using GNU.
+- [ ] Compile branch in 'Debug' mode on WCOSS2.
+- [ ] Run unit tests locally on any Tier 1 machine.
+- [ ] Run relevant consistency tests locally on all Tier 1 machine.
+
+Describe any additional tests performed.
 
 ## DEPENDENCIES:
 Add any links to pending PRs that are required prior to merging this PR. For example:
