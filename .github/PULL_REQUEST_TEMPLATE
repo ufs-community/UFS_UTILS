@@ -14,7 +14,9 @@
 One or more paragraphs describing the problem, solution, and required changes.
 
 ## TESTS CONDUCTED: 
-State whether the contingency tests were run or are pending, and if they were already run, state the result.  If contingency test baselines need to be updated as a result of this PR, please specify the machine(s) and path(s) to the new files.  Note that running the contigency tests is required for every PR and should be run at least once after all commits or changes have been made after review of the PR.  Make note of the compilers used, the platform/machine, and other relevant details as necessary.  Please also note whether new unit tests or updates to existing ones were required and their file names.
+The tests below must be conducted before merging. 
+
+- [ ] Compile branch on all Tier 1 machines using Intel (Orion, Jet, Hera and WCOSS2).
 
 ## DEPENDENCIES:
 Add any links to pending PRs that are required prior to merging this PR. For example:
