@@ -69,7 +69,6 @@ load(pathJoin("gsl", gsl_ver))
 nco_ver=os.getenv("nco_ver") or "4.9.7"
 load(pathJoin("nco", nco_ver))
 
-prepend_path("MODULEPATH", "/apps/dev/lmodules/intel_cray_mpich/19.1.3.304/cray-mpich/8.1.4")
 esmf_ver=os.getenv("esmf_ver") or "8.4.1"
 load(pathJoin("esmf", esmf_ver))
 
