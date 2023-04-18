@@ -14,7 +14,7 @@
 One or more paragraphs describing the problem, solution, and required changes.
 
 ## TESTS CONDUCTED: 
-The tests below must be conducted before merging. Contact a repository manager if you need assistance.
+If there are changes to the build or source code, the tests below must be conducted. Contact a repository manager if you need assistance.
 
 - [ ] Compile branch on all Tier 1 machines using Intel (Orion, Jet, Hera and WCOSS2).
 - [ ] Compile branch on Hera using GNU.
