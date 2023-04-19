@@ -411,7 +411,7 @@ implicit none
 real(dp),dimension(2,2),    intent(in ):: x
 real(dp),dimension(2,2),    intent(out):: z
 real(dp),dimension(2,2,2,2),intent(out):: zd
-real(dp),dimension(2,2):: vv,oo,d11,d12,d22,pqr
+real(dp),dimension(2,2):: vv,oo,d11,d12,d22,pqr,d11pqr,d12pqr,d22pqr
 real(dp)               :: c,s,cc,cs,ss,c2h,p,q,r,lp,lq,L
 integer(spi)           :: i
 call eigensym2(x,vv,oo)
@@ -424,9 +424,12 @@ d11(1,:)=(/ cc,cs /); d11(2,:)=(/ cs,ss/)
 d12(1,:)=(/-cs,c2h/); d12(2,:)=(/c2h,cs/)
 d22(1,:)=(/ ss,-cs/); d22(2,:)=(/-cs,cc/)
 pqr(1,:)=(/p,r/)    ; pqr(2,:)=(/r,q/)
-zd(:,:,1,1)=matmul(vv,matmul(d11*pqr,transpose(vv)))
-zd(:,:,1,2)=matmul(vv,matmul(d12*pqr,transpose(vv)))
-zd(:,:,2,2)=matmul(vv,matmul(d22*pqr,transpose(vv)))
+d11pqr=d11*pqr
+d12pqr=d12*pqr
+d22pqr=d22*pqr
+zd(:,:,1,1)=matmul(vv,matmul(d11pqr,transpose(vv)))
+zd(:,:,1,2)=matmul(vv,matmul(d12pqr,transpose(vv)))
+zd(:,:,2,2)=matmul(vv,matmul(d22pqr,transpose(vv)))
 zd(:,:,2,1)=zd(:,:,1,2)
 end subroutine logsym2d
 

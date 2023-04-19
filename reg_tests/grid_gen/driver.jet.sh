@@ -84,7 +84,7 @@ TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_
       --partition=xjet -o $LOG_FILE3 -e $LOG_FILE3 ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
-# ESG regional grid
+# ESG regional grid (output dominant soil/vegetation type).
 #-----------------------------------------------------------------------------
 
 LOG_FILE4=${LOG_FILE}04
@@ -92,19 +92,28 @@ TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_
       --partition=xjet -o $LOG_FILE4 -e $LOG_FILE4 ./esg.regional.sh)
 
 #-----------------------------------------------------------------------------
-# Regional GSL gravity wave drag.
+# ESG regional grid (output percent of each soil and vegetation type and
+# the dominant category).
 #-----------------------------------------------------------------------------
 
 LOG_FILE5=${LOG_FILE}05
-TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
-      --partition=xjet -o $LOG_FILE5 -e $LOG_FILE5 ./regional.gsl.gwd.sh)
+TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional.pct.cat \
+      --partition=xjet -o $LOG_FILE5 -e $LOG_FILE5 ./esg.regional.pct.cat.sh)
+
+#-----------------------------------------------------------------------------
+# Regional GSL gravity wave drag.
+#-----------------------------------------------------------------------------
+
+LOG_FILE6=${LOG_FILE}06
+TEST6=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+      --partition=xjet -o $LOG_FILE6 -e $LOG_FILE6 ./regional.gsl.gwd.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       -q $QUEUE -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5 << EOF
+       -q $QUEUE -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF
