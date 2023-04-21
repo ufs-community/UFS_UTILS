@@ -13,7 +13,7 @@ prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/gnu/modulefiles")
 gnu_ver="9.2"
 load(pathJoin("gnu", gnu_ver))
 
-prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/gnu-9.2_ncdf49/modulefiles/stack")
+prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/gnu-9.2/modulefiles/stack")
 
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
@@ -28,7 +28,7 @@ load(pathJoin("hpc-mpich", mpich_ver))
 netcdf_ver=os.getenv("netcdf_ver") or "4.9.1"
 load(pathJoin("netcdf", netcdf_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8.4.1"
+esmf_ver=os.getenv("esmf_ver") or "8.4.1b07"
 load(pathJoin("esmf", esmf_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
@@ -37,7 +37,7 @@ load(pathJoin("bacio", bacio_ver))
 g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
-ip_ver=os.getenv("ip_ver") or "3.3.3"
+ip_ver=os.getenv("ip_ver") or "4.0.0"
 load(pathJoin("ip", ip_ver))
 
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.4"
@@ -55,10 +55,10 @@ load(pathJoin("sfcio", sfcio_ver))
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
 
-nccmp_ver=os.getenv("nccmp_ver") or "1.8.9.0"
+nccmp_ver=os.getenv("nccmp_ver") or "1.9.1.0"
 load(pathJoin("nccmp", nccmp_ver))
 
-zlib_ver=os.getenv("zlib_ver") or "1.2.11"
+zlib_ver=os.getenv("zlib_ver") or "1.2.12"
 load(pathJoin("zlib", zlib_ver))
 
 png_ver=os.getenv("png_ver") or "1.6.37"
