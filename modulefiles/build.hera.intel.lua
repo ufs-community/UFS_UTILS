@@ -14,7 +14,7 @@ load(pathJoin("intel", intel_ver))
 impi_ver=os.getenv("impi_ver") or "2022.1.2"
 load(pathJoin("impi", impi_ver))
 
-prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/intel-2022.1.2_ncdf49/modulefiles/stack")
+prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/intel-2022.1.2/modulefiles/stack")
 
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
@@ -29,7 +29,7 @@ load(pathJoin("bacio", bacio_ver))
 g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
-ip_ver=os.getenv("ip_ver") or "3.3.3"
+ip_ver=os.getenv("ip_ver") or "4.0.0"
 load(pathJoin("ip", ip_ver))
 
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.4"
@@ -47,7 +47,7 @@ load(pathJoin("sfcio", sfcio_ver))
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
 
-zlib_ver=os.getenv("zlib_ver") or "1.2.13"
+zlib_ver=os.getenv("zlib_ver") or "1.2.12"
 load(pathJoin("zlib", zlib_ver))
 
 png_ver=os.getenv("png_ver") or "1.6.37"
@@ -59,13 +59,13 @@ load(pathJoin("hdf5", hdf5_ver))
 netcdf_ver=os.getenv("netcdf_ver") or "4.9.1"
 load(pathJoin("netcdf", netcdf_ver))
 
-nccmp_ver=os.getenv("nccmp_ver") or "1.8.9.0"
+nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
 load(pathJoin("nccmp", nccmp_ver))
 
 esmf_ver=os.getenv("esmf_ver") or "8.4.1"
 load(pathJoin("esmf", esmf_ver))
 
-nco_ver=os.getenv("nco_ver") or "5.1.4"
+nco_ver=os.getenv("nco_ver") or "5.0.6"
 load(pathJoin("nco", nco_ver))
 
 whatis("Description: UFS_UTILS build environment")
