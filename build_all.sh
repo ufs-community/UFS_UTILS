@@ -28,7 +28,7 @@ fi
 
 # Ensure the submodules have been initialized.
 
-if [[ ! -d ./ccpp-physics/physics ]];then
+if [[ ! -d ./ccpp-physics/physics ]]; then
   git submodule init
   git submodule update
 fi
