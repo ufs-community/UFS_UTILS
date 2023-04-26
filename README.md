@@ -59,20 +59,21 @@ It also uses the following repositories:
 
 ## Installing
 
-On Orion, Jet, Hera and WCOSS2, invoke the build script:
+On Orion, Jet, Hera and WCOSS2, set the 'fixed' directories
+using the 'link_fixdirs.sh' script in ./fix. See the script's 
+prolog for details.
+
+This repository uses submodules, so do:
+
+```
+git submodule init
+git submodule update
+```
+
+Then, invoke the build script:
 
 ```
 ./build_all.sh
-```
-
-Otherwise, do:
-
-```
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=/path/to/install ..
-make -j2
-make install
 ```
 
 ## Contents

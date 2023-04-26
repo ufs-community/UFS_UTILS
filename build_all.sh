@@ -26,6 +26,13 @@ else
  set -x
 fi
 
+# Ensure the submodules have been initialized.
+
+if [[ ! -d ./ccpp-physics/physics ]];then
+  git submodule init
+  git submodule update
+fi
+
 # The unit test data download is part of the build system. Not all machines can
 # access the EMC ftp site, so turn off the build (-DBUILD_TESTING=OFF) of the units tests accordingly.
 # Those with access to the EMC ftp site are: Orion and Hera.
