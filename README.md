@@ -70,14 +70,7 @@ should choose "emc") and `$machine` is the platform. Example:
 ./link_fixdirs.sh emc hera
 ```
 
-2) This repository uses submodules, so do:
-
-```
-git submodule init
-git submodule update
-```
-
-3) Then, invoke the build script:
+2) Then, invoke the build script:
 
 ```
 ./build_all.sh
