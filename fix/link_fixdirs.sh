@@ -1,7 +1,15 @@
 #!/bin/bash
 set -ex
 
-#--Make symbolic links to 'fixed' directories.
+# Set up the 'fixed' directories. 
+# 
+# This script takes two arguments:
+#
+#  $RUN_ENVIR - Either 'emc' (creates links) or
+#               'nco' (copies data).
+#
+#  $machine - is the machine. Choices are:
+#             'wcoss2', 'hera', 'jet', 'orion', 's4'
 
 RUN_ENVIR=${1}
 machine=${2}

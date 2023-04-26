@@ -61,8 +61,12 @@ It also uses the following repositories:
 
 On Orion, Jet, Hera and WCOSS2 do the following:
 
-1) Set the 'fixed' directories using the 'link_fixdirs.sh'
-script in ./fix. See the script's prolog for details.
+1) Set the 'fixed' directories using the `link_fixdirs.sh`
+script in `./fix`. Usage: `./link_fixdirs.sh $RUN_ENVIR $machine`,
+where `$RUN_ENVIR` is "emc" or "nco" (most developers
+should choose "emc") and `$machine` is the platform.
+
+Example: `./link_fixdirs.sh emc hera`
 
 2) This repository uses submodules, so do:
 
