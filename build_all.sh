@@ -3,6 +3,7 @@
 # This build script is only used on officially supported machines.  All other
 # users should set module files as needed, and build directly with CMake.
 #
+#
 # George Gayno
 
 set -eux
@@ -25,29 +26,24 @@ else
  set -x
 fi
 
-
 # The unit test data download is part of the build system. Not all machines can
 # access the EMC ftp site, so turn off the build (-DBUILD_TESTING=OFF) of the units tests accordingly.
 # Those with access to the EMC ftp site are: Orion and Hera.
 
-if [[ "$target" == "hera" || "$target" == "orion" || "$target" == "wcoss2" ]]; then
-  CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DBUILD_TESTING=OFF"
-   #CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DBUILD_TESTING=ON"
-   #CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DENABLE_DOCS=ON -DBUILD_TESTING=ON"
-else
-  CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DBUILD_TESTING=OFF"
-   #CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DENABLE_DOCS=ON -DBUILD_TESTING=OFF"
-fi
+CMAKE_FLAGS="-DCMAKE_INSTALL_PREFIX=../ -DCMAKE_INSTALL_BINDIR=exec -DBUILD_TESTING=OFF"
+
+# Allow users of this script to provide CMake options e.g. -DGFS=ON|OFF to build GFS specific utilities only
+CMAKE_OPTS=${CMAKE_OPTS:-}
 
 rm -fr ./build
 mkdir ./build && cd ./build
 
-cmake .. ${CMAKE_FLAGS}
+cmake .. ${CMAKE_FLAGS} ${CMAKE_OPTS}
 
-make -j 8 VERBOSE=1
+make -j ${BUILD_JOBS:-8} VERBOSE=${BUILD_VERBOSE:-}
 make install
 
-#make test
+#ctest
 #ctest -I 4,5
 
 exit

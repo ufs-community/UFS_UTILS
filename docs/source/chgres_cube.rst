@@ -21,7 +21,9 @@ The program assumes Noah/Noah-MP LSM coefficients for certain soil thresholds. I
       * model_grid.F90 - Sets up the ESMF grid objects for the input data grid and target FV3 grid.
       * static_data.F90 - Reads static surface climatological data for the target FV3 grid (such as soil type and vegetation type).  Time interpolates time-varying fields, such as monthly plant greenness, to the model run time. Set path to these files via the fix_dir_target_grid namelist variable.
       * write_data.F90 - Writes the tiled and header files expected by the forecast model.
-      * input_data.F90 - Contains routines to read atmospheric and surface data from GRIB2, NEMSIO and NetCDF files.
+      * atm_input_data.F90 - Contains routines to read input atmospheric data from GRIB2, NEMSIO and NetCDF files.
+      * nst_input_data.F90 - Contains routines to read input NSST data from NEMSIO and NetCDF files.
+      * sfc_input_data.F90 - Contains routines to read input surface data from GRIB2, NEMSIO and NetCDF files.
       * utils.F90 - Contains utility routines, such as error handling.
       * grib2_util.F90 -  Routines to (1) convert from RH to specific humidity; (2) convert from omega to dzdt.  Required for GRIB2 input data.
       * atmosphere.F90 - Process atmospheric fields.  Horizontally interpolate from input to target FV3 grid using ESMF regridding.  Adjust surface pressure according to terrain differences between input and target grid.  Vertically interpolate to target FV3 grid vertical levels.  Description of main routines:
@@ -139,6 +141,25 @@ Initializing global domains with GRIB2 data - some caveats
       * Soil moisture in the GRIB2 files is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types.  Could result in poor latent/sensible heat fluxes.
       * Ozone is not available at all isobaric levels.  Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
       * Only tested with GRIB2 data from GFS v14 and v15 (from 12z July 19, 2017 to current).  May not work with older GFS data.  Will not work with GRIB2 data from other models.
+      * Note that when concatenating grib2 files for use in initialization of global simulations, it is possible to inadvertently introduce duplicate variables and levels into the subsequent grib2 files.  Chgres_cube will automatically fail with a warning message indicating that the grib2 file used contains these duplicate entries.  Prior to continuing it will be necessary to strip out duplicate entries.  Users can remove these entries through use of wgrib2, such as in the following command:
+              * ``wgrib2 IN.grb -submsg 1 | unique.pl | wgrib2 -i IN.grb -GRIB OUT.grb``, where IN.grb is the original concatenated grib2 file, and OUT.grb is the resulting grib2 file, with duplicates removed.  The "unique.pl" Perl script is as follows, taken from the `Tricks for wgrib2 <https://www.ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/tricks.wgrib2>`_ website:
+
+                      .. code-block:: console
+
+                         ----------------------- unique.pl ------------------------
+                         #!/usr/bin/perl -w
+                         # print only lines where fields 3..N are different
+                         # 
+                         while (<STDIN>) {
+                            chomp;
+                            $line = $_;
+                            $_ =~ s/^[0-9.]*:[0-9]*://;
+                            if (! defined $inv{$_}) { 
+                              $inv{$_} = 1;
+                              print "$line\n";
+                            }
+                         }
+                         --------------------- end unique.pl ----------------------
 
 Near Sea Surface Temperature (NSST) data and GRIB2 initialization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -302,6 +323,25 @@ Keep these things in mind when using FV3GFS GRIB2 data for model initialization:
       * For FV3GFS GRIB2 data, soil moisture is created using bilinear interpolation and, therefore, may be a mixture of values from different soil types. Could result in poor latent/sensible heat fluxes.
       * Ozone is not available at all isobaric levels. Missing levels are set to a nominal value defined in the variable mapping (VARMAP) file (1E-07).
       * Only tested with GRIB2 data from FV3GFS, RAP, NAM, and HRRR data. May not work with GRIB2 data from other models. Use these at your own risk.
+      * Note that when concatenating grib2 files for use in initialization of regional simulations, it is possible to inadvertently introduce duplicate variables and levels into the subsequent grib2 files.  Chgres_cube will automatically fail with a warning message indicating that the grib2 file used contains these duplicate entries.  Prior to continuing it will be necessary to strip out duplicate entries.  Users can remove these entries through use of wgrib2, such as in the following command:
+              * ``wgrib2 IN.grb -submsg 1 | unique.pl | wgrib2 -i IN.grb -GRIB OUT.grb``, where IN.grb is the original concatenated grib2 file, and OUT.grb is the resulting grib2 file, with duplicates removed.  The "unique.pl" Perl script is as follows, taken from the `Tricks for wgrib2 <https://www.ftp.cpc.ncep.noaa.gov/wd51we/wgrib2/tricks.wgrib2>`_ website:
+                      
+                      .. code-block:: console
+                            
+                         ----------------------- unique.pl ------------------------
+                         #!/usr/bin/perl -w
+                         # print only lines where fields 3..N are different
+                         #
+                         while (<STDIN>) {
+                            chomp;
+                            $line = $_;
+                            $_ =~ s/^[0-9.]*:[0-9]*://;
+                            if (! defined $inv{$_}) {
+                              $inv{$_} = 1;
+                              print "$line\n";
+                            }
+                         }
+                         --------------------- end unique.pl ----------------------
 
 Regional chgres_cube namelist options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

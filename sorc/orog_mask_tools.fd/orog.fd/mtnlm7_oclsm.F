@@ -3419,6 +3419,7 @@ C
       WRITE(6,*) "! MAKEOA2 EXIT"
 C
       RETURN
+
       END SUBROUTINE MAKEOA2
  
 !> Compute a great circle distance between two points.
@@ -3607,6 +3608,12 @@ C
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
      3           is_south_pole,is_north_pole,IMI,JMI,OA_IN,OL_IN,
      4           slm_in,lon_in,lat_in)
+
+! Required when using iplib v4.0 or higher.
+#ifdef IP_V4
+      use ipolates_mod
+#endif
+
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.
@@ -3646,13 +3653,13 @@ C
       integer int_opt, ipopt(20), kgds_input(200), kgds_output(200)
       integer count_land_output
       integer ij, ijmdl_output, iret, num_mismatch_land, num
-      integer ibo(1)
+      integer ibo(1), ibi(1)
       logical*1, allocatable :: bitmap_input(:,:)
-      logical*1, allocatable :: bitmap_output(:)
+      logical*1, allocatable :: bitmap_output(:,:)
       integer, allocatable :: ijsav_land_output(:)
       real,    allocatable :: lats_land_output(:)
       real,    allocatable :: lons_land_output(:)
-      real,    allocatable :: output_data_land(:)
+      real,    allocatable :: output_data_land(:,:)
       real,    allocatable :: lons_mismatch_output(:)
       real,    allocatable :: lats_mismatch_output(:)
       real,    allocatable :: data_mismatch_output(:)
@@ -3789,8 +3796,8 @@ C
       where(slm_in > 0.0) bitmap_input=.true.   
       print*, "count(bitmap_input)", count(bitmap_input)
       
-      allocate(bitmap_output(count_land_output))
-      allocate(output_data_land(count_land_output))
+      allocate(bitmap_output(count_land_output,1))
+      allocate(output_data_land(count_land_output,1))
       allocate(ijsav_land_output(count_land_output))
       allocate(lats_land_output(count_land_output))
       allocate(lons_land_output(count_land_output))
@@ -3811,13 +3818,14 @@ C
 
       oa4 = 0.0
       ol = 0.0
+      ibi = 1
       
       do KWD=1,4
         bitmap_output = .false.
          output_data_land = 0.0
         call ipolates(int_opt, ipopt, kgds_input, kgds_output,   
      &         (IMI*JMI), count_land_output,               
-     &          1, 1, bitmap_input, oa_in(:,:,KWD),  
+     &          1, ibi, bitmap_input, oa_in(:,:,KWD),  
      &          count_land_output, lats_land_output,
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
@@ -3828,10 +3836,10 @@ C
 
         num_mismatch_land = 0     
         do ij = 1, count_land_output
-          if (bitmap_output(ij)) then
+          if (bitmap_output(ij,1)) then
             j = (ijsav_land_output(ij)-1)/IM + 1
             i = mod(ijsav_land_output(ij)-1,IM) + 1
-            oa4(i,j,KWD)=output_data_land(ij)
+            oa4(i,j,KWD)=output_data_land(ij,1)
           else  ! default value
             num_mismatch_land =  num_mismatch_land + 1
           endif
@@ -3847,7 +3855,7 @@ C
           
           num = 0     
           do ij = 1, count_land_output
-            if (.not. bitmap_output(ij)) then   
+            if (.not. bitmap_output(ij,1)) then   
               num = num+1
               lons_mismatch_output(num) = lons_land_output(ij)
               lats_mismatch_output(num) = lats_land_output(ij)
@@ -3869,7 +3877,7 @@ C
        
         num = 0
         do ij = 1, count_land_output
-          if (.not. bitmap_output(ij)) then   
+          if (.not. bitmap_output(ij,1)) then   
             num = num+1
             j = (ijsav_land_output(ij)-1)/IM + 1
             i = mod(ijsav_land_output(ij)-1,IM) + 1
@@ -3889,7 +3897,7 @@ C
         output_data_land = 0.0
         call ipolates(int_opt, ipopt, kgds_input, kgds_output,   
      &         (IMI*JMI), count_land_output,               
-     &          1, 1, bitmap_input, ol_in(:,:,KWD),  
+     &          1, ibi, bitmap_input, ol_in(:,:,KWD),  
      &          count_land_output, lats_land_output,
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
@@ -3900,10 +3908,10 @@ C
 
         num_mismatch_land = 0     
         do ij = 1, count_land_output
-          if (bitmap_output(ij)) then
+          if (bitmap_output(ij,1)) then
             j = (ijsav_land_output(ij)-1)/IM + 1
             i = mod(ijsav_land_output(ij)-1,IM) + 1
-            ol(i,j,KWD)=output_data_land(ij)
+            ol(i,j,KWD)=output_data_land(ij,1)
           else  ! default value
             num_mismatch_land =  num_mismatch_land + 1
           endif
@@ -3916,7 +3924,7 @@ C
        
         num = 0
         do ij = 1, count_land_output
-          if (.not. bitmap_output(ij)) then   
+          if (.not. bitmap_output(ij,1)) then   
             num = num+1
             j = (ijsav_land_output(ij)-1)/IM + 1
             i = mod(ijsav_land_output(ij)-1,IM) + 1

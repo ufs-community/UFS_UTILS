@@ -6,9 +6,7 @@
 set(fortran_src
    kinds.f90
    module_ncio.f90
-   module_nwp_base.f90
    module_nwp.f90)
-#   process_FVCOM.f90)
 
 set(exe_src process_FVCOM.f90)
 

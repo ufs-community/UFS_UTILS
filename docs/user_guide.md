@@ -2,14 +2,15 @@
 
 # UFS_UTILS
 
-Utilities for the NCEP models. This is part of the
-[NCEPLIBS](https://github.com/NOAA-EMC/NCEPLIBS) project.
+Utilities for the NCEP Unified Forecast System.
 
 The UFS_UTILS code can be found here:
 https://github.com/ufs-community/UFS_UTILS.
 
 ## Documentation for Previous Versions of UFS_UTILS
 
+* [UFS_UTILS Version 1.10.0](ver-1.10.0/index.html)
+* [UFS_UTILS Version 1.9.0](ver-1.9.0/index.html)
 * [UFS_UTILS Version 1.8.0](ver-1.8.0/index.html)
 * [UFS_UTILS Version 1.7.0](ver-1.7.0/index.html)
 * [UFS_UTILS Version 1.6.0](ver-1.6.0/index.html)
