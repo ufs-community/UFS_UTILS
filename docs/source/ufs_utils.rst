@@ -222,6 +222,8 @@ Land-sea mask and land fraction are created from a global 30-arc second Universi
       * Kim, Y-J and A. Arakawa, 1995: Improvement of orographic gravity wave parameterization using a mesoscale gravity wave model.  J. Atmos. Sci. 52, pp 1875-1902.
       * Lott, F. and M. J. Miller: 1977: A new sub-grid scale orographic drag parameterization: Its formulation and testing, QJRMS, 123, pp 101-127.
 
+**Caution:** At model grid resolutions finer than 1 km, the 30-arc-second input data will not be sufficient to properly resolve the land-sea mask, land fraction and orography fields. At model grid resolutions finer than 3 km, the remaining fields (used by the GWD) will not be well resolved. In that case, users should consider not running with GWD.
+
 Code structure
 --------------
 
