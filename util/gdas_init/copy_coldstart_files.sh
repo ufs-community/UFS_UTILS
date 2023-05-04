@@ -6,16 +6,26 @@
 copy_data()
 {
 
-set -x
+  set -x
 
-mkdir -p $SAVEDIR
-cp gfs_ctrl.nc $SAVEDIR
+  MEM=$1
 
-for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
-do
-  cp out.atm.${tile}.nc  ${SAVEDIR}/gfs_data.${tile}.nc
-  cp out.sfc.${tile}.nc  ${SAVEDIR}/sfc_data.${tile}.nc
-done
+  SAVEDIR_MODEL_DATA=$SUBDIR/model_data/atmos/input
+  mkdir -p $SAVEDIR_MODEL_DATA
+  cp gfs_ctrl.nc $SAVEDIR_MODEL_DATA
+
+  for tile in 'tile1' 'tile2' 'tile3' 'tile4' 'tile5' 'tile6'
+  do
+    cp out.atm.${tile}.nc ${SAVEDIR_MODEL_DATA}/gfs_data.${tile}.nc
+    cp out.sfc.${tile}.nc ${SAVEDIR_MODEL_DATA}/sfc_data.${tile}.nc
+  done
+
+  if [ ${MEM} == 'gdas' ]; then
+    SAVEDIR_ANALYSIS=$SUBDIR/analysis/atmos
+    mkdir -p $SAVEDIR_ANALYSIS
+    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR_ANALYSIS/
+    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR_ANALYSIS/
+  fi
 }
 
 set -x
@@ -39,13 +49,7 @@ set -x
 if [ ${MEMBER} == 'gdas' ] || [ ${MEMBER} == 'gfs' ]; then
   SUBDIR=$OUTDIR/${MEMBER}.${yy}${mm}${dd}/${hh}
   rm -fr $SUBDIR
-  SAVEDIR=$SUBDIR/atmos/INPUT
-  copy_data
-  if [ ${MEMBER} == 'gdas' ]; then
-    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR/..
-    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR/..
-  fi
-  touch $SAVEDIR/../${MEMBER}.t${hh}z.loginc.txt
+  copy_data ${MEMBER}
 elif [ ${MEMBER} == 'enkf' ]; then  # v16 retro data only.
   MEMBER=1
   while [ $MEMBER -le 80 ]; do
@@ -56,17 +60,13 @@ elif [ ${MEMBER} == 'enkf' ]; then  # v16 retro data only.
     fi
     SUBDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER_CH}
     rm -fr $SUBDIR
-    SAVEDIR=$SUBDIR/atmos/INPUT
-    copy_data
-    touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
+    copy_data ${MEMBER}
     MEMBER=$(( $MEMBER + 1 ))
   done
 else
   SUBDIR=$OUTDIR/enkfgdas.${yy}${mm}${dd}/${hh}/mem${MEMBER}
   rm -fr $SUBDIR
-  SAVEDIR=$SUBDIR/atmos/INPUT
-  copy_data
-  touch $SAVEDIR/../enkfgdas.t${hh}z.loginc.txt
+  copy_data ${MEMBER}
 fi
 
 exit 0
