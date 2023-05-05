@@ -35,7 +35,7 @@ UFS_UTILS Code managers: George Gayno, Jeff Beck, Larissa Reames
 
 This package uses the [hpc-stack](https://github.com/NOAA-EMC/hpc-stack) for the following NCEPLIBS packages:
  - [NCEPLIBS-sfcio](https://github.com/NOAA-EMC/NCEPLIBS-sfcio)
- - [NCEPLIBS-w3nco](https://github.com/NOAA-EMC/NCEPLIBS-w3nco)
+ - [NCEPLIBS-w3emc](https://github.com/NOAA-EMC/NCEPLIBS-w3emc)
  - [NCEPLIBS-bacio](https://github.com/NOAA-EMC/NCEPLIBS-bacio)
  - [NCEPLIBS-nemsio](https://github.com/NOAA-EMC/NCEPLIBS-nemsio)
  - [NCEPLIBS-sigio](https://github.com/NOAA-EMC/NCEPLIBS-sigio)
@@ -59,20 +59,21 @@ It also uses the following repositories:
 
 ## Installing
 
-On Orion, Jet, Hera and WCOSS2, invoke the build script:
+On Orion, Jet, Hera and WCOSS2 do the following:
+
+1) Set the 'fixed' directories using the `link_fixdirs.sh`
+script in `./fix`. Usage: `./link_fixdirs.sh $RUN_ENVIR $machine`,
+where `$RUN_ENVIR` is "emc" or "nco" (most developers
+should choose "emc") and `$machine` is the platform. Example:
+
+```
+./link_fixdirs.sh emc hera
+```
+
+2) Then, invoke the build script:
 
 ```
 ./build_all.sh
-```
-
-Otherwise, do:
-
-```
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=/path/to/install ..
-make -j2
-make install
 ```
 
 ## Contents
@@ -91,7 +92,7 @@ are called from driver scripts.
 
 The `util` directory contains utility scripts.
 
-The `parm` directory contains variable mapping parameter tables used by
+The `parm` directory contains parameter files used by
 the chgres_cube program.
 
 The `driver_scripts` directory contains high-level driver scripts to

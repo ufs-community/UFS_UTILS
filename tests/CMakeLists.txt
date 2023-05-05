@@ -33,9 +33,7 @@ function(PULL_DATA THE_URL THE_FILE)
   endif()
 endfunction()
 
-# Add the test subdirecotries.
-# fvcom test only works for Intel. Comment out for now.
-#add_subdirectory(fvcom_tools)
+add_subdirectory(fvcom_tools)
 add_subdirectory(filter_topo)
 add_subdirectory(chgres_cube)
 add_subdirectory(fre-nctools)

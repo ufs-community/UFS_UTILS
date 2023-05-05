@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash
 
 ulimit -s unlimited
 
@@ -16,7 +16,7 @@ cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-git clone --recursive https://github.com/ufs-community/UFS_UTILS.git
+git clone https://github.com/ufs-community/UFS_UTILS.git
 rc=$?
 
 # Check to see if the clone was successful. Previously, it has

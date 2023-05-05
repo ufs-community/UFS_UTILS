@@ -339,6 +339,8 @@
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
 
+ LOGICAL             :: IS_NOAHMP=.FALSE.
+
  real(kind=kind_io8) :: min_ice(lensfc)
 
  REAL                :: SLMASK(LENSFC), OROG(LENSFC)
@@ -475,7 +477,8 @@ ENDIF
 ! READ THE INPUT SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- CALL READ_DATA(LSOIL,LENSFC,DO_NSST,.false.,TSFFCS=TSFFCS,SMCFCS=SMCFCS,   &
+ CALL READ_DATA(LSOIL,LENSFC,DO_NSST,.false.,IS_NOAHMP=IS_NOAHMP, &
+                TSFFCS=TSFFCS,SMCFCS=SMCFCS,   &
                 SWEFCS=SWEFCS,STCFCS=STCFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS,  &
                 CVFCS=CVFCS,  CVBFCS=CVBFCS,CVTFCS=CVTFCS,ALBFCS=ALBFCS,  &
                 VEGFCS=VEGFCS,SLIFCS=SLIFCS,CNPFCS=CNPFCS,F10M=F10M    ,  &
@@ -712,14 +715,25 @@ ENDIF
 ! WRITE OUT UPDATED SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- CALL WRITE_DATA(SLIFCS,TSFFCS,SWEFCS,TG3FCS,ZORFCS,         &
-                 ALBFCS,ALFFCS,VEGFCS,CNPFCS,F10M,           &
-                 T2M,Q2M,VETFCS,SOTFCS,USTAR,FMM,FHH,        &
-                 SICFCS,SIHFCS,SITFCS,                       &
-                 TPRCP,SRFLAG,SNDFCS,                        &
-                 VMNFCS,VMXFCS,SLPFCS,ABSFCS,                &
-                 SLCFCS,SMCFCS,STCFCS,                       &
-                 IDIM,JDIM,LENSFC,LSOIL,DO_NSST,NSST)
+ IF (IS_NOAHMP) THEN
+
+   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,NSST,VEGFCS=VEGFCS, &
+                   SLCFCS=SLCFCS,SMCFCS=SMCFCS)
+
+ ELSE
+
+   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL, &
+                   DO_NSST,NSST,SLIFCS=SLIFCS,TSFFCS=TSFFCS,VEGFCS=VEGFCS, &
+                   SWEFCS=SWEFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS, &
+                   ALBFCS=ALBFCS,ALFFCS=ALFFCS,CNPFCS=CNPFCS, &
+                   F10M=F10M,T2M=T2M,Q2M=Q2M,VETFCS=VETFCS, &
+                   SOTFCS=SOTFCS,USTAR=USTAR,FMM=FMM,FHH=FHH, &
+                   SICFCS=SICFCS,SIHFCS=SIHFCS,SITFCS=SITFCS,TPRCP=TPRCP, &
+                   SRFLAG=SRFLAG,SWDFCS=SNDFCS,VMNFCS=VMNFCS, &
+                   VMXFCS=VMXFCS,SLPFCS=SLPFCS,ABSFCS=ABSFCS, &
+                   SLCFCS=SLCFCS,SMCFCS=SMCFCS,STCFCS=STCFCS)
+
+ ENDIF
 
  IF (DO_NSST) THEN
    DEALLOCATE(NSST%C_0)

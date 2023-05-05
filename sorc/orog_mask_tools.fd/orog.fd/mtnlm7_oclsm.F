@@ -1884,7 +1884,7 @@ C
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
-      real, dimension(:), allocatable ::  hgt_1d
+      real, dimension(:), allocatable ::  hgt_1d, hgt_1d_all
       integer IM, JM, IMN, JMN
       real GLAT(JMN), GLON(IMN)
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
@@ -1896,9 +1896,11 @@ C
       LOGICAL FLAG, DEBUG
       real    LONO(4),LATO(4),LONI,LATI
       real    HEIGHT
-      integer JM1,i,j,nsum,ii,jj,i1,numx,i2
+      integer JM1,i,j,nsum,nsum_all,ii,jj,i1,numx,i2
       integer ilist(IMN)
       real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1,XW2,XW4
+      real    XNSUM_ALL,XLAND_ALL,XWATR_ALL,HEIGHT_ALL
+      real    XL1_ALL,XS1_ALL,XW1_ALL,XW2_ALL,XW4_ALL
 !jaa
       real :: xnsum_j,xland_j,xwatr_j
       logical inside_a_polygon
@@ -1910,6 +1912,7 @@ C
 ! ---  mskocn=0 dont use Ocean model sea land mask, not OK, not present
       print *,' _____ SUBROUTINE MAKEMT2 '
       allocate(hgt_1d(MAXSUM))
+      allocate(hgt_1d_all(MAXSUM))
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
       JM1 = JM - 1
@@ -1930,7 +1933,10 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 !$omp parallel do
 !$omp* private (j,i,xnsum,xland,xwatr,nsum,xl1,xs1,xw1,xw2,xw4,lono,
 !$omp*          lato,jst,jen,ilist,numx,jj,i2,ii,loni,lati,height,
-!$omp*          hgt_1d)
+!$omp*          hgt_1d,
+!$omp*          xnsum_all,xland_all,xwatr_all,nsum_all,
+!$omp*          xl1_all,xs1_all,xw1_all,xw2_all,xw4_all,
+!$omp*          height_all,hgt_1d_all)
       DO J=1,JM
 !       print*, "J=", J
        DO I=1,IM
@@ -1946,6 +1952,15 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
          XW1 = 0.0
          XW2 = 0.0
          XW4 = 0.0
+         XNSUM_ALL = 0.0
+         XLAND_ALL = 0.0
+         XWATR_ALL = 0.0
+         nsum_all = 0
+         XL1_ALL = 0.0
+         XS1_ALL = 0.0
+         XW1_ALL = 0.0
+         XW2_ALL = 0.0
+         XW4_ALL = 0.0
          
          LONO(1) = lon_c(i,j) 
          LONO(2) = lon_c(i+1,j) 
@@ -1960,6 +1975,23 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
             ii = ilist(i2)
             LONI = ii*DELXN
             LATI = -90 + jj*DELXN
+
+            XLAND_ALL = XLAND_ALL + FLOAT(ZSLM(ii,jj))
+            XWATR_ALL = XWATR_ALL + FLOAT(1-ZSLM(ii,jj))
+            XNSUM_ALL = XNSUM_ALL + 1.
+            HEIGHT_ALL = FLOAT(ZAVG(ii,jj)) 
+            nsum_all = nsum_all+1
+            if(nsum_all > MAXSUM) then
+              print*, "nsum_all is greater than MAXSUM, increase MAXSUM"
+              call ABORT()
+            endif
+            hgt_1d_all(nsum_all) = HEIGHT_ALL
+            IF(HEIGHT_ALL.LT.-990.) HEIGHT_ALL = 0.0
+            XL1_ALL = XL1_ALL + HEIGHT_ALL * FLOAT(ZSLM(ii,jj))
+            XS1_ALL = XS1_ALL + HEIGHT_ALL * FLOAT(1-ZSLM(ii,jj))
+            XW1_ALL = XW1_ALL + HEIGHT_ALL
+            XW2_ALL = XW2_ALL + HEIGHT_ALL ** 2
+
             if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
      &          LONO*D2R,LATO*D2R))then
 
@@ -2001,13 +2033,35 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                IF(VAR(I,J).GT.1.) THEN
                   VAR4(I,J) = MIN(XW4/XNSUM/VAR(I,J) **4,10.)
                ENDIF
-            ENDIF
-         ENDDO
+         ELSEIF(XNSUM_ALL.GT.1.) THEN
+               land_frac(i,j) = XLAND_ALL/XNSUM _ALL 
+               SLM(I,J) = FLOAT(NINT(XLAND_ALL/XNSUM_ALL))
+               IF(SLM(I,J).NE.0.) THEN
+                  ORO(I,J)= XL1_ALL / XLAND_ALL
+               ELSE
+                  ORO(I,J)= XS1_ALL / XWATR_ALL
+               ENDIF
+               VAR(I,J)=SQRT(MAX(XW2_ALL/XNSUM_ALL-
+     &                         (XW1_ALL/XNSUM_ALL)**2,0.))
+               do I1 = 1, NSUM_ALL
+                  XW4_ALL = XW4_ALL + 
+     &                     (hgt_1d_all(I1) - ORO(i,j)) ** 4
+               enddo   
+
+               IF(VAR(I,J).GT.1.) THEN
+                  VAR4(I,J) = MIN(XW4_ALL/XNSUM_ALL/VAR(I,J) **4,10.)
+               ENDIF
+         ELSE
+               print*, "no source points in MAKEMT2"
+               call ABORT()
+         ENDIF
+       ENDDO
       ENDDO
 !$omp end parallel do
       WRITE(6,*) "! MAKEMT2 ORO SLM VAR VAR4 DONE"
 C
       deallocate(hgt_1d)
+      deallocate(hgt_1d_all)
       RETURN
       END
 
@@ -3365,6 +3419,7 @@ C
       WRITE(6,*) "! MAKEOA2 EXIT"
 C
       RETURN
+
       END SUBROUTINE MAKEOA2
  
 !> Compute a great circle distance between two points.
@@ -3553,6 +3608,12 @@ C
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
      3           is_south_pole,is_north_pole,IMI,JMI,OA_IN,OL_IN,
      4           slm_in,lon_in,lat_in)
+
+! Required when using iplib v4.0 or higher.
+#ifdef IP_V4
+      use ipolates_mod
+#endif
+
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.
@@ -3592,13 +3653,13 @@ C
       integer int_opt, ipopt(20), kgds_input(200), kgds_output(200)
       integer count_land_output
       integer ij, ijmdl_output, iret, num_mismatch_land, num
-      integer ibo(1)
+      integer ibo(1), ibi(1)
       logical*1, allocatable :: bitmap_input(:,:)
-      logical*1, allocatable :: bitmap_output(:)
+      logical*1, allocatable :: bitmap_output(:,:)
       integer, allocatable :: ijsav_land_output(:)
       real,    allocatable :: lats_land_output(:)
       real,    allocatable :: lons_land_output(:)
-      real,    allocatable :: output_data_land(:)
+      real,    allocatable :: output_data_land(:,:)
       real,    allocatable :: lons_mismatch_output(:)
       real,    allocatable :: lats_mismatch_output(:)
       real,    allocatable :: data_mismatch_output(:)
@@ -3735,8 +3796,8 @@ C
       where(slm_in > 0.0) bitmap_input=.true.   
       print*, "count(bitmap_input)", count(bitmap_input)
       
-      allocate(bitmap_output(count_land_output))
-      allocate(output_data_land(count_land_output))
+      allocate(bitmap_output(count_land_output,1))
+      allocate(output_data_land(count_land_output,1))
       allocate(ijsav_land_output(count_land_output))
       allocate(lats_land_output(count_land_output))
       allocate(lons_land_output(count_land_output))
@@ -3757,13 +3818,14 @@ C
 
       oa4 = 0.0
       ol = 0.0
+      ibi = 1
       
       do KWD=1,4
         bitmap_output = .false.
          output_data_land = 0.0
         call ipolates(int_opt, ipopt, kgds_input, kgds_output,   
      &         (IMI*JMI), count_land_output,               
-     &          1, 1, bitmap_input, oa_in(:,:,KWD),  
+     &          1, ibi, bitmap_input, oa_in(:,:,KWD),  
      &          count_land_output, lats_land_output,
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
@@ -3774,10 +3836,10 @@ C
 
         num_mismatch_land = 0     
         do ij = 1, count_land_output
-          if (bitmap_output(ij)) then
+          if (bitmap_output(ij,1)) then
             j = (ijsav_land_output(ij)-1)/IM + 1
             i = mod(ijsav_land_output(ij)-1,IM) + 1
-            oa4(i,j,KWD)=output_data_land(ij)
+            oa4(i,j,KWD)=output_data_land(ij,1)
           else  ! default value
             num_mismatch_land =  num_mismatch_land + 1
           endif
@@ -3793,7 +3855,7 @@ C
           
           num = 0     
           do ij = 1, count_land_output
-            if (.not. bitmap_output(ij)) then   
+            if (.not. bitmap_output(ij,1)) then   
               num = num+1
               lons_mismatch_output(num) = lons_land_output(ij)
               lats_mismatch_output(num) = lats_land_output(ij)
@@ -3815,7 +3877,7 @@ C
        
         num = 0
         do ij = 1, count_land_output
-          if (.not. bitmap_output(ij)) then   
+          if (.not. bitmap_output(ij,1)) then   
             num = num+1
             j = (ijsav_land_output(ij)-1)/IM + 1
             i = mod(ijsav_land_output(ij)-1,IM) + 1
@@ -3835,7 +3897,7 @@ C
         output_data_land = 0.0
         call ipolates(int_opt, ipopt, kgds_input, kgds_output,   
      &         (IMI*JMI), count_land_output,               
-     &          1, 1, bitmap_input, ol_in(:,:,KWD),  
+     &          1, ibi, bitmap_input, ol_in(:,:,KWD),  
      &          count_land_output, lats_land_output,
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
@@ -3846,10 +3908,10 @@ C
 
         num_mismatch_land = 0     
         do ij = 1, count_land_output
-          if (bitmap_output(ij)) then
+          if (bitmap_output(ij,1)) then
             j = (ijsav_land_output(ij)-1)/IM + 1
             i = mod(ijsav_land_output(ij)-1,IM) + 1
-            ol(i,j,KWD)=output_data_land(ij)
+            ol(i,j,KWD)=output_data_land(ij,1)
           else  ! default value
             num_mismatch_land =  num_mismatch_land + 1
           endif
@@ -3862,7 +3924,7 @@ C
        
         num = 0
         do ij = 1, count_land_output
-          if (.not. bitmap_output(ij)) then   
+          if (.not. bitmap_output(ij,1)) then   
             num = num+1
             j = (ijsav_land_output(ij)-1)/IM + 1
             i = mod(ijsav_land_output(ij)-1,IM) + 1

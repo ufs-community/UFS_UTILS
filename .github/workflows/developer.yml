@@ -37,7 +37,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install libpng-dev zlib1g-dev libjpeg-dev doxygen libmpich-dev
         sudo apt-get install libnetcdf-dev libnetcdff-dev netcdf-bin pkg-config        
-        python3 -m pip install gcovr
+    #   python3 -m pip install gcovr
 
     - name: cache-esmf
       id: cache-esmf
@@ -194,7 +194,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-w3emc
         path: w3emc
-        ref: v2.9.0
+        ref: v2.9.3
 
     - name: build-w3emc
       run: |
@@ -243,31 +243,6 @@ jobs:
         mkdir build
         cd build
         cmake .. -DCMAKE_INSTALL_PREFIX=~/sfcio
-        make -j2
-        make install
-
-    - name: cache-w3nco
-      id: cache-w3nco
-      uses: actions/cache@v2
-      with:
-        path: ~/w3nco
-        key: developer-w3nco-${{ runner.os }}-2.4.1
-
-    - name: checkout-w3nco
-      if: steps.cache-w3nco.outputs.cache-hit != 'true'
-      uses: actions/checkout@v2
-      with:
-        repository: NOAA-EMC/NCEPLIBS-w3nco
-        path: w3nco
-        ref: v2.4.1
-
-    - name: build-w3nco
-      if: steps.cache-w3nco.outputs.cache-hit != 'true'
-      run: |
-        cd w3nco
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_INSTALL_PREFIX=~/w3nco
         make -j2
         make install
 
@@ -341,14 +316,14 @@ jobs:
         doxygen --version
         export ESMFMKFILE=~/esmf/lib/esmf.mk
         cd build
-        cmake -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3emc;~/w3nco;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug ..
+        cmake -DTEST_FILE_DIR=/home/runner/data -DENABLE_DOCS=On -DCMAKE_PREFIX_PATH="~/jasper;~/g2c;~/bacio;~/g2;~/w3emc;~/sfcio;~/sigio;~/nemsio;~/sp;~/ip" -DCMAKE_Fortran_FLAGS="-g -fprofile-arcs -ftest-coverage -O0" -DCMAKE_C_FLAGS="-g -fprofile-arcs -ftest-coverage -O0"  -DCMAKE_BUILD_TYPE=Debug ..
         make -j2 VERBOSE=1
 
     - name: test
       run: |
         cd ufs_utils/build
         ctest --verbose --rerun-failed --output-on-failure
-        gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
+    #   gcovr --root .. -v  --html-details --exclude ../tests --exclude CMakeFiles --print-summary -o test-coverage.html &> /dev/null
 
     - name: cache-data
       if: steps.cache-data.outputs.cache-hit != 'true'
