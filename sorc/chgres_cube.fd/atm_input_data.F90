@@ -1970,7 +1970,7 @@ implicit none
 ! Convert from 2-d to 3-d cartesian winds.
 !---------------------------------------------------------------------------
 
- call convert_winds
+ call convert_winds_to_xyz
 
 !---------------------------------------------------------------------------
 ! Compute pressure.

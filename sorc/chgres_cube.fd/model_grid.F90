@@ -124,10 +124,10 @@
  if (trim(input_type) == "gaussian_nemsio" .or. &
      trim(input_type) == "gfs_gaussian_nemsio" .or. &
      trim(input_type) == "gfs_sigio" .or. &
+     trim(input_type) == "ifs_latlon_netcdf" .or. &
      trim(input_type) == "gaussian_netcdf") then
    call define_input_grid_gaussian(npets)
- elseif (trim(input_type) == "grib2" .or. &
-     trim(input_type) == "ifs_latlon_netcdf" ) then
+ elseif (trim(input_type) == "grib2" ) then
    call define_input_grid_grib2(npets)
  else
    call define_input_grid_mosaic(localpet, npets)
@@ -233,6 +233,25 @@
    call netcdf_err(rc, 'reading grid_yt id')
    rc=nf90_inquire_dimension(ncid,id_grid,len=j_input)
    call netcdf_err(rc, 'reading grid_yt')
+
+   rc = nf90_close(ncid)
+ elseif (trim(input_type) == "ifs_latlon_netcdf") then
+
+   print*,'- OPEN AND READ: ',trim(the_file)
+   rc=nf90_open(trim(the_file),nf90_nowrite,ncid)
+   call netcdf_err(rc, 'opening file')
+
+   print*,"- READ lon_xt"
+   rc=nf90_inq_dimid(ncid, 'lon', id_grid)
+   call netcdf_err(rc, 'reading lon id')
+   rc=nf90_inquire_dimension(ncid,id_grid,len=i_input)
+   call netcdf_err(rc, 'reading lon')
+
+   print*,"- READ lat"
+   rc=nf90_inq_dimid(ncid, 'lat', id_grid)
+   call netcdf_err(rc, 'reading lat id')
+   rc=nf90_inquire_dimension(ncid,id_grid,len=j_input)
+   call netcdf_err(rc, 'reading lat')
 
    rc = nf90_close(ncid)
 
