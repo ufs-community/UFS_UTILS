@@ -127,7 +127,7 @@
      trim(input_type) == "ifs_latlon_netcdf" .or. &
      trim(input_type) == "gaussian_netcdf") then
    call define_input_grid_gaussian(npets)
- elseif (trim(input_type) == "grib2" ) then
+ elseif (trim(input_type) == "grib2") then
    call define_input_grid_grib2(npets)
  else
    call define_input_grid_mosaic(localpet, npets)
