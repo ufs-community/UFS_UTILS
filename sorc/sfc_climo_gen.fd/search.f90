@@ -76,7 +76,7 @@
    case ('vegetation_type') ! vegetation type
      default_value = float(3)
    case default
-     print*,'- FATAL ERROR IN ROUTINE SEARCH.  UNIDENTIFIED FIELD : ', field
+     print*,'- FATAL ERROR IN ROUTINE SEARCH.  UNIDENTIFIED FIELD : ', field_name
      call mpi_abort(mpi_comm_world, 77, ierr)
  end select
 
