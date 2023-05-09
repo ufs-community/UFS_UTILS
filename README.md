@@ -59,20 +59,21 @@ It also uses the following repositories:
 
 ## Installing
 
-On Orion, Jet, Hera and WCOSS2, invoke the build script:
+On Orion, Jet, Hera and WCOSS2 do the following:
+
+1) Set the 'fixed' directories using the `link_fixdirs.sh`
+script in `./fix`. Usage: `./link_fixdirs.sh $RUN_ENVIR $machine`,
+where `$RUN_ENVIR` is "emc" or "nco" (most developers
+should choose "emc") and `$machine` is the platform. Example:
+
+```
+./link_fixdirs.sh emc hera
+```
+
+2) Then, invoke the build script:
 
 ```
 ./build_all.sh
-```
-
-Otherwise, do:
-
-```
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=/path/to/install ..
-make -j2
-make install
 ```
 
 ## Contents
