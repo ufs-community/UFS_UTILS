@@ -2694,7 +2694,7 @@
 !    skint_ptr(i,j) = (fice_ptr(i,j) * seaice_skint_ptr(i,j)) +  &
 !                     ( (1.0 - fice_ptr(i,j)) * frz_ice )
    else
-     seaice_skint_ptr(i,j) = -1.e20
+     seaice_skint_ptr(i,j) = 1.e20
      hice_ptr(i,j) = 0.0
    endif
  enddo
@@ -2725,7 +2725,7 @@
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
      if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0.0) then
-       data_ptr(i,j) = -1.e20
+       data_ptr(i,j) = 1.e20
      endif
    enddo
    enddo
@@ -2944,7 +2944,7 @@
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
      if (landmask_ptr(i,j) == 0) then
-       skint_ptr(i,j) = -1.e20
+       skint_ptr(i,j) = 1.e20
      endif
    enddo
    enddo
