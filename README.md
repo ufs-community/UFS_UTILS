@@ -55,7 +55,7 @@ And for the following third party libraries:
 
 It also uses the following repositories:
 
- - [NCAR common community physics package](https://github.com/NCAR/ccpp-physics)
+ - [Common Community Physics Package](https://github.com/ufs-community/ccpp-physics)
 
 ## Installing
 
