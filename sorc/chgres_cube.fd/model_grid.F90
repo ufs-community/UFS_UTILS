@@ -417,8 +417,6 @@
  integer                      :: extra, error, ncid
  integer, allocatable         :: decomptile(:,:)
 
- integer(esmf_kind_i8), allocatable    :: landmask_one_tile(:,:)
-
  real(esmf_kind_r8), allocatable       :: latitude_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_s_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_w_one_tile(:,:)
@@ -553,7 +551,6 @@
    allocate(latitude_one_tile(i_input,j_input))
    allocate(latitude_s_one_tile(i_input,jp1_input))
    allocate(latitude_w_one_tile(ip1_input,j_input))
-   allocate(landmask_one_tile(i_input,j_input))
  else
    allocate(longitude_one_tile(0,0))
    allocate(longitude_s_one_tile(0,0))
@@ -561,7 +558,6 @@
    allocate(latitude_one_tile(0,0))
    allocate(latitude_s_one_tile(0,0))
    allocate(latitude_w_one_tile(0,0))
-   allocate(landmask_one_tile(0,0))
  endif
 
  do tile = 1, num_tiles_input_grid
@@ -603,7 +599,6 @@
  deallocate(latitude_one_tile)
  deallocate(latitude_s_one_tile)
  deallocate(latitude_w_one_tile)
- deallocate(landmask_one_tile)
 
  end subroutine define_input_grid_mosaic
 

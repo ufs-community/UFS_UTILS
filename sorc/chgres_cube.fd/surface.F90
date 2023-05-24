@@ -3807,7 +3807,10 @@
 
    where(ice_ptr > 0.0) mask_ptr = 2
 
- else
+ else ! Fractional grid. The model requires this record be present. However,
+      ! the data is recomputed in FV3GFS_io.F90 after it is read in. Here,
+      ! compute it using the same algorithm as the model and output it as
+      ! a diagnostic.
 
    print*,"- GET TARGET land fraction."
    call ESMF_FieldGet(land_frac_target_grid, &
@@ -3820,10 +3823,13 @@
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
 
-     if(ice_ptr(i,j) > 0.0) then
-       mask_ptr(i,j) = 2
-     else
-       mask_ptr(i,j) = int(land_frac_ptr(i,j))
+     mask_ptr(i,j) = ceiling(land_frac_ptr(i,j))
+     if (mask_ptr(i,j) /= 1) then
+       if(ice_ptr(i,j) > 0.0) then
+         mask_ptr(i,j) = 2
+       else
+         mask_ptr(i,j) = 0
+       endif
      endif
   
    enddo
