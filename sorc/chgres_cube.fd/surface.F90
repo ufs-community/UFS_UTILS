@@ -2923,7 +2923,7 @@
   do j = clb(2), cub(2)
   do i = clb(1), cub(1)
     if (fice_ptr(i,j) == 0.0) then
-      ice_ptr(i,j,:) = -1.e20
+      ice_ptr(i,j,:) = 1.e20
     endif
   enddo
   enddo

@@ -2493,7 +2493,7 @@
      call netcdf_err(error, 'DEFINING SLC COORD' )
 
      if(fract_grid)then
-       error = nf90_def_var(ncid, 'stc_ice', NF90_DOUBLE, (/dim_x,dim_y,dim_ice,dim_time/), id_stc_ice)
+       error = nf90_def_var(ncid, 'tiice', NF90_DOUBLE, (/dim_x,dim_y,dim_ice,dim_time/), id_stc_ice)
        call netcdf_err(error, 'DEFINING STC_ICE' )
        error = nf90_put_att(ncid, id_stc_ice, "long_name", "stc_ice")
        call netcdf_err(error, 'DEFINING STC_ICE LONG NAME' )
