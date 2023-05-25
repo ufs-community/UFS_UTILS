@@ -15,14 +15,6 @@
  private
 
 ! surface fields (not including nst)
- type(esmf_field), public   :: alvsf_nl_target_grid
-                                       !< alvsf at non-land
- type(esmf_field), public   :: alvwf_nl_target_grid
-                                       !< alvwf at non-land
- type(esmf_field), public   :: alnsf_nl_target_grid
-                                       !< alnsf at non-land
- type(esmf_field), public   :: alnwf_nl_target_grid
-                                       !< alnwf at non-land
  type(esmf_field), public   :: canopy_mc_target_grid
                                        !< Canopy moisture content.
  type(esmf_field), public   :: f10m_target_grid
@@ -164,10 +156,6 @@
  call ESMF_FieldDestroy(soil_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(soilm_tot_target_grid, rc=rc)
  call ESMF_FieldDestroy(soilm_liq_target_grid, rc=rc)
- if (ESMF_FieldIsCreated(alvsf_nl_target_grid)) call ESMF_FieldDestroy(alvsf_nl_target_grid, rc=rc)
- if (ESMF_FieldIsCreated(alvwf_nl_target_grid)) call ESMF_FieldDestroy(alvwf_nl_target_grid, rc=rc)
- if (ESMF_FieldIsCreated(alnsf_nl_target_grid)) call ESMF_FieldDestroy(alnsf_nl_target_grid, rc=rc)
- if (ESMF_FieldIsCreated(alnwf_nl_target_grid)) call ESMF_FieldDestroy(alnwf_nl_target_grid, rc=rc)
 
  end subroutine cleanup_target_sfc_data
 
