@@ -39,12 +39,7 @@
 #
 # veg_type_src - Input vegetation type data. Choices are:
 #                  For viirs-based vegetation type data, set to:
-#                  - "viirs.igbp.0.1" for global 0.10-deg data
-#                  - "viirs.igbp.0.05" for global 0.05-deg data
-#                  - "viirs.igbp.0.03" for global 0.03-deg data
-#                  - "viirs.igbp.conus.30s" for CONUS 30s data
-#                  - "viirs.igbp.nh.30s" for NH 30s data
-#                  - "viirs.igbp.30s" for global 30s data
+#                  - "viirs.v2.igbp.30s" for global 30s data
 #                  For the modis-based vegetation data, set to:
 #                  - "modis.igbp.0.05" for global 0.05-deg data
 #                  - "modis.igbp.0.03" for global 0.03-deg data
@@ -60,7 +55,7 @@
 #                   - "statsgo.nh.30s" for NH 30s data
 #                   - "statsgo.30s" for global 30s data
 #                   For Beijing Norm. Univ. soil type data
-#                   - "bnu.30s" for global 30s data
+#                   - "bnu.v2.30s" for global 30s data
 #
 # vegsoilt_frac - When .true., output the fraction of each
 #                 vegetation and soil type and the dominant

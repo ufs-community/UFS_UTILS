@@ -84,12 +84,7 @@ export vegsoilt_frac='.false.'  # When true, outputs percent of each
 
 export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
-                                # 1) "viirs.igbp.0.1" for global 0.10-deg data
-                                # 2) "viirs.igbp.0.05" for global 0.05-deg data
-                                # 3) "viirs.igbp.0.03" for global 0.03-deg data
-                                # 4) "viirs.igbp.conus.30s" for CONUS 30s data
-                                # 5) "viirs.igbp.nh.30s" for NH 30s data
-                                # 6) "viirs.igbp.30s" for global 30s data
+                                # 1) "viirs.v2.igbp.30s" for global 30s data
                                 # For the modis-based data, set to:
                                 # 1) "modis.igbp.0.05" for global 0.05-deg data
                                 # 2) "modis.igbp.0.03" for global 0.03-deg data
@@ -105,7 +100,7 @@ export soil_type_src="statsgo.0.05"  # Soil type data
                                 # 4) "statsgo.nh.30s" for NH 30s data
                                 # 5) "statsgo.30s" for global 30s data
                                 # For Beijing Normal Univ. data, set to:
-                                # 1) "bnu.30s" for global 30s data.
+                                # 1) "bnu.v2.30s" for global 30s data.
 
 if [ $gtype = uniform ]; then
   export res=96
