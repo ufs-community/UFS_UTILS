@@ -10,7 +10,7 @@ prepend_path("MODULEPATH", "/work/noaa/epic-ps/role-epic-ps/miniconda3/modulefil
 miniconda3_ver=os.getenv("miniconda3_ver") or "4.12.0"
 load(pathJoin("miniconda3", miniconda3_ver))
 
-prepend_path("MODULEPATH", "/work/noaa/epic-ps/role-epic-ps/hpc-stack/libs/intel-2022.1.2/modulefiles/stack")
+prepend_path("MODULEPATH", "/work/noaa/epic-ps/role-epic-ps/hpc-stack/libs/intel-2022.1.2_ncdf492/modulefiles/stack")
 
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
@@ -48,19 +48,16 @@ load(pathJoin("sigio", sigio_ver))
 zlib_ver=os.getenv("zlib_ver") or "1.2.12"
 load(pathJoin("zlib", zlib_ver))
 
-png_ver=os.getenv("png_ver") or "1.6.37"
-load(pathJoin("libpng", png_ver))
-
 hdf5_ver=os.getenv("hdf5_ver") or "1.14.0"
 load(pathJoin("hdf5", hdf5_ver))
 
-netcdf_ver=os.getenv("netcdf_ver") or "4.9.1"
+netcdf_ver=os.getenv("netcdf_ver") or "4.9.2"
 load(pathJoin("netcdf", netcdf_ver))
 
 nccmp_ver=os.getenv("nccmp_ver") or "1.8.9.0"
 load(pathJoin("nccmp", nccmp_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8.3.0b09"
+esmf_ver=os.getenv("esmf_ver") or "8.4.2"
 load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.0.6"
