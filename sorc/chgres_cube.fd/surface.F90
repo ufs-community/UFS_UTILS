@@ -44,7 +44,6 @@
                                  snow_depth_at_ice_target_grid, &
                                  z0_water_target_grid, &
                                  z0_ice_target_grid, sst_target_grid, &
-                                 seaice_substrate_temp_target_grid, &
                                  snow_liq_equiv_at_ice_target_grid
 
  use write_data, only : write_fv3_sfc_data_netcdf
@@ -2400,7 +2399,7 @@
  real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: hice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: tg3_ptr(:,:)
- real(esmf_kind_r8), pointer        :: tg3_ice_ptr(:,:)
+!real(esmf_kind_r8), pointer        :: tg3_ice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: snod_ptr(:,:)
  real(esmf_kind_r8), pointer        :: snol_ptr(:,:)
 
@@ -2683,20 +2682,20 @@
 
  if (fract_grid) then
 
-   call ESMF_FieldGet(seaice_substrate_temp_target_grid, &
-                    farrayPtr=tg3_ice_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+!  call ESMF_FieldGet(seaice_substrate_temp_target_grid, &
+!                   farrayPtr=tg3_ice_ptr, rc=rc)
+!  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!   call error_handler("IN FieldGet", rc)
 
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (fice_ptr(i,j) > 0.0) then  ! sea ice
-       tg3_ice_ptr(i,j) = frz_ice
-     else
-       tg3_ice_ptr(i,j) = -1.e20
-     endif
-   enddo
-   enddo
+!  do j = clb(2), cub(2)
+!  do i = clb(1), cub(1)
+!    if (fice_ptr(i,j) > 0.0) then  ! sea ice
+!      tg3_ice_ptr(i,j) = frz_ice
+!    else
+!      tg3_ice_ptr(i,j) = -1.e20
+!    endif
+!  enddo
+!  enddo
 
    call ESMF_FieldGet(substrate_temp_target_grid, &
                     farrayPtr=tg3_ptr, rc=rc)
@@ -3254,25 +3253,25 @@
 
  target_ptr = init_val
 
- if (fract_grid) then
+!if (fract_grid) then
 
-   print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE SUBSTRATE TEMP."
-   seaice_substrate_temp_target_grid = ESMF_FieldCreate(target_grid, &
-                                     typekind=ESMF_TYPEKIND_R8, &
-                                     name="seaice_substrate_temp_target_grid", &
-                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-     call error_handler("IN FieldCreate", rc)
+!  print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE SUBSTRATE TEMP."
+!  seaice_substrate_temp_target_grid = ESMF_FieldCreate(target_grid, &
+!                                    typekind=ESMF_TYPEKIND_R8, &
+!                                    name="seaice_substrate_temp_target_grid", &
+!                                    staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+!  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!    call error_handler("IN FieldCreate", rc)
 
-   print*,"- INITIALIZE TARGET sea ice substrate temp."
-   call ESMF_FieldGet(seaice_substrate_temp_target_grid, &
-                      farrayPtr=target_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGet", rc)
+!  print*,"- INITIALIZE TARGET sea ice substrate temp."
+!  call ESMF_FieldGet(seaice_substrate_temp_target_grid, &
+!                     farrayPtr=target_ptr, rc=rc)
+!  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!     call error_handler("IN FieldGet", rc)
 
-   target_ptr = init_val
+!  target_ptr = init_val
 
- endif
+!endif
 
  print*,"- CALL FieldCreate FOR TARGET GRID SRFLAG."
  srflag_target_grid = ESMF_FieldCreate(target_grid, &
