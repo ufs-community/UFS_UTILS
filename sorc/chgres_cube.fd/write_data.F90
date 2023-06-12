@@ -2131,14 +2131,14 @@
      call netcdf_err(error, 'DEFINING ZORL COORD' )
 
 !    else
-     error = nf90_def_var(ncid, 'zorll', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl_land)
-     call netcdf_err(error, 'DEFINING ZORLL' )
-     error = nf90_put_att(ncid, id_zorl_land, "long_name", "zorll")
-     call netcdf_err(error, 'DEFINING ZORLL LONG NAME' )
-     error = nf90_put_att(ncid, id_zorl_land, "units", "none")
-     call netcdf_err(error, 'DEFINING ZORLL UNITS' )
-     error = nf90_put_att(ncid, id_zorl_land, "coordinates", "geolon geolat")
-     call netcdf_err(error, 'DEFINING ZORLL COORD' )
+!    error = nf90_def_var(ncid, 'zorll', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl_land)
+!    call netcdf_err(error, 'DEFINING ZORLL' )
+!    error = nf90_put_att(ncid, id_zorl_land, "long_name", "zorll")
+!    call netcdf_err(error, 'DEFINING ZORLL LONG NAME' )
+!    error = nf90_put_att(ncid, id_zorl_land, "units", "none")
+!    call netcdf_err(error, 'DEFINING ZORLL UNITS' )
+!    error = nf90_put_att(ncid, id_zorl_land, "coordinates", "geolon geolat")
+!    call netcdf_err(error, 'DEFINING ZORLL COORD' )
 
      error = nf90_def_var(ncid, 'zorli', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl_ice)
      call netcdf_err(error, 'DEFINING ZORLI' )
@@ -2736,16 +2736,16 @@
 
    if(fract_grid)then
 
-   print*,"- CALL FieldGather FOR TARGET GRID Z0_land FOR TILE: ", tile
-   call ESMF_FieldGather(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", error)
+!  print*,"- CALL FieldGather FOR TARGET GRID Z0_land FOR TILE: ", tile
+!  call ESMF_FieldGather(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+!  if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!     call error_handler("IN FieldGather", error)
 
-   if (localpet == 0) then
-     dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
-     error = nf90_put_var( ncid, id_zorl_land, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
-     call netcdf_err(error, 'WRITING Z0_LAND RECORD' )
-   endif
+!  if (localpet == 0) then
+!    dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
+!    error = nf90_put_var( ncid, id_zorl_land, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+!    call netcdf_err(error, 'WRITING Z0_LAND RECORD' )
+!  endif
 
    print*,"- CALL FieldGather FOR TARGET GRID Z0_ICE FOR TILE: ", tile
    call ESMF_FieldGather(z0_ice_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
