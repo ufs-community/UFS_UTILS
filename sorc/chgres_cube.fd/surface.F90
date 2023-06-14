@@ -2746,8 +2746,8 @@
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
      if (fice_ptr(i,j) == 0.0) then
-       snol_ptr(i,j) = -1.e20
-       snod_ptr(i,j) = -1.e20
+       snol_ptr(i,j) = 1.e20
+       snod_ptr(i,j) = 1.e20
      end if
    enddo
    enddo
@@ -2764,11 +2764,11 @@
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
      if (landmask_ptr(i,j) /= 1) then  ! not land
-       if (fice_ptr(i,j) > 0.0) then
-         data_ptr(i,j) = snod_ptr(i,j)
-       else
-         data_ptr(i,j) = -1.e20
-       endif
+!      if (fice_ptr(i,j) > 0.0) then
+!        data_ptr(i,j) = snod_ptr(i,j)
+!      else
+         data_ptr(i,j) = 1.e20
+!      endif
      end if
    enddo
    enddo
@@ -2792,11 +2792,11 @@
    do j = clb(2), cub(2)
    do i = clb(1), cub(1)
      if (landmask_ptr(i,j) /= 1) then  ! not land
-       if (fice_ptr(i,j) > 0.0) then
-         data_ptr(i,j) = snol_ptr(i,j)
-       else
-         data_ptr(i,j) = -1.e20
-       endif
+   !   if (fice_ptr(i,j) > 0.0) then
+   !     data_ptr(i,j) = snol_ptr(i,j)
+   !   else
+         data_ptr(i,j) = 1.e20
+   !   endif
      end if
    enddo
    enddo
