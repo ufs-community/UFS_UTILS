@@ -20,12 +20,6 @@ else
 
 fi
 
-
-echo "got to the final step"
-
-
-
-#UFSDIR=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK
 UFSDIR=$home_dir
 
 
