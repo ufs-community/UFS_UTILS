@@ -46,3 +46,6 @@ endif()
 if(WEIGHT_GEN)
   add_subdirectory(weight_gen.fd)
 endif()
+
+add_subdirectory(ocean_merge.fd)
+

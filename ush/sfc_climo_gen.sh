@@ -47,8 +47,9 @@ vegsoilt_frac=${vegsoilt_frac:-.false.}
 veg_type_src=${veg_type_src:-"modis.igbp.0.05"}
 VEG_TYPE_FILE=${VEG_TYPE_FILE:-${input_sfc_climo_dir}/vegetation_type.${veg_type_src}.nc}
 soil_type_src=${soil_type_src:-"statsgo.0.05"}
-SOIL_TYPE_FILE=${SOIL_TYPE_FILE:-${input_sfc_climo_dir}/soil_type.${soil_type_src}.nc}
-
+#SOIL_TYPE_FILE=${SOIL_TYPE_FILE:-${input_sfc_climo_dir}/soil_type.${soil_type_src}.nc}
+#SOIL_TYPE_FILE="/scratch2/NCEPDEV/land/data/input_data/soil_type/soil_type.bnu.v2.30s.nc"
+SOIL_TYPE_FILE="/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.sanath/fix/soil_type.bnu.v2.30s.test.nc"
 if [ ! -d $SAVE_DIR ]; then
   mkdir -p $SAVE_DIR
 fi

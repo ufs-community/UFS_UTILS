@@ -43,7 +43,7 @@ set -eux
 # Makes FV3 cubed-sphere grid
 #----------------------------------------------------------------------------------
 
-export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
+export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072i
 export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest, regional_gfdl,
                                 # or regional_esg
 
@@ -52,6 +52,9 @@ export lake_cutoff=${lake_cutoff:-0.20} # lake fractions less than lake_cutoff
                                         # are ignored.
 
 export make_gsl_orog=${make_gsl_orog:-false} # when true, create GSL drag suite orog files.
+
+
+
 
 if [ $gtype = uniform ];  then
   echo "Creating global uniform grid"
@@ -91,10 +94,15 @@ elif [ $gtype = regional_esg ]; then
   export dely=${dely:-0.0585}             # Grid spacing (in degrees) in the 'j' direction.
   export halo=${halo:-3}                  # Number of rows/cols for halo.
   title=esg
-else
+elsE
   echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest, regional_gfdl or regional_esg"
   exit 9
 fi
+
+
+
+
+
 
 export TEMP_DIR=${TEMP_DIR:?}
 export out_dir=${out_dir:?}
@@ -109,6 +117,8 @@ export NCDUMP=${NCDUMP:-ncdump}
 rm -fr $TEMP_DIR
 mkdir -p $TEMP_DIR
 cd $TEMP_DIR ||exit 8
+
+
 
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
@@ -198,11 +208,13 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   if [ $add_lake = true ]; then
     $script_dir/fv3gfs_make_lake.sh
+
     err=$?
     if [ $err != 0 ]; then
       exit $err
     fi
   fi
+
 
   set +x
   echo "End uniform orography generation at `date`"
@@ -242,6 +254,12 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   cp $grid_dir/C${res}_*mosaic.nc             $out_dir
 
   echo "Grid and orography files are now prepared."
+
+
+	if [[ ! -z "$ocn" ]]; then
+                 $script_dir/fv3gfs_ocean_merge.sh $res $ocn
+        fi
+
 
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
@@ -468,6 +486,20 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
 
 fi
 
+
+
+
+#------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------
+#Redo orog and filter.
+#------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------
+
+if [[ ! -z "$ocn" ]]; then
+	$script_dir/orog.sh $res $ocn
+fi
+
+
 #------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
 # Create surface static fields - vegetation type, soil type, etc.
@@ -479,11 +511,31 @@ fi
 #------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
 
-export WORK_DIR=$TEMP_DIR/sfcfields
-export SAVE_DIR=$out_dir/fix_sfc
-export BASE_DIR=$home_dir
-export FIX_FV3=$out_dir
-export input_sfc_climo_dir=$home_dir/fix/sfc_climo
+
+ 
+
+	 if [[ ! -z "$ocn" ]]; then
+
+		export SAVE_DIR=$(dirname $out_dir)/C${res}.mx${ocn}/fix_sfc
+		export FIX_FV3=$(dirname $out_dir)/C${res}.mx${ocn}
+		export mosaic_file=$FIX_FV3/C${res}_mosaic.nc
+
+
+	 else
+	
+		export SAVE_DIR=$out_dir/fix_sfc
+		export FIX_FV3=$out_dir
+
+ 	 fi
+	 export WORK_DIR=$TEMP_DIR/sfcfields
+	 export BASE_DIR=$home_dir
+	 export input_sfc_climo_dir=$home_dir/fix/sfc_climo
+
+source ${BASE_DIR}/sorc/machine-setup.sh > /dev/null 2>&1
+module use ${BASE_DIR}/modulefiles
+module load build.hera.intel
+module list
+
 
 if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   export HALO=$halop1
@@ -494,7 +546,12 @@ elif [ $gtype = nest ]; then
   export mosaic_file=$out_dir/C${res}_coarse_mosaic.nc
 fi
 
+
+
 $script_dir/sfc_climo_gen.sh
+
+
+
 err=$?
 if [ $err != 0 ]; then
   echo error in sfc_climo_gen
@@ -505,6 +562,9 @@ if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   rm -f $out_dir/C${res}_grid.tile${tile}.nc
   rm -f $out_dir/C${res}_oro_data.tile${tile}.nc
 fi
+
+
+
 
 #------------------------------------------------------------------------------------
 # Run for the global nest - tile 7.
@@ -520,5 +580,8 @@ if [ $gtype = nest ]; then
     exit $err
   fi
 fi
+
+
+
 
 exit

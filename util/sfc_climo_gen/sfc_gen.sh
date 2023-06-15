@@ -77,16 +77,16 @@ export res=96.mx100
 #export GRIDTYPE=regional
 #FIX_REG=/lfs/h2/emc/stmp/$LOGNAME/fix.reg
 
-export veg_type_src="modis.igbp.0.05"
+#export veg_type_src="modis.igbp.0.05"
 
-export soil_type_src="statsgo.0.05"
+#export soil_type_src="statsgo.0.05"
 
 export WORK_DIR=/lfs/h2/emc/stmp/$LOGNAME/work.sfc
 export SAVE_DIR=/lfs/h2/emc/stmp/$LOGNAME/sfc.C${res}
 
 export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
-export vegsoilt_frac=.true.
+export vegsoilt_frac=.false.
 
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
