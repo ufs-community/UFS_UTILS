@@ -43,7 +43,7 @@ set -eux
 # Makes FV3 cubed-sphere grid
 #----------------------------------------------------------------------------------
 
-export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072i
+export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
 export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest, regional_gfdl,
                                 # or regional_esg
 
@@ -94,7 +94,7 @@ elif [ $gtype = regional_esg ]; then
   export dely=${dely:-0.0585}             # Grid spacing (in degrees) in the 'j' direction.
   export halo=${halo:-3}                  # Number of rows/cols for halo.
   title=esg
-elsE
+else
   echo "Error: please specify grid type with 'gtype' as uniform, stretch, nest, regional_gfdl or regional_esg"
   exit 9
 fi
