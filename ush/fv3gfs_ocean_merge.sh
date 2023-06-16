@@ -2,10 +2,10 @@
 
 ##
 ## Original code to merge by Shan Sun (shan.sun@noaa.gov )
-## https://docs.google.com/document/d/1dPirkrZfvqlVi4GgdVRYVvdjd8BeVPlRg6irI9hH_c0/edit
-## Modified by Rahul (rahul.mahajan@noaa.gov )
-## Modified by Sanath (sanath.kumar@noaa.gov) to be included into one grid generation process May 2023
-## https://docs.google.com/document/d/1VD4gkOOUjhpLKtjLiT7gOaJeEUi7P4h5Xlg09KiqAv0/edit?pli=1
+## 
+## Modified by Rahul 
+## Modified by Sanath to be included into one grid generation process May 2023
+## 
 ##
 
 

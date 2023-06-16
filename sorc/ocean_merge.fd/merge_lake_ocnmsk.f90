@@ -1,7 +1,7 @@
 !!! input are from pth1 and pth2, output will be in the local dir
 !!! To compile, do
 !!! ifort merge_lake_ocnmsk.F90 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf
-!!! created by Shan.Sun@noaa.gov, modified by Rahul Mahajan and Sanath Kumar
+!!! created by Shan.Sun  modified by Rahul Mahajan and Sanath Kumar
 !!!
 !!!
 
