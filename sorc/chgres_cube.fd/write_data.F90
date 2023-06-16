@@ -2130,14 +2130,14 @@
 !    endif
 
 !    if(.not.fract_grid)then
-     error = nf90_def_var(ncid, 'zorl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl)
-     call netcdf_err(error, 'DEFINING ZORL' )
-     error = nf90_put_att(ncid, id_zorl, "long_name", "zorl")
-     call netcdf_err(error, 'DEFINING ZORL LONG NAME' )
-     error = nf90_put_att(ncid, id_zorl, "units", "none")
-     call netcdf_err(error, 'DEFINING ZORL UNITS' )
-     error = nf90_put_att(ncid, id_zorl, "coordinates", "geolon geolat")
-     call netcdf_err(error, 'DEFINING ZORL COORD' )
+!    error = nf90_def_var(ncid, 'zorl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl)
+!    call netcdf_err(error, 'DEFINING ZORL' )
+!    error = nf90_put_att(ncid, id_zorl, "long_name", "zorl")
+!    call netcdf_err(error, 'DEFINING ZORL LONG NAME' )
+!    error = nf90_put_att(ncid, id_zorl, "units", "none")
+!    call netcdf_err(error, 'DEFINING ZORL UNITS' )
+!    error = nf90_put_att(ncid, id_zorl, "coordinates", "geolon geolat")
+!    call netcdf_err(error, 'DEFINING ZORL COORD' )
 
 !    else
 !    error = nf90_def_var(ncid, 'zorll', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl_land)
@@ -2748,17 +2748,17 @@
      call netcdf_err(error, 'WRITING SLOPE RECORD' )
    endif
 
-   print*,"- CALL FieldGather FOR TARGET GRID Z0 FOR TILE: ", tile
-   call ESMF_FieldGather(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
-   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", error)
+!  print*,"- CALL FieldGather FOR TARGET GRID Z0 FOR TILE: ", tile
+!  call ESMF_FieldGather(z0_target_grid, data_one_tile, rootPet=0, tile=tile, rc=error)
+!  if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+!     call error_handler("IN FieldGather", error)
 
-   if (localpet == 0) then
+!  if (localpet == 0) then
 !    dum2d(:,:) = data_one_tile(istart:iend, jstart:jend)
-     dum2d(:,:) = 1.e20
-     error = nf90_put_var( ncid, id_zorl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
-     call netcdf_err(error, 'WRITING Z0 RECORD' )
-   endif
+!    dum2d(:,:) = 1.e20
+!    error = nf90_put_var( ncid, id_zorl, dum2d, start=(/1,1,1/), count=(/i_target_out,j_target_out,1/))
+!    call netcdf_err(error, 'WRITING Z0 RECORD' )
+!  endif
 
    if(fract_grid)then
 
