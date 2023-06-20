@@ -379,6 +379,7 @@
  INTEGER             :: veg_type_landice
 
  LOGICAL :: FILE_EXISTS, DO_SOI_INC, DO_SNO_INC
+
 !--------------------------------------------------------------------------------
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
 ! increments.
@@ -681,11 +682,11 @@ ENDIF
 
         ! store background states
         STC_BCK = STCFCS
-        SMC_BCK = SMCFCS ! not used yet.
-        SLC_BCK = SLCFCS ! not used yet.
+        SMC_BCK = SMCFCS
+        SLC_BCK = SLCFCS
 
-        CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,LANDINC_MASK,LANDINC_MASK_FG,  &
-            LENSFC,LSOIL,IDIM,JDIM, MYRANK)
+        CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,LANDINC_MASK, &
+                LANDINC_MASK_FG,LENSFC,LSOIL,IDIM,JDIM, MYRANK)
 
         !--------------------------------------------------------------------------------
         ! make any necessary adjustments to dependent variables

@@ -40,22 +40,24 @@ contains
  !!
  !! @author Clara Draper. @date March 2021
 
-subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile, &
-                        lensfc,lsoil,idim,jdim, myrank)
+subroutine add_increment_soil(rla,rlo,stc_state,slc_state,smc_state,soilsnow_tile,  &
+                        soilsnow_fg_tile,lensfc,lsoil,idim,jdim, myrank)
 
     use utils
     use gdswzd_mod
     use read_write_data, only : idim_gaus, jdim_gaus, &
-                             stc_inc_gaus, soilsnow_gaus
+                             stc_inc_gaus, soilsnow_gaus, slc_inc_gaus
     use mpi
 
     implicit none
 
     integer, intent(in)      :: lensfc, lsoil, idim, jdim, myrank
 
-    integer, intent(in)         :: soilsnow_tile(lensfc), soilsnow_fg_tile(lensfc)
+    integer, intent(in)      :: soilsnow_tile(lensfc), soilsnow_fg_tile(lensfc)
     real, intent(inout)      :: rla(lensfc), rlo(lensfc)
     real, intent(inout)      :: stc_state(lensfc, lsoil)
+    real, intent(inout)      :: slc_state(lensfc, lsoil)
+    real, intent(inout)      :: smc_state(lensfc, lsoil)
 
     integer                  :: iopt, nret, kgds_gaus(200)
     integer                  :: igaus, jgaus, ij
@@ -69,14 +71,21 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
 
     real                     :: wsum
     real                     :: stc_inc(lsoil)
+    real                     :: stc_temp(lsoil)
+    real                     :: slc_inc(lsoil)
     real, allocatable        :: xpts(:), ypts(:), lats(:), lons(:)
     real, allocatable        :: dum2d(:,:), lats_rad(:), lons_rad(:)
     real, allocatable        :: agrid(:,:,:), s2c(:,:,:)
 
-    integer                  :: k, nother, nsnowupd, nnosoilnear, nsoilupd, nsnowchange
-    logical                  :: gaus_has_soil
-        
+    integer                  :: k, nother, nsnowupd, nnosoilnear, nsoilupd, nfrozen
+    logical                  :: gaus_has_soil, soil_freeze, soil_ice
+
+! control state for soil analysis:
     integer, parameter       :: lsoil_incr=3 ! number of layers to add incrments to
+    logical, parameter       :: upd_stc=.true.
+    logical, parameter       :: upd_slc=.true.
+
+    real, parameter          :: tfreez=273.16 !< con_t0c  in physcons
                                                 
     ! this produces the same lat/lon as can be read in from the file
 
@@ -167,10 +176,10 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
     !
     nother = 0 ! grid cells not land
     nsnowupd = 0  ! grid cells with snow (temperature not yet updated)
-    nsnowchange = 0  ! grid cells where no temp upd made, because snow occurence changed
     nnosoilnear = 0 ! grid cells where model has soil, but 4 closest gaus grids don't
                  ! (no update made here)
-    nsoilupd = 0
+    nsoilupd = 0 ! grid cells that are updated
+    nfrozen = 0 ! not update as frozen soil
 
 
     ij_loop : do ij = 1, lensfc
@@ -195,13 +204,11 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
         if (itile==0) itile = idim
 
         !----------------------------------------------------------------------
-        ! if the snow analysis has chnaged to occurence of snow, skip the
-        ! temperature analysis
+        ! if snow is present before or after snow update, skip soil temp analysis
         !----------------------------------------------------------------------
 
-        if ((mask_fg_tile == 2 .and. mask_tile == 1) .or. &
-            (mask_fg_tile == 1 .and. mask_tile == 2) ) then
-         nsnowchange = nsnowchange + 1
+        if (mask_fg_tile == 2 .or. mask_tile == 2) then
+         nsnowupd = nsnowupd + 1
          cycle ij_loop
         endif
 
@@ -228,55 +235,77 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
              cycle ij_loop
            endif
 
-        ! calcualate weighted increment over nearby grid cells that have soil
-
-        ! Draper: to-do, code adding increments to soil moisture.
-        !         will require converting to soil wetness index first
-        !         (need to add soil properties to the increment file)
-
-           nsoilupd = nsoilupd + 1
-
            stc_inc = 0.0
+           slc_inc = 0.0
            wsum  = 0.0
 
            if (soilsnow_gaus(igaus,jgaus) == 1) then
              do k = 1, lsoil_incr
-                 stc_inc(k)  = stc_inc(k) + (s2c(itile,jtile,1) * stc_inc_gaus(k,igaus,jgaus))
+                 if (upd_stc) &
+                   stc_inc(k)  = stc_inc(k) + (s2c(itile,jtile,1) * stc_inc_gaus(k,igaus,jgaus))
+                 if (upd_slc) &
+                   slc_inc(k)  = slc_inc(k) + (s2c(itile,jtile,1) * slc_inc_gaus(k,igaus,jgaus))
              enddo
              wsum  = wsum + s2c(itile,jtile,1)
            endif
 
            if (soilsnow_gaus(igausp1,jgaus) == 1) then
              do k = 1, lsoil_incr
-                 stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,2) * stc_inc_gaus(k,igausp1,jgaus))
+                 if (upd_stc) &
+                   stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,2) * stc_inc_gaus(k,igausp1,jgaus))
+                 if (upd_slc) &
+                   slc_inc(k) = slc_inc(k) + (s2c(itile,jtile,2) * slc_inc_gaus(k,igausp1,jgaus))
              enddo
              wsum  = wsum + s2c(itile,jtile,2)
            endif
 
            if (soilsnow_gaus(igausp1,jgausp1) == 1) then
              do k = 1, lsoil_incr
-                 stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,3) * stc_inc_gaus(k,igausp1,jgausp1))
+                 if (upd_stc) &
+                   stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,3) * stc_inc_gaus(k,igausp1,jgausp1))
+                 if (upd_slc) &
+                   slc_inc(k) = slc_inc(k) + (s2c(itile,jtile,3) * slc_inc_gaus(k,igausp1,jgausp1))
              enddo
              wsum  = wsum + s2c(itile,jtile,3)
            endif
 
            if (soilsnow_gaus(igaus,jgausp1) == 1) then
              do k = 1, lsoil_incr
-                 stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,4) * stc_inc_gaus(k,igaus,jgausp1))
+                 if (upd_stc) &
+                   stc_inc(k) = stc_inc(k) + (s2c(itile,jtile,4) * stc_inc_gaus(k,igaus,jgausp1))
+                 if (upd_slc) &
+                   slc_inc(k) = slc_inc(k) + (s2c(itile,jtile,4) * slc_inc_gaus(k,igaus,jgausp1))
              enddo
              wsum  = wsum + s2c(itile,jtile,4)
            endif
 
-        ! add increment
-           do k = 1, lsoil_incr
-             stc_inc(k) = stc_inc(k) / wsum
-             stc_state(ij,k) = stc_state(ij,k) + stc_inc(k)
-        ! todo, apply some bounds?
-           enddo
+           !----------------------------------------------------------------------
+           !  add the interpolated increment to the background
+           !----------------------------------------------------------------------
 
-        ! don't update soil states if snow present.
-        elseif(mask_tile==2) then
-           nsnowupd = nsnowupd + 1
+           soil_freeze=.false.
+           soil_ice=.false.
+           do k = 1, lsoil_incr
+
+             stc_inc(k) = stc_inc(k) / wsum
+             
+             stc_temp(k) = stc_state(ij,k) + stc_inc(k)
+             if ( min(stc_temp(k),stc_state(ij,k)) < tfreez)  soil_freeze=.true.
+             if ( smc_state(ij,k) - slc_state(ij,k) > 0.001 )  soil_ice=.true.
+             ! do not do updates if this layer or an  above layer is frozen
+             if ( (.not. soil_freeze ) .and. (.not. soil_ice ) ) then 
+                if (k==1) nsoilupd = nsoilupd + 1
+                if (upd_stc) &
+                   stc_state(ij,k) = stc_temp(k)
+                if (upd_slc) then
+                   ! apply zero limit here (higher model-specific limits are later)
+                   slc_state(ij,k) = max(slc_state(ij,k) + slc_inc(k), 0.0)
+                   smc_state(ij,k) = max(smc_state(ij,k) + slc_inc(k), 0.0) 
+                endif
+             else
+                if (k==1) nfrozen = nfrozen+1
+             endif
+           enddo
 
         endif ! if soil/snow point
 
@@ -284,16 +313,10 @@ subroutine add_increment_soil(rla,rlo,stc_state,soilsnow_tile, soilsnow_fg_tile,
 
     write(*,'(a,i2)') 'statistics of grids number processed for rank : ', myrank
     write(*,'(a,i8)') ' soil grid cells updated = ',nsoilupd
+    write(*,'(a,i8)') ' soil grid cells not updated, frozen = ',nfrozen
     write(*,'(a,i8)') ' (not updated) soil grid cells, no soil nearby on gsi grid = ',nnosoilnear
-    write(*,'(a,i8)') ' (not updated) soil grid cells, change in presence of snow = ', nsnowchange
     write(*,'(a,i8)') ' (not updated yet) snow grid cells = ', nsnowupd
     write(*,'(a,i8)') ' grid cells, without soil or snow = ', nother
-
-    nother = 0 ! grid cells not land
-    nsnowupd = 0  ! grid cells where no temp upd made, because snow occurence changed
-    nnosoilnear = 0 ! grid cells where model has soil, but 4 closest gaus grids don't
-                 ! (no update made here)
-    nsoilupd = 0
 
     deallocate(id1, id2, jdc, s2c)
 
