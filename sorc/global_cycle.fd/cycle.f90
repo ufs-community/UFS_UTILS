@@ -312,7 +312,7 @@
  USE LAND_INCREMENTS, ONLY: ADD_INCREMENT_SOIL,     &
                             ADD_INCREMENT_SNOW,     &
                             CALCULATE_LANDINC_MASK, &
-                            APPLY_LAND_DA_ADJUSTMENTS_STC, &
+                            APPLY_LAND_DA_ADJUSTMENTS_SOIL, &
                             APPLY_LAND_DA_ADJUSTMENTS_SND
 
  IMPLICIT NONE
@@ -377,6 +377,7 @@
  real, dimension(idim,jdim) :: tf_clm,tf_trd,sal_clm
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
  INTEGER             :: veg_type_landice
+ INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
 
  LOGICAL :: FILE_EXISTS, DO_SOI_INC, DO_SNO_INC
 
@@ -489,6 +490,13 @@ ENDIF
                 VMNFCS=VMNFCS,VMXFCS=VMXFCS,SLCFCS=SLCFCS,SLPFCS=SLPFCS,  &
                 ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
                 ZSOIL=ZSOIL,   NSST=NSST)
+
+! lsm currently specificed twice (LSM in namelist; and is_noahmp which is determined by
+! variable names in restart. For now, just check they agree. Later, remove one method.
+ IF (IS_NOAHMP  .and. (LSM .NE. 2) ) THEN 
+   PRINT *, 'CONFLICT between specified LSM and restart, exiting'
+   call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+ ENDIF
 
  IF (USE_UFO) THEN
    PRINT*
@@ -685,15 +693,18 @@ ENDIF
         SMC_BCK = SMCFCS
         SLC_BCK = SLCFCS
 
-        CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,LANDINC_MASK, &
-                LANDINC_MASK_FG,LENSFC,LSOIL,IDIM,JDIM, MYRANK)
+        ! below updates [STC/SMC/STC]FCS to hold the analysis
+        CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
+                LANDINC_MASK,LANDINC_MASK_FG,LENSFC,LSOIL,IDIM,JDIM, MYRANK)
 
         !--------------------------------------------------------------------------------
         ! make any necessary adjustments to dependent variables
         !--------------------------------------------------------------------------------
 
-        CALL APPLY_LAND_DA_ADJUSTMENTS_STC(LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
-            SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS)
+
+        CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL(LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
+            SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS, STC_UPDATED, &
+            SLC_UPDATED,ZSOIL)
 
    ENDIF ! soil increments
 
