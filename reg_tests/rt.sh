@@ -2,7 +2,7 @@
 
 ulimit -s unlimited
 
-export MAILTO=
+export MAILTO=clara.draper@noaa.gov
 
 # Directory to download UFS_UTILS to and run the consistency tests
 export WORK_DIR=

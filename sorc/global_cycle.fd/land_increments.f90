@@ -19,7 +19,7 @@ module land_increments
     ! control state for soil analysis:
     integer, parameter       :: lsoil_incr=3 ! number of layers to add incrments to
     logical, parameter       :: upd_stc=.true.
-    logical, parameter       :: upd_slc=.true.
+    logical, parameter       :: upd_slc=.false.
 
     real, parameter          :: tfreez=273.16 !< con_t0c  in physcons
 contains
