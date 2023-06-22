@@ -222,7 +222,7 @@ subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated,
         !  do update to soil temperature grid cells, using bilinear interp
         !----------------------------------------------------------------------
 
-        if (mask_tile == 1 .and. ( smc_state(ij,1) .LT. 0.99 ) ) then
+        if (mask_tile == 1) then
            ! these are the four nearest grid cells on the gaus grid
            igaus   = id1(itile,jtile)
            jgaus   = jdc(itile,jtile)
@@ -404,7 +404,7 @@ subroutine calculate_landinc_mask(smc,swe,vtype,lensfc,veg_type_landice,mask)
 
     ! land (but not land-ice)
     do i=1,lensfc
-        if (smc(i) .LT. 1.0) then
+        if (smc(i) .LT. 0.99) then
           if (swe(i) .GT. 0.001) then ! snow covered land
                 mask(i) = 2
           else                        ! non-snow covered land
