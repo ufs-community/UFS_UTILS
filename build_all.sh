@@ -10,6 +10,7 @@ set -eux
 
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
+PW_CSP=${PW_CSP:-} # TODO: This is an implementation from EPIC and consistent with the UFS WM build system.
 export MOD_PATH
 
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
@@ -17,6 +18,15 @@ if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
  set +x
  source ./modulefiles/build.$target > /dev/null
  set -x
+#TODO: This will need to be revisited once the EPIC supported-stacks come online.
+elif [[ "${PW_CSP}" == "aws" ]]; then
+  module use /contrib/global-workflow/spack-stack/envs/ufsutils/install/modulefiles/Core
+  module load stack-intel
+  module load stack-intel-oneapi-mpi
+  module use ./modulefiles
+  module load build.noaacloud.intel
+  module list
+  set -x
 else
  set +x
  source ./sorc/machine-setup.sh
