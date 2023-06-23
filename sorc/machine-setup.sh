@@ -98,7 +98,7 @@ elif [[ -d /data/prod ]] ; then
     fi
     target=s4
     module purge
-elif [[ -z ${PW_CSP} ]]; then
+elif [[ "$(dnsdomainname)" =~ "pw" ]]; then
     if [[ "${PW_CSP}" == "aws" ]]; then # TODO: Add other CSPs here.
 	target=noaacloud
         module purge
