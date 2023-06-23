@@ -13,6 +13,9 @@ load(pathJoin("intel", hpc_intel_ver))
 impi_ver=os.getenv("impi_ver") or "2021.3.0"
 load(pathJoin("impi", impi_ver))
 
+module load stack-intel
+module load stack-intel-oneapi-mpi
+
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
