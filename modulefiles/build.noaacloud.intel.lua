@@ -1,5 +1,5 @@
 help([[ 
-Load environment to compile UFS_UTILS on NOAA CSP using Intel
+Load environment to compile UFS_UTILS on NOAA CSPs using Intel
 ]])
 
 cmake_ver=os.getenv("cmake_ver") or "3.16.1"
