@@ -1,9 +1,21 @@
 !!! input are from pth1 and pth2, output will be in the local dir
-!!! To compile, do
+!!! To compile standalone do
 !!! ifort merge_lake_ocnmsk.F90 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf
 !!! created by Shan.Sun  modified by Rahul Mahajan and Sanath Kumar
 !!!
 !!!
+
+!!!
+!
+!!! "Determine the water mask by merging the lake mask with the mapped ocean
+!!! mask from MOM6, both are on the FV3 grid. During merge, the ocean mask
+!!! dominates the lake mask if there is a conflict. After the merge, the remaining
+!!! non-water fraction is the land fraction.m"
+!!!
+!!!
+
+
+
 
 program merge_lake_ocnmsk
   use netcdf

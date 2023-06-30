@@ -491,7 +491,11 @@ fi
 
 #------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
-#Redo orog and filter.
+# Redo orog and filter.
+# The lake mask is derived first using the step 1 and when the ocean mask is merged,
+# the lake/land points may change and hence is re run. The lake merge routine needs
+# the oro files to derive the initial lakemask and hence is re run after it is modified
+#
 #------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
 

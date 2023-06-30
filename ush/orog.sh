@@ -2,7 +2,9 @@
 
 #
 # Shan's original code  modified to accept arguments 
-#
+# Land points will change hence orog is re run
+
+
 
 
 
