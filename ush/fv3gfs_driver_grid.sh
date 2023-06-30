@@ -538,7 +538,7 @@ fi
 source ${BASE_DIR}/sorc/machine-setup.sh > /dev/null 2>&1
 module use ${BASE_DIR}/modulefiles
 module load build.hera.intel
-module list
+#module list
 
 
 if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then

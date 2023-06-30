@@ -108,5 +108,5 @@ if [ $iret != 0 ]; then
   exit $iret
 fi
 
-cp /scratch2/NCEPDEV/stmp1/${USER}/my_grids/C${CRES}/C${CRES}_mosaic.nc $WORKDIR 
+cp $out_dir/C${CRES}/C${CRES}_mosaic.nc $WORKDIR 
 
