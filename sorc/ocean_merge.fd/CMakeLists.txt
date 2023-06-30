@@ -15,7 +15,7 @@ set(exe_name ocean_merge)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  sp::sp_d
+  
   NetCDF::NetCDF_Fortran)
 
 install(TARGETS ${exe_name})
