@@ -40,7 +40,7 @@ cat << EOF > input.nml
 &mask_nml
  ocean_mask_dir="$ocean_mask_dir/${ocn}/"
  ocnres="mx${ocn}"
- lake_mask_dir="/scratch2/NCEPDEV/stmp1/${USER}/my_grids/C${res}/"
+ lake_mask_dir="$out_dir/"
  atmres="C${res}"
  out_dir="$TEMP_DIR/ocean_merged/C${res}.mx${ocn}/"
 /  
