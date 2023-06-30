@@ -88,7 +88,7 @@ export vegsoilt_frac='.false.' # When .false., output dominant soil and
                                # the dominant category. A Fortran logical,
                                # so include the dots.
 
-export veg_type_src="viirs.igbp.0.05" #  Vegetation type data.
+export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
                                 # 1) "viirs.igbp.0.1" for global 0.10-deg data
                                 # 2) "viirs.igbp.0.05" for global 0.05-deg data
@@ -103,7 +103,7 @@ export veg_type_src="viirs.igbp.0.05" #  Vegetation type data.
                                 # 4) "modis.igbp.nh.30s" for N Hemis 30s data
                                 # 5) "modis.igbp.30s" for global 30s data
 
-export soil_type_src="statsgo.30s" #  Soil type data. 
+export soil_type_src="statsgo.0.05" #  Soil type data. 
                                 # For STATSGO data
                                 # 1) "statsgo.0.05" for global 0.05-deg data
                                 # 2) "statsgo.0.03" for global 0.03-deg data
@@ -119,7 +119,7 @@ export soil_type_src="statsgo.30s" #  Soil type data.
 
 if [ $gtype = uniform ]; then
   export res=96     	       # required atmos res, defaultes to 98
-  export ocn="100"                # "" to ignore else "XXX" ocean grid to the atmos res from above as Cres.mxXXX 
+  export ocn="500"             # "" to ignore else "XXX" ocean grid to the atmos res from above as Cres.mxXXX 
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
 elif [ $gtype = stretch ]; then
@@ -167,7 +167,7 @@ export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
 export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.kumar/CPLD_GRIDGEN/
 
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids_single_step
 
 export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/CPLD_GRIDGEN/
 
@@ -186,6 +186,7 @@ fi
 
 export readme_name=$readme_name
 
+mkdir -p $out_dir
 
 cat <<EOF >$readme_name
 

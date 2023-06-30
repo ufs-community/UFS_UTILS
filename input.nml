@@ -1,8 +1,0 @@
-
-&mask_nml
- ocean_mask_dir="/scratch1/NCEPDEV/stmp4/Sanath.Kumar/CPLD_GRIDGEN//100/"
- ocnres="mx100"
- lake_mask_dir="/scratch2/NCEPDEV/stmp1/Sanath.Kumar/my_grids/C96/"
- atmres="C96"
- out_dir="/scratch2/NCEPDEV/stmp1/Sanath.Kumar/ocean_merged/C96.mx100/"
-/  

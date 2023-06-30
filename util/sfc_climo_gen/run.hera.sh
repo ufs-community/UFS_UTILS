@@ -15,7 +15,7 @@
 #SBATCH --nodes=1 --ntasks-per-node=24
 #SBATCH --partition=bigmem
 #SBATCH -q debug
-#SBATCH -t 00:10:00
+#SBATCH -t 00:30:00
 
 set -x
 
@@ -32,15 +32,16 @@ module list
 # Set model resolution.
 #-------------------------------------
 
-#export res=96.mx100
+export res=3342
 #export res=384.mx025
 
 #-------------------------------------
 # Where the model "grid", "mosaic" and "oro" files reside.
 #-------------------------------------
 
-export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
+#export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
+export FIX_FV3=/scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C${res}
 #-------------------------------------
 # Uncomment for regional grids.
 #-------------------------------------
@@ -77,9 +78,14 @@ export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 #   1) "bnu.30s" for global 30s data
 #-------------------------------------------------------------
 
-export veg_type_src="viirs.igbp.30s"
+#export veg_type_src="viirs.igbp.30s"
 
+#export soil_type_src="statsgo.0.05"
+
+export veg_type_src="viirs.igbp.0.05"
 export soil_type_src="statsgo.0.05"
+
+
 #
 #soil type has been hard coded tyo use BNU V2
 #
@@ -90,7 +96,7 @@ export soil_type_src="statsgo.0.05"
 #-------------------------------------
 
 export WORK_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/work.sfc
-export SAVE_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/repo_viirs30s_bnuv2/sfc.C${res}
+export SAVE_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/repo_test/sfc.C${res}
 
 #-------------------------------------
 # Should not have to touch anything below here.

@@ -1,0 +1,802 @@
++ export APRUN_SFC=srun
++ APRUN_SFC=srun
++ export BASE_DIR=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../..
++ BASE_DIR=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../..
++ source /scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../sorc/machine-setup.sh
++ module use /scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles
+++ /apps/lmod/8.5.2/libexec/lmod bash use /scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles
++ eval '__LMOD_REF_COUNT_MODULEPATH=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:1\;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:1\;/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:2\;/work2/06146/tg854455/frontera/spack-stack/modulefiles:2\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:1\;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:1\;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:1\;/apps/lmod/lmod/modulefiles/Core:1\;/apps/modules/modulefiles/Linux:1\;/apps/modules/modulefiles:1\;/contrib/sutils/modulefiles:1\;/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4:1;' export '__LMOD_REF_COUNT_MODULEPATH;' 'MODULEPATH=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:/work2/06146/tg854455/frontera/spack-stack/modulefiles:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:/apps/lmod/lmod/modulefiles/Core:/apps/modules/modulefiles/Linux:/apps/modules/modulefiles:/contrib/sutils/modulefiles:/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4;' export 'MODULEPATH;' '_ModuleTable001_=X01vZHVsZVRhYmxlXz17WyJNVHZlcnNpb24iXT0zLFsiY19yZWJ1aWxkVGltZSJdPWZhbHNlLFsiY19zaG9ydFRpbWUiXT1mYWxzZSxkZXB0aFQ9e30sZmFtaWx5PXt9LG1UPXt9LG1wYXRoQT17Ii9zY3JhdGNoMi9OQ0VQREVWL2xhbmQvU2FuYXRoLkt1bWFyL1VGU19VVElMU19TSy91dGlsL3NmY19jbGltb19nZW4vLi4vLi4vbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci91ZnNfd2VhdGhlci1tb2RlbC9tb2R1bGVmaWxlcy9oZXJhLmludGVsIiwiL3dvcmsyLzA2MTQ2L3RnODU0NDU1L2Zyb250ZXJhL3NwYWNrLXN0YWNrL3NwYWNrLXN0YWNrLXYxL2VudnMvc2t5bGFiLTEuMC4wLWdudS05LjEuMC9pbnN0YWxsL21vZHVsZWZpbGVz;' export '_ModuleTable001_;' '_ModuleTable002_=L0NvcmUiLCIvd29yazIvMDYxNDYvdGc4NTQ0NTUvZnJvbnRlcmEvc3BhY2stc3RhY2svbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL3N0YWNrIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXItbW9kZWwvbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci91ZnNfd2VhdGhlci1tb2RlbC9tb2R1bGVmaWxlcy91ZnNfaGVyYS5pbnRlbC5sdWEiLCIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZSIsIi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMvTGludXgiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVz;' export '_ModuleTable002_;' '_ModuleTable003_=IiwiL2NvbnRyaWIvc3V0aWxzL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gxL0JNQy9nbXRiL3NvZnR3YXJlL21vZHVsZWZpbGVzL2ludGVsLTE4LjAuNS4yNzQvaW1waS0yMDE4LjAuNCIsfSxbInN5c3RlbUJhc2VNUEFUSCJdPSIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZTovYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL0xpbnV4Oi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMiLH0=;' export '_ModuleTable003_;' '_ModuleTable_Sz_=3;' export '_ModuleTable_Sz_;'
+++ __LMOD_REF_COUNT_MODULEPATH='/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:1;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:1;/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:2;/work2/06146/tg854455/frontera/spack-stack/modulefiles:2;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:1;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:1;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:1;/apps/lmod/lmod/modulefiles/Core:1;/apps/modules/modulefiles/Linux:1;/apps/modules/modulefiles:1;/contrib/sutils/modulefiles:1;/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4:1'
+++ export __LMOD_REF_COUNT_MODULEPATH
+++ MODULEPATH=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:/work2/06146/tg854455/frontera/spack-stack/modulefiles:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:/apps/lmod/lmod/modulefiles/Core:/apps/modules/modulefiles/Linux:/apps/modules/modulefiles:/contrib/sutils/modulefiles:/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4
+++ export MODULEPATH
+++ _ModuleTable001_=X01vZHVsZVRhYmxlXz17WyJNVHZlcnNpb24iXT0zLFsiY19yZWJ1aWxkVGltZSJdPWZhbHNlLFsiY19zaG9ydFRpbWUiXT1mYWxzZSxkZXB0aFQ9e30sZmFtaWx5PXt9LG1UPXt9LG1wYXRoQT17Ii9zY3JhdGNoMi9OQ0VQREVWL2xhbmQvU2FuYXRoLkt1bWFyL1VGU19VVElMU19TSy91dGlsL3NmY19jbGltb19nZW4vLi4vLi4vbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci91ZnNfd2VhdGhlci1tb2RlbC9tb2R1bGVmaWxlcy9oZXJhLmludGVsIiwiL3dvcmsyLzA2MTQ2L3RnODU0NDU1L2Zyb250ZXJhL3NwYWNrLXN0YWNrL3NwYWNrLXN0YWNrLXYxL2VudnMvc2t5bGFiLTEuMC4wLWdudS05LjEuMC9pbnN0YWxsL21vZHVsZWZpbGVz
+++ export _ModuleTable001_
+++ _ModuleTable002_=L0NvcmUiLCIvd29yazIvMDYxNDYvdGc4NTQ0NTUvZnJvbnRlcmEvc3BhY2stc3RhY2svbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL3N0YWNrIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXItbW9kZWwvbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci91ZnNfd2VhdGhlci1tb2RlbC9tb2R1bGVmaWxlcy91ZnNfaGVyYS5pbnRlbC5sdWEiLCIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZSIsIi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMvTGludXgiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVz
+++ export _ModuleTable002_
+++ _ModuleTable003_=IiwiL2NvbnRyaWIvc3V0aWxzL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gxL0JNQy9nbXRiL3NvZnR3YXJlL21vZHVsZWZpbGVzL2ludGVsLTE4LjAuNS4yNzQvaW1waS0yMDE4LjAuNCIsfSxbInN5c3RlbUJhc2VNUEFUSCJdPSIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZTovYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL0xpbnV4Oi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMiLH0=
+++ export _ModuleTable003_
+++ _ModuleTable_Sz_=3
+++ export _ModuleTable_Sz_
+++ : -s sh
++ eval
++ module load build.hera.intel
+++ /apps/lmod/8.5.2/libexec/lmod bash load build.hera.intel
++ eval '__LMOD_REF_COUNT_ACLOCAL_PATH=/apps/cmake/3.16.1/share/aclocal:1;' export '__LMOD_REF_COUNT_ACLOCAL_PATH;' 'ACLOCAL_PATH=/apps/cmake/3.16.1/share/aclocal;' export 'ACLOCAL_PATH;' 'ACL_BOARD_VENDOR_PATH=/opt/Intel/OpenCLFPGA/oneAPI/Boards;' export 'ACL_BOARD_VENDOR_PATH;' 'BACIO_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1/include_4;' export 'BACIO_INC4;' 'BACIO_INC8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1/include_8;' export 'BACIO_INC8;' 'BACIO_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1/lib/libbacio_4.a;' export 'BACIO_LIB4;' 'BACIO_LIB8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1/lib/libbacio_8.a;' export 'BACIO_LIB8;' 'CC=icc;' export 'CC;' '__LMOD_REF_COUNT_CLASSPATH=/apps/oneapi/mpi/2021.5.1/lib/mpi.jar:1;' export '__LMOD_REF_COUNT_CLASSPATH;' 'CLASSPATH=/apps/oneapi/mpi/2021.5.1/lib/mpi.jar;' export 'CLASSPATH;' '__LMOD_REF_COUNT_CMAKE_PREFIX_PATH=/apps/oneapi/compiler/2022.0.2/linux/IntelDPCPP:1\;/apps/cmake/3.16.1:1;' export '__LMOD_REF_COUNT_CMAKE_PREFIX_PATH;' 'CMAKE_PREFIX_PATH=/apps/oneapi/compiler/2022.0.2/linux/IntelDPCPP:/apps/cmake/3.16.1;' export 'CMAKE_PREFIX_PATH;' 'CMPLR_ROOT=/apps/oneapi/compiler/2022.0.2;' export 'CMPLR_ROOT;' '__LMOD_REF_COUNT_CPATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/include:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/include:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/include:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/include:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/include:1\;/apps/oneapi/mpi/2021.5.1/include:1\;/apps/oneapi/mkl/2022.0.2/include:1;' export '__LMOD_REF_COUNT_CPATH;' 'CPATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/include:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/include:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/include:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/include:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/include:/apps/oneapi/mpi/2021.5.1/include:/apps/oneapi/mkl/2022.0.2/include;' export 'CPATH;' 'CXX=icpc;' export 'CXX;' '__LMOD_REF_COUNT_DYLD_LIBRARY_PATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib:1;' export '__LMOD_REF_COUNT_DYLD_LIBRARY_PATH;' 'DYLD_LIBRARY_PATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib;' export 'DYLD_LIBRARY_PATH;' 'ESMFMKFILE=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib/esmf.mk;' export 'ESMFMKFILE;' 'ESMF_BIN=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/bin;' export 'ESMF_BIN;' 'ESMF_DIR=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08;' export 'ESMF_DIR;' 'ESMF_INC=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/include;' export 'ESMF_INC;' 'ESMF_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/include;' export 'ESMF_INCLUDES;' 'ESMF_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib;' export 'ESMF_LIB;' 'ESMF_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib;' export 'ESMF_LIBRARIES;' 'ESMF_MOD=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/mod;' export 'ESMF_MOD;' 'ESMF_PATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08;' export 'ESMF_PATH;' 'ESMF_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08;' export 'ESMF_ROOT;' 'ESMF_VERSION=8.4.0b08;' export 'ESMF_VERSION;' 'FC=ifort;' export 'FC;' 'FI_PROVIDER_PATH=/apps/oneapi/mpi/2021.5.1//libfabric/lib/prov:/usr/lib64/libfabric;' export 'FI_PROVIDER_PATH;' 'FPGA_VARS_ARGS=;' export 'FPGA_VARS_ARGS;' 'FPGA_VARS_DIR=/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga;' export 'FPGA_VARS_DIR;' 'G2_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5/include_4;' export 'G2_INC4;' 'G2_INCd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5/include_d;' export 'G2_INCd;' 'G2_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5/lib64/libg2_4.a;' export 'G2_LIB4;' 'G2_LIBd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5/lib64/libg2_d.a;' export 'G2_LIBd;' 'HDF5_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/include;' export 'HDF5_INCLUDES;' 'HDF5_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib;' export 'HDF5_LIBRARIES;' 'HDF5_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6;' export 'HDF5_ROOT;' 'HDF5_VERSION=1.10.6;' export 'HDF5_VERSION;' 'HPC_OPT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack;' export 'HPC_OPT;' 'INTELFPGAOCLSDKROOT=/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga;' export 'INTELFPGAOCLSDKROOT;' 'IP_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/include_4;' export 'IP_INC4;' 'IP_INC8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/include_8;' export 'IP_INC8;' 'IP_INCd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/include_d;' export 'IP_INCd;' 'IP_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/lib/libip_4.a;' export 'IP_LIB4;' 'IP_LIB8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/lib/libip_8.a;' export 'IP_LIB8;' 'IP_LIBd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/lib/libip_d.a;' export 'IP_LIBd;' 'I_MPI_CC=icc;' export 'I_MPI_CC;' 'I_MPI_F90=ifort;' export 'I_MPI_F90;' 'I_MPI_PIN_RESPECT_CPUSET=off;' export 'I_MPI_PIN_RESPECT_CPUSET;' 'I_MPI_PMI_LIBRARY=/apps/slurm/default/lib/libpmi2.so;' export 'I_MPI_PMI_LIBRARY;' 'I_MPI_ROOT=/apps/oneapi/mpi/2021.5.1;' export 'I_MPI_ROOT;' '__LMOD_REF_COUNT_LD_LIBRARY_PATH=/apps/nco/4.9.1/intel/18.0.5.274/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib:1\;/apps/oneapi/mpi/2021.5.1/libfabric/lib:1\;/apps/oneapi/mpi/2021.5.1/lib/release:1\;/apps/oneapi/mpi/2021.5.1/lib:1\;/apps/oneapi/mkl/2022.0.2/lib/intel64:1\;/apps/oneapi/compiler/2022.0.2/linux/lib:1\;/apps/oneapi/compiler/2022.0.2/linux/lib/x64:1\;/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga/host/linux64/lib:1\;/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin:1\;/apps/slurm/default/lib:1;' export '__LMOD_REF_COUNT_LD_LIBRARY_PATH;' 'LD_LIBRARY_PATH=/apps/nco/4.9.1/intel/18.0.5.274/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib:/apps/oneapi/mpi/2021.5.1/libfabric/lib:/apps/oneapi/mpi/2021.5.1/lib/release:/apps/oneapi/mpi/2021.5.1/lib:/apps/oneapi/mkl/2022.0.2/lib/intel64:/apps/oneapi/compiler/2022.0.2/linux/lib:/apps/oneapi/compiler/2022.0.2/linux/lib/x64:/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga/host/linux64/lib:/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin::/apps/slurm/default/lib;' export 'LD_LIBRARY_PATH;' 'LIBPNG_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib64/libpng.a;' export 'LIBPNG_LIB;' '__LMOD_REF_COUNT_LIBRARY_PATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:1\;/apps/oneapi/mpi/2021.5.1/libfabric/lib:1\;/apps/oneapi/mpi/2021.5.1/lib/release:1\;/apps/oneapi/mpi/2021.5.1/lib:1\;/apps/oneapi/mkl/2022.0.2/lib/intel64:1\;/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin:1\;/apps/oneapi/compiler/2022.0.2/linux/lib:1;' export '__LMOD_REF_COUNT_LIBRARY_PATH;' 'LIBRARY_PATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:/apps/oneapi/mpi/2021.5.1/libfabric/lib:/apps/oneapi/mpi/2021.5.1/lib/release:/apps/oneapi/mpi/2021.5.1/lib:/apps/oneapi/mkl/2022.0.2/lib/intel64:/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin:/apps/oneapi/compiler/2022.0.2/linux/lib;' export 'LIBRARY_PATH;' 'LMOD_FAMILY_COMPILER=intel;' export 'LMOD_FAMILY_COMPILER;' 'LMOD_FAMILY_COMPILER_VERSION=2022.1.2;' export 'LMOD_FAMILY_COMPILER_VERSION;' 'LMOD_FAMILY_METACOMPILER=hpc-intel;' export 'LMOD_FAMILY_METACOMPILER;' 'LMOD_FAMILY_METACOMPILER_VERSION=2022.1.2;' export 'LMOD_FAMILY_METACOMPILER_VERSION;' 'LMOD_FAMILY_MPI=impi;' export 'LMOD_FAMILY_MPI;' 'LMOD_FAMILY_MPI_VERSION=2022.1.2;' export 'LMOD_FAMILY_MPI_VERSION;' '__LMOD_REF_COUNT_LOADEDMODULES=cmake/3.16.1:1\;hpss/hpss:1\;hpc/1.2.0:1\;intel/2022.1.2:1\;hpc-intel/2022.1.2:1\;impi/2022.1.2:1\;hpc-impi/2022.1.2:1\;g2/3.4.5:1\;ip/4.0.0:1\;bacio/2.4.1:1\;nemsio/2.5.4:1\;sp/2.3.3:1\;w3emc/2.9.2:1\;sfcio/1.4.1:1\;sigio/2.3.2:1\;zlib/1.2.11:1\;libpng/1.6.35:1\;hdf5/1.10.6:1\;netcdf/4.7.4:1\;nccmp/1.8.9.0:1\;esmf/8.4.0b08:1\;nco/4.9.1:1\;build.hera.intel:1;' export '__LMOD_REF_COUNT_LOADEDMODULES;' 'LOADEDMODULES=cmake/3.16.1:hpss/hpss:hpc/1.2.0:intel/2022.1.2:hpc-intel/2022.1.2:impi/2022.1.2:hpc-impi/2022.1.2:g2/3.4.5:ip/4.0.0:bacio/2.4.1:nemsio/2.5.4:sp/2.3.3:w3emc/2.9.2:sfcio/1.4.1:sigio/2.3.2:zlib/1.2.11:libpng/1.6.35:hdf5/1.10.6:netcdf/4.7.4:nccmp/1.8.9.0:esmf/8.4.0b08:nco/4.9.1:build.hera.intel;' export 'LOADEDMODULES;' '__LMOD_REF_COUNT_MANPATH=/apps/nco/4.9.1/intel/18.0.5.274/share/man:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/share/man:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0/share/man:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/share/man:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/share/man:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/share/man:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/share/man:1\;/apps/oneapi/mpi/2021.5.1/man:1\;/apps/oneapi/compiler/2022.0.2/documentation/en/man/common:1\;/apps/lmod/lmod/share/man:1\;/apps/local/man:1\;/apps/slurm/default/share/man:1\;/apps/slurm/tools/sbank/share/man:1;' export '__LMOD_REF_COUNT_MANPATH;' 'MANPATH=/apps/nco/4.9.1/intel/18.0.5.274/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/share/man:/apps/oneapi/mpi/2021.5.1/man:/apps/oneapi/compiler/2022.0.2/documentation/en/man/common:/apps/lmod/lmod/share/man:/apps/local/man:/apps/slurm/default/share/man:/apps/slurm/tools/sbank/share/man::;' export 'MANPATH;' 'MKGFSNEMSIOCTL=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin/mkgfsnemsioctl;' export 'MKGFSNEMSIOCTL;' 'MKLROOT=/apps/oneapi/mkl/2022.0.2;' export 'MKLROOT;' '__LMOD_REF_COUNT_MODULEPATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2:1\;/apps/modules/modulefamilies/intel_impi:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2:1\;/apps/modules/modulefamilies/intel:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:2\;/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:1\;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:1\;/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:2\;/work2/06146/tg854455/frontera/spack-stack/modulefiles:2\;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:1\;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:1\;/apps/lmod/lmod/modulefiles/Core:1\;/apps/modules/modulefiles/Linux:1\;/apps/modules/modulefiles:1\;/contrib/sutils/modulefiles:1\;/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4:1;' export '__LMOD_REF_COUNT_MODULEPATH;' 'MODULEPATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2:/apps/modules/modulefamilies/intel_impi:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2:/apps/modules/modulefamilies/intel:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:/work2/06146/tg854455/frontera/spack-stack/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:/apps/lmod/lmod/modulefiles/Core:/apps/modules/modulefiles/Linux:/apps/modules/modulefiles:/contrib/sutils/modulefiles:/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4;' export 'MODULEPATH;' 'MPI_CC=mpiicc;' export 'MPI_CC;' 'MPI_CXX=mpiicpc;' export 'MPI_CXX;' 'MPI_FC=mpiifort;' export 'MPI_FC;' 'NCCMP_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0;' export 'NCCMP_ROOT;' 'NCCMP_VERSION=1.8.9.0;' export 'NCCMP_VERSION;' 'NEMSIO_CHGDATE=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin/nemsio_chgdate;' export 'NEMSIO_CHGDATE;' 'NEMSIO_GET=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin/nemsio_get;' export 'NEMSIO_GET;' 'NEMSIO_INC=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/include;' export 'NEMSIO_INC;' 'NEMSIO_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/lib/libnemsio.a;' export 'NEMSIO_LIB;' 'NEMSIO_READ=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin/nemsio_read;' export 'NEMSIO_READ;' 'NETCDF=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4;' export 'NETCDF;' 'NETCDF_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/include;' export 'NETCDF_INCLUDES;' 'NETCDF_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib;' export 'NETCDF_LIBRARIES;' 'NETCDF_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4;' export 'NETCDF_ROOT;' 'NETCDF_VERSION=4.7.4;' export 'NETCDF_VERSION;' '__LMOD_REF_COUNT_NLSPATH=/apps/oneapi/mkl/2022.0.2/lib/intel64/locale/%l_%t/%N:1\;/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin/locale/%l_%t/%N:1;' export '__LMOD_REF_COUNT_NLSPATH;' 'NLSPATH=/apps/oneapi/mkl/2022.0.2/lib/intel64/locale/%l_%t/%N:/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin/locale/%l_%t/%N;' export 'NLSPATH;' 'NetCDF=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4;' export 'NetCDF;' 'NetCDF_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/include;' export 'NetCDF_INCLUDES;' 'NetCDF_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib;' export 'NetCDF_LIBRARIES;' 'NetCDF_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4;' export 'NetCDF_ROOT;' 'NetCDF_VERSION=4.7.4;' export 'NetCDF_VERSION;' 'OCL_ICD_FILENAMES=libintelocl_emu.so:libalteracl.so:/apps/oneapi/compiler/2022.0.2/linux/lib/x64/libintelocl.so;' export 'OCL_ICD_FILENAMES;' '__LMOD_REF_COUNT_PATH=/apps/nco/4.9.1/intel/18.0.5.274/bin:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/bin:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0/bin:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/bin:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/bin:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin:1\;/apps/oneapi/mpi/2021.5.1/libfabric/bin:1\;/apps/oneapi/mpi/2021.5.1/bin:1\;/apps/oneapi/mkl/2022.0.2/bin/intel64:1\;/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga/bin:1\;/apps/oneapi/compiler/2022.0.2/linux/bin/intel64:1\;/apps/oneapi/compiler/2022.0.2/linux/bin:1\;/apps/hpss:1\;/apps/cmake/3.16.1/bin:1\;/usr/lib64/qt-3.3/bin:1\;/usr/local/bin:1\;/usr/bin:1\;/usr/local/sbin:1\;/usr/sbin:1\;/opt/ibutils/bin:1\;/apps/local/bin:1\;/apps/local/sbin:1\;/apps/slurm/default/tools:1\;/apps/slurm/default/bin:1\;/apps/slurm/default/sbin:1\;/apps/slurm/tools/sbank/bin:1\;/home/Sanath.Kumar/.local/bin:1\;/home/Sanath.Kumar/bin:1;' export '__LMOD_REF_COUNT_PATH;' 'PATH=/apps/nco/4.9.1/intel/18.0.5.274/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin:/apps/oneapi/mpi/2021.5.1/libfabric/bin:/apps/oneapi/mpi/2021.5.1/bin:/apps/oneapi/mkl/2022.0.2/bin/intel64:/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga/bin:/apps/oneapi/compiler/2022.0.2/linux/bin/intel64:/apps/oneapi/compiler/2022.0.2/linux/bin:/apps/hpss:/apps/cmake/3.16.1/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ibutils/bin:/apps/local/bin:/apps/local/sbin:/apps/slurm/default/tools:/apps/slurm/default/bin:/apps/slurm/default/sbin:/apps/slurm/tools/sbank/bin:/home/Sanath.Kumar/.local/bin:/home/Sanath.Kumar/bin;' export 'PATH;' 'PKG_CONFIG_PATH=/apps/oneapi/mpi/2021.5.1/lib/pkgconfig;' export 'PKG_CONFIG_PATH;' 'PNG_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/include;' export 'PNG_INCLUDES;' 'PNG_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib;' export 'PNG_LIBRARIES;' 'PNG_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35;' export 'PNG_ROOT;' 'PNG_VERSION=1.6.35;' export 'PNG_VERSION;' 'SERIAL_CC=icc;' export 'SERIAL_CC;' 'SERIAL_CXX=icpc;' export 'SERIAL_CXX;' 'SERIAL_FC=ifort;' export 'SERIAL_FC;' 'SFCIO_INC=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sfcio/1.4.1/include;' export 'SFCIO_INC;' 'SFCIO_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sfcio/1.4.1/lib/libsfcio.a;' export 'SFCIO_LIB;' 'SIGIO_INC=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2/include;' export 'SIGIO_INC;' 'SIGIO_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2/include;' export 'SIGIO_INC4;' 'SIGIO_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2/lib/libsigio.a;' export 'SIGIO_LIB;' 'SIGIO_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2/lib/libsigio.a;' export 'SIGIO_LIB4;' 'SP_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/include_4;' export 'SP_INC4;' 'SP_INC8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/include_8;' export 'SP_INC8;' 'SP_INCd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/include_d;' export 'SP_INCd;' 'SP_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/lib/libsp_4.a;' export 'SP_LIB4;' 'SP_LIB8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/lib/libsp_8.a;' export 'SP_LIB8;' 'SP_LIBd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/lib/libsp_d.a;' export 'SP_LIBd;' 'W3EMC_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/include_4;' export 'W3EMC_INC4;' 'W3EMC_INC8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/include_8;' export 'W3EMC_INC8;' 'W3EMC_INCd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/include_d;' export 'W3EMC_INCd;' 'W3EMC_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/lib64/libw3emc_4.a;' export 'W3EMC_LIB4;' 'W3EMC_LIB8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/lib64/libw3emc_8.a;' export 'W3EMC_LIB8;' 'W3EMC_LIBd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/lib64/libw3emc_d.a;' export 'W3EMC_LIBd;' 'ZLIB_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/include;' export 'ZLIB_INCLUDES;' 'ZLIB_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib/libz.a;' export 'ZLIB_LIB;' 'ZLIB_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib;' export 'ZLIB_LIBRARIES;' 'ZLIB_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11;' export 'ZLIB_ROOT;' 'ZLIB_VERSION=1.2.11;' export 'ZLIB_VERSION;' '__LMOD_REF_COUNT__LMFILES_=/apps/modules/modulefiles/cmake/3.16.1:1\;/apps/modules/modulefiles/hpss/hpss:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack/hpc/1.2.0.lua:1\;/apps/modules/modulefiles/intel/2022.1.2:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core/hpc-intel/2022.1.2.lua:1\;/apps/modules/modulefamilies/intel/impi/2022.1.2:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/hpc-impi/2022.1.2.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/g2/3.4.5.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/ip/4.0.0.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/bacio/2.4.1.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/nemsio/2.5.4.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sp/2.3.3.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/w3emc/2.9.2.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sfcio/1.4.1.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sigio/2.3.2.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/zlib/1.2.11.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/libpng/1.6.35.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/hdf5/1.10.6.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/netcdf/4.7.4.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/nccmp/1.8.9.0.lua:1\;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/esmf/8.4.0b08.lua:1\;/apps/modules/modulefamilies/intel/nco/4.9.1:1\;/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles/build.hera.intel.lua:1;' export '__LMOD_REF_COUNT__LMFILES_;' '_LMFILES_=/apps/modules/modulefiles/cmake/3.16.1:/apps/modules/modulefiles/hpss/hpss:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack/hpc/1.2.0.lua:/apps/modules/modulefiles/intel/2022.1.2:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core/hpc-intel/2022.1.2.lua:/apps/modules/modulefamilies/intel/impi/2022.1.2:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/hpc-impi/2022.1.2.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/g2/3.4.5.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/ip/4.0.0.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/bacio/2.4.1.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/nemsio/2.5.4.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sp/2.3.3.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/w3emc/2.9.2.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sfcio/1.4.1.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sigio/2.3.2.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/zlib/1.2.11.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/libpng/1.6.35.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/hdf5/1.10.6.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/netcdf/4.7.4.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/nccmp/1.8.9.0.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/esmf/8.4.0b08.lua:/apps/modules/modulefamilies/intel/nco/4.9.1:/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles/build.hera.intel.lua;' export '_LMFILES_;' '_ModuleTable001_=X01vZHVsZVRhYmxlXz17WyJNVHZlcnNpb24iXT0zLFsiY19yZWJ1aWxkVGltZSJdPWZhbHNlLFsiY19zaG9ydFRpbWUiXT1mYWxzZSxkZXB0aFQ9e30sZmFtaWx5PXtbIk1ldGFDb21waWxlciJdPSJocGMtaW50ZWwiLFsiY29tcGlsZXIiXT0iaW50ZWwiLFsibXBpIl09ImltcGkiLH0sbVQ9e2JhY2lvPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvYmFjaW8vMi40LjEubHVhIixbImZ1bGxOYW1lIl09ImJhY2lvLzIuNC4xIixbImxvYWRPcmRlciJdPTEwLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTIsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1l;' export '_ModuleTable001_;' '_ModuleTable002_=Il09ImJhY2lvIixbIndWIl09Il4wMDAwMDAwMi4wMDAwMDAwMDQuMDAwMDAwMDAxLip6ZmluYWwiLH0sWyJidWlsZC5oZXJhLmludGVsIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvVUZTX1VUSUxTX1NLL3V0aWwvc2ZjX2NsaW1vX2dlbi8uLi8uLi9tb2R1bGVmaWxlcy9idWlsZC5oZXJhLmludGVsLmx1YSIsWyJmdWxsTmFtZSJdPSJidWlsZC5oZXJhLmludGVsIixbImxvYWRPcmRlciJdPTIzLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTAsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImJ1aWxkLmhlcmEuaW50ZWwiLFsid1YiXT0iTS4qemZpbmFsIix9LGNtYWtlPXtbImZuIl09Ii9hcHBzL21vZHVsZXMvbW9kdWxlZmls;' export '_ModuleTable002_;' '_ModuleTable003_=ZXMvY21ha2UvMy4xNi4xIixbImZ1bGxOYW1lIl09ImNtYWtlLzMuMTYuMSIsWyJsb2FkT3JkZXIiXT0xLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImNtYWtlLzMuMTYuMSIsWyJ3ViJdPSIwMDAwMDAwMDMuMDAwMDAwMDE2LjAwMDAwMDAwMS4qemZpbmFsIix9LGVzbWY9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9lc21mLzguNC4wYjA4Lmx1YSIsWyJmdWxsTmFtZSJdPSJlc21mLzguNC4wYjA4IixbImxvYWRPcmRlciJdPTIxLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEs;' export '_ModuleTable003_;' '_ModuleTable004_=WyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImVzbWYvOC40LjBiMDgiLFsid1YiXT0iXjAwMDAwMDA4LjAwMDAwMDAwNC4qYi4wMDAwMDAwMDguKnpmaW5hbCIsfSxnMj17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2cyLzMuNC41Lmx1YSIsWyJmdWxsTmFtZSJdPSJnMi8zLjQuNSIsWyJsb2FkT3JkZXIiXT04LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImcyLzMuNC41IixbIndWIl09Il4wMDAwMDAwMy4wMDAwMDAwMDQuMDAwMDAwMDA1Lip6ZmluYWwiLH0saGRmNT17WyJmbiJd;' export '_ModuleTable004_;' '_ModuleTable005_=PSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL21waS9pbnRlbC8yMDIyLjEuMi9pbXBpLzIwMjIuMS4yL2hkZjUvMS4xMC42Lmx1YSIsWyJmdWxsTmFtZSJdPSJoZGY1LzEuMTAuNiIsWyJsb2FkT3JkZXIiXT0xOCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0yLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJoZGY1LzEuMTAuNiIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDEwLjAwMDAwMDAwNi4qemZpbmFsIix9LGhwYz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL3N0YWNrL2hwYy8xLjIuMC5sdWEiLFsiZnVsbE5h;' export '_ModuleTable005_;' '_ModuleTable006_=bWUiXT0iaHBjLzEuMi4wIixbImxvYWRPcmRlciJdPTMscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaHBjLzEuMi4wIixbIndWIl09IjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsfSxbImhwYy1pbXBpIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi9ocGMtaW1waS8yMDIyLjEuMi5sdWEiLFsiZnVsbE5hbWUiXT0iaHBjLWltcGkvMjAyMi4xLjIiLFsibG9hZE9yZGVyIl09Nyxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJo;' export '_ModuleTable006_;' '_ModuleTable007_=cGMtaW1waS8yMDIyLjEuMiIsWyJ3ViJdPSIwMDAwMDIwMjIuMDAwMDAwMDAxLjAwMDAwMDAwMi4qemZpbmFsIix9LFsiaHBjLWludGVsIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb3JlL2hwYy1pbnRlbC8yMDIyLjEuMi5sdWEiLFsiZnVsbE5hbWUiXT0iaHBjLWludGVsLzIwMjIuMS4yIixbImxvYWRPcmRlciJdPTUscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaHBjLWludGVsLzIwMjIuMS4yIixbIndWIl09IjAwMDAwMjAyMi4wMDAwMDAwMDEuMDAwMDAwMDAyLip6ZmluYWwiLH0saHBzcz17WyJmbiJdPSIvYXBwcy9tb2R1;' export '_ModuleTable007_;' '_ModuleTable008_=bGVzL21vZHVsZWZpbGVzL2hwc3MvaHBzcyIsWyJmdWxsTmFtZSJdPSJocHNzL2hwc3MiLFsibG9hZE9yZGVyIl09Mixwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJocHNzIixbIndWIl09Il5ocHNzLip6ZmluYWwiLH0saW1waT17WyJmbiJdPSIvYXBwcy9tb2R1bGVzL21vZHVsZWZhbWlsaWVzL2ludGVsL2ltcGkvMjAyMi4xLjIiLFsiZnVsbE5hbWUiXT0iaW1waS8yMDIyLjEuMiIsWyJsb2FkT3JkZXIiXT02LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTIsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImltcGkvMjAyMi4xLjIiLFsid1YiXT0iMDAwMDAyMDIyLjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpm;' export '_ModuleTable008_;' '_ModuleTable009_=aW5hbCIsfSxpbnRlbD17WyJmbiJdPSIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL2ludGVsLzIwMjIuMS4yIixbImZ1bGxOYW1lIl09ImludGVsLzIwMjIuMS4yIixbImxvYWRPcmRlciJdPTQscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MixbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaW50ZWwvMjAyMi4xLjIiLFsid1YiXT0iMDAwMDAyMDIyLjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsfSxpcD17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2lwLzQuMC4wLmx1YSIsWyJmdWxsTmFtZSJdPSJpcC80LjAuMCIsWyJsb2FkT3JkZXIi;' export '_ModuleTable009_;' '_ModuleTable010_=XT05LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImlwLzQuMC4wIixbIndWIl09Il4wMDAwMDAwNC4qemZpbmFsIix9LGxpYnBuZz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2xpYnBuZy8xLjYuMzUubHVhIixbImZ1bGxOYW1lIl09ImxpYnBuZy8xLjYuMzUiLFsibG9hZE9yZGVyIl09MTcscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0ibGlicG5nLzEuNi4zNSIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDA2LjAwMDAwMDAzNS4q;' export '_ModuleTable010_;' '_ModuleTable011_=emZpbmFsIix9LG5jY21wPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvbmNjbXAvMS44LjkuMC5sdWEiLFsiZnVsbE5hbWUiXT0ibmNjbXAvMS44LjkuMCIsWyJsb2FkT3JkZXIiXT0yMCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuY2NtcC8xLjguOS4wIixbIndWIl09Il4wMDAwMDAwMS4wMDAwMDAwMDguMDAwMDAwMDA5Lip6ZmluYWwiLH0sbmNvPXtbImZuIl09Ii9hcHBzL21vZHVsZXMvbW9kdWxlZmFtaWxpZXMvaW50ZWwvbmNvLzQuOS4xIixbImZ1bGxOYW1lIl09Im5jby80LjkuMSIs;' export '_ModuleTable011_;' '_ModuleTable012_=WyJsb2FkT3JkZXIiXT0yMixwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuY28vNC45LjEiLFsid1YiXT0iMDAwMDAwMDA0LjAwMDAwMDAwOS4wMDAwMDAwMDEuKnpmaW5hbCIsfSxuZW1zaW89e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9uZW1zaW8vMi41LjQubHVhIixbImZ1bGxOYW1lIl09Im5lbXNpby8yLjUuNCIsWyJsb2FkT3JkZXIiXT0xMSxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuZW1zaW8vMi41LjQi;' export '_ModuleTable012_;' '_ModuleTable013_=LFsid1YiXT0iXjAwMDAwMDAyLjAwMDAwMDAwNS4wMDAwMDAwMDQuKnpmaW5hbCIsfSxuZXRjZGY9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9uZXRjZGYvNC43LjQubHVhIixbImZ1bGxOYW1lIl09Im5ldGNkZi80LjcuNCIsWyJsb2FkT3JkZXIiXT0xOSxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuZXRjZGYvNC43LjQiLFsid1YiXT0iXjAwMDAwMDA0LjAwMDAwMDAwNy4wMDAwMDAwMDQuKnpmaW5hbCIsfSxzZmNpbz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3By;' export '_ModuleTable013_;' '_ModuleTable014_=b2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL3NmY2lvLzEuNC4xLmx1YSIsWyJmdWxsTmFtZSJdPSJzZmNpby8xLjQuMSIsWyJsb2FkT3JkZXIiXT0xNCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJzZmNpby8xLjQuMSIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDA0LjAwMDAwMDAwMS4qemZpbmFsIix9LHNpZ2lvPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvc2lnaW8vMi4zLjIubHVhIixbImZ1bGxOYW1lIl09InNpZ2lv;' export '_ModuleTable014_;' '_ModuleTable015_=LzIuMy4yIixbImxvYWRPcmRlciJdPTE1LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09InNpZ2lvLzIuMy4yIixbIndWIl09Il4wMDAwMDAwMi4wMDAwMDAwMDMuMDAwMDAwMDAyLip6ZmluYWwiLH0sc3A9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi9zcC8yLjMuMy5sdWEiLFsiZnVsbE5hbWUiXT0ic3AvMi4zLjMiLFsibG9hZE9yZGVyIl09MTIscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0ic3AvMi4zLjMiLFsid1YiXT0iXjAwMDAw;' export '_ModuleTable015_;' '_ModuleTable016_=MDAyLjAwMDAwMDAwMy4wMDAwMDAwMDMuKnpmaW5hbCIsfSx3M2VtYz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL3czZW1jLzIuOS4yLmx1YSIsWyJmdWxsTmFtZSJdPSJ3M2VtYy8yLjkuMiIsWyJsb2FkT3JkZXIiXT0xMyxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJ3M2VtYy8yLjkuMiIsWyJ3ViJdPSJeMDAwMDAwMDIuMDAwMDAwMDA5LjAwMDAwMDAwMi4qemZpbmFsIix9LHpsaWI9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9t;' export '_ModuleTable016_;' '_ModuleTable017_=b2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi96bGliLzEuMi4xMS5sdWEiLFsiZnVsbE5hbWUiXT0iemxpYi8xLjIuMTEiLFsibG9hZE9yZGVyIl09MTYscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iemxpYi8xLjIuMTEiLFsid1YiXT0iXjAwMDAwMDAxLjAwMDAwMDAwMi4wMDAwMDAwMTEuKnpmaW5hbCIsfSx9LG1wYXRoQT17Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvbXBpL2ludGVsLzIwMjIuMS4yL2ltcGkvMjAyMi4xLjIiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZhbWlsaWVzL2ludGVsX2ltcGkiLCIvc2NyYXRjaDIvTkNFUERF;' export '_ModuleTable017_;' '_ModuleTable018_=Vi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yIiwiL2FwcHMvbW9kdWxlcy9tb2R1bGVmYW1pbGllcy9pbnRlbCIsIi9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29yZSIsIi9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvc3RhY2siLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci9VRlNfVVRJTFNfU0svdXRpbC9zZmNfY2xpbW9fZ2VuLy4uLy4uL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXIt;' export '_ModuleTable018_;' '_ModuleTable019_=bW9kZWwvbW9kdWxlZmlsZXMvaGVyYS5pbnRlbCIsIi93b3JrMi8wNjE0Ni90Zzg1NDQ1NS9mcm9udGVyYS9zcGFjay1zdGFjay9zcGFjay1zdGFjay12MS9lbnZzL3NreWxhYi0xLjAuMC1nbnUtOS4xLjAvaW5zdGFsbC9tb2R1bGVmaWxlcy9Db3JlIiwiL3dvcmsyLzA2MTQ2L3RnODU0NDU1L2Zyb250ZXJhL3NwYWNrLXN0YWNrL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXItbW9kZWwvbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci91ZnNfd2VhdGhlci1tb2RlbC9tb2R1bGVmaWxlcy91ZnNfaGVyYS5pbnRlbC5sdWEiLCIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMv;' export '_ModuleTable019_;' '_ModuleTable020_=Q29yZSIsIi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMvTGludXgiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzIiwiL2NvbnRyaWIvc3V0aWxzL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gxL0JNQy9nbXRiL3NvZnR3YXJlL21vZHVsZWZpbGVzL2ludGVsLTE4LjAuNS4yNzQvaW1waS0yMDE4LjAuNCIsfSxbInN5c3RlbUJhc2VNUEFUSCJdPSIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZTovYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL0xpbnV4Oi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMiLH0=;' export '_ModuleTable020_;' '_ModuleTable_Sz_=20;' export '_ModuleTable_Sz_;' 'bacio_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1;' export 'bacio_ROOT;' 'bacio_VERSION=2.4.1;' export 'bacio_VERSION;' 'g2_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5;' export 'g2_ROOT;' 'g2_VERSION=3.4.5;' export 'g2_VERSION;' alias 'htar=htar\' '-T\' '4;' 'ip_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0;' export 'ip_ROOT;' 'ip_VERSION=4.0.0;' export 'ip_VERSION;' 'nemsio_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4;' export 'nemsio_ROOT;' 'nemsio_VERSION=2.5.4;' export 'nemsio_VERSION;' 'sfcio_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sfcio/1.4.1;' export 'sfcio_ROOT;' 'sfcio_VERSION=1.4.1;' export 'sfcio_VERSION;' 'sigio_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2;' export 'sigio_ROOT;' 'sigio_VERSION=2.3.2;' export 'sigio_VERSION;' 'sp_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3;' export 'sp_ROOT;' 'sp_VERSION=2.3.3;' export 'sp_VERSION;' 'w3emc_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2;' export 'w3emc_ROOT;' 'w3emc_VERSION=2.9.2;' export 'w3emc_VERSION;'
+++ __LMOD_REF_COUNT_ACLOCAL_PATH=/apps/cmake/3.16.1/share/aclocal:1
+++ export __LMOD_REF_COUNT_ACLOCAL_PATH
+++ ACLOCAL_PATH=/apps/cmake/3.16.1/share/aclocal
+++ export ACLOCAL_PATH
+++ ACL_BOARD_VENDOR_PATH=/opt/Intel/OpenCLFPGA/oneAPI/Boards
+++ export ACL_BOARD_VENDOR_PATH
+++ BACIO_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1/include_4
+++ export BACIO_INC4
+++ BACIO_INC8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1/include_8
+++ export BACIO_INC8
+++ BACIO_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1/lib/libbacio_4.a
+++ export BACIO_LIB4
+++ BACIO_LIB8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1/lib/libbacio_8.a
+++ export BACIO_LIB8
+++ CC=icc
+++ export CC
+++ __LMOD_REF_COUNT_CLASSPATH=/apps/oneapi/mpi/2021.5.1/lib/mpi.jar:1
+++ export __LMOD_REF_COUNT_CLASSPATH
+++ CLASSPATH=/apps/oneapi/mpi/2021.5.1/lib/mpi.jar
+++ export CLASSPATH
+++ __LMOD_REF_COUNT_CMAKE_PREFIX_PATH='/apps/oneapi/compiler/2022.0.2/linux/IntelDPCPP:1;/apps/cmake/3.16.1:1'
+++ export __LMOD_REF_COUNT_CMAKE_PREFIX_PATH
+++ CMAKE_PREFIX_PATH=/apps/oneapi/compiler/2022.0.2/linux/IntelDPCPP:/apps/cmake/3.16.1
+++ export CMAKE_PREFIX_PATH
+++ CMPLR_ROOT=/apps/oneapi/compiler/2022.0.2
+++ export CMPLR_ROOT
+++ __LMOD_REF_COUNT_CPATH='/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/include:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/include:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/include:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/include:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/include:1;/apps/oneapi/mpi/2021.5.1/include:1;/apps/oneapi/mkl/2022.0.2/include:1'
+++ export __LMOD_REF_COUNT_CPATH
+++ CPATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/include:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/include:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/include:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/include:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/include:/apps/oneapi/mpi/2021.5.1/include:/apps/oneapi/mkl/2022.0.2/include
+++ export CPATH
+++ CXX=icpc
+++ export CXX
+++ __LMOD_REF_COUNT_DYLD_LIBRARY_PATH='/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib:1'
+++ export __LMOD_REF_COUNT_DYLD_LIBRARY_PATH
+++ DYLD_LIBRARY_PATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib
+++ export DYLD_LIBRARY_PATH
+++ ESMFMKFILE=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib/esmf.mk
+++ export ESMFMKFILE
+++ ESMF_BIN=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/bin
+++ export ESMF_BIN
+++ ESMF_DIR=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08
+++ export ESMF_DIR
+++ ESMF_INC=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/include
+++ export ESMF_INC
+++ ESMF_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/include
+++ export ESMF_INCLUDES
+++ ESMF_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib
+++ export ESMF_LIB
+++ ESMF_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib
+++ export ESMF_LIBRARIES
+++ ESMF_MOD=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/mod
+++ export ESMF_MOD
+++ ESMF_PATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08
+++ export ESMF_PATH
+++ ESMF_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08
+++ export ESMF_ROOT
+++ ESMF_VERSION=8.4.0b08
+++ export ESMF_VERSION
+++ FC=ifort
+++ export FC
+++ FI_PROVIDER_PATH=/apps/oneapi/mpi/2021.5.1//libfabric/lib/prov:/usr/lib64/libfabric
+++ export FI_PROVIDER_PATH
+++ FPGA_VARS_ARGS=
+++ export FPGA_VARS_ARGS
+++ FPGA_VARS_DIR=/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga
+++ export FPGA_VARS_DIR
+++ G2_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5/include_4
+++ export G2_INC4
+++ G2_INCd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5/include_d
+++ export G2_INCd
+++ G2_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5/lib64/libg2_4.a
+++ export G2_LIB4
+++ G2_LIBd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5/lib64/libg2_d.a
+++ export G2_LIBd
+++ HDF5_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/include
+++ export HDF5_INCLUDES
+++ HDF5_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib
+++ export HDF5_LIBRARIES
+++ HDF5_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6
+++ export HDF5_ROOT
+++ HDF5_VERSION=1.10.6
+++ export HDF5_VERSION
+++ HPC_OPT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack
+++ export HPC_OPT
+++ INTELFPGAOCLSDKROOT=/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga
+++ export INTELFPGAOCLSDKROOT
+++ IP_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/include_4
+++ export IP_INC4
+++ IP_INC8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/include_8
+++ export IP_INC8
+++ IP_INCd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/include_d
+++ export IP_INCd
+++ IP_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/lib/libip_4.a
+++ export IP_LIB4
+++ IP_LIB8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/lib/libip_8.a
+++ export IP_LIB8
+++ IP_LIBd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0/lib/libip_d.a
+++ export IP_LIBd
+++ I_MPI_CC=icc
+++ export I_MPI_CC
+++ I_MPI_F90=ifort
+++ export I_MPI_F90
+++ I_MPI_PIN_RESPECT_CPUSET=off
+++ export I_MPI_PIN_RESPECT_CPUSET
+++ I_MPI_PMI_LIBRARY=/apps/slurm/default/lib/libpmi2.so
+++ export I_MPI_PMI_LIBRARY
+++ I_MPI_ROOT=/apps/oneapi/mpi/2021.5.1
+++ export I_MPI_ROOT
+++ __LMOD_REF_COUNT_LD_LIBRARY_PATH='/apps/nco/4.9.1/intel/18.0.5.274/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib:1;/apps/oneapi/mpi/2021.5.1/libfabric/lib:1;/apps/oneapi/mpi/2021.5.1/lib/release:1;/apps/oneapi/mpi/2021.5.1/lib:1;/apps/oneapi/mkl/2022.0.2/lib/intel64:1;/apps/oneapi/compiler/2022.0.2/linux/lib:1;/apps/oneapi/compiler/2022.0.2/linux/lib/x64:1;/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga/host/linux64/lib:1;/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin:1;/apps/slurm/default/lib:1'
+++ export __LMOD_REF_COUNT_LD_LIBRARY_PATH
+++ LD_LIBRARY_PATH=/apps/nco/4.9.1/intel/18.0.5.274/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib:/apps/oneapi/mpi/2021.5.1/libfabric/lib:/apps/oneapi/mpi/2021.5.1/lib/release:/apps/oneapi/mpi/2021.5.1/lib:/apps/oneapi/mkl/2022.0.2/lib/intel64:/apps/oneapi/compiler/2022.0.2/linux/lib:/apps/oneapi/compiler/2022.0.2/linux/lib/x64:/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga/host/linux64/lib:/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin::/apps/slurm/default/lib
+++ export LD_LIBRARY_PATH
+++ LIBPNG_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib64/libpng.a
+++ export LIBPNG_LIB
+++ __LMOD_REF_COUNT_LIBRARY_PATH='/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:1;/apps/oneapi/mpi/2021.5.1/libfabric/lib:1;/apps/oneapi/mpi/2021.5.1/lib/release:1;/apps/oneapi/mpi/2021.5.1/lib:1;/apps/oneapi/mkl/2022.0.2/lib/intel64:1;/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin:1;/apps/oneapi/compiler/2022.0.2/linux/lib:1'
+++ export __LMOD_REF_COUNT_LIBRARY_PATH
+++ LIBRARY_PATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/lib:/apps/oneapi/mpi/2021.5.1/libfabric/lib:/apps/oneapi/mpi/2021.5.1/lib/release:/apps/oneapi/mpi/2021.5.1/lib:/apps/oneapi/mkl/2022.0.2/lib/intel64:/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin:/apps/oneapi/compiler/2022.0.2/linux/lib
+++ export LIBRARY_PATH
+++ LMOD_FAMILY_COMPILER=intel
+++ export LMOD_FAMILY_COMPILER
+++ LMOD_FAMILY_COMPILER_VERSION=2022.1.2
+++ export LMOD_FAMILY_COMPILER_VERSION
+++ LMOD_FAMILY_METACOMPILER=hpc-intel
+++ export LMOD_FAMILY_METACOMPILER
+++ LMOD_FAMILY_METACOMPILER_VERSION=2022.1.2
+++ export LMOD_FAMILY_METACOMPILER_VERSION
+++ LMOD_FAMILY_MPI=impi
+++ export LMOD_FAMILY_MPI
+++ LMOD_FAMILY_MPI_VERSION=2022.1.2
+++ export LMOD_FAMILY_MPI_VERSION
+++ __LMOD_REF_COUNT_LOADEDMODULES='cmake/3.16.1:1;hpss/hpss:1;hpc/1.2.0:1;intel/2022.1.2:1;hpc-intel/2022.1.2:1;impi/2022.1.2:1;hpc-impi/2022.1.2:1;g2/3.4.5:1;ip/4.0.0:1;bacio/2.4.1:1;nemsio/2.5.4:1;sp/2.3.3:1;w3emc/2.9.2:1;sfcio/1.4.1:1;sigio/2.3.2:1;zlib/1.2.11:1;libpng/1.6.35:1;hdf5/1.10.6:1;netcdf/4.7.4:1;nccmp/1.8.9.0:1;esmf/8.4.0b08:1;nco/4.9.1:1;build.hera.intel:1'
+++ export __LMOD_REF_COUNT_LOADEDMODULES
+++ LOADEDMODULES=cmake/3.16.1:hpss/hpss:hpc/1.2.0:intel/2022.1.2:hpc-intel/2022.1.2:impi/2022.1.2:hpc-impi/2022.1.2:g2/3.4.5:ip/4.0.0:bacio/2.4.1:nemsio/2.5.4:sp/2.3.3:w3emc/2.9.2:sfcio/1.4.1:sigio/2.3.2:zlib/1.2.11:libpng/1.6.35:hdf5/1.10.6:netcdf/4.7.4:nccmp/1.8.9.0:esmf/8.4.0b08:nco/4.9.1:build.hera.intel
+++ export LOADEDMODULES
+++ __LMOD_REF_COUNT_MANPATH='/apps/nco/4.9.1/intel/18.0.5.274/share/man:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/share/man:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0/share/man:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/share/man:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/share/man:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/share/man:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/share/man:1;/apps/oneapi/mpi/2021.5.1/man:1;/apps/oneapi/compiler/2022.0.2/documentation/en/man/common:1;/apps/lmod/lmod/share/man:1;/apps/local/man:1;/apps/slurm/default/share/man:1;/apps/slurm/tools/sbank/share/man:1'
+++ export __LMOD_REF_COUNT_MANPATH
+++ MANPATH=/apps/nco/4.9.1/intel/18.0.5.274/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/share/man:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/share/man:/apps/oneapi/mpi/2021.5.1/man:/apps/oneapi/compiler/2022.0.2/documentation/en/man/common:/apps/lmod/lmod/share/man:/apps/local/man:/apps/slurm/default/share/man:/apps/slurm/tools/sbank/share/man::
+++ export MANPATH
+++ MKGFSNEMSIOCTL=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin/mkgfsnemsioctl
+++ export MKGFSNEMSIOCTL
+++ MKLROOT=/apps/oneapi/mkl/2022.0.2
+++ export MKLROOT
+++ __LMOD_REF_COUNT_MODULEPATH='/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2:1;/apps/modules/modulefamilies/intel_impi:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2:1;/apps/modules/modulefamilies/intel:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:2;/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:1;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:1;/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:2;/work2/06146/tg854455/frontera/spack-stack/modulefiles:2;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:1;/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:1;/apps/lmod/lmod/modulefiles/Core:1;/apps/modules/modulefiles/Linux:1;/apps/modules/modulefiles:1;/contrib/sutils/modulefiles:1;/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4:1'
+++ export __LMOD_REF_COUNT_MODULEPATH
+++ MODULEPATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2:/apps/modules/modulefamilies/intel_impi:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2:/apps/modules/modulefamilies/intel:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:/work2/06146/tg854455/frontera/spack-stack/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:/apps/lmod/lmod/modulefiles/Core:/apps/modules/modulefiles/Linux:/apps/modules/modulefiles:/contrib/sutils/modulefiles:/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4
+++ export MODULEPATH
+++ MPI_CC=mpiicc
+++ export MPI_CC
+++ MPI_CXX=mpiicpc
+++ export MPI_CXX
+++ MPI_FC=mpiifort
+++ export MPI_FC
+++ NCCMP_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0
+++ export NCCMP_ROOT
+++ NCCMP_VERSION=1.8.9.0
+++ export NCCMP_VERSION
+++ NEMSIO_CHGDATE=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin/nemsio_chgdate
+++ export NEMSIO_CHGDATE
+++ NEMSIO_GET=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin/nemsio_get
+++ export NEMSIO_GET
+++ NEMSIO_INC=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/include
+++ export NEMSIO_INC
+++ NEMSIO_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/lib/libnemsio.a
+++ export NEMSIO_LIB
+++ NEMSIO_READ=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin/nemsio_read
+++ export NEMSIO_READ
+++ NETCDF=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4
+++ export NETCDF
+++ NETCDF_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/include
+++ export NETCDF_INCLUDES
+++ NETCDF_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib
+++ export NETCDF_LIBRARIES
+++ NETCDF_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4
+++ export NETCDF_ROOT
+++ NETCDF_VERSION=4.7.4
+++ export NETCDF_VERSION
+++ __LMOD_REF_COUNT_NLSPATH='/apps/oneapi/mkl/2022.0.2/lib/intel64/locale/%l_%t/%N:1;/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin/locale/%l_%t/%N:1'
+++ export __LMOD_REF_COUNT_NLSPATH
+++ NLSPATH=/apps/oneapi/mkl/2022.0.2/lib/intel64/locale/%l_%t/%N:/apps/oneapi/compiler/2022.0.2/linux/compiler/lib/intel64_lin/locale/%l_%t/%N
+++ export NLSPATH
+++ NetCDF=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4
+++ export NetCDF
+++ NetCDF_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/include
+++ export NetCDF_INCLUDES
+++ NetCDF_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/lib
+++ export NetCDF_LIBRARIES
+++ NetCDF_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4
+++ export NetCDF_ROOT
+++ NetCDF_VERSION=4.7.4
+++ export NetCDF_VERSION
+++ OCL_ICD_FILENAMES=libintelocl_emu.so:libalteracl.so:/apps/oneapi/compiler/2022.0.2/linux/lib/x64/libintelocl.so
+++ export OCL_ICD_FILENAMES
+++ __LMOD_REF_COUNT_PATH='/apps/nco/4.9.1/intel/18.0.5.274/bin:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/bin:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0/bin:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/bin:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/bin:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin:1;/apps/oneapi/mpi/2021.5.1/libfabric/bin:1;/apps/oneapi/mpi/2021.5.1/bin:1;/apps/oneapi/mkl/2022.0.2/bin/intel64:1;/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga/bin:1;/apps/oneapi/compiler/2022.0.2/linux/bin/intel64:1;/apps/oneapi/compiler/2022.0.2/linux/bin:1;/apps/hpss:1;/apps/cmake/3.16.1/bin:1;/usr/lib64/qt-3.3/bin:1;/usr/local/bin:1;/usr/bin:1;/usr/local/sbin:1;/usr/sbin:1;/opt/ibutils/bin:1;/apps/local/bin:1;/apps/local/sbin:1;/apps/slurm/default/tools:1;/apps/slurm/default/bin:1;/apps/slurm/default/sbin:1;/apps/slurm/tools/sbank/bin:1;/home/Sanath.Kumar/.local/bin:1;/home/Sanath.Kumar/bin:1'
+++ export __LMOD_REF_COUNT_PATH
+++ PATH=/apps/nco/4.9.1/intel/18.0.5.274/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/esmf/8.4.0b08/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/nccmp/1.8.9.0/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/netcdf/4.7.4/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/hdf5/1.10.6/bin:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4/bin:/apps/oneapi/mpi/2021.5.1/libfabric/bin:/apps/oneapi/mpi/2021.5.1/bin:/apps/oneapi/mkl/2022.0.2/bin/intel64:/apps/oneapi/compiler/2022.0.2/linux/lib/oclfpga/bin:/apps/oneapi/compiler/2022.0.2/linux/bin/intel64:/apps/oneapi/compiler/2022.0.2/linux/bin:/apps/hpss:/apps/cmake/3.16.1/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/opt/ibutils/bin:/apps/local/bin:/apps/local/sbin:/apps/slurm/default/tools:/apps/slurm/default/bin:/apps/slurm/default/sbin:/apps/slurm/tools/sbank/bin:/home/Sanath.Kumar/.local/bin:/home/Sanath.Kumar/bin
+++ export PATH
+++ PKG_CONFIG_PATH=/apps/oneapi/mpi/2021.5.1/lib/pkgconfig
+++ export PKG_CONFIG_PATH
+++ PNG_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/include
+++ export PNG_INCLUDES
+++ PNG_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35/lib
+++ export PNG_LIBRARIES
+++ PNG_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/libpng/1.6.35
+++ export PNG_ROOT
+++ PNG_VERSION=1.6.35
+++ export PNG_VERSION
+++ SERIAL_CC=icc
+++ export SERIAL_CC
+++ SERIAL_CXX=icpc
+++ export SERIAL_CXX
+++ SERIAL_FC=ifort
+++ export SERIAL_FC
+++ SFCIO_INC=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sfcio/1.4.1/include
+++ export SFCIO_INC
+++ SFCIO_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sfcio/1.4.1/lib/libsfcio.a
+++ export SFCIO_LIB
+++ SIGIO_INC=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2/include
+++ export SIGIO_INC
+++ SIGIO_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2/include
+++ export SIGIO_INC4
+++ SIGIO_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2/lib/libsigio.a
+++ export SIGIO_LIB
+++ SIGIO_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2/lib/libsigio.a
+++ export SIGIO_LIB4
+++ SP_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/include_4
+++ export SP_INC4
+++ SP_INC8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/include_8
+++ export SP_INC8
+++ SP_INCd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/include_d
+++ export SP_INCd
+++ SP_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/lib/libsp_4.a
+++ export SP_LIB4
+++ SP_LIB8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/lib/libsp_8.a
+++ export SP_LIB8
+++ SP_LIBd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3/lib/libsp_d.a
+++ export SP_LIBd
+++ W3EMC_INC4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/include_4
+++ export W3EMC_INC4
+++ W3EMC_INC8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/include_8
+++ export W3EMC_INC8
+++ W3EMC_INCd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/include_d
+++ export W3EMC_INCd
+++ W3EMC_LIB4=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/lib64/libw3emc_4.a
+++ export W3EMC_LIB4
+++ W3EMC_LIB8=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/lib64/libw3emc_8.a
+++ export W3EMC_LIB8
+++ W3EMC_LIBd=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2/lib64/libw3emc_d.a
+++ export W3EMC_LIBd
+++ ZLIB_INCLUDES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/include
+++ export ZLIB_INCLUDES
+++ ZLIB_LIB=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib/libz.a
+++ export ZLIB_LIB
+++ ZLIB_LIBRARIES=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11/lib
+++ export ZLIB_LIBRARIES
+++ ZLIB_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/zlib/1.2.11
+++ export ZLIB_ROOT
+++ ZLIB_VERSION=1.2.11
+++ export ZLIB_VERSION
+++ __LMOD_REF_COUNT__LMFILES_='/apps/modules/modulefiles/cmake/3.16.1:1;/apps/modules/modulefiles/hpss/hpss:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack/hpc/1.2.0.lua:1;/apps/modules/modulefiles/intel/2022.1.2:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core/hpc-intel/2022.1.2.lua:1;/apps/modules/modulefamilies/intel/impi/2022.1.2:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/hpc-impi/2022.1.2.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/g2/3.4.5.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/ip/4.0.0.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/bacio/2.4.1.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/nemsio/2.5.4.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sp/2.3.3.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/w3emc/2.9.2.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sfcio/1.4.1.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sigio/2.3.2.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/zlib/1.2.11.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/libpng/1.6.35.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/hdf5/1.10.6.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/netcdf/4.7.4.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/nccmp/1.8.9.0.lua:1;/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/esmf/8.4.0b08.lua:1;/apps/modules/modulefamilies/intel/nco/4.9.1:1;/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles/build.hera.intel.lua:1'
+++ export __LMOD_REF_COUNT__LMFILES_
+++ _LMFILES_=/apps/modules/modulefiles/cmake/3.16.1:/apps/modules/modulefiles/hpss/hpss:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack/hpc/1.2.0.lua:/apps/modules/modulefiles/intel/2022.1.2:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core/hpc-intel/2022.1.2.lua:/apps/modules/modulefamilies/intel/impi/2022.1.2:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/hpc-impi/2022.1.2.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/g2/3.4.5.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/ip/4.0.0.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/bacio/2.4.1.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/nemsio/2.5.4.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sp/2.3.3.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/w3emc/2.9.2.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sfcio/1.4.1.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/sigio/2.3.2.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/zlib/1.2.11.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/libpng/1.6.35.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/hdf5/1.10.6.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/netcdf/4.7.4.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2/nccmp/1.8.9.0.lua:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2/esmf/8.4.0b08.lua:/apps/modules/modulefamilies/intel/nco/4.9.1:/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles/build.hera.intel.lua
+++ export _LMFILES_
+++ _ModuleTable001_=X01vZHVsZVRhYmxlXz17WyJNVHZlcnNpb24iXT0zLFsiY19yZWJ1aWxkVGltZSJdPWZhbHNlLFsiY19zaG9ydFRpbWUiXT1mYWxzZSxkZXB0aFQ9e30sZmFtaWx5PXtbIk1ldGFDb21waWxlciJdPSJocGMtaW50ZWwiLFsiY29tcGlsZXIiXT0iaW50ZWwiLFsibXBpIl09ImltcGkiLH0sbVQ9e2JhY2lvPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvYmFjaW8vMi40LjEubHVhIixbImZ1bGxOYW1lIl09ImJhY2lvLzIuNC4xIixbImxvYWRPcmRlciJdPTEwLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTIsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1l
+++ export _ModuleTable001_
+++ _ModuleTable002_=Il09ImJhY2lvIixbIndWIl09Il4wMDAwMDAwMi4wMDAwMDAwMDQuMDAwMDAwMDAxLip6ZmluYWwiLH0sWyJidWlsZC5oZXJhLmludGVsIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvVUZTX1VUSUxTX1NLL3V0aWwvc2ZjX2NsaW1vX2dlbi8uLi8uLi9tb2R1bGVmaWxlcy9idWlsZC5oZXJhLmludGVsLmx1YSIsWyJmdWxsTmFtZSJdPSJidWlsZC5oZXJhLmludGVsIixbImxvYWRPcmRlciJdPTIzLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTAsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImJ1aWxkLmhlcmEuaW50ZWwiLFsid1YiXT0iTS4qemZpbmFsIix9LGNtYWtlPXtbImZuIl09Ii9hcHBzL21vZHVsZXMvbW9kdWxlZmls
+++ export _ModuleTable002_
+++ _ModuleTable003_=ZXMvY21ha2UvMy4xNi4xIixbImZ1bGxOYW1lIl09ImNtYWtlLzMuMTYuMSIsWyJsb2FkT3JkZXIiXT0xLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImNtYWtlLzMuMTYuMSIsWyJ3ViJdPSIwMDAwMDAwMDMuMDAwMDAwMDE2LjAwMDAwMDAwMS4qemZpbmFsIix9LGVzbWY9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9lc21mLzguNC4wYjA4Lmx1YSIsWyJmdWxsTmFtZSJdPSJlc21mLzguNC4wYjA4IixbImxvYWRPcmRlciJdPTIxLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEs
+++ export _ModuleTable003_
+++ _ModuleTable004_=WyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImVzbWYvOC40LjBiMDgiLFsid1YiXT0iXjAwMDAwMDA4LjAwMDAwMDAwNC4qYi4wMDAwMDAwMDguKnpmaW5hbCIsfSxnMj17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2cyLzMuNC41Lmx1YSIsWyJmdWxsTmFtZSJdPSJnMi8zLjQuNSIsWyJsb2FkT3JkZXIiXT04LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImcyLzMuNC41IixbIndWIl09Il4wMDAwMDAwMy4wMDAwMDAwMDQuMDAwMDAwMDA1Lip6ZmluYWwiLH0saGRmNT17WyJmbiJd
+++ export _ModuleTable004_
+++ _ModuleTable005_=PSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL21waS9pbnRlbC8yMDIyLjEuMi9pbXBpLzIwMjIuMS4yL2hkZjUvMS4xMC42Lmx1YSIsWyJmdWxsTmFtZSJdPSJoZGY1LzEuMTAuNiIsWyJsb2FkT3JkZXIiXT0xOCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0yLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJoZGY1LzEuMTAuNiIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDEwLjAwMDAwMDAwNi4qemZpbmFsIix9LGhwYz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL3N0YWNrL2hwYy8xLjIuMC5sdWEiLFsiZnVsbE5h
+++ export _ModuleTable005_
+++ _ModuleTable006_=bWUiXT0iaHBjLzEuMi4wIixbImxvYWRPcmRlciJdPTMscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaHBjLzEuMi4wIixbIndWIl09IjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsfSxbImhwYy1pbXBpIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi9ocGMtaW1waS8yMDIyLjEuMi5sdWEiLFsiZnVsbE5hbWUiXT0iaHBjLWltcGkvMjAyMi4xLjIiLFsibG9hZE9yZGVyIl09Nyxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJo
+++ export _ModuleTable006_
+++ _ModuleTable007_=cGMtaW1waS8yMDIyLjEuMiIsWyJ3ViJdPSIwMDAwMDIwMjIuMDAwMDAwMDAxLjAwMDAwMDAwMi4qemZpbmFsIix9LFsiaHBjLWludGVsIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb3JlL2hwYy1pbnRlbC8yMDIyLjEuMi5sdWEiLFsiZnVsbE5hbWUiXT0iaHBjLWludGVsLzIwMjIuMS4yIixbImxvYWRPcmRlciJdPTUscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaHBjLWludGVsLzIwMjIuMS4yIixbIndWIl09IjAwMDAwMjAyMi4wMDAwMDAwMDEuMDAwMDAwMDAyLip6ZmluYWwiLH0saHBzcz17WyJmbiJdPSIvYXBwcy9tb2R1
+++ export _ModuleTable007_
+++ _ModuleTable008_=bGVzL21vZHVsZWZpbGVzL2hwc3MvaHBzcyIsWyJmdWxsTmFtZSJdPSJocHNzL2hwc3MiLFsibG9hZE9yZGVyIl09Mixwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJocHNzIixbIndWIl09Il5ocHNzLip6ZmluYWwiLH0saW1waT17WyJmbiJdPSIvYXBwcy9tb2R1bGVzL21vZHVsZWZhbWlsaWVzL2ludGVsL2ltcGkvMjAyMi4xLjIiLFsiZnVsbE5hbWUiXT0iaW1waS8yMDIyLjEuMiIsWyJsb2FkT3JkZXIiXT02LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTIsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImltcGkvMjAyMi4xLjIiLFsid1YiXT0iMDAwMDAyMDIyLjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpm
+++ export _ModuleTable008_
+++ _ModuleTable009_=aW5hbCIsfSxpbnRlbD17WyJmbiJdPSIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL2ludGVsLzIwMjIuMS4yIixbImZ1bGxOYW1lIl09ImludGVsLzIwMjIuMS4yIixbImxvYWRPcmRlciJdPTQscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MixbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaW50ZWwvMjAyMi4xLjIiLFsid1YiXT0iMDAwMDAyMDIyLjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsfSxpcD17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2lwLzQuMC4wLmx1YSIsWyJmdWxsTmFtZSJdPSJpcC80LjAuMCIsWyJsb2FkT3JkZXIi
+++ export _ModuleTable009_
+++ _ModuleTable010_=XT05LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImlwLzQuMC4wIixbIndWIl09Il4wMDAwMDAwNC4qemZpbmFsIix9LGxpYnBuZz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2xpYnBuZy8xLjYuMzUubHVhIixbImZ1bGxOYW1lIl09ImxpYnBuZy8xLjYuMzUiLFsibG9hZE9yZGVyIl09MTcscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0ibGlicG5nLzEuNi4zNSIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDA2LjAwMDAwMDAzNS4q
+++ export _ModuleTable010_
+++ _ModuleTable011_=emZpbmFsIix9LG5jY21wPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvbmNjbXAvMS44LjkuMC5sdWEiLFsiZnVsbE5hbWUiXT0ibmNjbXAvMS44LjkuMCIsWyJsb2FkT3JkZXIiXT0yMCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuY2NtcC8xLjguOS4wIixbIndWIl09Il4wMDAwMDAwMS4wMDAwMDAwMDguMDAwMDAwMDA5Lip6ZmluYWwiLH0sbmNvPXtbImZuIl09Ii9hcHBzL21vZHVsZXMvbW9kdWxlZmFtaWxpZXMvaW50ZWwvbmNvLzQuOS4xIixbImZ1bGxOYW1lIl09Im5jby80LjkuMSIs
+++ export _ModuleTable011_
+++ _ModuleTable012_=WyJsb2FkT3JkZXIiXT0yMixwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuY28vNC45LjEiLFsid1YiXT0iMDAwMDAwMDA0LjAwMDAwMDAwOS4wMDAwMDAwMDEuKnpmaW5hbCIsfSxuZW1zaW89e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9uZW1zaW8vMi41LjQubHVhIixbImZ1bGxOYW1lIl09Im5lbXNpby8yLjUuNCIsWyJsb2FkT3JkZXIiXT0xMSxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuZW1zaW8vMi41LjQi
+++ export _ModuleTable012_
+++ _ModuleTable013_=LFsid1YiXT0iXjAwMDAwMDAyLjAwMDAwMDAwNS4wMDAwMDAwMDQuKnpmaW5hbCIsfSxuZXRjZGY9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9uZXRjZGYvNC43LjQubHVhIixbImZ1bGxOYW1lIl09Im5ldGNkZi80LjcuNCIsWyJsb2FkT3JkZXIiXT0xOSxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuZXRjZGYvNC43LjQiLFsid1YiXT0iXjAwMDAwMDA0LjAwMDAwMDAwNy4wMDAwMDAwMDQuKnpmaW5hbCIsfSxzZmNpbz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3By
+++ export _ModuleTable013_
+++ _ModuleTable014_=b2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL3NmY2lvLzEuNC4xLmx1YSIsWyJmdWxsTmFtZSJdPSJzZmNpby8xLjQuMSIsWyJsb2FkT3JkZXIiXT0xNCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJzZmNpby8xLjQuMSIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDA0LjAwMDAwMDAwMS4qemZpbmFsIix9LHNpZ2lvPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvc2lnaW8vMi4zLjIubHVhIixbImZ1bGxOYW1lIl09InNpZ2lv
+++ export _ModuleTable014_
+++ _ModuleTable015_=LzIuMy4yIixbImxvYWRPcmRlciJdPTE1LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09InNpZ2lvLzIuMy4yIixbIndWIl09Il4wMDAwMDAwMi4wMDAwMDAwMDMuMDAwMDAwMDAyLip6ZmluYWwiLH0sc3A9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi9zcC8yLjMuMy5sdWEiLFsiZnVsbE5hbWUiXT0ic3AvMi4zLjMiLFsibG9hZE9yZGVyIl09MTIscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0ic3AvMi4zLjMiLFsid1YiXT0iXjAwMDAw
+++ export _ModuleTable015_
+++ _ModuleTable016_=MDAyLjAwMDAwMDAwMy4wMDAwMDAwMDMuKnpmaW5hbCIsfSx3M2VtYz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL3czZW1jLzIuOS4yLmx1YSIsWyJmdWxsTmFtZSJdPSJ3M2VtYy8yLjkuMiIsWyJsb2FkT3JkZXIiXT0xMyxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJ3M2VtYy8yLjkuMiIsWyJ3ViJdPSJeMDAwMDAwMDIuMDAwMDAwMDA5LjAwMDAwMDAwMi4qemZpbmFsIix9LHpsaWI9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9t
+++ export _ModuleTable016_
+++ _ModuleTable017_=b2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi96bGliLzEuMi4xMS5sdWEiLFsiZnVsbE5hbWUiXT0iemxpYi8xLjIuMTEiLFsibG9hZE9yZGVyIl09MTYscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iemxpYi8xLjIuMTEiLFsid1YiXT0iXjAwMDAwMDAxLjAwMDAwMDAwMi4wMDAwMDAwMTEuKnpmaW5hbCIsfSx9LG1wYXRoQT17Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvbXBpL2ludGVsLzIwMjIuMS4yL2ltcGkvMjAyMi4xLjIiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZhbWlsaWVzL2ludGVsX2ltcGkiLCIvc2NyYXRjaDIvTkNFUERF
+++ export _ModuleTable017_
+++ _ModuleTable018_=Vi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yIiwiL2FwcHMvbW9kdWxlcy9tb2R1bGVmYW1pbGllcy9pbnRlbCIsIi9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29yZSIsIi9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvc3RhY2siLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci9VRlNfVVRJTFNfU0svdXRpbC9zZmNfY2xpbW9fZ2VuLy4uLy4uL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXIt
+++ export _ModuleTable018_
+++ _ModuleTable019_=bW9kZWwvbW9kdWxlZmlsZXMvaGVyYS5pbnRlbCIsIi93b3JrMi8wNjE0Ni90Zzg1NDQ1NS9mcm9udGVyYS9zcGFjay1zdGFjay9zcGFjay1zdGFjay12MS9lbnZzL3NreWxhYi0xLjAuMC1nbnUtOS4xLjAvaW5zdGFsbC9tb2R1bGVmaWxlcy9Db3JlIiwiL3dvcmsyLzA2MTQ2L3RnODU0NDU1L2Zyb250ZXJhL3NwYWNrLXN0YWNrL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXItbW9kZWwvbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci91ZnNfd2VhdGhlci1tb2RlbC9tb2R1bGVmaWxlcy91ZnNfaGVyYS5pbnRlbC5sdWEiLCIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMv
+++ export _ModuleTable019_
+++ _ModuleTable020_=Q29yZSIsIi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMvTGludXgiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzIiwiL2NvbnRyaWIvc3V0aWxzL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gxL0JNQy9nbXRiL3NvZnR3YXJlL21vZHVsZWZpbGVzL2ludGVsLTE4LjAuNS4yNzQvaW1waS0yMDE4LjAuNCIsfSxbInN5c3RlbUJhc2VNUEFUSCJdPSIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZTovYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL0xpbnV4Oi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMiLH0=
+++ export _ModuleTable020_
+++ _ModuleTable_Sz_=20
+++ export _ModuleTable_Sz_
+++ bacio_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/bacio/2.4.1
+++ export bacio_ROOT
+++ bacio_VERSION=2.4.1
+++ export bacio_VERSION
+++ g2_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/g2/3.4.5
+++ export g2_ROOT
+++ g2_VERSION=3.4.5
+++ export g2_VERSION
+++ alias 'htar=htar -T 4'
+++ ip_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/ip/4.0.0
+++ export ip_ROOT
+++ ip_VERSION=4.0.0
+++ export ip_VERSION
+++ nemsio_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/impi-2022.1.2/nemsio/2.5.4
+++ export nemsio_ROOT
+++ nemsio_VERSION=2.5.4
+++ export nemsio_VERSION
+++ sfcio_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sfcio/1.4.1
+++ export sfcio_ROOT
+++ sfcio_VERSION=1.4.1
+++ export sfcio_VERSION
+++ sigio_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sigio/2.3.2
+++ export sigio_ROOT
+++ sigio_VERSION=2.3.2
+++ export sigio_VERSION
+++ sp_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/sp/2.3.3
+++ export sp_ROOT
+++ sp_VERSION=2.3.3
+++ export sp_VERSION
+++ w3emc_ROOT=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/intel-2022.1.2/w3emc/2.9.2
+++ export w3emc_ROOT
+++ w3emc_VERSION=2.9.2
+++ export w3emc_VERSION
+++ : -s sh
++ eval
++ module list
+++ /apps/lmod/8.5.2/libexec/lmod bash list
++ eval echo ''\'''\'';' echo ''\''Currently'\''' ''\''Loaded'\''' ''\''Modules:'\'';' echo ''\'''\''' ''\'''\''' ''\''1)'\''' ''\''cmake/3.16.1'\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\''9)'\''' ''\''ip/4.0.0'\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\''17)'\''' ''\''libpng/1.6.35'\'';' echo ''\'''\''' ''\'''\''' ''\''2)'\''' ''\''hpss/hpss'\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\''10)'\''' ''\''bacio/2.4.1'\''' ''\'''\''' ''\'''\''' ''\''18)'\''' ''\''hdf5/1.10.6'\'';' echo ''\'''\''' ''\'''\''' ''\''3)'\''' ''\''hpc/1.2.0'\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\''11)'\''' ''\''nemsio/2.5.4'\''' ''\'''\''' ''\''19)'\''' ''\''netcdf/4.7.4'\'';' echo ''\'''\''' ''\'''\''' ''\''4)'\''' ''\''intel/2022.1.2'\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\''12)'\''' ''\''sp/2.3.3'\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\''20)'\''' ''\''nccmp/1.8.9.0'\'';' echo ''\'''\''' ''\'''\''' ''\''5)'\''' ''\''hpc-intel/2022.1.2'\''' ''\'''\''' ''\''13)'\''' ''\''w3emc/2.9.2'\''' ''\'''\''' ''\'''\''' ''\''21)'\''' ''\''esmf/8.4.0b08'\'';' echo ''\'''\''' ''\'''\''' ''\''6)'\''' ''\''impi/2022.1.2'\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\''14)'\''' ''\''sfcio/1.4.1'\''' ''\'''\''' ''\'''\''' ''\''22)'\''' ''\''nco/4.9.1'\'';' echo ''\'''\''' ''\'''\''' ''\''7)'\''' ''\''hpc-impi/2022.1.2'\''' ''\'''\''' ''\'''\''' ''\''15)'\''' ''\''sigio/2.3.2'\''' ''\'''\''' ''\'''\''' ''\''23)'\''' ''\''build.hera.intel'\'';' echo ''\'''\''' ''\'''\''' ''\''8)'\''' ''\''g2/3.4.5'\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\'''\''' ''\''16)'\''' ''\''zlib/1.2.11'\'';' echo ''\'''\'';' echo ''\'''\''' ''\'''\'';' echo ''\'''\'';' 'MODULEPATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2:/apps/modules/modulefamilies/intel_impi:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2:/apps/modules/modulefamilies/intel:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:/work2/06146/tg854455/frontera/spack-stack/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:/apps/lmod/lmod/modulefiles/Core:/apps/modules/modulefiles/Linux:/apps/modules/modulefiles:/contrib/sutils/modulefiles:/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4;' export 'MODULEPATH;' '_ModuleTable001_=X01vZHVsZVRhYmxlXz17WyJNVHZlcnNpb24iXT0zLFsiY19yZWJ1aWxkVGltZSJdPWZhbHNlLFsiY19zaG9ydFRpbWUiXT1mYWxzZSxkZXB0aFQ9e30sZmFtaWx5PXtbIk1ldGFDb21waWxlciJdPSJocGMtaW50ZWwiLFsiY29tcGlsZXIiXT0iaW50ZWwiLFsibXBpIl09ImltcGkiLH0sbVQ9e2JhY2lvPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvYmFjaW8vMi40LjEubHVhIixbImZ1bGxOYW1lIl09ImJhY2lvLzIuNC4xIixbImxvYWRPcmRlciJdPTEwLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTIsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1l;' export '_ModuleTable001_;' '_ModuleTable002_=Il09ImJhY2lvIixbIndWIl09Il4wMDAwMDAwMi4wMDAwMDAwMDQuMDAwMDAwMDAxLip6ZmluYWwiLH0sWyJidWlsZC5oZXJhLmludGVsIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvVUZTX1VUSUxTX1NLL3V0aWwvc2ZjX2NsaW1vX2dlbi8uLi8uLi9tb2R1bGVmaWxlcy9idWlsZC5oZXJhLmludGVsLmx1YSIsWyJmdWxsTmFtZSJdPSJidWlsZC5oZXJhLmludGVsIixbImxvYWRPcmRlciJdPTIzLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTAsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImJ1aWxkLmhlcmEuaW50ZWwiLFsid1YiXT0iTS4qemZpbmFsIix9LGNtYWtlPXtbImZuIl09Ii9hcHBzL21vZHVsZXMvbW9kdWxlZmls;' export '_ModuleTable002_;' '_ModuleTable003_=ZXMvY21ha2UvMy4xNi4xIixbImZ1bGxOYW1lIl09ImNtYWtlLzMuMTYuMSIsWyJsb2FkT3JkZXIiXT0xLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImNtYWtlLzMuMTYuMSIsWyJ3ViJdPSIwMDAwMDAwMDMuMDAwMDAwMDE2LjAwMDAwMDAwMS4qemZpbmFsIix9LGVzbWY9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9lc21mLzguNC4wYjA4Lmx1YSIsWyJmdWxsTmFtZSJdPSJlc21mLzguNC4wYjA4IixbImxvYWRPcmRlciJdPTIxLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEs;' export '_ModuleTable003_;' '_ModuleTable004_=WyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImVzbWYvOC40LjBiMDgiLFsid1YiXT0iXjAwMDAwMDA4LjAwMDAwMDAwNC4qYi4wMDAwMDAwMDguKnpmaW5hbCIsfSxnMj17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2cyLzMuNC41Lmx1YSIsWyJmdWxsTmFtZSJdPSJnMi8zLjQuNSIsWyJsb2FkT3JkZXIiXT04LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImcyLzMuNC41IixbIndWIl09Il4wMDAwMDAwMy4wMDAwMDAwMDQuMDAwMDAwMDA1Lip6ZmluYWwiLH0saGRmNT17WyJmbiJd;' export '_ModuleTable004_;' '_ModuleTable005_=PSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL21waS9pbnRlbC8yMDIyLjEuMi9pbXBpLzIwMjIuMS4yL2hkZjUvMS4xMC42Lmx1YSIsWyJmdWxsTmFtZSJdPSJoZGY1LzEuMTAuNiIsWyJsb2FkT3JkZXIiXT0xOCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0yLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJoZGY1LzEuMTAuNiIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDEwLjAwMDAwMDAwNi4qemZpbmFsIix9LGhwYz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL3N0YWNrL2hwYy8xLjIuMC5sdWEiLFsiZnVsbE5h;' export '_ModuleTable005_;' '_ModuleTable006_=bWUiXT0iaHBjLzEuMi4wIixbImxvYWRPcmRlciJdPTMscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaHBjLzEuMi4wIixbIndWIl09IjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsfSxbImhwYy1pbXBpIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi9ocGMtaW1waS8yMDIyLjEuMi5sdWEiLFsiZnVsbE5hbWUiXT0iaHBjLWltcGkvMjAyMi4xLjIiLFsibG9hZE9yZGVyIl09Nyxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJo;' export '_ModuleTable006_;' '_ModuleTable007_=cGMtaW1waS8yMDIyLjEuMiIsWyJ3ViJdPSIwMDAwMDIwMjIuMDAwMDAwMDAxLjAwMDAwMDAwMi4qemZpbmFsIix9LFsiaHBjLWludGVsIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb3JlL2hwYy1pbnRlbC8yMDIyLjEuMi5sdWEiLFsiZnVsbE5hbWUiXT0iaHBjLWludGVsLzIwMjIuMS4yIixbImxvYWRPcmRlciJdPTUscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaHBjLWludGVsLzIwMjIuMS4yIixbIndWIl09IjAwMDAwMjAyMi4wMDAwMDAwMDEuMDAwMDAwMDAyLip6ZmluYWwiLH0saHBzcz17WyJmbiJdPSIvYXBwcy9tb2R1;' export '_ModuleTable007_;' '_ModuleTable008_=bGVzL21vZHVsZWZpbGVzL2hwc3MvaHBzcyIsWyJmdWxsTmFtZSJdPSJocHNzL2hwc3MiLFsibG9hZE9yZGVyIl09Mixwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJocHNzIixbIndWIl09Il5ocHNzLip6ZmluYWwiLH0saW1waT17WyJmbiJdPSIvYXBwcy9tb2R1bGVzL21vZHVsZWZhbWlsaWVzL2ludGVsL2ltcGkvMjAyMi4xLjIiLFsiZnVsbE5hbWUiXT0iaW1waS8yMDIyLjEuMiIsWyJsb2FkT3JkZXIiXT02LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTIsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImltcGkvMjAyMi4xLjIiLFsid1YiXT0iMDAwMDAyMDIyLjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpm;' export '_ModuleTable008_;' '_ModuleTable009_=aW5hbCIsfSxpbnRlbD17WyJmbiJdPSIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL2ludGVsLzIwMjIuMS4yIixbImZ1bGxOYW1lIl09ImludGVsLzIwMjIuMS4yIixbImxvYWRPcmRlciJdPTQscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MixbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaW50ZWwvMjAyMi4xLjIiLFsid1YiXT0iMDAwMDAyMDIyLjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsfSxpcD17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2lwLzQuMC4wLmx1YSIsWyJmdWxsTmFtZSJdPSJpcC80LjAuMCIsWyJsb2FkT3JkZXIi;' export '_ModuleTable009_;' '_ModuleTable010_=XT05LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImlwLzQuMC4wIixbIndWIl09Il4wMDAwMDAwNC4qemZpbmFsIix9LGxpYnBuZz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2xpYnBuZy8xLjYuMzUubHVhIixbImZ1bGxOYW1lIl09ImxpYnBuZy8xLjYuMzUiLFsibG9hZE9yZGVyIl09MTcscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0ibGlicG5nLzEuNi4zNSIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDA2LjAwMDAwMDAzNS4q;' export '_ModuleTable010_;' '_ModuleTable011_=emZpbmFsIix9LG5jY21wPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvbmNjbXAvMS44LjkuMC5sdWEiLFsiZnVsbE5hbWUiXT0ibmNjbXAvMS44LjkuMCIsWyJsb2FkT3JkZXIiXT0yMCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuY2NtcC8xLjguOS4wIixbIndWIl09Il4wMDAwMDAwMS4wMDAwMDAwMDguMDAwMDAwMDA5Lip6ZmluYWwiLH0sbmNvPXtbImZuIl09Ii9hcHBzL21vZHVsZXMvbW9kdWxlZmFtaWxpZXMvaW50ZWwvbmNvLzQuOS4xIixbImZ1bGxOYW1lIl09Im5jby80LjkuMSIs;' export '_ModuleTable011_;' '_ModuleTable012_=WyJsb2FkT3JkZXIiXT0yMixwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuY28vNC45LjEiLFsid1YiXT0iMDAwMDAwMDA0LjAwMDAwMDAwOS4wMDAwMDAwMDEuKnpmaW5hbCIsfSxuZW1zaW89e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9uZW1zaW8vMi41LjQubHVhIixbImZ1bGxOYW1lIl09Im5lbXNpby8yLjUuNCIsWyJsb2FkT3JkZXIiXT0xMSxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuZW1zaW8vMi41LjQi;' export '_ModuleTable012_;' '_ModuleTable013_=LFsid1YiXT0iXjAwMDAwMDAyLjAwMDAwMDAwNS4wMDAwMDAwMDQuKnpmaW5hbCIsfSxuZXRjZGY9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9uZXRjZGYvNC43LjQubHVhIixbImZ1bGxOYW1lIl09Im5ldGNkZi80LjcuNCIsWyJsb2FkT3JkZXIiXT0xOSxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuZXRjZGYvNC43LjQiLFsid1YiXT0iXjAwMDAwMDA0LjAwMDAwMDAwNy4wMDAwMDAwMDQuKnpmaW5hbCIsfSxzZmNpbz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3By;' export '_ModuleTable013_;' '_ModuleTable014_=b2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL3NmY2lvLzEuNC4xLmx1YSIsWyJmdWxsTmFtZSJdPSJzZmNpby8xLjQuMSIsWyJsb2FkT3JkZXIiXT0xNCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJzZmNpby8xLjQuMSIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDA0LjAwMDAwMDAwMS4qemZpbmFsIix9LHNpZ2lvPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvc2lnaW8vMi4zLjIubHVhIixbImZ1bGxOYW1lIl09InNpZ2lv;' export '_ModuleTable014_;' '_ModuleTable015_=LzIuMy4yIixbImxvYWRPcmRlciJdPTE1LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09InNpZ2lvLzIuMy4yIixbIndWIl09Il4wMDAwMDAwMi4wMDAwMDAwMDMuMDAwMDAwMDAyLip6ZmluYWwiLH0sc3A9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi9zcC8yLjMuMy5sdWEiLFsiZnVsbE5hbWUiXT0ic3AvMi4zLjMiLFsibG9hZE9yZGVyIl09MTIscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0ic3AvMi4zLjMiLFsid1YiXT0iXjAwMDAw;' export '_ModuleTable015_;' '_ModuleTable016_=MDAyLjAwMDAwMDAwMy4wMDAwMDAwMDMuKnpmaW5hbCIsfSx3M2VtYz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL3czZW1jLzIuOS4yLmx1YSIsWyJmdWxsTmFtZSJdPSJ3M2VtYy8yLjkuMiIsWyJsb2FkT3JkZXIiXT0xMyxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJ3M2VtYy8yLjkuMiIsWyJ3ViJdPSJeMDAwMDAwMDIuMDAwMDAwMDA5LjAwMDAwMDAwMi4qemZpbmFsIix9LHpsaWI9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9t;' export '_ModuleTable016_;' '_ModuleTable017_=b2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi96bGliLzEuMi4xMS5sdWEiLFsiZnVsbE5hbWUiXT0iemxpYi8xLjIuMTEiLFsibG9hZE9yZGVyIl09MTYscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iemxpYi8xLjIuMTEiLFsid1YiXT0iXjAwMDAwMDAxLjAwMDAwMDAwMi4wMDAwMDAwMTEuKnpmaW5hbCIsfSx9LG1wYXRoQT17Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvbXBpL2ludGVsLzIwMjIuMS4yL2ltcGkvMjAyMi4xLjIiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZhbWlsaWVzL2ludGVsX2ltcGkiLCIvc2NyYXRjaDIvTkNFUERF;' export '_ModuleTable017_;' '_ModuleTable018_=Vi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yIiwiL2FwcHMvbW9kdWxlcy9tb2R1bGVmYW1pbGllcy9pbnRlbCIsIi9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29yZSIsIi9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvc3RhY2siLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci9VRlNfVVRJTFNfU0svdXRpbC9zZmNfY2xpbW9fZ2VuLy4uLy4uL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXIt;' export '_ModuleTable018_;' '_ModuleTable019_=bW9kZWwvbW9kdWxlZmlsZXMvaGVyYS5pbnRlbCIsIi93b3JrMi8wNjE0Ni90Zzg1NDQ1NS9mcm9udGVyYS9zcGFjay1zdGFjay9zcGFjay1zdGFjay12MS9lbnZzL3NreWxhYi0xLjAuMC1nbnUtOS4xLjAvaW5zdGFsbC9tb2R1bGVmaWxlcy9Db3JlIiwiL3dvcmsyLzA2MTQ2L3RnODU0NDU1L2Zyb250ZXJhL3NwYWNrLXN0YWNrL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXItbW9kZWwvbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci91ZnNfd2VhdGhlci1tb2RlbC9tb2R1bGVmaWxlcy91ZnNfaGVyYS5pbnRlbC5sdWEiLCIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMv;' export '_ModuleTable019_;' '_ModuleTable020_=Q29yZSIsIi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMvTGludXgiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzIiwiL2NvbnRyaWIvc3V0aWxzL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gxL0JNQy9nbXRiL3NvZnR3YXJlL21vZHVsZWZpbGVzL2ludGVsLTE4LjAuNS4yNzQvaW1waS0yMDE4LjAuNCIsfSxbInN5c3RlbUJhc2VNUEFUSCJdPSIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZTovYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL0xpbnV4Oi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMiLH0=;' export '_ModuleTable020_;' '_ModuleTable_Sz_=20;' export '_ModuleTable_Sz_;'
+++ echo ''
+
+++ echo Currently Loaded Modules:
+Currently Loaded Modules:
+++ echo '' '' '1)' cmake/3.16.1 '' '' '' '' '' '' '' '' '9)' ip/4.0.0 '' '' '' '' '' '17)' libpng/1.6.35
+  1) cmake/3.16.1         9) ip/4.0.0      17) libpng/1.6.35
+++ echo '' '' '2)' hpss/hpss '' '' '' '' '' '' '' '' '' '' '10)' bacio/2.4.1 '' '' '18)' hdf5/1.10.6
+  2) hpss/hpss           10) bacio/2.4.1   18) hdf5/1.10.6
+++ echo '' '' '3)' hpc/1.2.0 '' '' '' '' '' '' '' '' '' '' '11)' nemsio/2.5.4 '' '19)' netcdf/4.7.4
+  3) hpc/1.2.0           11) nemsio/2.5.4  19) netcdf/4.7.4
+++ echo '' '' '4)' intel/2022.1.2 '' '' '' '' '' '12)' sp/2.3.3 '' '' '' '' '' '20)' nccmp/1.8.9.0
+  4) intel/2022.1.2      12) sp/2.3.3      20) nccmp/1.8.9.0
+++ echo '' '' '5)' hpc-intel/2022.1.2 '' '13)' w3emc/2.9.2 '' '' '21)' esmf/8.4.0b08
+  5) hpc-intel/2022.1.2  13) w3emc/2.9.2   21) esmf/8.4.0b08
+++ echo '' '' '6)' impi/2022.1.2 '' '' '' '' '' '' '14)' sfcio/1.4.1 '' '' '22)' nco/4.9.1
+  6) impi/2022.1.2       14) sfcio/1.4.1   22) nco/4.9.1
+++ echo '' '' '7)' hpc-impi/2022.1.2 '' '' '15)' sigio/2.3.2 '' '' '23)' build.hera.intel
+  7) hpc-impi/2022.1.2   15) sigio/2.3.2   23) build.hera.intel
+++ echo '' '' '8)' g2/3.4.5 '' '' '' '' '' '' '' '' '' '' '' '16)' zlib/1.2.11
+  8) g2/3.4.5            16) zlib/1.2.11
+++ echo ''
+
+++ echo '' ''
+ 
+++ echo ''
+
+++ MODULEPATH=/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/mpi/intel/2022.1.2/impi/2022.1.2:/apps/modules/modulefamilies/intel_impi:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/compiler/intel/2022.1.2:/apps/modules/modulefamilies/intel:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/core:/scratch2/NCEPDEV/nwprod/hpc-stack/libs/hpc-stack/modulefiles/stack:/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/hera.intel:/work2/06146/tg854455/frontera/spack-stack/spack-stack-v1/envs/skylab-1.0.0-gnu-9.1.0/install/modulefiles/Core:/work2/06146/tg854455/frontera/spack-stack/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles:/scratch2/NCEPDEV/land/Sanath.Kumar/ufs_weather-model/modulefiles/ufs_hera.intel.lua:/apps/lmod/lmod/modulefiles/Core:/apps/modules/modulefiles/Linux:/apps/modules/modulefiles:/contrib/sutils/modulefiles:/scratch1/BMC/gmtb/software/modulefiles/intel-18.0.5.274/impi-2018.0.4
+++ export MODULEPATH
+++ _ModuleTable001_=X01vZHVsZVRhYmxlXz17WyJNVHZlcnNpb24iXT0zLFsiY19yZWJ1aWxkVGltZSJdPWZhbHNlLFsiY19zaG9ydFRpbWUiXT1mYWxzZSxkZXB0aFQ9e30sZmFtaWx5PXtbIk1ldGFDb21waWxlciJdPSJocGMtaW50ZWwiLFsiY29tcGlsZXIiXT0iaW50ZWwiLFsibXBpIl09ImltcGkiLH0sbVQ9e2JhY2lvPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvYmFjaW8vMi40LjEubHVhIixbImZ1bGxOYW1lIl09ImJhY2lvLzIuNC4xIixbImxvYWRPcmRlciJdPTEwLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTIsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1l
+++ export _ModuleTable001_
+++ _ModuleTable002_=Il09ImJhY2lvIixbIndWIl09Il4wMDAwMDAwMi4wMDAwMDAwMDQuMDAwMDAwMDAxLip6ZmluYWwiLH0sWyJidWlsZC5oZXJhLmludGVsIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvVUZTX1VUSUxTX1NLL3V0aWwvc2ZjX2NsaW1vX2dlbi8uLi8uLi9tb2R1bGVmaWxlcy9idWlsZC5oZXJhLmludGVsLmx1YSIsWyJmdWxsTmFtZSJdPSJidWlsZC5oZXJhLmludGVsIixbImxvYWRPcmRlciJdPTIzLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTAsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImJ1aWxkLmhlcmEuaW50ZWwiLFsid1YiXT0iTS4qemZpbmFsIix9LGNtYWtlPXtbImZuIl09Ii9hcHBzL21vZHVsZXMvbW9kdWxlZmls
+++ export _ModuleTable002_
+++ _ModuleTable003_=ZXMvY21ha2UvMy4xNi4xIixbImZ1bGxOYW1lIl09ImNtYWtlLzMuMTYuMSIsWyJsb2FkT3JkZXIiXT0xLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImNtYWtlLzMuMTYuMSIsWyJ3ViJdPSIwMDAwMDAwMDMuMDAwMDAwMDE2LjAwMDAwMDAwMS4qemZpbmFsIix9LGVzbWY9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9lc21mLzguNC4wYjA4Lmx1YSIsWyJmdWxsTmFtZSJdPSJlc21mLzguNC4wYjA4IixbImxvYWRPcmRlciJdPTIxLHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEs
+++ export _ModuleTable003_
+++ _ModuleTable004_=WyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImVzbWYvOC40LjBiMDgiLFsid1YiXT0iXjAwMDAwMDA4LjAwMDAwMDAwNC4qYi4wMDAwMDAwMDguKnpmaW5hbCIsfSxnMj17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2cyLzMuNC41Lmx1YSIsWyJmdWxsTmFtZSJdPSJnMi8zLjQuNSIsWyJsb2FkT3JkZXIiXT04LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImcyLzMuNC41IixbIndWIl09Il4wMDAwMDAwMy4wMDAwMDAwMDQuMDAwMDAwMDA1Lip6ZmluYWwiLH0saGRmNT17WyJmbiJd
+++ export _ModuleTable004_
+++ _ModuleTable005_=PSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL21waS9pbnRlbC8yMDIyLjEuMi9pbXBpLzIwMjIuMS4yL2hkZjUvMS4xMC42Lmx1YSIsWyJmdWxsTmFtZSJdPSJoZGY1LzEuMTAuNiIsWyJsb2FkT3JkZXIiXT0xOCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0yLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJoZGY1LzEuMTAuNiIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDEwLjAwMDAwMDAwNi4qemZpbmFsIix9LGhwYz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL3N0YWNrL2hwYy8xLjIuMC5sdWEiLFsiZnVsbE5h
+++ export _ModuleTable005_
+++ _ModuleTable006_=bWUiXT0iaHBjLzEuMi4wIixbImxvYWRPcmRlciJdPTMscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaHBjLzEuMi4wIixbIndWIl09IjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsfSxbImhwYy1pbXBpIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi9ocGMtaW1waS8yMDIyLjEuMi5sdWEiLFsiZnVsbE5hbWUiXT0iaHBjLWltcGkvMjAyMi4xLjIiLFsibG9hZE9yZGVyIl09Nyxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJo
+++ export _ModuleTable006_
+++ _ModuleTable007_=cGMtaW1waS8yMDIyLjEuMiIsWyJ3ViJdPSIwMDAwMDIwMjIuMDAwMDAwMDAxLjAwMDAwMDAwMi4qemZpbmFsIix9LFsiaHBjLWludGVsIl09e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb3JlL2hwYy1pbnRlbC8yMDIyLjEuMi5sdWEiLFsiZnVsbE5hbWUiXT0iaHBjLWludGVsLzIwMjIuMS4yIixbImxvYWRPcmRlciJdPTUscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaHBjLWludGVsLzIwMjIuMS4yIixbIndWIl09IjAwMDAwMjAyMi4wMDAwMDAwMDEuMDAwMDAwMDAyLip6ZmluYWwiLH0saHBzcz17WyJmbiJdPSIvYXBwcy9tb2R1
+++ export _ModuleTable007_
+++ _ModuleTable008_=bGVzL21vZHVsZWZpbGVzL2hwc3MvaHBzcyIsWyJmdWxsTmFtZSJdPSJocHNzL2hwc3MiLFsibG9hZE9yZGVyIl09Mixwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJocHNzIixbIndWIl09Il5ocHNzLip6ZmluYWwiLH0saW1waT17WyJmbiJdPSIvYXBwcy9tb2R1bGVzL21vZHVsZWZhbWlsaWVzL2ludGVsL2ltcGkvMjAyMi4xLjIiLFsiZnVsbE5hbWUiXT0iaW1waS8yMDIyLjEuMiIsWyJsb2FkT3JkZXIiXT02LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTIsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImltcGkvMjAyMi4xLjIiLFsid1YiXT0iMDAwMDAyMDIyLjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpm
+++ export _ModuleTable008_
+++ _ModuleTable009_=aW5hbCIsfSxpbnRlbD17WyJmbiJdPSIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL2ludGVsLzIwMjIuMS4yIixbImZ1bGxOYW1lIl09ImludGVsLzIwMjIuMS4yIixbImxvYWRPcmRlciJdPTQscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MixbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iaW50ZWwvMjAyMi4xLjIiLFsid1YiXT0iMDAwMDAyMDIyLjAwMDAwMDAwMS4wMDAwMDAwMDIuKnpmaW5hbCIsfSxpcD17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2lwLzQuMC4wLmx1YSIsWyJmdWxsTmFtZSJdPSJpcC80LjAuMCIsWyJsb2FkT3JkZXIi
+++ export _ModuleTable009_
+++ _ModuleTable010_=XT05LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09ImlwLzQuMC4wIixbIndWIl09Il4wMDAwMDAwNC4qemZpbmFsIix9LGxpYnBuZz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL2xpYnBuZy8xLjYuMzUubHVhIixbImZ1bGxOYW1lIl09ImxpYnBuZy8xLjYuMzUiLFsibG9hZE9yZGVyIl09MTcscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0ibGlicG5nLzEuNi4zNSIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDA2LjAwMDAwMDAzNS4q
+++ export _ModuleTable010_
+++ _ModuleTable011_=emZpbmFsIix9LG5jY21wPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvbmNjbXAvMS44LjkuMC5sdWEiLFsiZnVsbE5hbWUiXT0ibmNjbXAvMS44LjkuMCIsWyJsb2FkT3JkZXIiXT0yMCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuY2NtcC8xLjguOS4wIixbIndWIl09Il4wMDAwMDAwMS4wMDAwMDAwMDguMDAwMDAwMDA5Lip6ZmluYWwiLH0sbmNvPXtbImZuIl09Ii9hcHBzL21vZHVsZXMvbW9kdWxlZmFtaWxpZXMvaW50ZWwvbmNvLzQuOS4xIixbImZ1bGxOYW1lIl09Im5jby80LjkuMSIs
+++ export _ModuleTable011_
+++ _ModuleTable012_=WyJsb2FkT3JkZXIiXT0yMixwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuY28vNC45LjEiLFsid1YiXT0iMDAwMDAwMDA0LjAwMDAwMDAwOS4wMDAwMDAwMDEuKnpmaW5hbCIsfSxuZW1zaW89e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9uZW1zaW8vMi41LjQubHVhIixbImZ1bGxOYW1lIl09Im5lbXNpby8yLjUuNCIsWyJsb2FkT3JkZXIiXT0xMSxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuZW1zaW8vMi41LjQi
+++ export _ModuleTable012_
+++ _ModuleTable013_=LFsid1YiXT0iXjAwMDAwMDAyLjAwMDAwMDAwNS4wMDAwMDAwMDQuKnpmaW5hbCIsfSxuZXRjZGY9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9tcGkvaW50ZWwvMjAyMi4xLjIvaW1waS8yMDIyLjEuMi9uZXRjZGYvNC43LjQubHVhIixbImZ1bGxOYW1lIl09Im5ldGNkZi80LjcuNCIsWyJsb2FkT3JkZXIiXT0xOSxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJuZXRjZGYvNC43LjQiLFsid1YiXT0iXjAwMDAwMDA0LjAwMDAwMDAwNy4wMDAwMDAwMDQuKnpmaW5hbCIsfSxzZmNpbz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3By
+++ export _ModuleTable013_
+++ _ModuleTable014_=b2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL3NmY2lvLzEuNC4xLmx1YSIsWyJmdWxsTmFtZSJdPSJzZmNpby8xLjQuMSIsWyJsb2FkT3JkZXIiXT0xNCxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJzZmNpby8xLjQuMSIsWyJ3ViJdPSJeMDAwMDAwMDEuMDAwMDAwMDA0LjAwMDAwMDAwMS4qemZpbmFsIix9LHNpZ2lvPXtbImZuIl09Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29tcGlsZXIvaW50ZWwvMjAyMi4xLjIvc2lnaW8vMi4zLjIubHVhIixbImZ1bGxOYW1lIl09InNpZ2lv
+++ export _ModuleTable014_
+++ _ModuleTable015_=LzIuMy4yIixbImxvYWRPcmRlciJdPTE1LHByb3BUPXt9LFsic3RhY2tEZXB0aCJdPTEsWyJzdGF0dXMiXT0iYWN0aXZlIixbInVzZXJOYW1lIl09InNpZ2lvLzIuMy4yIixbIndWIl09Il4wMDAwMDAwMi4wMDAwMDAwMDMuMDAwMDAwMDAyLip6ZmluYWwiLH0sc3A9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9tb2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi9zcC8yLjMuMy5sdWEiLFsiZnVsbE5hbWUiXT0ic3AvMi4zLjMiLFsibG9hZE9yZGVyIl09MTIscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0ic3AvMi4zLjMiLFsid1YiXT0iXjAwMDAw
+++ export _ModuleTable015_
+++ _ModuleTable016_=MDAyLjAwMDAwMDAwMy4wMDAwMDAwMDMuKnpmaW5hbCIsfSx3M2VtYz17WyJmbiJdPSIvc2NyYXRjaDIvTkNFUERFVi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yL3czZW1jLzIuOS4yLmx1YSIsWyJmdWxsTmFtZSJdPSJ3M2VtYy8yLjkuMiIsWyJsb2FkT3JkZXIiXT0xMyxwcm9wVD17fSxbInN0YWNrRGVwdGgiXT0xLFsic3RhdHVzIl09ImFjdGl2ZSIsWyJ1c2VyTmFtZSJdPSJ3M2VtYy8yLjkuMiIsWyJ3ViJdPSJeMDAwMDAwMDIuMDAwMDAwMDA5LjAwMDAwMDAwMi4qemZpbmFsIix9LHpsaWI9e1siZm4iXT0iL3NjcmF0Y2gyL05DRVBERVYvbndwcm9kL2hwYy1zdGFjay9saWJzL2hwYy1zdGFjay9t
+++ export _ModuleTable016_
+++ _ModuleTable017_=b2R1bGVmaWxlcy9jb21waWxlci9pbnRlbC8yMDIyLjEuMi96bGliLzEuMi4xMS5sdWEiLFsiZnVsbE5hbWUiXT0iemxpYi8xLjIuMTEiLFsibG9hZE9yZGVyIl09MTYscHJvcFQ9e30sWyJzdGFja0RlcHRoIl09MSxbInN0YXR1cyJdPSJhY3RpdmUiLFsidXNlck5hbWUiXT0iemxpYi8xLjIuMTEiLFsid1YiXT0iXjAwMDAwMDAxLjAwMDAwMDAwMi4wMDAwMDAwMTEuKnpmaW5hbCIsfSx9LG1wYXRoQT17Ii9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvbXBpL2ludGVsLzIwMjIuMS4yL2ltcGkvMjAyMi4xLjIiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZhbWlsaWVzL2ludGVsX2ltcGkiLCIvc2NyYXRjaDIvTkNFUERF
+++ export _ModuleTable017_
+++ _ModuleTable018_=Vi9ud3Byb2QvaHBjLXN0YWNrL2xpYnMvaHBjLXN0YWNrL21vZHVsZWZpbGVzL2NvbXBpbGVyL2ludGVsLzIwMjIuMS4yIiwiL2FwcHMvbW9kdWxlcy9tb2R1bGVmYW1pbGllcy9pbnRlbCIsIi9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvY29yZSIsIi9zY3JhdGNoMi9OQ0VQREVWL253cHJvZC9ocGMtc3RhY2svbGlicy9ocGMtc3RhY2svbW9kdWxlZmlsZXMvc3RhY2siLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci9VRlNfVVRJTFNfU0svdXRpbC9zZmNfY2xpbW9fZ2VuLy4uLy4uL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXIt
+++ export _ModuleTable018_
+++ _ModuleTable019_=bW9kZWwvbW9kdWxlZmlsZXMvaGVyYS5pbnRlbCIsIi93b3JrMi8wNjE0Ni90Zzg1NDQ1NS9mcm9udGVyYS9zcGFjay1zdGFjay9zcGFjay1zdGFjay12MS9lbnZzL3NreWxhYi0xLjAuMC1nbnUtOS4xLjAvaW5zdGFsbC9tb2R1bGVmaWxlcy9Db3JlIiwiL3dvcmsyLzA2MTQ2L3RnODU0NDU1L2Zyb250ZXJhL3NwYWNrLXN0YWNrL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gyL05DRVBERVYvbGFuZC9TYW5hdGguS3VtYXIvdWZzX3dlYXRoZXItbW9kZWwvbW9kdWxlZmlsZXMiLCIvc2NyYXRjaDIvTkNFUERFVi9sYW5kL1NhbmF0aC5LdW1hci91ZnNfd2VhdGhlci1tb2RlbC9tb2R1bGVmaWxlcy91ZnNfaGVyYS5pbnRlbC5sdWEiLCIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMv
+++ export _ModuleTable019_
+++ _ModuleTable020_=Q29yZSIsIi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMvTGludXgiLCIvYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzIiwiL2NvbnRyaWIvc3V0aWxzL21vZHVsZWZpbGVzIiwiL3NjcmF0Y2gxL0JNQy9nbXRiL3NvZnR3YXJlL21vZHVsZWZpbGVzL2ludGVsLTE4LjAuNS4yNzQvaW1waS0yMDE4LjAuNCIsfSxbInN5c3RlbUJhc2VNUEFUSCJdPSIvYXBwcy9sbW9kL2xtb2QvbW9kdWxlZmlsZXMvQ29yZTovYXBwcy9tb2R1bGVzL21vZHVsZWZpbGVzL0xpbnV4Oi9hcHBzL21vZHVsZXMvbW9kdWxlZmlsZXMiLH0=
+++ export _ModuleTable020_
+++ _ModuleTable_Sz_=20
+++ export _ModuleTable_Sz_
+++ : -s sh
++ eval
++ export res=3342
++ res=3342
++ export FIX_FV3=/scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342
++ FIX_FV3=/scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342
++ export veg_type_src=viirs.igbp.0.05
++ veg_type_src=viirs.igbp.0.05
++ export soil_type_src=statsgo.0.05
++ soil_type_src=statsgo.0.05
++ export WORK_DIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/work.sfc
++ WORK_DIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/work.sfc
++ export SAVE_DIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/repo_test/sfc.C3342
++ SAVE_DIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/repo_test/sfc.C3342
++ [[ '' = \r\e\g\i\o\n\a\l ]]
++ res2=3342
++ export mosaic_file=/scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
++ mosaic_file=/scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
++ export input_sfc_climo_dir=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../fix/sfc_climo
++ input_sfc_climo_dir=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../fix/sfc_climo
++ ulimit -a
+core file size          (blocks, -c) unlimited
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 1541452
+max locked memory       (kbytes, -l) unlimited
+max memory size         (kbytes, -m) 389120000
+open files                      (-n) 131072
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) unlimited
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 1541452
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
++ ulimit -s unlimited
++ rm -fr /scratch2/NCEPDEV/stmp1/Sanath.Kumar/work.sfc /scratch2/NCEPDEV/stmp1/Sanath.Kumar/repo_test/sfc.C3342
++ /scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../ush/sfc_climo_gen.sh
++ res=3342
++ WORK_DIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/work.sfc
++ SAVE_DIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/repo_test/sfc.C3342
++ BASE_DIR=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../..
++ exec_dir=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../exec
++ GRIDTYPE=NULL
++ FIX_FV3=/scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342
++ input_sfc_climo_dir=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../fix/sfc_climo
++ mosaic_file=/scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
++ HALO=0
++ vegsoilt_frac=.false.
++ veg_type_src=viirs.igbp.0.05
++ VEG_TYPE_FILE=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../fix/sfc_climo/vegetation_type.viirs.igbp.0.05.nc
++ soil_type_src=statsgo.0.05
++ SOIL_TYPE_FILE=/scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../fix/sfc_climo/soil_type.statsgo.0.05.nc
++ '[' '!' -d /scratch2/NCEPDEV/stmp1/Sanath.Kumar/repo_test/sfc.C3342 ']'
++ mkdir -p /scratch2/NCEPDEV/stmp1/Sanath.Kumar/repo_test/sfc.C3342
++ rm -fr /scratch2/NCEPDEV/stmp1/Sanath.Kumar/work.sfc
++ mkdir -p /scratch2/NCEPDEV/stmp1/Sanath.Kumar/work.sfc
++ cd /scratch2/NCEPDEV/stmp1/Sanath.Kumar/work.sfc
++ [[ NULL == \n\e\s\t ]]
++ [[ NULL == \r\e\g\i\o\n\a\l ]]
++ the_orog_files='"C3342_oro_data.tile1.nc","C3342_oro_data.tile2.nc","C3342_oro_data.tile3.nc","C3342_oro_data.tile4.nc","C3342_oro_data.tile5.nc","C3342_oro_data.tile6.nc"'
++ cat
++ APRUN_SFC=srun
++ srun /scratch2/NCEPDEV/land/Sanath.Kumar/UFS_UTILS_SK/util/sfc_climo_gen/../../exec/sfc_climo_gen
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - INITIALIZE ESMF
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            0
+ - READ SETUP NAMELIST, LOCALPET:            0
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            1
+ - READ SETUP NAMELIST, LOCALPET:            1
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            2
+ - READ SETUP NAMELIST, LOCALPET:            2
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            3
+ - READ SETUP NAMELIST, LOCALPET:            3
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            4
+ - READ SETUP NAMELIST, LOCALPET:            4
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            5
+ - READ SETUP NAMELIST, LOCALPET:            5
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            6
+ - READ SETUP NAMELIST, LOCALPET:            6
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            7
+ - READ SETUP NAMELIST, LOCALPET:            7
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            8
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET            9
+ - READ SETUP NAMELIST, LOCALPET:            9
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           10
+ - READ SETUP NAMELIST, LOCALPET:           10
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           11
+ - READ SETUP NAMELIST, LOCALPET:           11
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           12
+ - READ SETUP NAMELIST, LOCALPET:           12
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           13
+ - READ SETUP NAMELIST, LOCALPET:           13
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           14
+ - READ SETUP NAMELIST, LOCALPET:           14
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           15
+ - READ SETUP NAMELIST, LOCALPET:           15
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           16
+ - READ SETUP NAMELIST, LOCALPET:           16
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           17
+ - READ SETUP NAMELIST, LOCALPET:           17
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           18
+ - READ SETUP NAMELIST, LOCALPET:           18
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           19
+ - READ SETUP NAMELIST, LOCALPET:           19
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           20
+ - READ SETUP NAMELIST, LOCALPET:           20
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           21
+ - READ SETUP NAMELIST, LOCALPET:           21
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           22
+ - READ SETUP NAMELIST, LOCALPET:           22
+ - CALL VMGetGlobal
+ - CALL VMGet
+ - NPETS IS            24
+ - LOCAL PET           23
+ - READ SETUP NAMELIST, LOCALPET:           23
+ - READ SETUP NAMELIST, LOCALPET:            8
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ - OPEN MODEL GRID MOSAIC FILE: 
+ /scratch1/NCEPDEV/global/glopara/fix/orog/20220805/C3342/C3342_mosaic.nc
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 0
+Abort(999) on node 20 (rank 20 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 20
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 18 (rank 18 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 18
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 12 (rank 12 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 12
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 1 (rank 1 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 1
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 4 (rank 4 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 4
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 17 (rank 17 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 17
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 23 (rank 23 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 23
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 21 (rank 21 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 21
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 5 (rank 5 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 5
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 6 (rank 6 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 6
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 11 (rank 11 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 11
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 13 (rank 13 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 13
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 14 (rank 14 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 14
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 16 (rank 16 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 16
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 10 (rank 10 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 10
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 15 (rank 15 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 15
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 2 (rank 2 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 2
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 19 (rank 19 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 19
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 7 (rank 7 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 7
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 22 (rank 22 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 22
+Abort(999) on node 3 (rank 3 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 3
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 8 (rank 8 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 8
+ 
+ FATAL ERROR: OPENING MODEL GRID MOSAIC FILE: No such file or directory
+ STOP.
+Abort(999) on node 9 (rank 9 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 999) - process 9
+slurmstepd: error: *** STEP 46457499.0 ON h13m01 CANCELLED AT 2023-06-27T22:40:53 ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: error: h13m01: tasks 0-1,4,12,18,20: Exited with exit code 1
+srun: launch/slurm: _step_signal: Terminating StepId=46457499.0
+srun: error: h13m01: tasks 2-3,5-11,13-17,19,21-23: Killed
++ exit
+_______________________________________________________________
+Start Epilog on node h13m01 for job 46457499 :: Tue Jun 27 22:40:55 UTC 2023
+Job 46457499 (serial) finished for user Sanath.Kumar in partition bigmem with exit code 137:0
+_______________________________________________________________
+End Epilogue Tue Jun 27 22:40:55 UTC 2023
