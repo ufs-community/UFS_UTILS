@@ -108,5 +108,5 @@ if [ $iret != 0 ]; then
   exit $iret
 fi
 
-cp $out_dir/C${CRES}/C${CRES}_mosaic.nc $WORKDIR 
+cp $out_dir/C${CRES}_mosaic.nc $WORKDIR 
 
