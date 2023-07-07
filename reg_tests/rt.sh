@@ -2,13 +2,13 @@
 
 ulimit -s unlimited
 
-export MAILTO=clara.draper@noaa.gov
+export MAILTO=
 
 # Directory to download UFS_UTILS to and run the consistency tests
-export WORK_DIR=/scratch2/BMC/gsienkf/Clara.Draper/gerrit-hera/UFS_UTILS_DEV/
+export WORK_DIR=
 
-export PROJECT_CODE=gsienkf
-export QUEUE=batch
+export PROJECT_CODE=
+export QUEUE=
 TIMEOUT_LIMIT=3600
 
 mkdir -p ${WORK_DIR}
@@ -16,8 +16,7 @@ cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-#git clone https://github.com/ufs-community/UFS_UTILS.git
-git clone       https://github.com/NOAA-PSL/UFS_UTILS.git -b feature/AddNoahmpIncr
+git clone https://github.com/ufs-community/UFS_UTILS.git
 rc=$?
 
 # Check to see if the clone was successful. Previously, it has
