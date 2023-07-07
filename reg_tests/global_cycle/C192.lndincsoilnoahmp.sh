@@ -22,13 +22,13 @@ export CDATE=2019073000
 export FHOUR=00
 export DELTSFC=6
 
-export CASE=C768
+export CASE=C192
 
-export COMIN=$HOMEreg/input_data
-export FNTSFA=$COMIN/gdas.t00z.rtgssthr.grb
-export FNSNOA=$COMIN/gdas.t00z.snogrb_t1534.3072.1536
-export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
-export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
+export COMIN=$HOMEreg/input_data_noahmp
+#export FNTSFA=$COMIN/gdas.t00z.rtgssthr.grb
+#export FNSNOA=$COMIN/gdas.t00z.snogrb_t1534.3072.1536
+#export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
+#export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
 export LND_SOI_FILE=$COMIN/sfcincr_gsi
 
@@ -52,7 +52,7 @@ $BASE_GSM/ush/global_cycle_driver.sh
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< C768 LANDINC SOILT CYCLE TEST FAILED. >>>"
+  echo "<<< C192 LANDINC SOILT CYCLE TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -63,7 +63,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c768.lndincsoil/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.lndincsoilnoahmp/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -78,7 +78,7 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< C768 LANDINC SOILT CYCLE TEST FAILED. >>>"
   echo "*****************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $BASE_GSM/reg_tests/update_baseline.sh $HOMEreg "c768.lndincsoil" $commit_num
+    $BASE_GSM/reg_tests/update_baseline.sh $HOMEreg "c192.lndincsoilnoahmp" $commit_num
   fi
 else
   echo
