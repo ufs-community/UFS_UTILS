@@ -30,7 +30,7 @@ module list
 WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-QUEUE="${QUEUE:-batch}"
+QUEUE="${QUEUE:-debug}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -64,8 +64,8 @@ TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 LOG_FILE=consistency.log02
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
-TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.lndincsoil \
-     -o $LOG_FILE -e $LOG_FILE ./C768.lndincsoil.sh)
+TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.lndincsoilnoahmp \
+     -o $LOG_FILE -e $LOG_FILE ./C192.lndincsoilnoahmp.sh)
 
 LOG_FILE=consistency.log03
 export DATA="${DATA_DIR}/test3"
