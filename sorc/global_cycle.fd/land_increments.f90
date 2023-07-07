@@ -11,6 +11,7 @@ module land_increments
     public calculate_landinc_mask
     public apply_land_da_adjustments_soil
     public apply_land_da_adjustments_snd
+    public lsm_noah, lsm_noahmp
 
     integer, parameter            :: lsm_noah=1      !< flag for NOAH land surface model
     integer, parameter            :: lsm_noahmp=2      !< flag for NOAHMP land surface model
@@ -18,8 +19,6 @@ module land_increments
 
     ! control state for soil analysis:
     integer, parameter       :: lsoil_incr=3 ! number of layers to add incrments to
-    logical, parameter       :: upd_stc=.true.
-    logical, parameter       :: upd_slc=.false.
 
     real, parameter          :: tfreez=273.16 !< con_t0c  in physcons
 contains
@@ -49,7 +48,7 @@ contains
  !! @author Clara Draper. @date March 2021
 
 subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated, slc_updated, &
-                        soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,idim,jdim, myrank)
+                        soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,idim,jdim,lsm, myrank)
 
     use utils
     use gdswzd_mod
@@ -59,7 +58,7 @@ subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated,
 
     implicit none
 
-    integer, intent(in)      :: lensfc, lsoil, idim, jdim, myrank
+    integer, intent(in)      :: lensfc, lsoil, idim, jdim, myrank, lsm
 
     integer, intent(in)      :: soilsnow_tile(lensfc), soilsnow_fg_tile(lensfc)
     real, intent(inout)      :: rla(lensfc), rlo(lensfc)
@@ -74,6 +73,7 @@ subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated,
     integer                  :: itile, jtile
     integer                  :: j, ierr
     integer                  :: igausp1, jgausp1
+    logical                  :: upd_slc, upd_stc
     real                     :: fill
 
     integer, allocatable     :: id1(:,:), id2(:,:), jdc(:,:)
@@ -108,8 +108,19 @@ subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated,
     kgds_gaus(12) = 255        ! oct 29 - reserved
     kgds_gaus(20) = 255        ! oct 5  - not used, set to 255
 
+
+    if (lsm==lsm_noah) then 
+        upd_stc=.true.
+        upd_slc=.false. ! not coded
+    elseif (lsm==lsm_noahmp) then 
+        upd_stc=.true.
+        upd_slc=.true.
+    endif
+
     print*
-    print*,'adjust soil temperature using gsi increments on gaussian grid'
+    print*,'adjust soil using gsi increments on gaussian grid'
+    print*,'updating soil temps', upd_stc
+    print*,'updating soil moisture', upd_slc
     print*,'adjusting first ', lsoil_incr, ' surface layers only'
 
     !----------------------------------------------------------------------
@@ -469,6 +480,7 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
 
     integer                       :: i, l, n_freeze, n_thaw, ierr, n_revert
     integer                       :: myrank, soiltype, iret, n_stc, n_slc
+    logical                       :: upd_slc, upd_stc
 
     real                          :: slc_new
 
@@ -478,11 +490,12 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
 
     call mpi_comm_rank(mpi_comm_world, myrank, ierr)
 
-    if (lsm .EQ. lsm_noahmp) then
-        print *, 'WARNING: Currently not updating Noah-MP STC if soils frozen' 
-    elseif ( (lsm .EQ. lsm_noah)  .and. (upd_slc) ) then 
-            print *, 'FATAL ERROR: SMC updating not coded for Noah model, exiting'
-            call mpi_abort(mpi_comm_world, 10, ierr)
+    if (lsm==lsm_noah) then 
+        upd_stc=.true.
+        upd_slc=.false.
+    elseif (lsm==lsm_noahmp) then 
+        upd_stc=.true.
+        upd_slc=.true.
     endif
 
     select case (lsm ) 
