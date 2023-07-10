@@ -18,7 +18,7 @@ module land_increments
                                                      !! copied from GFS_typedefs.F90
 
     ! control state for soil analysis:
-    integer, parameter       :: lsoil_incr=3 ! number of layers to add incrments to
+    integer, parameter       :: lsoil_incr=3 !< number of layers to add incrments to
 
     real, parameter          :: tfreez=273.16 !< con_t0c  in physcons
 contains
@@ -37,12 +37,17 @@ contains
  !! @param[inout] RLA Latitude on the cubed-sphere tile
  !! @param[inout] RLO Longitude on the cubed-sphere tile
  !! @param[inout] STC_STATE
+ !! @param[inout] SMC_STATE
+ !! @param[inout] SLC_STATE
+ !! @param[out] stc_updated
+ !! @param[out] slc_updated
  !! @param[in] SOILSNOW_TILE Land mask for increments on the cubed-sphere tile
  !! @param[in] SOILSNOW_FG_TILE First guess land mask for increments on the cubed-sphere tile
  !! @param[in] LENSFC Number of land points on a tile
  !! @param[in] LSOIL Number of soil layers
  !! @param[in] IDIM 'I' dimension of a tile
  !! @param[in] JDIM 'J' dimension of a tile
+ !! @param[in] lsm
  !! @param[in] MYRANK MPI rank number
  !!
  !! @author Clara Draper. @date March 2021
@@ -441,8 +446,7 @@ end subroutine calculate_landinc_mask
 !! appropriate max. values for SMC).
 !! Here: adjust (frozen) soil moisture to be consistent with changes in
 !! soil temperature from DA
-
-!> @param[in] lsm Integer code for the LSM
+!! @param[in] lsm Integer code for the LSM
 !! @param[in] isot Integer code for the soil type data set
 !! @param[in] ivegsrc Integer code for the vegetation type data set
 !! @param[in] lensfc Number of land points for this tile
@@ -453,6 +457,9 @@ end subroutine calculate_landinc_mask
 !! @param[in] stc_adj Analysis soil temperature states
 !! @param[inout] smc_adj Analysis soil moisture states
 !! @param[inout] slc_adj Analysis liquid soil moisture states
+!! @param[in] stc_updated
+!! @param[in] slc_updated
+!! @param[in] zsoil
 !! @author Clara Draper @date April 2021
 
 subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
