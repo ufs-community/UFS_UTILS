@@ -110,3 +110,9 @@ fi
 
 cp $out_dir/C${CRES}_mosaic.nc $WORKDIR 
 
+rm -f ./input.nml
+rm -f ./fort.235
+rm -f ./fort.25
+rm -f ./fort.15
+rm -f ./landcover30.fixed
+

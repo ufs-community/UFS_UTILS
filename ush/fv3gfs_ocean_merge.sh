@@ -62,6 +62,7 @@ mkdir -p $results_dir
 ./ocean_merge
 
 
+rm -f input.nml
 
 err=$?
   if [ $err != 0 ]; then

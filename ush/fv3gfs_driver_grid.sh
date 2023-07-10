@@ -562,6 +562,21 @@ if [ $err != 0 ]; then
   exit $err
 fi
 
+
+#-----------------------------------------------------------------------
+# Copy what is needed and clean up
+#-----------------------------------------------------------------------
+
+ if [[ ! -z "$ocn" ]]; then
+
+	cp -R  $TEMP_DIR/C$res.mx$ocn $final_out_dir
+	rm -rf $TEMP_DIR/
+	
+fi
+
+
+
+
 if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   rm -f $out_dir/C${res}_grid.tile${tile}.nc
   rm -f $out_dir/C${res}_oro_data.tile${tile}.nc

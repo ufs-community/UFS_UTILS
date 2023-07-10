@@ -119,7 +119,7 @@ export soil_type_src="statsgo.0.05" #  Soil type data.
 
 if [ $gtype = uniform ]; then
   export res=96     	       # required atmos res, defaultes to 98
-  export ocn="500"             # "" to ignore else "XXX" ocean grid to the atmos res from above as Cres.mxXXX 
+  export ocn="100"             # "" to ignore else "XXX" ocean grid to the atmos res from above as Cres.mxXXX 
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
 elif [ $gtype = stretch ]; then
@@ -165,44 +165,50 @@ fi
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.kumar/CPLD_GRIDGEN/
-
 export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids_single_step/
-
 export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/CPLD_GRIDGEN/
 
-
-
-
-# save a file with the various variables that was used for later reference
-
- if [[ ! -z "$ocn" ]]; then
-		readme_name=$out_dir/readme.C$res.mx$ocn.txt
-
-else
- 		readme_name=$out_dir/readme.C$res.txt
-
-fi
-
-export readme_name=$readme_name
-
-mkdir -p $out_dir
-
-cat <<EOF >$readme_name
-
-The following parameters were used
-veg_type=$veg_type_src
-soil_type=$soil_type_src
-add_lake=$add_lake         
-lake_cutoff=$lake_cutoff
-                
-EOF
 
 
 
 #---------------------------------------------------------------------
 # Should not need to change anything below here.
 #-----------------------------------------------------------------------
+
+
+
+mkdir $out_dir/C$res
+# Save a file with the various variables that was used for later reference
+# Change the output to temp if the ocn variable is set. This way only the required files are saved in the out_dir
+
+export final_out_dir=$out_dir
+
+
+if [[ ! -z "$ocn" ]]; then
+              
+	
+		mkdir -p $out_dir/C$res.mx$ocn
+                readme_name=$out_dir/C$res.mx$ocn/readme.C$res.mx$ocn.txt
+		export out_dir=$TEMP_DIR	
+
+else
+                mkdir -p $out_dir/C$res
+                readme_name=$out_dir/C$res/readme.C$res.txt
+
+fi
+
+export readme_name=$readme_name
+
+
+cat <<EOF >$readme_name
+
+The following parameters were used
+veg_type=$veg_type_src
+soil_type=$soil_type_src
+add_lake=$add_lake
+lake_cutoff=$lake_cutoff
+
+EOF
 
 export APRUN=time
 export APRUN_SFC=srun
