@@ -166,9 +166,16 @@ fi
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
 export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids_single_step/
+
+#
+# Only these combinations of Cres and ocn can be recreated.
+# User needs to run the CPLD_GRIDGEN for other resolutions.
+# 
+# Cres= C48, C96, C192, C384, C768, C1152, C3072;
+# ocn=  mx025, mx050, mx100, mx500
+#
+#
 export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/CPLD_GRIDGEN/
-
-
 
 
 #---------------------------------------------------------------------
