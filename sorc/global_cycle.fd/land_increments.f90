@@ -39,8 +39,8 @@ contains
  !! @param[inout] STC_STATE Soil temperature state vector
  !! @param[inout] SMC_STATE Soil moisture (liquid plus solid) state vector
  !! @param[inout] SLC_STATE Liquid soil moisture state vector
- !! @param[out] stc_updated Logical to record whether STC in each grid cell was updated
- !! @param[out] slc_updated Logical to record whether SMC in each grid cell was updated
+ !! @param[out] stc_updated Integer to record whether STC in each grid cell was updated
+ !! @param[out] slc_updated Integer to record whether SMC in each grid cell was updated
  !! @param[in] SOILSNOW_TILE Land mask for increments on the cubed-sphere tile
  !! @param[in] SOILSNOW_FG_TILE First guess land mask for increments on the cubed-sphere tile
  !! @param[in] LENSFC Number of land points on a tile
@@ -457,8 +457,8 @@ end subroutine calculate_landinc_mask
 !! @param[in] stc_adj Analysis soil temperature states
 !! @param[inout] smc_adj Analysis soil moisture states
 !! @param[inout] slc_adj Analysis liquid soil moisture states
-!! @param[in] stc_updated Logical to record whether STC in each grid cell was updated
-!! @param[in] slc_updated Logical to record whether SLC in each grid cell was updated
+!! @param[in] stc_updated Integer to record whether STC in each grid cell was updated
+!! @param[in] slc_updated Integer to record whether SLC in each grid cell was updated
 !! @param[in] zsoil Depth of bottom of each soil layer
 !! @author Clara Draper @date April 2021
 
