@@ -36,18 +36,18 @@ contains
  !!
  !! @param[inout] RLA Latitude on the cubed-sphere tile
  !! @param[inout] RLO Longitude on the cubed-sphere tile
- !! @param[inout] STC_STATE
- !! @param[inout] SMC_STATE
- !! @param[inout] SLC_STATE
- !! @param[out] stc_updated
- !! @param[out] slc_updated
+ !! @param[inout] STC_STATE Soil temperature state vector
+ !! @param[inout] SMC_STATE Soil moisture (liquid plus solid) state vector
+ !! @param[inout] SLC_STATE Liquid soil moisture state vector
+ !! @param[out] stc_updated Logical to record whether STC in each grid cell was updated
+ !! @param[out] slc_updated Logical to record whether SMC in each grid cell was updated
  !! @param[in] SOILSNOW_TILE Land mask for increments on the cubed-sphere tile
  !! @param[in] SOILSNOW_FG_TILE First guess land mask for increments on the cubed-sphere tile
  !! @param[in] LENSFC Number of land points on a tile
  !! @param[in] LSOIL Number of soil layers
  !! @param[in] IDIM 'I' dimension of a tile
  !! @param[in] JDIM 'J' dimension of a tile
- !! @param[in] lsm
+ !! @param[in] lsm Integer flag indicating which land model is used (1-Noah, 2-Noah-MP)
  !! @param[in] MYRANK MPI rank number
  !!
  !! @author Clara Draper. @date March 2021
@@ -457,9 +457,9 @@ end subroutine calculate_landinc_mask
 !! @param[in] stc_adj Analysis soil temperature states
 !! @param[inout] smc_adj Analysis soil moisture states
 !! @param[inout] slc_adj Analysis liquid soil moisture states
-!! @param[in] stc_updated
-!! @param[in] slc_updated
-!! @param[in] zsoil
+!! @param[in] stc_updated Logical to record whether STC in each grid cell was updated
+!! @param[in] slc_updated Logical to record whether SLC in each grid cell was updated
+!! @param[in] zsoil Depth of bottom of each soil layer
 !! @author Clara Draper @date April 2021
 
 subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
