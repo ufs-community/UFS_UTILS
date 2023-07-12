@@ -49,8 +49,11 @@ MODULE READ_WRITE_DATA
  REAL, ALLOCATABLE, PUBLIC    :: DTREF_GAUS(:,:) !< GSI foundation temperature
                                                  !! increment on the gaussian grid.
 
- REAL, ALLOCATABLE, PUBLIC    :: STC_INC_GAUS(:,:,:) !< GSI soil temperature increments 
-                                                     !! on the gaussian grid. 
+ REAL, ALLOCATABLE, PUBLIC    :: STC_INC_GAUS(:,:,:) !< GSI soil temperature increments
+                                                     !! on the gaussian grid.
+
+ REAL, ALLOCATABLE, PUBLIC    :: SLC_INC_GAUS(:,:,:) !< GSI soil moisture increments
+                                                     !! on the gaussian grid.
 
  PUBLIC :: READ_DATA
  PUBLIC :: READ_GSI_DATA
@@ -905,6 +908,7 @@ MODULE READ_WRITE_DATA
 
      ALLOCATE(DUMMY(IDIM_GAUS,JDIM_GAUS+2))
      ALLOCATE(STC_INC_GAUS(LSOIL,IDIM_GAUS,JDIM_GAUS))
+     ALLOCATE(SLC_INC_GAUS(LSOIL,IDIM_GAUS,JDIM_GAUS))
 
      ! read in soil temperature increments in each layer
      DO K = 1, LSOIL
@@ -921,6 +925,19 @@ MODULE READ_WRITE_DATA
          DO J = 1, JDIM_GAUS
            STC_INC_GAUS(K,:,J) = DUMMY(:,J+1)
          ENDDO
+
+         INCVAR = "slc"//K_CH//"_inc"
+         ERROR=NF90_INQ_VARID(NCID, INCVAR, ID_VAR)
+         err_msg = "reading "//INCVAR//" ID"
+         CALL NETCDF_ERR(ERROR, trim(err_msg))
+         ERROR=NF90_GET_VAR(NCID, ID_VAR, DUMMY)
+         err_msg = "reading "//INCVAR//" data"
+         CALL NETCDF_ERR(ERROR, err_msg)
+
+         DO J = 1, JDIM_GAUS
+           SLC_INC_GAUS(K,:,J) = DUMMY(:,J+1)
+         ENDDO
+
      ENDDO
 
      ALLOCATE(IDUMMY(IDIM_GAUS,JDIM_GAUS+2))
