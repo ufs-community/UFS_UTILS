@@ -68,7 +68,7 @@ BUILD_DIR=${BUILD_DIR:-"${DIR_ROOT}/build"}
 [[ ${BUILD_CLEAN:-"YES"} =~ [yYtT] ]] && rm -rf "$BUILD_DIR"
 mkdir -p "${BUILD_DIR}" && cd "${BUILD_DIR}"
 
-cmake "${CMAKE_FLAGS}" "${CMAKE_OPTS}" "${DIR_ROOT}"
+cmake ${CMAKE_FLAGS} ${CMAKE_OPTS} "${DIR_ROOT}"
 
 make -j "${BUILD_JOBS:-8}" VERBOSE="${BUILD_VERBOSE:-}"
 make install
@@ -76,4 +76,4 @@ make install
 #ctest
 #ctest -I 4,5
 
-exit
+exit 0
