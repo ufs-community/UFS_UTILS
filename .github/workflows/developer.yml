@@ -114,12 +114,35 @@ jobs:
         make -j2
         make install
 
+    - name: cache-w3emc
+      id: cache-w3emc
+      uses: actions/cache@v2
+      with:
+        path: ~/w3emc
+        key: developer-w3emc-${{ runner.os }}-2.10.0
+
+    - name: checkout-w3emc
+      uses: actions/checkout@v2
+      with:
+        repository: NOAA-EMC/NCEPLIBS-w3emc
+        path: w3emc
+        ref: v2.10.0
+
+    - name: build-w3emc
+      run: |
+        cd w3emc
+        mkdir build
+        cd build
+        cmake -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc -DBUILD_WITH_BUFR=OFF ..
+        make -j2
+        make install
+        
     - name: cache-g2
       id: cache-g2
       uses: actions/cache@v2
       with:
         path: ~/g2
-        key: developer-g2-${{ runner.os }}-3.4.5
+        key: developer-g2-${{ runner.os }}-3.4.6
 
     - name: checkout-g2
       if: steps.cache-g2.outputs.cache-hit != 'true'
@@ -127,7 +150,7 @@ jobs:
       with:
         repository: NOAA-EMC/NCEPLIBS-g2
         path: g2
-        ref: v3.4.5
+        ref: v3.4.6
 
     - name: build-g2
       if: steps.cache-g2.outputs.cache-hit != 'true'
@@ -135,7 +158,7 @@ jobs:
         cd g2
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=~/g2 -DCMAKE_PREFIX_PATH="~/bacio;~/jasper" ..
+        cmake -DCMAKE_INSTALL_PREFIX=~/g2 -DCMAKE_PREFIX_PATH="~/bacio;~/jasper;~/w3emc" ..
         make -j2
         make install
 
@@ -189,22 +212,6 @@ jobs:
         make -j2
         make install
 
-    - name: checkout-w3emc
-      uses: actions/checkout@v2
-      with:
-        repository: NOAA-EMC/NCEPLIBS-w3emc
-        path: w3emc
-        ref: v2.9.3
-
-    - name: build-w3emc
-      run: |
-        cd w3emc
-        mkdir build
-        cd build
-        cmake -DCMAKE_PREFIX_PATH=~/bacio -DCMAKE_INSTALL_PREFIX=~/w3emc ..
-        make -j2
-        make install
-        
     # - name: checkout-g2c
     #   uses: actions/checkout@v2
     #   with:
