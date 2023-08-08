@@ -33,8 +33,6 @@
                                        !< Sea ice fraction.
  type(esmf_field), public   :: seaice_skin_temp_target_grid
                                        !< Sea ice skin temperature.
-!type(esmf_field), public   :: seaice_substrate_temp_target_grid
-                                       !< Sea ice substrate temperature.
  type(esmf_field), public   :: skin_temp_target_grid
                                        !< Skin temperature/sst.
  type(esmf_field), public   :: sst_target_grid
@@ -144,7 +142,6 @@
  call ESMF_FieldDestroy(seaice_fract_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_depth_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_skin_temp_target_grid, rc=rc)
-!if (ESMF_FieldIsCreated(seaice_substrate_temp_target_grid)) call ESMF_FieldDestroy(seaice_substrate_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(srflag_target_grid, rc=rc)
  call ESMF_FieldDestroy(skin_temp_target_grid, rc=rc)
  if (ESMF_FieldIsCreated(sst_target_grid)) call ESMF_FieldDestroy(sst_target_grid, rc=rc)
