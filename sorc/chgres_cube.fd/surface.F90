@@ -1038,9 +1038,8 @@
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 1
 
-!cfract this logic should work for fractional grids.
  mask_target_ptr = 0
- where (landmask_target_ptr == 1) mask_target_ptr = 1
+ where (landmask_target_ptr == 1) mask_target_ptr = 1 ! some or all land.
 
  method=ESMF_REGRIDMETHOD_CONSERVE
  isrctermprocessing = 1
@@ -1090,7 +1089,6 @@
  call ESMF_FieldBundleDestroy(bundle_allland_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleDestroy", rc)
-  
 
  do tile = 1, num_tiles_target_grid
 
@@ -1099,11 +1097,10 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
-!cfract 0 - all water; 1 - some land.
    if (localpet == 0) then
      allocate(land_target_one_tile(i_target,j_target))
      land_target_one_tile = 0
-     where(mask_target_one_tile == 1) land_target_one_tile = 1
+     where(mask_target_one_tile == 1) land_target_one_tile = 1 ! some or all land.
    
      call search_many(num_fields,bundle_allland_target, &
                     tile,search_nums,localpet, mask=land_target_one_tile)
@@ -1134,8 +1131,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,'land ice check ',veg_type_landice_input
-
  mask_input_ptr = 0
  where (nint(veg_type_input_ptr) == veg_type_landice_input) mask_input_ptr = 1
 
@@ -1145,8 +1140,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract veg_type_target should contain a valid value at points with
-!cfract any land. So this logic should work with fractional grids.
  mask_target_ptr = 0
  where (nint(veg_type_target_ptr) == veg_type_landice_target) mask_target_ptr = 1
 
@@ -1232,8 +1225,6 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
-!cfract setting land_target_one_tile. this should work for fractional grids.
-
    if (localpet == 0) then
      land_target_one_tile = 0
      where(nint(veg_type_target_one_tile) == veg_type_landice_target) land_target_one_tile = 1
@@ -1273,10 +1264,9 @@
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 1
  where (nint(veg_type_input_ptr) == veg_type_landice_input) mask_input_ptr = 0
 
-!cfract This should work for fractional grid.
  mask_target_ptr = 0
- where (landmask_target_ptr == 1) mask_target_ptr = 1
- where (nint(veg_type_target_ptr) == veg_type_landice_target) mask_target_ptr = 0
+ where (landmask_target_ptr == 1) mask_target_ptr = 1  ! some or all land.
+ where (nint(veg_type_target_ptr) == veg_type_landice_target) mask_target_ptr = 0 ! land ice.
 
  method=ESMF_REGRIDMETHOD_NEAREST_STOD
  isrctermprocessing = 1
@@ -1316,12 +1306,6 @@
  
  
  if (.not. sotyp_from_climo) then 
-!   call ESMF_FieldBundleAdd(bundle_nolandice_target, (/soil_type_target_grid/), rc=rc)
-!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!      call error_handler("IN FieldBundleAdd", rc)
-!   call ESMF_FieldBundleAdd(bundle_nolandice_input, (/soil_type_input_grid/), rc=rc)
-!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!      call error_handler("IN FieldBundleAdd", rc)
    print*,"- CALL Field_Regrid ."
    call ESMF_FieldRegrid(soil_type_input_grid, &
                          soil_type_target_grid, &
@@ -1343,10 +1327,6 @@
      call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
      soil_type_target_ptr(i,j) = -9999.9 
    enddo
- !  call ESMF_FieldBundleGet(bundle_nolandice_target,fieldCount=num_fields,rc=rc)
- !  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
- !     call error_handler("IN FieldBundleGet", rc)
- !  sotyp_ind = 3
  endif
  
  if (.not. vgfrc_from_climo) then 
@@ -1407,11 +1387,6 @@
  search_nums(1:5) = (/85,7,224,85,86/)
  dozero(1:5) = (/.False.,.False.,.True.,.True.,.False./)
  
- !if (.not.sotyp_from_climo) then
- !  search_nums(sotyp_ind) = 226
- !  dozero(sotyp_ind) = .False.
- !endif
- 
  if (.not. vgfrc_from_climo) then
    search_nums(vgfrc_ind) = 224
    dozero(vgfrc_ind) = .True.
@@ -1455,9 +1430,6 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
-!cfract Here mask_target_one_tile is 'landmask_target_grid'. it is
-!cfract then modified by veg_type_target_grid. so this should work for 
-!cfract grids.
    if (localpet == 0) then
      where(nint(veg_type_target_one_tile) == veg_type_landice_target) mask_target_one_tile = 0
    endif

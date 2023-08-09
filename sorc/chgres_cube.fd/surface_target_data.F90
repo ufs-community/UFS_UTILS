@@ -40,14 +40,14 @@
  type(esmf_field), public   :: srflag_target_grid
                                        !< Snow/rain flag.
  type(esmf_field), public   :: snow_liq_equiv_target_grid
-                                       !< Liquid equivalent snow depth.
+                                       !< Liquid equivalent snow depth at land.
  type(esmf_field), public   :: snow_liq_equiv_at_ice_target_grid
                                        !< Liquid equivalent snow depth at sea
                                        !< ice.
  type(esmf_field), public   :: snow_depth_target_grid
-                                       !< Physical snow depth.
+                                       !< Physical snow depth at land.
  type(esmf_field), public   :: snow_depth_at_ice_target_grid
-                                       !< physical snow depth at sea ice
+                                       !< physical snow depth at sea ice.
  type(esmf_field), public   :: soil_temp_target_grid
                                        !< 3-d soil temperature.
  type(esmf_field), public   :: soilm_liq_target_grid
