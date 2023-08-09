@@ -3005,7 +3005,6 @@
 
  target_ptr = init_val
 
-!if (fract_grid) then
  print*,"- CALL FieldCreate FOR TARGET GRID SNOW LIQ EQUIV AT SEA ICE."
  snow_liq_equiv_at_ice_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -3021,8 +3020,6 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
-
-!endif ! fractional grid
 
  print*,"- CALL FieldCreate FOR TARGET GRID SNOW DEPTH."
  snow_depth_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3040,7 +3037,6 @@
 
  target_ptr = init_val
 
-!if (fract_grid) then
  print*,"- CALL FieldCreate FOR TARGET GRID SNOW DEPTH AT SEA ICE."
  snow_depth_at_ice_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -3056,7 +3052,6 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
-!endif
 
  print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE FRACTION."
  seaice_fract_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3090,7 +3085,6 @@
 
  target_ptr = init_val
 
-!if(fract_grid)then
  print*,"- CALL FieldCreate FOR TARGET GRID sst."
  sst_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -3106,7 +3100,6 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
-!endif
 
  print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE SKIN TEMP."
  seaice_skin_temp_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3188,7 +3181,6 @@
 
  target_ptr = init_val
 
-!if (fract_grid)then
  print*,"- CALL FieldCreate FOR TARGET GRID Z0_ICE."
  z0_ice_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -3220,7 +3212,6 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
-!endif
 
  print*,"- CALL FieldCreate FOR INTERPOLATED TARGET GRID TERRAIN."
  terrain_from_input_grid = ESMF_FieldCreate(target_grid, &
@@ -3254,8 +3245,7 @@
 
  target_ptr = init_val
 
-!if(fract_grid)then
- print*,"- CALL FieldCreate FOR TARGET GRID sea ice column TEMPERATURE."
+ print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE COLUMN TEMPERATURE."
  ice_temp_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_R8, &
                                    staggerloc=ESMF_STAGGERLOC_CENTER, &
@@ -3272,7 +3262,6 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr_3d = init_val
-!endif
 
  print*,"- CALL FieldCreate FOR TARGET GRID SOIL TEMPERATURE."
  soil_temp_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3489,12 +3478,15 @@
 
 !> Update landmask for sea ice.
 !!
+!! The model requires the landmask record be present. However, the data
+!! is recomputed in FV3ATM routine fv3atm_sfc_io.F90 after it is read in. Here,
+!! compute it using the same algorithm as the model and output it as
+!! a diagnostic.
+!!
 !! @author George Gayno
  subroutine update_landmask
 
  use model_grid, only : landmask_target_grid, land_frac_target_grid
-
- use program_setup, only : fract_grid
 
  implicit none
 
@@ -3518,39 +3510,28 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- if (.not.fract_grid) then
-
-   where(ice_ptr > 0.0) mask_ptr = 2
-
- else ! Fractional grid. The model requires this record be present. However,
-      ! the data is recomputed in FV3GFS_io.F90 after it is read in. Here,
-      ! compute it using the same algorithm as the model and output it as
-      ! a diagnostic.
-
-   print*,"- GET TARGET land fraction."
-   call ESMF_FieldGet(land_frac_target_grid, &
+ print*,"- GET TARGET land fraction."
+ call ESMF_FieldGet(land_frac_target_grid, &
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=land_frac_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGet", rc)
 
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
 
-     mask_ptr(i,j) = ceiling(land_frac_ptr(i,j))
-     if (mask_ptr(i,j) /= 1) then
-       if(ice_ptr(i,j) > 0.0) then
-         mask_ptr(i,j) = 2
-       else
-         mask_ptr(i,j) = 0
-       endif
+   mask_ptr(i,j) = ceiling(land_frac_ptr(i,j))
+   if (mask_ptr(i,j) /= 1) then
+     if(ice_ptr(i,j) > 0.0) then
+       mask_ptr(i,j) = 2
+     else
+       mask_ptr(i,j) = 0
      endif
+   endif
   
-   enddo
-   enddo
-
- endif
+ enddo
+ enddo
 
  end subroutine update_landmask
 
