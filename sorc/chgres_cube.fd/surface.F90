@@ -318,8 +318,7 @@
                                        vgfrc_from_climo, &
                                        minmax_vgfrc_from_climo, &
                                        lai_from_climo, &
-                                       tg3_from_soil, &
-                                       fract_grid
+                                       tg3_from_soil
                                        
  use static_data, only               : veg_type_target_grid, &
                                        soil_type_target_grid, &
@@ -894,24 +893,18 @@
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 0) mask_input_ptr = 1
 
-!cfract include points that are fractional ice.
-!cfract use seamask_target, which is 1 if there is some water.
-!cfract then remove points where fice is > 0.
-!cfract We want points with at least some water, but no ice.
+!---------------------------------------------------------------------------------------------
+! Set target mask - want points with at least some open water.
+!---------------------------------------------------------------------------------------------
 
  mask_target_ptr = 0
- where (seamask_target_ptr == 1) mask_target_ptr = 1
- if (fract_grid) then
-   where (seaice_fract_target_ptr  == 1.0_esmf_kind_r8) mask_target_ptr = 0
- else
-   where (seaice_fract_target_ptr  > 0.0) mask_target_ptr = 0
- endif
+ where (seamask_target_ptr == 1) mask_target_ptr = 1  ! some or all non-land.
+ where (seaice_fract_target_ptr  == 1.0_esmf_kind_r8) mask_target_ptr = 0 ! all ice.
 
  method=ESMF_REGRIDMETHOD_CONSERVE
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for water fields."
-!if(fract_grid)then
  call ESMF_FieldRegridStore(skin_temp_input_grid, &
                             sst_target_grid, &
                             srcmaskvalues=(/0/), &
@@ -923,19 +916,6 @@
                             routehandle=regrid_water, &
                             regridmethod=method, &
                             unmappedDstList=unmapped_ptr, rc=rc)
-!else
-!call ESMF_FieldRegridStore(skin_temp_input_grid, &
-!                           skin_temp_target_grid, &
-!                           srcmaskvalues=(/0/), &
-!                           dstmaskvalues=(/0/), &
-!                           polemethod=ESMF_POLEMETHOD_NONE, &
-!                           srctermprocessing=isrctermprocessing, &
-!                           unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
-!                           normtype=ESMF_NORMTYPE_FRACAREA, &
-!                           routehandle=regrid_water, &
-!                           regridmethod=method, &
-!                           unmappedDstList=unmapped_ptr, rc=rc)
-!endif
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
@@ -1024,16 +1004,12 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
-!cfract - here mask must be points with some water, but no ice.
+! Mask must be points with some water, but no ice.
    if (localpet == 0) then
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
-     where(mask_target_one_tile == 1) water_target_one_tile = 1
-     if(fract_grid) then
-       where(fice_target_one_tile == 1.0_esmf_kind_r8) water_target_one_tile = 0
-     else
-       where(fice_target_one_tile > 0.0) water_target_one_tile = 0
-     endif
+     where(mask_target_one_tile == 1) water_target_one_tile = 1 ! some or all non-land.
+     where(fice_target_one_tile == 1.0_esmf_kind_r8) water_target_one_tile = 0 ! all ice
      call search_many(num_fields,bundle_water_target, tile,search_nums,localpet, &
                 latitude=latitude_one_tile,mask=water_target_one_tile)
    else
