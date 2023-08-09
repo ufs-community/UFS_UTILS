@@ -29,7 +29,7 @@
                                  srflag_target_grid, soil_temp_target_grid, &
                                  seaice_depth_target_grid, snow_liq_equiv_target_grid, &
                                  seaice_skin_temp_target_grid, skin_temp_target_grid, &
-                                 snow_depth_target_grid, z0_target_grid, &
+                                 snow_depth_target_grid, &
                                  c_d_target_grid, c_0_target_grid, &
                                  d_conv_target_grid, dt_cool_target_grid, &
                                  ifd_target_grid, qrain_target_grid, &
@@ -973,11 +973,7 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
 
-!if(fract_grid)then
  call ESMF_FieldBundleAdd(bundle_water_target, (/sst_target_grid, z0_water_target_grid/), rc=rc)
-!else
-!call ESMF_FieldBundleAdd(bundle_water_target, (/skin_temp_target_grid, z0_target_grid/), rc=rc)
-!endif
 
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
@@ -2243,7 +2239,6 @@
 
  use model_grid, only                : landmask_target_grid, &
                                        seamask_target_grid
- use static_data, only               : veg_type_target_grid
  use program_setup, only             : fract_grid
 
  implicit none
@@ -2252,17 +2247,9 @@
  integer(esmf_kind_i8), pointer     :: landmask_ptr(:,:)
  integer(esmf_kind_i8), pointer     :: seamask_ptr(:,:)
 
- real                               :: z0_igbp(20)
- real(esmf_kind_r8), pointer        :: data_ptr(:,:)
  real(esmf_kind_r8), pointer        :: data_ptr2(:,:)
  real(esmf_kind_r8), pointer        :: data_ptr3(:,:)
  real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
- real(esmf_kind_r8), pointer        :: veg_type_ptr(:,:)
-
- data z0_igbp /1.089, 2.653, 0.854, 0.826, 0.800, 0.050,  &
-               0.030, 0.856, 0.856, 0.150, 0.040, 0.130,  &
-               1.000, 0.250, 0.011, 0.011, 0.001, 0.076,  &
-               0.050, 0.030/
 
  print*,"- CALL FieldGet FOR TARGET GRID LAND-SEA MASK."
  call ESMF_FieldGet(landmask_target_grid, &
@@ -2275,18 +2262,6 @@
  print*,"- CALL FieldGet FOR TARGET GRID SEA ICE."
  call ESMF_FieldGet(seaice_fract_target_grid, &
                     farrayPtr=fice_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- print*,"- CALL FieldGet FOR TARGET GRID VEGETATION TYPE."
- call ESMF_FieldGet(veg_type_target_grid, &
-                    farrayPtr=veg_type_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- print*,"- CALL FieldGet FOR TARGET GRID Z0."
- call ESMF_FieldGet(z0_target_grid, &
-                    farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
@@ -2321,15 +2296,6 @@
 
  if(fract_grid)then
 
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (landmask_ptr(i,j) == 1) then
-       data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
-     else
-       data_ptr(i,j) = 1.e20
-     endif
-   enddo
-   enddo
 
 !  print*,"- CALL FieldGet FOR TARGET GRID Z0 WATER."
 !  call ESMF_FieldGet(z0_water_target_grid, &
@@ -2359,8 +2325,6 @@
    do i = clb(1), cub(1)
      if (fice_ptr(i,j) > 0.0 .or. seamask_ptr(i,j) == 0) then
        data_ptr3(i,j) = 1.e20
-!    elseif (landmask_ptr(i,j) == 1) then
-!      data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
      endif
    enddo
    enddo
@@ -3299,22 +3263,6 @@
 
  print*,"- INITIALIZE TARGET leaf area index."
  call ESMF_FieldGet(lai_target_grid, &
-                    farrayPtr=target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- target_ptr = init_val
-
- print*,"- CALL FieldCreate FOR TARGET GRID Z0."
- z0_target_grid = ESMF_FieldCreate(target_grid, &
-                                     typekind=ESMF_TYPEKIND_R8, &
-                                     name="z0_target_grid", &
-                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldCreate", rc)
-
- print*,"- INITIALIZE TARGET grid z0."
- call ESMF_FieldGet(z0_target_grid, &
                     farrayPtr=target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)

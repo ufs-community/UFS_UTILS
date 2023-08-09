@@ -60,8 +60,6 @@
                                        !< Precipitation.
  type(esmf_field), public   :: ustar_target_grid
                                        !< Friction velocity.
- type(esmf_field), public   :: z0_target_grid
-                                       !< Roughness length.
  type(esmf_field), public   :: z0_ice_target_grid
                                        !< roughness length at sea ice
  type(esmf_field), public   :: z0_water_target_grid
@@ -147,9 +145,8 @@
  if (ESMF_FieldIsCreated(sst_target_grid)) call ESMF_FieldDestroy(sst_target_grid, rc=rc)
  call ESMF_FieldDestroy(canopy_mc_target_grid, rc=rc)
  call ESMF_FieldDestroy(lai_target_grid,rc=rc)
- call ESMF_FieldDestroy(z0_target_grid, rc=rc)
- if (ESMF_FieldIsCreated(z0_ice_target_grid)) call ESMF_FieldDestroy(z0_ice_target_grid, rc=rc)
- if (ESMF_FieldIsCreated(z0_water_target_grid)) call ESMF_FieldDestroy(z0_water_target_grid, rc=rc)
+ call ESMF_FieldDestroy(z0_ice_target_grid, rc=rc)
+ call ESMF_FieldDestroy(z0_water_target_grid, rc=rc)
  call ESMF_FieldDestroy(soil_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(soilm_tot_target_grid, rc=rc)
  call ESMF_FieldDestroy(soilm_liq_target_grid, rc=rc)
