@@ -861,19 +861,12 @@
  do tile = 1, num_tiles_target_grid
 
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
-   call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
-
-   print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
    call ESMF_FieldGather(seaice_fract_target_grid, fice_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
-!cfract using ice flag of '2' here. cant do that.
    if (localpet == 0) then   
-     where(mask_target_one_tile == 1) mask_target_one_tile = 0
-     print*,'got here ',tile,maxval(mask_target_one_tile),minval(mask_target_one_tile)
+     mask_target_one_tile = 0
      where(fice_target_one_tile > 0.0) mask_target_one_tile = 1
      call search_many(num_fields,bundle_seaice_target,tile, search_nums,localpet, &
                     mask=mask_target_one_tile)
