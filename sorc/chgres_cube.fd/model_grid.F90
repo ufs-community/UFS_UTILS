@@ -70,10 +70,9 @@
  type(esmf_field),  public              :: longitude_w_input_grid
                                            !< longitude of 'west' edge of grid
                                            !! box, input grid
-
  type(esmf_field),  public              :: landmask_target_grid
-                                           !< land mask target grid - '1' land;
-                                           !! '0' non-land
+                                           !< land mask target grid - '1' some or all land;
+                                           !! '0' all non-land
  type(esmf_field),  public              :: land_frac_target_grid
                                            !< land fraction, target grid
  type(esmf_field),  public              :: latitude_target_grid
@@ -93,8 +92,8 @@
                                            !< longitude of 'west' edge of grid
                                            !! box, target grid
  type(esmf_field),  public              :: seamask_target_grid
-                                           !< sea mask target grid - '1' non-land;
-                                           !! '0' land
+                                           !< sea mask target grid - '1' some or all non-land;
+                                           !! '0' all land
  type(esmf_field),  public              :: terrain_target_grid
                                            !< terrain height target grid
 

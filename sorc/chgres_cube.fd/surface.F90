@@ -529,7 +529,7 @@
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 1
 
  mask_target_ptr = 0
- where (landmask_target_ptr == 1) mask_target_ptr = 1
+ where (landmask_target_ptr == 1) mask_target_ptr = 1 ! some or all land.
  
  print*,"- CALL FieldCreate FOR TERRAIN FROM INPUT GRID LAND."
  terrain_from_input_grid_land = ESMF_FieldCreate(target_grid, &
@@ -659,7 +659,7 @@
     call error_handler("IN FieldRegridRelease", rc)
     
 !-----------------------------------------------------------------------
-! Next, determine the sea ice fraction on target grid.  
+! Next, determine the sea ice fraction on the fractional target grid.  
 ! For fractional grids, the ice fraction is not scaled for the
 ! fraction of non-land. So if a point is 50% land and non-land,
 ! an ice frac of 100% means the entire non-land portion is ice covered.
@@ -668,9 +668,10 @@
  mask_input_ptr = 1
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
  
-! For non-fractional grids, 'seamask_target_ptr' is '0' for land points
-! and '1' for non-land points. For fractional grids, 'seamask_target_ptr'
-! will be '0' if all land and '1' is at least some non-land.
+!-----------------------------------------------------------------------
+! Map to grid points that are partial or all non-land. That is 
+! indicated where seamask_target is '1'.
+!-----------------------------------------------------------------------
 
  mask_target_ptr = int(seamask_target_ptr,kind=esmf_kind_i4)
 
@@ -745,14 +746,12 @@
                  latitude=latitude_one_tile)
    endif
    
-! When running with fractional grids, to reduce the number of points with small amounts of open water, 
-! set any point with ice between 95-100% to 100%.
+!------------------------------------------------------------------------------
+! To reduce the potenitally large number of target grid points with a very
+! small amount of open water, set any point with ice between 95-100% to 100%.
+!------------------------------------------------------------------------------
 
-   if (fract_grid) then
-     ice_lim = 0.95_esmf_kind_r8
-   else
-     ice_lim = 1.0_esmf_kind_r8
-   endif
+   ice_lim = 0.95_esmf_kind_r8
 
    if (localpet == 0) then
      do j = 1, j_target
@@ -798,7 +797,6 @@
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for 3d seaice fields."
- if(fract_grid)then
  call ESMF_FieldRegridStore(soil_temp_input_grid, &
                             ice_temp_target_grid, &
                             srcmaskvalues=(/0/), &
@@ -810,19 +808,7 @@
                             routehandle=regrid_seaice, &
                             regridmethod=method, &
                             unmappedDstList=unmapped_ptr, rc=rc)
- else
- call ESMF_FieldRegridStore(soil_temp_input_grid, &
-                            soil_temp_target_grid, &
-                            srcmaskvalues=(/0/), &
-                            dstmaskvalues=(/0/), &
-                            polemethod=ESMF_POLEMETHOD_NONE, &
-                            srctermprocessing=isrctermprocessing, &
-                            unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, &
-                            normtype=ESMF_NORMTYPE_FRACAREA, &
-                            routehandle=regrid_seaice, &
-                            regridmethod=method, &
-                            unmappedDstList=unmapped_ptr, rc=rc)
- endif
+
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
@@ -833,28 +819,22 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
 
-!if (fract_grid) then
-   call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_at_ice_target_grid, &
+ call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_at_ice_target_grid, &
                           snow_liq_equiv_at_ice_target_grid, seaice_skin_temp_target_grid, &
                           ice_temp_target_grid/), rc=rc)
-!else
-!  call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_target_grid, &
-!                         snow_liq_equiv_target_grid, seaice_skin_temp_target_grid, &
-!                         soil_temp_target_grid/), rc=rc)
-!endif
 
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
 
  call ESMF_FieldBundleAdd(bundle_seaice_input, (/seaice_depth_input_grid, snow_depth_input_grid, &
                           snow_liq_equiv_input_grid, seaice_skin_temp_input_grid, &
                           soil_temp_input_grid/), rc=rc)                          
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
+
  call ESMF_FieldBundleGet(bundle_seaice_target,fieldCount=num_fields,rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleGet", rc)
- 
 
  allocate(search_nums(num_fields))
  allocate(dozero(num_fields))
@@ -893,6 +873,7 @@
 !cfract using ice flag of '2' here. cant do that.
    if (localpet == 0) then   
      where(mask_target_one_tile == 1) mask_target_one_tile = 0
+     print*,'got here ',tile,maxval(mask_target_one_tile),minval(mask_target_one_tile)
      where(fice_target_one_tile > 0.0) mask_target_one_tile = 1
      call search_many(num_fields,bundle_seaice_target,tile, search_nums,localpet, &
                     mask=mask_target_one_tile)
@@ -902,7 +883,6 @@
 
  enddo
 
- !deallocate(search_nums, fice_target_one_tile)
  deallocate(search_nums)
 
  call ESMF_FieldBundleDestroy(bundle_seaice_target,rc=rc)
@@ -2964,8 +2944,6 @@
  subroutine create_surface_esmf_fields
 
  use model_grid, only         : target_grid, lsoil_target
-
- use program_setup, only      : fract_grid
 
  implicit none
 
