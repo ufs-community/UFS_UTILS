@@ -2548,7 +2548,7 @@
  enddo
  enddo
 
- print*,"- ZERO OUT TARGET GRID SNOW DEPTH AT NON-LAND."
+ print*,"- SET NON-LAND FLAG AT TARGET GRID SNOW DEPTH."
  call ESMF_FieldGet(snow_depth_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2562,7 +2562,7 @@
  enddo
  enddo
 
- print*,"- ZERO OUT TARGET GRID SNOW LIQ AT NON-LAND."
+ print*,"- SET NON-LAND FLAG AT TARGET GRID SNOW LIQ."
  call ESMF_FieldGet(snow_liq_equiv_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
