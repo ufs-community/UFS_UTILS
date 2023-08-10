@@ -1,0 +1,119 @@
+20230804 155252.684 INFO             PET07 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155252.684 INFO             PET07 !!! THE ESMF_LOG IS SET TO OUTPUT ALL LOG MESSAGES !!!
+20230804 155252.684 INFO             PET07 !!!     THIS MAY CAUSE SLOWDOWN IN PERFORMANCE     !!!
+20230804 155252.684 INFO             PET07 !!! FOR PRODUCTION RUNS, USE:                      !!!
+20230804 155252.684 INFO             PET07 !!!                   ESMF_LOGKIND_Multi_On_Error  !!!
+20230804 155252.684 INFO             PET07 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155252.684 INFO             PET07 Running with ESMF Version   : v8.4.0b08
+20230804 155252.684 INFO             PET07 ESMF library build date/time: "Aug  3 2022" "19:00:28"
+20230804 155252.684 INFO             PET07 ESMF library build location : /scratch2/NCEPDEV/nwprod/hpc-stack/src/develop/pkg/v8.4.0b08
+20230804 155252.684 INFO             PET07 ESMF_COMM                   : intelmpi
+20230804 155252.684 INFO             PET07 ESMF_MOAB                   : enabled
+20230804 155252.684 INFO             PET07 ESMF_LAPACK                 : enabled
+20230804 155252.684 INFO             PET07 ESMF_NETCDF                 : enabled
+20230804 155252.684 INFO             PET07 ESMF_PNETCDF                : disabled
+20230804 155252.684 INFO             PET07 ESMF_PIO                    : enabled
+20230804 155252.684 INFO             PET07 ESMF_YAMLCPP                : enabled
+20230804 155507.285 INFO             PET07 Finalizing ESMF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155252.720 INFO             PET07 !!! THE ESMF_LOG IS SET TO OUTPUT ALL LOG MESSAGES !!!
+20230804 155252.720 INFO             PET07 !!!     THIS MAY CAUSE SLOWDOWN IN PERFORMANCE     !!!
+20230804 155252.720 INFO             PET07 !!! FOR PRODUCTION RUNS, USE:                      !!!
+20230804 155252.720 INFO             PET07 !!!                   ESMF_LOGKIND_Multi_On_Error  !!!
+20230804 155252.720 INFO             PET07 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155252.720 INFO             PET07 Running with ESMF Version   : v8.4.0b08
+20230804 155252.720 INFO             PET07 ESMF library build date/time: "Aug  3 2022" "19:00:28"
+20230804 155252.720 INFO             PET07 ESMF library build location : /scratch2/NCEPDEV/nwprod/hpc-stack/src/develop/pkg/v8.4.0b08
+20230804 155252.720 INFO             PET07 ESMF_COMM                   : intelmpi
+20230804 155252.721 INFO             PET07 ESMF_MOAB                   : enabled
+20230804 155252.721 INFO             PET07 ESMF_LAPACK                 : enabled
+20230804 155252.721 INFO             PET07 ESMF_NETCDF                 : enabled
+20230804 155252.721 INFO             PET07 ESMF_PNETCDF                : disabled
+20230804 155252.721 INFO             PET07 ESMF_PIO                    : enabled
+20230804 155252.721 INFO             PET07 ESMF_YAMLCPP                : enabled
+20230804 155458.978 INFO             PET07 Finalizing ESMF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155255.612 INFO             PET07 !!! THE ESMF_LOG IS SET TO OUTPUT ALL LOG MESSAGES !!!
+20230804 155255.612 INFO             PET07 !!!     THIS MAY CAUSE SLOWDOWN IN PERFORMANCE     !!!
+20230804 155255.612 INFO             PET07 !!! FOR PRODUCTION RUNS, USE:                      !!!
+20230804 155255.612 INFO             PET07 !!!                   ESMF_LOGKIND_Multi_On_Error  !!!
+20230804 155255.612 INFO             PET07 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155255.612 INFO             PET07 Running with ESMF Version   : v8.4.0b08
+20230804 155255.612 INFO             PET07 ESMF library build date/time: "Aug  3 2022" "19:00:28"
+20230804 155255.612 INFO             PET07 ESMF library build location : /scratch2/NCEPDEV/nwprod/hpc-stack/src/develop/pkg/v8.4.0b08
+20230804 155255.612 INFO             PET07 ESMF_COMM                   : intelmpi
+20230804 155255.612 INFO             PET07 ESMF_MOAB                   : enabled
+20230804 155255.612 INFO             PET07 ESMF_LAPACK                 : enabled
+20230804 155255.612 INFO             PET07 ESMF_NETCDF                 : enabled
+20230804 155255.612 INFO             PET07 ESMF_PNETCDF                : disabled
+20230804 155255.612 INFO             PET07 ESMF_PIO                    : enabled
+20230804 155255.612 INFO             PET07 ESMF_YAMLCPP                : enabled
+20230804 155521.303 INFO             PET07 Finalizing ESMF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155255.682 INFO             PET07 !!! THE ESMF_LOG IS SET TO OUTPUT ALL LOG MESSAGES !!!
+20230804 155255.682 INFO             PET07 !!!     THIS MAY CAUSE SLOWDOWN IN PERFORMANCE     !!!
+20230804 155255.682 INFO             PET07 !!! FOR PRODUCTION RUNS, USE:                      !!!
+20230804 155255.682 INFO             PET07 !!!                   ESMF_LOGKIND_Multi_On_Error  !!!
+20230804 155255.682 INFO             PET07 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155255.682 INFO             PET07 Running with ESMF Version   : v8.4.0b08
+20230804 155255.682 INFO             PET07 ESMF library build date/time: "Aug  3 2022" "19:00:28"
+20230804 155255.682 INFO             PET07 ESMF library build location : /scratch2/NCEPDEV/nwprod/hpc-stack/src/develop/pkg/v8.4.0b08
+20230804 155255.682 INFO             PET07 ESMF_COMM                   : intelmpi
+20230804 155255.684 INFO             PET07 ESMF_MOAB                   : enabled
+20230804 155255.684 INFO             PET07 ESMF_LAPACK                 : enabled
+20230804 155255.684 INFO             PET07 ESMF_NETCDF                 : enabled
+20230804 155255.684 INFO             PET07 ESMF_PNETCDF                : disabled
+20230804 155255.684 INFO             PET07 ESMF_PIO                    : enabled
+20230804 155255.684 INFO             PET07 ESMF_YAMLCPP                : enabled
+20230804 155516.382 INFO             PET07 Finalizing ESMF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155309.134 INFO             PET07 !!! THE ESMF_LOG IS SET TO OUTPUT ALL LOG MESSAGES !!!
+20230804 155309.134 INFO             PET07 !!!     THIS MAY CAUSE SLOWDOWN IN PERFORMANCE     !!!
+20230804 155309.134 INFO             PET07 !!! FOR PRODUCTION RUNS, USE:                      !!!
+20230804 155309.134 INFO             PET07 !!!                   ESMF_LOGKIND_Multi_On_Error  !!!
+20230804 155309.134 INFO             PET07 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155309.134 INFO             PET07 Running with ESMF Version   : v8.4.0b08
+20230804 155309.134 INFO             PET07 ESMF library build date/time: "Aug  3 2022" "19:00:28"
+20230804 155309.134 INFO             PET07 ESMF library build location : /scratch2/NCEPDEV/nwprod/hpc-stack/src/develop/pkg/v8.4.0b08
+20230804 155309.134 INFO             PET07 ESMF_COMM                   : intelmpi
+20230804 155309.135 INFO             PET07 ESMF_MOAB                   : enabled
+20230804 155309.135 INFO             PET07 ESMF_LAPACK                 : enabled
+20230804 155309.135 INFO             PET07 ESMF_NETCDF                 : enabled
+20230804 155309.135 INFO             PET07 ESMF_PNETCDF                : disabled
+20230804 155309.135 INFO             PET07 ESMF_PIO                    : enabled
+20230804 155309.135 INFO             PET07 ESMF_YAMLCPP                : enabled
+20230804 155529.900 INFO             PET07 Finalizing ESMF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155342.925 INFO             PET07 !!! THE ESMF_LOG IS SET TO OUTPUT ALL LOG MESSAGES !!!
+20230804 155342.925 INFO             PET07 !!!     THIS MAY CAUSE SLOWDOWN IN PERFORMANCE     !!!
+20230804 155342.925 INFO             PET07 !!! FOR PRODUCTION RUNS, USE:                      !!!
+20230804 155342.925 INFO             PET07 !!!                   ESMF_LOGKIND_Multi_On_Error  !!!
+20230804 155342.925 INFO             PET07 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155342.925 INFO             PET07 Running with ESMF Version   : v8.4.0b08
+20230804 155342.925 INFO             PET07 ESMF library build date/time: "Aug  3 2022" "19:00:28"
+20230804 155342.925 INFO             PET07 ESMF library build location : /scratch2/NCEPDEV/nwprod/hpc-stack/src/develop/pkg/v8.4.0b08
+20230804 155342.925 INFO             PET07 ESMF_COMM                   : intelmpi
+20230804 155342.926 INFO             PET07 ESMF_MOAB                   : enabled
+20230804 155342.926 INFO             PET07 ESMF_LAPACK                 : enabled
+20230804 155342.926 INFO             PET07 ESMF_NETCDF                 : enabled
+20230804 155342.926 INFO             PET07 ESMF_PNETCDF                : disabled
+20230804 155342.926 INFO             PET07 ESMF_PIO                    : enabled
+20230804 155342.926 INFO             PET07 ESMF_YAMLCPP                : enabled
+20230804 155604.652 INFO             PET07 Finalizing ESMF
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155343.014 INFO             PET07 !!! THE ESMF_LOG IS SET TO OUTPUT ALL LOG MESSAGES !!!
+20230804 155343.014 INFO             PET07 !!!     THIS MAY CAUSE SLOWDOWN IN PERFORMANCE     !!!
+20230804 155343.014 INFO             PET07 !!! FOR PRODUCTION RUNS, USE:                      !!!
+20230804 155343.014 INFO             PET07 !!!                   ESMF_LOGKIND_Multi_On_Error  !!!
+20230804 155343.014 INFO             PET07 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+20230804 155343.014 INFO             PET07 Running with ESMF Version   : v8.4.0b08
+20230804 155343.014 INFO             PET07 ESMF library build date/time: "Aug  3 2022" "19:00:28"
+20230804 155343.014 INFO             PET07 ESMF library build location : /scratch2/NCEPDEV/nwprod/hpc-stack/src/develop/pkg/v8.4.0b08
+20230804 155343.014 INFO             PET07 ESMF_COMM                   : intelmpi
+20230804 155343.019 INFO             PET07 ESMF_MOAB                   : enabled
+20230804 155343.019 INFO             PET07 ESMF_LAPACK                 : enabled
+20230804 155343.019 INFO             PET07 ESMF_NETCDF                 : enabled
+20230804 155343.019 INFO             PET07 ESMF_PNETCDF                : disabled
+20230804 155343.019 INFO             PET07 ESMF_PIO                    : enabled
+20230804 155343.019 INFO             PET07 ESMF_YAMLCPP                : enabled
+20230804 155610.912 INFO             PET07 Finalizing ESMF

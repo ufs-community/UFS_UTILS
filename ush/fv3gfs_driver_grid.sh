@@ -53,9 +53,6 @@ export lake_cutoff=${lake_cutoff:-0.20} # lake fractions less than lake_cutoff
 
 export make_gsl_orog=${make_gsl_orog:-false} # when true, create GSL drag suite orog files.
 
-
-
-
 if [ $gtype = uniform ];  then
   echo "Creating global uniform grid"
 elif [ $gtype = stretch ]; then
@@ -99,11 +96,6 @@ else
   exit 9
 fi
 
-
-
-
-
-
 export TEMP_DIR=${TEMP_DIR:?}
 export out_dir=${out_dir:?}
 
@@ -117,8 +109,6 @@ export NCDUMP=${NCDUMP:-ncdump}
 rm -fr $TEMP_DIR
 mkdir -p $TEMP_DIR
 cd $TEMP_DIR ||exit 8
-
-
 
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
@@ -149,8 +139,24 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   export grid_dir=$TEMP_DIR/$name/grid
   export orog_dir=$TEMP_DIR/$name/orog
-  out_dir=$out_dir/C${res}
+
+
+if [[ ! -z "$ocn" ]]; then
+
+		out_dir=$out_dir/C$res.mx$ocn
+                
+                readme_name=readme.C$res.mx$ocn.txt
+                
+
+else
+                out_dir=$out_dir/C$res
+                readme_name=readme.C$res.txt
+
+fi
+
+
   mkdir -p $out_dir
+  
 
   if [ $gtype = nest ]; then
     filter_dir=$orog_dir   # nested grid topography will be filtered online
@@ -208,13 +214,59 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   if [ $add_lake = true ]; then
     $script_dir/fv3gfs_make_lake.sh
-
     err=$?
     if [ $err != 0 ]; then
       exit $err
     fi
   fi
 
+
+
+
+  if [[ ! -z "$ocn" ]]; then
+
+    results_dir=$TEMP_DIR/ocean_merged/C${res}.mx${ocn}
+    mkdir -p ${results_dir}
+
+    cat << EOF > input.nml
+     &mask_nml
+     ocean_mask_dir="$ocean_mask_dir/${ocn}/"
+     ocnres="mx${ocn}"
+     lake_mask_dir="${TEMP_DIR}/C${res}/orog/"
+     atmres="C${res}"
+     out_dir="${results_dir}/"
+    /
+EOF
+  
+
+    time  ${exec_dir}/./ocean_merge
+    set -x
+    pwd
+
+    echo run orog 2nd time
+
+    for tnum in '1' '2' '3' '4' '5' '6'
+    do
+    cd ${TEMP_DIR}/C${res}/orog/tile$tnum
+    echo $tnum $res $res 0 0 0 0 0 0 > INPS
+    echo C${res}_grid.tile${tnum}.nc >> INPS
+
+    echo none >> INPS
+    echo ".false." >> INPS
+    echo '"'${TEMP_DIR}/ocean_merged/C${res}.mx${ocn}/C${res}.mx${ocn}.tile${tnum}.nc'"' >> INPS
+
+    cat INPS
+    time ${exec_dir}/orog < INPS
+
+    ncks -A -v lake_frac,lake_depth ${TEMP_DIR}/ocean_merged/C${res}.mx${ocn}/C${res}.mx${ocn}.tile${tnum}.nc out.oro.nc
+    #cp out.oro.nc $out_dir/oro_C${res}.mx${ocn}.tile${tnum}.nc
+    cp out.oro.nc $orog_dir/oro.C${res}.tile${tnum}.nc
+    cp C${res}_grid.tile${tnum}.nc $out_dir/C${res}_grid.tile${tnum}.nc
+    done
+
+
+  fi
+#exit 8
 
   set +x
   echo "End uniform orography generation at `date`"
@@ -246,7 +298,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
     cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}_grid.tile${tile}.nc
     if [ $make_gsl_orog = true ]; then
-      cp $orog_dir/C${res}_oro_data_*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
+      cp $orog_dir/C${res}.oro.datadata_*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
     fi
     tile=`expr $tile + 1 `
   done
@@ -255,11 +307,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   echo "Grid and orography files are now prepared."
 
-
-	if [[ ! -z "$ocn" ]]; then
-                 $script_dir/fv3gfs_ocean_merge.sh $res $ocn
-        fi
-
+#exit 8
 
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
@@ -486,24 +534,6 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
 
 fi
 
-
-
-
-#------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------
-# Redo orog and filter.
-# The lake mask is derived first using the step 1 and when the ocean mask is merged,
-# the lake/land points may change and hence is re run. The lake merge routine needs
-# the oro files to derive the initial lakemask and hence is re run after it is modified
-#
-#------------------------------------------------------------------------------------
-#------------------------------------------------------------------------------------
-
-if [[ ! -z "$ocn" ]]; then
-	$script_dir/orog.sh $res $ocn
-fi
-
-
 #------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
 # Create surface static fields - vegetation type, soil type, etc.
@@ -515,31 +545,11 @@ fi
 #------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------
 
-
- 
-
-	 if [[ ! -z "$ocn" ]]; then
-
-		export SAVE_DIR=$(dirname $out_dir)/C${res}.mx${ocn}/fix_sfc
-		export FIX_FV3=$(dirname $out_dir)/C${res}.mx${ocn}
-		export mosaic_file=$FIX_FV3/C${res}_mosaic.nc
-
-
-	 else
-	
-		export SAVE_DIR=$out_dir/fix_sfc
-		export FIX_FV3=$out_dir
-
- 	 fi
-	 export WORK_DIR=$TEMP_DIR/sfcfields
-	 export BASE_DIR=$home_dir
-	 export input_sfc_climo_dir=$home_dir/fix/sfc_climo
-
-source ${BASE_DIR}/sorc/machine-setup.sh > /dev/null 2>&1
-module use ${BASE_DIR}/modulefiles
-module load build.hera.intel
-#module list
-
+export WORK_DIR=$TEMP_DIR/sfcfields
+export SAVE_DIR=$out_dir/fix_sfc
+export BASE_DIR=$home_dir
+export FIX_FV3=$out_dir
+export input_sfc_climo_dir=$home_dir/fix/sfc_climo
 
 if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   export HALO=$halop1
@@ -550,40 +560,17 @@ elif [ $gtype = nest ]; then
   export mosaic_file=$out_dir/C${res}_coarse_mosaic.nc
 fi
 
-
-
 $script_dir/sfc_climo_gen.sh
-
-
-
 err=$?
 if [ $err != 0 ]; then
   echo error in sfc_climo_gen
   exit $err
 fi
 
-
-#-----------------------------------------------------------------------
-# Copy what is needed and clean up
-#-----------------------------------------------------------------------
-
- if [[ ! -z "$ocn" ]]; then
-
-	cp -R  $TEMP_DIR/C$res.mx$ocn $final_out_dir
-	rm -rf $TEMP_DIR/
-	
-fi
-
-
-
-
 if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   rm -f $out_dir/C${res}_grid.tile${tile}.nc
   rm -f $out_dir/C${res}_oro_data.tile${tile}.nc
 fi
-
-
-
 
 #------------------------------------------------------------------------------------
 # Run for the global nest - tile 7.
@@ -602,5 +589,22 @@ fi
 
 
 
+#------------------------------------------------------------------------------------
+# Make the README
+#------------------------------------------------------------------------------------
+
+cd $out_dir
+cat <<EOF > $readme_name
+
+The following # was used 
+<git hub link goes here>
+
+The following parameters were used
+veg_type=$veg_type_src
+soil_type=$soil_type_src
+add_lake=$add_lake
+lake_cutoff=$lake_cutoff
+
+EOF
 
 exit

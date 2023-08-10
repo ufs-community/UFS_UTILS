@@ -51,15 +51,15 @@
 #
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
+EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/data/gfs.init/input
 EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
-yy=2022
-mm=05
-dd=06
-hh=06
+yy=2021
+mm=03
+dd=23
+hh=12
 
 use_v16retro=no
 
@@ -74,8 +74,9 @@ CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
+#OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 
+OUTDIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/data/C48.mx500.l64
 #---------------------------------------------------------
 # Dont touch anything below here.
 #---------------------------------------------------------

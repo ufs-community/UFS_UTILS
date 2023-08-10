@@ -32,6 +32,8 @@ program merge_lake_ocnmsk
   integer :: ncid,ndims,nvars,natts,lat,lon,v1id,v2id,v3id,v4id,start(2),count(2),i,j,latid,lonid,ncid4, dims(2),tile,nodp_pt,lake_pt,vlat
   real, allocatable :: lake_frac(:,:),lake_depth(:,:),land_frac(:,:),ocn_frac(:,:),slmsk(:,:),lat2d(:,:)
 
+  
+
   call read_nml(pth1, pth2, atmres, ocnres, pth3)
 
   nodp_pt=0
@@ -54,7 +56,8 @@ program merge_lake_ocnmsk
     call handle_err (nf90_inq_varid(ncid, 'land_frac', v1id))
     call handle_err (nf90_get_var (ncid, v1id, ocn_frac, start=start, count=count))
 
-    write(flnm,'(3a,i1,a)') trim(pth2),trim(atmres),'_oro_data.tile',tile,'.nc'
+   !write(flnm,'(3a,i1,a)') trim(pth2),trim(atmres),'_orog_data.tile',tile,'.nc'
+    write(flnm,'(4a,i1,a)') trim(pth2),'oro.',trim(atmres),'.tile',tile,'.nc'
     print *,' flnm2=',trim(flnm)
     call handle_err (nf90_open (flnm, NF90_NOWRITE, ncid))
     call handle_err (nf90_inquire (ncid, ndimensions=ndims, nvariables=nvars, nattributes=natts))

@@ -99,6 +99,14 @@ cp $executable .
 echo  $mtnres $lonb $latb $jcap $NR $NF1 $NF2 $efac $blat > INPS
 echo $OUTGRID >> INPS
 echo $orogfile >> INPS
+if [ -z ${ocn+x} ]; then
+  echo ".false." >> INPS
+else
+  echo ".true." >> INPS
+fi 
+echo "none" >> INPS
+#echo '"'/scratch2/NCEPDEV/stmp1/George.Gayno/fv3_grid.uniform.ocean.merge/ocean_merged/C96.mx100/C96.mx100.tile${tile}.nc'"' >> INPS
+
 cat INPS
 time $executable < INPS
 

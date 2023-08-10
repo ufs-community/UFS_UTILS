@@ -1,0 +1,122 @@
+#-----------------------------------------------------------
+#
+#  1) Compile the chgres_cube program.  Invoke 
+#     ../../build_all.sh
+#
+#  2) Ensure links to the 'fixed' directories are
+#     set.  See the ../../fix/link_fixdirs.sh script prolog
+#     for details.
+#
+#  3) Set all config variables.  See definitions 
+#     below.
+#
+#  4) Invoke the driver script for your machine (with no
+#     arguments).
+#
+# Variable definitions:
+# --------------------
+# EXTRACT_DIR  - Directory where data extracted from HPSS
+#                is stored.
+# EXTRACT_DATA - Set to 'yes' to extract data from HPSS.
+#                If data has been extracted and is located
+#                in EXTRACT_DIR, set to 'no'.
+# RUN_CHGRES   - To run chgres, set to 'yes'.  To extract
+#                data only, set to 'no'.
+# yy/mm/dd/hh  - The year/month/day/hour of your desired
+#                experiment.  Currently, does not support
+#                pre-ENKF GFS data, prior to
+#                2012 May 21 00z.  Use two digits.
+# LEVS         - Number of hybrid levels plus 1.  To
+#                run with 64 levels, set LEVS to 65.
+# CRES_HIRES   - Resolution of the hires component of
+#                your experiment.
+# CRES_ENKF    - Resolution of the enkf component of the
+#                your experiment.
+# UFS_DIR      - Location of your checked out UFS_UTILS
+#                repo.
+# OUTDIR       - Directory where the coldstart data output 
+#                from chgres is stored.
+# CDUMP        - When 'gdas', will process gdas and enkf 
+#                members. When 'gfs', will process gfs 
+#                member for running free forecast only.
+# use_v16retro - When 'yes', use v16 retro parallel data.         
+#                The retro parallel tarballs can be missing
+#                or incomplete. So this option may not
+#                always work. Contact george.gayno@noaa.gov
+#                if you encounter problems.
+# FRAC_ORO     - To use the latest orographic data, 
+#                set to 'yes', otherwise, set to 'no'.
+#                Note that: the latest orographic data
+#                support both frac_grid and none frac_grid in the UFS 
+#
+#-----------------------------------------------------------
+
+EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/data/gfs.init/input
+EXTRACT_DATA=no
+
+RUN_CHGRES=yes
+
+yy=2022
+mm=05
+dd=06
+hh=06
+
+use_v16retro=no
+
+LEVS=65
+
+CDUMP=gdas
+
+FRAC_ORO=yes
+
+CRES_HIRES=C48
+CRES_ENKF=C48
+
+UFS_DIR=$PWD/../..
+
+#OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
+OUTDIR=/scratch2/NCEPDEV/stmp1/Sanath.Kumar/data/output.C48.mx500.L64
+
+
+#---------------------------------------------------------
+# Dont touch anything below here.
+#---------------------------------------------------------
+
+GDAS_INIT_DIR=$UFS_DIR/util/gdas_init
+EXEC_DIR=$UFS_DIR/exec
+
+if [ "$use_v16retro" = "yes" ]; then
+
+  gfs_ver=v16retro
+
+else
+
+  gfs_ver=v16
+
+# No ENKF data prior to 2012/05/21/00z
+  if [ $yy$mm$dd$hh -lt 2012052100 ]; then
+    set +x
+    echo FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA
+    exit 2
+  elif [ $yy$mm$dd$hh -lt 2016051000 ]; then
+    gfs_ver=v12
+  elif [ $yy$mm$dd$hh -lt 2017072000 ]; then
+    gfs_ver=v13
+  elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
+    gfs_ver=v14
+  elif [ $yy$mm$dd$hh -lt 2021032100 ]; then
+    gfs_ver=v15
+# The way the v16 switch over was done, there is no complete
+# set of v16 or v15 data for 2021032100.  And although
+# v16 was officially implemented 2021032212, the v16 prod 
+# tarballs were archived starting 2021032106.
+  elif [ $yy$mm$dd$hh -lt 2021032106 ]; then
+    set +x
+    echo FATAL ERROR: NO V15 OR V16 DATA FOR 2021032100
+    exit 1
+  fi
+
+fi
+
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF FRAC_ORO
+export LEVS gfs_ver EXEC_DIR GDAS_INIT_DIR
