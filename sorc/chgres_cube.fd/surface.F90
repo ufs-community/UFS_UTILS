@@ -2280,13 +2280,11 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!if (fract_grid) then
-   print*,"- CALL FieldGet FOR TARGET GRID SEA MASK."
-   call ESMF_FieldGet(seamask_target_grid, &
-                      farrayPtr=seamask_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ print*,"- CALL FieldGet FOR TARGET GRID SEA MASK."
+ call ESMF_FieldGet(seamask_target_grid, &
+                    farrayPtr=seamask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-!endif
 
  print*,"- CALL FieldGet FOR TARGET GRID SEA ICE FRACTION."
  call ESMF_FieldGet(seaice_fract_target_grid, &
@@ -2300,9 +2298,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract Setting to flag value at water. With fractional grid,
-!cfract restrict this to points that are all water. i.e.,
-!cfract where landmask_ptr = 0.
+! Slope type is set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2315,9 +2312,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract Setting to flag value at water. With fractional grid,
-!cfract restrict this to points that are all water. i.e.,
-!cfract where landmask_ptr = 0.
+! Soil type is set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2330,67 +2326,67 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract Setting to flag value at water. With fractional grid,
-!cfract restrict this to points that are all water. i.e.,
-!cfract where landmask_ptr = 0.
+! Vegetation type is set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) veg_type_ptr(i,j) = 0.0
  enddo
  enddo
 
- print*,"- SET TARGET GRID ALVSF AT NON-LAND."
+ print*,"- SET TARGET GRID ALVSF FLAG AT NON-LAND."
  call ESMF_FieldGet(alvsf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract This array contains albedo at points with at least
-!cfract some land. At all other points set to flag value.
-!cfract That means points where landmask_ptr is 0.
+! Set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
-!  if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
- print*,"- SET TARGET GRID ALVWF AT NON-LAND."
+ print*,"- SET TARGET GRID ALVWF FLAG AT NON-LAND."
  call ESMF_FieldGet(alvwf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+! Set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
-!  if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
- print*,"- SET TARGET GRID ALNSF AT NON-LAND."
+ print*,"- SET TARGET GRID ALNSF FLAG AT NON-LAND."
  call ESMF_FieldGet(alnsf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+! Set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
-!  if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
- print*,"- SET TARGET GRID ALNWF AT NON-LAND."
+ print*,"- SET TARGET GRID ALNWF FLAG AT NON-LAND."
  call ESMF_FieldGet(alnwf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+! Set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
-!  if (fract_grid .and. landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2400,7 +2396,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract for fract grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2413,7 +2408,6 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract for fract grid, this is where landmask_ptr is 0.
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2426,7 +2420,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract for fract grid, this is where landmask_ptr is 0.
+! Set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2439,7 +2434,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract for fract grid, this is where landmask_ptr is 0.
+! Set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2452,7 +2448,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract for fract grid, this is where landmask_ptr is 0.
+! Set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) veg_greenness_ptr(i,j) = 0.0
@@ -2465,7 +2462,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!cfract for fract grid, this is where landmask_ptr is 0.
+! Set to flag value at points that are all non-land.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
@@ -2477,6 +2475,8 @@
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
+
+! The 0.01 indicates bare ground.
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
@@ -2490,77 +2490,46 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- SET TARGET GRID SKIN TEMP AT ICE POINTS."
+ print*,"- CALL FieldGet FOR TARGET GRID SKIN TEMP."
  call ESMF_FieldGet(skin_temp_target_grid, &
                     farrayPtr=skint_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- SET TARGET GRID SEA ICE DEPTH TO ZERO AT NON-ICE POINTS."
+ print*,"- CALL FieldGet FOR TARGET GRID ICE DEPTH."
  call ESMF_FieldGet(seaice_depth_target_grid, &
                     farrayPtr=hice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!if(fract_grid)then
+ print*,"- SET TARGET GRID SEA ICE DEPTH TO ZERO AT NON-ICE POINTS."
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (fice_ptr(i,j) > 0.0) then
-!    skint_ptr(i,j) = (fice_ptr(i,j) * seaice_skint_ptr(i,j)) +  &
-!                     ( (1.0 - fice_ptr(i,j)) * frz_ice )
-   else
+   if (fice_ptr(i,j) == 0.0) then
      seaice_skint_ptr(i,j) = 1.e20
      hice_ptr(i,j) = 0.0
    endif
  enddo
  enddo
-!else
-!do j = clb(2), cub(2)
-!do i = clb(1), cub(1)
-!  if (fice_ptr(i,j) > 0.0) then
-!    skint_ptr(i,j) = (fice_ptr(i,j) * seaice_skint_ptr(i,j)) +  &
-!                     ( (1.0 - fice_ptr(i,j)) * frz_ice )
-!  else
-!    seaice_skint_ptr(i,j) = skint_ptr(i,j)
-!    hice_ptr(i,j) = 0.0
-!  endif
-!enddo
-!enddo
-!endif
 
-!if (fract_grid) then
-
-   print*,"- SET TARGET GRID SST FLAG VALUE."
-
-   call ESMF_FieldGet(sst_target_grid, &
+ print*,"- SET TARGET GRID SST FLAG VALUE."
+ call ESMF_FieldGet(sst_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- if (fract_grid) then
+! Set flag at points with all ice or points that are all land (seamask=0).
 
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0.0) then
-       data_ptr(i,j) = 1.e20
-     endif
-   enddo
-   enddo
-
- else
-
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (fice_ptr(i,j) > 0.0 .or. seamask_ptr(i,j) == 0.0) then
-       data_ptr(i,j) = 1.e20
-     endif
-   enddo
-   enddo
-
- endif
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0.0) then
+     data_ptr(i,j) = 1.e20
+   endif
+ enddo
+ enddo
 
  print*,"- SET MISSING FLAG AT TARGET GRID SUBSTRATE TEMP."
-
  call ESMF_FieldGet(substrate_temp_target_grid, &
                     farrayPtr=tg3_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2568,7 +2537,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0.0) then  ! non-land
+   if (landmask_ptr(i,j) == 0.0) then  ! completely non-land.
      tg3_ptr(i,j) = -1.e20
    endif
  enddo
