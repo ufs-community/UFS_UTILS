@@ -162,7 +162,7 @@ fi
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/test_full_test
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/test_full
 export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN/
 
 #-----------------------------------------------------------------------
