@@ -1582,10 +1582,9 @@
    do i = clb(1), cub(1)
 
 !---------------------------------------------------------------------------------------------
-! Check land points that are not permanent land ice.  
+! Check points with some land (that are not permanent land ice).
 !---------------------------------------------------------------------------------------------
 
-!cfract - 1 for at least some land.
      if (landmask_ptr(i,j) == 1 .and. nint(veg_type_ptr(i,j)) /= veg_type_landice_target) then
 
        soil_type = nint(soil_type_ptr(i,j))
@@ -1866,10 +1865,9 @@
    do i = clb(1), cub(1)
 
 !---------------------------------------------------------------------------------------------
-! Check land points that are not permanent land ice.  
+! Check points with some land (that are not permanent land ice).  
 !---------------------------------------------------------------------------------------------
 
-!cfract when '1' will contain some land.
      if (landmask_ptr(i,j) == 1 .and. nint(veg_type_ptr(i,j)) /= veg_type_landice_target) then
 
         soilt_target = nint(soil_type_target_ptr(i,j))
@@ -2016,8 +2014,7 @@
  
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-!cfract at least some land when equal to '1'.
-   if (landmask_ptr(i,j) == 1) then
+   if (landmask_ptr(i,j) == 1) then ! partial or all land
      terrain_diff = abs(terrain_input_ptr(i,j) - terrain_target_ptr(i,j))
      if (terrain_diff > 100.0) then
        do k = clb(3), cub(3)
@@ -2781,8 +2778,6 @@
 
  use model_grid, only         : seamask_target_grid
 
- use program_setup, only      : fract_grid
-
  implicit none
 
  integer(esmf_kind_i8), pointer     :: mask_ptr(:,:)
@@ -2834,16 +2829,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
-!cfract Setting filler value for tref at ice and land points. 
-!cfract Under fractional grids skin t is not currently defined.
-!cfract So, set to ice temp.
-
- where(mask_ptr == 0) data_ptr = skint_ptr
- if (fract_grid) then
-   where(fice_ptr > 0.0) data_ptr = frz_ice
- else
-   where(fice_ptr > 0.0) data_ptr = skint_ptr
- endif
+ where(mask_ptr == 0) data_ptr = skint_ptr  ! all land
+ where(fice_ptr > 0.0) data_ptr = frz_ice ! points with some ice
 
 ! xz
 
@@ -2853,9 +2840,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
-!cfract same as above.
- where(mask_ptr == 0) data_ptr = xz_fill
- where(fice_ptr > 0.0) data_ptr = xz_fill
+ where(mask_ptr == 0) data_ptr = xz_fill ! all land
+ where(fice_ptr > 0.0) data_ptr = xz_fill ! points with some ice
 
  do i = 1,num_nst_fields_minus2
    
@@ -2867,9 +2853,8 @@
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
      call error_handler("IN FieldGet", rc)
      
-!cfract same as above.
-   where(mask_ptr == 0) data_ptr = nst_fill
-   where(fice_ptr > 0.0) data_ptr = nst_fill
+   where(mask_ptr == 0) data_ptr = nst_fill  ! all land
+   where(fice_ptr > 0.0) data_ptr = nst_fill ! points with some ice
 
  enddo
 
