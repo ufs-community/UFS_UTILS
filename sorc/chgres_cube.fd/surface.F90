@@ -2229,7 +2229,8 @@
 
  end subroutine roughness
 
-!> Perform some quality control checks before output.
+!> Perform some quality control checks and set flag values
+!! at non-active points.
 !!
 !! @author George Gayno NOAA/EMC
  subroutine qc_check
@@ -2273,6 +2274,8 @@
  real(esmf_kind_r8), pointer        :: snod_ptr(:,:)
  real(esmf_kind_r8), pointer        :: snol_ptr(:,:)
 
+ print*,'- PERFORM QC CHECK'
+
  print*,"- CALL FieldGet FOR TARGET GRID LAND-SEA MASK."
  call ESMF_FieldGet(landmask_target_grid, &
                     computationalLBound=clb, &
@@ -2299,11 +2302,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Slope type is set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land.
  enddo
  enddo
 
@@ -2313,11 +2314,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Soil type is set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land.
  enddo
  enddo
 
@@ -2327,11 +2326,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Vegetation type is set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) veg_type_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) veg_type_ptr(i,j) = 0.0 ! all non-land.
  enddo
  enddo
 
@@ -2341,11 +2338,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2355,11 +2350,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2369,11 +2362,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2383,11 +2374,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = -1.e20 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = -1.e20 ! gfs physics flag value
  enddo
  enddo
 
@@ -2399,7 +2388,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2411,7 +2400,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2421,11 +2410,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2435,11 +2422,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2449,11 +2434,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) veg_greenness_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) veg_greenness_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2463,11 +2446,9 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-! Set to flag value at points that are all non-land.
-
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2544,86 +2525,56 @@
  enddo
  enddo
 
-!if (fract_grid) then
+ print*,"- SET MISSING FLAG AT TARGET GRID SNOW FIELDS AT ICE."
 
-   print*,"- SET MISSING FLAG AT TARGET GRID SNOW DEPTH AT ICE."
-   call ESMF_FieldGet(snow_depth_at_ice_target_grid, &
+ print*,"- CALL FieldGet FOR TARGET GRID SNOW DEPTH AT ICE."
+ call ESMF_FieldGet(snow_depth_at_ice_target_grid, &
                     farrayPtr=snod_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
      call error_handler("IN FieldGet", rc)
 
-   print*,"- SET MISSING FLAG AT TARGET GRID SNOW LIQ EQUIV AT ICE."
-   call ESMF_FieldGet(snow_liq_equiv_at_ice_target_grid, &
-                    farrayPtr=snol_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ print*,"- CALL FieldGet FOR TARGET GRID SNOW LIQ EQUIV AT ICE."
+ call ESMF_FieldGet(snow_liq_equiv_at_ice_target_grid, &
+                  farrayPtr=snol_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
      call error_handler("IN FieldGet", rc)
 
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (fice_ptr(i,j) == 0.0) then
-       snol_ptr(i,j) = 1.e20
-       snod_ptr(i,j) = 1.e20
-     end if
-   enddo
-   enddo
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) == 0.0) then ! points with no ice.
+     snol_ptr(i,j) = 1.e20
+     snod_ptr(i,j) = 1.e20
+   end if
+ enddo
+ enddo
 
-!endif
-
- print*,"- ZERO OUT TARGET GRID SNOW DEPTH AT OPEN WATER."
+ print*,"- ZERO OUT TARGET GRID SNOW DEPTH AT NON-LAND."
  call ESMF_FieldGet(snow_depth_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!if (fract_grid) then
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (landmask_ptr(i,j) /= 1) then  ! not land
-!      if (fice_ptr(i,j) > 0.0) then
-!        data_ptr(i,j) = snod_ptr(i,j)
-!      else
-         data_ptr(i,j) = 1.e20
-!      endif
-     end if
-   enddo
-   enddo
-!else
-!  do j = clb(2), cub(2)
-!  do i = clb(1), cub(1)
-!    if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then
-!      data_ptr(i,j) = 0.0
-!    end if
-!  enddo
-!  enddo
-!endif
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) == 0) then  ! all non-land
+     data_ptr(i,j) = 1.e20
+   end if
+ enddo
+ enddo
 
- print*,"- ZERO OUT TARGET GRID SNOW LIQ AT OPEN WATER."
+ print*,"- ZERO OUT TARGET GRID SNOW LIQ AT NON-LAND."
  call ESMF_FieldGet(snow_liq_equiv_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!if (fract_grid) then
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (landmask_ptr(i,j) /= 1) then  ! not land
-   !   if (fice_ptr(i,j) > 0.0) then
-   !     data_ptr(i,j) = snol_ptr(i,j)
-   !   else
-         data_ptr(i,j) = 1.e20
-   !   endif
-     end if
-   enddo
-   enddo
-!else
-!  do j = clb(2), cub(2)
-!  do i = clb(1), cub(1)
-!    if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then
-!      data_ptr(i,j) = 0.0
-!    end if
-!  enddo
-!  enddo
-!endif
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) == 0) then  ! all non-land
+       data_ptr(i,j) = 1.e20
+   end if
+ enddo
+ enddo
 
  print*,"- SET NON-LAND FLAG VALUE FOR TARGET GRID TOTAL SOIL MOISTURE."
  call ESMF_FieldGet(soilm_tot_target_grid, &
@@ -2631,85 +2582,59 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- SET NON-LAND FLAG VALUE FOR  TARGET GRID LIQUID SOIL MOISTURE."
+ print*,"- SET NON-LAND FLAG VALUE FOR TARGET GRID LIQUID SOIL MOISTURE."
  call ESMF_FieldGet(soilm_liq_target_grid, &
                     farrayPtr=soilml_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-!if (fract_grid) then
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (landmask_ptr(i,j) == 0 .or. &
-         nint(veg_type_ptr(i,j)) == veg_type_landice_target) then
-       soilmt_ptr(i,j,:) = 1.0
-       soilml_ptr(i,j,:) = 1.0
-     endif
-   enddo
-   enddo
-!else
-!  do j = clb(2), cub(2)
-!  do i = clb(1), cub(1)
-!    if (fice_ptr(i,j) > 0.0 .or. landmask_ptr(i,j) == 0 .or. &
-!        nint(veg_type_ptr(i,j)) == veg_type_landice_target) then
-!      soilmt_ptr(i,j,:) = 1.0
-!      soilml_ptr(i,j,:) = 1.0
-!    endif
-!  enddo
-!  enddo
-!endif
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) == 0 .or. &
+       nint(veg_type_ptr(i,j)) == veg_type_landice_target) then
+     soilmt_ptr(i,j,:) = 1.0
+     soilml_ptr(i,j,:) = 1.0
+   endif
+ enddo
+ enddo
 
- print*,"- SET OPEN WATER FLAG FOR TARGET GRID SOIL TEMPERATURE."
+ print*,"- SET NON-LAND FLAG FOR TARGET GRID SOIL TEMPERATURE."
  call ESMF_FieldGet(soil_temp_target_grid, &
                     farrayPtr=data3d_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
    call error_handler("IN FieldGet", rc)
 
-!if (fract_grid) then
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) == 0) then ! all non-land.
+     data3d_ptr(i,j,:) = -1.e20
+   endif
+ enddo
+ enddo
 
-  do j = clb(2), cub(2)
-  do i = clb(1), cub(1)
-    if (landmask_ptr(i,j) == 0) then
-      data3d_ptr(i,j,:) = -1.e20
-    endif
-  enddo
-  enddo
-
-  print*,"- SET FLAG FOR TARGET GRID ICE TEMPERATURE."
-  call ESMF_FieldGet(ice_temp_target_grid, &
+ print*,"- SET NON-ICE FLAG FOR TARGET GRID ICE TEMPERATURE."
+ call ESMF_FieldGet(ice_temp_target_grid, &
                      farrayPtr=ice_ptr, rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-  do j = clb(2), cub(2)
-  do i = clb(1), cub(1)
-    if (fice_ptr(i,j) == 0.0) then
-      ice_ptr(i,j,:) = 1.e20
-    endif
-  enddo
-  enddo
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) == 0.0) then
+     ice_ptr(i,j,:) = 1.e20
+   endif
+ enddo
+ enddo
 
-!else
+ print*,"- SET NON-LAND FLAG FOR TARGET GRID SKIN TEMPERATURE."
 
-!do j = clb(2), cub(2)
-!do i = clb(1), cub(1)
-!  if (landmask_ptr(i,j) == 0 .and. fice_ptr(i,j) == 0.0) then
-!    data3d_ptr(i,j,:) = skint_ptr(i,j)  ! open water flag value.
-!  endif
-!enddo
-!enddo
-
-!endif
-
-!if (fract_grid) then ! set flag value at non-land
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (landmask_ptr(i,j) == 0) then
-       skint_ptr(i,j) = 1.e20
-     endif
-   enddo
-   enddo
-!endif
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) == 0) then ! all non-land.
+     skint_ptr(i,j) = 1.e20
+   endif
+ enddo
+ enddo
 
  return
 
