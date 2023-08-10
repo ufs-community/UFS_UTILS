@@ -2148,16 +2148,14 @@
  
  end subroutine adjust_soil_levels
 
-!> Set roughness length at land and sea ice. At land, roughness is
-!! set from a lookup table based on the vegetation type. At sea ice,
-!! roughness is set to 1 cm.
+!> Set roughness length at points with some sea ice to 1 cm.
+!! Set flag value at points with some or all open water.
 !!
 !! @author George Gayno NOAA/EMC
  subroutine roughness
 
  use model_grid, only                : landmask_target_grid, &
                                        seamask_target_grid
- use program_setup, only             : fract_grid
 
  implicit none
 
@@ -2168,6 +2166,8 @@
  real(esmf_kind_r8), pointer        :: data_ptr2(:,:)
  real(esmf_kind_r8), pointer        :: data_ptr3(:,:)
  real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
+
+ print*,"- SET ROUGHNESS."
 
  print*,"- CALL FieldGet FOR TARGET GRID LAND-SEA MASK."
  call ESMF_FieldGet(landmask_target_grid, &
@@ -2183,71 +2183,46 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
-   print*,"- CALL FieldGet FOR TARGET GRID Z0 WATER."
-   call ESMF_FieldGet(z0_water_target_grid, &
+ print*,"- CALL FieldGet FOR TARGET GRID Z0 WATER."
+ call ESMF_FieldGet(z0_water_target_grid, &
                       farrayPtr=data_ptr3, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGet", rc)
 
-   print*,"- CALL FieldGet FOR TARGET SEA MASK."
-   call ESMF_FieldGet(seamask_target_grid, &
+ print*,"- CALL FieldGet FOR TARGET SEA MASK."
+ call ESMF_FieldGet(seamask_target_grid, &
                       farrayPtr=seamask_ptr, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGet", rc)
 
-
-   print*,"- CALL FieldGet FOR TARGET GRID Z0 ICE."
-   call ESMF_FieldGet(z0_ice_target_grid, &
+ print*,"- CALL FieldGet FOR TARGET GRID Z0 ICE."
+ call ESMF_FieldGet(z0_ice_target_grid, &
                       farrayPtr=data_ptr2, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGet", rc)
 
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (fice_ptr(i,j) > 0.0) then
-       data_ptr2(i,j) = 1.0
-     else
-       data_ptr2(i,j) = 1.e20
-     endif
-   enddo
-   enddo
+! At points with some ice, set to nominal value of 1 cm. Elsewhere, set to flag value.
 
- if(fract_grid)then
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) > 0.0) then
+     data_ptr2(i,j) = 1.0
+   else
+     data_ptr2(i,j) = 1.e20
+   endif
+ enddo
+ enddo
 
+! Roughness at points with some or all open water. Here we set a flag value at points
+! that are all ice or points that are all land (seamask = 0).
 
-!  print*,"- CALL FieldGet FOR TARGET GRID Z0 WATER."
-!  call ESMF_FieldGet(z0_water_target_grid, &
-!                     farrayPtr=data_ptr3, rc=rc)
-!  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!     call error_handler("IN FieldGet", rc)
-
-!  print*,"- CALL FieldGet FOR TARGET SEA MASK."
-!  call ESMF_FieldGet(seamask_target_grid, &
-!                     farrayPtr=seamask_ptr, rc=rc)
-!  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!     call error_handler("IN FieldGet", rc)
-
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0) then
-       data_ptr3(i,j) = 1.e20
-     endif
-   enddo
-   enddo
-
- else ! non-fractional grid
-
-!cfract should check for fice instead? under fractional
-!cfract grids need to preserve original landmask_target.
-   do j = clb(2), cub(2)
-   do i = clb(1), cub(1)
-     if (fice_ptr(i,j) > 0.0 .or. seamask_ptr(i,j) == 0) then
-       data_ptr3(i,j) = 1.e20
-     endif
-   enddo
-   enddo
-
- endif
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0) then
+     data_ptr3(i,j) = 1.e20
+   endif
+ enddo
+ enddo
 
  end subroutine roughness
 
