@@ -99,10 +99,6 @@
  logical, public                 :: convert_sfc = .false. !< Convert sfc data when true.
  logical, public                 :: wam_cold_start = .false. !< When true, cold start for whole atmosphere model.
  
-
- logical, public                 :: fract_grid = .false.  !< When true, run for coupled grids (where model 
-                                                          !! points can be both land and non-land).
-
  ! Options for replacing vegetation/soil type, veg fraction, and lai with data from the grib2 file
  ! Default is to use climatology instead
  logical, public                 :: vgtyp_from_climo = .true. !<  If false, interpolate vegetation type from the input 
@@ -199,8 +195,7 @@
                    halo_bndy, & 
                    halo_blend, &
                    nsoill_out, &
-                   thomp_mp_climo_file, &
-                   fract_grid
+                   thomp_mp_climo_file
 
  print*,"- READ SETUP NAMELIST"
 
@@ -351,12 +346,6 @@
    print*,"- WILL PROCESS CLIMO THOMPSON MP TRACERS FROM FILE: ", trim(thomp_mp_climo_file)
  endif
 
- if (fract_grid) then
-   print*,'WILL PROCESS A FRACTIONAL GRID.'
- else
-   print*,'WILL PROCESS A NON-FRACTIONAL GRID.'
- endif
-  
  return
 
  end subroutine read_setup_namelist

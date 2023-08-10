@@ -223,6 +223,9 @@
 
  if (convert_nst) call cleanup_input_nst_data
 
+!---------------------------------------------------------------------------------------------
+! Update land mask for ice.
+!---------------------------------------------------------------------------------------------
  
  call update_landmask
 
@@ -2230,8 +2233,6 @@
 !!
 !! @author George Gayno NOAA/EMC
  subroutine qc_check
-
- use program_setup, only             : fract_grid
 
  use model_grid, only                : landmask_target_grid, &
                                        seamask_target_grid
