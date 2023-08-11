@@ -1908,6 +1908,7 @@
  real(kind=4), allocatable       :: lsoil_data(:), x_data(:), y_data(:)
  real(kind=8), allocatable       :: dum2d(:,:), dum3d(:,:,:)
  real(kind=4)                    :: times
+ real(kind=8), parameter         :: missing=-1.e+20_8
  real(esmf_kind_r8), allocatable :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
 
@@ -2059,6 +2060,8 @@
      call netcdf_err(error, 'DEFINING TSFCL UNITS' )
      error = nf90_put_att(ncid, id_tsfcl, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TSFCL COORD' )
+     error = nf90_put_att(ncid, id_tsfcl, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING TSFCL MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'tsea', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tsea)
      call netcdf_err(error, 'DEFINING TSEA' )
@@ -2068,6 +2071,8 @@
      call netcdf_err(error, 'DEFINING TSEA UNITS' )
      error = nf90_put_att(ncid, id_tsea, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TSEA COORD' )
+     error = nf90_put_att(ncid, id_tsea, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING TSEA MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'weasdi', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_sheleg_ice)
      call netcdf_err(error, 'DEFINING WEASD/SHELEG AT ICE' )
@@ -2077,6 +2082,8 @@
      call netcdf_err(error, 'DEFINING WEASD/SHELEG AT ICE UNITS' )
      error = nf90_put_att(ncid, id_sheleg_ice, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING WEASD/SHELEG AT ICE COORD' )
+     error = nf90_put_att(ncid, id_sheleg_ice, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING WEASD/SHELEG AT ICE MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'weasdl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_sheleg_land)
      call netcdf_err(error, 'DEFINING WEASD/SHELEG AT LAND' )
@@ -2086,6 +2093,8 @@
      call netcdf_err(error, 'DEFINING WEASD/SHELEG AT LAND UNITS' )
      error = nf90_put_att(ncid, id_sheleg_land, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SHELEG AT LAND COORD' )
+     error = nf90_put_att(ncid, id_sheleg_land, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING SHELEG AT LAND MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'tg3', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tg3)
      call netcdf_err(error, 'DEFINING TG3' )
@@ -2095,6 +2104,8 @@
      call netcdf_err(error, 'DEFINING TG3 UNITS' )
      error = nf90_put_att(ncid, id_tg3, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TG3 COORD' )
+     error = nf90_put_att(ncid, id_tg3, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING TG3 MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'zorli', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl_ice)
      call netcdf_err(error, 'DEFINING ZORLI' )
@@ -2104,6 +2115,8 @@
      call netcdf_err(error, 'DEFINING ZORLI UNITS' )
      error = nf90_put_att(ncid, id_zorl_ice, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ZORLI COORD' )
+     error = nf90_put_att(ncid, id_zorl_ice, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING ZORLI MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'zorlw', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_zorl_water)
      call netcdf_err(error, 'DEFINING ZORLW' )
@@ -2113,6 +2126,8 @@
      call netcdf_err(error, 'DEFINING ZORLW UNITS' )
      error = nf90_put_att(ncid, id_zorl_water, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ZORLW COORD' )
+     error = nf90_put_att(ncid, id_zorl_water, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING ZORLW MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'alvsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvsf)
      call netcdf_err(error, 'DEFINING ALVSF' )
@@ -2122,6 +2137,8 @@
      call netcdf_err(error, 'DEFINING ALVSF UNITS' )
      error = nf90_put_att(ncid, id_alvsf, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ALVSF COORD' )
+     error = nf90_put_att(ncid, id_alvsf, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING ALVSF MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'alvwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alvwf)
      call netcdf_err(error, 'DEFINING ALVWF' )
@@ -2131,6 +2148,8 @@
      call netcdf_err(error, 'DEFINING ALVWF UNITS' )
      error = nf90_put_att(ncid, id_alvwf, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ALVWF COORD' )
+     error = nf90_put_att(ncid, id_alvwf, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING ALVWF MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'alnsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnsf)
      call netcdf_err(error, 'DEFINING ALNSF' )
@@ -2140,6 +2159,8 @@
      call netcdf_err(error, 'DEFINING ALNSF UNITS' )
      error = nf90_put_att(ncid, id_alnsf, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ALNSF COORD' )
+     error = nf90_put_att(ncid, id_alnsf, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING ALNSF MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'alnwf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_alnwf)
      call netcdf_err(error, 'DEFINING ALNWF' )
@@ -2149,6 +2170,8 @@
      call netcdf_err(error, 'DEFINING ALNWF UNITS' )
      error = nf90_put_att(ncid, id_alnwf, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING ALNWF COORD' )
+     error = nf90_put_att(ncid, id_alnwf, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING ALNWF MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'facsf', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_facsf)
      call netcdf_err(error, 'DEFINING FACSF' )
@@ -2284,6 +2307,8 @@
      call netcdf_err(error, 'DEFINING TISFC UNITS' )
      error = nf90_put_att(ncid, id_tisfc, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TISFC COORD' )
+     error = nf90_put_att(ncid, id_tisfc, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING TISFC MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'tprcp', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tprcp)
      call netcdf_err(error, 'DEFINING TPRCP' )
@@ -2311,15 +2336,19 @@
      call netcdf_err(error, 'DEFINING SNWDPH AT ICE UNITS' )
      error = nf90_put_att(ncid, id_snwdph_ice, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING SNWDPH AT ICE COORD' )
+     error = nf90_put_att(ncid, id_snwdph_ice, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING SNWDPH AT ICE MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'snodl', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_snwdph_land)
-     call netcdf_err(error, 'DEFINING SNWDPH AT ICE' )
+     call netcdf_err(error, 'DEFINING SNWDPH AT LAND' )
      error = nf90_put_att(ncid, id_snwdph_land, "long_name", "snwdph_land")
-     call netcdf_err(error, 'DEFINING SNWDPH AT ICE LONG NAME' )
+     call netcdf_err(error, 'DEFINING SNWDPH AT LAND LONG NAME' )
      error = nf90_put_att(ncid, id_snwdph_land, "units", "none")
-     call netcdf_err(error, 'DEFINING SNWDPH AT ICE UNITS' )
+     call netcdf_err(error, 'DEFINING SNWDPH AT LAND UNITS' )
      error = nf90_put_att(ncid, id_snwdph_land, "coordinates", "geolon geolat")
-     call netcdf_err(error, 'DEFINING SNWDPH AT ICE COORD' )
+     call netcdf_err(error, 'DEFINING SNWDPH AT LAND COORD' )
+     error = nf90_put_att(ncid, id_snwdph_land, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING SNWDPH AT LAND MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'shdmin', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_shdmin)
      call netcdf_err(error, 'DEFINING SHDMIN' )
@@ -2376,6 +2405,8 @@
      call netcdf_err(error, 'DEFINING STC UNITS' )
      error = nf90_put_att(ncid, id_stc, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING STC COORD' )
+     error = nf90_put_att(ncid, id_stc, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING STC MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'smc', NF90_DOUBLE, (/dim_x,dim_y,dim_lsoil,dim_time/), id_smc)
      call netcdf_err(error, 'DEFINING SMC' )
@@ -2403,6 +2434,8 @@
      call netcdf_err(error, 'DEFINING TIICE UNITS' )
      error = nf90_put_att(ncid, id_ice_temp, "coordinates", "geolon geolat")
      call netcdf_err(error, 'DEFINING TIICE COORD' )
+     error = nf90_put_att(ncid, id_ice_temp, "missing_value", missing)
+     call netcdf_err(error, 'DEFINING TIICE MISSING FLAG' )
 
      if (convert_nst) then
 

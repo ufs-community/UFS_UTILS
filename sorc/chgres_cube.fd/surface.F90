@@ -80,6 +80,9 @@
                                        !< gravity
  real, parameter, private           :: hlice       = 3.335E5
                                        !< latent heat of fusion
+
+ real(esmf_kind_r8), parameter, private :: missing = -1.e20_esmf_kind_r8
+                                           !< flag for non-active points.
                                        
 
  type realptr_2d
@@ -2211,7 +2214,7 @@
    if (fice_ptr(i,j) > 0.0) then
      data_ptr2(i,j) = 1.0
    else
-     data_ptr2(i,j) = 1.e20
+     data_ptr2(i,j) = missing
    endif
  enddo
  enddo
@@ -2222,7 +2225,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0) then
-     data_ptr3(i,j) = 1.e20
+     data_ptr3(i,j) = missing
    endif
  enddo
  enddo
@@ -2340,7 +2343,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = -1.e20 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = missing ! gfs physics flag value
  enddo
  enddo
 
@@ -2352,7 +2355,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = -1.e20 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = missing ! gfs physics flag value
  enddo
  enddo
 
@@ -2364,7 +2367,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = -1.e20 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = missing ! gfs physics flag value
  enddo
  enddo
 
@@ -2376,7 +2379,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = -1.e20 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = missing ! gfs physics flag value
  enddo
  enddo
 
@@ -2489,7 +2492,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) == 0.0) then
-     seaice_skint_ptr(i,j) = 1.e20
+     seaice_skint_ptr(i,j) = missing
      hice_ptr(i,j) = 0.0
    endif
  enddo
@@ -2506,7 +2509,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0.0) then
-     data_ptr(i,j) = 1.e20
+     data_ptr(i,j) = missing
    endif
  enddo
  enddo
@@ -2520,7 +2523,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0.0) then  ! completely non-land.
-     tg3_ptr(i,j) = -1.e20
+     tg3_ptr(i,j) = missing
    endif
  enddo
  enddo
@@ -2542,8 +2545,8 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) == 0.0) then ! points with no ice.
-     snol_ptr(i,j) = 1.e20
-     snod_ptr(i,j) = 1.e20
+     snol_ptr(i,j) = missing
+     snod_ptr(i,j) = missing
    end if
  enddo
  enddo
@@ -2557,7 +2560,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0) then  ! all non-land
-     data_ptr(i,j) = 1.e20
+     data_ptr(i,j) = missing
    end if
  enddo
  enddo
@@ -2571,7 +2574,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0) then  ! all non-land
-       data_ptr(i,j) = 1.e20
+       data_ptr(i,j) = missing
    end if
  enddo
  enddo
@@ -2607,7 +2610,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0) then ! all non-land.
-     data3d_ptr(i,j,:) = -1.e20
+     data3d_ptr(i,j,:) = missing
    endif
  enddo
  enddo
@@ -2621,7 +2624,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) == 0.0) then
-     ice_ptr(i,j,:) = 1.e20
+     ice_ptr(i,j,:) = missing
    endif
  enddo
  enddo
@@ -2631,7 +2634,7 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (landmask_ptr(i,j) == 0) then ! all non-land.
-     skint_ptr(i,j) = 1.e20
+     skint_ptr(i,j) = missing
    endif
  enddo
  enddo
