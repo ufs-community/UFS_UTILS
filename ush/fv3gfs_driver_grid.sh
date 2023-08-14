@@ -23,10 +23,12 @@
 #
 # Calls the following scripts:
 #   1) fv3gfs_make_grid.sh (make 'grid' files)
-#   2) fv3gfs_make_orog.sh (make 'oro' files)
-#   3) fv3gfs_make_orog_gsl.sh (make gsl drag 'oro' files)
-#   4) fv3gfs_filter_topo.sh (filter topography)
-#   5) sfc_climo_gen.sh (create surface climo fields)
+#   2) fv3gfs_make_orog.sh (make 'oro' files) (generates the land mask and exits)
+#   3) fv3gfs_make_lake.sh (adds lakes)
+#   4) ocean_merge.exe (Reads pregenerated ocean grid and merges them)
+#   5) fv3gfs_make_orog_gsl.sh (make gsl drag 'oro' files)
+#   6) fv3gfs_filter_topo.sh (filter topography)
+#   7) sfc_climo_gen.sh (create surface climo fields)
 #
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
@@ -98,7 +100,6 @@ fi
 
 export TEMP_DIR=${TEMP_DIR:?}
 export out_dir=${out_dir:?}
-
 export home_dir=${home_dir:-"$PWD/../"}
 export script_dir=$home_dir/ush
 export exec_dir=${exec_dir:-"$home_dir/exec"}
