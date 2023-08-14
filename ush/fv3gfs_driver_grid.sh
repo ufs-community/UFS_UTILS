@@ -23,12 +23,13 @@
 #
 # Calls the following scripts:
 #   1) fv3gfs_make_grid.sh (make 'grid' files)
-#   2) fv3gfs_make_orog.sh (make 'oro' files) (generates the land mask and exits)
+#   2) fv3gfs_make_orog.sh (make land mask and exits)
 #   3) fv3gfs_make_lake.sh (adds lakes)
 #   4) ocean_merge.exe (Reads pregenerated ocean grid and merges them)
-#   5) fv3gfs_make_orog_gsl.sh (make gsl drag 'oro' files)
-#   6) fv3gfs_filter_topo.sh (filter topography)
-#   7) sfc_climo_gen.sh (create surface climo fields)
+#   5) fv3gfs_make_orog.sh (reads mearged masks and makes 'oro' files)
+#   6) fv3gfs_make_orog_gsl.sh (make gsl drag 'oro' files)
+#   7) fv3gfs_filter_topo.sh (filter topography)
+#   8) sfc_climo_gen.sh (create surface climo fields)
 #
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
