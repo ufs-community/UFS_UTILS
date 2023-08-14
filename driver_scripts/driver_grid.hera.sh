@@ -6,7 +6,7 @@
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
 #SBATCH --nodes=1 --ntasks-per-node=24
-##SBATCH --partition=bigmem
+#SBATCH --partition=bigmem
 #SBATCH -q debug
 #SBATCH -t 00:20:00
 
@@ -86,7 +86,7 @@ export vegsoilt_frac='.false.' # When .false., output dominant soil and
                                # the dominant category. A Fortran logical,
                                # so include the dots.
 
-export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
+export veg_type_src="viirs.v2.igbp.30s" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
                                 # 1) "viirs.v2.igbp.30s" for global 30s data
                                 # For the modis-based data, set to:
@@ -96,7 +96,7 @@ export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # 4) "modis.igbp.nh.30s" for N Hemis 30s data
                                 # 5) "modis.igbp.30s" for global 30s data
 
-export soil_type_src="statsgo.0.05" #  Soil type data. 
+export soil_type_src="bnu.v2.30s" #  Soil type data. 
                                 # For STATSGO data
                                 # 1) "statsgo.0.05" for global 0.05-deg data
                                 # 2) "statsgo.0.03" for global 0.03-deg data

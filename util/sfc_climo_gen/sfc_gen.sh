@@ -66,22 +66,25 @@
 set -x
 
 #export res=96
-export res=96.mx100
+export res=768.mx025
 
 #HALO=4
 #export GRIDTYPE=regional
 #FIX_REG=/lfs/h2/emc/stmp/$LOGNAME/fix.reg
 
-export veg_type_src="modis.igbp.0.05"
+export veg_type_src="viirs.v2.igbp.30s"
 
-export soil_type_src="statsgo.0.05"
+export soil_type_src="bnu.v2.30s"
 
-export WORK_DIR=/lfs/h2/emc/stmp/$LOGNAME/work.sfc
-export SAVE_DIR=/lfs/h2/emc/stmp/$LOGNAME/sfc.C${res}
+export WORK_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/work.sfc
+export SAVE_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/sfc.C${res}
 
 export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
-export vegsoilt_frac=.true.
+# Requires much more resources when true. On hera, uses 6 nodes,
+# 12 tasks per node. On WCOSS2...
+
+export vegsoilt_frac=.false.
 
 #------------------------------------------------------------------------
 #------------------------------------------------------------------------
