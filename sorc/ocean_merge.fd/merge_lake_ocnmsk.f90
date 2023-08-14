@@ -1,22 +1,19 @@
-!!! input are from pth1 and pth2, output will be in the local dir
-!!! To compile standalone do
-!!! ifort merge_lake_ocnmsk.F90 -I$NETCDF/include -L$NETCDF/lib -lnetcdff -lnetcdf
-!!! created by Shan.Sun  modified by Rahul Mahajan and Sanath Kumar
-!!!
-!!!
+!> @file
+!! @brief Determines the water mask by merging the lake mask with
+!! the mapped ocean mask from MOM6.
+!! @author Shan Sun
+!! @author Rahul Mahajan
+!! @author Sanath Kumar
 
-!!!
-!
-!!! "Determine the water mask by merging the lake mask with the mapped ocean
-!!! mask from MOM6, both are on the FV3 grid. During merge, the ocean mask
-!!! dominates the lake mask if there is a conflict. After the merge, the remaining
-!!! non-water fraction is the land fraction.m"
-!!!
-!!!
-
-
-
-
+!> Determine the water mask by merging the lake mask with the mapped ocean
+!! mask from MOM6, both are on the FV3 grid. During merge, the ocean mask
+!! dominates the lake mask if there is a conflict. After the merge, the remaining
+!! non-water fraction is the land fraction.
+!! 
+!! @return 0 for success, error code otherwise.
+!! @author Shan Sun
+!! @author Rahul Mahajan
+!! @author Sanath Kumar
 program merge_lake_ocnmsk
   use netcdf
 
@@ -136,6 +133,10 @@ program merge_lake_ocnmsk
 
 end program merge_lake_ocnmsk
 
+!> Handle netCDF errors.
+!!
+!! @param[in] ret NetCDF return code.
+!! @author Shan Sun
 subroutine handle_err (ret)
   use netcdf
   integer, intent(in) :: ret
@@ -146,6 +147,15 @@ subroutine handle_err (ret)
   end if
 end subroutine handle_err
 
+!> Read program namelist.
+!!
+!! @param[out] ocean_mask_dir Directory containing MOM6 ocean mask file.
+!! @param[out] lake_mask_dir Directory containing the lake mask file.
+!! @param[out] out_dir Directory where output file will be written.
+!! @param[out] atmres Atmosphere grid resolution.
+!! @param[out] ocnres Ocean grid resolution.
+!! @author Rahul Mahajan
+!! @author Sanath Kumar
 subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres, ocnres,out_dir)
 
   integer :: unit=7, io_status

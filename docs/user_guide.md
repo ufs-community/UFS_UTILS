@@ -23,6 +23,9 @@ https://github.com/ufs-community/UFS_UTILS.
 - <a href="chgres_cube/index.html">chgres_cube</a> - Creates cold
   start initial conditions for FV3 model runs.
 
+- <a href="cpld_gridgen/index.html">cpld_gridgen</a> - Utility to 
+  create the Fix and IC files for the S2SW and S2S applications 
+
 - <a href="emcsfc_ice_blend/index.html">emcsfc_ice_blend</a> - Blends
   National Ice Center sea ice cover and EMC sea ice concentration data
   to create a global sea ice analysis used to update the GFS once per
@@ -56,6 +59,15 @@ https://github.com/ufs-community/UFS_UTILS.
   gnomonic grids, and to compute the equivalent global resolution of a
   regional grid.
 
+- <a href="lsm_routines/index.html">lsm_routines</a> - Land surface 
+  model-specific routines that are utilised elsewhere within UFS_UTILS.
+  Currently, contains the routines required by global_cycle to 
+  perform data assimilation updates to land model states
+
+- <a href="ocean_merge/index.html">ocean_merge</a> - Utility to 
+  determine the water mask by merging a lake mask with a mapped
+  ocean mask from MOM6.
+
 - <a href="orog_mask_tools/index.html">orog_mask_tools</a> - Utilities
   to create land mask, terrain and gravity wave drag fields; set lake
   fraction and depth; creates an inland land mask.
@@ -68,14 +80,6 @@ https://github.com/ufs-community/UFS_UTILS.
   coordinate parameters from fields such as surface pressure, model
   top and the number of vertical levels. Outputs the 'ak' and 'bk'
   parameters used by the forecast model to define the hybrid levels.
-
-- <a href="lsm_routines/index.html">lsm_routines</a> - Land surface 
-  model-specific routines that are utilised elsewhere within UFS_UTILS.
-  Currently, contains the routines required by global_cycle to 
-  perform data assimilation updates to land model states
-
-- <a href="cpld_gridgen/index.html">cpld_gridgen</a> - Utility to 
-  create the Fix and IC files for the S2SW and S2S applications 
 
 - <a href="weight_gen/index.html">weight_gen</a> - Utility to 
   create gaussian grid ESMF 'scrip' files for use in creating

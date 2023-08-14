@@ -141,18 +141,18 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   export orog_dir=$TEMP_DIR/$name/orog
 
 
-if [[ ! -z "$ocn" ]]; then
+#if [[ ! -z "$ocn" ]]; then
 
 		out_dir=$out_dir/C$res.mx$ocn
                 
                 readme_name=readme.C$res.mx$ocn.txt
                 
 
-else
-                out_dir=$out_dir/C$res
-                readme_name=readme.C$res.txt
+#else
+               # out_dir=$out_dir/C$res
+               # readme_name=readme.C$res.txt
 
-fi
+#fi
 
 
   mkdir -p $out_dir
@@ -222,8 +222,8 @@ fi
 
 
 
-
-  if [[ ! -z "$ocn" ]]; then
+## we had this for back compatability ie to work if ocn is not set.
+ # if [[ ! -z "$ocn" ]]; then 
 
     results_dir=$TEMP_DIR/ocean_merged/C${res}.mx${ocn}
     mkdir -p ${results_dir}
@@ -265,7 +265,7 @@ EOF
     done
 
 
-  fi
+ # fi
 #exit 8
 
   set +x
@@ -330,6 +330,7 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   filter_dir=$TEMP_DIR/$name/filter_topo
   rm -rf $TEMP_DIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
+
 
 #----------------------------------------------------------------------------------
 # Create regional gfdl grid files.

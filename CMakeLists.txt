@@ -14,7 +14,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # User options.
 option(OPENMP "use OpenMP threading" ON)
-option(ENABLE_DOCS "Enable generation of doxygen-based documentation." OFF)
+option(ENABLE_DOCS "Enable generation of doxygen-based documentation." ON)
 
 # Utilities to be built (Default: ALL)
 option(ICEBLEND "Enable building emcsfc_ice_blend.fd" ON)
@@ -30,6 +30,7 @@ option(FVCOMTOOLS "Enable building fvcom_tools.fd" ON)
 option(GBLEVENTS "Enable building gblevents.fd" ON)
 option(CPLD_GRIDGEN "Enable building cpld_gridgen.fd" ON)
 option(WEIGHT_GEN "Enable building weight_gen.fd" ON)
+option(OCEAN_MERGE "Enable building ocean_merge.fd" ON)
 
 # Option to build application specific utilities
 option(GFS "Enable building GFS-only utilities" OFF)
@@ -46,6 +47,7 @@ if(GFS)
   set(GBLEVENTS OFF CACHE BOOL "Disable building gblevents.fd" FORCE)
   set(CPLD_GRIDGEN OFF CACHE BOOL "Disable building cpld_gridgen.fd" FORCE)
   set(WEIGHT_GEN OFF CACHE BOOL "Disable building weight_gen.fd" FORCE)
+  set(OCEAN_MERGE OFF CACHE BOOL "Disable building ocean_merge.fd" FORCE)
 endif()
 
 SET(TEST_FILE_DIR "." CACHE STRING "Check this directory for test files before using FTP.")
