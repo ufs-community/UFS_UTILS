@@ -112,4 +112,4 @@ jobs:
           spack env activate ufs_utils-env
           cd ufs_utils
           cd build
-
+          ctest --verbose --rerun-failed --output-on-failure
