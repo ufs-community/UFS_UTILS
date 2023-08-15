@@ -16,8 +16,7 @@ env:
 
 # The jobs are split into:
 # 1. a dependency build step (setup), and
-# 2. a UFS-utils build step (build)
-# 3. a future UFS-utils test step (test)
+# 2. a UFS-utils build and test step (ufs_utils)
 # The setup is run once and the environment is cached,
 # so each subsequent build and test of UFS-utils can reuse the cached
 # dependencies to save time (and compute).
@@ -27,11 +26,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout-ufs_utils
+      - name: checkout  # this is to get the ci/spack.yaml file
         uses: actions/checkout@v3
         with:
             path: ufs_utils
-            submodules: true
 
       # Cache spack, compiler and dependencies
       - name: cache-env
@@ -58,11 +56,17 @@ jobs:
           spack install -v --fail-fast --dirty
           spack clean --all
 
-  build:
+  ufs_utils:
     needs: setup
     runs-on: ubuntu-latest
 
     steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+            path: ufs_utils
+            submodules: recursive
+
       - name: cache-env
         id: cache-env
         uses: actions/cache@v2
@@ -72,7 +76,7 @@ jobs:
             ~/.spack
           key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
 
-      - name: build-ufs_utils
+      - name: build
         run: |
           source spack/share/spack/setup-env.sh
           spack env activate ufs_utils-env
@@ -83,20 +87,6 @@ jobs:
           cmake -DCMAKE_INSTALL_PREFIX=../install ..
           make -j2 VERBOSE=1
           make install
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: cache-env
-        id: cache-env
-        uses: actions/cache@v2
-        with:
-          path: |
-            spack
-            ~/.spack
-          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
 
       - name: ctest
         run: |
