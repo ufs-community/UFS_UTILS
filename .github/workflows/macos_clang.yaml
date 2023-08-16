@@ -39,7 +39,7 @@ jobs:
           path: |
             spack
             ~/.spack
-          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack_macOS.yaml') }}
+          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
 
       # Install dependencies using Spack
       - name: install-dependencies-with-spack
@@ -47,7 +47,8 @@ jobs:
         run: |
           git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git
           source spack/share/spack/setup-env.sh
-          spack env create ufs_utils-env ufs_utils/ci/spack_macOS.yaml
+          sed "s/\[intel, gcc@10:10, apple-clang@14\]/\[apple-clang@14\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
+          spack env create ufs_utils-env spack_ci.yaml
           spack env activate ufs_utils-env
           spack external find
           spack add openmpi@4.1.5
@@ -73,7 +74,7 @@ jobs:
           path: |
             spack
             ~/.spack
-          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack_macOS.yaml') }}
+          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
 
       - name: build
         run: |

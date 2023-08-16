@@ -59,7 +59,8 @@ jobs:
         run: |
           git clone -c feature.manyFiles=true https://github.com/NOAA-EMC/spack.git
           source spack/share/spack/setup-env.sh
-          spack env create ufs_utils-env ufs_utils/ci/spack.yaml
+          sed "s/\[intel, gcc@10:10, apple-clang@14\]/\[intel\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
+          spack env create ufs_utils-env spack_ci.yaml
           spack env activate ufs_utils-env
           spack compiler find
           sudo apt install cmake
