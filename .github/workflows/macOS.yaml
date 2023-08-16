@@ -73,7 +73,7 @@ jobs:
           path: |
             spack
             ~/.spack
-          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
+          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack_macOS.yaml') }}
 
       - name: build
         run: |
