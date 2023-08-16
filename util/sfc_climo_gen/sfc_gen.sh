@@ -48,14 +48,14 @@
 #                  - "modis.igbp.30s" for global 30s data
 #
 # soil_type_src - Input soil type data. Choices are:
+#                   For Beijing Norm. Univ. soil type data
+#                   - "bnu.v2.30s" for global 30s data
 #                   For STATSGO soil type data
 #                   - "statsgo.0.05" for global 0.05-deg data
 #                   - "statsgo.0.03" for global 0.03-deg data
 #                   - "statsgo.conus.30s" for CONUS 30s data
 #                   - "statsgo.nh.30s" for NH 30s data
 #                   - "statsgo.30s" for global 30s data
-#                   For Beijing Norm. Univ. soil type data
-#                   - "bnu.v2.30s" for global 30s data
 #
 # vegsoilt_frac - When .true., output the fraction of each
 #                 vegetation and soil type and the dominant
