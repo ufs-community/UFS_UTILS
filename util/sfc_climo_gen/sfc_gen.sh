@@ -65,7 +65,6 @@
 
 set -x
 
-#export res=96
 export res=768.mx025
 
 #HALO=4
@@ -81,8 +80,8 @@ export SAVE_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/sfc.C${res}
 
 export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
-# Requires much more resources when true. On hera, uses 6 nodes,
-# 12 tasks per node. On WCOSS2...
+# Requires much more resources when true. On hera, use 6 nodes,
+# 12 tasks per node. On WCOSS2, use 5 nodes, 12 tasks per node.
 
 export vegsoilt_frac=.false.
 
