@@ -1,0 +1,97 @@
+name: GCC Linux Build and Test
+on: [push, pull_request, workflow_dispatch]
+
+
+# Use custom shell with -l so .bash_profile is sourced
+# without having to do it in manually every step
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+env:
+  cache_key: gcc
+  CC: gcc-10
+  FC: gfortran-10
+  CXX: g++-10
+
+# The jobs are split into:
+# 1. a dependency build step (setup), and
+# 2. a UFS-utils build and test step (ufs_utils)
+# The setup is run once and the environment is cached,
+# so each subsequent build and test of UFS-utils can reuse the cached
+# dependencies to save time (and compute).
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout  # this is to get the ci/spack.yaml file
+        uses: actions/checkout@v3
+        with:
+            path: ufs_utils
+
+      # Cache spack, compiler and dependencies
+      - name: cache-env
+        id: cache-env
+        uses: actions/cache@v2
+        with:
+          path: |
+            spack
+            ~/.spack
+          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
+
+      # Install dependencies using Spack
+      - name: install-dependencies-with-spack
+        if: steps.cache-env.outputs.cache-hit != 'true'
+        run: |
+          git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git
+          source spack/share/spack/setup-env.sh
+          spack env create ufs_utils-env ufs_utils/ci/spack.yaml
+          spack env activate ufs_utils-env
+          sudo apt install cmake
+          spack external find
+          spack add mpich@3.4.2
+          spack concretize
+          spack install -v --fail-fast --dirty
+          spack clean --all
+
+  ufs_utils:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+            path: ufs_utils
+            submodules: recursive
+
+      - name: cache-env
+        id: cache-env
+        uses: actions/cache@v2
+        with:
+          path: |
+            spack
+            ~/.spack
+          key: spack-${{ runner.os }}-${{ env.cache_key }}-${{ hashFiles('ufs_utils/ci/spack.yaml') }}
+
+      - name: build
+        run: |
+          source spack/share/spack/setup-env.sh
+          spack env activate ufs_utils-env
+          export CC=mpicc
+          export FC=mpif90
+          cd ufs_utils
+          mkdir -p build && cd build
+          cmake -DCMAKE_INSTALL_PREFIX=../install ..
+          make -j2 VERBOSE=1
+          make install
+
+      - name: ctest
+        run: |
+          source spack/share/spack/setup-env.sh
+          spack env activate ufs_utils-env
+          cd ufs_utils
+          cd build
+          ctest --verbose --rerun-failed --output-on-failure
