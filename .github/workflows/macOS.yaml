@@ -49,7 +49,6 @@ jobs:
           source spack/share/spack/setup-env.sh
           spack env create ufs_utils-env ufs_utils/ci/spack_macOS.yaml
           spack env activate ufs_utils-env
-          sudo apt install cmake
           spack external find
           spack add openmpi@4.1.5
           spack concretize
