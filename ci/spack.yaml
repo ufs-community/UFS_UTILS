@@ -1,0 +1,24 @@
+# Spack environment file to build UFS utilities dependencies
+spack:
+  packages:
+    all:
+      compiler:
+      - intel
+      - gcc@10:10
+  specs:
+  - netcdf-c@4.7.4
+  - netcdf-fortran@4.5.3
+  - bacio@2.4.1
+  - g2@3.4.5
+  - ip@3.3.3
+  - nemsio@2.5.4
+  - sp@2.3.3
+  - w3emc@2.9.2
+  - sfcio@1.4.1
+  - sigio@2.3.2
+  - nccmp@1.9.0.1
+  - parallelio@2.5.9+fortran~pnetcdf
+  - esmf@8.4.2~debug~xerces+external-parallelio
+  view: true
+  concretizer:
+    unify: true
