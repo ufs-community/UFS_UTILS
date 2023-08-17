@@ -116,7 +116,7 @@ if [ $gtype = uniform ]; then
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
  # export ocn=${ocn:-"025"}     # use one of  "025", "050", "100", "500". Cannot be empty	
-  export ocn="500"
+  export ocn="100"
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
