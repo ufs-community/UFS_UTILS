@@ -112,10 +112,11 @@ export soil_type_src="statsgo.0.05" #  Soil type data.
                                 # 1) "bnu.30s" for global 30s data.
 
 if [ $gtype = uniform ]; then
-  export res=48
+  export res=96
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
-  export ocn=${ocn:-"025"}     # use one of  "025", "050", "100", "500". Cannot be empty	
+ # export ocn=${ocn:-"025"}     # use one of  "025", "050", "100", "500". Cannot be empty	
+  export ocn="500"
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -162,7 +163,7 @@ fi
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/test_full
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_coupled_grids
 export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN/
 
 #-----------------------------------------------------------------------

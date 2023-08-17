@@ -14,7 +14,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # User options.
 option(OPENMP "use OpenMP threading" ON)
-option(ENABLE_DOCS "Enable generation of doxygen-based documentation." ON)
+option(ENABLE_DOCS "Enable generation of doxygen-based documentation." OFF)
 
 # Utilities to be built (Default: ALL)
 option(ICEBLEND "Enable building emcsfc_ice_blend.fd" ON)
