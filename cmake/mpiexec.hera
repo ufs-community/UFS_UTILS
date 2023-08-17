@@ -6,7 +6,7 @@
 #   $2+ - Executable and its arguments
 #
 
-ACCOUNT=gsd-fv3
+ACCOUNT=fv3-cpu
 QOS=debug
 
 NP=$1

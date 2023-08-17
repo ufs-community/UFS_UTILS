@@ -26,15 +26,16 @@ program merge_lake_ocnmsk
   logical, parameter :: int_lake=.true.
 
   character(len=120) :: flnm
-  integer :: ncid,ndims,nvars,natts,lat,lon,v1id,v2id,v3id,v4id,start(2),count(2),i,j,latid,lonid,ncid4, dims(2),tile,nodp_pt,lake_pt,vlat
+  integer :: ncid,ndims,nvars,natts,lat,lon,v1id,v2id,v3id,v4id,start(2),count(2),i,j,latid,lonid,ncid4, dims(2),tile,nodp_pt
+  integer :: lake_pt,vlat
   real, allocatable :: lake_frac(:,:),lake_depth(:,:),land_frac(:,:),ocn_frac(:,:),slmsk(:,:),lat2d(:,:)
 
   
 
   call read_nml(pth1, pth2, atmres, ocnres, pth3)
-
+  
   nodp_pt=0
-  lake_pt=0
+  lake_pt=0  
   do tile=1,6
     write(flnm,'(5a,i1,a)') trim(pth1),trim(atmres),'.',trim(ocnres),'.tile',tile,'.nc'
     call handle_err (nf90_open (flnm, NF90_NOWRITE, ncid))
