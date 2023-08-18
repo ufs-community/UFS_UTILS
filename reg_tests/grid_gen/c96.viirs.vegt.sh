@@ -15,6 +15,7 @@ export out_dir=${WORK_DIR}/c96.viirs.vegt
 export res=96
 export gtype=uniform
 export veg_type_src="viirs.v2.igbp.30s"
+export soil_type_src="bnu.v2.30s"
 
 NCCMP=${NCCMP:-$(which nccmp)}
 
