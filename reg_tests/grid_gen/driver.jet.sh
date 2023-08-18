@@ -68,12 +68,12 @@ TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       --partition=xjet -o $LOG_FILE1 -e $LOG_FILE1 ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
-# C96 uniform grid using viirs vegetation type data.
+# C96 uniform grid using viirs vegetation type and bnu soil type data.
 #-----------------------------------------------------------------------------
 
 LOG_FILE2=${LOG_FILE}02
-TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.vegt \
-      --partition=xjet -o $LOG_FILE2 -e $LOG_FILE2 ./c96.viirs.vegt.sh)
+TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.bnu \
+      --partition=xjet -o $LOG_FILE2 -e $LOG_FILE2 ./c96.viirs.bnu.sh)
 
 #-----------------------------------------------------------------------------
 # gfdl regional grid
