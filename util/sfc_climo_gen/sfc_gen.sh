@@ -39,12 +39,7 @@
 #
 # veg_type_src - Input vegetation type data. Choices are:
 #                  For viirs-based vegetation type data, set to:
-#                  - "viirs.igbp.0.1" for global 0.10-deg data
-#                  - "viirs.igbp.0.05" for global 0.05-deg data
-#                  - "viirs.igbp.0.03" for global 0.03-deg data
-#                  - "viirs.igbp.conus.30s" for CONUS 30s data
-#                  - "viirs.igbp.nh.30s" for NH 30s data
-#                  - "viirs.igbp.30s" for global 30s data
+#                  - "viirs.v2.igbp.30s" for global 30s data
 #                  For the modis-based vegetation data, set to:
 #                  - "modis.igbp.0.05" for global 0.05-deg data
 #                  - "modis.igbp.0.03" for global 0.03-deg data
@@ -53,14 +48,14 @@
 #                  - "modis.igbp.30s" for global 30s data
 #
 # soil_type_src - Input soil type data. Choices are:
+#                   For Beijing Norm. Univ. soil type data
+#                   - "bnu.v2.30s" for global 30s data
 #                   For STATSGO soil type data
 #                   - "statsgo.0.05" for global 0.05-deg data
 #                   - "statsgo.0.03" for global 0.03-deg data
 #                   - "statsgo.conus.30s" for CONUS 30s data
 #                   - "statsgo.nh.30s" for NH 30s data
 #                   - "statsgo.30s" for global 30s data
-#                   For Beijing Norm. Univ. soil type data
-#                   - "bnu.30s" for global 30s data
 #
 # vegsoilt_frac - When .true., output the fraction of each
 #                 vegetation and soil type and the dominant
@@ -70,21 +65,23 @@
 
 set -x
 
-#export res=96
-export res=96.mx100
+export res=768.mx025
 
 #HALO=4
 #export GRIDTYPE=regional
 #FIX_REG=/lfs/h2/emc/stmp/$LOGNAME/fix.reg
 
-#export veg_type_src="modis.igbp.0.05"
+export veg_type_src="viirs.v2.igbp.30s"
 
-#export soil_type_src="statsgo.0.05"
+export soil_type_src="bnu.v2.30s"
 
-export WORK_DIR=/lfs/h2/emc/stmp/$LOGNAME/work.sfc
-export SAVE_DIR=/lfs/h2/emc/stmp/$LOGNAME/sfc.C${res}
+export WORK_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/work.sfc
+export SAVE_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/sfc.C${res}
 
 export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
+
+# Requires much more resources when true. On hera, use 6 nodes,
+# 12 tasks per node. On WCOSS2, use 5 nodes, 12 tasks per node.
 
 export vegsoilt_frac=.false.
 
