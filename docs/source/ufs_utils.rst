@@ -528,7 +528,7 @@ The surface climatological data is located here `./fix/fix_sfc_climo <https://no
 
       * Global 1-degree fractional coverage strong/weak zenith angle albedo - facsf.1.0.nc
       * Global 0.05-degree maximum snow albedo - maximum_snow_albedo.0.05.nc
-      * Global 2.6 x 1.5-degree soil substrate temperature - substrate_temperature.2.6x1.5.nc
+      * Global 0.5-degree soil substrate temperature - substrate_temperature.gfs.0.5.nc
       * Global 0.05-degree four component monthly snow-free albedo - snowfree_albedo.4comp.0.05.nc
       * Global 1.0-degree categorical slope type - slope_type.1.0.nc
       * Global 0.05-degree CLM soil color (Lawrence and Chase, 2007 JGR) - soil_color.clm.0.05.nc
