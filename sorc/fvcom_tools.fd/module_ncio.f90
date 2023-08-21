@@ -2513,13 +2513,14 @@ contains
   !! @param[in] units units to use in netcdf variable
   !!
   !! @author David.M.Wright org: UM/GLERL @date 2020-09-01
-  subroutine add_new_var_3d(this,varname,dname1,dname2,dname3,lname,units)
+  subroutine add_new_var_3d(this,varname,dname1,dname2,dname3,lname,units,dtype)
     implicit none
     !
     class(ncio) :: this
     character(len=*),intent(in) :: varname,dname1,dname2,dname3 &
          ,lname,units
     integer :: status, ncid, dim1id, dim2id, dim3id, varid
+    character(len=*),intent(in) :: dtype
 
     status = nf90_redef(this%ncid) !Enter Define Mode
     if (status /= nf90_noerr) call this%handle_err(status)
@@ -2531,8 +2532,19 @@ contains
     status = nf90_inq_dimid(this%ncid, dname3, dim3id)
     if (status /= nf90_noerr) call this%handle_err(status)
 
-    status = nf90_def_var(this%ncid, varname, nf90_double, &
+    if(trim(dtype)=="double") then
+        status = nf90_def_var(this%ncid, varname, nf90_double, &
          (/ dim1id, dim2id, dim3id /), varid)
+    elseif(trim(dtype)=="float") then
+        status = nf90_def_var(this%ncid, varname, nf90_float, &
+         (/ dim1id, dim2id, dim3id /), varid)
+    elseif(trim(dtype)=="int") then
+        status = nf90_def_var(this%ncid, varname, nf90_int, &
+         (/ dim1id, dim2id, dim3id /), varid)
+    else 
+      write(*,*) ' undefined data type ', trim(dtype)
+      call this%handle_err(status)
+    endif
     if (status /= nf90_noerr) call this%handle_err(status)
 
     status = nf90_put_att(this%ncid, varid, 'long_name', lname)
@@ -2557,13 +2569,14 @@ contains
   !! @param[in] units units to use in netcdf variable
   !!
   !! @author David.M.Wright org: UM/GLERL @date 2021-10-07
-  subroutine add_new_var_2d(this,varname,dname1,dname2,lname,units)
+  subroutine add_new_var_2d(this,varname,dname1,dname2,lname,units,dtype)
     implicit none
     !
     class(ncio) :: this
     character(len=*),intent(in) :: varname,dname1,dname2  &
          ,lname,units
     integer :: status, ncid, dim1id, dim2id, varid
+    character(len=*),intent(in) :: dtype
 
     status = nf90_redef(this%ncid) !Enter Define Mode
     if (status /= nf90_noerr) call this%handle_err(status)
@@ -2573,8 +2586,19 @@ contains
     status = nf90_inq_dimid(this%ncid, dname2, dim2id)
     if (status /= nf90_noerr) call this%handle_err(status)
 
-    status = nf90_def_var(this%ncid, varname, nf90_double, &
+    if(trim(dtype)=="double") then
+      status = nf90_def_var(this%ncid, varname, nf90_double, &
          (/ dim1id, dim2id /), varid)
+    elseif(trim(dtype)=="float") then
+      status = nf90_def_var(this%ncid, varname, nf90_float, &
+         (/ dim1id, dim2id /), varid)
+    elseif(trim(dtype)=="int") then
+      status = nf90_def_var(this%ncid, varname, nf90_int, &
+         (/ dim1id, dim2id /), varid)
+    else
+      write(*,*) ' undefined data type ', trim(dtype)
+      call this%handle_err(status)
+    endif
     if (status /= nf90_noerr) call this%handle_err(status)
 
     status = nf90_put_att(this%ncid, varid, 'long_name', lname)
