@@ -58,11 +58,6 @@
 !!  - IDIM,JDIM    i/j dimension of a cubed-sphere tile.
 !!  - LUGB         Unit number used in the sfccycle subprogram
 !!                 to read input datasets.
-!!  Next four should match the gfs_physics_nml 
-!!  - LSM          Integer code for LSM (as in GFS_TYPES)
-!!                 1 - Noah
-!!                 (note: added for land_da_adjust layers, however 
-!!                 sfcsub routine (and likely others) assume the noah lsm
 !!  - LSOIL        Number of soil layers.
 !!  - IY,IM,ID,IH  Year, month, day, and hour of initial state.
 !!  - FH           Forecast hour
@@ -110,18 +105,18 @@
  IMPLICIT NONE
 !
  CHARACTER(LEN=3) :: DONST
- INTEGER :: IDIM, JDIM, LSM, LSOIL, LUGB, IY, IM, ID, IH, IALB
+ INTEGER :: IDIM, JDIM, LSOIL, LUGB, IY, IM, ID, IH, IALB
  INTEGER :: ISOT, IVEGSRC, LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
  INTEGER :: NPROCS, MYRANK, NUM_THREADS, NUM_PARTHDS, MAX_TASKS
  REAL    :: FH, DELTSFC, ZSEA1, ZSEA2
  LOGICAL :: USE_UFO, DO_NSST, DO_LNDINC, DO_SFCCYCLE, FRAC_GRID
 !
- NAMELIST/NAMCYC/ IDIM,JDIM,LSM,LSOIL,LUGB,IY,IM,ID,IH,FH,&
+ NAMELIST/NAMCYC/ IDIM,JDIM,LSOIL,LUGB,IY,IM,ID,IH,FH,&
                   DELTSFC,IALB,USE_UFO,DONST,             &
                   DO_SFCCYCLE,ISOT,IVEGSRC,ZSEA1_MM,      &
                   ZSEA2_MM, MAX_TASKS, DO_LNDINC, FRAC_GRID
 !
- DATA IDIM,JDIM,LSM,LSOIL/96,96,1,4/
+ DATA IDIM,JDIM,LSOIL/96,96,4/
  DATA IY,IM,ID,IH,FH/1997,8,2,0,0./
  DATA LUGB/51/, DELTSFC/0.0/, IALB/1/, MAX_TASKS/99999/
  DATA ISOT/1/, IVEGSRC/2/, ZSEA1_MM/0/, ZSEA2_MM/0/
@@ -170,10 +165,10 @@
  ENDIF
 
  PRINT*
- IF (MYRANK==0) PRINT*,"LUGB,IDIM,JDIM,LSM,ISOT,IVEGSRC,LSOIL,DELTSFC,IY,IM,ID,IH,FH: ", &
-              LUGB,IDIM,JDIM,LSM,ISOT,IVEGSRC,LSOIL,DELTSFC,IY,IM,ID,IH,FH
+ IF (MYRANK==0) PRINT*,"LUGB,IDIM,JDIM,ISOT,IVEGSRC,LSOIL,DELTSFC,IY,IM,ID,IH,FH: ", &
+              LUGB,IDIM,JDIM,ISOT,IVEGSRC,LSOIL,DELTSFC,IY,IM,ID,IH,FH
 
- CALL SFCDRV(LUGB,IDIM,JDIM,LSM,LENSFC,LSOIL,DELTSFC,  &
+ CALL SFCDRV(LUGB,IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
              IY,IM,ID,IH,FH,IALB,                  &
              USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LNDINC, &
              FRAC_GRID,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
@@ -278,8 +273,6 @@
  !! @param[in] IDIM 'i' dimension of the cubed-sphere tile
  !! @param[in] JDIM 'j' dimension of the cubed-sphere tile
  !! @param[in] LENSFC Total numberof points for the cubed-sphere tile
- !! @param[in] LSM Integer code for the land surface model 
- !!            1 - Noah
  !! @param[in] LSOIL Number of soil layers
  !! @param[in] DELTSFC Cycling frequency in hours
  !! @param[in] IY Year of initial state
@@ -303,7 +296,7 @@
  !! @param[in] IVEGSRC Use IGBP vegetation type when '1'.  Use SIB when '2'.
  !! @param[in] MYRANK MPI rank number
  !! @author Mark Iredell, George Gayno
- SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LSM,LENSFC,LSOIL,DELTSFC,  &
+ SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
                    USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LNDINC,&
                    FRAC_GRID,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
@@ -314,12 +307,13 @@
  USE LAND_INCREMENTS, ONLY: ADD_INCREMENT_SOIL,     &
                             ADD_INCREMENT_SNOW,     &
                             CALCULATE_LANDINC_MASK, &
-                            APPLY_LAND_DA_ADJUSTMENTS_STC, &
-                            APPLY_LAND_DA_ADJUSTMENTS_SND
+                            APPLY_LAND_DA_ADJUSTMENTS_SOIL, &
+                            APPLY_LAND_DA_ADJUSTMENTS_SND, &
+                            LSM_NOAH, LSM_NOAHMP
 
  IMPLICIT NONE
 
- INTEGER, INTENT(IN) :: IDIM, JDIM, LSM,LENSFC, LSOIL, IALB
+ INTEGER, INTENT(IN) :: IDIM, JDIM, LENSFC, LSOIL, IALB
  INTEGER, INTENT(IN) :: LUGB, IY, IM, ID, IH
  INTEGER, INTENT(IN) :: ISOT, IVEGSRC, MYRANK
 
@@ -342,7 +336,8 @@
  integer             :: num_parthds, num_threads
 ! integer :: ichk, jchk, ijchk
 
- LOGICAL             :: IS_NOAHMP=.FALSE.
+ LOGICAL             :: IS_NOAHMP
+ INTEGER             :: LSM
 
  real(kind=kind_io8) :: min_ice(lensfc)
 
@@ -380,8 +375,10 @@
  real, dimension(idim,jdim) :: tf_clm,tf_trd,sal_clm
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
  INTEGER             :: veg_type_landice
+ INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
 
  LOGICAL :: FILE_EXISTS, DO_SOI_INC, DO_SNO_INC
+
 !--------------------------------------------------------------------------------
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
 ! increments.
@@ -501,7 +498,6 @@ ENDIF
                 ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
                 ZSOIL=ZSOIL,   NSST=NSST)
 
-
  print*,'is noahmp/fract grid ',is_noahmp, frac_grid
 
  IF (FRAC_GRID .AND. .NOT. IS_NOAHMP) THEN
@@ -523,6 +519,12 @@ ENDIF
 !    print*,'bad point 2 ',tile_num,i,landfrac(i),vegfcs(i)
 !  endif
 !enddo
+
+ IF (IS_NOAHMP) THEN 
+        LSM=LSM_NOAHMP
+ ELSE
+        LSM=LSM_NOAH
+ ENDIF
 
  IF (USE_UFO) THEN
    PRINT*
@@ -551,7 +553,7 @@ ENDIF
  
  ! CALCULATE MASK FOR LAND INCREMENTS
  IF (DO_LNDINC)  &
-    CALL CALCULATE_LANDINC_MASK(SLCFCS(:,1),SWEFCS, VETFCS,  &
+    CALL CALCULATE_LANDINC_MASK(SMCFCS(:,1),SWEFCS, VETFCS,  &
                     LENSFC,VEG_TYPE_LANDICE,  LANDINC_MASK)
 
 !--------------------------------------------------------------------------------
@@ -759,7 +761,7 @@ ENDIF
         LANDINC_MASK_FG = LANDINC_MASK
 
         IF (DO_SFCCYCLE .OR. DO_SNO_INC)  THEN
-            CALL CALCULATE_LANDINC_MASK(SLCFCS(:,1),SWEFCS, VETFCS, LENSFC, &
+            CALL CALCULATE_LANDINC_MASK(SMCFCS(:,1),SWEFCS, VETFCS, LENSFC, &
                                                         VEG_TYPE_LANDICE, LANDINC_MASK )
         ENDIF
 
@@ -786,18 +788,21 @@ ENDIF
 
         ! store background states
         STC_BCK = STCFCS
-        SMC_BCK = SMCFCS ! not used yet.
-        SLC_BCK = SLCFCS ! not used yet.
+        SMC_BCK = SMCFCS
+        SLC_BCK = SLCFCS
 
-        CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,LANDINC_MASK,LANDINC_MASK_FG,  &
-            LENSFC,LSOIL,IDIM,JDIM, MYRANK)
+        ! below updates [STC/SMC/STC]FCS to hold the analysis
+        CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
+                LANDINC_MASK,LANDINC_MASK_FG,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
 
         !--------------------------------------------------------------------------------
         ! make any necessary adjustments to dependent variables
         !--------------------------------------------------------------------------------
 
-        CALL APPLY_LAND_DA_ADJUSTMENTS_STC(LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
-            SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS)
+
+        CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL(LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
+            SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS, STC_UPDATED, &
+            SLC_UPDATED,ZSOIL)
 
    ENDIF ! soil increments
 
@@ -820,13 +825,12 @@ ENDIF
 ! WRITE OUT UPDATED SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- IF (IS_NOAHMP) THEN
+ IF (LSM==LSM_NOAHMP) THEN
 
    CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,NSST,VEGFCS=VEGFCS, &
-                   SLCFCS=SLCFCS,SMCFCS=SMCFCS)
+                   SLCFCS=SLCFCS,SMCFCS=SMCFCS,STCFCS=STCFCS)
 
-
- ELSE
+ ELSEIF (LSM==LSM_NOAH) THEN
 
    CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL, &
                    DO_NSST,NSST,SLIFCS=SLIFCS,TSFFCS=TSFFCS,VEGFCS=VEGFCS, &
