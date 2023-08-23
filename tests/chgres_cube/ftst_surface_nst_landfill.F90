@@ -13,8 +13,6 @@
 
  use surface, only : nst_land_fill, &
                      create_nst_esmf_fields
- 
- use program_setup, only : fract_grid
 
  use surface_target_data, only : skin_temp_target_grid, &
                      seaice_fract_target_grid, &
@@ -82,8 +80,6 @@
  !--------------------------------------------------------------------!
  !---------------- Setup Target Grid & Coordinates -------------------!
  !--------------------------------------------------------------------!
- 
- fract_grid = .false.
 
  i_target = IPTS_TARGET
  j_target = JPTS_TARGET
