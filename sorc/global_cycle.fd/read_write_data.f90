@@ -664,8 +664,8 @@ MODULE READ_WRITE_DATA
  end subroutine remove_checksum
 
  !> Read latitude and longitude for the cubed-sphere tile from the
- !! 'grid' file.  Read the filtered and unfiltered orography from
- !! the 'orography' file.
+ !! 'grid' file.  Read the filtered and unfiltered orography and
+ !! optionally the land fraction from the 'orography' file.
  !!
  !! @param[in] IDIM 'i' dimension of cubed-sphere tile.
  !! @param[in] JDIM 'j' dimension of cubed-sphere tile.
@@ -675,6 +675,7 @@ MODULE READ_WRITE_DATA
  !! @param[out] OROG Filtered orography.
  !! @param[out] OROG_UF Unfiltered orography.
  !! @param[out] TILE_NUM Cubed-sphere tile number
+ !! @param[out] LANDFRAC Land fraction.
  !! @author George Gayno NOAA/EMC
  SUBROUTINE READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,&
                               TILE_NUM,IDIM,JDIM,IJDIM,LANDFRAC)
