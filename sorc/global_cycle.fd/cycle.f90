@@ -348,6 +348,7 @@
  REAL                :: ALBFCS(LENSFC,4), TG3FCS(LENSFC)
  REAL                :: CNPFCS(LENSFC), SMCFCS(LENSFC,LSOIL)
  REAL                :: STCFCS(LENSFC,LSOIL), SLIFCS(LENSFC)
+!REAL                :: STCFCS_SAVE(LENSFC,LSOIL)
  REAL                :: AISFCS(LENSFC), F10M(LENSFC)
  REAL                :: VEGFCS(LENSFC), VETFCS(LENSFC)
  REAL                :: SOTFCS(LENSFC), ALFFCS(LENSFC,2)
@@ -498,6 +499,8 @@ ENDIF
                 ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
                 ZSOIL=ZSOIL,   NSST=NSST)
 
+!STCFCS_SAVE = STCFCS
+
  print*,'is noahmp/fract grid ',is_noahmp, frac_grid
 
  IF (FRAC_GRID .AND. .NOT. IS_NOAHMP) THEN
@@ -644,7 +647,7 @@ ENDIF
         print*,'bad point 5 ',tile_num,i,landfrac(i),slmaskl(i),vegfcs(i)
           endif
        endif
-        print*,'in loop after first if'
+!       print*,'in loop after first if'
        if(nint(slmaskl(i)) == 0 .and. vegfcs(i) > 0.0) then
         print*,'bad point 6 ',tile_num,i,landfrac(i),slmaskw(i),vegfcs(i)
        endif
@@ -659,6 +662,19 @@ ENDIF
        if(nint(slmaskw(i)) == 1 .and. sicfcs(i) > 0.0) then
         print*,'bad ice point ',tile_num,i,landfrac(i),sicfcs(i)
        endif
+
+!      if(landfrac(i) > 0.0_kind_io8 .and. abs(stcfcs(i,1)-stcfcs_save(i,1)) > 0.001) then
+!       print*,'bad stc 1 point ',tile_num,i,stcfcs(i,1),stcfcs_save(i,1)
+!      endif
+!      if(landfrac(i) > 0.0_kind_io8 .and. abs(stcfcs(i,2)-stcfcs_save(i,2)) > 0.001) then
+!       print*,'bad stc 2 point ',tile_num,i,stcfcs(i,2),stcfcs_save(i,2)
+!      endif
+!      if(landfrac(i) > 0.0_kind_io8 .and. abs(stcfcs(i,3)-stcfcs_save(i,3)) > 0.001) then
+!       print*,'bad stc 3 point ',tile_num,i,stcfcs(i,3),stcfcs_save(i,3)
+!      endif
+!      if(landfrac(i) > 0.0_kind_io8 .and. abs(stcfcs(i,4)-stcfcs_save(i,4)) > 0.001) then
+!       print*,'bad stc 4 point ',tile_num,i,stcfcs(i,4),stcfcs_save(i,4)
+!      endif
 
      ENDDO
 
