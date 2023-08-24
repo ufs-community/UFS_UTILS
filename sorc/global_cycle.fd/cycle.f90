@@ -724,7 +724,7 @@ ENDIF
 !    update foundation & surface temperature for NSST
 !
      CALL ADJUST_NSST(RLA,RLO,SLIFCS,SLIFCS_FG,TSFFCS,SITFCS,SICFCS,STCFCS, &
-                    NSST,LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2,IM,ID,DELTSFC,  &
+                    NSST,LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2, &
                     tf_clm_tile,tf_trd_tile,sal_clm_tile)
    ENDIF
  ENDIF
@@ -910,9 +910,6 @@ ENDIF
  !! depth of sea temperature. In whole mm.
  !! @param[in] ZSEA2 When running nsst model, this is the upper bound of
  !! depth of sea temperature. In whole mm.
- !! @param[in] MON Month
- !! @param[in] DAY Day
- !! @param[in] DELTSFC Cycling frequency in hours
  !! @param[in] tf_clm_tile Climatological reference temperature on the
  !! cubed-sphere tile.
  !! @param[in] tf_trd_tile Climatolocial reference temperature trend on the
@@ -922,7 +919,7 @@ ENDIF
  !! @author Xu Li, George Gayno
  SUBROUTINE ADJUST_NSST(RLA,RLO,SLMSK_TILE,SLMSK_FG_TILE,SKINT_TILE,&
                         SICET_TILE,sice_tile,SOILT_TILE,NSST,LENSFC,LSOIL,    &
-                        IDIM,JDIM,ZSEA1,ZSEA2,MON,DAY,DELTSFC, &
+                        IDIM,JDIM,ZSEA1,ZSEA2, &
                         tf_clm_tile,tf_trd_tile,sal_clm_tile)
 
  USE UTILS
@@ -935,11 +932,11 @@ ENDIF
 
  IMPLICIT NONE
 
- INTEGER, INTENT(IN)      :: LENSFC, LSOIL, IDIM, JDIM, MON, DAY
+ INTEGER, INTENT(IN)      :: LENSFC, LSOIL, IDIM, JDIM
 
  REAL, INTENT(IN)         :: SLMSK_TILE(LENSFC), SLMSK_FG_TILE(LENSFC)
  real, intent(in)         :: tf_clm_tile(lensfc),tf_trd_tile(lensfc),sal_clm_tile(lensfc)
- REAL, INTENT(IN)         :: ZSEA1, ZSEA2, DELTSFC
+ REAL, INTENT(IN)         :: ZSEA1, ZSEA2
  REAL, INTENT(INOUT)      :: RLA(LENSFC), RLO(LENSFC), SKINT_TILE(LENSFC)
  REAL, INTENT(INOUT)      :: SICET_TILE(LENSFC),sice_tile(lensfc),SOILT_TILE(LENSFC,LSOIL)
 
@@ -1710,7 +1707,7 @@ subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
  real,    dimension(nx*ny)  :: tf_clm_ij  ! sst climatology at target grids (nx*ny)
  real,    dimension(nx*ny)  :: tf_trd_ij  ! 6-hourly sst climatology tendency 
  real :: wei1,wei2
- integer :: nxc,nyc,mon1,mon2,i,j
+ integer :: nxc,nyc,mon1,mon2
  character (len=6), parameter :: fin_tf_clm='sstclm' ! sst climatology file name
 !
 ! get which two months used and their weights from atime
@@ -1823,7 +1820,7 @@ subroutine get_sal_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,sal_clm)
 
  real,    dimension(nx*ny)  :: sal_clm_ij  ! salinity climatology at target grids (nx*ny)
  real :: wei1,wei2
- integer :: nxc,nyc,mon1,mon2,i,j
+ integer :: nxc,nyc,mon1,mon2
  character (len=6), parameter :: fin_sal_clm='salclm' ! salinity climatology file name
 !
 ! get which two months used and their weights from atime
@@ -1933,11 +1930,10 @@ subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
  real, parameter :: deg2rad=3.1415926/180.0
  real,    dimension(jdim_lalo) :: xlats_lalo
  real,    dimension(idim_lalo) :: xlons_lalo
- real    :: tf,wsum,res_km
+ real    :: wsum
  integer :: itile,jtile
- integer :: ii,jj,ij,iii,jjj
+ integer :: ij
  integer :: ilalo,jlalo,ilalop1,jlalop1
- integer :: istart,iend,jstart,jend,krad
 
  integer, allocatable, dimension(:,:)   :: id1,id2,jdc
  real,    allocatable, dimension(:,:,:) :: agrid,s2c

@@ -872,7 +872,7 @@ MODULE READ_WRITE_DATA
  CHARACTER(LEN=1)                 :: K_CH
  CHARACTER(LEN=10)                :: INCVAR
  CHARACTER(LEN=80)                :: err_msg
- INTEGER                          :: K, I 
+ INTEGER                          :: K
 
  PRINT*
  PRINT*, "READ INPUT GSI DATA FROM: "//TRIM(GSI_FILE)
@@ -1705,7 +1705,6 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
   integer,parameter:: lu_sst = 21   ! fortran unit number of grib sst file
 
   integer :: iret
-  integer :: mscan,kb1
   integer :: kf,kg,k,j,ierr
   integer, dimension(22):: jgds,kgds
   integer, dimension(25):: jpds,kpds
@@ -1763,15 +1762,14 @@ subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
   real,    dimension(nlon),      intent(out) :: xlons
   real,    dimension(nlon,nlat), intent(out) :: sal
 ! Local variables
-  integer :: ncid,ntime
+  integer :: ncid
 
   integer, parameter :: ndims = 3
   character (len = *), parameter :: lat_name = "latitude"
   character (len = *), parameter :: lon_name = "longitude"
   character (len = *), parameter :: t_name = "time"
   character (len = *), parameter :: sal_name="sal"
-  integer :: no_fill,fill_value
-  integer :: time_varid,lon_varid, lat_varid, z_varid, sal_varid
+  integer :: time_varid,lon_varid, lat_varid, sal_varid
 
   ! The start and count arrays will tell the netCDF library where to read our data.
   integer, dimension(ndims) :: start, count
@@ -1782,10 +1780,6 @@ subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
   character (len = *), parameter :: time_units = "months"
   character (len = *), parameter :: lat_units = "degrees_north"
   character (len = *), parameter :: lon_units = "degrees_east"
-
-  integer :: missv
-! Loop indices
-  integer :: i,j
 
 ! Open the file. 
   call nc_check( nf90_open(filename, nf90_nowrite, ncid) )
