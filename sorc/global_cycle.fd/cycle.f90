@@ -569,20 +569,19 @@ ENDIF
 
  IF (DO_SFCCYCLE) THEN
    ALLOCATE(SLMASKL(LENSFC), SLMASKW(LENSFC))
-   IF (FRAC_GRID) THEN
+
+   SET_MASK : IF (FRAC_GRID) THEN
 
      DO I=1,LENSFC
        IF(LANDFRAC(I) > 0.0_KIND_IO8) THEN
          SLMASKL(I) = CEILING(LANDFRAC(I)-1.0E-6_KIND_IO8)
          SLMASKW(I) =   FLOOR(LANDFRAC(I)+1.0E-6_KIND_IO8)
        ELSE
-         IF(NINT(SLMASK(I)) == 1) THEN ! if landfrac is zero, this should not happen.
-                                       ! is this a band aid?
-            print*,'first if'
-           SLMASKL(I) = 1.0_KIND_io8
-           SLMASKW(I) = 1.0_KIND_io8
-         ELSE ! if landfrac is zero, this is expected.
-!           print*,'second if'
+         IF(NINT(SLMASK(I)) == 1) THEN ! If landfrac is zero, this should not happen.
+                                       ! So, stop processing.
+           PRINT*, 'FATAL ERROR: LAND FRAC AND SLMASK MISMATCH.'
+           CALL MPI_ABORT(MPI_COMM_WORLD, 27, IERR)
+         ELSE
            SLMASKL(I) = 0.0_KIND_io8
            SLMASKW(I) = 0.0_KIND_io8
          ENDIF
@@ -598,7 +597,9 @@ ENDIF
      ENDDO
 
    ELSE
-! for running uncoupled (non-fractional grid)
+
+! For running uncoupled (non-fractional grid).
+
      DO I=1,LENSFC
        IF(NINT(SLMASK(I)) == 1) THEN
          SLMASKL(I) = 1.0_KIND_io8
@@ -609,7 +610,7 @@ ENDIF
        ENDIF
      ENDDO  
 
-   ENDIF ! frac_grid
+   ENDIF SET_MASK
 
    DO I=1,LENSFC
      if(nint(slmask(i)) == 0) then
