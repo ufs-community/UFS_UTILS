@@ -8,22 +8,19 @@ load(pathJoin("cmake", cmake_ver))
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
-prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/gnu/modulefiles")
-
-gnu_ver="9.2"
-load(pathJoin("gnu", gnu_ver))
-
 prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/hpc-stack/libs/gnu-9.2/modulefiles/stack")
+
+gnu_ver=os.getenv("gnu_ver") or "9.2"
+load(pathJoin("gnu", gnu_ver))
 
 hpc_ver=os.getenv("hpc_ver") or "1.2.0"
 load(pathJoin("hpc", hpc_ver))
 
-load(pathJoin("hpc-gnu", gnu_ver))
+hpc_gnu_ver=os.getenv("hpc_gnu_ver") or "9.2"
+load(pathJoin("hpc-gnu", hpc_gnu_ver))
 
-mpich_ver=os.getenv("mpich_ver") or "3.3.2"
-load(pathJoin("mpich", mpich_ver))
-
-load(pathJoin("hpc-mpich", mpich_ver))
+hpc_mpich_ver=os.getenv("hpc_mpich_ver") or "3.3.2"
+load(pathJoin("hpc-mpich", hpc_mpich_ver))
 
 netcdf_ver=os.getenv("netcdf_ver") or "4.9.1"
 load(pathJoin("netcdf", netcdf_ver))
