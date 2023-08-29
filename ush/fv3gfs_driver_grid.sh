@@ -142,12 +142,15 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   export grid_dir=$TEMP_DIR/$name/grid
   export orog_dir=$TEMP_DIR/$name/orog
 
+if [ -z ${ocn+x} ]; then
+    out_dir=$out_dir/C$res
+    readme_name=readme.C$res.txt
+  else
+    out_dir=$out_dir/C$res.mx$ocn
+    readme_name=readme.C$res.mx$ocn.txt
+  fi
 
-
-		out_dir=$out_dir/C$res.mx$ocn
-                
-                readme_name=readme.C$res.mx$ocn.txt
-         
+                         
 
 
   mkdir -p $out_dir

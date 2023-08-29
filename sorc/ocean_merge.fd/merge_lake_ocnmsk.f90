@@ -166,16 +166,12 @@ subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres, ocnres,out_dir)
   character(len=120), intent(out) :: out_dir
   character(len=10),  intent(out) :: atmres,ocnres
 
-  !ocean_mask_dir='/scratch1/NCEPDEV/stmp4/Sanath.Kumar/CPLD_GRIDGEN/100/' ! MOM6 mask dir
-  !lake_mask_dir='/scratch1/NCEPDEV/stmp4/Sanath.Kumar/CPLD_GRIDGEN/100/' ! this is for P8
-  !atmres='C96'
-  !ocnres='mx100'
-  !out_dir='/scratch1/BMC/gsd-fv3-dev/fv3data/edit_landfrac_mom6_nov2021/' 
-
   namelist/mask_nml/ocean_mask_dir, lake_mask_dir, atmres, ocnres, out_dir
   open(unit=unit, file='input.nml', iostat=io_status )
   read(unit,mask_nml, iostat=io_status )
   close(unit)
-  if (io_status > 0) call handle_err(-1, 'Error reading input.nml')
-
+  if (io_status > 0) then
+        print *,'Error reading input.nml' 
+        call handle_err(-1)
+  end if      
 end subroutine read_nml

@@ -47,7 +47,8 @@ vegsoilt_frac=${vegsoilt_frac:-.false.}
 veg_type_src=${veg_type_src:-"modis.igbp.0.05"}
 VEG_TYPE_FILE=${VEG_TYPE_FILE:-${input_sfc_climo_dir}/vegetation_type.${veg_type_src}.nc}
 soil_type_src=${soil_type_src:-"statsgo.0.05"}
-SOIL_TYPE_FILE=${SOIL_TYPE_FILE:-${input_sfc_climo_dir}/soil_type.${soil_type_src}.nc}
+
+
 
 if [ ! -d $SAVE_DIR ]; then
   mkdir -p $SAVE_DIR
@@ -66,7 +67,6 @@ if [[ $GRIDTYPE == "nest" ]] || [[ $GRIDTYPE == "regional" ]]; then
 else
   the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
 fi
-
 cat << EOF > ./fort.41
 &config
 input_facsf_file="${input_sfc_climo_dir}/facsf.1.0.nc"
