@@ -15,17 +15,15 @@
 module module_nwp
 
    use kinds, only: r_kind, r_single, i_short, rmissing
-   use module_nwp_base, only: nwpbase
 !   use module_map_utils, only: map_util
    use module_ncio, only: ncio
 
    implicit none
 
    public :: fcst_nwp
-   public :: nwp_type
 
    private
-   type :: nwp_type
+   type :: fcst_nwp
       character(len=6) :: datatype !< Data type.
       integer :: numvar !< Number of variabls.
       integer :: xlat !< Number of latitudes.
@@ -66,15 +64,6 @@ module module_nwp
       real(r_kind), allocatable :: nwp_zorl_w(:,:) !< warm start surface roughness
       real(r_kind), allocatable :: nwp_hice_w(:,:) !< warm start ice thickness
 
-   end type nwp_type
-
-   type, extends(nwp_type) :: fcst_nwp
-      ! The pointers are carryover from when I inherited the code from
-      ! GSL's work with HRRR for a similar use. I am not sure with
-      ! object based coding in Fortran if it needs to have parts
-      ! initialized to gain access to the procedures within it. - D. Wright.
-      type(nwpbase), pointer :: head => NULL() !< Pointer to head of list.
-      type(nwpbase), pointer :: tail => NULL() !< Pointer to tail of list.
       contains
          procedure :: initial => initial_nwp !< Defines vars and names. @return
          procedure :: list_initial => list_initial_nwp !< List the setup. @return
@@ -211,9 +200,6 @@ module module_nwp
             write(6,*) 'Unknown data type:', itype
             stop 1234
          end if
-
-         this%head => NULL()
-         this%tail => NULL()
 
          write(6,*) 'Finished initial_nwp'
          write(6,*) ' '
@@ -442,8 +428,6 @@ module module_nwp
          character(len=6), intent(in) :: itype
          character(len=4), intent(in) :: wcstart
 
-         type(nwpbase), pointer :: thisobs,thisobsnext
-
          deallocate(this%varnames)
          deallocate(this%latname)
          deallocate(this%lonname)
@@ -471,18 +455,6 @@ module module_nwp
          else
             write(6,*) 'no deallocation'
          end if
-
-         thisobs => this%head
-         if(.NOT.associated(thisobs)) then
-            write(6,*) 'No memory to release'
-            return
-         endif
-         do while(associated(thisobs))
-
-            thisobsnext => thisobs%next
-            call thisobs%destroy()
-            thisobs => thisobsnext
-         enddo
 
          write(6,*) 'Finished finish_nwp'
          write(6,*) ' '

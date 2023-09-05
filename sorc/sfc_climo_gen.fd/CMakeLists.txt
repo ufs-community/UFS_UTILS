@@ -5,10 +5,13 @@
 
 set(lib_src
     interp.F90
+    interp_frac_cats.F90
     model_grid.F90
     output.f90
+    output_frac_cats.F90
     program_setup.f90
     search.f90
+    search_frac_cats.f90
     source_grid.F90
     utils.f90)
 
@@ -38,7 +41,7 @@ target_link_libraries(
 
 target_link_libraries(${exe_name} PRIVATE sfc_climo_gen_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)

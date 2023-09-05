@@ -6,8 +6,8 @@
 # the 'prod' v16 tarballs started March 21, 2021 06Z.
 #
 # Starting at June 27, 2022 00z, the tarball names were changed.
-# Older files had 'prod' in their name. Newer files has 'v16.2'
-# in their name.
+# Older files had 'prod' in their name. Newer files have the
+# GFS version number in their name.
 #----------------------------------------------------------------------
 
 bundle=$1
@@ -24,18 +24,22 @@ mm_m6=$(echo $date10_m6 | cut -c5-6)
 dd_m6=$(echo $date10_m6 | cut -c7-8)
 hh_m6=$(echo $date10_m6 | cut -c9-10)
 
-if [ $yy$mm$dd$hh -ge 2022062700 ]; then
-  version="v16.2"
-else
-  version="prod"
-fi
-
 #----------------------------------------------------------------------
 # Account for tarball file name changes starting at
 # June 27, 2022 at 00z.
 #----------------------------------------------------------------------
 
-if [ ${yy_m6}${mm_m6}${dd_m6}${hh_m6} -ge 2022062700 ]; then
+if [ $yy$mm$dd$hh -ge 2022112900 ]; then
+  version="v16.3"
+elif [ $yy$mm$dd$hh -ge 2022062700 ]; then
+  version="v16.2"
+else
+  version="prod"
+fi
+
+if [ ${yy_m6}${mm_m6}${dd_m6}${hh_m6} -ge 2022112900 ]; then
+  version_enkf="v16.3"
+elif [ ${yy_m6}${mm_m6}${dd_m6}${hh_m6} -ge 2022062700 ]; then
   version_enkf="v16.2"
 else
   version_enkf="prod"

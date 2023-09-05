@@ -36,7 +36,7 @@ target_include_directories(global_cycle_lib INTERFACE ${mod_dir})
 target_link_libraries(
   global_cycle_lib
   PUBLIC
-  w3nco::w3nco_d
+  w3emc::w3emc_d
   bacio::bacio_4
   ip::ip_d
   sp::sp_d
@@ -50,7 +50,7 @@ endif()
 
 target_link_libraries(${exe_name} PRIVATE global_cycle_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)

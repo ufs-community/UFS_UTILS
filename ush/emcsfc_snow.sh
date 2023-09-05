@@ -77,7 +77,7 @@ envir=${envir:-"prod"}
 NWROOT=${NWROOT:-"/nw${envir}"}
 HOMEgfs=${HOMEgfs:-$NWROOT/gfs.${gfs_ver:?}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
-FIXam=${FIXam:-$HOMEgfs/fix/fix_am}
+FIXam=${FIXam:-$HOMEgfs/fix/am}
 
 COMOUT=${COMOUT:-$PWD}
 

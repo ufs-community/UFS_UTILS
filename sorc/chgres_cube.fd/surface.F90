@@ -44,6 +44,8 @@
 
  use write_data, only : write_fv3_sfc_data_netcdf
 
+ use utilities, only  : error_handler
+
  implicit none
 
  private
@@ -104,9 +106,10 @@
 !! @author George Gayno NCEP/EMC
  subroutine surface_driver(localpet)
 
- use input_data, only                : cleanup_input_sfc_data, &
-                                       cleanup_input_nst_data, &
-                                       read_input_sfc_data, &
+ use sfc_input_data, only            : cleanup_input_sfc_data, &
+                                       read_input_sfc_data
+
+ use nst_input_data, only            : cleanup_input_nst_data, &
                                        read_input_nst_data
 
  use program_setup, only             : calc_soil_params_driver, &
@@ -116,6 +119,8 @@
                                        cleanup_static_fields
 
  use surface_target_data, only       : cleanup_target_nst_data
+
+ use utilities, only                 : error_handler
 
  implicit none
 
@@ -245,7 +250,7 @@
  use mpi
  use esmf
 
- use input_data, only                : canopy_mc_input_grid,  &
+ use sfc_input_data, only            : canopy_mc_input_grid,  &
                                        f10m_input_grid,  &
                                        ffmm_input_grid,  &
                                        landsea_mask_input_grid, &
@@ -265,7 +270,13 @@
                                        ustar_input_grid,  &
                                        veg_type_input_grid, &
                                        z0_input_grid, &
-                                       c_d_input_grid, &
+                                       veg_type_landice_input, &
+                                       veg_greenness_input_grid, &
+                                       max_veg_greenness_input_grid, &
+                                       min_veg_greenness_input_grid, &
+                                       lai_input_grid
+
+ use nst_input_data, only           :  c_d_input_grid, &
                                        c_0_input_grid, &
                                        d_conv_input_grid, &
                                        dt_cool_input_grid, &
@@ -282,12 +293,9 @@
                                        xtts_input_grid, &
                                        xzts_input_grid, &
                                        z_c_input_grid, &
-                                       zm_input_grid, terrain_input_grid, &
-                                       veg_type_landice_input, &
-                                       veg_greenness_input_grid, &
-                                       max_veg_greenness_input_grid, &
-                                       min_veg_greenness_input_grid, &
-                                       lai_input_grid
+                                       zm_input_grid
+
+ use atm_input_data, only            : terrain_input_grid
 
  use model_grid, only                : input_grid, target_grid, &
                                        i_target, j_target, &
@@ -647,7 +655,7 @@
  mask_input_ptr = 1
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
  
- mask_target_ptr = seamask_target_ptr
+ mask_target_ptr = int(seamask_target_ptr,kind=esmf_kind_i4)
 
  method=ESMF_REGRIDMETHOD_CONSERVE
 
@@ -843,11 +851,12 @@
    if (localpet == 0) then   
      where(mask_target_one_tile == 1) mask_target_one_tile = 0
      where(mask_target_one_tile == 2) mask_target_one_tile = 1
+     call search_many(num_fields,bundle_seaice_target,tile, search_nums,localpet, &
+                    mask=mask_target_one_tile)
+   else
+     call search_many(num_fields,bundle_seaice_target, tile,search_nums,localpet)
    endif
 
-
-   call search_many(num_fields,bundle_seaice_target,data_one_tile, mask_target_one_tile,tile,search_nums,localpet, &
-                    field_data_3d=data_one_tile_3d)
  enddo
 
  deallocate(search_nums)
@@ -969,10 +978,12 @@
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
      where(mask_target_one_tile == 0) water_target_one_tile = 1
-   endif
 
-   call search_many(num_fields,bundle_water_target,data_one_tile, water_target_one_tile,& 
-                    tile,search_nums,localpet,latitude=latitude_one_tile)
+     call search_many(num_fields,bundle_water_target, tile,search_nums,localpet, &
+                latitude=latitude_one_tile,mask=water_target_one_tile)
+   else
+     call search_many(num_fields,bundle_water_target, tile,search_nums,localpet)
+   endif
 
    if (localpet == 0) deallocate(water_target_one_tile)
 
@@ -1060,10 +1071,12 @@
      allocate(land_target_one_tile(i_target,j_target))
      land_target_one_tile = 0
      where(mask_target_one_tile == 1) land_target_one_tile = 1
-   endif
    
-   call search_many(num_fields,bundle_allland_target,data_one_tile, land_target_one_tile,& 
-                    tile,search_nums,localpet)
+     call search_many(num_fields,bundle_allland_target, &
+                    tile,search_nums,localpet, mask=land_target_one_tile)
+   else
+     call search_many(num_fields,bundle_allland_target, tile,search_nums,localpet)
+   endif
 
    if (localpet == 0) deallocate(land_target_one_tile)   
  enddo
@@ -1194,8 +1207,12 @@
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
        call error_handler("IN FieldGather", rc)
 
-   call search_many(num_fields,bundle_landice_target,data_one_tile, land_target_one_tile,& 
-                    tile,search_nums,localpet,terrain_land=data_one_tile2,field_data_3d=data_one_tile_3d)
+   if (localpet==0) then
+      call search_many(num_fields,bundle_landice_target,tile,search_nums,localpet,&
+                terrain_land=data_one_tile2,mask=land_target_one_tile)
+   else
+      call search_many(num_fields,bundle_landice_target,tile,search_nums,localpet)
+   endif
  enddo
 
  deallocate (veg_type_target_one_tile)
@@ -1408,9 +1425,12 @@
    call ESMF_FieldGather(soil_type_target_grid, data_one_tile2, rootPet=0,tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldGather", rc)
-      
-   call search_many(num_fields,bundle_nolandice_target,data_one_tile, mask_target_one_tile,& 
-                    tile,search_nums,localpet,soilt_climo=data_one_tile2, field_data_3d=data_one_tile_3d)
+   if (localpet==0) then 
+      call search_many(num_fields,bundle_nolandice_target,tile,search_nums,localpet, &
+                soilt_climo=data_one_tile2, mask=mask_target_one_tile)
+   else
+      call search_many(num_fields,bundle_nolandice_target, tile,search_nums,localpet)
+   endif
    
    print*,"- CALL FieldGather FOR TARGET GRID TOTAL SOIL MOISTURE, TILE: ", tile
    call ESMF_FieldGather(soilm_tot_target_grid, data_one_tile_3d, rootPet=0, tile=tile, rc=rc)
@@ -2006,11 +2026,12 @@
 !! @author Jeff Beck
  subroutine adjust_soil_levels(localpet)
  use model_grid, only       : lsoil_target, i_input, j_input, input_grid
- use input_data, only       : lsoil_input, soil_temp_input_grid, &
+ use sfc_input_data, only   : lsoil_input, soil_temp_input_grid, &
                               soilm_liq_input_grid, soilm_tot_input_grid
  implicit none
  integer, intent(in)                   :: localpet
- character(len=1000)      :: msg
+ character(len=500)       :: msg
+ character(len=2)         :: lsoil_input_ch, lsoil_target_ch
  integer                  :: rc
  real(esmf_kind_r8)          :: tmp(i_input,j_input), &
                                 data_one_tile(i_input,j_input,lsoil_input), &
@@ -2105,12 +2126,11 @@
  
  elseif (lsoil_input /= lsoil_target) then
   rc = -1
-  
-  write(msg,'("NUMBER OF SOIL LEVELS IN INPUT (",I2,") and OUPUT &
-               (",I2,") MUST EITHER BE EQUAL OR 9 AND 4, RESPECTIVELY")') &
-               lsoil_input, lsoil_target
-
-  call error_handler(trim(msg), rc)
+  write(lsoil_input_ch, '(i2)') lsoil_input
+  write(lsoil_target_ch, '(i2)') lsoil_target
+  msg="NUMBER OF SOIL LEVELS IN INPUT " // lsoil_input_ch // " AND OUTPUT " &
+      // lsoil_target_ch // " MUST EITHER BE EQUAL OR 9 AND 4 RESPECTIVELY."
+  call error_handler(msg, rc)
  endif
  
  end subroutine adjust_soil_levels
@@ -3282,20 +3302,18 @@
 !!
 !! @param[in] num_field  Number of fields to process.
 !! @param[inout] bundle_target  ESMF FieldBundle holding target fields to search
-!! @param[inout] field_data_2d  A real array of size i_target,j_target to temporarily hold data for searching
-!! @param[inout] mask  An integer array of size i_target,j_target that holds masked (0) and unmasked (1) 
-!!                     values indicating where to execute search (only at unmasked points).
 !! @param[in] tile  Current cubed sphere tile.
 !! @param[inout]  search_nums  Array length num_field holding search field numbers corresponding to each field provided for searching.
 !! @param[in]  localpet  ESMF local persistent execution thread.
 !! @param[in]  latitude  (optional) A real array size i_target,j_target of latitude on the target grid 
 !! @param[in]  terrain_land  (optional) A real array size i_target,j_target of terrain height (m) on the target grid 
 !! @param[in]  soilt_climo  (optional) A real array size i_target,j_target of climatological soil type on the target grid 
-!! @param[in]  field_data_3d (optional) An empty real array of size i_target,j_target,lsoil_target to temporarily hold soil data for searching 
+!! @param[inout] mask  (optional) An integer array of size i_target,j_target that holds masked (0) and unmasked (1)
+!!                     values indicating where to execute search (only at
+!unmasked points).
 !! @author Larissa Reames, OU CIMMS/NOAA/NSSL
- subroutine search_many(num_field,bundle_target,field_data_2d,mask, tile, &
-                         search_nums,localpet,latitude,terrain_land,soilt_climo,&
-                         field_data_3d)
+ subroutine search_many(num_field,bundle_target,tile,search_nums,localpet,latitude, &
+                        terrain_land,soilt_climo, mask)
 
  use model_grid, only                  : i_target,j_target, lsoil_target
  use program_setup, only               : external_model, input_type
@@ -3305,14 +3323,14 @@
 
  integer, intent(in)                         :: num_field
  type(esmf_fieldbundle), intent(inout)       :: bundle_target
- real(esmf_kind_r8), intent(inout)           :: field_data_2d(i_target,j_target)
- real(esmf_kind_r8), intent(inout), optional :: field_data_3d(i_target,j_target,lsoil_target) 
+
  real(esmf_kind_r8), intent(inout), optional :: latitude(i_target,j_target)
  real(esmf_kind_r8), intent(inout), optional :: terrain_land(i_target,j_target)
  real(esmf_kind_r8), intent(inout), optional :: soilt_climo(i_target,j_target)
- integer(esmf_kind_i8), intent(inout)        :: mask(i_target,j_target)
+ integer(esmf_kind_i8), intent(inout), optional  :: mask(i_target,j_target)
  
-    
+ real(esmf_kind_r8), allocatable :: field_data_2d(:,:)   
+ real(esmf_kind_r8), allocatable :: field_data_3d(:,:,:)  
  integer, intent(in)             :: tile,localpet
  integer, intent(inout)          :: search_nums(num_field)
  
@@ -3323,6 +3341,7 @@
  integer, parameter              :: TERRAIN_FIELD_NUM= 7
  integer :: j,k, rc, ndims
 
+ 
  do k = 1,num_field
    call ESMF_FieldBundleGet(bundle_target,k,temp_field, rc=rc)
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
@@ -3330,39 +3349,37 @@
    call ESMF_FieldGet(temp_field, name=fname, dimcount=ndims,rc=rc)
         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
           call error_handler("IN FieldGet", rc)
+   if (localpet==0) then
+       allocate(field_data_2d(i_target,j_target))
+   else
+       allocate(field_data_2d(0,0))
+   endif
    if (ndims .eq. 2) then
-       print*, "processing 2d field ", trim(fname)
-       print*, "FieldGather"
        call ESMF_FieldGather(temp_field,field_data_2d,rootPet=0,tile=tile, rc=rc)
        if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldGather", rc)
      if (localpet == 0) then 
        if (present(latitude) .and. search_nums(k).eq.SST_FIELD_NUM) then
          ! Sea surface temperatures; pass latitude field to search
-         print*, "search1"
          call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k),latitude=latitude)
        elseif (present(terrain_land) .and. search_nums(k) .eq. TERRAIN_FIELD_NUM) then
          ! Terrain height; pass optional climo terrain array to search
-         print*, "search2"
          call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k),terrain_land=terrain_land)
        elseif (search_nums(k) .eq. SOTYP_LAND_FIELD_NUM) then
          ! Soil type over land    
          if (fname .eq. "soil_type_target_grid") then
            ! Soil type over land when interpolating input data to target grid
            ! *with* the intention of retaining interpolated data in output
-           print*, "search3"
            call search(field_data_2d, mask, i_target, j_target, tile,search_nums(k),soilt_climo=soilt_climo)
          elseif (present(soilt_climo)) then
            if (maxval(field_data_2d) > 0 .and. (trim(external_model) .ne. "GFS" .or. trim(input_type) .ne. "grib2")) then
              ! Soil type over land when interpolating input data to target grid
              ! *without* the intention of retaining data in output file
-             print*, "search4"
              call search(field_data_2d, mask, i_target, j_target, tile, search_nums(k))
            else 
              ! If no soil type field exists in input data (e.g., GFS grib2) then don't search
              ! but simply set data to the climo field. This may result in
              ! somewhat inaccurate soil moistures as no scaling will occur 
-             print*, "search5"
              field_data_2d = soilt_climo
            endif !check field value   
          endif !sotype from target grid
@@ -3376,12 +3393,17 @@
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldScatter", rc)
    else
+     if (localpet==0) then
+         allocate(field_data_3d(i_target,j_target,lsoil_target))
+     else
+         allocate(field_data_3d(0,0,0))
+     endif
+ 
      ! Process 3d fields soil temperature, moisture, and liquid
-     print*, "FieldGather"
      call ESMF_FieldGather(temp_field,field_data_3d,rootPet=0,tile=tile,rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldGather", rc)
-     print*, "processing 3d field ", trim(fname)
+        
      if (localpet==0) then 
        do j = 1, lsoil_target
          field_data_2d = field_data_3d(:,:,j)
@@ -3392,7 +3414,9 @@
      call ESMF_FieldScatter(temp_field, field_data_3d, rootPet=0, tile=tile,rc=rc)
       if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
         call error_handler("IN FieldScatter", rc)
+     deallocate(field_data_3d)
    endif !ndims
+   deallocate(field_data_2d)
  end do !fields
 
  end subroutine search_many

@@ -2,7 +2,7 @@
 # UFS_UTILS
 
 Utilities for the NCEP models. This is part of the
-[NCEPLIBS](https://github.com/NOAA-EMC/NCEPLIBS) project.
+[Unified Forecast System](https://github.com/ufs-community) project.
 
 Documentation for chgres_cube and other utilities can be found at
 https://noaa-emcufs-utils.readthedocs.io/en/latest/.
@@ -22,19 +22,20 @@ fre-nctools | GFDL progammer
 fvcom_tools | David Wright, University of Michigan, Ming Hu, GSD/AMB
 gblevents | Hang Lei
 gdas_init | George Gayno
-global_cycle | George Gayno, Shrinivas Moorthi, Mark Iredell, Xu Li, Hang Lei
-grid_tools | R. J. Purser (regional_esg_grid), Tom Black/Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
+global_cycle | George Gayno, Shrinivas Moorthi, Xu Li
+grid_tools | R. J. Purser (regional_esg_grid), Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
 orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
 sfc_climo_gen | George Gayno
-vcoord_gen | Fanglin Yang, Mark Iredell
+vcoord_gen | Fanglin Yang
+weight_gen | George Gayno
 
-UFS_UTILS Code managers: George Gayno, Kyle Gerheiser, Jeff Beck, Larissa Reames
+UFS_UTILS Code managers: George Gayno, Jeff Beck, Larissa Reames
 
 ## Prerequisites
 
 This package uses the [hpc-stack](https://github.com/NOAA-EMC/hpc-stack) for the following NCEPLIBS packages:
  - [NCEPLIBS-sfcio](https://github.com/NOAA-EMC/NCEPLIBS-sfcio)
- - [NCEPLIBS-w3nco](https://github.com/NOAA-EMC/NCEPLIBS-w3nco)
+ - [NCEPLIBS-w3emc](https://github.com/NOAA-EMC/NCEPLIBS-w3emc)
  - [NCEPLIBS-bacio](https://github.com/NOAA-EMC/NCEPLIBS-bacio)
  - [NCEPLIBS-nemsio](https://github.com/NOAA-EMC/NCEPLIBS-nemsio)
  - [NCEPLIBS-sigio](https://github.com/NOAA-EMC/NCEPLIBS-sigio)
@@ -54,73 +55,59 @@ And for the following third party libraries:
 
 It also uses the following repositories:
 
- - [NCAR common community physics package](https://github.com/NCAR/ccpp-physics)
+ - [Common Community Physics Package](https://github.com/ufs-community/ccpp-physics)
 
 ## Installing
 
-On Orion, Jet, Hera and WCOSS2, invoke the build script:
+On Orion, Jet, Hera and WCOSS2 do the following:
+
+1) Set the 'fixed' directories using the `link_fixdirs.sh`
+script in `./fix`. Usage: `./link_fixdirs.sh $RUN_ENVIR $machine`,
+where `$RUN_ENVIR` is "emc" or "nco" (most developers
+should choose "emc") and `$machine` is the platform. Example:
+
+```
+./link_fixdirs.sh emc hera
+```
+
+2) Then, invoke the build script:
 
 ```
 ./build_all.sh
 ```
 
-Otherwise, do:
-
-```
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=/path/to/install ..
-make -j2
-make install
-```
-
 ## Contents
 
-The UFS_UTILS package contains the following utilities (under the sorc
-directory):
-- chgres_cube
-- cpld_gridgen
-- emcsfc_ice_blend
-- emcsfc_snow2mdl
-- fre-nctools
-- fvcom_tools
-- gblevents
-- global_cycle
-- grid_tools
-- orog_mask_tools
-- sfc_climo_gen
-- vcoord_gen
+The `sorc` directory contains the source code.
 
-The reg_tests directory contains the consistency test code.
+The `reg_tests` directory contains the consistency test code.
 
-The fix directory is where we set links to directories containing
+The `fix` directory contains links to directories containing
 large, static data files used by UFS_UTILS programs.
 
-The tests directory contains unit tests.
+The `tests` directory contains unit tests.
 
-The ush directory contains scripts to run UFS_UTILS programs.  Most
+The `ush` directory contains scripts to run UFS_UTILS programs.  Most
 are called from driver scripts.
 
-The util directory contains utility scripts to create coldstart
-initial conditions for GFS parallels, and to run the vertical
-coordinate generator.
+The `util` directory contains utility scripts.
 
-The parm directory contains variable mapping parameter tables used by
+The `parm` directory contains parameter files used by
 the chgres_cube program.
 
-The driver_scripts directory contains high-level driver scripts to
+The `driver_scripts` directory contains high-level driver scripts to
 create a model grid on officially supported HPC platforms.
 
-The modulefiles directory contains modules loaded when building
+The `modulefiles` directory contains modules loaded when building
 UFS_UTILS on supported HPC platforms.  They are also loaded at runtime
 by utility and consistency test scripts.
 
-The docs directory contains the control file for the doxygen
+The `docs` directory contains the control file for the doxygen
 documentation build, as well as some markdown files which are part of
 the documentation. It also contains (in the source subdirectory) the
 ReadTheDocs documentation files.
 
-The cmake directory contains CMake package find utilities, and utilities to
+The `cmake` directory contains CMake package find utilities, and utilities to
 run units tests on some supported HPC platforms.
 
 ## References

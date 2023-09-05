@@ -4,9 +4,9 @@
 #PBS -e log
 #PBS -q debug
 #PBS -A GFS-DEV
-#PBS -l walltime=00:05:00
+#PBS -l walltime=00:15:00
 #PBS -N make_grid
-#PBS -l select=1:ncpus=24:mem=100GB
+#PBS -l select=1:ncpus=24:mem=500GB
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on WCOSS2.
@@ -51,10 +51,11 @@
 #      x/y grid spacing - "delx/y", and halo.
 #   8) Set working directory - TEMP_DIR - and path to the repository
 #      clone - home_dir.
-#   9) Check settings for 'make_gsl_orog' and 'veg_type_src'
-#      below.
-#  10) Submit script: "cat $script | bsub".
-#  11) All files will be placed in "out_dir".
+#   9) To use the GSL orographic drag suite, set 'make_gsl_orog' to true.
+#  10) Set 'soil_veg_src' and 'veg_type_src' to choose the
+#      soil type and vegetation type data.
+#  11) Submit script: "qsub $script".
+#  12) All files will be placed in "out_dir".
 #
 #-----------------------------------------------------------------------
 
@@ -69,20 +70,42 @@ module list
 # Set grid specs here.
 #-----------------------------------------------------------------------
 
-export gtype=uniform           # 'uniform', 'stretch', 'nest', 
+export gtype=regional_esg      # 'uniform', 'stretch', 'nest', 
                                # 'regional_gfdl', 'regional_esg'
-export make_gsl_orog=false     # 'true' if user needs 'oro' files for GSL
-                               # orographic drag suite
-export veg_type_src="modis.igbp.0.05" #  veg type data.
+
+export make_gsl_orog=false     # When 'true' will output 'oro' files for
+                               # the GSL orographic drag suite.
+
+export vegsoilt_frac='.false.'  # When true, outputs percent of each
+                               # soil and veg type category and a 
+                               # dominant category. When false, only
+                               # outputs the dominant category. A
+                               # Fortran logical, so include the dots.
+
+export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
-                                # 1) "viirs.igbp.0.05" for global 5km data
-                                # 2) "viirs.igbp.0.1" for global 10km data
-                                # 3) "viirs.igbp.0.03" for global 3km data
-                                # 4) "viirs.igbp.conus.0.01" for regional 1km data
+                                # 1) "viirs.igbp.0.1" for global 0.10-deg data
+                                # 2) "viirs.igbp.0.05" for global 0.05-deg data
+                                # 3) "viirs.igbp.0.03" for global 0.03-deg data
+                                # 4) "viirs.igbp.conus.30s" for CONUS 30s data
+                                # 5) "viirs.igbp.nh.30s" for NH 30s data
+                                # 6) "viirs.igbp.30s" for global 30s data
                                 # For the modis-based data, set to:
-                                # 1) "modis.igbp.0.05" for global 5km data
-                                # 2) "modis.igbp.0.03" for global 3km data
-                                # 3) "modis.igbp.conus.0.01" for regional 1km data
+                                # 1) "modis.igbp.0.05" for global 0.05-deg data
+                                # 2) "modis.igbp.0.03" for global 0.03-deg data
+                                # 3) "modis.igbp.conus.30s" for CONUS 30s data
+                                # 4) "modis.igbp.nh.30s" for N Hemis 30s data
+                                # 5) "modis.igbp.30s" for global 30s data
+
+export soil_type_src="statsgo.0.05"  # Soil type data
+                                # For STATSGO soil type data, set to:
+                                # 1) "statsgo.0.05" for global 0.05-deg data
+                                # 2) "statsgo.0.03" for global 0.03-deg data
+                                # 3) "statsgo.conus.30s" for CONUS 30s data
+                                # 4) "statsgo.nh.30s" for NH 30s data
+                                # 5) "statsgo.30s" for global 30s data
+                                # For Beijing Normal Univ. data, set to:
+                                # 1) "bnu.30s" for global 30s data.
 
 if [ $gtype = uniform ]; then
   export res=96
@@ -109,7 +132,7 @@ elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
 elif [ $gtype = regional_esg ] ; then
   export res=-999              # equivalent resolution is computed
   export target_lon=-97.5      # Center longitude of grid
-  export target_lat=35.5       # Center latitude of grid
+  export target_lat=35.0       # Center latitude of grid
   export idim=301              # Dimension of grid in 'i' direction
   export jdim=200              # Dimension of grid in 'j' direction
   export delx=0.0585           # Grid spacing (in degrees) in the 'i' direction
@@ -145,7 +168,6 @@ export APRUN_SFC="mpiexec -n 24 -ppn 24 -cpu-bind core"
 export OMP_NUM_THREADS=24 # orog code worked best with 24 threads.
 export OMP_PLACES=cores
 export OMP_STACKSIZE=2048m
-export machine=WCOSS2_CRAY
 
 ulimit -a
 ulimit -s unlimited

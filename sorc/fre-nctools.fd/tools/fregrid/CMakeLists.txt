@@ -17,4 +17,4 @@ target_link_libraries(fregrid_lib
 
 target_link_libraries(fregrid PRIVATE fregrid_lib)
 
-install(TARGETS fregrid RUNTIME DESTINATION ${exec_dir})
+install(TARGETS fregrid)

@@ -33,9 +33,9 @@ NWROOT=${NWROOT:-/nw${envir}}
 HOMEufs=${HOMEufs:-${NWROOT}/ufs_util.${ufs_ver}}
 EXECufs=${EXECufs:-$HOMEufs/exec}
 FIXufs=${FIXufs:-$HOMEufs/fix}
-FIXfv3=${FIXfv3:-$FIXufs/fix_fv3_gmted2010/C${CRES}}
+FIXfv3=${FIXfv3:-$FIXufs/orog/C${CRES}}
 FIXsfc=${FIXsfc:-$FIXfv3/fix_sfc}
-FIXam=${FIXam:-$FIXufs/fix_am}
+FIXam=${FIXam:-$FIXufs/am}
 
 #----------------------------------------------------------------------------
 # CDATE - YYMMDDHH of your run.
@@ -156,7 +156,14 @@ GEOGRID_FILE_INPUT=${GEOGRID_FILE_INPUT:-NULL}
 #                          be located in FIXfv3.
 #
 # THOMPSON_AEROSOL_FILE = Location of Thompson aerosol climatology file.
+#
+# WAM_COLD_START = Set to .true. if coldstarting for the Whole Atmosphere
+#                  Model (WAM).
+#
+# WAM_PARM_FILE = Location of the parameter file used by the WAM function.
 #----------------------------------------------------------------------------
+
+WAM_PARM_FILE=${WAM_PARM_FILE:-NULL}
 
 VARMAP_FILE=${VARMAP_FILE:-NULL}
 
@@ -262,6 +269,7 @@ cat << EOF > ./fort.41
   grib2_file_input_grid="${GRIB2_FILE_INPUT}"
   geogrid_file_input_grid="${GEOGRID_FILE_INPUT}"
   varmap_file="${VARMAP_FILE}"
+  wam_parm_file="${WAM_PARM_FILE}"
   cycle_year=$iy
   cycle_mon=$im
   cycle_day=$id

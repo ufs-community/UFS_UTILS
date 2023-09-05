@@ -15,6 +15,7 @@
  use esmf
  use netcdf
  use model_grid
+ use program_setup, only : fract_vegsoil_type
  use source_grid
  use utils
  use mpi
@@ -185,16 +186,22 @@
                                  
    enddo
 
-! These fields are adjusted at landice.
+! Adjust some fields at permanent land ice points. These points are identified by the
+! 'permanent ice' vegetation type category.
+!
+! When outputting the fraction of each vegetation type, land ice points are
+! not defined. So don't do this adjustment.
 
-   select case (trim(field_names(n)))
-     case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
-     if (localpet == 0) then
-       allocate(vegt_mdl_one_tile(i_mdl,j_mdl))
-     else
-       allocate(vegt_mdl_one_tile(0,0))
-     endif
-   end select
+   if (.not. fract_vegsoil_type) then
+     select case (trim(field_names(n)))
+       case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
+       if (localpet == 0) then
+         allocate(vegt_mdl_one_tile(i_mdl,j_mdl))
+       else
+         allocate(vegt_mdl_one_tile(0,0))
+       endif
+     end select
+   endif
 
    OUTPUT_LOOP : do tile = 1, num_tiles
 
@@ -218,30 +225,36 @@
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather.", rc)
 
-     select case (trim(field_names(n)))
-       case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
-         print*,"- CALL FieldGather FOR MODEL GRID VEG TYPE."
-         call ESMF_FieldGather(vegt_field_mdl, vegt_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     if (.not. fract_vegsoil_type) then
+       select case (trim(field_names(n)))
+         case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
+           print*,"- CALL FieldGather FOR MODEL GRID VEG TYPE."
+           call ESMF_FieldGather(vegt_field_mdl, vegt_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
+           if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
             call error_handler("IN FieldGather.", rc)
-     end select
+       end select
+     endif
 
      if (localpet == 0) then
        print*,'- CALL SEARCH FOR TILE ',tile
        call search (data_mdl_one_tile, mask_mdl_one_tile, i_mdl, j_mdl, tile, field_names(n))
-       select case (field_names(n))
-         case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type')
-           call adjust_for_landice (data_mdl_one_tile, vegt_mdl_one_tile, i_mdl, j_mdl, field_names(n))
-       end select
+       if (.not. fract_vegsoil_type) then
+         select case (field_names(n))
+           case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
+             call adjust_for_landice (data_mdl_one_tile, vegt_mdl_one_tile, i_mdl, j_mdl, field_names(n))
+         end select
+       endif
        where(mask_mdl_one_tile == 0) data_mdl_one_tile = missing
        call output (data_mdl_one_tile, lat_mdl_one_tile, lon_mdl_one_tile, i_mdl, j_mdl, tile, record, t, n)
      endif
 
-     if (field_names(n) == 'vegetation_type') then
-       print*,"- CALL FieldScatter FOR MODEL GRID VEGETATION TYPE."
-       call ESMF_FieldScatter(vegt_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-       if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     if (.not. fract_vegsoil_type) then
+       if (field_names(n) == 'vegetation_type') then
+         print*,"- CALL FieldScatter FOR MODEL GRID VEGETATION TYPE."
+         call ESMF_FieldScatter(vegt_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
+         if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
           call error_handler("IN FieldScatter.", rc)
+       endif
      endif
 
    enddo OUTPUT_LOOP
@@ -341,6 +354,15 @@
          field(i,j) = landice_value
        else
          if (nint(field(i,j)) == nint(landice_value)) field(i,j) = 6.0
+       endif
+     enddo
+     enddo
+   case ('soil_color') ! soil color
+     landice_value = 10.0
+     do j = 1, jdim
+     do i = 1, idim
+       if (nint(vegt(i,j)) == landice) then
+         field(i,j) = landice_value
        endif
      enddo
      enddo

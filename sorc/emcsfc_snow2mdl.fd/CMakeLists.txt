@@ -17,6 +17,9 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8 -fconvert=big-endian")
 endif()
+if(ip_VERSION GREATER_EQUAL 4.0.0)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DIP_V4")
+endif()
 
 set(exe_name emcsfc_snow2mdl)
 
@@ -33,7 +36,7 @@ target_link_libraries(snow2mdl_lib
   ip::ip_d
   sp::sp_d
   bacio::bacio_4
-  w3nco::w3nco_d)
+  w3emc::w3emc_d)
 
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} PUBLIC OpenMP::OpenMP_Fortran)
@@ -41,7 +44,7 @@ endif()
 
 target_link_libraries(${exe_name} PRIVATE snow2mdl_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
