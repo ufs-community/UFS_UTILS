@@ -1,4 +1,4 @@
-name: GCC Linux Build and Test
+name: Clang macOS Build and Test
 on: [push, pull_request, workflow_dispatch]
 
 
@@ -9,10 +9,10 @@ defaults:
     shell: bash -leo pipefail {0}
 
 env:
-  cache_key: gcc
-  CC: gcc-10
-  FC: gfortran-10
-  CXX: g++-10
+  cache_key: clang
+  CC: clang
+  FC: gfortran-11
+  CXX: clang
 
 # The jobs are split into:
 # 1. a dependency build step (setup), and
@@ -23,7 +23,7 @@ env:
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
+    runs-on: macos-12
 
     steps:
       - name: checkout  # this is to get the ci/spack.yaml file
@@ -34,7 +34,7 @@ jobs:
       # Cache spack, compiler and dependencies
       - name: cache-env
         id: cache-env
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             spack
@@ -47,18 +47,18 @@ jobs:
         run: |
           git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git
           source spack/share/spack/setup-env.sh
-          spack env create ufs_utils-env ufs_utils/ci/spack.yaml
+          sed "s/\[intel, gcc@10:10, apple-clang@14\]/\[apple-clang@14\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
+          spack env create ufs_utils-env spack_ci.yaml
           spack env activate ufs_utils-env
-          sudo apt install cmake
           spack external find
-          spack add mpich@3.4.2
+          spack add openmpi@4.1.5
           spack concretize
           spack install -v --fail-fast --dirty
           spack clean --all
 
   ufs_utils:
     needs: setup
-    runs-on: ubuntu-latest
+    runs-on: macos-12
 
     steps:
       - name: checkout
@@ -69,7 +69,7 @@ jobs:
 
       - name: cache-env
         id: cache-env
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             spack
