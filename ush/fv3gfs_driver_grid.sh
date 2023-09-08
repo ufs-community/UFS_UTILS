@@ -220,8 +220,6 @@ if [ -z ${ocn+x} ]; then
 if [ -z ${ocn+x} ]; then
    $script_dir/fv3gfs_ocean_merge.sh
 else
-
-
  echo run orog 2nd time
     for tnum in '1' '2' '3' '4' '5' '6'
     do
@@ -231,28 +229,18 @@ else
 
     echo none >> INPS
     echo ".false." >> INPS
-    echo '"'${TEMP_DIR}/C${res}/orog/C${res}.tile${tnum}.nc'"' >> INPS
+    echo '"'${TEMP_DIR}/C${res}/orog/oro.C${res}.tile${tnum}.nc'"' >> INPS
 
     cat INPS
     time ${exec_dir}/orog < INPS
-
     ncks -A -v lake_frac,lake_depth ${TEMP_DIR}/C${res}/orog/oro.C${res}.tile${tnum}.nc out.oro.nc
-    cp out.oro.nc $orog_dir/oro.C${res}.tile${tnum}.nc
+    cp out.oro.nc $out_dir/oro.C${res}.tile${tnum}.nc
     cp C${res}_grid.tile${tnum}.nc $out_dir/C${res}_grid.tile${tnum}.nc
     done
 
 fi
 
   set -x
-
-
-
-
-
-
-
-
-
 
 
   set +x

@@ -8,7 +8,7 @@
 #SBATCH --nodes=6 --ntasks-per-node=12
 #SBATCH --partition=bigmem
 #SBATCH -q debug
-#SBATCH -t 01:30:00
+#SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on Hera.
@@ -107,11 +107,11 @@ export soil_type_src="statsgo.0.05" #  Soil type data.
                                 # 1) "bnu.v2.30s" for global 30s data.
 
 if [ $gtype = uniform ]; then
-  export res=96
+  export res=48
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
- # export ocn=${ocn:-"025"}     # use one of  "025", "050", "100", "500". Cannot be empty	
-  export ocn="100"
+  #export ocn=${ocn:-"025"}     # use one of  "025", "050", "100", "500". Cannot be empty	
+  
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
