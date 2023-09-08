@@ -40,6 +40,12 @@ else
  set -x
 fi
 
+set +x
+module display g2
+module unload g2
+
+export g2_ROOT=/scratch1/NCEPDEV/da/George.Gayno/noscrub/eric.rrfs/g2lib/NCEPLIBS-g2/lib
+
 # Ensure the submodules have been initialized.
 
 if [[ ! -d "${DIR_ROOT}/ccpp-physics/physics" ]]; then
