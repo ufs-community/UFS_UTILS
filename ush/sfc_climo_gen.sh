@@ -47,6 +47,7 @@ vegsoilt_frac=${vegsoilt_frac:-.false.}
 veg_type_src=${veg_type_src:-"modis.igbp.0.05"}
 VEG_TYPE_FILE=${VEG_TYPE_FILE:-${input_sfc_climo_dir}/vegetation_type.${veg_type_src}.nc}
 soil_type_src=${soil_type_src:-"statsgo.0.05"}
+SOIL_TYPE_FILE=${SOIL_TYPE_FILE:-${input_sfc_climo_dir}/soil_type.${soil_type_src}.nc}
 
 
 
