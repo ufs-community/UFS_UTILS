@@ -16,11 +16,11 @@ EOF
 
 
     time  ${exec_dir}/./ocean_merge
+
     set -x
-    pwd
-
     echo run orog 2nd time
-
+    set +x
+	
     for tnum in '1' '2' '3' '4' '5' '6'
     do
     cd ${TEMP_DIR}/C${res}/orog/tile$tnum

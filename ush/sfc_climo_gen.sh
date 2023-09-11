@@ -60,6 +60,7 @@ mkdir -p $WORK_DIR
 cd $WORK_DIR
 #input_substrate_temperature_file="${input_sfc_climo_dir}/substrate_temperature.2.6x1.5.nc"
 #input_substrate_temperature_file="${input_sfc_climo_dir}/substrate_temperature.gfs.0.5.nc"
+# update the above depending on the fix files
 #----------------------------------------------------------------------------------
 # The stand-alone regional and global nest are assumed to be tile 7.
 #----------------------------------------------------------------------------------

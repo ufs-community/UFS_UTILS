@@ -143,15 +143,15 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   export orog_dir=$TEMP_DIR/$name/orog
 
 
-if [ $gtype = uniform ]; then
+	if [ $gtype = uniform ]; then
 		out_dir=$out_dir/C$res.mx$ocn
                 
                 readme_name=readme.C$res.mx$ocn.txt
-else
+	else
 
 	out_dir=$out_dir/C$res
         readme_name=readme.C$res.txt
-fi         
+	fi         
 
 
   mkdir -p $out_dir
@@ -221,9 +221,9 @@ fi
 
 
 
-if [ $gtype = uniform ]; then
-   $script_dir/fv3gfs_ocean_merge.sh
-fi
+	if [ $gtype = uniform ]; then
+  		 $script_dir/fv3gfs_ocean_merge.sh
+	fi
 
   set +x
   echo "End uniform orography generation at `date`"
@@ -287,7 +287,7 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   filter_dir=$TEMP_DIR/$name/filter_topo
   rm -rf $TEMP_DIR/$name
   mkdir -p $grid_dir $orog_dir $filter_dir
-
+  readme_name=readme.$gtype.txt
 
 #----------------------------------------------------------------------------------
 # Create regional gfdl grid files.
@@ -548,21 +548,76 @@ fi
 
 
 #------------------------------------------------------------------------------------
-# Make the README
+# Make the README files with all relevant info to reproduce the outputs
 #------------------------------------------------------------------------------------
 
 cd $out_dir
+
+
+if [ $gtype = uniform ] || [ $gtype = stretch ]; then
+
 cat <<EOF > $readme_name
-
-The following # was used 
-<git hub link goes here>
-
+The following # was used
+https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
-veg_type=$veg_type_src
-soil_type=$soil_type_src
-add_lake=$add_lake
-lake_cutoff=$lake_cutoff
-
+        gtype=$gtype
+        make_gsl_orog=$make_gsl_orog
+        vegsoilt_frac=$vegsoilt_frac
+        veg_type=$veg_type_src
+        soil_type=$soil_type_src
 EOF
+elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
+
+
+cat <<EOF > $readme_name
+The following # was used
+https://github.com/sanatcumar/UFS_UTILS/tree/single_step
+The following parameters were used
+        gtype=$gtype
+        vegsoilt_frac=$vegsoilt_frac
+        veg_type=$veg_type_src
+        soil_type=$soil_type_src
+        make_gsl_orog=$make_gsl_orog
+        vegsoilt_frac=$vegsoilt_frac
+        veg_type=$veg_type_src
+        soil_type=$soil_type_src
+        add_lake=$add_lake
+        lake_cutoff=$lake_cutoff
+        stretch_fac=$stretch_fac        # Stretching factor for the grid
+        target_lon=$target_lon          # Center longitude of the highest resolution tile
+        target_lat=$target_lat          # Center latitude of the highest resolution tile
+        refine_ratio=$refine_ratio      # The refinement ratio
+        istart_nest=$istart_nest        # Starting i-direction index of nest grid in parent tile supergrid
+        jstart_nest=$jstart_nest        # Starting j-direction index of nest grid in parent tile supergrid
+        iend_nest=$iend_nest            # Ending i-direction index of nest grid in parent tile supergrid
+        jend_nest=$jend_nest            # Ending j-direction index of nest grid in parent tile supergrid
+        halo=$halo                      # Lateral boundary halo
+EOF
+elif [ $gtype = regional_esg ] ; then
+
+cat <<EOF > $readme_name
+The following # was used
+https://github.com/sanatcumar/UFS_UTILS/tree/single_step
+The following parameters were used
+        gtype=$gtype
+        res=-999                        # equivalent resolution is computed
+        vegsoilt_frac=$vegsoilt_frac
+        veg_type=$veg_type_src
+        soil_type=$soil_type_src
+        target_lon=$target_lon          # Center longitude of grid
+        target_lat=target_lat           # Center latitude of grid
+        idim=$idim                      # Dimension of grid in 'i' direction
+        jdim=$jdim                      # Dimension of grid in 'j' direction
+        delx=$delx                      # Grid spacing (in degrees) in the 'i' direction
+                                        # on the SUPERGRID (which has twice the resolution of
+                                        # the model grid).  The physical grid spacing in the 'i'
+                                        # direction is related to delx as follows:
+        dely=$dely                      # Grid spacing (in degrees) in the 'j' direction.
+        halo=$halo                      # number of row/cols for halo
+EOF
+fi
+
+
+
 
 exit
