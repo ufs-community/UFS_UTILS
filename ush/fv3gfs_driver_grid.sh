@@ -142,14 +142,17 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   export grid_dir=$TEMP_DIR/$name/grid
   export orog_dir=$TEMP_DIR/$name/orog
 
-if [ -z ${ocn+x} ]; then
-    out_dir=$out_dir/C$res
-    readme_name=readme.C$res.txt
-  else
-    out_dir=$out_dir/C$res.mx$ocn
-    readme_name=readme.C$res.mx$ocn.txt
-  fi
-                       
+
+if [ $gtype = uniform ]; then
+		out_dir=$out_dir/C$res.mx$ocn
+                
+                readme_name=readme.C$res.mx$ocn.txt
+else
+
+	out_dir=$out_dir/C$res
+        readme_name=readme.C$res.txt
+fi         
+
 
   mkdir -p $out_dir
   
@@ -217,31 +220,10 @@ if [ -z ${ocn+x} ]; then
   fi
 
 
-if [ -z ${ocn+x} ]; then
+
+if [ $gtype = uniform ]; then
    $script_dir/fv3gfs_ocean_merge.sh
-else
- echo run orog 2nd time
-    for tnum in '1' '2' '3' '4' '5' '6'
-    do
-    cd ${TEMP_DIR}/C${res}/orog/tile$tnum
-    echo $tnum $res $res 0 0 0 0 0 0 > INPS
-    echo C${res}_grid.tile${tnum}.nc >> INPS
-
-    echo none >> INPS
-    echo ".false." >> INPS
-    echo '"'${TEMP_DIR}/C${res}/orog/oro.C${res}.tile${tnum}.nc'"' >> INPS
-
-    cat INPS
-    time ${exec_dir}/orog < INPS
-    ncks -A -v lake_frac,lake_depth ${TEMP_DIR}/C${res}/orog/oro.C${res}.tile${tnum}.nc out.oro.nc
-    cp out.oro.nc $out_dir/oro.C${res}.tile${tnum}.nc
-    cp C${res}_grid.tile${tnum}.nc $out_dir/C${res}_grid.tile${tnum}.nc
-    done
-
 fi
-
-  set -x
-
 
   set +x
   echo "End uniform orography generation at `date`"
@@ -344,7 +326,7 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
     jstart_nest_halo=`expr $jstart_nest - $add_subtract_value`
 
     echo "================================================================================== "
-    ucho "For refine_ratio= $refine_ratio" 
+    echo "For refine_ratio= $refine_ratio" 
     echo " iend_nest= $iend_nest iend_nest_halo= $iend_nest_halo istart_nest= $istart_nest istart_nest_halo= $istart_nest_halo"
     echo " jend_nest= $jend_nest jend_nest_halo= $jend_nest_halo jstart_nest= $jstart_nest jstart_nest_halo= $jstart_nest_halo"
     echo "================================================================================== "
@@ -387,18 +369,17 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   res=${res//$'\n'/}
   out_dir=$out_dir/C${res}
   mkdir -p $out_dir
-  readme_name=readme.C$res.txt
+
 #----------------------------------------------------------------------------------
 # Create orography.
 #----------------------------------------------------------------------------------
  
   echo "Begin orography generation at `date`"
-  echo $orog_dir 	
+
   set +x
   echo
   echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
   echo
-  echo $orog_dir	
   set -x
   $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
   err=$?
@@ -571,78 +552,17 @@ fi
 #------------------------------------------------------------------------------------
 
 cd $out_dir
-
-
-if [ $gtype = uniform ] || [ $gtype = stretch ]; then
-
 cat <<EOF > $readme_name
 
-The following # was used
-https://github.com/sanatcumar/UFS_UTILS/tree/single_step
+The following # was used 
+<git hub link goes here>
 
 The following parameters were used
-        gtype=$gtype
-        make_gsl_orog=$make_gsl_orog
-        vegsoilt_frac=$vegsoilt_frac
-        veg_type=$veg_type_src
-        soil_type=$soil_type_src
+veg_type=$veg_type_src
+soil_type=$soil_type_src
+add_lake=$add_lake
+lake_cutoff=$lake_cutoff
 
 EOF
-elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
-
-
-cat <<EOF > $readme_name
-The following # was used
-https://github.com/sanatcumar/UFS_UTILS/tree/single_step
-
-The following parameters were used
-
-        gtype=$gtype
-        vegsoilt_frac=$vegsoilt_frac
-    veg_type=$veg_type_src
-    soil_type=$soil_type_src
-        make_gsl_orog=$make_gsl_orog
-        vegsoilt_frac=$vegsoilt_frac
-        veg_type=$veg_type_src
-        soil_type=$soil_type_src
-        add_lake=$add_lake
-        lake_cutoff=$lake_cutoff
-        stretch_fac=$stretch_fac        # Stretching factor for the grid
-        target_lon=$target_lon          # Center longitude of the highest resolution tile
-        target_lat=$target_lat          # Center latitude of the highest resolution tile
-        refine_ratio=$refine_ratio      # The refinement ratio
-        istart_nest=$istart_nest        # Starting i-direction index of nest grid in parent tile supergrid
-        jstart_nest=$jstart_nest      # Starting j-direction index of nest grid in parent tile supergrid
-        iend_nest=$iend_nest        # Ending i-direction index of nest grid in parent tile supergrid
-        jend_nest=$jend_nest       # Ending j-direction index of nest grid in parent tile supergrid
-        halo=$halo                # Lateral boundary halo
-
-EOF
-elif [ $gtype = regional_esg ] ; then
-
-cat <<EOF > $readme_name
-The following # was used
-https://github.com/sanatcumar/UFS_UTILS/tree/single_step
-
-The following parameters were used
-        gtype=$gtype
-        res=-999                        # equivalent resolution is computed
-        vegsoilt_frac=$vegsoilt_frac
-    veg_type=$veg_type_src
-    soil_type=$soil_type_src
-        target_lon=$target_lon     # Center longitude of grid
-        target_lat=target_lat      # Center latitude of grid
-        idim=$idim                      # Dimension of grid in 'i' direction
-        jdim=$jdim              # Dimension of grid in 'j' direction
-        delx=$delx              # Grid spacing (in degrees) in the 'i' direction
-                               # on the SUPERGRID (which has twice the resolution of
-                               # the model grid).  The physical grid spacing in the 'i'
-                               # direction is related to delx as follows:
-        dely=$dely           # Grid spacing (in degrees) in the 'j' direction.
-        halo=$halo                # number of row/cols for halo
-
-EOF
-fi
-
 
 exit
