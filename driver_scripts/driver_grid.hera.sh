@@ -7,7 +7,7 @@
 #SBATCH -e log.fv3_grid_driver
 #SBATCH --nodes=1 --ntasks-per-node=24
 ##SBATCH --partition=bigmem
-#SBATCH -q batch
+#SBATCH -q debug
 #SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
@@ -86,7 +86,7 @@ export vegsoilt_frac='.false.' # When .false., output dominant soil and
                                # the dominant category. A Fortran logical,
                                # so include the dots.
 
-export veg_type_src="viirs.igbp.0.05" #  Vegetation type data.
+export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
                                 # 1) "viirs.igbp.0.1" for global 0.10-deg data
                                 # 2) "viirs.igbp.0.05" for global 0.05-deg data
@@ -162,7 +162,7 @@ fi
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_coupled_grids_baseline_tests/
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids/
 export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN/
 
 #-----------------------------------------------------------------------

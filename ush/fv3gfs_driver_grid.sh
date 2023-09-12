@@ -21,16 +21,15 @@
 #   4) surface climo fields, such as soil type, vegetation
 #      greenness and albedo.
 #
-# Calls the following scripts:
-#   1) fv3gfs_make_grid.sh (make 'grid' files)
-#   2) fv3gfs_make_orog.sh (make land mask and exits)
-#   3) fv3gfs_make_lake.sh (adds lakes)
-#   4) ocean_merge.exe (Reads pregenerated ocean grid and merges them)
-#   5) fv3gfs_make_orog.sh (reads mearged masks and makes 'oro' files)
-#   6) fv3gfs_make_orog_gsl.sh (make gsl drag 'oro' files)
-#   7) fv3gfs_filter_topo.sh (filter topography)
-#   8) sfc_climo_gen.sh (create surface climo fields)
-#
+#Calls the following scripts
+# 1) fv3gfs_make_grid.sh (make 'grid' files)
+# 2) fv3gfs_make_lake.sh (adds lakes)
+# 3) fv3gfs_make_orog.sh (make land mask and exits for uniform grid type only, generates oro for other grid types)
+# 4) fv3gfs_ocean_merge.sh (Reads pre-generated ocean grid and merges them for uniform grid type only)
+# 5) fv3gfs_make_orog.sh (reads merged masks and makes 'oro' files for uniform grid type only)
+# 6) fv3gfs_make_orog_gsl.sh (make gsl drag 'oro' files for uniform grid type only)
+# 7) fv3gfs_filter_topo.sh (filter topography)
+# 8) sfc_climo_gen.sh (create surface climo fields)
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
