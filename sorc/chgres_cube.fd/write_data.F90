@@ -1983,6 +1983,13 @@
      error = nf90_def_dim(ncid, 'Time', 1, dim_time)
      call netcdf_err(error, 'DEFINING TIME DIMENSION' )
 
+!--- define attributes
+!
+!--- The fractional grid version of chgres will output
+!--- a new coldstart file. This file will be 'version 2'.
+     error = nf90_put_att(ncid, nf90_global, 'file_version', 'V2')
+     call netcdf_err(error, 'DEFINING GLOBAL ATTRIBUTE' )
+
  !--- define fields
      error = nf90_def_var(ncid, 'xaxis_1', NF90_FLOAT, (/dim_x/), id_x)
      call netcdf_err(error, 'DEFINING XAXIS_1 FIELD' )
