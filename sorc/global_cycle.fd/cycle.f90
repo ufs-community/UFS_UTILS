@@ -508,6 +508,16 @@ ENDIF
    call MPI_ABORT(MPI_COMM_WORLD, 18, IERR)
  ENDIF
 
+ IF (FRAC_GRID .AND. DO_SNO_INC) THEN
+   print *, 'FATAL ERROR: Snow increment update does not work with fractional grids.'
+   call MPI_ABORT(MPI_COMM_WORLD, 19, IERR)
+ ENDIF
+
+ IF (IS_NOAHMP .AND. DO_SNO_INC) THEN
+   print *, 'FATAL ERROR: Snow increment update does not work with NOAH_MP.'
+   call MPI_ABORT(MPI_COMM_WORLD, 29, IERR)
+ ENDIF
+
 !ichk = 282
 !jchk = 362
 !ijchk = (jchk-1) * idim + ichk
