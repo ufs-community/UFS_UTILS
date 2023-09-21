@@ -86,9 +86,9 @@ export vegsoilt_frac='.false.' # When .false., output dominant soil and
                                # the dominant category. A Fortran logical,
                                # so include the dots.
 
-export veg_type_src="viirs.v2.igbp.30s" #  Vegetation type data.
+export veg_type_src="viirs.v3.igbp.30s" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
-                                # 1) "viirs.v2.igbp.30s" for global 30s data
+                                # 1) "viirs.v3.igbp.30s" for global 30s data
                                 # For the modis-based data, set to:
                                 # 1) "modis.igbp.0.05" for global 0.05-deg data
                                 # 2) "modis.igbp.0.03" for global 0.03-deg data
@@ -96,7 +96,7 @@ export veg_type_src="viirs.v2.igbp.30s" #  Vegetation type data.
                                 # 4) "modis.igbp.nh.30s" for N Hemis 30s data
                                 # 5) "modis.igbp.30s" for global 30s data
 
-export soil_type_src="bnu.v2.30s" #  Soil type data. 
+export soil_type_src="bnu.v3.30s" #  Soil type data. 
                                 # For STATSGO data
                                 # 1) "statsgo.0.05" for global 0.05-deg data
                                 # 2) "statsgo.0.03" for global 0.03-deg data
@@ -104,7 +104,7 @@ export soil_type_src="bnu.v2.30s" #  Soil type data.
                                 # 4) "statsgo.nh.30s" for NH 30s data
                                 # 5) "statsgo.30s" for global 30s data
                                 # For Beijing Norm. Univ. data
-                                # 1) "bnu.v2.30s" for global 30s data.
+                                # 1) "bnu.v3.30s" for global 30s data.
 
 if [ $gtype = uniform ]; then
   export res=96
