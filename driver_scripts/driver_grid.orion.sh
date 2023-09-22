@@ -161,7 +161,7 @@ export OMP_NUM_THREADS=24
 export OMP_STACKSIZE=2048m
 
 ulimit -a
-ulimit -s 199000000
+ulimit -s unlimited
 
 #-----------------------------------------------------------------------
 # Start script.
