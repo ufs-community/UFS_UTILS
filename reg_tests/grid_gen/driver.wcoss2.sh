@@ -71,12 +71,12 @@ TEST1=$(qsub -V -o $LOG_FILE1 -e $LOG_FILE1 -q $QUEUE -A $PROJECT_CODE -l wallti
         -N c96.uniform -l select=1:ncpus=30:mem=40GB $PWD/c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
-# C96 uniform grid using viirs vegetation data.
+# C96 uniform grid using viirs vegetation and bnu soil type data.
 #-----------------------------------------------------------------------------
 
 LOG_FILE2=${LOG_FILE}02
-TEST2=$(qsub -V -o $LOG_FILE2 -e $LOG_FILE2 -q $QUEUE -A $PROJECT_CODE -l walltime=00:10:00 \
-        -N c96.viirs.vegt -l select=1:ncpus=30:mem=40GB $PWD/c96.viirs.vegt.sh)
+TEST2=$(qsub -V -o $LOG_FILE2 -e $LOG_FILE2 -q $QUEUE -A $PROJECT_CODE -l walltime=00:15:00 \
+        -N c96.viirs.bnu -l select=1:ncpus=30:mem=250GB $PWD/c96.viirs.bnu.sh)
 
 #-----------------------------------------------------------------------------
 # gfdl regional grid
