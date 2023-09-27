@@ -73,7 +73,7 @@ fi
 cat << EOF > ./fort.41
 &config
 input_facsf_file="${input_sfc_climo_dir}/facsf.1.0.nc"
-input_substrate_temperature_file="${input_sfc_climo_dir}/substrate_temperature.2.6x1.5.nc"
+input_substrate_temperature_file="${input_sfc_climo_dir}/substrate_temperature.gfs.0.5.nc"
 input_maximum_snow_albedo_file="${input_sfc_climo_dir}/maximum_snow_albedo.0.05.nc"
 input_snowfree_albedo_file="${input_sfc_climo_dir}/snowfree_albedo.4comp.0.05.nc"
 input_slope_type_file="${input_sfc_climo_dir}/slope_type.1.0.nc"
