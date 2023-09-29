@@ -15,7 +15,7 @@ PROGRAM inland_mask
 
   REAL, ALLOCATABLE :: inland(:,:,:)
   REAL, ALLOCATABLE :: land_frac(:,:,:)
-  INTEGER :: i_ctr, j_ctr, tile_beg, tile_end
+  INTEGER :: tile_beg, tile_end
   INTEGER :: cs_res, x_res, y_res
   CHARACTER(len=32) :: arg
   INTEGER :: stat
@@ -23,7 +23,7 @@ PROGRAM inland_mask
   REAL :: cutoff
   CHARACTER(len=1) :: reg
 
-  LOGICAL, ALLOCATABLE :: done(:,:,:)
+  LOGICAL, ALLOCATABLE :: done(:,:,:) 
 
   CALL getarg(0, arg) ! get the program name
   IF (iargc() /= 3 .AND. iargc() /= 4) THEN
@@ -78,14 +78,19 @@ CONTAINS
 !! @author Ning Wang  
 SUBROUTINE mark_global_inland(cs_res)
   INTEGER, INTENT(IN) :: cs_res
+  INTEGER :: i_seed, j_seed
  
   ALLOCATE(done(cs_res,cs_res,6))
   ALLOCATE(inland(cs_res,cs_res,6))
   done = .false.
   inland = 1.0
-  i_ctr = cs_res/2; j_ctr = cs_res/2
 
-  CALL mark_global_inland_rec_d(i_ctr, j_ctr, 2, 0)
+  i_seed = cs_res/2; j_seed = cs_res/2
+  CALL mark_global_inland_rec_d(i_seed, j_seed, 2, 0)
+
+! to make sure black sea is excluded
+  i_seed = REAL(cs_res)/32.0*3; j_seed = i_seed 
+  CALL mark_global_inland_rec_d(i_seed, j_seed, 3, 0)
   
   DEALLOCATE(done)
 
@@ -99,6 +104,7 @@ END SUBROUTINE mark_global_inland
 SUBROUTINE mark_inland_reg(cs_res)
   INTEGER, INTENT(IN) :: cs_res
   INTEGER :: i_seed, j_seed
+  INTEGER :: i
 
   ALLOCATE(done(x_res,y_res,1))
   ALLOCATE(inland(x_res,y_res,1))
@@ -116,6 +122,30 @@ SUBROUTINE mark_inland_reg(cs_res)
   i_seed = x_res/3; j_seed = 1 
   CALL mark_regional_inland_rec_d(i_seed, j_seed, 1, 0)
 
+  j_seed = 1
+  DO i = 1, x_res
+    CALL mark_regional_inland_rec_d(i, j_seed, 1, 0)
+  ENDDO
+
+  j_seed = y_res
+  DO i = x_res/2, x_res
+    CALL mark_regional_inland_rec_d(i, j_seed, 1, 0)
+  ENDDO
+
+! set up additional 3 seeds for ESG CONUS grid 
+!  i_seed = 1600; j_seed = 1040 
+!  i_seed = x_res - 10; j_seed = y_res
+!  CALL mark_regional_inland_rec_d(i_seed, j_seed, 1, 0)
+
+!  i_seed = x_res - 60; j_seed = y_res
+!  CALL mark_regional_inland_rec_d(i_seed, j_seed, 1, 0)
+
+!  i_seed = x_res - 275; j_seed = y_res
+!  CALL mark_regional_inland_rec_d(i_seed, j_seed, 1, 0)
+
+!  i_seed = 500; j_seed = 1 
+!  CALL mark_regional_inland_rec_d(i_seed, j_seed, 1, 0)
+  
   DEALLOCATE(done)
 
 END SUBROUTINE mark_inland_reg
