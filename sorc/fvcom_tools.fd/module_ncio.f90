@@ -2511,6 +2511,7 @@ contains
   !! @param[in] dname3 3rd dimension name
   !! @param[in] lname long name output for netcdf variable
   !! @param[in] units units to use in netcdf variable
+  !! @param[in] dtype date type of netcdf variable
   !!
   !! @author David.M.Wright org: UM/GLERL @date 2020-09-01
   subroutine add_new_var_3d(this,varname,dname1,dname2,dname3,lname,units,dtype)
@@ -2567,6 +2568,7 @@ contains
   !! @param[in] dname2 2nd dimension name
   !! @param[in] lname long name output for netcdf variable
   !! @param[in] units units to use in netcdf variable
+  !! @param[in] dtype data type of netcdf variable
   !!
   !! @author David.M.Wright org: UM/GLERL @date 2021-10-07
   subroutine add_new_var_2d(this,varname,dname1,dname2,lname,units,dtype)
