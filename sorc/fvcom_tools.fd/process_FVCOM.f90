@@ -77,14 +77,14 @@ program process_FVCOM
    integer            :: fv3_io_layout_y
    integer,allocatable :: fv3_layout_begin(:),fv3_layout_end(:)
 
-   real(r_kind), allocatable :: fv3ice(:,:), fv3sst(:,:)
-   real(r_kind), allocatable :: fv3sfcT(:,:), fv3mask(:,:)
-   real(r_kind), allocatable :: fv3iceT(:,:), fv3sfcTl(:,:)
-   real(r_kind), allocatable :: fv3zorl(:,:), fv3hice(:,:)
-   real(r_kind), allocatable :: lbcice(:,:), lbcsst(:,:)
-   real(r_kind), allocatable :: lbcsfcT(:,:), lbcmask(:,:)
-   real(r_kind), allocatable :: lbciceT(:,:), lbczorl(:,:)
-   real(r_kind), allocatable :: lbchice(:,:)   
+   real(r_single), allocatable :: fv3ice(:,:), fv3sst(:,:)
+   real(r_single), allocatable :: fv3sfcT(:,:), fv3mask(:,:)
+   real(r_single), allocatable :: fv3iceT(:,:), fv3sfcTl(:,:)
+   real(r_single), allocatable :: fv3zorl(:,:), fv3hice(:,:)
+   real(r_single), allocatable :: lbcice(:,:), lbcsst(:,:)
+   real(r_single), allocatable :: lbcsfcT(:,:), lbcmask(:,:)
+   real(r_single), allocatable :: lbciceT(:,:), lbczorl(:,:)
+   real(r_single), allocatable :: lbchice(:,:)
 
 !  Declare namelists
 !  SETUP (general control namelist) :
@@ -378,14 +378,14 @@ if(mypeLocal <= fv3_io_layout_y) then
       if (wcstart == 'cold') then
 ! Add_New_Var takes names of (Variable,Dim1,Dim2,Dim3,Long_Name,Units)
          call geo%replace_var("zorl",NLON,NLAT,fv3zorl)
-         call geo%add_new_var('glmsk','xaxis_1','yaxis_1','Time','glmsk','none')
+         call geo%add_new_var('glmsk','xaxis_1','yaxis_1','Time','glmsk','none','float')
          call geo%replace_var('glmsk',NLON,NLAT,lbcmask)
       end if
       if (wcstart == 'warm') then
          call geo%replace_var("zorli",NLON,NLAT,fv3zorl)
          call geo%replace_var("tsfc",NLON,NLAT,fv3sfcT)
          call geo%replace_var("tsfcl",NLON,NLAT,fv3sfcTl)
-         call geo%add_new_var('glmsk','xaxis_1','yaxis_1','Time','glmsk','none')
+         call geo%add_new_var('glmsk','xaxis_1','yaxis_1','Time','glmsk','none','float')
          call geo%replace_var('glmsk',NLON,NLAT,lbcmask)
       end if
       call geo%close
