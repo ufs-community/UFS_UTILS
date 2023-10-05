@@ -51,9 +51,11 @@ PROGRAM lake_frac
     CALL getarg(0, arg) ! get the program name
     IF (iargc() /= 5 .AND. iargc() /= 6) THEN
       PRINT*, 'Usage: ', trim(arg), & 
-       ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] [lake data path] [lake status source] [lake depth source]'  
+       ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] &
+         [lake data path] [lake status source] [lake depth source]'  
       PRINT*, 'Or: ', trim(arg), & 
-       ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] [lake data path] [lake status source] [lake depth source] [lake_cutoff]'
+       ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] &
+         [lake data path] [lake status source] [lake depth source] [lake_cutoff]'
       STOP
     ENDIF
     CALL getarg(1, arg)
@@ -294,7 +296,7 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
               src_grid_lon_beg,src_grid_lon_end,stride_lon
             PRINT*, 'lon range ', &
               src_grid_lon(src_grid_lon_beg),src_grid_lon(src_grid_lon_end)
-            IF (two_section == .true.) THEN
+            IF (two_section .eqv. .true.) THEN
               PRINT*, 'section1 index lon range and stride', &
                 src_grid_lon_beg1,src_grid_lon_end1,stride_lon
               PRINT*, 'section1 lon range ', &
@@ -306,11 +308,11 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
             ENDIF
           ENDIF
 #endif
-          IF (two_section == .false.) THEN
+          IF (two_section .eqv. .false.) THEN
             DO i =  src_grid_lon_beg, src_grid_lon_end, stride_lon
               p(1) = src_grid_lat(j); p(2) = src_grid_lon(i) 
               p(:) = p(:)*d2r
-              IF(enclosure_cnvx(v, 4, p, co_gc) == .true.) THEN
+              IF(enclosure_cnvx(v, 4, p, co_gc) .eqv. .true.) THEN
                 grid_ct = grid_ct+1
                 lkst = lakestat((j-1)*nlon+i); lkdp = lakedpth((j-1)*nlon+i)
                 CALL lake_cell_comp(lkst, lkdp, lake_ct, lake_avg_frac, lake_dpth_sum)
@@ -320,7 +322,7 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
             DO i =  src_grid_lon_beg1, src_grid_lon_end1, stride_lon
               p(1) = src_grid_lat(j); p(2) = src_grid_lon(i) 
               p(:) = p(:)*d2r
-              IF(enclosure_cnvx(v, 4, p, co_gc) == .true.) THEN
+              IF(enclosure_cnvx(v, 4, p, co_gc) .eqv. .true.) THEN
                 grid_ct = grid_ct+1
                 lkst = lakestat((j-1)*nlon+i); lkdp = lakedpth((j-1)*nlon+i)
                 CALL lake_cell_comp(lkst, lkdp, lake_ct, lake_avg_frac, lake_dpth_sum)
@@ -329,7 +331,7 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
             DO i =  src_grid_lon_beg2, src_grid_lon_end2, stride_lon
               p(1) = src_grid_lat(j); p(2) = src_grid_lon(i) 
               p(:) = p(:)*d2r
-              IF(enclosure_cnvx(v, 4, p, co_gc) == .true.) THEN
+              IF(enclosure_cnvx(v, 4, p, co_gc) .eqv. .true.) THEN
                 grid_ct = grid_ct+1
                 lkst = lakestat((j-1)*nlon+i); lkdp = lakedpth((j-1)*nlon+i)
                 CALL lake_cell_comp(lkst, lkdp, lake_ct, lake_avg_frac, lake_dpth_sum)
@@ -693,7 +695,8 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       CALL nc_opchk(stat, "nf90_put_att: lake_depth:description") 
 #endif
 
-      write(string,'(a,es8.1)') 'land_frac and lake_frac are adjusted such that their sum is 1 at points where inland=1; land_frac cutoff is',land_cutoff
+      write(string,'(a,es8.1)') 'land_frac and lake_frac are adjusted such that &
+         their sum is 1 at points where inland=1; land_frac cutoff is',land_cutoff
       stat = nf90_put_att(ncid, land_frac_id,'description',trim(string))
       CALL nc_opchk(stat, "nf90_put_att: land_frac:description") 
 
@@ -915,7 +918,8 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
       CALL nc_opchk(stat, "nf90_put_att: lake_depth:description") 
     ENDIF
 #endif
-    write(string,'(a,es8.1)') 'land_frac and lake_frac are adjusted such that their sum is 1 at points where inland=1; land_frac cutoff is',land_cutoff
+    write(string,'(a,es8.1)') 'land_frac and lake_frac are adjusted such that &
+      their sum is 1 at points where inland=1; land_frac cutoff is',land_cutoff
     stat = nf90_put_att(ncid, land_frac_id,'description',trim(string))
     CALL nc_opchk(stat, "nf90_put_att: land_frac:description") 
     write(string,'(a)') 'slmsk = nint(land_frac)'
