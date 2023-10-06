@@ -15,7 +15,6 @@
 !!  - Ning Wang, Apr. 2019: Extended the program to process the same lake data 
 !!                         for FV3 stand-alone regional (SAR) model.
 !!     
-!! @return 0 for successful completion and for error.
 !#define DIAG_N_VERBOSE
 #define ADD_ATT_FOR_NEW_VAR
 PROGRAM lake_frac
@@ -39,8 +38,6 @@ PROGRAM lake_frac
     REAL, PARAMETER :: d2r = acos(-1.0) / 180.0
     REAL, PARAMETER :: r2d = 180.0 /acos(-1.0) 
     REAL, PARAMETER :: pi = acos(-1.0) 
-!   REAL*8, PARAMETER :: gppdeg = 119.99444445
-!   REAL*8, PARAMETER :: delta = 1.0 / 119.99444445
     REAL*8, PARAMETER :: gppdeg = 120.0
     REAL*8, PARAMETER :: delta = 1.0 / 120.0
 
@@ -371,6 +368,14 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
 
 END SUBROUTINE cal_lake_frac_depth 
 
+!> Compute cumulatively the lake fraction and lake depth for a cell 
+!!
+!! @param[in] lkst and lkdp are lake status and lake depth values from 
+!! a grid point in the source file.
+!! @param[out] lake_ct and lake_avg_frac are lake fraction info accumulated 
+!! for a cell. 
+!! @param[out] lake_depth_sum is the lake depth accumulation for the cell. 
+!! @author Ning Wang
 SUBROUTINE lake_cell_comp(lkst, lkdp, lake_ct, lake_avg_frac, lake_dpth_sum)
     INTEGER*1, INTENT(IN) :: lkst
     INTEGER*2, INTENT(IN) :: lkdp
@@ -1022,6 +1027,15 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
   
 END SUBROUTINE write_reg_lakedata_to_orodata
 
+!> Include Caspian Sea and Aral Sea if GLDB dataset is used, and 
+!! exclude lakes in the coastal areas of Antarctica if MODIS dataset is used.
+!!
+!! @param[inout] lake_frac, lake_depth, lake fraction and lake depth arrays
+!! of the given tile. 
+!! @param[in] land_frac, land fraction array of the given tile.
+!! @param[in] geolat, geolon, latitude and longitude arrays of the given tile.
+!! @param[in] tile_num, tile number of the given tile.
+!! @author Ning Wang
 SUBROUTINE include_exclude_lakes(lake_frac,land_frac,lake_depth,geolat,geolon,tile_num)
     REAL, INTENT(INOUT) :: lake_frac(cs_res*cs_res), lake_depth(cs_res*cs_res)
     REAL, INTENT(IN) :: land_frac(cs_res*cs_res)

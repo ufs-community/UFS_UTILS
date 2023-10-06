@@ -106,8 +106,7 @@ export soil_type_src="bnu.v3.30s" #  Soil type data.
                                 # For Beijing Norm. Univ. data
                                 # 1) "bnu.v3.30s" for global 30s data.
 
-export reg_domain=na3km   # '3km', 'na3km', '13km', and 'na13km'
-export lake_data_srce=MODISP_GLDBV3 # 'GLDBV3', 'MODIS_GLOBATHY', 'MODISP_GLDBV3', and 'VIIRS_GLDBV3'
+export lake_data_srce=MODISP_GLDBV3 # 'GLDBV3', 'MODISP_GLOBATHY', 'MODISP_GLDBV3', and 'VIIRS_GLDBV3'
 
 if [ $gtype = uniform ]; then
   export res=96
