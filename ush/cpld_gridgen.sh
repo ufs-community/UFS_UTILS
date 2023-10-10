@@ -65,6 +65,9 @@ if [ $RESNAME = 100 ]; then
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
 	ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
+	export FSRC=${OUTDIR_PATH}/rect.1p0_SCRIP.nc
+	export FDST=${OUTDIR_PATH}/rect.1p0_mesh.nc
+	$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
     fi
 fi
 
@@ -77,6 +80,12 @@ if [ $RESNAME = 050 ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
 	ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
 	ncremap -g ${OUTDIR_PATH}/rect.0p5_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
+	export FSRC=${OUTDIR_PATH}/rect.1p0_SCRIP.nc
+	export FDST=${OUTDIR_PATH}/rect.1p0_mesh.nc
+	$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+	export FSRC=${OUTDIR_PATH}/rect.0p5_SCRIP.nc
+	export FDST=${OUTDIR_PATH}/rect.0p5_mesh.nc
+	$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
     fi
 fi
 
@@ -90,6 +99,15 @@ if [ $RESNAME = 025 ]; then
 	ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
 	ncremap -g ${OUTDIR_PATH}/rect.0p5_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
 	ncremap -g ${OUTDIR_PATH}/rect.0p25_SCRIP.nc -G latlon=721,1440#lon_typ=grn_ctr#lat_typ=cap
+	export FSRC=${OUTDIR_PATH}/rect.1p0_SCRIP.nc
+	export FDST=${OUTDIR_PATH}/rect.1p0_mesh.nc
+	$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+	export FSRC=${OUTDIR_PATH}/rect.0p5_SCRIP.nc
+	export FDST=${OUTDIR_PATH}/rect.0p5_mesh.nc
+	$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+	export FSRC=${OUTDIR_PATH}/rect.0p25_SCRIP.nc
+	export FDST=${OUTDIR_PATH}/rect.0p25_mesh.nc
+	$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
     fi
 fi
 
