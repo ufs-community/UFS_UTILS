@@ -370,11 +370,11 @@ END SUBROUTINE cal_lake_frac_depth
 
 !> Compute cumulatively the lake fraction and lake depth for a cell 
 !!
-!! @param[in] lkst and lkdp are lake status and lake depth values from 
-!! a grid point in the source file.
-!! @param[out] lake_ct and lake_avg_frac are lake fraction info accumulated 
-!! for a cell. 
-!! @param[out] lake_depth_sum is the lake depth accumulation for the cell. 
+!! @param[in] lkst lake status value from a grid point in the source data.
+!! @param[in] lkdp lake depth value from a grid point in the source data.
+!! @param[out] lake_ct lake points number accumulated for the cell 
+!! @param[out] lake_avg_frac lake fraction value accumulated for the cell. 
+!! @param[out] lake_dpth_sum is the lake depth value accumulated for the cell. 
 !! @author Ning Wang
 SUBROUTINE lake_cell_comp(lkst, lkdp, lake_ct, lake_avg_frac, lake_dpth_sum)
     INTEGER*1, INTENT(IN) :: lkst
@@ -1030,11 +1030,12 @@ END SUBROUTINE write_reg_lakedata_to_orodata
 !> Include Caspian Sea and Aral Sea if GLDB dataset is used, and 
 !! exclude lakes in the coastal areas of Antarctica if MODIS dataset is used.
 !!
-!! @param[inout] lake_frac, lake_depth, lake fraction and lake depth arrays
-!! of the given tile. 
-!! @param[in] land_frac, land fraction array of the given tile.
-!! @param[in] geolat, geolon, latitude and longitude arrays of the given tile.
-!! @param[in] tile_num, tile number of the given tile.
+!! @param[inout] lake_frac lake fraction array of the given tile. 
+!! @param[inout] lake_depth lake depth array of the given tile. 
+!! @param[in] land_frac land fraction array of the given tile.
+!! @param[in] geolat latitude array of the given tile.
+!! @param[in] geolon longitude array of the given tile.
+!! @param[in] tile_num tile number of the given tile.
 !! @author Ning Wang
 SUBROUTINE include_exclude_lakes(lake_frac,land_frac,lake_depth,geolat,geolon,tile_num)
     REAL, INTENT(INOUT) :: lake_frac(cs_res*cs_res), lake_depth(cs_res*cs_res)
