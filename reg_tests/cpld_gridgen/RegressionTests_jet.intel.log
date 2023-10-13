@@ -1,7 +1,7 @@
-Mon Apr 25 14:59:30 GMT 2022
+Fri Oct 13 16:41:48 UTC 2023
 Start Regression test
 
-Working dir = /lfs4/HFIP/h-nems//Minsuk.Ji/CPLD_GRIDGEN/rt_25376/025
+Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/CPLD_GRIDGEN/rt_291617/025
 Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/025
 
 Checking test 025 results ....
@@ -23,7 +23,7 @@ Comparing mesh.mx025.nc........OK
 Comparing tripole.mx025.nc........OK
 
 
-Working dir = /lfs4/HFIP/h-nems//Minsuk.Ji/CPLD_GRIDGEN/rt_25376/050
+Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/CPLD_GRIDGEN/rt_291617/050
 Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/050
 
 Checking test 050 results ....
@@ -47,7 +47,7 @@ Comparing tripole.mx025.Ct.to.mx050.Ct.neareststod.nc........OK
 Comparing tripole.mx050.nc........OK
 
 
-Working dir = /lfs4/HFIP/h-nems//Minsuk.Ji/CPLD_GRIDGEN/rt_25376/100
+Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/CPLD_GRIDGEN/rt_291617/100
 Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/100
 
 Checking test 100 results ....
@@ -73,4 +73,5 @@ Comparing ufs.topo_edits_011818.nc........OK
 
 
 REGRESSION TEST WAS SUCCESSFUL
-Mon Apr 25 15:07:31 GMT 2022
+Fri Oct 13 17:20:59 UTC 2023
+Elapsed time: 00h:50m:02s. Have a nice day!
