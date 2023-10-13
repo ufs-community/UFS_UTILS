@@ -1,7 +1,7 @@
-Sat Apr 23 12:52:18 CDT 2022
+Fri Oct 13 10:36:10 CDT 2023
 Start Regression test
 
-Working dir = /work/noaa/stmp/jminsuk/CPLD_GRIDGEN/rt_614/025
+Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_1850/025
 Baseline dir = /work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data/025
 
 Checking test 025 results ....
@@ -23,7 +23,7 @@ Comparing mesh.mx025.nc........OK
 Comparing tripole.mx025.nc........OK
 
 
-Working dir = /work/noaa/stmp/jminsuk/CPLD_GRIDGEN/rt_614/050
+Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_1850/050
 Baseline dir = /work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data/050
 
 Checking test 050 results ....
@@ -47,7 +47,7 @@ Comparing tripole.mx025.Ct.to.mx050.Ct.neareststod.nc........OK
 Comparing tripole.mx050.nc........OK
 
 
-Working dir = /work/noaa/stmp/jminsuk/CPLD_GRIDGEN/rt_614/100
+Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_1850/100
 Baseline dir = /work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data/100
 
 Checking test 100 results ....
@@ -73,4 +73,5 @@ Comparing ufs.topo_edits_011818.nc........OK
 
 
 REGRESSION TEST WAS SUCCESSFUL
-Sat Apr 23 12:56:51 CDT 2022
+Fri Oct 13 10:54:22 CDT 2023
+Elapsed time: 00h:19m:31s. Have a nice day!
