@@ -1,7 +1,7 @@
-Sat Apr 23 17:52:41 UTC 2022
+Wed Oct 11 12:57:14 UTC 2023
 Start Regression test
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_142841/025
+Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_286674/025
 Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/025
 
 Checking test 025 results ....
@@ -23,7 +23,7 @@ Comparing mesh.mx025.nc........OK
 Comparing tripole.mx025.nc........OK
 
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_142841/050
+Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_286674/050
 Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/050
 
 Checking test 050 results ....
@@ -47,7 +47,7 @@ Comparing tripole.mx025.Ct.to.mx050.Ct.neareststod.nc........OK
 Comparing tripole.mx050.nc........OK
 
 
-Working dir = /scratch1/NCEPDEV/stmp4/Minsuk.Ji/CPLD_GRIDGEN/rt_142841/100
+Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_286674/100
 Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/100
 
 Checking test 100 results ....
@@ -73,4 +73,5 @@ Comparing ufs.topo_edits_011818.nc........OK
 
 
 REGRESSION TEST WAS SUCCESSFUL
-Sat Apr 23 17:57:15 UTC 2022
+Wed Oct 11 13:14:59 UTC 2023
+Elapsed time: 00h:19m:05s. Have a nice day!
