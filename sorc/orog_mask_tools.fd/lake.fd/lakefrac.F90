@@ -15,6 +15,7 @@
 !!  - Ning Wang, Apr. 2019: Extended the program to process the same lake data 
 !!                         for FV3 stand-alone regional (SAR) model.
 !!     
+!! @return 0 for success.
 !#define DIAG_N_VERBOSE
 #define ADD_ATT_FOR_NEW_VAR
 PROGRAM lake_frac
@@ -53,7 +54,7 @@ PROGRAM lake_frac
       PRINT*, 'Or: ', trim(arg), & 
        ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] &
          [lake data path] [lake status source] [lake depth source] [lake_cutoff]'
-      STOP
+      STOP -1
     ENDIF
     CALL getarg(1, arg)
     READ(arg,*,iostat=stat) tile_req
@@ -151,7 +152,7 @@ PROGRAM lake_frac
     DEALLOCATE(lakestatus,lakedepth)
     DEALLOCATE(src_grid_lat, src_grid_lon)
 
-    STOP
+    STOP 0
 CONTAINS
 
 !> Calculate lake fraction and depth on the model grid from
@@ -1110,7 +1111,7 @@ SUBROUTINE nc_opchk(stat,opname)
    IF (stat .NE.0)  THEN
      msg = trim(opname) // ' Error, status code and message:'
      PRINT*,trim(msg), stat, nf90_strerror(stat)
-     STOP
+     STOP -1
    END IF
 
 END SUBROUTINE nc_opchk
