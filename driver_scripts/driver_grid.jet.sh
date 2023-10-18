@@ -103,11 +103,12 @@ export soil_type_src="bnu.v3.30s" # Soil type data.
                                 # 3) "statsgo.conus.30s" for CONUS 30s data
                                 # 4) "statsgo.nh.30s" for NH 30s data
                                 # 5) "statsgo.30s" for global 30s data
+export lake_data_srce=MODISP_GLDBV3 # 'GLDBV3', 'MODISP_GLOBATHY', 'MODISP_GLDBV3', and 'VIIRS_GLDBV3'
 
 if [ $gtype = uniform ]; then
   export res=96
-  export add_lake=false        # Add lake frac and depth to orography data.
-  export lake_cutoff=0.20      # lake frac < lake_cutoff ignored when add_lake=T
+  export add_lake=true         # Add lake frac and depth to orography data.
+  export lake_cutoff=0.50      # lake frac < lake_cutoff ignored when add_lake=T
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
