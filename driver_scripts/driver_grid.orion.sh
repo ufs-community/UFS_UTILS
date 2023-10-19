@@ -102,7 +102,10 @@ export soil_type_src="bnu.v3.30s" #  Soil type data.
                                 # 3) "statsgo.conus.30s" for CONUS 30s data
                                 # 4) "statsgo.nh.30s" for NH 30s data
                                 # 5) "statsgo.30s" for global 30s data
-export lake_data_srce=MODISP_GLDBV3 # 'GLDBV3', 'MODISP_GLOBATHY', 'MODISP_GLDBV3', and 'VIIRS_GLDBV3'
+
+# choose dataset sources for lakefrac & lakedepth so that lake_data_srce=LakeFrac_LakeDepth; 
+# available options are 'MODISP_GLDBV3', 'MODISP_GLOBATHY' & 'VIIRS_GLDBV3';
+export lake_data_srce=MODISP_GLDBV3 
 
 if [ $gtype = uniform ]; then
   export res=96
