@@ -107,7 +107,7 @@ export soil_type_src="bnu.v3.30s" #  Soil type data.
                                 # 1) "bnu.v3.30s" for global 30s data.
 
 # choose dataset sources for lakefrac & lakedepth so that lake_data_srce=LakeFrac_LakeDepth; 
-# available options are 'MODISP_GLDBV3', 'MODISP_GLOBATHY' & 'VIIRS_GLDBV3';
+# available options are 'MODISP_GLDBV3', 'MODISP_GLOBATHY', 'VIIRS_GLDBV3', 'VIIRS_GLOBATHY' & 'GLDBV3'
 export lake_data_srce=MODISP_GLDBV3 
 
 if [ $gtype = uniform ]; then

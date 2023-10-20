@@ -14,28 +14,24 @@ if [ $gtype != uniform ] && [ $gtype != regional_gfdl ]; then
   exit 0
 fi
 echo "lake_data_srce = $lake_data_srce"
-if [ $lake_data_srce == GLDBV3 ]; then
-  lakestatusrc="GLDBV3"
+if [ $lake_data_srce == MODISP_GLDBV3 ]; then
+  lakestatusrc="MODISP"
   lakedepthsrc="GLDBV3"
-fi
-if [ $lake_data_srce == GLDBV2 ]; then
-  lakestatusrc="GLDBV2"
-  lakedepthsrc="GLDBV2"
 fi
 if [ $lake_data_srce == MODISP_GLOBATHY ]; then
   lakestatusrc="MODISP"
   lakedepthsrc="GLOBATHY"
 fi
+if [ $lake_data_srce == VIIRS_GLDBV3 ]; then
+  lakestatusrc="VIIRS"
+  lakedepthsrc="GLDBV3"
+fi
 if [ $lake_data_srce == VIIRS_GLOBATHY ]; then
   lakestatusrc="VIIRS"
   lakedepthsrc="GLOBATHY"
 fi
-if [ $lake_data_srce == MODISP_GLDBV3 ]; then
-  lakestatusrc="MODISP"
-  lakedepthsrc="GLDBV3"
-fi
-if [ $lake_data_srce == VIIRS_GLDBV3 ]; then
-  lakestatusrc="VIIRS"
+if [ $lake_data_srce == GLDBV3 ]; then
+  lakestatusrc="GLDBV3"
   lakedepthsrc="GLDBV3"
 fi
 
