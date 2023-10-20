@@ -39,22 +39,25 @@ contains
     ! set the destination grids
     !---------------------------------------------------------------------
 
-    if(trim(res) .eq. '400')return
-
-    if(trim(res) .eq. '100')then
+    if(trim(res) .eq. '500')then
        ndest = 1
        allocate(destgrds(ndest))
-       destgrds = (/'1p0 '/)
+       destgrds = (/'5p0 '/)
     end if
-    if(trim(res) .eq. '050')then
+    if(trim(res) .eq. '100')then
        ndest = 2
        allocate(destgrds(ndest))
-       destgrds = (/'1p0 ', '0p5 '/)
+       destgrds = (/'5p0 ', '1p0 '/)
     end if
-    if(trim(res) .eq. '025')then
+    if(trim(res) .eq. '050')then
        ndest = 3
        allocate(destgrds(ndest))
-       destgrds = (/'1p0 ', '0p5 ', '0p25'/)
+       destgrds = (/'5p0 ', '1p0 ', '0p5 '/)
+    end if
+    if(trim(res) .eq. '025')then
+       ndest = 4
+       allocate(destgrds(ndest))
+       destgrds = (/'5p0 ', '1p0 ', '0p5 ', '0p25'/)
     end if
 
     !---------------------------------------------------------------------
