@@ -59,6 +59,7 @@ module source_grid
 
  integer, intent(in)              :: localpet, npets
  
+ character(len=50)                :: field_names_save(100)
  character(len=50)                :: vname
 
  integer                          :: dimid, dims(1), ncid, status
@@ -160,10 +161,9 @@ module source_grid
 ! number of variables minus 5.  
 !-----------------------------------------------------------------------
 
- num_fields = num_vars - 5
- num_records = num_vars * num_time_recs
-
- allocate(field_names(num_fields))
+! NOTE: the new BNU soil type data contains extra records for
+! sand and clay percentages. These extra records are not need yet,
+! so add logic to temporarily ignore them.
 
  count = 0
  do n = 1, num_vars
@@ -176,11 +176,22 @@ module source_grid
   if (trim(vname) == 'lon_corner') cycle
   if (trim(vname) == 'lat') cycle
   if (trim(vname) == 'lat_corner') cycle
+  if (trim(vname) == 'clay_lev1') cycle
+  if (trim(vname) == 'clay_top') cycle
+  if (trim(vname) == 'sand_lev1') cycle
+  if (trim(vname) == 'sand_top') cycle
 
   count = count + 1
-  field_names(count) = vname
+  field_names_save(count) = vname
 
  enddo
+
+ num_fields = count
+ num_records = num_vars * num_time_recs
+
+ allocate(field_names(num_fields))
+
+ field_names = field_names_save(1:num_fields)
 
  if(localpet==0) print*,'- FIELDS TO BE PROCESSED: ', field_names
 

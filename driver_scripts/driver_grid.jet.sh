@@ -5,10 +5,10 @@
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
-#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH --nodes=3 --ntasks-per-node=10
 #SBATCH --partition=xjet
-#SBATCH -q batch
-#SBATCH -t 00:10:00
+#SBATCH -q debug
+#SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on Jet.
@@ -84,14 +84,9 @@ export vegsoilt_frac='.false.'  # When true, outputs percent of each
                                # outputs the dominant category. A
                                # Fortran logical, so include the dots.
 
-export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
+export veg_type_src="viirs.v3.igbp.30s" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
-                                # 1) "viirs.igbp.0.1" for global 0.10-deg data
-                                # 2) "viirs.igbp.0.05" for global 0.05-deg data
-                                # 3) "viirs.igbp.0.03" for global 0.03-deg data
-                                # 4) "viirs.igbp.conus.30s" for CONUS 30s data
-                                # 5) "viirs.igbp.nh.30s" for NH 30s data
-                                # 6) "viirs.igbp.30s" for global 30s data
+                                # 1) "viirs.v3.igbp.30s" for global 30s data
                                 # For the modis-based data, set to:
                                 # 1) "modis.igbp.0.05" for global 0.05-deg data
                                 # 2) "modis.igbp.0.03" for global 0.03-deg data
@@ -99,15 +94,15 @@ export veg_type_src="modis.igbp.0.05" #  Vegetation type data.
                                 # 4) "modis.igbp.nh.30s" for N Hemis 30s data
                                 # 5) "modis.igbp.30s" for global 30s data
 
-export soil_type_src="statsgo.0.05" # Soil type data.
+export soil_type_src="bnu.v3.30s" # Soil type data.
+                                # For Beijing Normal Univ. data, set to:
+                                # 1) "bnu.v3.30s" for global 30s data.
                                 # For STATSGO soil type data, set to:
                                 # 1) "statsgo.0.05" for global 0.05-deg data
                                 # 2) "statsgo.0.03" for global 0.03-deg data
                                 # 3) "statsgo.conus.30s" for CONUS 30s data
                                 # 4) "statsgo.nh.30s" for NH 30s data
                                 # 5) "statsgo.30s" for global 30s data
-                                # For Beijing Normal Univ. data, set to:
-                                # 1) "bnu.30s" for global 30s data.
 
 if [ $gtype = uniform ]; then
   export res=96
