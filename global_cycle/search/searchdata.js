@@ -5,8 +5,8 @@ var indexSectionsWithContent =
   2: "mru",
   3: "clmnru",
   4: "acdginrstw",
-  5: "dijkls",
-  6: "g"
+  5: "dijklst",
+  6: "gr"
 };
 
 var indexSectionNames =

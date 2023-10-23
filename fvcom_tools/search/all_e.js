@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['readme',['README',['../md__lfs_h2_emc_global_noscrub_George_8Gayno_ufs_utils_8git_UFS_UTILS_sorc_fvcom_tools_8fd_docs_README.html',1,'']]],
   ['r_5fkind',['r_kind',['../namespacekinds.html#a699e36574bc3d76eb8c85e14f6234212',1,'kinds']]],
   ['r_5fsingle',['r_single',['../namespacekinds.html#a2941a091aedaf97539960bc627db578c',1,'kinds']]],
   ['read_5fn',['read_n',['../structmodule__nwp_1_1fcst__nwp.html#ae01e5bb75ed1d59e452951f96ab7ebff',1,'module_nwp::fcst_nwp']]],

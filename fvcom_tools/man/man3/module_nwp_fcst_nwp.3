@@ -1,4 +1,4 @@
-.TH "module_nwp::fcst_nwp" 3 "Mon Apr 17 2023" "Version 1.10.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_nwp::fcst_nwp" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -102,63 +102,63 @@ module_nwp::fcst_nwp
 .br
 .RI "Number of variabls\&. "
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_hice_c\fP"
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_hice_c\fP"
 .br
 .RI "cold start ice thickness "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_hice_w\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_hice_w\fP"
 .br
 .RI "warm start ice thickness "
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_ice_c\fP"
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_ice_c\fP"
 .br
 .RI "cold start over water ice concentration 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_ice_w\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_ice_w\fP"
 .br
 .RI "warm start over water ice concentration 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_icet_c\fP"
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_icet_c\fP"
 .br
 .RI "cold start ice skin temperature 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_icet_w\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_icet_w\fP"
 .br
 .RI "warm start ice skin temperature 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_mask_c\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_mask_c\fP"
 .br
 .RI "cold start land/water mask 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_mask_w\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_mask_w\fP"
 .br
 .RI "warm start land/water mask 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_sfct_c\fP"
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_sfct_c\fP"
 .br
 .RI "cold start skin temperature 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_sfct_w\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_sfct_w\fP"
 .br
 .RI "warm start skin temperature 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_sfctl_w\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_sfctl_w\fP"
 .br
 .RI "warm start skin temperature 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_sst_c\fP"
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_sst_c\fP"
 .br
 .RI "cold start sst 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_sst_w\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_sst_w\fP"
 .br
 .RI "warm start sst 3d array "
 .ti -1c
-.RI "real(r_kind), dimension(:,:,:), allocatable \fBnwp_zorl_c\fP"
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_zorl_c\fP"
 .br
 .RI "cold start surface roughness "
 .ti -1c
-.RI "real(r_kind), dimension(:,:), allocatable \fBnwp_zorl_w\fP"
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_zorl_w\fP"
 .br
 .RI "warm start surface roughness "
 .ti -1c
@@ -356,91 +356,91 @@ Definition at line 43 of file module_nwp\&.f90\&.
 Number of variabls\&. 
 .PP
 Definition at line 28 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_hice_c\fC [private]\fP"
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_hice_c\fC [private]\fP"
 
 .PP
 cold start ice thickness 
 .PP
 Definition at line 56 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_hice_w\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_hice_w\fC [private]\fP"
 
 .PP
 warm start ice thickness 
 .PP
 Definition at line 65 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_ice_c\fC [private]\fP"
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_ice_c\fC [private]\fP"
 
 .PP
 cold start over water ice concentration 3d array 
 .PP
 Definition at line 52 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_ice_w\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_ice_w\fC [private]\fP"
 
 .PP
 warm start over water ice concentration 3d array 
 .PP
 Definition at line 60 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_icet_c\fC [private]\fP"
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_icet_c\fC [private]\fP"
 
 .PP
 cold start ice skin temperature 3d array 
 .PP
 Definition at line 54 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_icet_w\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_icet_w\fC [private]\fP"
 
 .PP
 warm start ice skin temperature 3d array 
 .PP
 Definition at line 62 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_mask_c\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_mask_c\fC [private]\fP"
 
 .PP
 cold start land/water mask 3d array 
 .PP
 Definition at line 50 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_mask_w\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_mask_w\fC [private]\fP"
 
 .PP
 warm start land/water mask 3d array 
 .PP
 Definition at line 58 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_sfct_c\fC [private]\fP"
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_sfct_c\fC [private]\fP"
 
 .PP
 cold start skin temperature 3d array 
 .PP
 Definition at line 53 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sfct_w\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sfct_w\fC [private]\fP"
 
 .PP
 warm start skin temperature 3d array 
 .PP
 Definition at line 61 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sfctl_w\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sfctl_w\fC [private]\fP"
 
 .PP
 warm start skin temperature 3d array 
 .PP
 Definition at line 63 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_sst_c\fC [private]\fP"
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_sst_c\fC [private]\fP"
 
 .PP
 cold start sst 3d array 
 .PP
 Definition at line 51 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sst_w\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sst_w\fC [private]\fP"
 
 .PP
 warm start sst 3d array 
 .PP
 Definition at line 59 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_zorl_c\fC [private]\fP"
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_zorl_c\fC [private]\fP"
 
 .PP
 cold start surface roughness 
 .PP
 Definition at line 55 of file module_nwp\&.f90\&.
-.SS "real(r_kind), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_zorl_w\fC [private]\fP"
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_zorl_w\fC [private]\fP"
 
 .PP
 warm start surface roughness 

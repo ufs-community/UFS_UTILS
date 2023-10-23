@@ -1,4 +1,4 @@
-.TH "READ_WRITE_DATA" 3 "Mon Apr 17 2023" "Version 1.10.0" "global_cycle" \" -*- nroff -*-
+.TH "READ_WRITE_DATA" 3 "Mon Oct 23 2023" "Version 1.11.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -77,6 +77,10 @@ READ_WRITE_DATA \- This module contains routines that read and write data\&.
 .RI "integer, public \fBjdim_gaus\fP"
 .br
 .RI "'j' dimension of GSI gaussian grid\&. "
+.ti -1c
+.RI "real, dimension(:,:,:), allocatable, public \fBslc_inc_gaus\fP"
+.br
+.RI "GSI soil moisture increments on the gaussian grid\&. "
 .ti -1c
 .RI "integer, dimension(:,:), allocatable, public \fBslmsk_gaus\fP"
 .br
@@ -192,7 +196,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1803 of file read_write_data\&.f90\&.
+Definition at line 1820 of file read_write_data\&.f90\&.
 .SS "subroutine, public READ_WRITE_DATA::get_tf_clm_dim (character(*), intent(in) file_sst, integer, intent(out) mlat_sst, integer, intent(out) mlon_sst)"
 
 .PP
@@ -219,7 +223,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1668 of file read_write_data\&.f90\&.
+Definition at line 1685 of file read_write_data\&.f90\&.
 .SS "subroutine READ_WRITE_DATA::nc_check (integer, intent(in) status)"
 
 .PP
@@ -237,7 +241,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1840 of file read_write_data\&.f90\&.
+Definition at line 1857 of file read_write_data\&.f90\&.
 .SS "subroutine READ_WRITE_DATA::NETCDF_ERR (integer, intent(in) ERR, character(len=*), intent(in) STRING)"
 
 .PP
@@ -257,7 +261,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 811 of file read_write_data\&.f90\&.
+Definition at line 814 of file read_write_data\&.f90\&.
 .SS "subroutine, public READ_WRITE_DATA::READ_DATA (integer, intent(in) LSOIL, integer, intent(in) LENSFC, logical, intent(in) DO_NSST, logical, intent(in) INC_FILE, logical, intent(out), optional IS_NOAHMP, real, dimension(lensfc), intent(out), optional TSFFCS, real, dimension(lensfc,lsoil), intent(out), optional SMCFCS, real, dimension(lensfc), intent(out), optional SWEFCS, real, dimension(lensfc,lsoil), intent(out), optional STCFCS, real, dimension(lensfc), intent(out), optional TG3FCS, real, dimension(lensfc), intent(out), optional ZORFCS, real, dimension(lensfc), intent(out), optional CVFCS, real, dimension(lensfc), intent(out), optional CVBFCS, real, dimension(lensfc), intent(out), optional CVTFCS, real, dimension(lensfc,4), intent(out), optional ALBFCS, real, dimension(lensfc), intent(out), optional VEGFCS, real, dimension(lensfc), intent(out), optional SLIFCS, real, dimension(lensfc), intent(out), optional CNPFCS, real, dimension(lensfc), intent(out), optional F10M, real, dimension(lensfc), intent(out), optional VETFCS, real, dimension(lensfc), intent(out), optional SOTFCS, real, dimension(lensfc,2), intent(out), optional ALFFCS, real, dimension(lensfc), intent(out), optional USTAR, real, dimension(lensfc), intent(out), optional FMM, real, dimension(lensfc), intent(out), optional FHH, real, dimension(lensfc), intent(out), optional SIHFCS, real, dimension(lensfc), intent(out), optional SICFCS, real, dimension(lensfc), intent(out), optional SITFCS, real, dimension(lensfc), intent(out), optional TPRCP, real, dimension(lensfc), intent(out), optional SRFLAG, real, dimension(lensfc), intent(out), optional SNDFCS, real, dimension(lensfc), intent(out), optional VMNFCS, real, dimension(lensfc), intent(out), optional VMXFCS, real, dimension(lensfc,lsoil), intent(out), optional SLCFCS, real, dimension(lensfc), intent(out), optional SLPFCS, real, dimension(lensfc), intent(out), optional ABSFCS, real, dimension(lensfc), intent(out), optional T2M, real, dimension(lensfc), intent(out), optional Q2M, real, dimension(lensfc), intent(out), optional SLMASK, real(kind=4), dimension(lsoil), intent(out), optional ZSOIL, type(nsst_data), optional NSST)"
 
 .PP
@@ -355,7 +359,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1013 of file read_write_data\&.f90\&.
+Definition at line 1030 of file read_write_data\&.f90\&.
 .SS "subroutine, public READ_WRITE_DATA::READ_GSI_DATA (character(len=*), intent(in) GSI_FILE, character(len=3), intent(in) FILE_TYPE, integer, intent(in), optional LSOIL)"
 
 .PP
@@ -377,7 +381,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 844 of file read_write_data\&.f90\&.
+Definition at line 847 of file read_write_data\&.f90\&.
 .SS "subroutine, public READ_WRITE_DATA::READ_LAT_LON_OROG (real, dimension(ijdim), intent(out) RLA, real, dimension(ijdim), intent(out) RLO, real, dimension(ijdim), intent(out) OROG, real, dimension(ijdim), intent(out) OROG_UF, character(len=5), intent(out) TILE_NUM, integer, intent(in) IDIM, integer, intent(in) JDIM, integer, intent(in) IJDIM)"
 
 .PP
@@ -409,7 +413,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 678 of file read_write_data\&.f90\&.
+Definition at line 681 of file read_write_data\&.f90\&.
 .SS "subroutine, public READ_WRITE_DATA::read_salclm_gfs_nc (character (len=*), intent(in) filename, real, dimension(nlon,nlat), intent(out) sal, real, dimension(nlat), intent(out) xlats, real, dimension(nlon), intent(out) xlons, integer, intent(in) nlat, integer, intent(in) nlon, integer, intent(in) itime)"
 
 .PP
@@ -439,7 +443,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1727 of file read_write_data\&.f90\&.
+Definition at line 1744 of file read_write_data\&.f90\&.
 .SS "subroutine, public READ_WRITE_DATA::read_tf_clim_grb (character(*), intent(in) file_sst, real, dimension(mlon_sst,mlat_sst), intent(out) sst, real, dimension(mlat_sst), intent(out) rlats_sst, real, dimension(mlon_sst), intent(out) rlons_sst, integer, intent(in) mlat_sst, integer, intent(in) mlon_sst, integer, intent(in) mon)"
 
 .PP
@@ -479,7 +483,7 @@ Xu Li NOAA/EMC
 .PP
 
 .PP
-Definition at line 1526 of file read_write_data\&.f90\&.
+Definition at line 1543 of file read_write_data\&.f90\&.
 .SS "subroutine READ_WRITE_DATA::remove_checksum (integer, intent(in) ncid, integer, intent(in) id_var)"
 
 .PP
@@ -499,7 +503,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 639 of file read_write_data\&.f90\&.
+Definition at line 642 of file read_write_data\&.f90\&.
 .SS "subroutine, public READ_WRITE_DATA::write_data (integer, intent(in) lensfc, integer, intent(in) idim, integer, intent(in) jdim, integer, intent(in) lsoil, logical, intent(in) do_nsst, type(nsst_data), intent(in) nsst, real, dimension(lensfc), intent(in), optional slifcs, real, dimension(lensfc), intent(in), optional tsffcs, real, dimension(lensfc), intent(in), optional vegfcs, real, dimension(lensfc), intent(in), optional swefcs, real, dimension(lensfc), intent(in), optional tg3fcs, real, dimension(lensfc), intent(in), optional zorfcs, real, dimension(lensfc,4), intent(in), optional albfcs, real, dimension(lensfc,2), intent(in), optional alffcs, real, dimension(lensfc), intent(in), optional cnpfcs, real, dimension(lensfc), intent(in), optional f10m, real, dimension(lensfc), intent(in), optional t2m, real, dimension(lensfc), intent(in), optional q2m, real, dimension(lensfc), intent(in), optional vetfcs, real, dimension(lensfc), intent(in), optional sotfcs, real, dimension(lensfc), intent(in), optional ustar, real, dimension(lensfc), intent(in), optional fmm, real, dimension(lensfc), intent(in), optional fhh, real, dimension(lensfc), intent(in), optional sicfcs, real, dimension(lensfc), intent(in), optional sihfcs, real, dimension(lensfc), intent(in), optional sitfcs, real, dimension(lensfc), intent(in), optional tprcp, real, dimension(lensfc), intent(in), optional srflag, real, dimension(lensfc), intent(in), optional swdfcs, real, dimension(lensfc), intent(in), optional vmnfcs, real, dimension(lensfc), intent(in), optional vmxfcs, real, dimension(lensfc), intent(in), optional slpfcs, real, dimension(lensfc), intent(in), optional absfcs, real, dimension(lensfc,lsoil), intent(in), optional slcfcs, real, dimension(lensfc,lsoil), intent(in), optional smcfcs, real, dimension(lensfc,lsoil), intent(in), optional stcfcs)"
 
 .PP
@@ -592,7 +596,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 125 of file read_write_data\&.f90\&.
+Definition at line 128 of file read_write_data\&.f90\&.
 .SH "Variable Documentation"
 .PP 
 .SS "real, dimension(:,:), allocatable, public READ_WRITE_DATA::dtref_gaus"
@@ -613,6 +617,12 @@ Definition at line 38 of file read_write_data\&.f90\&.
 'j' dimension of GSI gaussian grid\&. 
 .PP
 Definition at line 40 of file read_write_data\&.f90\&.
+.SS "real, dimension(:,:,:), allocatable, public READ_WRITE_DATA::slc_inc_gaus"
+
+.PP
+GSI soil moisture increments on the gaussian grid\&. 
+.PP
+Definition at line 55 of file read_write_data\&.f90\&.
 .SS "integer, dimension(:,:), allocatable, public READ_WRITE_DATA::slmsk_gaus"
 
 .PP

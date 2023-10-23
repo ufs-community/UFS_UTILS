@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['readme',['README',['../md__lfs_h2_emc_global_noscrub_George_8Gayno_ufs_utils_8git_UFS_UTILS_sorc_global_cycle_8fd_docs_README.html',1,'']]],
   ['read_5fdata',['READ_DATA',['../namespaceREAD__WRITE__DATA.html#aa47cb22fc08f1f566848f9ad0ea1ad80',1,'READ_WRITE_DATA']]],
   ['read_5fgsi_5fdata',['READ_GSI_DATA',['../namespaceREAD__WRITE__DATA.html#ac5baedc292577bd0c2365ad4077458f1',1,'READ_WRITE_DATA']]],
   ['read_5flat_5flon_5forog',['READ_LAT_LON_OROG',['../namespaceREAD__WRITE__DATA.html#a4076fde1bf855db325146f1f2c524511',1,'READ_WRITE_DATA']]],

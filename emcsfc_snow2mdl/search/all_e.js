@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['readme',['README',['../md__lfs_h2_emc_global_noscrub_George_8Gayno_ufs_utils_8git_UFS_UTILS_sorc_emcsfc_snow2mdl_8fd_docs_README.html',1,'']]],
   ['read_5fafwa_5fbinary',['read_afwa_binary',['../namespacesnowdat.html#a097b7b0377daf37b721b0c871762e24d',1,'snowdat']]],
   ['read_5fafwa_5fmask',['read_afwa_mask',['../namespacesnowdat.html#a328b01fb9013c27f0093d416f21ab47e',1,'snowdat']]],
   ['read_5fconfig_5fnml',['read_config_nml',['../namespaceprogram__setup.html#a40111d93a5e305839de5e43e78183273',1,'program_setup']]],

@@ -25,6 +25,7 @@ var NAVTREE =
 [
   [ "vcoord_gen", "index.html", [
     [ "Introduction", "index.html#autotoc_md1", null ],
+    [ "README", "md__lfs_h2_emc_global_noscrub_George_8Gayno_ufs_utils_8git_UFS_UTILS_sorc_vcoord_gen_8fd_docs_README.html", null ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "Globals", "globals.html", [

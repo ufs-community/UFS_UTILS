@@ -1,8 +1,8 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/gblevents.fd/gblevents.f" 3 "Mon Apr 17 2023" "Version 1.10.0" "gblevents" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/gblevents.fd/gblevents.f" 3 "Mon Oct 23 2023" "Version 1.11.0" "gblevents" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/gblevents.fd/gblevents.f \- Pre/Post processing of of prepbufr events\&.  
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/gblevents.fd/gblevents.f \- Pre/Post processing of of prepbufr events\&.  
 
 .SH SYNOPSIS
 .br
@@ -371,7 +371,7 @@ REMARKS: WILL IMMEDIATELY RETURN TO CALLING PROGRAM IF ANY OF THE FOLLOWING COND
 .PP
 ATTRIBUTES: LANGUAGE: FORTRAN 90 MACHINE: NCEP WCOSS 
 .PP
-Definition at line 2207 of file gblevents\&.f\&.
+Definition at line 2208 of file gblevents\&.f\&.
 .SS "subroutine GBLEVN10 (integer, dimension(2) IUNITF, integer IDATEP, integer IM, integer JM, integer IDRT)"
 
 .PP
@@ -401,7 +401,7 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 2479 of file gblevents\&.f\&.
+Definition at line 2480 of file gblevents\&.f\&.
 .PP
 References gblevn11()\&.
 .SS "subroutine gblevn11 (integer imax, integer jmax, real, dimension(imax,jmax) grid)"
@@ -409,7 +409,7 @@ References gblevn11()\&.
 .PP
 North-south swap\&. 
 .PP
-Definition at line 2928 of file gblevents\&.f\&.
+Definition at line 2929 of file gblevents\&.f\&.
 .PP
 Referenced by GBLEVN10()\&.
 .SS "subroutine gblevn11d (integer imax, integer jmax, real(kind=8), dimension(imax,jmax) grid)"
@@ -417,7 +417,7 @@ Referenced by GBLEVN10()\&.
 .PP
 Does something\&. 
 .PP
-Definition at line 2948 of file gblevents\&.f\&.
+Definition at line 2949 of file gblevents\&.f\&.
 .PP
 Referenced by GBLEVN12(), and GBLEVN13()\&.
 .SS "subroutine GBLEVN12 (integer, dimension(2) IUNITF, integer IDATEP, integer IM, integer JM, integer IDRT)"
@@ -458,7 +458,7 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 2998 of file gblevents\&.f\&.
+Definition at line 2999 of file gblevents\&.f\&.
 .PP
 References gblevn11d(), and getlats()\&.
 .SS "subroutine GBLEVN13 (integer, dimension(2) IUNITF, integer IDATEP, integer IMX, integer JMX, integer IDRT)"
@@ -491,7 +491,7 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 3414 of file gblevents\&.f\&.
+Definition at line 3415 of file gblevents\&.f\&.
 .PP
 References gblevn11d(), and getlats()\&.
 .SS "subroutine getlats ( idrt)"
@@ -506,7 +506,7 @@ get latitudes
 .PP
 
 .PP
-Definition at line 3752 of file gblevents\&.f\&.
+Definition at line 3753 of file gblevents\&.f\&.
 .PP
 Referenced by GBLEVN12(), and GBLEVN13()\&.
 .SS "function OEFG01 ( P,  TYP,  IE,  OEMIN)"
@@ -537,15 +537,20 @@ PRECIPITABLE WATER)
 .br
 \fIOEMIN\fP - REAL MINIMUM VALUE FOR OBS ERROR (FOR VARIABLE BEING
 .IP "\(bu" 2
-INTERPOLATED)
+INTERPOLATED) 
 .PP
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+OEFG01 OBSERVATION ERROR
 .RE
 .PP
 REMARKS: 'OEFG01' RETURNED IS OBSERVATION ERROR FOR VARIABLE 'IE' IN REPORT TYPE 'TYP', INTERPOLATED TO PRESSURE LEVEL 'P'\&.
 .PP
 ATTRIBUTES: LANGUAGE: FORTRAN 90 MACHINE: NCEP WCOSS 
 .PP
-Definition at line 2060 of file gblevents\&.f\&.
+Definition at line 2061 of file gblevents\&.f\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for gblevents from the source code\&.

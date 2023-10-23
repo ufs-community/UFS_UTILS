@@ -1,4 +1,4 @@
-.TH "module_nwp" 3 "Mon Apr 17 2023" "Version 1.10.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_nwp" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -88,7 +88,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 426 of file module_nwp\&.f90\&.
+Definition at line 440 of file module_nwp\&.f90\&.
 .SS "subroutine module_nwp::get_time_ind_nwp (class(\fBfcst_nwp\fP) this, character(len=*), intent(in) filename, character(len=*), intent(in) instr, integer, intent(out) outindex)\fC [private]\fP"
 
 .PP
@@ -112,7 +112,7 @@ David Wright, University of Michigan and GLERL
 .PP
 
 .PP
-Definition at line 474 of file module_nwp\&.f90\&.
+Definition at line 488 of file module_nwp\&.f90\&.
 .PP
 References ncdata\&.
 .SS "subroutine module_nwp::initial_nwp (class(\fBfcst_nwp\fP) this, character(len=6), intent(in) itype, character(len=4), intent(in) wcstart)\fC [private]\fP"
@@ -155,7 +155,7 @@ David Wright, University of Michigan and GLERL
 
 .PP
 Definition at line 215 of file module_nwp\&.f90\&.
-.SS "subroutine module_nwp::read_nwp (class(\fBfcst_nwp\fP) this, character(len=*), intent(in) filename, character(len=6), intent(in) itype, character(len=4), intent(in) wcstart, integer, intent(inout) numlon, integer, intent(inout) numlat, integer, intent(inout) numtimes, integer, intent(in) time_to_get, real(r_kind), dimension(:,:), intent(inout) mask, real(r_kind), dimension(:,:), intent(inout) sst, real(r_kind), dimension(:,:), intent(inout) ice, real(r_kind), dimension(:,:), intent(inout) sfcT, real(r_kind), dimension(:,:), intent(inout) iceT, real(r_kind), dimension(:,:), intent(inout) sfcTl, real(r_kind), dimension(:,:), intent(inout) zorl, real(r_kind), dimension(:,:), intent(inout) hice, integer, intent(in) ybegin, integer, intent(in) yend)\fC [private]\fP"
+.SS "subroutine module_nwp::read_nwp (class(\fBfcst_nwp\fP) this, character(len=*), intent(in) filename, character(len=6), intent(in) itype, character(len=4), intent(in) wcstart, integer, intent(inout) numlon, integer, intent(inout) numlat, integer, intent(inout) numtimes, integer, intent(in) time_to_get, real(r_single), dimension(:,:), intent(inout) mask, real(r_single), dimension(:,:), intent(inout) sst, real(r_single), dimension(:,:), intent(inout) ice, real(r_single), dimension(:,:), intent(inout) sfcT, real(r_single), dimension(:,:), intent(inout) iceT, real(r_single), dimension(:,:), intent(inout) sfcTl, real(r_single), dimension(:,:), intent(inout) zorl, real(r_single), dimension(:,:), intent(inout) hice, integer, intent(in) ybegin, integer, intent(in) yend)\fC [private]\fP"
 
 .PP
 This subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. 

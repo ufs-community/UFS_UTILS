@@ -1,8 +1,8 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/module_ncio.f90" 3 "Mon Apr 17 2023" "Version 1.10.0" "fvcom_tools" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/module_ncio.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/module_ncio.f90 \- Functions to read and write netcdf files\&.  
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/module_ncio.f90 \- Functions to read and write netcdf files\&.  
 
 .SH SYNOPSIS
 .br
@@ -26,11 +26,11 @@
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBmodule_ncio::add_new_var_2d\fP (this, varname, dname1, dname2, lname, units)"
+.RI "subroutine \fBmodule_ncio::add_new_var_2d\fP (this, varname, dname1, dname2, lname, units, dtype)"
 .br
 .RI "Add a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&. "
 .ti -1c
-.RI "subroutine \fBmodule_ncio::add_new_var_3d\fP (this, varname, dname1, dname2, dname3, lname, units)"
+.RI "subroutine \fBmodule_ncio::add_new_var_3d\fP (this, varname, dname1, dname2, dname3, lname, units, dtype)"
 .br
 .RI "Add a new variable to sfc_data\&.nc with dimensions (Time, yaxis_1, xaxis_1)\&. "
 .ti -1c

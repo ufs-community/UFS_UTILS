@@ -1,8 +1,8 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/read_write_data.f90" 3 "Mon Apr 17 2023" "Version 1.10.0" "global_cycle" \" -*- nroff -*-
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/global_cycle.fd/read_write_data.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/read_write_data.f90 \- Contains utility routines that read and write data\&.  
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/global_cycle.fd/read_write_data.f90 \- Contains utility routines that read and write data\&.  
 
 .SH SYNOPSIS
 .br
@@ -85,6 +85,10 @@
 .RI "integer, public \fBREAD_WRITE_DATA::jdim_gaus\fP"
 .br
 .RI "'j' dimension of GSI gaussian grid\&. "
+.ti -1c
+.RI "real, dimension(:,:,:), allocatable, public \fBREAD_WRITE_DATA::slc_inc_gaus\fP"
+.br
+.RI "GSI soil moisture increments on the gaussian grid\&. "
 .ti -1c
 .RI "integer, dimension(:,:), allocatable, public \fBREAD_WRITE_DATA::slmsk_gaus\fP"
 .br

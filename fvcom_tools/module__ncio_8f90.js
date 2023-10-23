@@ -1,8 +1,8 @@
 var module__ncio_8f90 =
 [
     [ "ncio", "structmodule__ncio_1_1ncio.html", "structmodule__ncio_1_1ncio" ],
-    [ "add_new_var_2d", "module__ncio_8f90.html#adc7a72cbb289615f38c41d1f80cc9133", null ],
-    [ "add_new_var_3d", "module__ncio_8f90.html#a2e91a5bae5bae5e63dded42effc7fc58", null ],
+    [ "add_new_var_2d", "module__ncio_8f90.html#a3a5af221792e9c4677e778f995b4c673", null ],
+    [ "add_new_var_3d", "module__ncio_8f90.html#afcf167057aef272b73e9ee7136930e51", null ],
     [ "close_nc", "module__ncio_8f90.html#a61ba2044f4a26a3fee7c6f7e25b4d4c3", null ],
     [ "convert_theta2t_2dgrid", "module__ncio_8f90.html#ab234b47224611d258c57578d613a1d2b", null ],
     [ "get_att_nc_int", "module__ncio_8f90.html#a0a31d1f98726c06ae2c74053df76e1be", null ],

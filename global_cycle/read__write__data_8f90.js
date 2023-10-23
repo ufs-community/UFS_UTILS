@@ -35,6 +35,7 @@ var read__write__data_8f90 =
     [ "dtref_gaus", "read__write__data_8f90.html#ada53dd5f6510915e42079c455ee73717", null ],
     [ "idim_gaus", "read__write__data_8f90.html#aeef3c8ca06080d8ea05f6fa5cc6a2e30", null ],
     [ "jdim_gaus", "read__write__data_8f90.html#a2a92699263a01b953ef2fb20954ad8cb", null ],
+    [ "slc_inc_gaus", "read__write__data_8f90.html#a6fed39a47ad6d32c84fe41028254d568", null ],
     [ "slmsk_gaus", "read__write__data_8f90.html#a568effba064bf165405b8df3844c37d9", null ],
     [ "soilsnow_gaus", "read__write__data_8f90.html#adf8fb6840c516a88d722b08d26f24d2f", null ],
     [ "stc_inc_gaus", "read__write__data_8f90.html#a4fb55178311fe11bc8ad04847050ef03", null ]

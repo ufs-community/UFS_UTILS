@@ -1,4 +1,4 @@
-.TH "module_ncio" 3 "Mon Apr 17 2023" "Version 1.10.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_ncio" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,11 +18,11 @@ module_ncio \- Functions to read and write netcdf files\&.
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBadd_new_var_2d\fP (this, varname, dname1, dname2, lname, units)"
+.RI "subroutine \fBadd_new_var_2d\fP (this, varname, dname1, dname2, lname, units, dtype)"
 .br
 .RI "Add a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&. "
 .ti -1c
-.RI "subroutine \fBadd_new_var_3d\fP (this, varname, dname1, dname2, dname3, lname, units)"
+.RI "subroutine \fBadd_new_var_3d\fP (this, varname, dname1, dname2, dname3, lname, units, dtype)"
 .br
 .RI "Add a new variable to sfc_data\&.nc with dimensions (Time, yaxis_1, xaxis_1)\&. "
 .ti -1c
@@ -217,7 +217,7 @@ Ming Hu
 
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine module_ncio::add_new_var_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, character(len=*), intent(in) dname1, character(len=*), intent(in) dname2, character(len=*), intent(in) lname, character(len=*), intent(in) units)\fC [private]\fP"
+.SS "subroutine module_ncio::add_new_var_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, character(len=*), intent(in) dname1, character(len=*), intent(in) dname2, character(len=*), intent(in) lname, character(len=*), intent(in) units, character(len=*), intent(in) dtype)\fC [private]\fP"
 
 .PP
 Add a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&. 
@@ -234,7 +234,9 @@ Add a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&.
 .br
 \fIlname\fP long name output for netcdf variable 
 .br
-\fIunits\fP units to use in netcdf variable
+\fIunits\fP units to use in netcdf variable 
+.br
+\fIdtype\fP data type of netcdf variable
 .RE
 .PP
 \fBAuthor:\fP
@@ -249,10 +251,10 @@ David\&.M\&.Wright org: UM/GLERL
 .PP
 
 .PP
-Definition at line 2561 of file module_ncio\&.f90\&.
+Definition at line 2575 of file module_ncio\&.f90\&.
 .PP
 Referenced by module_ncio::ncio::add_new_var()\&.
-.SS "subroutine module_ncio::add_new_var_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, character(len=*), intent(in) dname1, character(len=*), intent(in) dname2, character(len=*), intent(in) dname3, character(len=*), intent(in) lname, character(len=*), intent(in) units)\fC [private]\fP"
+.SS "subroutine module_ncio::add_new_var_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, character(len=*), intent(in) dname1, character(len=*), intent(in) dname2, character(len=*), intent(in) dname3, character(len=*), intent(in) lname, character(len=*), intent(in) units, character(len=*), intent(in) dtype)\fC [private]\fP"
 
 .PP
 Add a new variable to sfc_data\&.nc with dimensions (Time, yaxis_1, xaxis_1)\&. 
@@ -271,7 +273,9 @@ Add a new variable to sfc_data\&.nc with dimensions (Time, yaxis_1, xaxis_1)\&.
 .br
 \fIlname\fP long name output for netcdf variable 
 .br
-\fIunits\fP units to use in netcdf variable
+\fIunits\fP units to use in netcdf variable 
+.br
+\fIdtype\fP date type of netcdf variable
 .RE
 .PP
 \fBAuthor:\fP
@@ -286,7 +290,7 @@ David\&.M\&.Wright org: UM/GLERL
 .PP
 
 .PP
-Definition at line 2517 of file module_ncio\&.f90\&.
+Definition at line 2518 of file module_ncio\&.f90\&.
 .PP
 Referenced by module_ncio::ncio::add_new_var()\&.
 .SS "subroutine module_ncio::close_nc (class(\fBncio\fP) this)\fC [private]\fP"

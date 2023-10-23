@@ -1,9 +1,9 @@
 var indexSectionsWithContent =
 {
-  0: "dlmv",
+  0: "dlmrv",
   1: "dmv",
   2: "dlv",
-  3: "v"
+  3: "rv"
 };
 
 var indexSectionNames =
