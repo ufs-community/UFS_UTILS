@@ -1,0 +1,65 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/enclosure_cnvx.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/enclosure_cnvx.F90 \- Test whether a point is inside a spherical convex polygon\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "logical function \fBenclosure_cnvx\fP (v, n, p, co_gc)"
+.br
+.RI "Test whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Test whether a point is inside a spherical convex polygon\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+N Wang 
+.RE
+.PP
+
+.PP
+Definition in file \fBenclosure_cnvx\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "logical function enclosure_cnvx (real*8, dimension(2,n), intent(in) v, integer, intent(in) n, real*8, dimension(2), intent(in) p, integer, intent(out) co_gc)"
+
+.PP
+Test whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices\&. Both the test point and the polygon are specified in latitude and longitude radians\&. It is assumed that a side of a spherical polygon is a great-circle arc that connects 2 adjacent vertices of the polygon\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP set of vertices 
+.br
+\fIn\fP number of vertices in v 
+.br
+\fIp\fP point to test 
+.br
+\fIco_gc\fP 'i' if \fCp\fP is on or within epsilon to side 'i' of the given spherical polygon, or 0 if point is not on any side of the given polygon\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+enclosure_cnvx whether the point is inside the polygon
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+N Wang 
+.RE
+.PP
+
+.PP
+Definition at line 50 of file enclosure_cnvx\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.

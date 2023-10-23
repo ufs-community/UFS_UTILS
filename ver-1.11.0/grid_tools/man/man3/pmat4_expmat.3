@@ -1,0 +1,119 @@
+.TH "pmat4::expmat" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::expmat
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBexpmat\fP (n, a, b, detb)"
+.br
+.RI "Evaluate the exponential, B, of a matrix, A, of degree n\&. "
+.ti -1c
+.RI "subroutine \fBexpmatd\fP (n, a, b, bd, detb, detbd)"
+.br
+.RI "Like expmat, but for the 1st derivatives also\&. "
+.ti -1c
+.RI "subroutine \fBexpmatdd\fP (n, a, b, bd, bdd, detb, detbd, detbdd)"
+.br
+.RI "Like expmat, but for the 1st and 2nd derivatives also\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 102 of file pmat4\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat4::expmat::expmat (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), intent(out) detb)\fC [private]\fP"
+
+.PP
+Evaluate the exponential, B, of a matrix, A, of degree n\&. Apply the iterated squaring method, m times, to the approximation to exp(A/(2**m)) obtained as a Taylor expansion of degree L See Fung, T\&. C\&., 2004, Int\&. J\&. Numer\&. Meth\&. Engng, 59, 1273--1286\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP order of square matrix A 
+.br
+\fIa\fP input matrix A 
+.br
+\fIb\fP matrix B, the exponential of matrix A 
+.br
+\fIdetb\fP determinant of matrix B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1729 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat4::expmat::expmatd (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), dimension(n,n,(n*(n+1))/2), intent(out) bd, real(dp), intent(out) detb, real(dp), dimension((n*(n+1))/2), intent(out) detbd)\fC [private]\fP"
+
+.PP
+Like expmat, but for the 1st derivatives also\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP order of square matrix A 
+.br
+\fIa\fP input matrix A 
+.br
+\fIb\fP matrix B, the exponential of matrix A 
+.br
+\fIbd\fP derivative of B wrt elements of A 
+.br
+\fIdetb\fP determinant of matrix B 
+.br
+\fIdetbd\fP derivative of detb wrt elements of A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1767 of file pmat4\&.f90\&.
+.SS "subroutine pmat4::expmat::expmatdd (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), dimension(n,n,(n*(n+1))/2), intent(out) bd, real(dp), dimension(n,n,(n*(n+1))/2,(n*(n+1))/2), intent(out) bdd, real(dp), intent(out) detb, real(dp), dimension((n*(n+1))/2), intent(out) detbd, real(dp), dimension((n*(n+1))/2,(n*(n+1))/2), intent(out) detbdd)\fC [private]\fP"
+
+.PP
+Like expmat, but for the 1st and 2nd derivatives also\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP order of the matrix A 
+.br
+\fIa\fP input matrix A 
+.br
+\fIb\fP matrix B, exponential of matrix A 
+.br
+\fIbd\fP derivative of B wrt elements of A 
+.br
+\fIbdd\fP 2nd derivative of B wrt elements of A 
+.br
+\fIdetb\fP determinant of matrix B 
+.br
+\fIdetbd\fP derivative of detb wrt elements of A 
+.br
+\fIdetbdd\fP 2nd derivative of detb wrt elements of A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1834 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

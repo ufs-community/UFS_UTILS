@@ -1,0 +1,87 @@
+.TH "pesg::xmtoxt" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::xmtoxt
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBxmtoxt\fP (a, xm, xt, xtd, ff)"
+.br
+.RI "Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd\&. "
+.ti -1c
+.RI "subroutine \fBxmtoxt1\fP (a, xm, xt, xtd, xt1, xtd1, ff)"
+.br
+.RI "Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, the derivatives, wrt a, of these quantities\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 31 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::xmtoxt::xmtoxt (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xm, real(dp), dimension(2), intent(out) xt, real(dp), dimension(2,2), intent(out) xtd, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Mapping parameter controlling grid line spacing profile 
+.br
+\fIxm\fP Vector value of map coordinates 
+.br
+\fIxt\fP Vector value of gnomonic plane coordinates 
+.br
+\fIxtd\fP 2*2 diagonal Jacobian, d(xt)/d(xm) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 254 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::xmtoxt::xmtoxt1 (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xm, real(dp), dimension(2), intent(out) xt, real(dp), dimension(2,2), intent(out) xtd, real(dp), dimension(2), intent(out) xt1, real(dp), dimension(2,2), intent(out) xtd1, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, the derivatives, wrt a, of these quantities\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Mapping parameter controlling grid line spacing profile 
+.br
+\fIxm\fP Vector value of map plane coordinates 
+.br
+\fIxt\fP Vector value of gnomonic plane coordinates 
+.br
+\fIxtd\fP 2*2 diagonal Jacobian, d(xt)/d(xm) 
+.br
+\fIxt1\fP Derivative wrt a of xt, d(xt)/da 
+.br
+\fIxtd1\fP Derivative wrt a of Jacobian xtd, d^2(xt)/(d(xm)da) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 276 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

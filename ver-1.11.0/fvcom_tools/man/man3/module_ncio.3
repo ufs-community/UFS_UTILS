@@ -1,0 +1,1637 @@
+.TH "module_ncio" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_ncio \- Functions to read and write netcdf files\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "type \fBncio\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBadd_new_var_2d\fP (this, varname, dname1, dname2, lname, units, dtype)"
+.br
+.RI "Add a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&. "
+.ti -1c
+.RI "subroutine \fBadd_new_var_3d\fP (this, varname, dname1, dname2, dname3, lname, units, dtype)"
+.br
+.RI "Add a new variable to sfc_data\&.nc with dimensions (Time, yaxis_1, xaxis_1)\&. "
+.ti -1c
+.RI "subroutine \fBclose_nc\fP (this)"
+.br
+.RI "Close a netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBconvert_theta2t_2dgrid\fP (this, nx, ny, ps, t2)"
+.br
+.RI "Convert theta T (Kelvin) to T (deg C)\&. "
+.ti -1c
+.RI "subroutine \fBget_att_nc_int\fP (this, attname, ival)"
+.br
+.RI "Get integer attribute in wrf netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBget_att_nc_real\fP (this, attname, rval)"
+.br
+.RI "Get attribute in wrf netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBget_att_nc_string\fP (this, attname, string)"
+.br
+.RI "Get string attribute in wrf netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBget_dim_nc\fP (this, dimname, dimvalue)"
+.br
+.RI "Get dimensions in netcdf file\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_char\fP (this, varname, ilength, field)"
+.br
+.RI "Read in character type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_char_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_char_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_char_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Read in 3D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_double\fP (this, varname, ilength, field)"
+.br
+.RI "Read in double type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_double_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_double_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_double_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Read in 3D double type field\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_int\fP (this, varname, ilength, field)"
+.br
+.RI "Read in integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_int_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D integer variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_int_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_int_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Read in 3D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_real\fP (this, varname, ilength, field)"
+.br
+.RI "Read in real type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_real_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_real_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_real_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Read in 3D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_short\fP (this, varname, ilength, field)"
+.br
+.RI "Read in short type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_short_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Read in 1D short type variable\&. "
+.ti -1c
+.RI "subroutine \fBget_var_nc_short_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Read in 2D short type variable\&. "
+.ti -1c
+.RI "subroutine \fBhandle_err\fP (this, status)"
+.br
+.RI "Handle netCDF errors\&. "
+.ti -1c
+.RI "subroutine \fBopen_nc\fP (this, filename, action, debug_level)"
+.br
+.RI "Open a netcdf file, set initial debug level\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_char\fP (this, varname, ilength, field)"
+.br
+.RI "Replace character type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_char_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Replace 1D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_char_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Replace 2D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_char_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Replace 3D character type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_double\fP (this, varname, ilength, field)"
+.br
+.RI "Replace double type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_double_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Replace 1D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_double_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Replace 2D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_double_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Replace 3D double type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_int\fP (this, varname, ilength, field)"
+.br
+.RI "Replace integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_int_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Replace 1D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_int_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Replace 2D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_int_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Replace 3D integer type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_real\fP (this, varname, ilength, field)"
+.br
+.RI "Replace real type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_real_1d\fP (this, varname, nd1, field)"
+.br
+.RI "Replace 1D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_real_2d\fP (this, varname, nd1, nd2, field)"
+.br
+.RI "Replace 2D real type variable\&. "
+.ti -1c
+.RI "subroutine \fBreplace_var_nc_real_3d\fP (this, varname, nd1, nd2, nd3, field)"
+.br
+.RI "Replace 3D real type variable\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functions to read and write netcdf files\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine module_ncio::add_new_var_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, character(len=*), intent(in) dname1, character(len=*), intent(in) dname2, character(len=*), intent(in) lname, character(len=*), intent(in) units, character(len=*), intent(in) dtype)\fC [private]\fP"
+
+.PP
+Add a new variable to sfc_data\&.nc with dimensions (yaxis_1, xaxis_1)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP Name of variable to be created in netcdf file 
+.br
+\fIdname1\fP 1st dimension name 
+.br
+\fIdname2\fP 2nd dimension name 
+.br
+\fIlname\fP long name output for netcdf variable 
+.br
+\fIunits\fP units to use in netcdf variable 
+.br
+\fIdtype\fP data type of netcdf variable
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David\&.M\&.Wright org: UM/GLERL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2021-10-07 
+.RE
+.PP
+
+.PP
+Definition at line 2575 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::add_new_var()\&.
+.SS "subroutine module_ncio::add_new_var_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, character(len=*), intent(in) dname1, character(len=*), intent(in) dname2, character(len=*), intent(in) dname3, character(len=*), intent(in) lname, character(len=*), intent(in) units, character(len=*), intent(in) dtype)\fC [private]\fP"
+
+.PP
+Add a new variable to sfc_data\&.nc with dimensions (Time, yaxis_1, xaxis_1)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP Name of variable to be created in netcdf file 
+.br
+\fIdname1\fP 1st dimension name 
+.br
+\fIdname2\fP 2nd dimension name 
+.br
+\fIdname3\fP 3rd dimension name 
+.br
+\fIlname\fP long name output for netcdf variable 
+.br
+\fIunits\fP units to use in netcdf variable 
+.br
+\fIdtype\fP date type of netcdf variable
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+David\&.M\&.Wright org: UM/GLERL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2020-09-01 
+.RE
+.PP
+
+.PP
+Definition at line 2518 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::add_new_var()\&.
+.SS "subroutine module_ncio::close_nc (class(\fBncio\fP) this)\fC [private]\fP"
+
+.PP
+Close a netcdf file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-04-10 
+.RE
+.PP
+
+.PP
+Definition at line 141 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::convert_theta2t_2dgrid (class(\fBncio\fP) this, integer nx, integer ny, real, dimension(nx,ny), intent(in) ps, real, dimension(nx,ny), intent(inout) t2)"
+
+.PP
+Convert theta T (Kelvin) to T (deg C)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fInx\fP number of grid points in x-dir 
+.br
+\fIny\fP number of grid points in y-dir 
+.br
+\fIps\fP Pressure (Pa) 
+.br
+\fIt2\fP Pot\&. Temperature (Kelvin) 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2481 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::get_att_nc_int (class(\fBncio\fP) this, character(len=*), intent(in) attname, integer, intent(out) ival)\fC [private]\fP"
+
+.PP
+Get integer attribute in wrf netcdf file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIattname\fP name of the attribute to get 
+.br
+\fIival\fP value of attribute\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-10-04 
+.RE
+.PP
+
+.PP
+Definition at line 187 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_att()\&.
+.SS "subroutine module_ncio::get_att_nc_real (class(\fBncio\fP) this, character(len=*), intent(in) attname, real, intent(out) rval)\fC [private]\fP"
+
+.PP
+Get attribute in wrf netcdf file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIattname\fP name of the attribute to get 
+.br
+\fIrval\fP return value 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-10-04 
+.RE
+.PP
+
+.PP
+Definition at line 163 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_att()\&.
+.SS "subroutine module_ncio::get_att_nc_string (class(\fBncio\fP) this, character(len=*), intent(in) attname, character(len=*), intent(out) string)\fC [private]\fP"
+
+.PP
+Get string attribute in wrf netcdf file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIattname\fP name of the attribute to get 
+.br
+\fIstring\fP value of attribute\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-10-04 
+.RE
+.PP
+
+.PP
+Definition at line 211 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_att()\&.
+.SS "subroutine module_ncio::get_dim_nc (class(\fBncio\fP) this, character(len=*), intent(in) dimname, integer, intent(out) dimvalue)\fC [private]\fP"
+
+.PP
+Get dimensions in netcdf file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIdimname\fP name of the dimension 
+.br
+\fIdimvalue\fP length of the dimension 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 236 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::get_var_nc_char (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, character, dimension(ilength), intent(out) field)"
+
+.PP
+Read in character type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP size of array 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2354 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::get_var_nc_char_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, character, dimension(nd1), intent(out) field)"
+
+.PP
+Read in 1D character type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2210 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_char_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, character, dimension(nd1,nd2), intent(out) field)"
+
+.PP
+Read in 2D character type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2248 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_char_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, intent(in) nd3, character, dimension(nd1,nd2,nd3), intent(out) field)"
+
+.PP
+Read in 3D character type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fInd3\fP length of third dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2300 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_double (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, real(8), dimension(ilength), intent(out) field)"
+
+.PP
+Read in double type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP size of array 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1390 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::get_var_nc_double_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, real(8), dimension(nd1), intent(out) field)"
+
+.PP
+Read in 1D double type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP lenth of first dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1244 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_double_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, real(8), dimension(nd1,nd2), intent(out) field)"
+
+.PP
+Read in 2D double type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1282 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_double_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, intent(in) nd3, real(8), dimension(nd1,nd2,nd3), intent(out) field)"
+
+.PP
+Read in 3D double type field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fInd3\fP length of third dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1334 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_int (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, integer, dimension(ilength), intent(out) field)"
+
+.PP
+Read in integer type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP size of array 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1904 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::get_var_nc_int_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, dimension(nd1), intent(out) field)"
+
+.PP
+Read in 1D integer variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1755 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_int_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, dimension(nd1,nd2), intent(out) field)"
+
+.PP
+Read in 2D integer type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1793 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_int_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, intent(in) nd3, integer, dimension(nd1,nd2,nd3), intent(out) field)"
+
+.PP
+Read in 3D integer type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fInd3\fP length of third dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1848 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_real (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, real(4), dimension(ilength), intent(out) field)"
+
+.PP
+Read in real type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP size of array 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1646 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::get_var_nc_real_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, real(4), dimension(nd1), intent(out) field)"
+
+.PP
+Read in 1D real type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1497 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_real_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, real(4), dimension(nd1,nd2), intent(out) field)"
+
+.PP
+Read in 2D real type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1535 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_real_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, intent(in) nd3, real(4), dimension(nd1,nd2,nd3), intent(out) field)"
+
+.PP
+Read in 3D real type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fInd3\fP length of third dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1590 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_short (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, integer(2), dimension(ilength), intent(out) field)"
+
+.PP
+Read in short type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP size of array 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2104 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::get_var_nc_short_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer(2), dimension(nd1), intent(out) field)"
+
+.PP
+Read in 1D short type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2013 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::get_var_nc_short_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer(2), dimension(nd1,nd2), intent(out) field)"
+
+.PP
+Read in 2D short type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP output variable 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2051 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::get_var()\&.
+.SS "subroutine module_ncio::handle_err (class(\fBncio\fP) this, integer, intent(in) status)"
+
+.PP
+Handle netCDF errors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIstatus\fP return code from neCDF 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 2461 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::open_nc (class(\fBncio\fP) this, character(len=*), intent(in) filename, character(len=1), intent(in) action, integer, intent(in), optional debug_level)\fC [private]\fP"
+
+.PP
+Open a netcdf file, set initial debug level\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIfilename\fP the file to open 
+.br
+\fIaction\fP 'r' for read, 'w' for write 
+.br
+\fIdebug_level\fP set to non-zero for some verbose output 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 104 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::replace_var_nc_char (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, character, dimension(ilength), intent(in) field)"
+
+.PP
+Replace character type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP length of array 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 398 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::replace_var_nc_char_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, character, dimension(nd1), intent(in) field)\fC [private]\fP"
+
+.PP
+Replace 1D character type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 264 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_char_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, character, dimension(nd1,nd2), intent(in) field)"
+
+.PP
+Replace 2D character type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 300 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_char_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, intent(in) nd3, character, dimension(nd1,nd2,nd3), intent(in) field)"
+
+.PP
+Replace 3D character type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fInd3\fP length of third dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 348 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_double (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, real(8), dimension(ilength), intent(in) field)"
+
+.PP
+Replace double type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP size of array 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 894 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::replace_var_nc_double_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, real(8), dimension(nd1), intent(in) field)"
+
+.PP
+Replace 1D double type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 749 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_double_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, real(8), dimension(nd1,nd2), intent(in) field)"
+
+.PP
+Replace 2D double type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 787 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_double_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, intent(in) nd3, real(8), dimension(nd1,nd2,nd3), intent(in) field)"
+
+.PP
+Replace 3D double type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fInd3\fP length of third dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 838 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_int (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, integer, dimension(ilength), intent(in) field)"
+
+.PP
+Replace integer type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP size of array 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1138 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::replace_var_nc_int_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, dimension(nd1), intent(in) field)"
+
+.PP
+Replace 1D integer type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP lenth of first dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1000 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_int_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, dimension(nd1,nd2), intent(in) field)"
+
+.PP
+Replace 2D integer type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1035 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_int_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, intent(in) nd3, integer, dimension(nd1,nd2,nd3), intent(in) field)"
+
+.PP
+Replace 3D integer type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fInd3\fP length of third dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 1086 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_real (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) ilength, real(4), dimension(ilength), intent(in) field)"
+
+.PP
+Replace real type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fIilength\fP length of array 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 643 of file module_ncio\&.f90\&.
+.SS "subroutine module_ncio::replace_var_nc_real_1d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, real(4), dimension(nd1), intent(in) field)"
+
+.PP
+Replace 1D real type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 505 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_real_2d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, real(4), dimension(nd1,nd2), intent(in) field)"
+
+.PP
+Replace 2D real type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 540 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SS "subroutine module_ncio::replace_var_nc_real_3d (class(\fBncio\fP) this, character(len=*), intent(in) varname, integer, intent(in) nd1, integer, intent(in) nd2, integer, intent(in) nd3, real(4), dimension(nd1,nd2,nd3), intent(in) field)"
+
+.PP
+Replace 3D real type variable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIthis\fP instance of an ncio class 
+.br
+\fIvarname\fP name of the variable 
+.br
+\fInd1\fP length of first dimension 
+.br
+\fInd2\fP length of second dimension 
+.br
+\fInd3\fP length of third dimension 
+.br
+\fIfield\fP replacement field 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ming Hu org: GSD/AMB 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017-11-01 
+.RE
+.PP
+
+.PP
+Definition at line 588 of file module_ncio\&.f90\&.
+.PP
+Referenced by module_ncio::ncio::replace_var()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.

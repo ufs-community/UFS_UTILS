@@ -1,0 +1,189 @@
+.TH "pmat4::gram" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::gram
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgram_d\fP (as, b, nrank, \fBdet\fP)"
+.br
+.RI "Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. "
+.ti -1c
+.RI "subroutine \fBgram_s\fP (as, b, nrank, \fBdet\fP)"
+.br
+.RI "Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. "
+.ti -1c
+.RI "subroutine \fBgraml_d\fP (as, b, nrank, detsign, ldet)"
+.br
+.RI "A version of gram_d where the determinant information is returned in logarithmic form (to avoid overflows for large matrices)\&. "
+.ti -1c
+.RI "subroutine \fBplaingram_d\fP (b, nrank)"
+.br
+.RI "A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. "
+.ti -1c
+.RI "subroutine \fBplaingram_s\fP (b, nrank)"
+.br
+.RI "A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. "
+.ti -1c
+.RI "subroutine \fBrowgram\fP (m, n, a, ipiv, tt, b, rank)"
+.br
+.RI "Without changing (tall) rectangular input matrix a, perform pivoted gram- Schmidt operations to orthogonalize the rows, until rows that remain become negligible\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 87 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat4::gram::gram_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(dp), intent(out) det)\fC [private]\fP"
+
+.PP
+Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. The number of columns returned is the rank, nrank, of A, and the determinant of the projection of A into the subspace of B is returned as det\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIas\fP given matrix A 
+.br
+\fIb\fP matrix B containing nrank orthonormal column vectors 
+.br
+\fInrank\fP rank of A 
+.br
+\fIdet\fP determinant of projection of A into subspace of B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1078 of file pmat4\&.f90\&.
+.SS "subroutine pmat4::gram::gram_s (real(sp), dimension(:,:), intent(in) as, real(sp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(sp), intent(out) det)\fC [private]\fP"
+
+.PP
+Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. The number of columns returned is the rank, nrank, of A, and the determinant of the projection of A into the subspace of B is returned as det\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIas\fP given matrix A 
+.br
+\fIb\fP matrix B containing nrank orthonormal column vectors 
+.br
+\fInrank\fP rank of A 
+.br
+\fIdet\fP determinant of projection of A into subspace of B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1007 of file pmat4\&.f90\&.
+.SS "subroutine pmat4::gram::graml_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, integer(spi), intent(out) detsign, real(dp), intent(out) ldet)\fC [private]\fP"
+
+.PP
+A version of gram_d where the determinant information is returned in logarithmic form (to avoid overflows for large matrices)\&. When the matrix is singular, the 'sign' of the determinant, detsign, is returned as zero (instead of either +1 or -1) and ldet is then just the log of the nonzero factors found by the process\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIas\fP given matrix A 
+.br
+\fIb\fP matrix B of orthonormal columns 
+.br
+\fInrank\fP rank of A 
+.br
+\fIdetsign\fP sign of determinant 
+.br
+\fIldet\fP logarithm of absolute value of determinant 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1150 of file pmat4\&.f90\&.
+.SS "subroutine pmat4::gram::plaingram_d (real(dp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)\fC [private]\fP"
+
+.PP
+A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP input as given matrix, output as orthogonalized vectors 
+.br
+\fInrank\fP effective rank of given matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1263 of file pmat4\&.f90\&.
+.SS "subroutine pmat4::gram::plaingram_s (real(sp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)\fC [private]\fP"
+
+.PP
+A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP input as given matrix, output as orthogonalized vectors 
+.br
+\fInrank\fP effective rank of given matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1227 of file pmat4\&.f90\&.
+.SS "subroutine pmat4::gram::rowgram (integer(spi), intent(in) m, integer(spi), intent(in) n, real(dp), dimension(m,n), intent(in) a, integer(spi), dimension(n), intent(out) ipiv, real(dp), dimension(m,n), intent(out) tt, real(dp), dimension(n,n), intent(out) b, integer(spi), intent(out) rank)\fC [private]\fP"
+
+.PP
+Without changing (tall) rectangular input matrix a, perform pivoted gram- Schmidt operations to orthogonalize the rows, until rows that remain become negligible\&. Record the pivoting sequence in ipiv, and the row-normalization in tt(j,j) and the row-orthogonalization in tt(i,j), for i>j\&. Note that tt(i,j)=0 for i<j (tt is truncated lower triangular)\&. The orthonormalized rows are returned in square array b, which is complete even when the effective rank < n\&. The recorded row operations can be repeated on independent column vectors through the use of subroutine ROWOPS (in this module)\&. It is recommended to rescale the original matrix A via a call to CORRAL (in this module) because the negligibility criterion depends upon an 'epsilon' value that is fixed (10**(-13)) and assumes elements of a are never too different in magnitude from unity, unless they are actually zero\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of rows of A 
+.br
+\fIn\fP number of columns of A 
+.br
+\fIa\fP rectangular input matrix A 
+.br
+\fIipiv\fP pivoting sequence 
+.br
+\fItt\fP row-normalization 
+.br
+\fIb\fP orthonormalized rows 
+.br
+\fIrank\fP effective rank of A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1315 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

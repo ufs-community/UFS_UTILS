@@ -1,0 +1,174 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/vcoord_gen.fd/vcoord_gen.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "vcoord_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/vcoord_gen.fd/vcoord_gen.f90 \- Generates hybrid coordinate interface profiles\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBvcoord_gen\fP (levs, lupp, pbot, psig, ppre, pupp, ptop, dpbot, dpsig, dppre, dpupp, dptop, pmin, ak, bk)"
+.br
+.RI "This subprogram generates hybrid coordinate interface profiles from a few given parameters\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Generates hybrid coordinate interface profiles\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2008-08-01 
+.RE
+.PP
+
+.PP
+Definition in file \fBvcoord_gen\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine vcoord_gen (integer, intent(in) levs, integer, intent(in) lupp, real, intent(in) pbot, real, intent(in) psig, real, intent(in) ppre, real, intent(in) pupp, real, intent(in) ptop, real, intent(in) dpbot, real, intent(in) dpsig, real, intent(in) dppre, real, intent(in) dpupp, real, intent(in) dptop, real, intent(out) pmin, real, dimension(0:levs), intent(out) ak, real, dimension(0:levs), intent(out) bk)"
+
+.PP
+This subprogram generates hybrid coordinate interface profiles from a few given parameters\&. The hybrid coordinate is intended to start out at the bottom in pure sigma and end up at the top in pure pressure, with a smooth transition in between\&. The pressure thickness is close to quadratic in pressure, with maximum thicknesses in the middle of the domain\&. The coordinate pressure will have continuous second derivatives in level\&.
+.PP
+The hybrid coordinate is returned in terms of vectors AK and BK, where the interface pressure is defined as A+B*ps where ps is surface pressure Thus A=0 in regions of pure sigma and B=0 in regions of pure sigma\&. At the bottom, A(0)=0 and B(0)=1 so that surface pressure is the bottom boundary condition, while at the top, A(levs)=ptop and B(levs)=0 so that the constant top pressure (which can be zero) is the top boundary condition\&.
+.PP
+The procedure for the calculation is described in the remarks section below\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlevs\fP integer number of levels 
+.br
+\fIlupp\fP integer number of levels below pupp 
+.br
+\fIpbot\fP real nominal surface pressure (Pa) 
+.br
+\fIpsig\fP real nominal pressure where coordinate changes from pure sigma (Pa) 
+.br
+\fIppre\fP real nominal pressure where coordinate changes to pure pressure (Pa) 
+.br
+\fIpupp\fP real nominal pressure where coordinate changes to upper atmospheric profile (Pa) 
+.br
+\fIptop\fP real pressure at top (Pa) 
+.br
+\fIdpbot\fP real coordinate thickness at bottom (Pa) 
+.br
+\fIdpsig\fP real thickness of zone within which coordinate changes to pure sigma (Pa) 
+.br
+\fIdppre\fP real thickness of zone within which coordinate changes to pure pressure (Pa) 
+.br
+\fIdpupp\fP real coordinate thickness at pupp (Pa) 
+.br
+\fIdptop\fP real coordinate thickness at top (Pa) 
+.br
+\fIpmin\fP real minimum surface pressure (Pa) 
+.br
+\fIak\fP real(0:levs) a coordinate values, bottom to top (Pa) 
+.br
+\fIbk\fP real(0:levs) b coordinate values, bottom to top ()
+.RE
+.PP
+Subprograms called:
+.IP "\(bu" 2
+ludcmp lower and upper triangular decomposition
+.IP "\(bu" 2
+lubksb lower and upper triangular back substitution
+.PP
+.PP
+.PP
+.nf
+
+   Example: Create the operational GFS 64-level hybrid coordinate\&.
+     real(8) pmin,ak(0:64),bk(0:64)
+     call vcoord_gen(64,64,100000\&.,99400\&.,7000\&.,0\&.,0\&.,500\&.,1200\&.,18000\&.,60\&.,60\&.,&
+                  pmin,ak,bk)
+     print '(2i6)',2,64
+     print '(f12\&.3,f12\&.8)',(ak(k),bk(k),k=0,64)
+     end
+.fi
+.PP
+.PP
+.PP
+.nf
+   Graphical description of parameters and zones:
+     ptop  ---  -----  ----------------------
+           \&.\&.\&.  dptop
+           ---         zone U (upper atmos)
+           \&.\&.\&.
+     pupp  ---  -----  ----------------------
+           \&.\&.\&.  dpupp
+           ---  -----
+           \&.\&.\&.         zone P (pure pressure)
+           ---
+           \&.\&.\&.
+     ppre  ---  -----  ----------------------
+           \&.\&.\&.
+           ---  dppre  zone T1 (transition 1)
+           \&.\&.\&.
+           ---  -----  ----------------------
+           \&.\&.\&.
+           ---
+           \&.\&.\&.         zone T2 (transition 2)
+           ---
+           \&.\&.\&.
+           ---  -----  ----------------------
+           \&.\&.\&.
+           ---  dpsig  zone T3 (transition 3)
+           \&.\&.\&.
+     psig  ---  -----  ----------------------
+           \&.\&.\&.
+           ---  -----  zone S (pure sigma)
+           \&.\&.\&.  dpbot
+     pbot  ---  -----  ----------------------
+ 
+.fi
+.PP
+.PP
+Detailed procedure description: 1 STEP 1\&. The pressure profile is computed with respect to the given reference surface pressure pbot\&. For this surface pressure, the 'sigma' thicknesses dsig are assumed to be proportional to a quadratic polynomial in sigma sig with zero intercepts sig1 and sig2 somewhere below and above the model domain, respectively\&. That is, dsig ~ (sig2-sig)*(sig-sig1)*dk Integrating this differential equation gives sig = (sig1*exp(c1*k+c2)+sig2)/(exp(c1*k+c2)+1) The required boundary conditions sig(0)=1 and sig(levs)=0 fix the proportionality and integration constants c1 and c2\&. The two crossing parameters (sig1 and sig2) are determined by two input sigma thickness conditions dsig/dk at the bottom and top which are respectively given as dpbot/(pbot-pupp) and dpupp/(pbot-pupp)\&. The crossing parameters are computed using Newton-Raphson iteration\&. This procedure fixes the pressure profile for surface pressure pbot\&. 2 STEP 2\&. The pressure profile is computed with respect to a minimum surface pressure\&. This minimum surface pressure pmin is yet to be determined\&. Divide the profile into zones: zone U (pure pressure) from pupp to ptop zone P (pure pressure) from pupp to ppre zone T1 (transition 1) from ppre to ppre+dppre zone T2 (transition 2) from ppre+dppre to psig-dpsig zone T3 (transition 3) from psig-dpsig to psig zone S (pure 'sigma') from psig to pmin (here sigma=p/ps so that d(ln(p))/dk is horizontally uniform) The pressure profile in the pure pressure zone P is set from step 1\&. The pressure thicknesses in zone T1 is set to be quadratic in level k\&. The pressure thicknesses in zone T2 is set to be linear in level k\&. The pressure thicknesses in zone T3 is set to be quadratic in level k\&. The pressure profile in the pure sigma zone S is also set from step 1\&. Thus there are nine unknowns: the 3 polynomial coefficients in zone T1 the 2 polynomial coefficients in zone T2 the 3 polynomial coefficients in zone T3 and the 1 minimum surface pressure\&. The nine conditions to determine these unknowns are: the thickness and its derivative match at zone P and T1 boundary the thickness and its derivative match at zone T1 and T2 boundary the thickness and its derivative match at zone T2 and T3 boundary the thickness and its derivative match at zone T3 and S boundary the sum of the thicknesses of zones T1, T2, T3, and S is pmin-ppre The unknowns are computed using standard linear decomposition\&. This procedure fixes the pressure profile for surface pressure pmin\&. 3 STEP 3\&. (Step 3 skipped if lupp=levs, in which case pupp=ptop and dpupp=dptop\&.) The pressure in zone U is assumed to be the exponential of a cubic polynomial in level k\&. The function must match the pressure at pupp, as well as the thickness and its derivative there, and the pressure at ptop+dptop at the second to top level\&. The latter 3 conditions are determined by using standard linear decomposition\&. 4 STEP 4\&. For an arbitrary surface pressure, the pressure profile is an linear combination of the pressure profiles for surface pressures pbot and pmin 
+.PP
+.nf
+
+     p(psfc)=p(pbot)*(psfc-pmin)/(pbot-pmin)+p(pmin)*(pbot-psfc)/(pbot-pmin)
+ 
+.fi
+.PP
+ from which the hybrid coordinate profiles ak and bk are found such that 
+.PP
+.nf
+
+     p(psfc)=ak+bk*psfc
+ 
+.fi
+.PP
+ 
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2008-08-01 
+.RE
+.PP
+
+.PP
+Definition at line 153 of file vcoord_gen\&.f90\&.
+.PP
+References lubksb(), and ludcmp()\&.
+.PP
+Referenced by driver()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for vcoord_gen from the source code\&.

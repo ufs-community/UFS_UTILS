@@ -1,0 +1,59 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/lsm_routines.fd/noah.fd/bulk_snow_module.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "noah" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/lsm_routines.fd/noah.fd/bulk_snow_module.f90 \- Routines to make DA updates to a bulk (single layer) snow model such as that in Noah\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBbulk_snow_module::calc_density\fP (lensfc, landmask, swe, snd, rank, density)"
+.br
+.RI "This subroutine calculates snow density from forecast fields\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Routines to make DA updates to a bulk (single layer) snow model such as that in Noah\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Clara Draper 
+.RE
+.PP
+
+.PP
+Definition in file \fBbulk_snow_module\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public bulk_snow_module::calc_density (integer, intent(in) lensfc, integer, dimension(lensfc), intent(in) landmask, real, dimension(lensfc), intent(in) swe, real, dimension(lensfc), intent(in) snd, integer, intent(in) rank, real, dimension(lensfc), intent(out) density)"
+
+.PP
+This subroutine calculates snow density from forecast fields\&. density = SWE/SND where snow present\&. = average from snow forecasts over land, where snow not present 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlensfc\fP Number of sfc grid cells 
+.br
+\fIrank\fP Processor rank 
+.br
+\fIlandmask\fP Mask for land increments 
+.br
+\fIswe\fP Snow Water Equivalent 
+.br
+\fIsnd\fP Snow Depth 
+.br
+\fIdensity\fP Snow density [-] 
+.RE
+.PP
+
+.PP
+Definition at line 27 of file bulk_snow_module\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for noah from the source code\&.

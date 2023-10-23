@@ -1,0 +1,115 @@
+.TH "output_frac_cats" 3 "Mon Oct 23 2023" "Version 1.11.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+output_frac_cats \- Output categorical data such as vegetation type\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBoutput_driver\fP (data_one_tile, dom_cat_one_tile, lat_one_tile, lon_one_tile, i_mdl, j_mdl, num_categories, tile)"
+.br
+.RI "Driver routine to output model categorical data\&. "
+.ti -1c
+.RI "subroutine \fBwriteit\fP (out_file, iout, jout, num_categories, latitude, longitude, data_pct, dominant_cat)"
+.br
+.RI "Write data to a netcdf file\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Output categorical data such as vegetation type\&. 
+
+Include percentage of each category within a model grid box and the dominant category\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public output_frac_cats::output_driver (real(esmf_kind_r4), dimension(i_mdl,j_mdl,num_categories), intent(in) data_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) dom_cat_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) lat_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) lon_one_tile, integer, intent(in) i_mdl, integer, intent(in) j_mdl, integer, intent(in) num_categories, integer, intent(in) tile)"
+
+.PP
+Driver routine to output model categorical data\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIdata_one_tile\fP The percentage of each category within a model grid cell\&. 
+.br
+\fIdom_cat_one_tile\fP The dominant category within a model grid cell\&. 
+.br
+\fIlat_one_tile\fP Latitude of each model grid cell\&. 
+.br
+\fIlon_one_tile\fP Longitude of each model grid cell\&. 
+.br
+\fIi_mdl\fP i dimension of model grid\&. 
+.br
+\fIj_mdl\fP j dimension of model grid\&. 
+.br
+\fInum_categories\fP Number of categories\&. 
+.br
+\fItile\fP Tile number\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition at line 33 of file output_frac_cats\&.F90\&.
+.PP
+References source_grid::field_names, model_grid::grid_tiles, program_setup::halo, and writeit()\&.
+.PP
+Referenced by interp_frac_cats()\&.
+.SS "subroutine output_frac_cats::writeit (character(len=*), intent(in) out_file, integer, intent(in) iout, integer, intent(in) jout, integer, intent(in) num_categories, real(esmf_kind_r4), dimension(iout,jout), intent(in) latitude, real(esmf_kind_r4), dimension(iout,jout), intent(in) longitude, real(esmf_kind_r4), dimension(iout,jout,num_categories), intent(in) data_pct, real(esmf_kind_r4), dimension(iout,jout), intent(in) dominant_cat)"
+
+.PP
+Write data to a netcdf file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIout_file\fP Output file name\&. 
+.br
+\fIiout\fP i-dimension of data\&. 
+.br
+\fIjout\fP j-dimension of data\&. 
+.br
+\fInum_categories\fP Number of categories\&. 
+.br
+\fIlatitude\fP Latitude of data\&. 
+.br
+\fIlongitude\fP Longitude of data\&. 
+.br
+\fIdata_pct\fP Percentage of each category in each model grid cell\&. 
+.br
+\fIdominant_cat\fP Dominant category in each model grid cell\&. 
+.RE
+.PP
+
+.PP
+Definition at line 114 of file output_frac_cats\&.F90\&.
+.PP
+References source_grid::day_of_rec, source_grid::field_names, utils::netcdf_err(), source_grid::num_time_recs, and source_grid::source\&.
+.PP
+Referenced by output_driver()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

@@ -1,0 +1,101 @@
+.TH "pesg::gtoxm_ak_rr" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::gtoxm_ak_rr
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgtoxm_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, lat, lon, xm, ff)"
+.br
+.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
+.ti -1c
+.RI "subroutine \fBgtoxm_ak_rr_m\fP (A, K, plat, plon, pazi, lat, lon, xm, ff)"
+.br
+.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 49 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. If the transformation is invalid, return a \&.true\&. failure flag\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameter of the ESG mapping 
+.br
+\fIk\fP parameter of the ESG mapping 
+.br
+\fIplat\fP radians latitude defining mapping projection center 
+.br
+\fIplon\fP radians longitude defining mapping projection center 
+.br
+\fIpazi\fP Azimuth of mapping orientation at its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing of the grid in radians 
+.br
+\fIlat\fP radians latitude of a point to be mapped 
+.br
+\fIlon\fP radians longitude of a point to be mapped 
+.br
+\fIxm\fP 2-vector map space image in center-relative grid units 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1933 of file pesg\&.f90\&.
+.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. If the transformation is invalid, return a \&.true\&. failure flag\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIplat\fP radians latitude defining mapping projection center 
+.br
+\fIplon\fP radians longitude defining mapping projection center 
+.br
+\fIpazi\fP Aximuth of mapping orientation at its center 
+.br
+\fIlat\fP radians latitude of a point to be mapped 
+.br
+\fIlon\fP radians longitude of a point to be mapped 
+.br
+\fIxm\fP 2-vector center-relative map-space image of mapped point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1888 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

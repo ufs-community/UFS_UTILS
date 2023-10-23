@@ -1,0 +1,78 @@
+.TH "pmat5::ininmap" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat5::ininmap
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdininmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.ti -1c
+.RI "subroutine \fBsininmap\fP (alon0, alat0, rot3)"
+.br
+.RI "Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 34 of file pmat5\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat5::ininmap::dininmap (real(dp), intent(in) alon0, real(dp), intent(in) alat0, real(dp), dimension(3,3), intent(out) rot3)\fC [private]\fP"
+
+.PP
+Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalon0\fP geographical longitude (degrees) of projection center\&. 
+.br
+\fIalat0\fP geographical latitude (degrees) of projection center\&. 
+.br
+\fIrot3\fP rotation matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::ininmap::sininmap (real(sp), intent(in) alon0, real(sp), intent(in) alat0, real(sp), dimension(3,3), intent(out) rot3)\fC [private]\fP"
+
+.PP
+Initialize the rotation matrix ROT3 needed to transform standard earth-centered cartesian components to the alternative cartesian frame oriented so as to put geographical point (ALAT0,ALON0) on the projection axis\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIalon0\fP geographical longitude (degrees) of projection center\&. 
+.br
+\fIalat0\fP geographical latitude (degrees) of projection center\&. 
+.br
+\fIrot3\fP rotation matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1995 
+.RE
+.PP
+
+.PP
+Definition at line 64 of file pmat5\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

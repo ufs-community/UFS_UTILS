@@ -1,0 +1,56 @@
+.TH "pmat2::udlvb" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::udlvb
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBUDLVB\fP (m, mah1, mah2, v, a)"
+.br
+.RI "Back-substitution step of linear inversion involving row-Vector and Banded matrix\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 73 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::udlvb::UDLVB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m), intent(inout) v, real(sp), dimension(m,\-mah1:mah2), intent(in) a)\fC [private]\fP"
+
+.PP
+Back-substitution step of linear inversion involving row-Vector and Banded matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and columns for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIv\fP input as right-hand-side row-vector, output as solution vector 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 1067 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

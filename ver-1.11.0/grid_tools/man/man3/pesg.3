@@ -1,0 +1,1902 @@
+.TH "pesg" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg \- Suite of routines to perform the 2-parameter family of Extended Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the the two parameters, A and K, of those mappings for a given rectangular domain's principal (median) semi-arcs with respect to a domain-averaged measure of distortion\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBbestesg_geo\fP"
+.br
+.ti -1c
+.RI "interface \fBbestesg_map\fP"
+.br
+.ti -1c
+.RI "interface \fBgaulegh\fP"
+.br
+.ti -1c
+.RI "interface \fBget_edges\fP"
+.br
+.ti -1c
+.RI "interface \fBget_meanq\fP"
+.br
+.ti -1c
+.RI "interface \fBget_qofv\fP"
+.br
+.ti -1c
+.RI "interface \fBget_qx\fP"
+.br
+.ti -1c
+.RI "interface \fBgtoxm_ak_dd\fP"
+.br
+.ti -1c
+.RI "interface \fBgtoxm_ak_rr\fP"
+.br
+.ti -1c
+.RI "interface \fBguessak_geo\fP"
+.br
+.ti -1c
+.RI "interface \fBguessak_map\fP"
+.br
+.ti -1c
+.RI "interface \fBhgrid_ak\fP"
+.br
+.ti -1c
+.RI "interface \fBhgrid_ak_dc\fP"
+.br
+.ti -1c
+.RI "interface \fBhgrid_ak_dd\fP"
+.br
+.ti -1c
+.RI "interface \fBhgrid_ak_rc\fP"
+.br
+.ti -1c
+.RI "interface \fBhgrid_ak_rr\fP"
+.br
+.ti -1c
+.RI "interface \fBxctoxm_ak\fP"
+.br
+.ti -1c
+.RI "interface \fBxctoxs\fP"
+.br
+.ti -1c
+.RI "interface \fBxmtog_ak_dd\fP"
+.br
+.ti -1c
+.RI "interface \fBxmtog_ak_rr\fP"
+.br
+.ti -1c
+.RI "interface \fBxmtoxc_ak\fP"
+.br
+.ti -1c
+.RI "interface \fBxmtoxt\fP"
+.br
+.ti -1c
+.RI "interface \fBxstoxc\fP"
+.br
+.ti -1c
+.RI "interface \fBxstoxt\fP"
+.br
+.ti -1c
+.RI "interface \fBxttoxm\fP"
+.br
+.ti -1c
+.RI "interface \fBxttoxs\fP"
+.br
+.ti -1c
+.RI "interface \fBzmtozt\fP"
+.br
+.ti -1c
+.RI "interface \fBzttozm\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBbestesg_geo\fP (lam, garcx, garcy, a, k, marcx, marcy, q, ff)"
+.br
+.RI "Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given geographical half-spans, garcx and garcy, as well as the corresponding map-space half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. "
+.ti -1c
+.RI "subroutine, public \fBbestesg_map\fP (lam, marcx, marcy, a, k, garcx, garcy, q, ff)"
+.br
+.RI "Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given map-coordinate half-spans, marcx and marcy, as well as the corresponding geographical half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. "
+.ti -1c
+.RI "subroutine \fBgaulegh\fP (m, x, w)"
+.br
+.RI "This Gauss-Legendre quadrature integrates exactly any even polynomial up to degree m*4-2 in the half-interval [0,1]\&. "
+.ti -1c
+.RI "subroutine, public \fBget_edges\fP (arcx, arcy, edgex, edgey)"
+.br
+.RI "For angles (degrees) of the arcs spanning the halfwidths between the region's center and its x and y edges, get the two cartesian vectors that represent the locations of these edge midpoints in the positive x and y directions\&. "
+.ti -1c
+.RI "subroutine \fBget_meanqd\fP (ngh, lam, xg, wg, ak, ma, q, qdak, qdma, ga, gadak, gadma, ff)"
+.br
+.RI "For a parameter vector, ak and a map-space domain-parameter vector, ma, return the lambda-parameterized quality diagnostic, Q, and the geographic domain-parameter vector ga\&. "
+.ti -1c
+.RI "subroutine \fBget_meanqs\fP (n, ngh, lam, xg, wg, aks, mas, qs, ff)"
+.br
+.RI "Like getmeanqd, except for n different values, aks, of ak and n different values, mas of ma, and without any of the derivatives\&. "
+.ti -1c
+.RI "subroutine \fBget_qofv\fP (lam, v1, v2, v3, v4, q)"
+.br
+.RI "The quadratic quantity Q depends linearly on v1 and v4 (which are already quadratic diagnostics of EL) and quadratically on v2 and v3 (which are linear diagnostics of EL)\&. "
+.ti -1c
+.RI "subroutine \fBget_qofvd\fP (lam, v2, v3, v1d, v2d, v3d, v4d, qd)"
+.br
+.RI "Like \fBget_qofv\fP, but for (only) the 2-vector derivatives of Q\&. "
+.ti -1c
+.RI "subroutine \fBget_qsofvs\fP (n, lam, v1s, v2s, v3s, v4s, qs)"
+.br
+.RI "General util to convert value\&. "
+.ti -1c
+.RI "subroutine \fBget_qx\fP (j0, v1, v2, v3, v4)"
+.br
+.RI "From a jacobian matrix, j0, get a sufficient set of v\&. "
+.ti -1c
+.RI "subroutine \fBget_qxd\fP (j0, j0d, v1, v2, v3, v4, v1d, v2d, v3d, v4d)"
+.br
+.RI "From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set of v\&. "
+.ti -1c
+.RI "subroutine \fBgtoxm_ak_dd_g\fP (A, K, pdlat, pdlon, pdazi, delx, dely, dlat, dlon, xm, ff)"
+.br
+.RI "Like gtoxm_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. "
+.ti -1c
+.RI "subroutine \fBgtoxm_ak_dd_m\fP (A, K, pdlat, pdlon, pdazi, dlat, dlon, xm, ff)"
+.br
+.RI "Like gtoxm_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. "
+.ti -1c
+.RI "subroutine \fBgtoxm_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, lat, lon, xm, ff)"
+.br
+.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
+.ti -1c
+.RI "subroutine \fBgtoxm_ak_rr_m\fP (A, K, plat, plon, pazi, lat, lon, xm, ff)"
+.br
+.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
+.ti -1c
+.RI "subroutine \fBguessak_geo\fP (asp, arc, ak)"
+.br
+.RI "Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical (degree) units measured along the rectangle's median, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. "
+.ti -1c
+.RI "subroutine \fBguessak_map\fP (asp, tmarcx, ak)"
+.br
+.RI "Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space nondimensional units, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. "
+.ti -1c
+.RI "subroutine, public \fBhgrid_ak\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, re, delxre, delyre, glat, glon, garea, ff)"
+.br
+.RI "Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, in dimensional units upon return\&. "
+.ti -1c
+.RI "subroutine \fBhgrid_ak_c\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, re, delxre, delyre, glat, glon, garea, dx, dy, dangle_dx, dangle_dy, ff)"
+.br
+.RI "Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, and the x- and y- grid steps, dx and dy, in dimensional units upon return\&. "
+.ti -1c
+.RI "subroutine, public \fBhgrid_ak_dc\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, xc, xcd, garea, ff)"
+.br
+.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. "
+.ti -1c
+.RI "subroutine, public \fBhgrid_ak_dd\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, ff)"
+.br
+.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. "
+.ti -1c
+.RI "subroutine \fBhgrid_ak_dd_c\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, dx, dy, dangle_dx, dangle_dy, ff)"
+.br
+.RI "Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely) are in degrees instead of radians\&. "
+.ti -1c
+.RI "subroutine, public \fBhgrid_ak_rc\fP (lx, ly, nx, ny, A, K, plat, plon, pazi, delx, dely, xc, xcd, garea, ff)"
+.br
+.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. "
+.ti -1c
+.RI "subroutine, public \fBhgrid_ak_rr\fP (lx, ly, nx, ny, A, K, plat, plon, pazi, delx, dely, glat, glon, garea, ff)"
+.br
+.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. "
+.ti -1c
+.RI "subroutine \fBhgrid_ak_rr_c\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, delx, dely, glat, glon, garea, dx, dy, angle_dx, angle_dy, ff)"
+.br
+.RI "Use a and k as the parameters of an extended Schmidt-transformed gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. "
+.ti -1c
+.RI "subroutine, public \fBxctoxm_ak\fP (a, k, xc, xm, ff)"
+.br
+.RI "Inverse mapping of \fBxmtoxc_ak\fP\&. "
+.ti -1c
+.RI "subroutine \fBxctoxs\fP (xc, xs)"
+.br
+.RI "Inverse of xstoxc\&. "
+.ti -1c
+.RI "subroutine \fBxmtog_ak_dd_g\fP (A, K, pdlat, pdlon, pdazi, delx, dely, xm, dlat, dlon, ff)"
+.br
+.RI "Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. "
+.ti -1c
+.RI "subroutine \fBxmtog_ak_dd_m\fP (A, K, pdlat, pdlon, pdazi, xm, dlat, dlon, ff)"
+.br
+.RI "Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. "
+.ti -1c
+.RI "subroutine \fBxmtog_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, xm, lat, lon, ff)"
+.br
+.RI "For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point\&. "
+.ti -1c
+.RI "subroutine \fBxmtog_ak_rr_m\fP (A, K, plat, plon, pazi, xm, lat, lon, ff)"
+.br
+.RI "Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians)\&. "
+.ti -1c
+.RI "subroutine, public \fBxmtoxc_ak\fP (a, k, xm, xc, xcd, ff)"
+.br
+.RI "Assuming the A-K parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian matrix, xcd\&. "
+.ti -1c
+.RI "subroutine \fBxmtoxc_vak\fP (ak, xm, xc, xcd, ff)"
+.br
+.RI "Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping with parameter vector, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, the Jacobian matrix, xcd\&. "
+.ti -1c
+.RI "subroutine \fBxmtoxc_vak1\fP (ak, xm, xc, xcd, xc1, xcd1, ff)"
+.br
+.RI "Like xmtoxc_vak, _ak, but also return derivatives wrt ak\&. "
+.ti -1c
+.RI "subroutine \fBxmtoxt\fP (a, xm, xt, xtd, ff)"
+.br
+.RI "Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd\&. "
+.ti -1c
+.RI "subroutine \fBxmtoxt1\fP (a, xm, xt, xtd, xt1, xtd1, ff)"
+.br
+.RI "Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, the derivatives, wrt a, of these quantities\&. "
+.ti -1c
+.RI "subroutine \fBxstoxc\fP (xs, xc, xcd)"
+.br
+.RI "Standard transformation from polar stereographic map coordinates, xs, to cartesian, xc, assuming the projection axis is polar\&. "
+.ti -1c
+.RI "subroutine \fBxstoxc1\fP (xs, xc, xcd, xcdd)"
+.br
+.RI "Standard transformation from polar stereographic map coordinates, xs, to cartesian, xc, assuming the projection axis is polar\&. "
+.ti -1c
+.RI "subroutine \fBxstoxt\fP (k, xs, xt, ff)"
+.br
+.RI "Inverse of xttoxs\&. "
+.ti -1c
+.RI "subroutine \fBxttoxm\fP (a, xt, xm, ff)"
+.br
+.RI "Inverse of xmtoxt\&. "
+.ti -1c
+.RI "subroutine \fBxttoxs\fP (k, xt, xs, xsd, ff)"
+.br
+.RI "Scaled gnomonic plane xt to standard stereographic plane xs\&. "
+.ti -1c
+.RI "subroutine \fBxttoxs1\fP (k, xt, xs, xsd, xsdd, xs1, xsd1, ff)"
+.br
+.RI "Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. "
+.ti -1c
+.RI "subroutine \fBzmtozt\fP (a, zm, zt, ztd, ff)"
+.br
+.RI "Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd, for positive and negative A and for the limiting case, A --> 0\&. "
+.ti -1c
+.RI "subroutine \fBzmtozt1\fP (a, zm, zt, ztd, zt1, ztd1, ff)"
+.br
+.RI "Like zmtozt, but also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd\&. "
+.ti -1c
+.RI "subroutine \fBzttozm\fP (a, zt, zm, ff)"
+.br
+.RI "Inverse of zmtozt\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Suite of routines to perform the 2-parameter family of Extended Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the the two parameters, A and K, of those mappings for a given rectangular domain's principal (median) semi-arcs with respect to a domain-averaged measure of distortion\&. 
+
+This criterion is itself endowed with a parameter, lam (for 'lambda' in [0,1) ) which gives weight to additional weight areal inhomogeneities instead of treating all distortion components equally\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public \fBpesg::bestesg_geo\fP (real(dp), intent(in) lam, real(dp), intent(in) garcx, real(dp), intent(in) garcy, real(dp), intent(out) a, real(dp), intent(out) k, real(dp), intent(out) marcx, real(dp), intent(out) marcy, real(dp), intent(out) q, logical, intent(out) ff)"
+
+.PP
+Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given geographical half-spans, garcx and garcy, as well as the corresponding map-space half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. If this process fails for any reason, the failure is alerted by a raised flag, FF, and the other output arguments must then be taken to be meaningless\&.
+.PP
+The diagnostic Q measures the variance over the domain of a local measure of grid distortion\&. A logarithmic measure of local grid deformation is give by L=log(J^t\&.J)/2, where J is the mapping Jacobian matrix, dX/dx, where X is the cartesian unit 3-vector representation of the image of the mapping of the map-coordinate 2-vector, x\&. The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest (lam=0) definition of the variance of L, but (Trace(L))**2 is another\&. Here, we weight both contributions, by lam and (1-lam) respectively, with 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k) that minimizes this Q\&.
+.PP
+The domain averages are computed by double Gauss-Legendre quadrature (i\&.e\&., in both the x and y directions), but restricted to a mere quadrant of the domain (since bilateral symmetry pertains across both domain medians, yielding a domain mean L that is strictly diagonal\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlam\fP 
+.br
+\fIgarcx\fP map-space half-spans 
+.br
+\fIgarcy\fP map-space half-spans 
+.br
+\fIa\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIk\fP Extended Schmidt Gnomonic parameter 
+.br
+\fImarcx\fP 
+.br
+\fImarcy\fP 
+.br
+\fIq\fP 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 903 of file pesg\&.f90\&.
+.PP
+References pietc::ms18, pietc::ms36, pietc::ms54, pietc::ms72, pietc::o5, pietc::s18, pietc::s36, pietc::s54, pietc::s72, and pietc::u5\&.
+.SS "subroutine, public \fBpesg::bestesg_map\fP (real(dp), intent(in) lam, real(dp), intent(in) marcx, real(dp), intent(in) marcy, real(dp), intent(out) a, real(dp), intent(out) k, real(dp), intent(out) garcx, real(dp), intent(out) garcy, real(dp), intent(out) q, logical, intent(out) ff)"
+
+.PP
+Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given map-coordinate half-spans, marcx and marcy, as well as the corresponding geographical half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. If this process fails for any reason, the failure is alerted by a raised flag, FF, and the other output arguments must then be taken to be meaningless\&.
+.PP
+The diagnostic Q measures the variance over the domain of a local measure of grid distortion\&. A logarithmic measure of local grid deformation is give by L=log(J^t\&.J)/2, where J is the mapping Jacobian matrix, dX/dx, where X is the cartesian unit 3-vector representation of the image of the mapping of the map-coordinate 2-vector, x\&. The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest (lam=0) definition of the variance of L, but (Trace(L))**2 is another\&. Here, we weight both contributions, by lam and (1-lam) respectively, with 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k) that minimizes this Q\&.
+.PP
+The domain averages are computed by double Gauss-Legendre quadrature (i\&.e\&., in both the x and y directions), but restricted to a mere quadrant of the domain (since bilateral symmetry pertains across both domain medians, yielding a domain mean L that is strictly diagonal\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlam\fP 
+.br
+\fImarcx\fP map-coordinate half-spans 
+.br
+\fImarcy\fP map-coordinate half-spans 
+.br
+\fIa\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIk\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIgarcx\fP geographical half-spans 
+.br
+\fIgarcy\fP geographical half-spans 
+.br
+\fIq\fP 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1073 of file pesg\&.f90\&.
+.PP
+References pietc::ms18, pietc::ms36, pietc::ms54, pietc::ms72, pietc::o5, pietc::s18, pietc::s36, pietc::s54, pietc::s72, and pietc::u5\&.
+.SS "subroutine \fBpesg::gaulegh\fP (integer(spi), intent(in) m, real(dp), dimension(m), intent(out) x, real(dp), dimension(m), intent(out) w)\fC [private]\fP"
+
+.PP
+This Gauss-Legendre quadrature integrates exactly any even polynomial up to degree m*4-2 in the half-interval [0,1]\&. This code is liberally adapted from the algorithm given in Press et al\&., Numerical Recipes\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of nodes in half-interval 
+.br
+\fIx\fP nodes and weights 
+.br
+\fIw\fP nodes and weights 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1852 of file pesg\&.f90\&.
+.PP
+References pietc::pih, pietc::u0, pietc::u1, and pietc::u2\&.
+.SS "subroutine, public \fBpesg::get_edges\fP (real(dp), intent(in) arcx, real(dp), intent(in) arcy, real(dp), dimension(3), intent(out) edgex, real(dp), dimension(3), intent(out) edgey)"
+
+.PP
+For angles (degrees) of the arcs spanning the halfwidths between the region's center and its x and y edges, get the two cartesian vectors that represent the locations of these edge midpoints in the positive x and y directions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIarcx\fP Center-relative angle (degrees) of edge midpoint in +x 
+.br
+\fIarcy\fP Center-relative angle (degrees) of edge midpoint in +y 
+.br
+\fIedgex\fP region's +x edge midpoint as cartesian unit 3-vector 
+.br
+\fIedgey\fP region's +y edge midpoint as cartesian unit 3-vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 489 of file pesg\&.f90\&.
+.PP
+References pietc::dtor, and pietc::u0\&.
+.SS "subroutine pesg::get_meanqd (integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) ma, real(dp), intent(out) q, real(dp), dimension(2), intent(out) qdak, real(dp), dimension(2), intent(out) qdma, real(dp), dimension(2), intent(out) ga, real(dp), dimension(2,2), intent(out) gadak, real(dp), dimension(2,2), intent(out) gadma, logical, intent(out) ff)"
+
+.PP
+For a parameter vector, ak and a map-space domain-parameter vector, ma, return the lambda-parameterized quality diagnostic, Q, and the geographic domain-parameter vector ga\&. Lambda is given by lam <1\&. Also, return the derivatives, qdak and qdma, of Q wrt ak and ma, and the derivatives gadak and gadma, of ga wrt ak and ma\&.
+.PP
+The domain averages of Q are accurately computed by bi-Gauss-Legendre quadrature over the positive quadrant of the domain (exploiting the symmetry) of the four constituent terms, v1, v2, v3, v4, from which the mean Q is computed using a quadratic formula of these constituents\&. The number of Gauss points in eaxh half-interval is ngh, and the nodes themselves are, in proportion to the half-interval, at xg\&. the normalized gauss weights are wg\&.
+.PP
+If a failure occurs, colmputations cease immediately and a failure flag, FF, is raised on return\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIngh\fP 
+.br
+\fIlam\fP Lambda 
+.br
+\fIxg\fP 
+.br
+\fIwg\fP 
+.br
+\fIak\fP parameter vector 
+.br
+\fIma\fP map-space domain-parameter vector 
+.br
+\fIq\fP lambda-parameterized quality diagnostic 
+.br
+\fIqdak\fP derivatives value 
+.br
+\fIqdma\fP derivatives value 
+.br
+\fIga\fP geographic domain-parameter vector 
+.br
+\fIgadak\fP 
+.br
+\fIgadma\fP 
+.br
+\fIff\fP error flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 604 of file pesg\&.f90\&.
+.PP
+References pietc::rtod, and pietc::u0\&.
+.SS "subroutine pesg::get_meanqs (integer(spi), intent(in) n, integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2,n), intent(in) aks, real(dp), dimension(2,n), intent(in) mas, real(dp), dimension(n), intent(out) qs, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like getmeanqd, except for n different values, aks, of ak and n different values, mas of ma, and without any of the derivatives\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP 
+.br
+\fIngh\fP 
+.br
+\fIlam\fP 
+.br
+\fIxg\fP 
+.br
+\fIwg\fP 
+.br
+\fIaks\fP 
+.br
+\fImas\fP 
+.br
+\fIqs\fP 
+.br
+\fIff\fP 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 682 of file pesg\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine \fBpesg::get_qofv\fP (real(dp), intent(in) lam, real(dp), intent(in) v1, real(dp), intent(in) v2, real(dp), intent(in) v3, real(dp), intent(in) v4, real(dp), intent(out) q)\fC [private]\fP"
+
+.PP
+The quadratic quantity Q depends linearly on v1 and v4 (which are already quadratic diagnostics of EL) and quadratically on v2 and v3 (which are linear diagnostics of EL)\&. EL = (1/2)log(G), where G=J^T\&.J, J the jacobian\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlam\fP 
+.br
+\fIv1\fP quadratic diagnostics of EL 
+.br
+\fIv2\fP linear diagnostics of EL 
+.br
+\fIv3\fP linear diagnostics of EL 
+.br
+\fIv4\fP quadratic diagnostics of EL 
+.br
+\fIq\fP quadratic quantity 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 729 of file pesg\&.f90\&.
+.PP
+References pietc::u1\&.
+.SS "subroutine pesg::get_qofvd (real(dp), intent(in) lam, real(dp), intent(in) v2, real(dp), intent(in) v3, real(dp), dimension(2), intent(in) v1d, real(dp), dimension(2), intent(in) v2d, real(dp), dimension(2), intent(in) v3d, real(dp), dimension(2), intent(in) v4d, real(dp), dimension(2), intent(out) qd)\fC [private]\fP"
+
+.PP
+Like \fBget_qofv\fP, but for (only) the 2-vector derivatives of Q\&. Note that the quadratic diagnostics v1 and v4 do not participate in this formula\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlam\fP 
+.br
+\fIv2\fP 
+.br
+\fIv3\fP 
+.br
+\fIv1d\fP 
+.br
+\fIv2d\fP 
+.br
+\fIv3d\fP 
+.br
+\fIv4d\fP 
+.br
+\fIqd\fP 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 751 of file pesg\&.f90\&.
+.PP
+References pietc::u1, and pietc::u2\&.
+.SS "subroutine pesg::get_qsofvs (integer(spi), intent(in) n, real(dp), intent(in) lam, real(dp), dimension(n), intent(in) v1s, real(dp), dimension(n), intent(in) v2s, real(dp), dimension(n), intent(in) v3s, real(dp), dimension(n), intent(in) v4s, real(dp), dimension(n), intent(out) qs)\fC [private]\fP"
+
+.PP
+General util to convert value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP 
+.br
+\fIlam\fP 
+.br
+\fIv1s\fP 
+.br
+\fIv2s\fP 
+.br
+\fIv3s\fP 
+.br
+\fIv4s\fP 
+.br
+\fIqs\fP 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 771 of file pesg\&.f90\&.
+.PP
+References pietc::u1\&.
+.SS "subroutine \fBpesg::get_qx\fP (real(dp), dimension(3,2), intent(in) j0, real(dp), intent(out) v1, real(dp), intent(out) v2, real(dp), intent(out) v3, real(dp), intent(out) v4)\fC [private]\fP"
+
+.PP
+From a jacobian matrix, j0, get a sufficient set of v\&. \&. diagnostics such that, from averages of these v, we can later compute the collective variance of Q(lam) that they imply for any choice of the 'lambda' parameter, lam\&. Note that v1 and v4 are quadratic diagnostics of EL, while v2 and v3 are linear\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIj0\fP jacobian matrix 
+.br
+\fIv1\fP quadratic diagnostics of EL 
+.br
+\fIv2\fP linear diagnostics of EL 
+.br
+\fIv3\fP linear diagnostics of EL 
+.br
+\fIv4\fP quadratic diagnostics of EL 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 512 of file pesg\&.f90\&.
+.PP
+References pietc::o2, and pietc::u2\&.
+.SS "subroutine pesg::get_qxd (real(dp), dimension(3,2), intent(in) j0, real(dp), dimension(3,2,2), intent(in) j0d, real(dp), intent(out) v1, real(dp), intent(out) v2, real(dp), intent(out) v3, real(dp), intent(out) v4, real(dp), dimension(2), intent(out) v1d, real(dp), dimension(2), intent(out) v2d, real(dp), dimension(2), intent(out) v3d, real(dp), dimension(2), intent(out) v4d)"
+
+.PP
+From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set of v\&. \&. diagnostics such that, from average of these diagnostics, we can later compute the collective variance of Q and its derivative\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIj0\fP jacobian matrix 
+.br
+\fIj0d\fP derivative of j0 
+.br
+\fIv1\fP 
+.br
+\fIv2\fP 
+.br
+\fIv3\fP 
+.br
+\fIv4\fP 
+.br
+\fIv1d\fP 
+.br
+\fIv2d\fP 
+.br
+\fIv3d\fP 
+.br
+\fIv4d\fP 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 542 of file pesg\&.f90\&.
+.PP
+References pietc::o2, pietc::u0, and pietc::u2\&.
+.SS "subroutine pesg::gtoxm_ak_dd_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like gtoxm_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameter of the ESG mapping 
+.br
+\fIk\fP parameter of the ESG mapping 
+.br
+\fIpdlat\fP degrees latitude defining mapping projection center 
+.br
+\fIpdlon\fP degrees longitude defining mapping projection center 
+.br
+\fIpdazi\fP Azimuth of mapping orientation at its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing of the grid in radians 
+.br
+\fIdlat\fP degrees latitude of a point to be mapped 
+.br
+\fIdlon\fP degrees longitude of a point to be mapped 
+.br
+\fIxm\fP 2-vector image of the point in center-relative grid units 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1984 of file pesg\&.f90\&.
+.PP
+References pietc::dtor, and gtoxm_ak_rr_g()\&.
+.SS "subroutine pesg::gtoxm_ak_dd_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like gtoxm_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameter of the ESG mapping 
+.br
+\fIk\fP parameter of the ESG mapping 
+.br
+\fIpdlat\fP degrees latitude defining mapping center 
+.br
+\fIpdlon\fP degrees longitude defining mapping center 
+.br
+\fIpdazi\fP Azimuth of mapping orientation at its center 
+.br
+\fIdlat\fP degrees latitude of point to be mapped 
+.br
+\fIdlon\fP degrees longitude of point to be mapped 
+.br
+\fIxm\fP 2-vector center-relative map space image of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1955 of file pesg\&.f90\&.
+.PP
+References pietc::dtor, and gtoxm_ak_rr_m()\&.
+.SS "subroutine pesg::gtoxm_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)"
+
+.PP
+Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. If the transformation is invalid, return a \&.true\&. failure flag\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameter of the ESG mapping 
+.br
+\fIk\fP parameter of the ESG mapping 
+.br
+\fIplat\fP radians latitude defining mapping projection center 
+.br
+\fIplon\fP radians longitude defining mapping projection center 
+.br
+\fIpazi\fP Azimuth of mapping orientation at its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing of the grid in radians 
+.br
+\fIlat\fP radians latitude of a point to be mapped 
+.br
+\fIlon\fP radians longitude of a point to be mapped 
+.br
+\fIxm\fP 2-vector map space image in center-relative grid units 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1933 of file pesg\&.f90\&.
+.PP
+References gtoxm_ak_rr_m()\&.
+.PP
+Referenced by gtoxm_ak_dd_g()\&.
+.SS "subroutine pesg::gtoxm_ak_rr_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. If the transformation is invalid, return a \&.true\&. failure flag\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIplat\fP radians latitude defining mapping projection center 
+.br
+\fIplon\fP radians longitude defining mapping projection center 
+.br
+\fIpazi\fP Aximuth of mapping orientation at its center 
+.br
+\fIlat\fP radians latitude of a point to be mapped 
+.br
+\fIlon\fP radians longitude of a point to be mapped 
+.br
+\fIxm\fP 2-vector center-relative map-space image of mapped point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1888 of file pesg\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.PP
+Referenced by gtoxm_ak_dd_m(), and gtoxm_ak_rr_g()\&.
+.SS "subroutine \fBpesg::guessak_geo\fP (real(dp), intent(in) asp, real(dp), intent(in) arc, real(dp), dimension(2), intent(out) ak)\fC [private]\fP"
+
+.PP
+Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical (degree) units measured along the rectangle's median, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIasp\fP aspect ratio of intended domain 
+.br
+\fIarc\fP major semi-axis angle in degrees for intended domain 
+.br
+\fIak\fP first guess of the parameter vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 809 of file pesg\&.f90\&.
+.SS "subroutine \fBpesg::guessak_map\fP (real(dp), intent(in) asp, real(dp), intent(in) tmarcx, real(dp), dimension(2), intent(out) ak)\fC [private]\fP"
+
+.PP
+Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space nondimensional units, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIasp\fP aspect ratio 
+.br
+\fItmarcx\fP 
+.br
+\fIak\fP first guess for the parameter vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 791 of file pesg\&.f90\&.
+.PP
+References pietc::rtod\&.
+.SS "subroutine, public \fBpesg::hgrid_ak\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) re, real(dp), intent(in) delxre, real(dp), intent(in) delyre, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
+
+.PP
+Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, in dimensional units upon return\&. The gridded lats and lons, glat and glon, remain in radians\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIplat\fP radians latitude of the projection center of the mapping 
+.br
+\fIplon\fP radians longitude of the projection center of the mapping 
+.br
+\fIpazi\fP Azimuth of map orientation at its center 
+.br
+\fIre\fP earth radius 
+.br
+\fIdelxre\fP map-space grid increments in the dimensional units 
+.br
+\fIdelyre\fP map-space grid increments in the dimensional units 
+.br
+\fIglat\fP grid points for latitude 
+.br
+\fIglon\fP grid points for longitude 
+.br
+\fIgarea\fP array of grid-cell areas in dimensional units 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1766 of file pesg\&.f90\&.
+.SS "subroutine pesg::hgrid_ak_c (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) re, real(dp), intent(in) delxre, real(dp), intent(in) delyre, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny  ), intent(out) dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny\-1), intent(out) dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dy, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, and the x- and y- grid steps, dx and dy, in dimensional units upon return\&. The gridded lats and lons, glat and glon, remain in radians\&. Also, in order for the argument list to remain compatible with an earlier version of this routine, the relative rotations of the steps, dangle_dx and dangle_dy, are returned as degrees instead of radians (all other angles in the argument list, i\&.e\&., plat,plon,pazi,glat,glon, remain radians)\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP number of grid spaces in x 
+.br
+\fIny\fP number of grid spaces in y 
+.br
+\fIa\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIk\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIplat\fP latitude of projection center of the mapping (radians) 
+.br
+\fIplon\fP longitude of projection center of the mapping (radians) 
+.br
+\fIpazi\fP Azimuth of map orientation at its center (radians) 
+.br
+\fIre\fP earth radius in dimensional length units 
+.br
+\fIdelxre\fP map-space grid increments in the dimensional units 
+.br
+\fIdelyre\fP map-space grid increments in the dimensional units 
+.br
+\fIglat\fP gridded lats (radians) 
+.br
+\fIglon\fP gridded lons (radians) 
+.br
+\fIgarea\fP grid cell areas in dimensional units 
+.br
+\fIdx\fP x- grid steps in dimensional units 
+.br
+\fIdy\fP y- grid steps in dimensional units 
+.br
+\fIdangle_dx\fP azimuth rotations of the steps dx (in degrees) 
+.br
+\fIdangle_dy\fP azimuth rotations of the steps dy (in degrees) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1818 of file pesg\&.f90\&.
+.PP
+References hgrid_ak_rr_c(), and pietc::rtod\&.
+.SS "subroutine, public \fBpesg::hgrid_ak_dc\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(3,  lx:lx+nx  ,ly:ly+ny  ), intent(out) xc, real(dp), dimension(3,2,lx:lx+nx  ,ly:ly+ny  ), intent(out) xcd, real(dp), dimension(    lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
+
+.PP
+Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. Like hgrid_ak_rx, return the grid points' cartesians xc and Jacobian matrices, xcd\&. Garea, the area of each grid cell, is also returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure occurs anywhere in these calculations\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIpdlat\fP degrees latitude of the projection center of the mapping 
+.br
+\fIpdlon\fP degrees longitude of the projection center of the mapping 
+.br
+\fIpdazi\fP azimuth of the orientation of the mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing of the grid in radians 
+.br
+\fIxc\fP grid points' earth-centered unit cartesians 
+.br
+\fIxcd\fP Jacobian matrices, d(xc)/d(xm) 
+.br
+\fIgarea\fP array of grid-cell areas (steradians) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1724 of file pesg\&.f90\&.
+.PP
+References pietc::dtor\&.
+.SS "subroutine, public \fBpesg::hgrid_ak_dd\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) gdlat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) gdlon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
+
+.PP
+Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. Like \fBhgrid_ak_rr\fP, return the grid points' lats and lons, except that here the angles are returned in degrees\&. Garea, the area of each grid cell, is returned as in \fBhgrid_ak_rr\fP, and a failure flag, ff, raised when a failure occurs anywhere in these calculations\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP number of the grid spaces in x 
+.br
+\fIny\fP number of the grid spaces in y 
+.br
+\fIa\fP parameter of an ESG mapping 
+.br
+\fIk\fP parameter of an ESG mapping 
+.br
+\fIpdlat\fP degrees latitude of the projection center of mapping 
+.br
+\fIpdlon\fP degrees longitude of the projection center of mapping 
+.br
+\fIpdazi\fP degrees azimuth of orientation of mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid (in radians) 
+.br
+\fIdely\fP central y-spacing of the grid (in radians) 
+.br
+\fIgdlat\fP array of grid point latitudes (in degrees) 
+.br
+\fIgdlon\fP array of grid point longitudes (in dgrees) 
+.br
+\fIgarea\fP array of grid cell areas (in steradians) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1630 of file pesg\&.f90\&.
+.PP
+References pietc::dtor, and pietc::rtod\&.
+.SS "subroutine pesg::hgrid_ak_dd_c (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) gdlat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) gdlon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny  ), intent(out) dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny\-1), intent(out) dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) dangle_dy, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely) are in degrees instead of radians\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIpdlat\fP latitude defining projection center of the mapping 
+.br
+\fIpdlon\fP longitude defining projection center of the mapping 
+.br
+\fIpdazi\fP azimuth of the orientation of the mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid (in radians) 
+.br
+\fIdely\fP central y-spacing of the grid (in radians) 
+.br
+\fIgdlat\fP array of grid point degree-latitudes 
+.br
+\fIgdlon\fP array of grid point degree-longitudes 
+.br
+\fIgarea\fP array of grid-cell areas (steradians) 
+.br
+\fIdx\fP step sizes of the grid-cell edges in x (earth radius=1 unit) 
+.br
+\fIdy\fP step sizes of the grid-cell edges in y (earth radius=1 unit) 
+.br
+\fIdangle_dx\fP azimuth rotation of the x grid steps, dx (degrees) 
+.br
+\fIdangle_dy\fP azimuth rotation of the y grid steps, dy (degrees) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1673 of file pesg\&.f90\&.
+.PP
+References pietc::dtor, hgrid_ak_rr_c(), and pietc::rtod\&.
+.SS "subroutine, public \fBpesg::hgrid_ak_rc\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(3,  lx:lx+nx  ,ly:ly+ny  ), intent(out) xc, real(dp), dimension(3,2,lx:lx+nx  ,ly:ly+ny  ), intent(out) xcd, real(dp), dimension(    lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
+
+.PP
+Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. Assume the radius of the earth is unity, and using the central mapping point as the coordinate origin, set up the grid with central x-spacing delx and y-spacing dely\&. The grid index location of the left-lower corner of the domain is (lx,ly) (typically both NEGATIVE)\&. The numbers of the grid spaces in x and y directions are nx and ny\&. (Note that, for a centered rectangular grid lx and ly are negative and, in magnitude, half the values of nx and ny respectively\&.) Return the unit cartesian vectors xc of the grid points and their jacobian matrices xcd wrt the map coordinates, and return a rectangular array, garea, of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells
+.PP
+If all goes well, return a lowered failure flag, ff=\&.false\&. \&. But if, for some reason, it is not possible to complete this task, return the raised failure flag, ff=\&.TRUE\&. \&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP parameters of the ESG mapping centered at (plat,plon) 
+.br
+\fIk\fP parameters of the ESG mapping centered at (plat,plon) 
+.br
+\fIplat\fP latitude of the projection center of the mapping (radians) 
+.br
+\fIplon\fP longitude of the projection center of the mapping (radians) 
+.br
+\fIpazi\fP azimuth of orientation of mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid (in radians) 
+.br
+\fIdely\fP central y-spacing of the grid (in radians) 
+.br
+\fIxc\fP Earth-centered unit cartesian 3-vectors at each grid point 
+.br
+\fIxcd\fP Jacobian matrices, d(xc)/d(xm), at each grid point 
+.br
+\fIgarea\fP rectangular array of grid-cell areas (steradians) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1541 of file pesg\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.SS "subroutine, public \fBpesg::hgrid_ak_rr\fP (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)"
+
+.PP
+Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. Assume the radius of the earth is unity, and using the central mapping point as the coordinate origin, set up the grid with central x-spacing delx and y-spacing dely\&. The grid index location of the left-lower corner of the domain is (lx,ly) (typically both NEGATIVE)\&. The numbers of the grid spaces in x and y directions are nx and ny\&. (Note that, for a centered rectangular grid lx and ly are negative and, in magnitude, half the values of nx and ny respectively\&.) Return the latitude and longitude, in radians again, of the grid points thus defined in the arrays, glat and glon, and return a rectangular array, garea, of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells
+.PP
+If all goes well, return a lowered failure flag, ff=\&.false\&. \&. But if, for some reason, it is not possible to complete this task, return the raised failure flag, ff=\&.TRUE\&. \&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative grid index in x of left edge of the domain 
+.br
+\fIly\fP center-relative grid index in y of lower edge of the domain 
+.br
+\fInx\fP number of grid spaces in x 
+.br
+\fIny\fP number of grid spaces in y 
+.br
+\fIA\fP parameter of the ESG mapping centered at (plat,plon) 
+.br
+\fIK\fP parameter of the ESG mapping centered at (plat,plon) 
+.br
+\fIplat\fP latitude of projection center of mapping (radians) 
+.br
+\fIplon\fP longitude of projection center of mapping (radians) 
+.br
+\fIpazi\fP azimuth of orientation of mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid (radians) 
+.br
+\fIdely\fP central y-spacing of the grid (radians) 
+.br
+\fIglat\fP grid points' latitudes 
+.br
+\fIglon\fP grid points' longitudes 
+.br
+\fIgarea\fP array of grid-cell areas (steradians) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1221 of file pesg\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.SS "subroutine pesg::hgrid_ak_rr_c (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) glon, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, real(dp), dimension(lx:lx+nx\-1,ly:ly+ny  ), intent(out) dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny\-1), intent(out) dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) angle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out) angle_dy, logical, intent(out) ff)"
+
+.PP
+Use a and k as the parameters of an extended Schmidt-transformed gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. Using the central mapping point as the coordinate origin, set up the grid with central x-spacing delx and y-spacing dely in nondimensional units, (i\&.e\&., as if the earth had unit radius) and with the location of the left- lower corner of the grid at center-relative grid index pair, (lx,ly) and with the number of the grid spaces in x and y directions given by nx and ny\&. (Note that, for a centered rectangular grid lx and ly are negative and, in magnitude, half the values of nx and ny respectively\&.) Return the latitude and longitude, again, in radians, of the grid pts thus defined in the arrays, glat and glon; return a rectangular array, garea, of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells in nondimensional 'steradian' units\&.
+.PP
+In this version, these grid cell areas are computed by 2D integrating the scalar jacobian of the transformation, using a 4th-order centered scheme\&. The estimated grid steps, dx and dy, are returned at the grid cell edges, using the same 4th-order scheme to integrate the 1D projected jacobian\&. The angles, relative to local east and north, are returned respectively as angle_dx and angle_dy at grid cell corners, in radians counterclockwise\&.
+.PP
+if all goes well, return a \&.FALSE\&. failure flag, ff\&. If, for some reason, it is not possible to complete this task, return the failure flag as \&.TRUE\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIk\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIplat\fP latitude of the projection center of the mapping (radians) 
+.br
+\fIplon\fP longitude of the projection center of the mapping (radians) 
+.br
+\fIpazi\fP azimuth of the orientation of the mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid (radians) 
+.br
+\fIdely\fP central y-spacing of the grid (radians) 
+.br
+\fIglat\fP grid points' latitudes (radians) 
+.br
+\fIglon\fP grid points' longitudes (radians) 
+.br
+\fIgarea\fP array of grid-cell areas (steradians) 
+.br
+\fIdx\fP grid steps in x at grid cell edges (radians) 
+.br
+\fIdy\fP grid steps in y at grid cell edges (radians) 
+.br
+\fIangle_dx\fP x angles relative to local east (radians) 
+.br
+\fIangle_dy\fP y angles relative to local north (radians) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1338 of file pesg\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.PP
+Referenced by hgrid_ak_c(), and hgrid_ak_dd_c()\&.
+.SS "subroutine, public \fBpesg::xctoxm_ak\fP (real(dp), intent(in) a, real(dp), intent(in) k, real(dp), dimension(3), intent(in) xc, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)"
+
+.PP
+Inverse mapping of \fBxmtoxc_ak\fP\&. That is, go from given cartesian unit 3-vector, xc, to map coordinate 2-vector xm (or return a raised failure flag, FF, if the attempt fails)\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP ESG mapping parameter for line spacing profile 
+.br
+\fIk\fP ESG mapping parameter for Gauss curvature in Schmidt mapping 
+.br
+\fIxc\fP Earth-centered cartesian unit 3-vector 
+.br
+\fIxm\fP 2-vector map coordinate 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 466 of file pesg\&.f90\&.
+.PP
+References pietc::f\&.
+.SS "subroutine \fBpesg::xctoxs\fP (real(dp), dimension(3), intent(in) xc, real(dp), dimension(2), intent(out) xs)\fC [private]\fP"
+
+.PP
+Inverse of xstoxc\&. I\&.e\&., cartesians to stereographic\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxc\fP Earth-centered cartesian unit 3-vector 
+.br
+\fIxs\fP Stereographic map coordinates 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 68 of file pesg\&.f90\&.
+.PP
+References pietc::u1\&.
+.SS "subroutine pesg::xmtog_ak_dd_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) dlat, real(dp), intent(out) dlon, logical, intent(out) ff)"
+
+.PP
+Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIpdlat\fP degrees latitude of projection center of the mapping 
+.br
+\fIpdlon\fP degrees longitude of projection center of the mapping 
+.br
+\fIpdazi\fP Azimuth of the mapping orientation about its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing of the grid in radians 
+.br
+\fIxm\fP map coordinates, in grid units, of a point to be mapped 
+.br
+\fIdlat\fP degrees latitude of the point 
+.br
+\fIdlon\fP degrees longitude of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2118 of file pesg\&.f90\&.
+.PP
+References pietc::dtor, pietc::rtod, and xmtog_ak_rr_m()\&.
+.SS "subroutine pesg::xmtog_ak_dd_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) dlat, real(dp), intent(out) dlon, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameters of the ESG mapping 
+.br
+\fIk\fP parameters of the ESG mapping 
+.br
+\fIpdlat\fP degrees latitude of the projection center of the mapping 
+.br
+\fIpdlon\fP degrees longitude of the projection center of the mapping 
+.br
+\fIpdazi\fP Azimuth of the orientation of the mapping at its center 
+.br
+\fIxm\fP map space 2-vector coordinates of a point 
+.br
+\fIdlat\fP degrees latitude of the point 
+.br
+\fIdlon\fP degrees longitude of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2087 of file pesg\&.f90\&.
+.PP
+References pietc::dtor, pietc::rtod, and xmtog_ak_rr_m()\&.
+.SS "subroutine pesg::xmtog_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) lat, real(dp), intent(out) lon, logical, intent(out) ff)"
+
+.PP
+For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point\&. If instead the transformation is invalid for any reason, then return the raised failure flag, FF=\&.true\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameters of the ESG mapping 
+.br
+\fIk\fP parameters of the ESG mapping 
+.br
+\fIplat\fP radians latitude of the projection center of the mapping 
+.br
+\fIplon\fP radians longitude of the projection center of the mapping 
+.br
+\fIpazi\fP Azimuth of the orientation of the mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing grid point in radians 
+.br
+\fIxm\fP grid-space 2-vector coordinates of a point to be mapped 
+.br
+\fIlat\fP radians latitude of the point 
+.br
+\fIlon\fP radians longitude of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2063 of file pesg\&.f90\&.
+.PP
+References xmtog_ak_rr_m()\&.
+.SS "subroutine pesg::xmtog_ak_rr_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) lat, real(dp), intent(out) lon, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians)\&. If the transformation is invalid for any reason, return instead with a raised failure flag, FF= \&.true\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameter of an ESG mapping 
+.br
+\fIk\fP parameter of an ESG mapping 
+.br
+\fIplat\fP radians latitude of the projection center of the mapping 
+.br
+\fIplon\fP radians longitude of the projection center of the mapping 
+.br
+\fIpazi\fP Azimuth of orientation of the mapping at its center 
+.br
+\fIxm\fP center-relative 2-vector map space coordinates of a point 
+.br
+\fIlat\fP radians latitude of the point 
+.br
+\fIlon\fP radians longitude of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2015 of file pesg\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.PP
+Referenced by xmtog_ak_dd_g(), xmtog_ak_dd_m(), and xmtog_ak_rr_g()\&.
+.SS "subroutine, public \fBpesg::xmtoxc_ak\fP (real(dp), intent(in) a, real(dp), intent(in) k, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)"
+
+.PP
+Assuming the A-K parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian matrix, xcd\&. If for any reason the mapping cannot be done, return a raised failure flag, FF\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP ESG mapping parameter for line spacing profile 
+.br
+\fIk\fP ESG mapping parameter for Gauss curvature in Schmidt mapping 
+.br
+\fIxm\fP map-space 2-vector 
+.br
+\fIxc\fP Earth-centered cartesian unit 3-vector 
+.br
+\fIxcd\fP Jacobian matrix, d(xc)/d(xm) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 440 of file pesg\&.f90\&.
+.SS "subroutine pesg::xmtoxc_vak (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)"
+
+.PP
+Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping with parameter vector, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, the Jacobian matrix, xcd\&. If for any reason the mapping cannot be done, return a raised failure flag,z FF\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIak\fP 2-vector parameterization of the ESG mapping 
+.br
+\fIxm\fP 2-vector of map plane coordinates 
+.br
+\fIxc\fP Earth-centered cartesian unit 3-vector 
+.br
+\fIxcd\fP Jacobian, d(xc)/d(xm) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 381 of file pesg\&.f90\&.
+.SS "subroutine pesg::xmtoxc_vak1 (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, real(dp), dimension(3,2), intent(out) xc1, real(dp), dimension(3,2,2), intent(out) xcd1, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like xmtoxc_vak, _ak, but also return derivatives wrt ak\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIak\fP 2-vector parameterization of the ESG mapping 
+.br
+\fIxm\fP 2-vector of map plane coordinates 
+.br
+\fIxc\fP Earth-centered cartesian unit 3-vector 
+.br
+\fIxcd\fP Jacobian of xc wrt xm, d(xc)/d(xm) 
+.br
+\fIxc1\fP Partial derivatives wrt ak of xc, d(xc)/d(ak) 
+.br
+\fIxcd1\fP Second derivative wrt xm and ak of xc, d^2(xc)/(d(xm)d(ak)) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 400 of file pesg\&.f90\&.
+.PP
+References xmtoxt1(), and xttoxs1()\&.
+.SS "subroutine \fBpesg::xmtoxt\fP (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xm, real(dp), dimension(2), intent(out) xt, real(dp), dimension(2,2), intent(out) xtd, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Mapping parameter controlling grid line spacing profile 
+.br
+\fIxm\fP Vector value of map coordinates 
+.br
+\fIxt\fP Vector value of gnomonic plane coordinates 
+.br
+\fIxtd\fP 2*2 diagonal Jacobian, d(xt)/d(xm) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 254 of file pesg\&.f90\&.
+.PP
+References pietc::u0\&.
+.SS "subroutine pesg::xmtoxt1 (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xm, real(dp), dimension(2), intent(out) xt, real(dp), dimension(2,2), intent(out) xtd, real(dp), dimension(2), intent(out) xt1, real(dp), dimension(2,2), intent(out) xtd1, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, the derivatives, wrt a, of these quantities\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Mapping parameter controlling grid line spacing profile 
+.br
+\fIxm\fP Vector value of map plane coordinates 
+.br
+\fIxt\fP Vector value of gnomonic plane coordinates 
+.br
+\fIxtd\fP 2*2 diagonal Jacobian, d(xt)/d(xm) 
+.br
+\fIxt1\fP Derivative wrt a of xt, d(xt)/da 
+.br
+\fIxtd1\fP Derivative wrt a of Jacobian xtd, d^2(xt)/(d(xm)da) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 276 of file pesg\&.f90\&.
+.PP
+References pietc::u0, and zmtozt1()\&.
+.PP
+Referenced by xmtoxc_vak1()\&.
+.SS "subroutine \fBpesg::xstoxc\fP (real(dp), dimension(2), intent(in) xs, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd)\fC [private]\fP"
+
+.PP
+Standard transformation from polar stereographic map coordinates, xs, to cartesian, xc, assuming the projection axis is polar\&. xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxs\fP Stereographic map coordinates 
+.br
+\fIxc\fP Cartesian earth-centered 3-vector 
+.br
+\fIxcd\fP Value of jacobian matrix, encoding distortion and metric 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 85 of file pesg\&.f90\&.
+.PP
+References pietc::u1, and pietc::u2\&.
+.SS "subroutine pesg::xstoxc1 (real(dp), dimension(2), intent(in) xs, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, real(dp), dimension(3,2,2), intent(out) xcdd)"
+
+.PP
+Standard transformation from polar stereographic map coordinates, xs, to cartesian, xc, assuming the projection axis is polar\&. xcd=d(xc)/d(xs) is the jacobian matrix, encoding distortion and metric\&. xcdd is the further derivative, wrt xs, of xcd\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxs\fP Stereographic map coordinates 
+.br
+\fIxc\fP Cartesian earth-centered 3-vector 
+.br
+\fIxcd\fP Jacobian matrix, encoding distortion and metric 
+.br
+\fIxcdd\fP Further derivative, wrt xs, of xcd 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 107 of file pesg\&.f90\&.
+.PP
+References pietc::u0, pietc::u1, and pietc::u2\&.
+.SS "subroutine \fBpesg::xstoxt\fP (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xs, real(dp), dimension(2), intent(out) xt, logical, intent(out) ff)"
+
+.PP
+Inverse of xttoxs\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIk\fP Gaussian curvature parameter of Schmidt mapping 
+.br
+\fIxs\fP Stereographic plane coordinates 
+.br
+\fIxt\fP Scaled gnomonic plane coordinates 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 139 of file pesg\&.f90\&.
+.PP
+References pietc::u1, and pietc::u2\&.
+.SS "subroutine \fBpesg::xttoxm\fP (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)"
+
+.PP
+Inverse of xmtoxt\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Mapping parameter controlling grid line spacing profile 
+.br
+.br
+\fIxt\fP Gnomonic plane coordinates 
+.br
+.br
+\fIxm\fP Map coordinates 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 235 of file pesg\&.f90\&.
+.SS "subroutine \fBpesg::xttoxs\fP (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Scaled gnomonic plane xt to standard stereographic plane xs\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIk\fP Gaussian curvature parameter of Schmidt mapping 
+.br
+\fIxt\fP Scaled gnomonic plane 
+.br
+\fIxs\fP Standard stereographic plane 
+.br
+\fIxsd\fP Jacobian matrix, d(xs)/d(xt)\&. 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 159 of file pesg\&.f90\&.
+.PP
+References pietc::u0, and pietc::u1\&.
+.SS "subroutine pesg::xttoxs1 (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, real(dp), dimension(2,2,2), intent(out) xsdd, real(dp), dimension(2), intent(out) xs1, real(dp), dimension(2,2), intent(out) xsd1, logical, intent(out) ff)"
+
+.PP
+Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIk\fP Gaussian curvature parameter of the Schmidt mapping 
+.br
+\fIxt\fP Scaled gnomonic plane 
+.br
+\fIxs\fP Standard stereographic plane 
+.br
+\fIxsd\fP Jacobian matrix, d(xs)/d(xt) 
+.br
+\fIxsdd\fP Second partial derivatives, d^2(xs)/(d(xt)d(xt)) 
+.br
+\fIxs1\fP Derivative of xs wrt mapping parameter, d(xs)/dk 
+.br
+\fIxsd1\fP Derivative of Jacobian wrt k: d^2(xs)/(d(xt)dk) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 193 of file pesg\&.f90\&.
+.PP
+References pietc::o2, pietc::u0, pietc::u1, and pietc::u2\&.
+.PP
+Referenced by xmtoxc_vak1()\&.
+.SS "subroutine \fBpesg::zmtozt\fP (real(dp), intent(in) a, real(dp), intent(in) zm, real(dp), intent(out) zt, real(dp), intent(out) ztd, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd, for positive and negative A and for the limiting case, A --> 0\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Mapping parameter controlling grid line spacing profile 
+.br
+\fIzm\fP Scalar value of single map plane coordinate 
+.br
+\fIzt\fP Scalar value of single gnomonic plane coordinate 
+.br
+\fIztd\fP Derivative of gnomonic coordinate, d(zt)/d(zm) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 323 of file pesg\&.f90\&.
+.PP
+References pietc::f, pietc::pih, pietc::u0, and pietc::u1\&.
+.SS "subroutine pesg::zmtozt1 (real(dp), intent(in) a, real(dp), intent(in) zm, real(dp), intent(out) zt, real(dp), intent(out) ztd, real(dp), intent(out) zt1, real(dp), intent(out) ztd1, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like zmtozt, but also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Mapping parameter controlling grid line spacing profile 
+.br
+\fIzm\fP Single map plane coordinate 
+.br
+\fIzt\fP Single gnomonic plane coordinate 
+.br
+\fIztd\fP Derivative wrt zm of zt, d(zt)/d(zm) 
+.br
+\fIzt1\fP Derivative wrt a of zt, d(zt)/da 
+.br
+\fIztd1\fP Derivative wrt a of ztd, d^2(zt)/(d(zm)da) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 348 of file pesg\&.f90\&.
+.PP
+References pietc::o3\&.
+.PP
+Referenced by xmtoxt1()\&.
+.SS "subroutine \fBpesg::zttozm\fP (real(dp), intent(in) a, real(dp), intent(in) zt, real(dp), intent(out) zm, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Inverse of zmtozt\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Mapping parameter controlling grid line spacing profile 
+.br
+\fIzt\fP Scalar value of single gnomonic plane coordinate 
+.br
+\fIzm\fP Scalar value of single map plane coordinate 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 299 of file pesg\&.f90\&.
+.PP
+References pietc::f, pietc::u0, and pietc::u1\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

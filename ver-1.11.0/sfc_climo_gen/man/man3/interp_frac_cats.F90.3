@@ -1,0 +1,70 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/sfc_climo_gen.fd/interp_frac_cats.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/sfc_climo_gen.fd/interp_frac_cats.F90 \- Read the input cateogorical source data and interpolate percent of each category to the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBinterp_frac_cats\fP (localpet, input_file)"
+.br
+.RI "Read the input source data and interpolate it to the model grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read the input cateogorical source data and interpolate percent of each category to the model grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition in file \fBinterp_frac_cats\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine interp_frac_cats (integer, intent(in) localpet, character(len=*), intent(in) input_file)"
+
+.PP
+Read the input source data and interpolate it to the model grid\&. Outputs the percentage of each category within a model grid box and the dominant category\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP this mpi task 
+.br
+\fIinput_file\fP filename of input source data\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition at line 15 of file interp_frac_cats\&.F90\&.
+.PP
+References utils::error_handler(), source_grid::field_names, model_grid::grid_mdl, source_grid::grid_src, model_grid::i_mdl, source_grid::i_src, model_grid::j_mdl, source_grid::j_src, model_grid::land_frac_field_mdl, model_grid::latitude_field_mdl, model_grid::longitude_field_mdl, model_grid::mask_field_mdl, utils::netcdf_err(), model_grid::num_tiles, output_frac_cats::output_driver(), and search_frac_cats()\&.
+.PP
+Referenced by driver()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

@@ -1,0 +1,78 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/grid_tools.fd/shave.fd/shave_nc.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/grid_tools.fd/shave.fd/shave_nc.F90 \- Utility to shave down domains of FV3 files\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcheck\fP (status)"
+.br
+.RI "Handle netCDF return codes\&. "
+.ti -1c
+.RI "program \fBshave_nc\fP"
+.br
+.RI "The grid driver step in FV3 preprocessing generates a grid_tile file and an oro_tile file for the regional domain\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utility to shave down domains of FV3 files\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Tom Black 
+.RE
+.PP
+
+.PP
+Definition in file \fBshave_nc\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine shave_nc::check (integer, intent(in) status)"
+
+.PP
+Handle netCDF return codes\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstatus\fP error code 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Tom Black 
+.RE
+.PP
+
+.PP
+Definition at line 267 of file shave_nc\&.F90\&.
+.SS "program shave_nc ()"
+
+.PP
+The grid driver step in FV3 preprocessing generates a grid_tile file and an oro_tile file for the regional domain\&. The final size of these files' domains must include the halo surrounding the computational domain\&. However the original size of these domains must exceed the domain size plus haloes so that the topography filtering program can produce correct values over the halo region\&. Then before the files go into the chgres job their domains must be shaved down to only the computational interior and the halo which is what this code does\&.
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Tom Black 
+.RE
+.PP
+
+.PP
+Definition at line 17 of file shave_nc\&.F90\&.
+.PP
+References check()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

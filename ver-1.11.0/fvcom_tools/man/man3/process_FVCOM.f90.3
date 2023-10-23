@@ -1,0 +1,63 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/process_FVCOM.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/process_FVCOM.f90 \- This is the code to put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "program \fBprocess_FVCOM\fP"
+.br
+.RI "Put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is the code to put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&. 
+
+
+.PP
+Definition in file \fBprocess_FVCOM\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "program process_FVCOM ()"
+
+.PP
+Put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&. This script will take four variables from the command line:
+.IP "1." 4
+Name of FV3 sfc data file (e\&.g\&. sfc_data\&.tile7\&.halo0\&.nc)
+.IP "2." 4
+Name of FVCOM data file (e\&.g\&. fvcom\&.nc)
+.IP "3." 4
+'warm' or 'cold' start\&. 'warm' start will read in sfc_data\&.nc files generated from a restart of UFS-SRW\&. 'cold' start will read in sfc_data\&.nc files generated from chgres_cube\&.
+.IP "4." 4
+String of time slice to use in the fvcom\&.nc file\&. This string should match exactly what is in the Times variable of the \&.nc file\&. To run the script, use the following example, modifying file names as needed: \&./fvcom_to_FV3 sfc_data\&.tile7\&.halo0\&.nc fvcom\&.nc cold \\ 2020-01-31T18:00:00\&.000000 Code is strongly based upon Eric James' (ESRL/GSL) work to update HRRR/WRF Great Lakes' temperature data with FVCOM\&. Code also relies heavily on Ming Hu's ncio module\&.
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan and GLERL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+17 Aug 2020 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 32 of file process_FVCOM\&.f90\&.
+.PP
+References kinds::i_kind, kinds::r_kind, and kinds::r_single\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.

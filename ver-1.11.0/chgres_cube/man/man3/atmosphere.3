@@ -1,0 +1,869 @@
+.TH "atmosphere" 3 "Mon Oct 23 2023" "Version 1.11.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+atmosphere \- Process atmospheric fields\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBatmosphere_driver\fP (localpet)"
+.br
+.RI "Driver routine to process for atmospheric fields\&. "
+.ti -1c
+.RI "subroutine \fBcleanup_all_target_atm_data\fP"
+.br
+.RI "Cleanup target grid atmospheric field objects\&. "
+.ti -1c
+.RI "subroutine \fBcleanup_target_atm_b4adj_data\fP"
+.br
+.RI "Cleanup atmospheric field (before adjustment) objects\&. "
+.ti -1c
+.RI "subroutine \fBcompute_zh\fP"
+.br
+.RI "Compute vertical level height\&. "
+.ti -1c
+.RI "subroutine \fBconvert_winds_to_uv\fP"
+.br
+.RI "Convert 3-d component winds to u and v\&. "
+.ti -1c
+.RI "subroutine \fBcreate_atm_b4adj_esmf_fields\fP"
+.br
+.RI "Create target grid field objects to hold data before vertical interpolation\&. "
+.ti -1c
+.RI "subroutine \fBcreate_atm_esmf_fields\fP"
+.br
+.RI "Create target grid field objects\&. "
+.ti -1c
+.RI "subroutine \fBhoriz_interp_thomp_mp_climo\fP"
+.br
+.RI "Horizontally interpolate thompson microphysics data to the target model grid\&. "
+.ti -1c
+.RI "subroutine \fBnewpr1\fP (localpet)"
+.br
+.RI "Computes 3-D pressure given an adjusted surface pressure\&. "
+.ti -1c
+.RI "subroutine \fBnewps\fP (localpet)"
+.br
+.RI "Computes adjusted surface pressure given a new terrain height\&. "
+.ti -1c
+.RI "subroutine, public \fBread_vcoord_info\fP"
+.br
+.RI "Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. "
+.ti -1c
+.RI "subroutine \fBRSEARCH\fP (IM, KM1, IXZ1, KXZ1, Z1, KM2, IXZ2, KXZ2, Z2, IXL2, KXL2, L2)"
+.br
+.RI "Search for a surrounding real interval\&. "
+.ti -1c
+.RI "subroutine \fBTERP3\fP (IM, IXZ1, IXQ1, IXZ2, IXQ2, NM, NXQ1, NXQ2, KM1, KXZ1, KXQ1, Z1, Q1, KM2, KXZ2, KXQ2, Z2, Q2)"
+.br
+.RI "Cubically interpolate in one dimension\&. "
+.ti -1c
+.RI "subroutine \fBVINTG\fP"
+.br
+.RI "Vertically interpolate upper-air fields\&. "
+.ti -1c
+.RI "subroutine \fBVINTG_THOMP_MP_CLIMO\fP"
+.br
+.RI "Vertically interpolate atmospheric fields to target FV3 grid\&. "
+.ti -1c
+.RI "subroutine \fBVINTG_WAM\fP (YEAR, MONTH, DAY, HOUR, PF)"
+.br
+.RI "Vertically extend model top into thermosphere for whole atmosphere model\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field) \fBdzdt_b4adj_target_grid\fP"
+.br
+.RI "vertical vel before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBpres_b4adj_target_grid\fP"
+.br
+.RI "3-d pres before terrain adj "
+.ti -1c
+.RI "type(esmf_field) \fBpres_target_grid\fP"
+.br
+.RI "3-d pressure "
+.ti -1c
+.RI "type(esmf_field) \fBps_b4adj_target_grid\fP"
+.br
+.RI "sfc pres before terrain adj "
+.ti -1c
+.RI "type(esmf_field) \fBqnifa_climo_b4adj_target_grid\fP"
+.br
+.RI "number concentration of ice friendly aerosols before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBqnwfa_climo_b4adj_target_grid\fP"
+.br
+.RI "number concentration of water friendly aerosols before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBtemp_b4adj_target_grid\fP"
+.br
+.RI "temp before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBterrain_interp_to_target_grid\fP"
+.br
+.RI "Input grid terrain interpolated to target grid\&. "
+.ti -1c
+.RI "type(esmf_field) \fBthomp_pres_climo_b4adj_target_grid\fP"
+.br
+.RI "pressure of each level on target grid "
+.ti -1c
+.RI "type(esmf_field), dimension(:), allocatable \fBtracers_b4adj_target_grid\fP"
+.br
+.RI "tracers before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBxwind_b4adj_target_grid\fP"
+.br
+.RI "x-component wind, before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBxwind_s_target_grid\fP"
+.br
+.RI "x-component wind, 'south' edge "
+.ti -1c
+.RI "type(esmf_field) \fBxwind_target_grid\fP"
+.br
+.RI "x-component wind, grid box center "
+.ti -1c
+.RI "type(esmf_field) \fBxwind_w_target_grid\fP"
+.br
+.RI "x-component wind, 'west' edge "
+.ti -1c
+.RI "type(esmf_field) \fBywind_b4adj_target_grid\fP"
+.br
+.RI "y-component wind, before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBywind_s_target_grid\fP"
+.br
+.RI "y-component wind, 'south' edge "
+.ti -1c
+.RI "type(esmf_field) \fBywind_target_grid\fP"
+.br
+.RI "y-component wind, grid box center "
+.ti -1c
+.RI "type(esmf_field) \fBywind_w_target_grid\fP"
+.br
+.RI "y-component wind, 'west' edge "
+.ti -1c
+.RI "type(esmf_field) \fBzwind_b4adj_target_grid\fP"
+.br
+.RI "z-component wind, before vert adj "
+.ti -1c
+.RI "type(esmf_field) \fBzwind_s_target_grid\fP"
+.br
+.RI "z-component wind, 'south' edge "
+.ti -1c
+.RI "type(esmf_field) \fBzwind_target_grid\fP"
+.br
+.RI "z-component wind, grid box center "
+.ti -1c
+.RI "type(esmf_field) \fBzwind_w_target_grid\fP"
+.br
+.RI "z-component wind, 'west' edge "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Process atmospheric fields\&. 
+
+Horizontally interpolate from input to target FV3 grid using ESMF regridding\&. Adjust surface pressure according to terrain differences between input and target grid\&. Vertically interpolate to target FV3 grid vertical levels\&. Processing based on the spectral GFS version of CHGRES\&.
+.PP
+For variables 'b4adj' indicates fields on the target grid before vertical adjustment\&. 'target' indicates data on target grid\&. 'input' indicates data on input grid\&. '_s' indicates fields on the 'south' edge of the grid box\&. '_w' indicate fields on the 'west' edge of the grid box\&. Otherwise, fields are at the center of the grid box\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public atmosphere::atmosphere_driver (integer, intent(in) localpet)"
+
+.PP
+Driver routine to process for atmospheric fields\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 119 of file atmosphere\&.F90\&.
+.PP
+References program_setup::atm_weight_file, cleanup_all_target_atm_data(), atm_input_data::cleanup_input_atm_data(), cleanup_target_atm_b4adj_data(), compute_zh(), convert_winds_to_uv(), create_atm_b4adj_esmf_fields(), create_atm_esmf_fields(), program_setup::cycle_day, program_setup::cycle_hour, program_setup::cycle_mon, program_setup::cycle_year, dzdt_b4adj_target_grid, atm_input_data::dzdt_input_grid, horiz_interp_thomp_mp_climo(), newpr1(), newps(), program_setup::num_tracers_input, pres_b4adj_target_grid, atm_input_data::pres_input_grid, ps_b4adj_target_grid, atm_input_data::ps_input_grid, atm_input_data::read_input_atm_data(), thompson_mp_climo_data::read_thomp_mp_climo_data(), read_vcoord_info(), program_setup::regional, temp_b4adj_target_grid, atm_input_data::temp_input_grid, atm_input_data::terrain_input_grid, terrain_interp_to_target_grid, program_setup::tracers, tracers_b4adj_target_grid, atm_input_data::tracers_input_grid, program_setup::use_thomp_mp_climo, program_setup::wam_cold_start, program_setup::wam_parm_file, xwind_b4adj_target_grid, atm_input_data::xwind_input_grid, xwind_s_target_grid, xwind_target_grid, xwind_w_target_grid, ywind_b4adj_target_grid, atm_input_data::ywind_input_grid, ywind_s_target_grid, ywind_target_grid, ywind_w_target_grid, zwind_b4adj_target_grid, atm_input_data::zwind_input_grid, zwind_s_target_grid, zwind_target_grid, and zwind_w_target_grid\&.
+.PP
+Referenced by chgres()\&.
+.SS "subroutine atmosphere::cleanup_all_target_atm_data ()\fC [private]\fP"
+
+.PP
+Cleanup target grid atmospheric field objects\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 2386 of file atmosphere\&.F90\&.
+.PP
+References atmosphere_target_data::cleanup_atmosphere_target_data(), pres_target_grid, xwind_s_target_grid, xwind_target_grid, xwind_w_target_grid, ywind_s_target_grid, ywind_target_grid, ywind_w_target_grid, zwind_s_target_grid, zwind_target_grid, and zwind_w_target_grid\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::cleanup_target_atm_b4adj_data ()\fC [private]\fP"
+
+.PP
+Cleanup atmospheric field (before adjustment) objects\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 2359 of file atmosphere\&.F90\&.
+.PP
+References dzdt_b4adj_target_grid, program_setup::num_tracers_input, pres_b4adj_target_grid, ps_b4adj_target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, tracers_b4adj_target_grid, xwind_b4adj_target_grid, ywind_b4adj_target_grid, and zwind_b4adj_target_grid\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::compute_zh ()\fC [private]\fP"
+
+.PP
+Compute vertical level height\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 2269 of file atmosphere\&.F90\&.
+.PP
+References atmosphere_target_data::levp1_target, program_setup::num_tracers, atmosphere_target_data::ps_target_grid, atmosphere_target_data::temp_target_grid, model_grid::terrain_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::vcoord_target, and atmosphere_target_data::zh_target_grid\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::convert_winds_to_uv ()\fC [private]\fP"
+
+.PP
+Convert 3-d component winds to u and v\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 780 of file atmosphere\&.F90\&.
+.PP
+References model_grid::latitude_s_target_grid, model_grid::latitude_w_target_grid, model_grid::longitude_s_target_grid, model_grid::longitude_w_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, xwind_s_target_grid, xwind_w_target_grid, ywind_s_target_grid, ywind_w_target_grid, zwind_s_target_grid, and zwind_w_target_grid\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::create_atm_b4adj_esmf_fields ()"
+
+.PP
+Create target grid field objects to hold data before vertical interpolation\&. These will be defined with the same number of vertical levels as the input grid\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 495 of file atmosphere\&.F90\&.
+.PP
+References dzdt_b4adj_target_grid, atm_input_data::lev_input, program_setup::num_tracers_input, pres_b4adj_target_grid, ps_b4adj_target_grid, model_grid::target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, program_setup::tracers, tracers_b4adj_target_grid, xwind_b4adj_target_grid, ywind_b4adj_target_grid, and zwind_b4adj_target_grid\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::create_atm_esmf_fields ()\fC [private]\fP"
+
+.PP
+Create target grid field objects\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 587 of file atmosphere\&.F90\&.
+.PP
+References atmosphere_target_data::delp_target_grid, atmosphere_target_data::dzdt_target_grid, atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, program_setup::num_tracers, pres_target_grid, atmosphere_target_data::ps_target_grid, model_grid::target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, atmosphere_target_data::u_s_target_grid, atmosphere_target_data::u_w_target_grid, atmosphere_target_data::v_s_target_grid, atmosphere_target_data::v_w_target_grid, xwind_s_target_grid, xwind_target_grid, xwind_w_target_grid, ywind_s_target_grid, ywind_target_grid, ywind_w_target_grid, atmosphere_target_data::zh_target_grid, zwind_s_target_grid, zwind_target_grid, and zwind_w_target_grid\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::horiz_interp_thomp_mp_climo ()\fC [private]\fP"
+
+.PP
+Horizontally interpolate thompson microphysics data to the target model grid\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 1292 of file atmosphere\&.F90\&.
+.PP
+References thompson_mp_climo_data::cleanup_thomp_mp_climo_input_data(), atmosphere_target_data::lev_target, thompson_mp_climo_data::lev_thomp_mp_climo, qnifa_climo_b4adj_target_grid, thompson_mp_climo_data::qnifa_climo_input_grid, atmosphere_target_data::qnifa_climo_target_grid, qnwfa_climo_b4adj_target_grid, thompson_mp_climo_data::qnwfa_climo_input_grid, atmosphere_target_data::qnwfa_climo_target_grid, model_grid::target_grid, thomp_pres_climo_b4adj_target_grid, and thompson_mp_climo_data::thomp_pres_climo_input_grid\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::newpr1 (integer, intent(in) localpet)\fC [private]\fP"
+
+.PP
+Computes 3-D pressure given an adjusted surface pressure\&. program history log: 
+.br
+ 2005-04-11 Hann-Ming Henry Juang hybrid sigma, sigma-p, and sigma-
+.IP "\(bu" 2
+PRGMMR: Henry Juang ORG: W/NMC23 DATE: 2005-04-11 
+.br
+ - PRGMMR: Fanglin Yang ORG: W/NMC23 DATE: 2006-11-28 
+.br
+ - PRGMMR: S\&. Moorthi ORG: NCEP/EMC DATE: 2006-12-12 
+.br
+ - PRGMMR: S\&. Moorthi ORG: NCEP/EMC DATE: 2007-01-02 
+.br
+ INPUT ARGUMENT LIST: 
+.br
+ IM INTEGER NUMBER OF POINTS TO COMPUTE 
+.br
+ KM INTEGER NUMBER OF LEVELS 
+.br
+ IDVC INTEGER VERTICAL COORDINATE ID 
+.br
+ (1 FOR SIGMA AND 2 FOR HYBRID) 
+.br
+ IDSL INTEGER TYPE OF SIGMA STRUCTURE 
+.br
+ (1 FOR PHILLIPS OR 2 FOR MEAN) 
+.br
+ NVCOORD INTEGER NUMBER OF VERTICAL COORDINATES 
+.br
+ VCOORD REAL (KM+1,NVCOORD) VERTICAL COORDINATE VALUES 
+.br
+ FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE 
+.br
+ FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B 
+.br
+ FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE AK REAL (KM+1) HYBRID INTERFACE A 
+.br
+ BK REAL (KM+1) HYBRID INTERFACE B 
+.br
+ PS REAL (IX) SURFACE PRESSURE (PA) 
+.br
+ OUTPUT ARGUMENT LIST: 
+.br
+ PM REAL (IX,KM) MID-LAYER PRESSURE (PA) 
+.br
+ DP REAL (IX,KM) LAYER DELTA PRESSURE (PA)
+.PP
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.br
+ 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann Ming Henry Juang, Juang, Fanglin Yang, S\&. Moorthi 
+.RE
+.PP
+
+.PP
+Definition at line 949 of file atmosphere\&.F90\&.
+.PP
+References atmosphere_target_data::delp_target_grid, atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, pres_target_grid, atmosphere_target_data::ps_target_grid, and atmosphere_target_data::vcoord_target\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::newps (integer, intent(in) localpet)\fC [private]\fP"
+
+.PP
+Computes adjusted surface pressure given a new terrain height\&. Computes a new surface pressure given a new orography\&. The new pressure is computed assuming a hydrostatic balance and a constant temperature lapse rate\&. Below ground, the lapse rate is assumed to be -6\&.5 k/km\&.
+.PP
+program history log:
+.IP "\(bu" 2
+91-10-31 mark iredell
+.IP "\(bu" 2
+2018-apr adapt for fv3\&. george gayno
+.PP
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell, George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+92-10-31 
+.RE
+.PP
+
+.PP
+Definition at line 1060 of file atmosphere\&.F90\&.
+.PP
+References program_setup::num_tracers, pres_b4adj_target_grid, ps_b4adj_target_grid, atmosphere_target_data::ps_target_grid, temp_b4adj_target_grid, terrain_interp_to_target_grid, model_grid::terrain_target_grid, program_setup::tracers, and tracers_b4adj_target_grid\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine, public atmosphere::read_vcoord_info ()"
+
+.PP
+Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 1257 of file atmosphere\&.F90\&.
+.PP
+References atmosphere_target_data::lev_target, atmosphere_target_data::levp1_target, atmosphere_target_data::nvcoord_target, program_setup::vcoord_file_target_grid, and atmosphere_target_data::vcoord_target\&.
+.PP
+Referenced by atmosphere_driver()\&.
+.SS "subroutine atmosphere::RSEARCH (integer, intent(in) IM, integer, intent(in) KM1, integer, intent(in) IXZ1, integer, intent(in) KXZ1, real(esmf_kind_r8), dimension(1+(im\-1)*ixz1+(km1\-1)*kxz1), intent(in) Z1, integer, intent(in) KM2, integer, intent(in) IXZ2, integer, intent(in) KXZ2, real(esmf_kind_r8), dimension(1+(im\-1)*ixz2+(km2\-1)*kxz2), intent(in) Z2, integer, intent(in) IXL2, integer, intent(in) KXL2, integer, dimension(1+(im\-1)*ixl2+(km2\-1)*kxl2), intent(out) L2)\fC [private]\fP"
+
+.PP
+Search for a surrounding real interval\&. This subprogram searches monotonic sequences of real numbers for intervals that surround a given search set of real numbers\&. The sequences may be monotonic in either direction; the real numbers may be single or double precision; the input sequences and sets and the output locations may be arbitrarily dimensioned\&.
+.PP
+If the array z1 is dimensioned (im,km1), then the skip numbers are ixz1=1 and kxz1=im; if it is dimensioned (km1,im), then the skip numbers are ixz1=km1 and kxz1=1; if it is dimensioned (im,jm,km1), then the skip numbers are ixz1=1 and kxz1=im*jm; etcetera\&. Similar examples apply to the skip numbers for z2 and l2\&.
+.PP
+Returned values of 0 or km1 indicate that the given search value 
+.br
+ is outside the range of the sequence\&.
+.PP
+If a search value is identical to one of the sequence values then the location returned points to the identical value\&. If the sequence is not strictly monotonic and a search value is identical to more than one of the sequence values, then the location returned may point to any of the identical values\&.
+.PP
+to be exact, for each i from 1 to im and for each k from 1 to km2, z=z2(1+(i-1)*ixz2+(k-1)*kxz2) is the search value and l=l2(1+(i-1)*ixl2+(k-1)*kxl2) is the location returned\&. if l=0, then z is less than the start point z1(1+(i-1)*ixz1) for ascending sequences (or greater than for descending sequences)\&. if l=km1, then z is greater than or equal to the end point z1(1+(i-1)*ixz1+(km1-1)*kxz1) for ascending sequences (or less than or equal to for descending sequences)\&. otherwise z is between the values z1(1+(i-1)*ixz1+(l-1)*kxz1) and z1(1+(i-1)*ixz1+(l-0)*kxz1) and may equal the former\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIim\fP integer number of sequences to search 
+.br
+.br
+\fIkm1\fP integer number of points in each sequence 
+.br
+.br
+\fIixz1\fP integer sequence skip number for z1 
+.br
+.br
+\fIkxz1\fP integer point skip number for z1 
+.br
+.br
+\fIz1\fP real (1+(im-1)*ixz1+(km1-1)*kxz1) 
+.br
+ sequence values to search 
+.br
+ (z1 must be monotonic in either direction) 
+.br
+.br
+\fIkm2\fP integer number of points to search for 
+.br
+ in each respective sequence 
+.br
+.br
+\fIixz2\fP integer sequence skip number for z2 
+.br
+.br
+\fIkxz2\fP integer point skip number for z2 
+.br
+.br
+\fIz2\fP real (1+(im-1)*ixz2+(km2-1)*kxz2) 
+.br
+ set of values to search for 
+.br
+ (z2 need not be monotonic) 
+.br
+.br
+\fIixl2\fP integer sequence skip number for l2 
+.br
+.br
+\fIkxl2\fP integer point skip number for l2 
+.br
+ 
+.br
+\fIl2\fP integer (1+(im-1)*ixl2+(km2-1)*kxl2) 
+.br
+ interval locations having values from 0 to km1 
+.br
+ (z2 will be between z1(l2) and z1(l2+1)) 
+.br
+ 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+98-05-01 
+.RE
+.PP
+
+.PP
+Definition at line 2221 of file atmosphere\&.F90\&.
+.SS "subroutine atmosphere::TERP3 (integer IM, integer IXZ1, integer IXQ1, integer IXZ2, integer IXQ2, integer NM, integer NXQ1, integer NXQ2, integer KM1, integer KXZ1, integer KXQ1, real(esmf_kind_r8), dimension(1+(im\-1)*ixz1+(km1\-1)*kxz1) Z1, real(esmf_kind_r8), dimension(1+(im\-1)*ixq1+(km1\-1)*kxq1+(nm\-1)*nxq1) Q1, integer KM2, integer KXZ2, integer KXQ2, real(esmf_kind_r8), dimension(1+(im\-1)*ixz2+(km2\-1)*kxz2) Z2, real(esmf_kind_r8), dimension(1+(im\-1)*ixq2+(km2\-1)*kxq2+(nm\-1)*nxq2) Q2)"
+
+.PP
+Cubically interpolate in one dimension\&. Interpolate field(s) in one dimension along the column(s)\&. The interpolation is cubic lagrangian with a monotonic constraint in the center of the domain\&. In the outer intervals it is linear\&. Outside the domain, fields are held constant\&.
+.PP
+PROGRAM HISTORY LOG: 
+.br
+ - 98-05-01 MARK IREDELL 
+.br
+ - 1999-01-04 IREDELL USE ESSL SEARCH 
+.br
+ 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIim\fP integer number of columns 
+.br
+.br
+\fIixz1\fP integer column skip number for z1 
+.br
+.br
+\fIixq1\fP integer column skip number for q1 
+.br
+.br
+\fIixz2\fP integer column skip number for z2 
+.br
+.br
+\fIixq2\fP integer column skip number for q2 
+.br
+.br
+\fInm\fP integer number of fields per column 
+.br
+.br
+\fInxq1\fP integer field skip number for q1 
+.br
+.br
+\fInxq2\fP integer field skip number for q2 
+.br
+.br
+\fIkm1\fP integer number of input points 
+.br
+.br
+\fIkxz1\fP integer point skip number for z1 
+.br
+.br
+\fIkxq1\fP integer point skip number for q1 
+.br
+.br
+\fIz1\fP real (1+(im-1)*ixz1+(km1-1)*kxz1) 
+.br
+ input coordinate values in which to interpolate 
+.br
+ (z1 must be strictly monotonic in either direction) 
+.br
+.br
+\fIq1\fP real (1+(im-1)*ixq1+(km1-1)*kxq1+(nm-1)*nxq1) 
+.br
+ input fields to interpolate 
+.br
+.br
+\fIkm2\fP integer number of output points 
+.br
+.br
+\fIkxz2\fP integer point skip number for z2 
+.br
+.br
+\fIkxq2\fP integer point skip number for q2 
+.br
+.br
+\fIz2\fP real (1+(im-1)*ixz2+(km2-1)*kxz2) 
+.br
+ output coordinate values to which to interpolate 
+.br
+ (z2 need not be monotonic) 
+.br
+.br
+\fIq2\fP real (1+(im-1)*ixq2+(km2-1)*kxq2+(nm-1)*nxq2) 
+.br
+ output interpolated fields 
+.br
+ 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+98-05-01 
+.RE
+.PP
+
+.PP
+Definition at line 2028 of file atmosphere\&.F90\&.
+.SS "subroutine atmosphere::VINTG ()\fC [private]\fP"
+
+.PP
+Vertically interpolate upper-air fields\&. Vertically interpolate upper-air fields\&. Wind, temperature, humidity and other tracers are interpolated\&. The interpolation is cubic lagrangian in log pressure with a monotonic constraint in the center of the domain\&. In the outer intervals it is linear in log pressure\&. Outside the domain, fields are generally held constant, except for temperature and humidity below the input domain, where the temperature lapse rate is held fixed at -6\&.5 k/km and the relative humidity is held constant\&. This routine expects fields ordered from bottom to top of atmosphere\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Mark Iredell 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+92-10-31 
+.RE
+.PP
+
+.PP
+Definition at line 1764 of file atmosphere\&.F90\&.
+.PP
+References dzdt_b4adj_target_grid, atmosphere_target_data::dzdt_target_grid, atm_input_data::lev_input, atmosphere_target_data::lev_target, program_setup::num_tracers_input, pres_b4adj_target_grid, pres_target_grid, temp_b4adj_target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, tracers_b4adj_target_grid, atmosphere_target_data::tracers_target_grid, xwind_b4adj_target_grid, xwind_target_grid, ywind_b4adj_target_grid, ywind_target_grid, zwind_b4adj_target_grid, and zwind_target_grid\&.
+.SS "subroutine atmosphere::VINTG_THOMP_MP_CLIMO ()\fC [private]\fP"
+
+.PP
+Vertically interpolate atmospheric fields to target FV3 grid\&. Vertically interpolate thompson microphysics climo tracers to the target model levels\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 1404 of file atmosphere\&.F90\&.
+.PP
+References atmosphere_target_data::lev_target, thompson_mp_climo_data::lev_thomp_mp_climo, pres_target_grid, qnifa_climo_b4adj_target_grid, atmosphere_target_data::qnifa_climo_target_grid, qnwfa_climo_b4adj_target_grid, atmosphere_target_data::qnwfa_climo_target_grid, and thomp_pres_climo_b4adj_target_grid\&.
+.SS "subroutine atmosphere::VINTG_WAM (integer, intent(in) YEAR, integer, intent(in) MONTH, integer, intent(in) DAY, integer, intent(in) HOUR, character(*), intent(in) PF)\fC [private]\fP"
+
+.PP
+Vertically extend model top into thermosphere for whole atmosphere model\&. Use climatological data to extent model top into thermosphere for temperature and consoder primary compositions of neutral atmosphere in term of specific values of oxygen, single oxygen, and ozone\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIyear\fP initial year 
+.br
+\fImonth\fP initial month 
+.br
+\fIday\fP initial day 
+.br
+\fIhour\fP initial hour 
+.br
+\fIpf\fP path to MSIS2\&.1 parm file
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Hann-Ming Henry Juang NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 1528 of file atmosphere\&.F90\&.
+.PP
+References atmosphere_target_data::dzdt_target_grid, gettemp(), model_grid::latitude_s_target_grid, atm_input_data::lev_input, atmosphere_target_data::lev_target, program_setup::num_tracers, pres_b4adj_target_grid, pres_target_grid, atmosphere_target_data::temp_target_grid, program_setup::tracers, atmosphere_target_data::tracers_target_grid, xwind_target_grid, ywind_target_grid, and zwind_target_grid\&.
+.SH "Variable Documentation"
+.PP 
+.SS "type(esmf_field) atmosphere::dzdt_b4adj_target_grid\fC [private]\fP"
+
+.PP
+vertical vel before vert adj 
+.PP
+Definition at line 80 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and VINTG()\&.
+.SS "type(esmf_field) atmosphere::pres_b4adj_target_grid\fC [private]\fP"
+
+.PP
+3-d pres before terrain adj 
+.PP
+Definition at line 84 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), newps(), VINTG(), and VINTG_WAM()\&.
+.SS "type(esmf_field) atmosphere::pres_target_grid\fC [private]\fP"
+
+.PP
+3-d pressure 
+.PP
+Definition at line 83 of file atmosphere\&.F90\&.
+.PP
+Referenced by cleanup_all_target_atm_data(), create_atm_esmf_fields(), newpr1(), VINTG(), VINTG_THOMP_MP_CLIMO(), and VINTG_WAM()\&.
+.SS "type(esmf_field) atmosphere::ps_b4adj_target_grid\fC [private]\fP"
+
+.PP
+sfc pres before terrain adj 
+.PP
+Definition at line 82 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and newps()\&.
+.SS "type(esmf_field) atmosphere::qnifa_climo_b4adj_target_grid\fC [private]\fP"
+
+.PP
+number concentration of ice friendly aerosols before vert adj 
+.PP
+Definition at line 102 of file atmosphere\&.F90\&.
+.PP
+Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
+.SS "type(esmf_field) atmosphere::qnwfa_climo_b4adj_target_grid\fC [private]\fP"
+
+.PP
+number concentration of water friendly aerosols before vert adj 
+.PP
+Definition at line 104 of file atmosphere\&.F90\&.
+.PP
+Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
+.SS "type(esmf_field) atmosphere::temp_b4adj_target_grid\fC [private]\fP"
+
+.PP
+temp before vert adj 
+.PP
+Definition at line 85 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), newps(), and VINTG()\&.
+.SS "type(esmf_field) atmosphere::terrain_interp_to_target_grid\fC [private]\fP"
+
+.PP
+Input grid terrain interpolated to target grid\&. 
+.PP
+Definition at line 86 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and newps()\&.
+.SS "type(esmf_field) atmosphere::thomp_pres_climo_b4adj_target_grid\fC [private]\fP"
+
+.PP
+pressure of each level on target grid 
+.PP
+Definition at line 106 of file atmosphere\&.F90\&.
+.PP
+Referenced by horiz_interp_thomp_mp_climo(), and VINTG_THOMP_MP_CLIMO()\&.
+.SS "type(esmf_field), dimension(:), allocatable atmosphere::tracers_b4adj_target_grid\fC [private]\fP"
+
+.PP
+tracers before vert adj 
+.PP
+Definition at line 81 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), newps(), and VINTG()\&.
+.SS "type(esmf_field) atmosphere::xwind_b4adj_target_grid\fC [private]\fP"
+
+.PP
+x-component wind, before vert adj 
+.PP
+Definition at line 90 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and VINTG()\&.
+.SS "type(esmf_field) atmosphere::xwind_s_target_grid\fC [private]\fP"
+
+.PP
+x-component wind, 'south' edge 
+.PP
+Definition at line 93 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds_to_uv(), and create_atm_esmf_fields()\&.
+.SS "type(esmf_field) atmosphere::xwind_target_grid\fC [private]\fP"
+
+.PP
+x-component wind, grid box center 
+.PP
+Definition at line 87 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), create_atm_esmf_fields(), VINTG(), and VINTG_WAM()\&.
+.SS "type(esmf_field) atmosphere::xwind_w_target_grid\fC [private]\fP"
+
+.PP
+x-component wind, 'west' edge 
+.PP
+Definition at line 96 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds_to_uv(), and create_atm_esmf_fields()\&.
+.SS "type(esmf_field) atmosphere::ywind_b4adj_target_grid\fC [private]\fP"
+
+.PP
+y-component wind, before vert adj 
+.PP
+Definition at line 91 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and VINTG()\&.
+.SS "type(esmf_field) atmosphere::ywind_s_target_grid\fC [private]\fP"
+
+.PP
+y-component wind, 'south' edge 
+.PP
+Definition at line 94 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds_to_uv(), and create_atm_esmf_fields()\&.
+.SS "type(esmf_field) atmosphere::ywind_target_grid\fC [private]\fP"
+
+.PP
+y-component wind, grid box center 
+.PP
+Definition at line 88 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), create_atm_esmf_fields(), VINTG(), and VINTG_WAM()\&.
+.SS "type(esmf_field) atmosphere::ywind_w_target_grid\fC [private]\fP"
+
+.PP
+y-component wind, 'west' edge 
+.PP
+Definition at line 97 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds_to_uv(), and create_atm_esmf_fields()\&.
+.SS "type(esmf_field) atmosphere::zwind_b4adj_target_grid\fC [private]\fP"
+
+.PP
+z-component wind, before vert adj 
+.PP
+Definition at line 92 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_target_atm_b4adj_data(), create_atm_b4adj_esmf_fields(), and VINTG()\&.
+.SS "type(esmf_field) atmosphere::zwind_s_target_grid\fC [private]\fP"
+
+.PP
+z-component wind, 'south' edge 
+.PP
+Definition at line 95 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds_to_uv(), and create_atm_esmf_fields()\&.
+.SS "type(esmf_field) atmosphere::zwind_target_grid\fC [private]\fP"
+
+.PP
+z-component wind, grid box center 
+.PP
+Definition at line 89 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), create_atm_esmf_fields(), VINTG(), and VINTG_WAM()\&.
+.SS "type(esmf_field) atmosphere::zwind_w_target_grid\fC [private]\fP"
+
+.PP
+z-component wind, 'west' edge 
+.PP
+Definition at line 98 of file atmosphere\&.F90\&.
+.PP
+Referenced by atmosphere_driver(), cleanup_all_target_atm_data(), convert_winds_to_uv(), and create_atm_esmf_fields()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

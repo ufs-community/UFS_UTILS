@@ -1,0 +1,127 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/model_grid.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/model_grid.F90 \- Read in data defining the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBmodel_grid\fP"
+.br
+.RI "Read in data defining the model grid\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBmodel_grid::model_grid_cleanup\fP"
+.br
+.RI "Clean up allocatable arrays\&. "
+.ti -1c
+.RI "subroutine \fBmodel_grid::read_mdl_grid_info\fP"
+.br
+.RI "Read mdl grid\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer \fBmodel_grid::grid_id_mdl\fP"
+.br
+.RI "grib id of model grid, 4-gaussian, 203-egrid "
+.ti -1c
+.RI "integer \fBmodel_grid::ijmdl\fP"
+.br
+.RI "total number of model land points "
+.ti -1c
+.RI "integer \fBmodel_grid::imdl\fP"
+.br
+.RI "i-dimension of model grid "
+.ti -1c
+.RI "integer, dimension(:), allocatable \fBmodel_grid::ipts_mdl\fP"
+.br
+.RI "i index of point on full grid "
+.ti -1c
+.RI "integer \fBmodel_grid::jmdl\fP"
+.br
+.RI "j-dimension of model grid "
+.ti -1c
+.RI "integer, dimension(:), allocatable \fBmodel_grid::jpts_mdl\fP"
+.br
+.RI "j index of point on full grid "
+.ti -1c
+.RI "integer, dimension(200) \fBmodel_grid::kgds_mdl\fP"
+.br
+.RI "holds grib gds info of model grid "
+.ti -1c
+.RI "real \fBmodel_grid::lat11\fP"
+.br
+.RI "Corner point latitude (1,1) of model grid\&. "
+.ti -1c
+.RI "real \fBmodel_grid::latlast\fP"
+.br
+.RI "Corner point latitude (imdl,jmdl) of model grid\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable \fBmodel_grid::lats_mdl\fP"
+.br
+.RI "Latitudes of model grid points\&. "
+.ti -1c
+.RI "real \fBmodel_grid::lon11\fP"
+.br
+.RI "Corner point longitude (1,1) of model grid\&. "
+.ti -1c
+.RI "real \fBmodel_grid::lonlast\fP"
+.br
+.RI "Corner point longitude (imdl,jmdl) of model grid\&. "
+.ti -1c
+.RI "real, dimension(:), allocatable \fBmodel_grid::lons_mdl\fP"
+.br
+.RI "longitudes of model grid points "
+.ti -1c
+.RI "integer, dimension(:), allocatable \fBmodel_grid::lonsperlat_mdl\fP"
+.br
+.RI "Number of longitudes (i-points) for each latitude (row)\&. "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBmodel_grid::lsmask_mdl\fP"
+.br
+.RI "land mask of model grid (0 - non land, 1-land) for global grids run thinned, will contain a modified version of the original mask that has land at all points encompassed by a thinned point "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBmodel_grid::lsmask_mdl_sav\fP"
+.br
+.RI "saved copy of land mask of model grid (0 - non land, 1-land) only used for global thinned grids\&. "
+.ti -1c
+.RI "real \fBmodel_grid::resol_mdl\fP"
+.br
+.RI "approximate model resolution in km\&. "
+.ti -1c
+.RI "logical \fBmodel_grid::thinned\fP"
+.br
+.RI "When true, global grids will run thinned (number of i points decrease toward pole) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read in data defining the model grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2005-Dec-16 
+.RE
+.PP
+
+.PP
+Definition in file \fBmodel_grid\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for emcsfc_snow2mdl from the source code\&.

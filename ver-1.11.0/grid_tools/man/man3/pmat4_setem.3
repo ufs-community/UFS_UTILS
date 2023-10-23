@@ -1,0 +1,51 @@
+.TH "pmat4::setem" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::setem
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBsetem\fP (c, d, e, g, r)"
+.br
+.RI "Given the 4 components of a unit quaternion, return the associated 3*3 rotation matrix\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 100 of file pmat4\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat4::setem::setem (real(dp), intent(in) c, real(dp), intent(in) d, real(dp), intent(in) e, real(dp), intent(in) g, real(dp), dimension(3,3), intent(out) r)\fC [private]\fP"
+
+.PP
+Given the 4 components of a unit quaternion, return the associated 3*3 rotation matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP 0th component of given quaternion 
+.br
+\fId\fP 1st component of given quaternion 
+.br
+\fIe\fP 2nd component of given quaternion 
+.br
+\fIg\fP 3rd component of given quaternion 
+.br
+\fIr\fP output 3*3 real rotation matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1690 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

@@ -1,0 +1,63 @@
+.TH "pesg::bestesg_map" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::bestesg_map
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBbestesg_map\fP (lam, marcx, marcy, a, k, garcx, garcy, q, ff)"
+.br
+.RI "Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given map-coordinate half-spans, marcx and marcy, as well as the corresponding geographical half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 43 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::bestesg_map::bestesg_map (real(dp), intent(in) lam, real(dp), intent(in) marcx, real(dp), intent(in) marcy, real(dp), intent(out) a, real(dp), intent(out) k, real(dp), intent(out) garcx, real(dp), intent(out) garcy, real(dp), intent(out) q, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given map-coordinate half-spans, marcx and marcy, as well as the corresponding geographical half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. If this process fails for any reason, the failure is alerted by a raised flag, FF, and the other output arguments must then be taken to be meaningless\&.
+.PP
+The diagnostic Q measures the variance over the domain of a local measure of grid distortion\&. A logarithmic measure of local grid deformation is give by L=log(J^t\&.J)/2, where J is the mapping Jacobian matrix, dX/dx, where X is the cartesian unit 3-vector representation of the image of the mapping of the map-coordinate 2-vector, x\&. The Frobenius squared-norm, Trace(L*L), of L is the basis for the simplest (lam=0) definition of the variance of L, but (Trace(L))**2 is another\&. Here, we weight both contributions, by lam and (1-lam) respectively, with 0 <= lam <1, to compute the variance Q(lam,a,k), and search for the (a,k) that minimizes this Q\&.
+.PP
+The domain averages are computed by double Gauss-Legendre quadrature (i\&.e\&., in both the x and y directions), but restricted to a mere quadrant of the domain (since bilateral symmetry pertains across both domain medians, yielding a domain mean L that is strictly diagonal\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlam\fP 
+.br
+\fImarcx\fP map-coordinate half-spans 
+.br
+\fImarcy\fP map-coordinate half-spans 
+.br
+\fIa\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIk\fP Extended Schmidt Gnomonic parameter 
+.br
+\fIgarcx\fP geographical half-spans 
+.br
+\fIgarcy\fP geographical half-spans 
+.br
+\fIq\fP 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1073 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

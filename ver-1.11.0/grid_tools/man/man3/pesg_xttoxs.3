@@ -1,0 +1,89 @@
+.TH "pesg::xttoxs" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::xttoxs
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBxttoxs\fP (k, xt, xs, xsd, ff)"
+.br
+.RI "Scaled gnomonic plane xt to standard stereographic plane xs\&. "
+.ti -1c
+.RI "subroutine \fBxttoxs1\fP (k, xt, xs, xsd, xsdd, xs1, xsd1, ff)"
+.br
+.RI "Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 28 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::xttoxs::xttoxs (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Scaled gnomonic plane xt to standard stereographic plane xs\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIk\fP Gaussian curvature parameter of Schmidt mapping 
+.br
+\fIxt\fP Scaled gnomonic plane 
+.br
+\fIxs\fP Standard stereographic plane 
+.br
+\fIxsd\fP Jacobian matrix, d(xs)/d(xt)\&. 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 159 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::xttoxs::xttoxs1 (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, real(dp), dimension(2,2,2), intent(out) xsdd, real(dp), dimension(2), intent(out) xs1, real(dp), dimension(2,2), intent(out) xsd1, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIk\fP Gaussian curvature parameter of the Schmidt mapping 
+.br
+\fIxt\fP Scaled gnomonic plane 
+.br
+\fIxs\fP Standard stereographic plane 
+.br
+\fIxsd\fP Jacobian matrix, d(xs)/d(xt) 
+.br
+\fIxsdd\fP Second partial derivatives, d^2(xs)/(d(xt)d(xt)) 
+.br
+\fIxs1\fP Derivative of xs wrt mapping parameter, d(xs)/dk 
+.br
+\fIxsd1\fP Derivative of Jacobian wrt k: d^2(xs)/(d(xt)dk) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 193 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

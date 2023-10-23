@@ -1,0 +1,119 @@
+.TH "pesg::xmtoxc_ak" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::xmtoxc_ak
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBxmtoxc_ak\fP (a, k, xm, xc, xcd, ff)"
+.br
+.RI "Assuming the A-K parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian matrix, xcd\&. "
+.ti -1c
+.RI "subroutine \fBxmtoxc_vak\fP (ak, xm, xc, xcd, ff)"
+.br
+.RI "Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping with parameter vector, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, the Jacobian matrix, xcd\&. "
+.ti -1c
+.RI "subroutine \fBxmtoxc_vak1\fP (ak, xm, xc, xcd, xc1, xcd1, ff)"
+.br
+.RI "Like xmtoxc_vak, _ak, but also return derivatives wrt ak\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 34 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::xmtoxc_ak::xmtoxc_ak (real(dp), intent(in) a, real(dp), intent(in) k, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Assuming the A-K parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian matrix, xcd\&. If for any reason the mapping cannot be done, return a raised failure flag, FF\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP ESG mapping parameter for line spacing profile 
+.br
+\fIk\fP ESG mapping parameter for Gauss curvature in Schmidt mapping 
+.br
+\fIxm\fP map-space 2-vector 
+.br
+\fIxc\fP Earth-centered cartesian unit 3-vector 
+.br
+\fIxcd\fP Jacobian matrix, d(xc)/d(xm) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 440 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::xmtoxc_ak::xmtoxc_vak (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping with parameter vector, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, the Jacobian matrix, xcd\&. If for any reason the mapping cannot be done, return a raised failure flag,z FF\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIak\fP 2-vector parameterization of the ESG mapping 
+.br
+\fIxm\fP 2-vector of map plane coordinates 
+.br
+\fIxc\fP Earth-centered cartesian unit 3-vector 
+.br
+\fIxcd\fP Jacobian, d(xc)/d(xm) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 381 of file pesg\&.f90\&.
+.SS "subroutine pesg::xmtoxc_ak::xmtoxc_vak1 (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, real(dp), dimension(3,2), intent(out) xc1, real(dp), dimension(3,2,2), intent(out) xcd1, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Like xmtoxc_vak, _ak, but also return derivatives wrt ak\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIak\fP 2-vector parameterization of the ESG mapping 
+.br
+\fIxm\fP 2-vector of map plane coordinates 
+.br
+\fIxc\fP Earth-centered cartesian unit 3-vector 
+.br
+\fIxcd\fP Jacobian of xc wrt xm, d(xc)/d(xm) 
+.br
+\fIxc1\fP Partial derivatives wrt ak of xc, d(xc)/d(ak) 
+.br
+\fIxcd1\fP Second derivative wrt xm and ak of xc, d^2(xc)/(d(xm)d(ak)) 
+.br
+\fIff\fP Failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 400 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

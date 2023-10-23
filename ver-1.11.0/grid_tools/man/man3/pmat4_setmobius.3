@@ -1,0 +1,97 @@
+.TH "pmat4::setmobius" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::setmobius
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBsetmobius\fP (xc0, xc1, xc2, aa, bb, cc, dd)"
+.br
+.RI "Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*cc=1, for a standard (north-)polar stereographic transformation that takes cartesian point, xc0 to the north pole, xc1 to (lat=0,lon=0), xc2 to the south pole (=complex infinity)\&. "
+.ti -1c
+.RI "subroutine \fBzsetmobius\fP (z0, infz0, z1, infz1, z2, infz2, aa, bb, cc, dd)"
+.br
+.RI "Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*cc=1, that takes polar stereographic point, z0 to the north pole, z1 to (lat=0,lon=0), z2 to the south pole (=complex infinity)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 107 of file pmat4\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat4::setmobius::setmobius (real(dp), dimension(3), intent(in) xc0, real(dp), dimension(3), intent(in) xc1, real(dp), dimension(3), intent(in) xc2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)\fC [private]\fP"
+
+.PP
+Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*cc=1, for a standard (north-)polar stereographic transformation that takes cartesian point, xc0 to the north pole, xc1 to (lat=0,lon=0), xc2 to the south pole (=complex infinity)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxc0\fP cartesian point that will map to (0,0,1) 
+.br
+\fIxc1\fP cartesian point that will map to (1,0,0) 
+.br
+\fIxc2\fP cartesian point that will map to (0,0,-1) 
+.br
+\fIaa\fP Mobius transformation complex coefficient 
+.br
+\fIbb\fP Mobius transformation complex coefficient 
+.br
+\fIcc\fP Mobius transformation complex coefficient 
+.br
+\fIdd\fP Mobius transformation complex coefficient 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2123 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat4::setmobius::zsetmobius (complex(dp), intent(in) z0, logical, intent(in) infz0, complex(dp), intent(in) z1, logical, intent(in) infz1, complex(dp), intent(in) z2, logical, intent(in) infz2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)\fC [private]\fP"
+
+.PP
+Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*cc=1, that takes polar stereographic point, z0 to the north pole, z1 to (lat=0,lon=0), z2 to the south pole (=complex infinity)\&. Should any one of z0,z1,z2 be itself the 'point at infinity' its corresponding infz will be set 'true' (and the z value itself not used)\&. This routine is like setmobius, except the three fixed points defining the mapping are given in standard complex stereographic form, together with the logical codes 'infzn' that are TRUE if that point is itself the projection pole (i\&.e\&., the South Pole for a north polar stereographic)\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIz0\fP complex input point that will map to (0,0) 
+.br
+\fIinfz0\fP logical indicator that z0 is the point at infinity 
+.br
+\fIz1\fP complex input point that will map to (1,0) 
+.br
+\fIinfz1\fP logical indicator that z1 is the point at infinity 
+.br
+\fIz2\fP complex input point that will map to infinity 
+.br
+\fIinfz2\fP logical indicator that z2 is the point at infinity 
+.br
+\fIaa\fP Mobius transformation complex coefficient 
+.br
+\fIbb\fP Mobius transformation complex coefficient 
+.br
+\fIcc\fP Mobius transformation complex coefficient 
+.br
+\fIdd\fP Mobius transformation complex coefficient 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2206 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

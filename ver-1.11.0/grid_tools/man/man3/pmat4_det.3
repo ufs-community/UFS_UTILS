@@ -1,0 +1,129 @@
+.TH "pmat4::det" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::det
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBdet_d\fP (a)"
+.br
+.RI "Return the determinant of a double precision matrix\&. "
+.ti -1c
+.RI "integer(spi) function \fBdet_i\fP (a)"
+.br
+.RI "Return the determinant of a single precision integer matrix\&. "
+.ti -1c
+.RI "integer(dpi) function \fBdet_id\fP (a)"
+.br
+.RI "Return the determinant of a double precision integer matrix\&. "
+.ti -1c
+.RI "real(sp) function \fBdet_s\fP (a)"
+.br
+.RI "Return the determinant of a single precision matrix\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 72 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function pmat4::det::det_d (real(dp), dimension(:,:), intent(in) a)\fC [private]\fP"
+
+.PP
+Return the determinant of a double precision matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input matrix A 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+det result, determinant of matrix A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 369 of file pmat4\&.f90\&.
+.SS "integer(spi) function pmat4::det::det_i (integer(spi), dimension(:,:), intent(in) a)\fC [private]\fP"
+
+.PP
+Return the determinant of a single precision integer matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP integer type input matrix A 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+idet result, determinant of matrix A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 390 of file pmat4\&.f90\&.
+.SS "integer(dpi) function pmat4::det::det_id (integer(dpi), dimension(:,:), intent(in) a)\fC [private]\fP"
+
+.PP
+Return the determinant of a double precision integer matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP integer type input matrix A 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+idet result, determinant of matrix A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 404 of file pmat4\&.f90\&.
+.SS "real(sp) function pmat4::det::det_s (real(sp), dimension(:,:), intent(in) a)\fC [private]\fP"
+
+.PP
+Return the determinant of a single precision matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input matrix A 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+det result, determinant of matrix A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 348 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

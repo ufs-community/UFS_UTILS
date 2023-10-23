@@ -1,0 +1,45 @@
+.TH "pmat4::axtorot" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::axtorot
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBaxtorot\fP (ax3, orth33)"
+.br
+.RI "Construct the 3*3 orthogonal matrix, orth33, that corresponds to the proper rotation encoded by the 3-vector, ax3\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 93 of file pmat4\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat4::axtorot::axtorot (real(dp), dimension(3), intent(in) ax3, real(dp), dimension(3,3), intent(out) orth33)\fC [private]\fP"
+
+.PP
+Construct the 3*3 orthogonal matrix, orth33, that corresponds to the proper rotation encoded by the 3-vector, ax3\&. The antisymmetric matrix ax33 equivalent to the axial vector ax3 is exponentiated to obtain orth33\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIax3\fP axial 3-vector 
+.br
+\fIorth33\fP 3*3 orthogonal matrix 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1548 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

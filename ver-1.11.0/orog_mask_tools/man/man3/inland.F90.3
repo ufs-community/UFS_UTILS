@@ -1,0 +1,315 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/inland.fd/inland.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/inland.fd/inland.F90 \- Program and associated routines for creating inland mask\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBfree_mem\fP ()"
+.br
+.RI "Deallocate module arrays\&. "
+.ti -1c
+.RI "program \fBinland_mask\fP"
+.br
+.RI "This program creates the inland mask and writes it to the orography data files\&. "
+.ti -1c
+.RI "subroutine \fBmark_global_inland\fP (cs_res)"
+.br
+.RI "Create inland mask for global grid\&. "
+.ti -1c
+.RI "recursive subroutine \fBmark_global_inland_rec_d\fP (i, j, t, rd)"
+.br
+.RI "Recursively walk through neighbors marking inland points for global grid\&. "
+.ti -1c
+.RI "subroutine \fBmark_inland_reg\fP (cs_res)"
+.br
+.RI "Create inland mask for regional grid\&. "
+.ti -1c
+.RI "recursive subroutine \fBmark_regional_inland_rec_d\fP (i, j, t, rd)"
+.br
+.RI "Recursively walk through neighbors marking inland points for regional grid\&. "
+.ti -1c
+.RI "subroutine \fBnc_opchk\fP (stat, opname)"
+.br
+.RI "Check NetCDF return code and print error message\&. "
+.ti -1c
+.RI "subroutine \fBread_orog\fP (cs_res)"
+.br
+.RI "Read in orography (land fraction) data\&. "
+.ti -1c
+.RI "subroutine \fBread_orog_reg\fP (cs_res)"
+.br
+.RI "Read in orography (land fraction) data for regional grid\&. "
+.ti -1c
+.RI "subroutine \fBwrite_inland\fP (cs_res)"
+.br
+.RI "Write inland back to the orography data files for global grid\&. "
+.ti -1c
+.RI "subroutine \fBwrite_inland_reg\fP (cs_res)"
+.br
+.RI "Write inland back to the orography data files for regional grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Program and associated routines for creating inland mask\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+July 1, 2020 
+.RE
+.PP
+
+.PP
+Definition in file \fBinland\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine inland_mask::free_mem ()"
+
+.PP
+Deallocate module arrays\&. 
+.PP
+Definition at line 426 of file inland\&.F90\&.
+.PP
+Referenced by inland_mask()\&.
+.SS "program inland_mask ()"
+
+.PP
+This program creates the inland mask and writes it to the orography data files\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 9 of file inland\&.F90\&.
+.PP
+References free_mem(), mark_global_inland(), mark_inland_reg(), read_orog(), read_orog_reg(), write_inland(), and write_inland_reg()\&.
+.SS "subroutine inland_mask::mark_global_inland (integer, intent(in) cs_res)"
+
+.PP
+Create inland mask for global grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcs_res\fP cubed sphere resolution (48, 96\&.\&.\&.)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 80 of file inland\&.F90\&.
+.PP
+References mark_global_inland_rec_d()\&.
+.PP
+Referenced by inland_mask()\&.
+.SS "recursive subroutine inland_mask::mark_global_inland_rec_d (integer, intent(in) i, integer, intent(in) j, integer, intent(in) t, integer, intent(in) rd)"
+
+.PP
+Recursively walk through neighbors marking inland points for global grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIi\fP cell index 
+.br
+\fIj\fP cell index 
+.br
+\fIt\fP tile number 
+.br
+\fIrd\fP current recursive depth (starts at 0)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 132 of file inland\&.F90\&.
+.PP
+Referenced by mark_global_inland()\&.
+.SS "subroutine inland_mask::mark_inland_reg (integer, intent(in) cs_res)"
+
+.PP
+Create inland mask for regional grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcs_res\fP cubed sphere resolution (48, 96\&.\&.\&.)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 100 of file inland\&.F90\&.
+.PP
+References mark_regional_inland_rec_d()\&.
+.PP
+Referenced by inland_mask()\&.
+.SS "recursive subroutine inland_mask::mark_regional_inland_rec_d (integer, intent(in) i, integer, intent(in) j, integer, intent(in) t, integer, intent(in) rd)"
+
+.PP
+Recursively walk through neighbors marking inland points for regional grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIi\fP cell index 
+.br
+\fIj\fP cell index 
+.br
+\fIt\fP tile face 
+.br
+\fIrd\fP current recursive depth (starts at 0)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 169 of file inland\&.F90\&.
+.PP
+Referenced by mark_inland_reg()\&.
+.SS "subroutine inland_mask::nc_opchk (integer stat, character(len=*) opname)"
+
+.PP
+Check NetCDF return code and print error message\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstat\fP status code returned from NetCDF 
+.br
+\fIopname\fP description of NetCDF operation called
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 438 of file inland\&.F90\&.
+.PP
+Referenced by read_cubed_sphere_grid(), read_cubed_sphere_reg_grid(), read_orog(), read_orog_reg(), write_inland(), write_inland_reg(), write_lakedata_to_orodata(), and write_reg_lakedata_to_orodata()\&.
+.SS "subroutine inland_mask::read_orog (integer, intent(in) cs_res)"
+
+.PP
+Read in orography (land fraction) data\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcs_res\fP cubed sphere resolution (48, 96\&.\&.\&.)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 203 of file inland\&.F90\&.
+.PP
+References nc_opchk()\&.
+.PP
+Referenced by inland_mask()\&.
+.SS "subroutine inland_mask::read_orog_reg (integer, intent(in) cs_res)"
+
+.PP
+Read in orography (land fraction) data for regional grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcs_res\fP cubed sphere resolution (48, 96\&.\&.\&.)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 249 of file inland\&.F90\&.
+.PP
+References nc_opchk()\&.
+.PP
+Referenced by inland_mask()\&.
+.SS "subroutine inland_mask::write_inland (integer, intent(in) cs_res)"
+
+.PP
+Write inland back to the orography data files for global grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcs_res\fP cubed sphere resolution (48, 96\&.\&.\&.)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 301 of file inland\&.F90\&.
+.PP
+References nc_opchk()\&.
+.PP
+Referenced by inland_mask()\&.
+.SS "subroutine inland_mask::write_inland_reg (integer, intent(in) cs_res)"
+
+.PP
+Write inland back to the orography data files for regional grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcs_res\fP cubed sphere resolution (48, 96\&.\&.\&.)
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 363 of file inland\&.F90\&.
+.PP
+References nc_opchk()\&.
+.PP
+Referenced by inland_mask()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.

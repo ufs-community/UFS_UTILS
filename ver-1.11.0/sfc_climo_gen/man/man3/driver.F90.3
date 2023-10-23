@@ -1,0 +1,60 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/sfc_climo_gen.fd/driver.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/sfc_climo_gen.fd/driver.F90 \- Interpolates static surface data from lat/lon grid, to FV3 model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "program \fBdriver\fP"
+.br
+.RI "Reads static surface data on a global lat/lon grid, interpolates the data to the fv3 model grid, and outputs the result in netcdf format\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Interpolates static surface data from lat/lon grid, to FV3 model grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition in file \fBdriver\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "program driver ()"
+
+.PP
+Reads static surface data on a global lat/lon grid, interpolates the data to the fv3 model grid, and outputs the result in netcdf format\&. Program execution is controlled by variables defined in the program configuration namelist (see module \fBprogram_setup\fP for details)\&.
+.PP
+Requires the following input files: 1) Model mosaic file (netcdf) 2) Model orography files (netcdf) 3) Model grid files (netcdf) 4) Source data file on global lat/lon grid (netcdf)
+.PP
+Outputs surface data on the model tiles in netcdf format\&.
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 24 of file driver\&.F90\&.
+.PP
+References model_grid::define_model_grid(), source_grid::define_source_grid(), utils::error_handler(), program_setup::fract_vegsoil_type, program_setup::input_facsf_file, program_setup::input_leaf_area_index_file, program_setup::input_maximum_snow_albedo_file, program_setup::input_slope_type_file, program_setup::input_snowfree_albedo_file, program_setup::input_soil_color_file, program_setup::input_soil_type_file, program_setup::input_substrate_temperature_file, program_setup::input_vegetation_greenness_file, program_setup::input_vegetation_type_file, interp(), interp_frac_cats(), program_setup::leaf_area_index_method, program_setup::maximum_snow_albedo_method, model_grid::model_grid_cleanup(), program_setup::read_setup_namelist(), program_setup::snowfree_albedo_method, source_grid::source_grid_cleanup(), and program_setup::vegetation_greenness_method\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

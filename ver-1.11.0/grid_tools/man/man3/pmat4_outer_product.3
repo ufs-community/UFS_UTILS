@@ -1,0 +1,108 @@
+.TH "pmat4::outer_product" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::outer_product
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function, dimension(size(a), size(b)) \fBouter_product_d\fP (a, b)"
+.br
+.RI "Return the outer product matrix of two double precision real vectors\&. "
+.ti -1c
+.RI "integer(spi) function, dimension(size(a), size(b)) \fBouter_product_i\fP (a, b)"
+.br
+.RI "Return the outer product matrix of two integer vectors\&. "
+.ti -1c
+.RI "real(sp) function, dimension(size(a), size(b)) \fBouter_product_s\fP (a, b)"
+.br
+.RI "Return the outer product matrix of two single precision real vectors\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 67 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_d (real(dp), dimension(:), intent(in) a, real(dp), dimension(:), intent(in) b)\fC [private]\fP"
+
+.PP
+Return the outer product matrix of two double precision real vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input vector 
+.br
+\fIb\fP real type input vector 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+c result, rank-1 matrix outer product 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 289 of file pmat4\&.f90\&.
+.SS "integer(spi) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_i (integer(spi), dimension(:), intent(in) a, integer(spi), dimension(:), intent(in) b)\fC [private]\fP"
+
+.PP
+Return the outer product matrix of two integer vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP integer type input vector 
+.br
+\fIb\fP integer type input vector 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+c result, rank-1 matrix outer product 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 305 of file pmat4\&.f90\&.
+.SS "real(sp) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_s (real(sp), dimension(:), intent(in) a, real(sp), dimension(:), intent(in) b)\fC [private]\fP"
+
+.PP
+Return the outer product matrix of two single precision real vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input vector 
+.br
+\fIb\fP real type input vector 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+c result, rank-1 matrix outer product 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 273 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

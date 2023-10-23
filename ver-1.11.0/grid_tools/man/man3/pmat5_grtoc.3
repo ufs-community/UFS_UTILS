@@ -1,0 +1,205 @@
+.TH "pmat5::grtoc" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat5::grtoc
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdgrtoc\fP (rlat, rlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates\&. "
+.ti -1c
+.RI "subroutine \fBdgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBdgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBsgrtoc\fP (rlat, rlon, xe)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates\&. "
+.ti -1c
+.RI "subroutine \fBsgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. "
+.ti -1c
+.RI "subroutine \fBsgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
+.br
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 37 of file pmat5\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat5::grtoc::dgrtoc (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates\&. Double proecision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 237 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::dgrtocd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.br
+\fIdxedlat\fP Derivative, d(xe)/d(rlat)\&. 
+.br
+\fIdxedlon\fP Derivative, d(xe)/d(rlon)\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 280 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::dgrtocdd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.br
+\fIdxedlat\fP Derivative, d(xe)/d(rlat)\&. 
+.br
+\fIdxedlon\fP Derivative, d(xe)/d(rlon)\&. 
+.br
+\fIddxedlatdlat\fP Derivative, d^2(xe)/(d(rlat)d(rlat))\&. 
+.br
+\fIddxedlatdlon\fP Derivative, d^2(xe)/(d(rlat)d(rlon))\&. 
+.br
+\fIddxedlondlon\fP Derivative, d^2(xe)/(d(rlon)d(rlon))\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 340 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::sgrtoc (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates\&. Single proecision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 220 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::sgrtocd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.br
+\fIdxedlat\fP Derivative, d(xe)/d(rlat)\&. 
+.br
+\fIdxedlon\fP Derivative, d(xe)/d(rlon)\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 257 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::sgrtocdd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
+
+.PP
+Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP Latitude (radians) of point\&. 
+.br
+\fIrlon\fP Longitude (radians) of point\&. 
+.br
+\fIxe\fP Earth-centered cartesian unit 3-vector of point\&. 
+.br
+\fIdxedlat\fP Derivative, d(xe)/d(rlat)\&. 
+.br
+\fIdxedlon\fP Derivative, d(xe)/d(rlon)\&. 
+.br
+\fIddxedlatdlat\fP Derivative, d^2(xe)/(d(rlat)d(rlat))\&. 
+.br
+\fIddxedlatdlon\fP Derivative, d^2(xe)/(d(rlat)d(rlon))\&. 
+.br
+\fIddxedlondlon\fP Derivative, d^2(xe)/(d(rlon)d(rlon))\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 307 of file pmat5\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

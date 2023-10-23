@@ -1,0 +1,108 @@
+.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/netcdf_io.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/netcdf_io.F90 \- Write out data in netcdf format\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBnetcdf_err\fP (err, string)"
+.br
+.RI "Check NetCDF error code and output the error message\&. "
+.ti -1c
+.RI "subroutine \fBwrite_netcdf\fP (im, jm, slm, land_frac, oro, orf, hprime, ntiles, tile, geolon, geolat, lon, lat)"
+.br
+.RI "Write out orography file in netcdf format\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Write out data in netcdf format\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Jordan Alpert NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBnetcdf_io\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine netcdf_err (integer, intent(in) err, character(len=*), intent(in) string)"
+
+.PP
+Check NetCDF error code and output the error message\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIerr\fP NetCDF error code 
+.br
+\fIstring\fP The NetCDF error message 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Jordan Alpert NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 219 of file netcdf_io\&.F90\&.
+.PP
+Referenced by __mtnlm7_oclsm\&.F__(), gsl_oro_data_lg_scale::calc_gsl_oro_data_lg_scale(), gsl_oro_data_sm_scale::calc_gsl_oro_data_sm_scale(), TERSUB(), and write_netcdf()\&.
+.SS "subroutine write_netcdf (integer, intent(in) im, integer, intent(in) jm, real, dimension(im,jm), intent(in) slm, real, dimension(im,jm), intent(in) land_frac, real, dimension(im,jm), intent(in) oro, real, dimension(im,jm), intent(in) orf, real, dimension(im,jm,14), intent(in) hprime, integer, intent(in) ntiles, integer, intent(in) tile, real, dimension(im,jm), intent(in) geolon, real, dimension(im,jm), intent(in) geolat, real, dimension(im), intent(in) lon, real, dimension(jm), intent(in) lat)"
+
+.PP
+Write out orography file in netcdf format\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIim\fP 'i' dimension of a model grid tile\&. 
+.br
+\fIjm\fP 'j' dimension of a model grid tile\&. 
+.br
+\fIslm\fP Land-sea mask\&. 
+.br
+\fIland_frac\fP Land fraction\&. 
+.br
+\fIoro\fP Orography 
+.br
+\fIorf\fP Filtered orography\&. Currently the same as 'oro'\&. 
+.br
+\fIhprime\fP The gravity wave drag fields on the model grid tile\&. 
+.br
+\fIntiles\fP Number of tiles to output\&. 
+.br
+\fItile\fP Tile number to output\&. 
+.br
+\fIgeolon\fP Longitude on the model grid tile\&. 
+.br
+\fIgeolat\fP Latitude on the model grid tile\&. 
+.br
+\fIlon\fP Longitude of the first row of the model grid tile\&. 
+.br
+\fIlat\fP Latitude of the first column of the model grid tile\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Jordan Alpert NOAA/EMC GFDL Programmer 
+.RE
+.PP
+
+.PP
+Definition at line 22 of file netcdf_io\&.F90\&.
+.PP
+References netcdf_err()\&.
+.PP
+Referenced by TERSUB()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.
