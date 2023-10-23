@@ -9,6 +9,7 @@ set -eux
 #-------------------------------------------------------------------------------------------------
 
 export CASE=${CASE:-C768}                    # resolution of tile: 48, 96, 192, 384, 768, 1152, 3072
+export OCNRES=${OCNRES:-100}
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...
 export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
 export COMPONENT=${COMPONENT:-atmos}
@@ -17,8 +18,10 @@ pwd=$(pwd)
 export NWPROD=${NWPROD:-$pwd}
 export DMPDIR=${DMPDIR:-$NWPROD}
 export HOMEgfs=${HOMEgfs:-$NWPROD/gfs.v15.0.0}
-export FIXam=${FIXam:-$HOMEgfs/fix/am}   
-export FIXfv3=${FIXfv3:-$HOMEgfs/fix/orog}
+export FIX_DIR=${FIX_DIR:-$HOMEgfs/fix}   
+export FIXam=${FIXam:-$FIX_DIR/am}   
+export OROFIX=${OROFIX:-$FIX_DIR/orog/${CASE}.mx${OCNRES}_frac}
+export FIX_SFC=${FIX_SFC:-$OROFIX/sfc}
 
 ntiles=${ntiles:-6}
 DONST=${DONST:-"NO"}
@@ -85,8 +88,8 @@ for n in $(seq 1 $ntiles); do
   chmod 644  $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
   ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
 
-  ln -fs $FIXfv3/C${CRES}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
-  ln -fs $FIXfv3/C${CRES}/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+  ln -fs ${OROFIX}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
+  ln -fs ${OROFIX}/oro_C${CRES}.mx${OCNRES}.tile${n}.nc   $DATA/fnorog.00$n
   if [[ "$DO_SNO_INC" == ".true." ]] ; then  
         ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/xainc.00$n
   fi
