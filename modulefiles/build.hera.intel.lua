@@ -46,14 +46,11 @@ load(pathJoin("zlib", zlib_ver))
 png_ver=os.getenv("png_ver") or "1.6.37"
 load(pathJoin("libpng", png_ver))
 
-hdf5_ver=os.getenv("hdf5_ver") or "1.14.0"
-load(pathJoin("hdf5", hdf5_ver))
+netcdf_c_ver=os.getenv("netcdf_c_ver") or "4.9.2"
+load(pathJoin("netcdf-c", netcdf_c_ver))
 
-netcdf_ver=os.getenv("netcdf_c_ver") or "4.9.2"
-load(pathJoin("netcdf-c", netcdf_ver))
-
-netcdf_ver=os.getenv("netcdf_fortran_ver") or "4.6.0"
-load(pathJoin("netcdf-fortran", netcdf_ver))
+netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.0"
+load(pathJoin("netcdf-fortran", netcdf_fortran_ver))
 
 nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
 load(pathJoin("nccmp", nccmp_ver))
