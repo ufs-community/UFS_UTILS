@@ -72,7 +72,7 @@ RUN=${RUN:-"gfs"}
 export HOMEgfs=${HOMEgfs:-$NWROOT/gfs.${gfs_ver:?}}
 export USHgfs=${USHgfs:-$HOMEgfs/ush}
 export FIXgfs=${FIXgfs:-$HOMEgfs/fix}
-FIXgfs_am=${FIXgfs_am:-$HOMEgfs/fix/fix_am}
+FIXgfs_am=${FIXgfs_am:-$HOMEgfs/fix/am}
 export EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 
 # output com directory.
@@ -90,7 +90,7 @@ cd $DATA
 export SENDCOM=${SENDCOM:-"NO"}
 
 #-----------------------------------------------------------------------
-# the "postmsg" and "err_exit" utilities are only used in ncep ops
+# The "err_exit" utility is only used in ncep ops
 # when the "prod_util" module is loaded. 
 #-----------------------------------------------------------------------
 
@@ -134,10 +134,7 @@ export pgmout=${pgmout:-OUTPUT}
 # call utility script to create global ice blend data.
 #-----------------------------------------------------------------------
 
-if test "$use_prod_util" = "true" ; then
-  msg="create blended ice data."
-  postmsg "$jlogfile" "$msg"
-fi
+echo "Create blended ice data."
 
 ${USHgfs}/emcsfc_ice_blend.sh
 rc=$?
@@ -157,16 +154,10 @@ if ((rc != 0));then
   if test "$SENDCOM" = "YES"
   then
     if [ -s $BLENDED_ICE_FILE_m6hrs ]; then
-      msg="copy old ice blend file to current directory"
-      if test "$use_prod_util" = "true" ; then
-        postmsg "$jlogfile" "$msg"
-      fi
+      echo "Copy old ice blend file to current directory"
       cp $BLENDED_ICE_FILE_m6hrs $COMOUT/$BLENDED_ICE_FILE
     else
-      msg="FATAL ERROR: CURRENT AND 6-HR OLD ICE FILE MISSING"
-      if test "$use_prod_util" = "true" ; then
-        postmsg "$jlogfile" "$msg"
-      fi
+      echo "FATAL ERROR: CURRENT AND 6-HR OLD ICE FILE MISSING"
       if test "$use_prod_util" = "true" ; then
         err_exit
       else
@@ -198,10 +189,7 @@ export GFS_LONSPERLAT_FILE=${LONSPERLAT:-$FIXgfs_am/global_lonsperlat.t${resolut
 export MODEL_SNOW_FILE=${FNSNOAJCAP:-${RUN}.${cycle}.snogrb_t${resolution}}
 export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP:-${COMINgfs_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
 
-if test "$use_prod_util" = "true" ; then
-  msg="create ${JCAP} snow data."
-  postmsg "$jlogfile" "$msg"
-fi
+echo "Create ${JCAP} snow data."
 
 ${USHgfs}/emcsfc_snow.sh
 rc=$?
@@ -221,16 +209,10 @@ if ((rc != 0)); then
   if test "$SENDCOM" = "YES"
   then
     if [ -s $MODEL_SNOW_FILE_m6hrs ]; then
-      msg="COPY OLD ${JCAP} SNOW FILE TO CURRENT DIRECTORY"
-      if test "$use_prod_util" = "true" ; then
-        postmsg "$jlogfile" "$msg"
-      fi
+      echo "COPY OLD ${JCAP} SNOW FILE TO CURRENT DIRECTORY"
       cp $MODEL_SNOW_FILE_m6hrs $COMOUT/$MODEL_SNOW_FILE
     else
-      msg="FATAL ERROR: CURRENT AND 6-HR OLD ${JCAP} SNOW MISSING"
-      if test "$use_prod_util" = "true" ; then
-        postmsg "$jlogfile" "$msg"
-      fi
+      echo "FATAL ERROR: CURRENT AND 6-HR OLD ${JCAP} SNOW MISSING"
       if test "$use_prod_util" = "true" ; then
         err_exit
       else
@@ -265,10 +247,7 @@ export GFS_LONSPERLAT_FILE=${LONSPERLAT_ENKF:-$FIXgfs_am/global_lonsperlat.t${re
 export MODEL_SNOW_FILE=${FNSNOAJCAP_ENKF:-${RUN}.${cycle}.snogrb_t${resolution}}
 export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP_ENKF:-${COMINgfs_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
 
-if test "$use_prod_util" = "true" ; then
-  msg="create enkf snow data."
-  postmsg "$jlogfile" "$msg"
-fi
+echo "Create enkf snow data."
 
 ${USHgfs}/emcsfc_snow.sh
 rc=$?
@@ -282,16 +261,10 @@ if ((rc != 0)); then
   if test "$SENDCOM" = "YES"
   then
     if [ -s $MODEL_SNOW_FILE_m6hrs ]; then
-      msg="COPY OLD ENKF SNOW FILE TO CURRENT DIRECTORY"
-      if test "$use_prod_util" = "true" ; then
-        postmsg "$jlogfile" "$msg"
-      fi
+      echo "COPY OLD ENKF SNOW FILE TO CURRENT DIRECTORY"
       cp $MODEL_SNOW_FILE_m6hrs $COMOUT/$MODEL_SNOW_FILE
     else
-      msg="FATAL ERROR: CURRENT AND 6-HR OLD ENKF SNOW MISSING"
-      if test "$use_prod_util" = "true" ; then
-        postmsg "$jlogfile" "$msg"
-      fi
+      echo "FATAL ERROR: CURRENT AND 6-HR OLD ENKF SNOW MISSING"
       if test "$use_prod_util" = "true" ; then
         err_exit
       else

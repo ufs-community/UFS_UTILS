@@ -15,17 +15,15 @@
 module module_nwp
 
    use kinds, only: r_kind, r_single, i_short, rmissing
-   use module_nwp_base, only: nwpbase
 !   use module_map_utils, only: map_util
    use module_ncio, only: ncio
 
    implicit none
 
    public :: fcst_nwp
-   public :: nwp_type
 
    private
-   type :: nwp_type
+   type :: fcst_nwp
       character(len=6) :: datatype !< Data type.
       integer :: numvar !< Number of variabls.
       integer :: xlat !< Number of latitudes.
@@ -49,32 +47,23 @@ module module_nwp
       character(len=20), allocatable :: dimnameDATE !< String dimension name.
       character(len=1), allocatable :: times(:,:) !< Array of times in FVCOM.
 
-      real(r_kind), allocatable :: nwp_mask_c(:,:) !< cold start land/water mask 3d array
-      real(r_kind), allocatable :: nwp_sst_c(:,:,:) !< cold start sst 3d array
-      real(r_kind), allocatable :: nwp_ice_c(:,:,:) !< cold start over water ice concentration 3d array
-      real(r_kind), allocatable :: nwp_sfct_c(:,:,:) !< cold start skin temperature 3d array
-      real(r_kind), allocatable :: nwp_icet_c(:,:,:)  !< cold start ice skin temperature 3d array
-      real(r_kind), allocatable :: nwp_zorl_c(:,:,:) !< cold start surface roughness
-      real(r_kind), allocatable :: nwp_hice_c(:,:,:) !< cold start ice thickness
+      real(r_single), allocatable :: nwp_mask_c(:,:) !< cold start land/water mask 3d array
+      real(r_single), allocatable :: nwp_sst_c(:,:,:) !< cold start sst 3d array
+      real(r_single), allocatable :: nwp_ice_c(:,:,:) !< cold start over water ice concentration 3d array
+      real(r_single), allocatable :: nwp_sfct_c(:,:,:) !< cold start skin temperature 3d array
+      real(r_single), allocatable :: nwp_icet_c(:,:,:)  !< cold start ice skin temperature 3d array
+      real(r_single), allocatable :: nwp_zorl_c(:,:,:) !< cold start surface roughness
+      real(r_single), allocatable :: nwp_hice_c(:,:,:) !< cold start ice thickness
 
-      real(r_kind), allocatable :: nwp_mask_w(:,:) !< warm start land/water mask 3d array
-      real(r_kind), allocatable :: nwp_sst_w(:,:) !< warm start sst 3d array
-      real(r_kind), allocatable :: nwp_ice_w(:,:) !< warm start over water ice concentration 3d array
-      real(r_kind), allocatable :: nwp_sfct_w(:,:) !< warm start skin temperature 3d array
-      real(r_kind), allocatable :: nwp_icet_w(:,:)  !< warm start ice skin temperature 3d array
-      real(r_kind), allocatable :: nwp_sfctl_w(:,:) !< warm start skin temperature 3d array
-      real(r_kind), allocatable :: nwp_zorl_w(:,:) !< warm start surface roughness
-      real(r_kind), allocatable :: nwp_hice_w(:,:) !< warm start ice thickness
+      real(r_single), allocatable :: nwp_mask_w(:,:) !< warm start land/water mask 3d array
+      real(r_single), allocatable :: nwp_sst_w(:,:) !< warm start sst 3d array
+      real(r_single), allocatable :: nwp_ice_w(:,:) !< warm start over water ice concentration 3d array
+      real(r_single), allocatable :: nwp_sfct_w(:,:) !< warm start skin temperature 3d array
+      real(r_single), allocatable :: nwp_icet_w(:,:)  !< warm start ice skin temperature 3d array
+      real(r_single), allocatable :: nwp_sfctl_w(:,:) !< warm start skin temperature 3d array
+      real(r_single), allocatable :: nwp_zorl_w(:,:) !< warm start surface roughness
+      real(r_single), allocatable :: nwp_hice_w(:,:) !< warm start ice thickness
 
-   end type nwp_type
-
-   type, extends(nwp_type) :: fcst_nwp
-      ! The pointers are carryover from when I inherited the code from
-      ! GSL's work with HRRR for a similar use. I am not sure with
-      ! object based coding in Fortran if it needs to have parts
-      ! initialized to gain access to the procedures within it. - D. Wright.
-      type(nwpbase), pointer :: head => NULL() !< Pointer to head of list.
-      type(nwpbase), pointer :: tail => NULL() !< Pointer to tail of list.
       contains
          procedure :: initial => initial_nwp !< Defines vars and names. @return
          procedure :: list_initial => list_initial_nwp !< List the setup. @return
@@ -212,9 +201,6 @@ module module_nwp
             stop 1234
          end if
 
-         this%head => NULL()
-         this%tail => NULL()
-
          write(6,*) 'Finished initial_nwp'
          write(6,*) ' '
 
@@ -281,8 +267,11 @@ module module_nwp
          integer, intent(in) :: ybegin,yend
          integer, intent(inout) :: numlon, numlat, numtimes
 !         real(r_single), intent(inout) :: mask(:,:), sst(:,:), ice(:,:), sfcT(:,:)
-         real(r_kind), intent(inout) :: mask(:,:),sst(:,:),ice(:,:),sfcT(:,:) &
+         real(r_single), intent(inout) :: mask(:,:),sst(:,:),ice(:,:),sfcT(:,:) &
                                         ,iceT(:,:),sfcTl(:,:),zorl(:,:),hice(:,:)
+
+         real(r_kind),allocatable :: tmp2d8b(:,:)
+         real(r_kind),allocatable :: tmp3d8b(:,:,:)
 
 !
 !        Open the file using module_ncio.f90 code, and find the number of
@@ -311,6 +300,8 @@ module module_nwp
             allocate(this%nwp_iceT_c(this%xlon,this%xlat,this%xtime))
             allocate(this%nwp_zorl_c(this%xlon,this%xlat,this%xtime))
             allocate(this%nwp_hice_c(this%xlon,this%xlat,this%xtime))
+            allocate(tmp2d8b(this%xlon,this%xlat))
+            allocate(tmp3d8b(this%xlon,this%xlat,this%xtime))
 
 !        Get variables from the data file, but only if the variable is
 !        defined for that data type.
@@ -323,40 +314,49 @@ module module_nwp
 
             if (this%i_mask .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_mask),this%xlon,  &
-                                   this%xlat,this%nwp_mask_c)
+                                   this%xlat,tmp2d8b)
+               this%nwp_mask_c=tmp2d8b
                mask = this%nwp_mask_c(:,ybegin:yend)
             end if
             if (this%i_sst .gt. 0) then
                write(6,*) 'get sst for cold or FVCOM'
                call ncdata%get_var(this%varnames(this%i_sst),this%xlon,  &
-                                   this%xlat,this%xtime,this%nwp_sst_c)
+                                   this%xlat,this%xtime,tmp3d8b)
+               this%nwp_sst_c=tmp3d8b
                sst = this%nwp_sst_c(:,ybegin:yend,time_to_get)
             end if
             if (this%i_ice .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_ice),this%xlon,  &
-                                   this%xlat,this%xtime,this%nwp_ice_c)
+                                   this%xlat,this%xtime,tmp3d8b)
+               this%nwp_ice_c=tmp3d8b
                ice = this%nwp_ice_c(:,ybegin:yend,time_to_get)
             end if
             if (this%i_sfcT .gt. 0) then
                call ncdata%get_var(this%varnames(this%i_sfcT),this%xlon,  &
-                                   this%xlat,this%xtime,this%nwp_sfcT_c)
+                                   this%xlat,this%xtime,tmp3d8b)
+               this%nwp_sfcT_c=tmp3d8b
                sfcT = this%nwp_sfcT_c(:,ybegin:yend,time_to_get)
             end if
             if (this%i_iceT .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_iceT),this%xlon,  &
-                                    this%xlat,this%xtime,this%nwp_iceT_c)
+                                    this%xlat,this%xtime,tmp3d8b)
+                this%nwp_iceT_c=tmp3d8b
                 iceT = this%nwp_iceT_c(:,ybegin:yend,time_to_get)
             end if
             if (this%i_zorl .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_zorl),this%xlon,  &
-                                    this%xlat,this%xtime,this%nwp_zorl_c)
+                                    this%xlat,this%xtime,tmp3d8b)
+                this%nwp_zorl_c=tmp3d8b
                 zorl = this%nwp_zorl_c(:,ybegin:yend,time_to_get)
             end if 
             if (this%i_hice .gt. 0) then
                 call ncdata%get_var(this%varnames(this%i_hice),this%xlon,  &
-                                    this%xlat,this%xtime,this%nwp_hice_c)
+                                    this%xlat,this%xtime,tmp3d8b)
+                this%nwp_hice_c=tmp3d8b
                 hice = this%nwp_hice_c(:,ybegin:yend,time_to_get)
             end if 
+            deallocate(tmp2d8b)
+            deallocate(tmp3d8b)
  
          else if (wcstart == 'warm') then
             allocate(this%nwp_mask_w(this%xlon,this%xlat))
@@ -442,8 +442,6 @@ module module_nwp
          character(len=6), intent(in) :: itype
          character(len=4), intent(in) :: wcstart
 
-         type(nwpbase), pointer :: thisobs,thisobsnext
-
          deallocate(this%varnames)
          deallocate(this%latname)
          deallocate(this%lonname)
@@ -471,18 +469,6 @@ module module_nwp
          else
             write(6,*) 'no deallocation'
          end if
-
-         thisobs => this%head
-         if(.NOT.associated(thisobs)) then
-            write(6,*) 'No memory to release'
-            return
-         endif
-         do while(associated(thisobs))
-
-            thisobsnext => thisobs%next
-            call thisobs%destroy()
-            thisobs => thisobsnext
-         enddo
 
          write(6,*) 'Finished finish_nwp'
          write(6,*) ' '

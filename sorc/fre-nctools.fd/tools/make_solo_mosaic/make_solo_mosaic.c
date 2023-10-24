@@ -58,16 +58,16 @@ char *usage[] = {
   "   C48_grid.tile5.nc,C48_grid.tile6.nc                                           ",
   "                                                                                 ",
   NULL};
- 
+
 const int MAXTILE = 100;
 const int MAXCONTACT = 100;
 const int SHORTSTRING = 32;
 char grid_version[] = "0.2";
 char tagname[] = "$Name: fre-nctools-bronx-10 $";
 
-main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
-  
+
   extern char *optarg;
   char *pch=NULL, *dir=NULL, history[512], entry[1280];
   char tilefile[MAXTILE][STRING], tiletype[MAXTILE][SHORTSTRING];
@@ -84,13 +84,13 @@ main (int argc, char *argv[])
   char mosaic_name[STRING] = "solo_mosaic";
   char grid_descriptor[128] = "";
   int c, i, n, m, l, errflg;
-  
+
   int option_index = 0;
   static struct option long_options[] = {
     {"mosaic_name",     required_argument, NULL, 'm'},
     {"num_tiles",       required_argument, NULL, 'n'},
     {"grid_descriptor", required_argument, NULL, 'g'},
-    {"tile_file",       required_argument, NULL, 'f'},  
+    {"tile_file",       required_argument, NULL, 'f'},
     {"periodx",         required_argument, NULL, 'x'},
     {"periody",         required_argument, NULL, 'y'},
     {"directory",       required_argument, NULL, 'd'},
@@ -100,7 +100,7 @@ main (int argc, char *argv[])
   mpp_init(&argc, &argv);
   /* this tool must be run one processor */
   if(mpp_npes()>1) mpp_error("make_solo_mosaic: this tool must be run on one processor");
-  
+
   errflg = (argc == 1);
   /* First read command line arguments. */
 
@@ -116,7 +116,7 @@ main (int argc, char *argv[])
       strcpy(grid_descriptor, optarg);
       break;
     case 'f':
-      strcpy(entry, optarg); 
+      strcpy(entry, optarg);
       pch = strtok(entry, ", ");
       nfiles = 0;
       while( pch != NULL) {
@@ -129,7 +129,7 @@ main (int argc, char *argv[])
       break;
     case 'y':
       periody = atof(optarg);
-      break; 
+      break;
     case 'd':  // path of the simple grid file.
       dir = optarg;
       break;
@@ -141,7 +141,7 @@ main (int argc, char *argv[])
   if (errflg || ntiles < 1 || !dir ) {
     char **u = usage;
     while (*u) { fprintf(stderr, "%s\n", *u); u++; }
-    exit(2);      
+    exit(2);
   }
 
   strcpy(history,argv[0]);
@@ -154,7 +154,7 @@ main (int argc, char *argv[])
   if(ntiles > MAXTILE) {
     mpp_error("make_solo_mosaic: number of tiles is greater than MAXTILE.");
   }
-    
+
   /*--- if file name is not specified through -f, file name will be horizontal_grid.tile#.nc */
   if(nfiles == 0) {
     if(ntiles == 1) {
@@ -252,7 +252,7 @@ main (int argc, char *argv[])
       }
     }
   }
-  
+
 
   /* write out data */
   {
@@ -266,7 +266,7 @@ main (int argc, char *argv[])
     /* define dimenison */
     dim_ntiles = mpp_def_dim(fid, "ntiles", ntiles);
     if(ncontact>0) dim_ncontact = mpp_def_dim(fid, "ncontact", ncontact);
-    dim_string = mpp_def_dim(fid, "string", STRING);    
+    dim_string = mpp_def_dim(fid, "string", STRING);
     /* define variable */
     id_mosaic = mpp_def_var(fid, "mosaic", MPP_CHAR, 1, &dim_string, 4, "standard_name",
 			    "grid_mosaic_spec", "children", "gridtiles", "contact_regions", "contacts",
@@ -306,7 +306,7 @@ main (int argc, char *argv[])
       nwrite[1] = strlen(tilefile[n]);
       mpp_put_var_value_block(fid, id_gridfiles, start, nwrite, tilefile[n]);
     }
-    
+
     for(n=0; n<ncontact; n++) {
       sprintf(str,"%s:%s::%s:%s", mosaic_name, tile_name[contact_tile1[n]], mosaic_name,
 	      tile_name[contact_tile2[n]]);
@@ -318,15 +318,12 @@ main (int argc, char *argv[])
       nwrite[1] = strlen(str);
       mpp_put_var_value_block(fid, id_contact_index, start, nwrite, str);
     }
-    mpp_close(fid);    
+    mpp_close(fid);
   }
 
-  
-  printf("congradulation: You have successfully run make_solo_mosaic\n");
+
+  printf("congratulation: You have successfully run make_solo_mosaic\n");
 
   return 0;
-  
+
 }; // end of main
-
-
-

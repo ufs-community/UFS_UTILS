@@ -6,9 +6,7 @@
 set(fortran_src
    kinds.f90
    module_ncio.f90
-   module_nwp_base.f90
    module_nwp.f90)
-#   process_FVCOM.f90)
 
 set(exe_src process_FVCOM.f90)
 
@@ -36,7 +34,7 @@ target_link_libraries(
 
 target_link_libraries(${exe_name} PRIVATE fvcom_tools_lib)
 
-install(TARGETS ${exe_name} RUNTIME DESTINATION ${exec_dir})
+install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)

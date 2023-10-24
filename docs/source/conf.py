@@ -50,11 +50,10 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'sphinx.ext.napoleon',
-    'sphinxcontrib.bibtex'
+    'sphinx.ext.napoleon'
 ]
 
-bibtex_bibfiles = ['references.bib']
+#bibtex_bibfiles = ['references.bib']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

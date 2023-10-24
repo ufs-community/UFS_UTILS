@@ -5,7 +5,6 @@
 !> Set up program execution
 !!
 !! Public variables:
-!! -----------------
 !!
 !! Here 'input' indicates variables associated with the input source data 
 !! and 'mdl' indicates variables associated with the fv3 model grid.
@@ -30,19 +29,28 @@
  character(len=500), public   :: input_snowfree_albedo_file = "NULL" !< File containing input snow-free albedo data.
  character(len=500), public   :: input_slope_type_file = "NULL" !< File containing input slope type data.
  character(len=500), public   :: input_soil_type_file = "NULL" !< File containing input soil type data.
+ character(len=500), public   :: input_soil_color_file = "NULL" !< File containing input soil color data.
  character(len=500), public   :: input_vegetation_type_file = "NULL" !< File containing input vegetation type data.
  character(len=500), public   :: input_vegetation_greenness_file = "NULL" !< File containing input vegetation greenness data.
  character(len=500), public   :: mosaic_file_mdl = "NULL" !< Model grid mosaic file.
  character(len=500), public   :: orog_dir_mdl = "NULL" !< Directory containing the model grid orography files.
  character(len=500), public   :: orog_files_mdl(6) = "NULL" !< Model grid orography filenames.
 
- character(len=50), public    :: leaf_area_index_method='bilinear' !< Interpolation method for leaf area index. Conservative or bilinear (default).
- character(len=50), public    :: maximum_snow_albedo_method='bilinear' !< Interpolation method for max snow albedo. Conservative or bilinear (default).
- character(len=50), public    :: snowfree_albedo_method='bilinear' !< Interpolation method for snowfree albedo. Conservative or bilinear (default).
- character(len=50), public    :: vegetation_greenness_method='bilinear' !< Interpolation method for vegetation greenness. Conservative or bilinear (default).
+ character(len=50), public    :: leaf_area_index_method='bilinear' !< Interpolation method for leaf area index.
+                                                                   !! Conservative or bilinear (default).
+ character(len=50), public    :: maximum_snow_albedo_method='bilinear' !< Interpolation method for max snow albedo.
+                                                                       !! Conservative or bilinear (default).
+ character(len=50), public    :: snowfree_albedo_method='bilinear' !< Interpolation method for snowfree albedo.
+                                                                   !! Conservative or bilinear (default).
+ character(len=50), public    :: vegetation_greenness_method='bilinear' !< Interpolation method for vegetation greenness.
+                                                                        !! Conservative or bilinear (default).
 
  integer, public              :: halo = 0 !< Number of row/cols defining the lateral
                                           !! boundary halo. Used for regional nests.
+
+ logical, public              :: fract_vegsoil_type = .false. !< When true, output the percentage of each soil
+                                                             !! and vegetation type category, and the dominant
+                                                             !! category within a model grid box.
 
  public :: read_setup_namelist
 
@@ -64,12 +72,13 @@
 
  namelist /config/ input_facsf_file, input_substrate_temperature_file, &
                    input_maximum_snow_albedo_file, input_snowfree_albedo_file, &
-                   input_slope_type_file, input_soil_type_file, &
+                   input_slope_type_file, input_soil_type_file, input_soil_color_file,&
                    input_leaf_area_index_file, input_vegetation_type_file, &
                    input_vegetation_greenness_file, mosaic_file_mdl, &
                    orog_dir_mdl, orog_files_mdl, halo, &
                    vegetation_greenness_method, leaf_area_index_method, &
-                   maximum_snow_albedo_method, snowfree_albedo_method
+                   maximum_snow_albedo_method, snowfree_albedo_method, &
+                   fract_vegsoil_type
 
  print*,"- READ SETUP NAMELIST, LOCALPET: ", localpet
 

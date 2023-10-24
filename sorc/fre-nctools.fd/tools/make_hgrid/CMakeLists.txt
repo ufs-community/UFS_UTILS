@@ -15,4 +15,4 @@ target_link_libraries(make_hgrid_lib
 
 target_link_libraries(make_hgrid PRIVATE make_hgrid_lib)
 
-install(TARGETS make_hgrid RUNTIME DESTINATION ${exec_dir})
+install(TARGETS make_hgrid)

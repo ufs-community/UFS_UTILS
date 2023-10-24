@@ -11,12 +11,13 @@
 
  use esmf
 
- use input_data, only    :  read_input_atm_data, &
+ use atm_input_data, only    :  read_input_atm_data, &
                             lev_input, &
                             levp1_input, &
                             temp_input_grid, tracers_input_grid, &
                             dzdt_input_grid, pres_input_grid, &
-                            ps_input_grid, wind_input_grid, &
+                            ps_input_grid, xwind_input_grid, &
+                            ywind_input_grid, zwind_input_grid, &
                             terrain_input_grid
 
  use program_setup, only :  input_type, data_dir_input_grid, &
@@ -52,7 +53,6 @@
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
  real(esmf_kind_r8), allocatable  :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable  :: data3d_one_tile(:,:,:)
- real(esmf_kind_r8), allocatable  :: data4d_one_tile(:,:,:,:)
 
  real :: expected_values_tmp(NUM_VALUES)
  real :: expected_values_sphum(NUM_VALUES)
@@ -174,7 +174,6 @@
  if (levp1_input /= EXPECTED_LEVP1_INPUT) stop 3
 
  allocate(data3d_one_tile(i_input,j_input,lev_input))
- allocate(data4d_one_tile(i_input,j_input,lev_input,3))
  allocate(data_one_tile(i_input,j_input))
 
 ! The i/j/k of the points to be checked.
@@ -231,13 +230,15 @@
  if (abs(data3d_one_tile(i_check(1),j_check(1),k_check(1)) - expected_values_pres(1)) > EPSILON) stop 22
  if (abs(data3d_one_tile(i_check(2),j_check(2),k_check(2)) - expected_values_pres(2)) > EPSILON) stop 23
 
- call ESMF_FieldGather(wind_input_grid, data4d_one_tile, rootPet=0, rc=rc)
- if (abs(data4d_one_tile(i_check(1),j_check(1),k_check(1),1) - expected_values_xwind(1)) > EPSILON) stop 24
- if (abs(data4d_one_tile(i_check(2),j_check(2),k_check(2),1) - expected_values_xwind(2)) > EPSILON) stop 25
- if (abs(data4d_one_tile(i_check(1),j_check(1),k_check(1),2) - expected_values_ywind(1)) > EPSILON) stop 26
- if (abs(data4d_one_tile(i_check(2),j_check(2),k_check(2),2) - expected_values_ywind(2)) > EPSILON) stop 27
- if (abs(data4d_one_tile(i_check(1),j_check(1),k_check(1),3) - expected_values_zwind(1)) > EPSILON) stop 28
- if (abs(data4d_one_tile(i_check(2),j_check(2),k_check(2),3) - expected_values_zwind(2)) > EPSILON) stop 29
+ call ESMF_FieldGather(xwind_input_grid, data3d_one_tile, rootPet=0, rc=rc)
+ if (abs(data3d_one_tile(i_check(1),j_check(1),k_check(1)) - expected_values_xwind(1)) > EPSILON) stop 24
+ if (abs(data3d_one_tile(i_check(2),j_check(2),k_check(2)) - expected_values_xwind(2)) > EPSILON) stop 25
+ call ESMF_FieldGather(ywind_input_grid, data3d_one_tile, rootPet=0, rc=rc)
+ if (abs(data3d_one_tile(i_check(1),j_check(1),k_check(1)) - expected_values_ywind(1)) > EPSILON) stop 26
+ if (abs(data3d_one_tile(i_check(2),j_check(2),k_check(2)) - expected_values_ywind(2)) > EPSILON) stop 27
+ call ESMF_FieldGather(zwind_input_grid, data3d_one_tile, rootPet=0, rc=rc)
+ if (abs(data3d_one_tile(i_check(1),j_check(1),k_check(1)) - expected_values_zwind(1)) > EPSILON) stop 28
+ if (abs(data3d_one_tile(i_check(2),j_check(2),k_check(2)) - expected_values_zwind(2)) > EPSILON) stop 29
 
  call ESMF_FieldGather(ps_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (abs(data_one_tile(i_check(1),j_check(1)) - expected_values_ps(1)) > EPSILON) stop 32
@@ -245,7 +246,7 @@
  call ESMF_FieldGather(terrain_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (abs(data_one_tile(i_check(1),j_check(1)) - expected_values_terrain(1)) > EPSILON) stop 34
 
- deallocate(latitude, longitude, data3d_one_tile, data4d_one_tile, data_one_tile)
+ deallocate(latitude, longitude, data3d_one_tile, data_one_tile)
 
  call ESMF_finalize(endflag=ESMF_END_KEEPMPI)
 

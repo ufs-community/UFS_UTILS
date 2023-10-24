@@ -1,10 +1,10 @@
 #-----------------------------------------------------------
 #
 #  1) Compile the chgres_cube program.  Invoke 
-#     ./sorc/build_chgres_cube.sh
+#     ../../build_all.sh
 #
 #  2) Ensure links to the 'fixed' directories are
-#     set.  See the ./sorc/link_fixdirs.sh script prolog
+#     set.  See the ../../fix/link_fixdirs.sh script prolog
 #     for details.
 #
 #  3) Set all config variables.  See definitions 
@@ -44,35 +44,44 @@
 #                or incomplete. So this option may not
 #                always work. Contact george.gayno@noaa.gov
 #                if you encounter problems.
+# FRAC_ORO     - To use the latest orographic data, 
+#                set to 'yes', otherwise, set to 'no'.
+#                Note that: the latest orographic data
+#                support both frac_grid and none frac_grid in the UFS 
 #
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/lfs4/HFIP/emcda/$USER/stmp/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
+EXTRACT_DATA=no
 
-RUN_CHGRES=no
+RUN_CHGRES=yes
 
-yy=2021
-mm=03
-dd=21
+yy=2022
+mm=05
+dd=06
 hh=06
 
-use_v16retro=yes
+use_v16retro=no
 
 LEVS=65
 
 CDUMP=gdas
+
+FRAC_ORO=yes
 
 CRES_HIRES=C192
 CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/lfs4/HFIP/emcda/$USER/stmp/gdas.init/output
+OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.
 #---------------------------------------------------------
+
+GDAS_INIT_DIR=$UFS_DIR/util/gdas_init
+EXEC_DIR=$UFS_DIR/exec
 
 if [ "$use_v16retro" = "yes" ]; then
 
@@ -107,5 +116,5 @@ else
 
 fi
 
-export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
-export LEVS gfs_ver
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF FRAC_ORO
+export LEVS gfs_ver EXEC_DIR GDAS_INIT_DIR

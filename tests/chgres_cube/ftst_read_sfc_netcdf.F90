@@ -16,10 +16,11 @@
                         input_grid, &
                         num_tiles_input_grid
 
- use input_data, only : read_input_sfc_data, &
+ use atm_input_data, only : terrain_input_grid
+
+ use sfc_input_data, only : read_input_sfc_data, &
                         lsoil_input, &
                         landsea_mask_input_grid, &
-                        terrain_input_grid, &
                         soilm_liq_input_grid, &
                         soilm_tot_input_grid, &
                         soil_temp_input_grid, &

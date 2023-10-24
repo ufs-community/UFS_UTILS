@@ -71,10 +71,12 @@
      default_value = float(1)
    case ('soil_type') ! soil type
      default_value = float(2)
+   case ('soil_color') ! soil color
+     default_value = float(4)
    case ('vegetation_type') ! vegetation type
      default_value = float(3)
    case default
-     print*,'- FATAL ERROR IN ROUTINE SEARCH.  UNIDENTIFIED FIELD : ', field
+     print*,'- FATAL ERROR IN ROUTINE SEARCH.  UNIDENTIFIED FIELD : ', field_name
      call mpi_abort(mpi_comm_world, 77, ierr)
  end select
 

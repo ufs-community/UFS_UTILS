@@ -39,6 +39,7 @@
 
  use surface, only             : surface_driver
 
+ use utilities, only           : error_handler
  implicit none
 
  integer                      :: ierr, localpet, npets
