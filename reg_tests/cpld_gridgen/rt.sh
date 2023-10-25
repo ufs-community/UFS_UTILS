@@ -160,7 +160,7 @@ elif [[ $target = jet ]]; then
     NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
-    WLCLK=20
+    WLCLK=25
     SBATCH_COMMAND="./cpld_gridgen.sh"
 fi
 NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE

@@ -41,11 +41,7 @@ elif [[ $MOSAICRES == C048 ]]; then
   export MOSAICRES=C48
   export NPX=48
 fi
-if [ $RESNAME = 500 ]; then
-  export FIXDIR_PATH=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805/500/
-else
-  export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
-fi
+export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
 
 APRUN=${APRUN:-"srun"}
 
