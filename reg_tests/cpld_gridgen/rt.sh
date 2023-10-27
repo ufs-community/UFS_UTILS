@@ -108,7 +108,7 @@ TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=10
+WLCLK_dflt=15
 export WLCLK=$WLCLK_dflt
 MEM_dflt="--mem=12g"
 export MEM=$MEM_dflt
@@ -125,7 +125,7 @@ rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
 if [[ $target = wcoss2 ]]; then
     STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
-    export MOM6_FIXDIR=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/fix_mom6
+    export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/20220805
     BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-GFS-DEV}
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
@@ -134,7 +134,7 @@ if [[ $target = wcoss2 ]]; then
     NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
-    export MOM6_FIXDIR=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
+    export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
@@ -143,7 +143,7 @@ elif [[ $target = hera ]]; then
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = orion ]]; then
     STMP=${STMP:-/work/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
+    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
@@ -153,13 +153,14 @@ elif [[ $target = orion ]]; then
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
     STMP=${STMP:-/lfs4/HFIP/h-nems/$USER}
-    export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/fix_mom6
+    export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/mom6/20220805
     BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
+    WLCLK=25
     SBATCH_COMMAND="./cpld_gridgen.sh"
 fi
 NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
