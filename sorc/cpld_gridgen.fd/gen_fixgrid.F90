@@ -169,17 +169,22 @@ program gen_fixgrid
 
   if(xtype.eq. 6)dp4 = real(dp8,4)
 
-  !print *,minval(dp8),maxval(dp8)
-  !print *,minval(dp4),maxval(dp4)
-
   if(editmask)then
      !---------------------------------------------------------------------
-     !  apply topoedits run time mask changes if required for this config
+     ! apply topoedits run time mask changes if required for this config
+     ! this will create a modified topoedits file which accounts for any
+     ! land mask changes created at run time by MOM6
      !---------------------------------------------------------------------
 
      if(trim(editsfile)  == 'none')then
         print '(a)', 'Need a valid editsfile to make mask edits '
-        stop
+        call abort()
+     end if
+     inquire(file=trim(dirsrc)//'/'//trim(editsfile),exist=fexist)
+     if (.not. fexist) then
+        print '(a)', 'Required topoedits file '//trim(editsfile) &
+             //'for land mask changes is missing '
+        call abort()
      end if
 
      fsrc = trim(dirsrc)//'/'//trim(editsfile)
@@ -191,11 +196,22 @@ program gen_fixgrid
   ! MOM6 reads the depth file, applies the topo edits and then adjusts
   ! depth using masking_depth and min/max depth. This call mimics
   ! MOM6 routines apply_topography_edits_from_file and limit_topography
+  ! If the the topoedits file has been modified to account for MOM6 run
+  ! time land mask changes (above), then the depth will be created using
+  ! this modified topoedits file
   !---------------------------------------------------------------------
 
-  fsrc = trim(dirsrc)//'/'//trim(editsfile)
-  if(editmask)fsrc = trim(dirout)//'/'//'ufs.'//trim(editsfile)
-  call apply_topoedits(fsrc)
+     fsrc = trim(dirsrc)//'/'//trim(editsfile)
+     if(editmask)fsrc = trim(dirout)//'/'//'ufs.'//trim(editsfile)
+
+     if (trim(editsfile) /= 'none') then
+        inquire(file=trim(fsrc),exist=fexist)
+        if (.not. fexist) then
+           print '(a)', 'Required topoedits file '//trim(fsrc)//' is missing '
+           call abort()
+        end if
+     end if
+     call apply_topoedits(fsrc)
 
   !---------------------------------------------------------------------
   ! read MOM6 supergrid file
