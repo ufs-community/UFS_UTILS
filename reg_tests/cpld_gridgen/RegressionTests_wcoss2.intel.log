@@ -1,8 +1,8 @@
-Thu Oct 26 17:23:32 UTC 2023
+Thu Oct 26 18:28:37 UTC 2023
 Start Regression test
 
-Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_198243/025
-Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/025.new
+Working dir = /lfs/h2/emc/stmp/denise.worthen/CPLD_GRIDGEN/rt_155737/025
+Baseline dir = /lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data/025.new
 
 Checking test 025 results ....
 Comparing Bu.mx025_SCRIP.nc........OK
@@ -38,8 +38,8 @@ Comparing tripole.mx025.Cv.to.Ct.bilinear.nc........OK
 Comparing tripole.mx025.nc........OK
 
 
-Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_198243/050
-Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/050.new
+Working dir = /lfs/h2/emc/stmp/denise.worthen/CPLD_GRIDGEN/rt_155737/050
+Baseline dir = /lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data/050.new
 
 Checking test 050 results ....
 Comparing Bu.mx050_SCRIP.nc........OK
@@ -74,8 +74,8 @@ Comparing tripole.mx050.Cv.to.Ct.bilinear.nc........OK
 Comparing tripole.mx050.nc........OK
 
 
-Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_198243/100
-Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/100.new
+Working dir = /lfs/h2/emc/stmp/denise.worthen/CPLD_GRIDGEN/rt_155737/100
+Baseline dir = /lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data/100.new
 
 Checking test 100 results ....
 Comparing Bu.mx100_SCRIP.nc........OK
@@ -108,8 +108,8 @@ Comparing tripole.mx100.nc........OK
 Comparing ufs.topo_edits_011818.nc........OK
 
 
-Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_198243/500
-Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/500.new
+Working dir = /lfs/h2/emc/stmp/denise.worthen/CPLD_GRIDGEN/rt_155737/500
+Baseline dir = /lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data/500.new
 
 Checking test 500 results ....
 Comparing Bu.mx500_SCRIP.nc........OK
@@ -139,5 +139,5 @@ Comparing tripole.mx500.nc........OK
 
 
 REGRESSION TEST WAS SUCCESSFUL
-Thu Oct 26 17:46:20 UTC 2023
-Elapsed time: 00h:24m:25s. Have a nice day!
+Thu Oct 26 18:48:08 UTC 2023
+Elapsed time: 00h:20m:34s. Have a nice day!

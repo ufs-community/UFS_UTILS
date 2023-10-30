@@ -117,7 +117,7 @@
 !! @author George Gayno
  subroutine atmosphere_driver(localpet)
 
- use mpi
+ use mpi_f08
 
  implicit none
 
@@ -1761,7 +1761,7 @@
 !!
 !! @author Mark Iredell @date 92-10-31
  SUBROUTINE VINTG
- use mpi
+ use mpi_f08
 
  IMPLICIT NONE
 

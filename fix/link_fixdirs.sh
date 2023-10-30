@@ -58,7 +58,7 @@ fi
 
 am_ver=${am_ver:-20220805}
 orog_ver=${orog_ver:-20220805}
-sfc_climo_ver=${sfc_climo_ver:-20221017}
+sfc_climo_ver=${sfc_climo_ver:-20230925}
 
 for dir in am orog orog_raw sfc_climo; do
     if [ -d $dir ]; then

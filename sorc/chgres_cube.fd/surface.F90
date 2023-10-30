@@ -260,7 +260,7 @@
 !! @author George Gayno NOAA/EMC
  subroutine interp(localpet)
 
- use mpi
+ use mpi_f08
  use esmf
 
  use sfc_input_data, only            : canopy_mc_input_grid,  &
