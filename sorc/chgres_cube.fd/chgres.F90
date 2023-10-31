@@ -23,7 +23,7 @@
 !! @return 0 for success, error code otherwise.
  program chgres
 
- use mpi
+ use mpi_f08
  use esmf
 
  use atmosphere, only          : atmosphere_driver
