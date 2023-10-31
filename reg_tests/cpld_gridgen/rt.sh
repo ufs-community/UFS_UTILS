@@ -108,7 +108,7 @@ TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=15
+WLCLK_dflt=20
 export WLCLK=$WLCLK_dflt
 MEM_dflt="--mem=12g"
 export MEM=$MEM_dflt
