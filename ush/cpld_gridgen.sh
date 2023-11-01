@@ -21,7 +21,7 @@ function edit_namelist {
 export RESNAME=${RESNAME:-$1}
 export DEBUG=.false.
 export MASKEDIT=.false.
-export DO_POSTWGTS=.false.
+export DO_POSTWGTS=.true.
 export OUTDIR_PATH=${OUTDIR_PATH:-/scratch1/NCEPDEV/climate/Denise.Worthen/grids-20220116}
 export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
 if [[ $MOSAICRES == C3072 ]]; then
@@ -41,11 +41,7 @@ elif [[ $MOSAICRES == C048 ]]; then
   export MOSAICRES=C48
   export NPX=48
 fi
-if [ $RESNAME = 500 ]; then
-  export FIXDIR_PATH=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805/500/
-else
-  export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
-fi
+export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
 
 APRUN=${APRUN:-"srun"}
 
@@ -54,6 +50,10 @@ if [ $RESNAME = 500 ]; then
     export NJ=35
     export TOPOGFILE=ocean_topog.nc
     export EDITSFILE='none'
+    if [ $DO_POSTWGTS == .true. ]; then
+	#pre-generate SCRIP files for dst rectilinear grids using NCO
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p0_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+    fi
 fi
 
 if [ $RESNAME = 100 ]; then
@@ -64,9 +64,8 @@ if [ $RESNAME = 100 ]; then
     export EDITSFILE=topo_edits_011818.nc
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
-	# TODO: is the stagger really correct? The first pt is at 0.0E?
-	# should lat_type be cap? #lon_typ=grn_ctr#lat_typ=cap
-	ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p0_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
     fi
 fi
 
@@ -77,10 +76,9 @@ if [ $RESNAME = 050 ]; then
     export EDITSFILE='none'
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
-	# TODO: is the stagger really correct? The first pt is at 0.0E?
-	# should lat_type be cap? #lon_typ=grn_ctr#lat_typ=cap
-	ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr
-	ncremap -g ${OUTDIR_PATH}/rect.0p5_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p0_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p5_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
     fi
 fi
 
@@ -91,11 +89,10 @@ if [ $RESNAME = 025 ]; then
     export EDITSFILE=All_edits.nc
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
-	# TODO: is the stagger really correct? The first pt is at 0.0E?
-	# should lat_type be cap? #lon_typ=grn_ctr#lat_typ=cap
-	ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr
-	ncremap -g ${OUTDIR_PATH}/rect.0p5_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr
-	ncremap -g ${OUTDIR_PATH}/rect.0p25_SCRIP.nc -G latlon=721,1440#lon_typ=grn_ctr
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p0_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p0_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p5_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p25_SCRIP.nc -G latlon=721,1440#lon_typ=grn_ctr#lat_typ=cap
     fi
 fi
 

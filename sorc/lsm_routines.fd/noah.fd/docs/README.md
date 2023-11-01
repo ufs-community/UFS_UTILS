@@ -10,4 +10,4 @@ set_soilveg.f   -> needed some changes for doxygen
 
 sflx_snippet.f is a snippet of the file sflx.F, with minor changes to compil, and to enable frh2o routine to be called externally.
 
-
+For complete documentation, see https://ufs-community.github.io/UFS_UTILS
