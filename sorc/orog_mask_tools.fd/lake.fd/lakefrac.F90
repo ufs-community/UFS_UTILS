@@ -671,7 +671,7 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
         Landsat products: the JRC water product (2016-2020) and the GLC-FCS30 (2020); &
         the source data set was created by Chengquan Huang of UMD;',trim(lakeinfo)
       ELSE IF (lakestatus_srce == "VIIRS") THEN
-        write(string,'(a,f4.2,a,i1)') 'based on multi-year VIIRS global surface type & 
+        write(string,'(2a)') 'based on multi-year VIIRS global surface type & 
         classification map (2012-2019); the source data set was created by &
         Chengquan Huang of UMD and Michael Barlage of NOAA;',trim(lakeinfo)
       ENDIF
