@@ -2487,12 +2487,20 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+! Under some model configurations, ice can form at t=00. New ice needs
+! a valid skin temperature. Therefore, at open water (potential
+! ice points) set to 'frz_ice'.
+
  print*,"- SET TARGET GRID SEA ICE DEPTH TO ZERO AT NON-ICE POINTS."
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) == 0.0) then
-     seaice_skint_ptr(i,j) = missing
+     if (seamask_ptr(i,j) == 0) then ! all land
+       seaice_skint_ptr(i,j) = missing
+     else
+       seaice_skint_ptr(i,j) = frz_ice ! some water and no ice
+     endif
      hice_ptr(i,j) = 0.0
    endif
  enddo
@@ -2621,10 +2629,18 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+! Under some model configurations, ice can form at t=00. New ice needs
+! a valid ice column temperature. Therefore, at open water (potential
+! ice points) set to 'frz_ice'.
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (fice_ptr(i,j) == 0.0) then
-     ice_ptr(i,j,:) = missing
+     if (seamask_ptr(i,j) == 0) then ! all land
+       ice_ptr(i,j,:) = missing
+     else
+       ice_ptr(i,j,:) = frz_ice  ! some water and no ice
+     endif
    endif
  enddo
  enddo
