@@ -65,8 +65,8 @@ PROGRAM lake_frac
     CALL getarg(5, lakedepth_srce)
 
     IF (iargc() == 5) THEN
-      lake_cutoff = 0.20
-      binary_lake = 0
+      lake_cutoff = 0.50
+      binary_lake = 1
     ELSE
       CALL getarg(6, arg)
       READ(arg,*,iostat=stat) lake_cutoff

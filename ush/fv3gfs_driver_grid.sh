@@ -48,8 +48,8 @@ export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest, regional_gf
                                 # or regional_esg
 
 export add_lake=${add_lake:-false}      # add lake fraction and depth. uniform only.
-export lake_cutoff=${lake_cutoff:-0.20} # ignore lake_frac < lake_cutoff when add_lake=T
-export binary_lake=${binary_lake:0}     # return '1 > lake_frac >= lake_cutoff' as 1/0 when binary_lake=1/0
+export lake_cutoff=${lake_cutoff:-0.50} # return 0 if lake_frac <  lake_cutoff & add_lake=T
+export binary_lake=${binary_lake:-1}    # return 1 if lake_frac >= lake_cutoff & add_lake=T
 
 export make_gsl_orog=${make_gsl_orog:-false} # when true, create GSL drag suite orog files.
 

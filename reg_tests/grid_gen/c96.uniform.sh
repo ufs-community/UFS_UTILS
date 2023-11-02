@@ -15,6 +15,8 @@ export res=96
 export gtype=uniform
 export add_lake=true
 export lake_data_srce=MODISP_GLDBV3
+export lake_cutoff=0.50
+export binary_lake=1
 
 NCCMP=${NCCMP:-$(which nccmp)}
 
