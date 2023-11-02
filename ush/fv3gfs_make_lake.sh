@@ -110,7 +110,7 @@ fi
 tile=$tile_beg
 while [ $tile -le $tile_end ]; do
   outfile=oro.C${res}.tile${tile}.nc
-  $APRUN $exe_add_lake ${tile} ${res} ${indir} ${lakestatusrc} ${lakedepthsrc} ${lake_cutoff}
+  $APRUN $exe_add_lake ${tile} ${res} ${indir} ${lakestatusrc} ${lakedepthsrc} ${lake_cutoff} ${binary_lake}
   err=$?
   if [ $err != 0 ]; then
     set +x

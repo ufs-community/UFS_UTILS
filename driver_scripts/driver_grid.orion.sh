@@ -110,7 +110,8 @@ export lake_data_srce=MODISP_GLDBV3
 if [ $gtype = uniform ]; then
   export res=96
   export add_lake=true         # Add lake frac and depth to orography data.
-  export lake_cutoff=0.50      # lake frac < lake_cutoff ignored when add_lake=T
+  export lake_cutoff=0.50      # ignore lake_frac < lake_cutoff when add_lake=T
+  export binary_lake=1         # return '1 > lake_frac >= lake_cutoff' as 1/0 when binary_lake=1/0
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid

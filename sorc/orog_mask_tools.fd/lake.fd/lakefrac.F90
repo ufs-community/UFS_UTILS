@@ -32,7 +32,7 @@ PROGRAM lake_frac
     REAL, ALLOCATABLE :: cs_lakestatus(:), cs_lakedepth(:)
     REAL, ALLOCATABLE :: src_grid_lon(:), src_grid_lat(:)
 
-    INTEGER :: tile_req, tile_beg, tile_end
+    INTEGER :: tile_req, tile_beg, tile_end, binary_lake
     REAL :: lake_cutoff
 
     INTEGER, PARAMETER :: nlat = 21600, nlon = 43200
@@ -47,13 +47,13 @@ PROGRAM lake_frac
     INTEGER :: stat
     
     CALL getarg(0, arg) ! get the program name
-    IF (iargc() /= 5 .AND. iargc() /= 6) THEN
+    IF (iargc() /= 5 .AND. iargc() /= 7) THEN
       PRINT*, 'Usage: ', trim(arg), & 
        ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] &
          [lake data path] [lake status source] [lake depth source]'  
       PRINT*, 'Or: ', trim(arg), & 
        ' [tile_num (0:all tiles, 7:regional)] [resolution (48,96, ...)] &
-         [lake data path] [lake status source] [lake depth source] [lake_cutoff]'
+         [lake data path] [lake status source] [lake depth source] [lake_cutoff] [binary_lake]'
       STOP -1
     ENDIF
     CALL getarg(1, arg)
@@ -66,14 +66,18 @@ PROGRAM lake_frac
 
     IF (iargc() == 5) THEN
       lake_cutoff = 0.20
+      binary_lake = 0
     ELSE
       CALL getarg(6, arg)
       READ(arg,*,iostat=stat) lake_cutoff
+      CALL getarg(7, arg)
+      READ(arg,*,iostat=stat) binary_lake
     ENDIF
 
     PRINT*, 'lake status source:', trim(lakestatus_srce) 
     PRINT*, 'lake depth source:', trim(lakedepth_srce) 
     PRINT*, 'lake cutoff:', lake_cutoff 
+    PRINT*, 'binary lake:', binary_lake
 
     IF (tile_req == 0) THEN
       tile_beg = 1; tile_end = 6
@@ -612,7 +616,7 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
     INTEGER :: stat, ncid, x_dimid, y_dimid, varid, dimids(2)
     INTEGER :: lake_frac_id, lake_depth_id
     INTEGER :: land_frac_id, slmsk_id, inland_id, geolon_id, geolat_id
-    CHARACTER(len=256) :: filename,string
+    CHARACTER(len=256) :: filename,string,lakeinfo
     CHARACTER(len=1) :: ich
     CHARACTER(len=4) res_ch
     REAL :: lake_frac(cs_res*cs_res),lake_depth(cs_res*cs_res)
@@ -657,22 +661,19 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       CALL nc_opchk(stat, "nf90_put_att: lake_frac:long_name") 
       stat = nf90_put_att(ncid, lake_frac_id,'unit','fraction')
       CALL nc_opchk(stat, "nf90_put_att: lake_frac:unit") 
+      write(lakeinfo,'(a,f4.2,a,i1)') ' lake_frac cutoff=',lake_cutoff,'; binary_lake=',binary_lake
       IF (lakestatus_srce == "GLDBV3") THEN 
-        write(string,'(a,es8.1)') 'based on GLDBv3 (Choulga et al. 2019); missing lakes &
-        added based on land_frac in this dataset; lake_frac cutoff:',lake_cutoff
+        write(string,'(2a)') 'based on GLDBv3 (Choulga et al. 2019); missing lakes & added based on land_frac in this dataset;',trim(lakeinfo)
       ELSE IF (lakestatus_srce == "GLDBV2") THEN 
-        write(string,'(a,es8.1)') 'based on GLDBv2 (Choulga et al. 2014); missing lakes &
-        added based on land_frac in this dataset; lake_frac cutoff:',lake_cutoff
+        write(string,'(2a)') 'based on GLDBv2 (Choulga et al. 2014); missing lakes & added based on land_frac in this dataset;',trim(lakeinfo)
       ELSE IF (lakestatus_srce == "MODISP") THEN
-        write(string,'(a,es8.1)') 'based on MODIS (2011-2015) product updated with two &
+        write(string,'(2a)') 'based on MODIS (2011-2015) product updated with two &
         Landsat products: the JRC water product (2016-2020) and the GLC-FCS30 (2020); &
-        the source data set was created by Chengquan Huang of UMD; &  
-        lake_frac cutoff:',lake_cutoff
+        the source data set was created by Chengquan Huang of UMD;',trim(lakeinfo)
       ELSE IF (lakestatus_srce == "VIIRS") THEN
-        write(string,'(a,es8.1)') 'based on multi-year VIIRS global surface type & 
+        write(string,'(a,f4.2,a,i1)') 'based on multi-year VIIRS global surface type & 
         classification map (2012-2019); the source data set was created by &
-        Chengquan Huang of UMD and Michael Barlage of NOAA; &
-        lake_frac cutoff:',lake_cutoff
+        Chengquan Huang of UMD and Michael Barlage of NOAA;',trim(lakeinfo)
       ENDIF
       stat = nf90_put_att(ncid, lake_frac_id,'description',trim(string))
       CALL nc_opchk(stat, "nf90_put_att: lake_frac:description") 
@@ -764,7 +765,11 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
           lake_frac(i) = 0.
         endif
 
-        if (lake_frac(i) < lake_cutoff) lake_frac(i)=0.
+        if (lake_frac(i) < lake_cutoff) then
+           lake_frac(i)=0.
+        elseif (binary_lake == 1) then
+           lake_frac(i)=1.
+        end if
         if (lake_frac(i) > 1.-epsil) lake_frac(i)=1.
       ENDDO
 
