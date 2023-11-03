@@ -663,9 +663,11 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
       CALL nc_opchk(stat, "nf90_put_att: lake_frac:unit") 
       write(lakeinfo,'(a,f4.2,a,i1)') ' lake_frac cutoff=',lake_cutoff,'; binary_lake=',binary_lake
       IF (lakestatus_srce == "GLDBV3") THEN 
-        write(string,'(2a)') 'based on GLDBv3 (Choulga et al. 2019); missing lakes & added based on land_frac in this dataset;',trim(lakeinfo)
+        write(string,'(2a)') 'based on GLDBv3 (Choulga et al. 2019); missing lakes & added based on land_frac in this dataset;', &
+                              trim(lakeinfo)
       ELSE IF (lakestatus_srce == "GLDBV2") THEN 
-        write(string,'(2a)') 'based on GLDBv2 (Choulga et al. 2014); missing lakes & added based on land_frac in this dataset;',trim(lakeinfo)
+        write(string,'(2a)') 'based on GLDBv2 (Choulga et al. 2014); missing lakes & added based on land_frac in this dataset;', &
+                              trim(lakeinfo)
       ELSE IF (lakestatus_srce == "MODISP") THEN
         write(string,'(2a)') 'based on MODIS (2011-2015) product updated with two &
         Landsat products: the JRC water product (2016-2020) and the GLC-FCS30 (2020); &
