@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #-----------------------------------------------------------------------
-# Create a C96 global uniform grid.  Compare output to a set
-# of baseline files using the 'nccmp' utility.  This script is
-# run by the machine specific driver script.
+# Create a C96 global uniform grid including inland lakes. Compare 
+# output to a set of baseline files using the 'nccmp' utility.  This
+# script is run by the machine specific driver script.
 #-----------------------------------------------------------------------
 
 set -x
@@ -13,6 +13,10 @@ export out_dir=${WORK_DIR}/c96.uniform
 
 export res=96
 export gtype=uniform
+export add_lake=true
+export lake_data_srce=MODISP_GLDBV3
+export lake_cutoff=0.50
+export binary_lake=1
 
 NCCMP=${NCCMP:-$(which nccmp)}
 
