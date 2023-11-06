@@ -29,6 +29,7 @@ contains
 
     character(len=CM), dimension(2) :: methodname = (/'conserve', 'bilinear'/)
 
+    type(ESMF_RouteHandle)       :: rh
     type(ESMF_RegridMethod_Flag) :: method
     ! the number of possible destination grids depends on the source grid resolution
     integer :: k,rc,nd,ndest
@@ -38,22 +39,25 @@ contains
     ! set the destination grids
     !---------------------------------------------------------------------
 
-    if(trim(res) .eq. '400')return
-
-    if(trim(res) .eq. '100')then
+    if(trim(res) .eq. '500')then
        ndest = 1
        allocate(destgrds(ndest))
-       destgrds = (/'1p0 '/)
+       destgrds = (/'5p0 '/)
     end if
-    if(trim(res) .eq. '050')then
+    if(trim(res) .eq. '100')then
        ndest = 2
        allocate(destgrds(ndest))
-       destgrds = (/'1p0 ', '0p5 '/)
+       destgrds = (/'5p0 ', '1p0 '/)
     end if
-    if(trim(res) .eq. '025')then
+    if(trim(res) .eq. '050')then
        ndest = 3
        allocate(destgrds(ndest))
-       destgrds = (/'1p0 ', '0p5 ', '0p25'/)
+       destgrds = (/'5p0 ', '1p0 ', '0p5 '/)
+    end if
+    if(trim(res) .eq. '025')then
+       ndest = 4
+       allocate(destgrds(ndest))
+       destgrds = (/'5p0 ', '1p0 ', '0p5 ', '0p25'/)
     end if
 
     !---------------------------------------------------------------------
@@ -71,8 +75,8 @@ contains
        print '(a)',trim(logmsg)
 
        call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
-            weightFile=trim(fwgt), regridmethod=method, &
-            ignoreDegenerate=.true., &
+            weightFile=trim(fwgt), regridmethod=method,                 &
+            ignoreDegenerate=.true.,                                    &
             unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
        if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
             line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
@@ -98,8 +102,8 @@ contains
           print '(a)',trim(logmsg)
 
           call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
-               weightFile=trim(fwgt), regridmethod=method, &
-               ignoreDegenerate=.true., &
+               weightFile=trim(fwgt), regridmethod=method,                 &
+               ignoreDegenerate=.true., regridRouteHandle=rh,              &
                unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
           if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
                line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)

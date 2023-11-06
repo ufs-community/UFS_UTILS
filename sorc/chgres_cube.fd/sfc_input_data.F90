@@ -1762,7 +1762,7 @@ module sfc_input_data
 !! @author Larissa Reames 
  subroutine read_input_sfc_grib2_file(localpet)
 
-   use mpi
+   use mpi_f08
    use grib_mod
    use program_setup, only : vgtyp_from_climo, sotyp_from_climo
    use model_grid, only    : input_grid_type
