@@ -1015,6 +1015,8 @@ MODULE READ_WRITE_DATA
  !! @param[out] ZSOIL Soil layer thickness.
  !! @param[out] NSST Data structure containing nsst fields.
  !! @author George Gayno NOAA/EMC
+ !! @author Yuan Xue: add capability to read soil related increments from cubed
+ !! sphere tiles
  SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,INC_FILE,IS_NOAHMP, &
                       TSFFCS,SMCFCS,SWEFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
@@ -1025,6 +1027,7 @@ MODULE READ_WRITE_DATA
                       SIHFCS,SICFCS,SITFCS, &
                       TPRCP,SRFLAG,SNDFCS,  &
                       VMNFCS,VMXFCS,SLCFCS, &
+                      SLCINC,STCINC,&
                       SLPFCS,ABSFCS,T2M,Q2M,SLMASK, &
                       ZSOIL,NSST)
  USE MPI
@@ -1054,6 +1057,8 @@ MODULE READ_WRITE_DATA
  REAL, OPTIONAL, INTENT(OUT)         :: SLCFCS(LENSFC,LSOIL)
  REAL, OPTIONAL, INTENT(OUT)         :: SMCFCS(LENSFC,LSOIL)
  REAL, OPTIONAL, INTENT(OUT)         :: STCFCS(LENSFC,LSOIL)
+ REAL, OPTIONAL, INTENT(OUT)         :: SLCINC(LENSFC,LSOIL)
+ REAL, OPTIONAL, INTENT(OUT)         :: STCINC(LENSFC,LSOIL)
  REAL(KIND=4), OPTIONAL, INTENT(OUT) :: ZSOIL(LSOIL)
 
  TYPE(NSST_DATA), OPTIONAL           :: NSST ! intent(out) will crash 
@@ -1500,6 +1505,23 @@ MODULE READ_WRITE_DATA
  CALL NETCDF_ERR(ERROR, 'READING stc' )
  STCFCS = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
  ENDIF
+
+ IF (PRESENT(SLCINC)) THEN
+ ERROR=NF90_INQ_VARID(NCID, "slc_inc", ID_VAR)
+ CALL NETCDF_ERR(ERROR, 'READING slc_inc ID' )
+ ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy3d)
+ CALL NETCDF_ERR(ERROR, 'READING slc increments' )
+ SLCINC = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
+ ENDIF
+
+ IF (PRESENT(STCINC)) THEN
+ ERROR=NF90_INQ_VARID(NCID, "stc_inc", ID_VAR)
+ CALL NETCDF_ERR(ERROR, 'READING stc_inc ID' )
+ ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy3d)
+ CALL NETCDF_ERR(ERROR, 'READING stc increments' )
+ STCINC = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
+ ENDIF
+
 
  DEALLOCATE(DUMMY3D)
 
