@@ -23,7 +23,11 @@ program merge_lake_ocnmsk
   character(len=120) :: pth2,pth3
   character(len=10)  :: atmres,ocnres
   real, parameter    :: min_land=1.e-4, def_lakedp=10.
-  logical, parameter :: int_lake=.true.
+ ! this variable is now renamed as binary_lake and is passed in from the name
+ ! list
+ ! logical, parameter :: int_lake=.true.  
+ ! all instances of int_lake was changed to binary_lake  
+  integer :: binary_lake
 
   character(len=120) :: flnm
   integer :: ncid,ndims,nvars,natts,lat,lon,v1id,v2id,v3id,v4id,start(2),count(2),i,j,latid,lonid,ncid4, dims(2),tile,nodp_pt
@@ -32,7 +36,7 @@ program merge_lake_ocnmsk
 
   
 
-  call read_nml(pth1, pth2, atmres, ocnres, pth3)
+  call read_nml(pth1, pth2, atmres, ocnres, pth3,binary_lake)
   
   nodp_pt=0
   lake_pt=0  
@@ -78,7 +82,7 @@ program merge_lake_ocnmsk
 
     do i=1,lon
     do j=1,lat
-      if (int_lake) lake_frac(i,j)=nint(lake_frac(i,j))     ! using integer lake_frac
+      if (binary_lake.eq.1) lake_frac(i,j)=nint(lake_frac(i,j))     ! using integer lake_frac
       if (lat2d(i,j).le.-60.) lake_frac(i,j)=0.             ! ignore lakes on Antarctica
       land_frac(i,j)=1.-ocn_frac(i,j)
       if (land_frac(i,j) <    min_land) land_frac(i,j)=0.   ! ignore land  < min_land
@@ -87,7 +91,7 @@ program merge_lake_ocnmsk
 
       if (lake_frac(i,j) > 0.) then
         lake_pt=lake_pt+1            ! calculating total lake points
-        if (int_lake) then
+        if (binary_lake.eq.1) then
           land_frac(i,j)=0.
         else
           land_frac(i,j)=1.-lake_frac(i,j)
@@ -99,7 +103,8 @@ program merge_lake_ocnmsk
       else
         lake_depth(i,j)=0.
       end if
-      slmsk(i,j) = ceiling(land_frac(i,j)) ! ceiling is used for orog smoothing
+!  slmsk(i,j) = ceiling(land_frac(i,j)) "ceiling is used for orog smoothing"
+      slmsk(i,j) = nint(land_frac(i,j)) ! nint got the land pts correct
     end do
     end do
 
@@ -157,7 +162,7 @@ end subroutine handle_err
 !! @param[out] ocnres Ocean grid resolution.
 !! @author Rahul Mahajan
 !! @author Sanath Kumar
-subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres, ocnres,out_dir)
+subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres,ocnres,out_dir,binary_lake)
 
   integer :: unit=7, io_status
 
@@ -165,8 +170,9 @@ subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres, ocnres,out_dir)
   character(len=120), intent(out) :: lake_mask_dir
   character(len=120), intent(out) :: out_dir
   character(len=10),  intent(out) :: atmres,ocnres
+  integer, intent(out):: binary_lake
 
-  namelist/mask_nml/ocean_mask_dir, lake_mask_dir, atmres, ocnres, out_dir
+  namelist/mask_nml/ocean_mask_dir, lake_mask_dir, atmres, ocnres,out_dir,binary_lake
   open(unit=unit, file='input.nml', iostat=io_status )
   read(unit,mask_nml, iostat=io_status )
   close(unit)

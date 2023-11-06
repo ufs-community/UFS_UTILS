@@ -11,6 +11,7 @@
      lake_mask_dir="${TEMP_DIR}/C${res}/orog/"
      atmres="C${res}"
      out_dir="${results_dir}/"
+     binary_lake=$binary_lake
     /
 EOF
 
