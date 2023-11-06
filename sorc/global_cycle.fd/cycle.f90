@@ -70,8 +70,8 @@
 !!  -DO_SFCCYCLE   Call sfccycle routine to update surface fields
 !!  -DO_LNDINC     Read in land increment files, and add increments to
 !!                 relevant states.
-!!  -DO_SOI_INC     Do land increments to soil states.
-!!  -DO_SNO_INC     Do land increments to snow states.
+!!  -DO_SOI_INC_GSI     Do land increments (on the Guassian grid) to soil states.
+!!  -DO_SNO_INC         Do land increments (on the cubed sphere tiles) to snow states.
 !!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
 !!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
 !!  - ZSEA1/2_MM   When running with NSST model, this is the lower/
@@ -374,7 +374,7 @@
  INTEGER             :: veg_type_landice
  INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
 
- LOGICAL :: FILE_EXISTS, DO_SOI_INC, DO_SNO_INC
+ LOGICAL :: FILE_EXISTS, DO_SOI_INC_GSI, DO_SNO_INC
 
 !--------------------------------------------------------------------------------
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
@@ -387,7 +387,7 @@
  DATA LND_SOI_FILE/'NULL'/
 
  DO_SNO_INC = .FALSE.
- DO_SOI_INC = .FALSE.
+ DO_SOI_INC_GSI = .FALSE.
  
 
  SIG1T = 0.0            ! Not a dead start!
@@ -446,7 +446,7 @@
 IF (DO_LNDINC) THEN
    ! identify variables to be updates, and allocate arrays.
    IF  (TRIM(LND_SOI_FILE) .NE. "NULL") THEN
-       DO_SOI_INC = .TRUE.
+       DO_SOI_INC_GSI = .TRUE.
        PRINT*
        PRINT*," APPLYING SOIL INCREMENTS FROM THE GSI"
        ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
@@ -648,7 +648,7 @@ ENDIF
     ENDIF
 
     ! SOIL INCREMENTS
-    IF (DO_SOI_INC) THEN
+    IF (DO_SOI_INC_GSI) THEN
 
        !--------------------------------------------------------------------------------
        ! re-calculate soilsnow mask if snow has been updated.
