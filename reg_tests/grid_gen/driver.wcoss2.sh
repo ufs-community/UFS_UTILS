@@ -67,7 +67,7 @@ rm -fr $WORK_DIR
 #-----------------------------------------------------------------------------
 
 LOG_FILE1=${LOG_FILE}01
-TEST1=$(qsub -V -o $LOG_FILE1 -e $LOG_FILE1 -q $QUEUE -A $PROJECT_CODE -l walltime=00:10:00 \
+TEST1=$(qsub -V -o $LOG_FILE1 -e $LOG_FILE1 -q $QUEUE -A $PROJECT_CODE -l walltime=00:15:00 \
         -N c96.uniform -l select=1:ncpus=30:mem=40GB $PWD/c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
