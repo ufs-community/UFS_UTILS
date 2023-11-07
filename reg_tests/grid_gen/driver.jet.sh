@@ -64,7 +64,7 @@ export OMP_NUM_THREADS=24
 #-----------------------------------------------------------------------------
 
 LOG_FILE1=${LOG_FILE}01
-TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
+TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:20:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
       --partition=xjet -o $LOG_FILE1 -e $LOG_FILE1 ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
