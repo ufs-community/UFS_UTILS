@@ -5,10 +5,10 @@
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
-#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH --nodes=6 --ntasks-per-node=12
 #SBATCH --partition=bigmem
-#SBATCH -q debug
-#SBATCH -t 00:30:00
+#SBATCH -q batch
+#SBATCH -t 04:30:00
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on Hera.
@@ -80,7 +80,7 @@ export gtype=uniform           # 'uniform', 'stretch', 'nest',
 export make_gsl_orog=false     # When 'true' will output 'oro' files for
                                # the GSL orographic drag suite.
 
-export vegsoilt_frac='.false.' # When .false., output dominant soil and 
+export vegsoilt_frac='.true.' # When .false., output dominant soil and 
                                # vegetation type category. When .true.,
                                # output fraction of each category and
                                # the dominant category. A Fortran logical,
@@ -111,11 +111,11 @@ export soil_type_src="bnu.v3.30s" #  Soil type data.
 export lake_data_srce=MODISP_GLDBV3 
 
 if [ $gtype = uniform ]; then
-  export res=96
+#  export res=96
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.50      # return 0 if lake_frac <  lake_cutoff & add_lake=T
   export binary_lake=1         # return 1 if lake_frac >= lake_cutoff & add_lake=T
-  export ocn=${ocn:-"025"}     # use one of  "025", "050", "100", "500". Cannot be empty
+#  export ocn=${ocn:-"025"}     # use one of  "025", "050", "100", "500". Cannot be empty
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -162,7 +162,7 @@ fi
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids/
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids_611/vegfrac/
 export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN/
 
 #-----------------------------------------------------------------------

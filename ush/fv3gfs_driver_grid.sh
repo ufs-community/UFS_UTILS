@@ -252,8 +252,8 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   tile=1
   while [ $tile -le $ntiles ]; do
-    cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
-    cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}_grid.tile${tile}.nc
+    cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/oro_C${res}.mx${ocn}.tile${tile}.nc
+    cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}.mx${ocn}_grid.tile${tile}.nc
     if [ $make_gsl_orog = true ]; then
       cp $orog_dir/C${res}.oro.datadata_*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
     fi
@@ -504,7 +504,7 @@ fi
 #------------------------------------------------------------------------------------
 
 export WORK_DIR=$TEMP_DIR/sfcfields
-export SAVE_DIR=$out_dir/fix_sfc
+export SAVE_DIR=$out_dir/sfc
 export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
 export input_sfc_climo_dir=$home_dir/fix/sfc_climo
@@ -513,6 +513,7 @@ if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   export HALO=$halop1
   ln -fs $out_dir/C${res}_grid.tile${tile}.halo${HALO}.nc $out_dir/C${res}_grid.tile${tile}.nc
   ln -fs $out_dir/C${res}_oro_data.tile${tile}.halo${HALO}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
+
   export GRIDTYPE=regional
 elif [ $gtype = nest ]; then
   export mosaic_file=$out_dir/C${res}_coarse_mosaic.nc
@@ -565,6 +566,9 @@ The following parameters were used
         vegsoilt_frac=$vegsoilt_frac
         veg_type=$veg_type_src
         soil_type=$soil_type_src
+        add_lake=$add_lake
+        binary_lake=$binary_lake
+	lake_cutoff=$lake_cutoff
 EOF
 elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
 
@@ -583,6 +587,7 @@ The following parameters were used
         soil_type=$soil_type_src
         add_lake=$add_lake
         lake_cutoff=$lake_cutoff
+        binary_lake=$binary_lake
         stretch_fac=$stretch_fac        # Stretching factor for the grid
         target_lon=$target_lon          # Center longitude of the highest resolution tile
         target_lat=$target_lat          # Center latitude of the highest resolution tile

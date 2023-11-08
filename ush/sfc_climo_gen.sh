@@ -68,8 +68,10 @@ cd $WORK_DIR
 if [[ $GRIDTYPE == "nest" ]] || [[ $GRIDTYPE == "regional" ]]; then
   the_orog_files='"C'${res}'_oro_data.tile7.nc"'
 else
-  the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
+  the_orog_files='"oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc"'
 fi
+#the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
+
 cat << EOF > ./fort.41
 &config
 input_facsf_file="${input_sfc_climo_dir}/facsf.1.0.nc"
@@ -92,6 +94,7 @@ fract_vegsoil_type=${vegsoilt_frac}
 /
 EOF
 
+
 APRUN_SFC=${APRUN_SFC:-"aprun -j 1 -n 6 -N 6"}
 $APRUN_SFC $exec_dir/sfc_climo_gen
 
@@ -102,7 +105,7 @@ if [[ $rc == 0 ]]; then
     for files in *.nc
     do
       if [[ -f $files ]]; then
-        mv $files ${SAVE_DIR}/C${res}.${files}
+        mv $files ${SAVE_DIR}/C${res}.mx${ocn}.${files}
       fi
     done
   else
