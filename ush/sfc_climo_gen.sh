@@ -68,7 +68,7 @@ cd $WORK_DIR
 if [[ $GRIDTYPE == "nest" ]] || [[ $GRIDTYPE == "regional" ]]; then
   the_orog_files='"C'${res}'_oro_data.tile7.nc"'
 else
-  the_orog_files='"oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile1.nc"'
+  the_orog_files='"oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile2.nc","oro_C'${res}.mx${ocn}'.tile3.nc","oro_C'${res}.mx${ocn}'.tile4.nc","oro_C'${res}.mx${ocn}'.tile5.nc","oro_C'${res}.mx${ocn}'.tile6.nc"'
 fi
 #the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
 
