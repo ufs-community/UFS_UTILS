@@ -6,7 +6,7 @@ module land_increments
 
     private
 
-    public add_increment_soil
+    public add_gsi_increment_soil
     public add_increment_snow
     public calculate_landinc_mask
     public apply_land_da_adjustments_soil
@@ -52,7 +52,8 @@ contains
  !!
  !! @author Clara Draper. @date March 2021
 
-subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated, slc_updated, &
+subroutine add_gsi_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated, slc_updated, &
+                        stc_inc_tmp, slc_inc_tmp, &
                         soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,idim,jdim,lsm, myrank)
 
     use utils
@@ -71,6 +72,9 @@ subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated,
     real, intent(inout)      :: slc_state(lensfc, lsoil)
     real, intent(inout)      :: smc_state(lensfc, lsoil)
     integer, intent(out)     :: stc_updated(lensfc), slc_updated(lensfc)
+
+    real                     :: slc_inc_tmp(lensfc, lsoil)
+    real                     :: stc_inc_tmp(lensfc, lsoil)
 
     integer                  :: iopt, nret, kgds_gaus(200)
     integer                  :: igaus, jgaus, ij
@@ -203,6 +207,9 @@ subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated,
     nfrozen = 0 ! not update as frozen soil
     nfrozen_upd = 0 ! not update as frozen soil
 
+    ! initialize matrix
+    stc_inc_tmp = 0.0
+    slc_inc_tmp = 0.0
 
     ij_loop : do ij = 1, lensfc
 
@@ -301,10 +308,12 @@ subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated,
              wsum  = wsum + s2c(itile,jtile,4)
            endif
 
-           ! normalize increments
+           ! normalize increments and save them
            do k = 1, lsoil_incr
              stc_inc(k) = stc_inc(k) / wsum
+             stc_inc_tmp(ij,k) = stc_inc(k)
              slc_inc(k) = slc_inc(k) / wsum
+             slc_inc_tmp(ij,k) = slc_inc(k)
            enddo
            !----------------------------------------------------------------------
            !  add the interpolated increment to the background
@@ -361,7 +370,7 @@ subroutine add_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated,
 
     deallocate(id1, id2, jdc, s2c)
 
-end subroutine add_increment_soil
+end subroutine add_gsi_increment_soil
 
  !> Add snow depth increment to model snow depth state,
  !! and limit output to be non-negative. JEDI increments are

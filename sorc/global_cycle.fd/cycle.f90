@@ -302,7 +302,7 @@
  USE READ_WRITE_DATA
  use machine
  USE MPI
- USE LAND_INCREMENTS, ONLY: ADD_INCREMENT_SOIL,     &
+ USE LAND_INCREMENTS, ONLY: ADD_GSI_INCREMENT_SOIL,     &
                             ADD_INCREMENT_SNOW,     &
                             CALCULATE_LANDINC_MASK, &
                             APPLY_LAND_DA_ADJUSTMENTS_SOIL, &
@@ -373,6 +373,8 @@
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
  INTEGER             :: veg_type_landice
  INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
+
+ REAL, DIMENSION(LENSFC,LSOIL) :: STC_INC_TMP, SLC_INC_TMP
 
  LOGICAL :: FILE_EXISTS, DO_SOI_INC_GSI, DO_SNO_INC
 
@@ -688,7 +690,8 @@ ENDIF
         SLC_BCK = SLCFCS
 
         ! below updates [STC/SMC/STC]FCS to hold the analysis
-        CALL ADD_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
+        CALL ADD_GSI_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
+                STC_INC_TMP, SLC_INC_TMP, &
                 LANDINC_MASK,LANDINC_MASK_FG,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
 
         !--------------------------------------------------------------------------------
@@ -700,13 +703,16 @@ ENDIF
             SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS, STC_UPDATED, &
             SLC_UPDATED,ZSOIL)
 
+        ! if read in GSI-based increments, save interpolated fields onto cubed sphere tiles
+        CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
+                   SLC_INC_TMP=SLC_INC_TMP,STC_INC_TMP=STC_INC_TMP)
+
    ENDIF ! soil increments
 
 !--------------------------------------------------------------------------------
 ! clean up
 !--------------------------------------------------------------------------------
 
-   ! to do - save and write out  STC_INC? (soil temperature increments)
    IF(ALLOCATED(LANDINC_MASK_FG)) DEALLOCATE(LANDINC_MASK_FG)
    IF(ALLOCATED(LANDINC_MASK)) DEALLOCATE(LANDINC_MASK)
    IF(ALLOCATED(STC_BCK)) DEALLOCATE(STC_BCK)
@@ -723,13 +729,13 @@ ENDIF
 
  IF (LSM==LSM_NOAHMP) THEN
 
-   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,NSST,VEGFCS=VEGFCS, &
+   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.false.,NSST,VEGFCS=VEGFCS, &
                    SLCFCS=SLCFCS,SMCFCS=SMCFCS,STCFCS=STCFCS)
 
  ELSEIF (LSM==LSM_NOAH) THEN
 
    CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL, &
-                   DO_NSST,NSST,SLIFCS=SLIFCS,TSFFCS=TSFFCS,VEGFCS=VEGFCS, &
+                   DO_NSST,.false.,NSST,SLIFCS=SLIFCS,TSFFCS=TSFFCS,VEGFCS=VEGFCS, &
                    SWEFCS=SWEFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS, &
                    ALBFCS=ALBFCS,ALFFCS=ALFFCS,CNPFCS=CNPFCS, &
                    F10M=F10M,T2M=T2M,Q2M=Q2M,VETFCS=VETFCS, &

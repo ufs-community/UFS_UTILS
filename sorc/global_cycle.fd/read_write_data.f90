@@ -116,15 +116,18 @@ MODULE READ_WRITE_DATA
    !! @param[in] stcfcs Soil temperature.
    !!
    !! @author George Gayno NOAA/EMC
-
+   !! @author Yuan Xue: gsi-based soil increments are interpolated onto the
+   !! cubed sphered tiles for assimilation, hence, add capability to write out 
+   !! interpolated increments into files
  subroutine write_data(lensfc,idim,jdim,lsoil, &
-                       do_nsst,nsst,slifcs,tsffcs,vegfcs,swefcs, &
+                       do_nsst,inc_file,nsst,slifcs,tsffcs,vegfcs,swefcs, &
                        tg3fcs,zorfcs,albfcs,alffcs, &
                        cnpfcs,f10m,t2m,q2m,vetfcs, &
                        sotfcs,ustar,fmm,fhh,sicfcs, &
                        sihfcs,sitfcs,tprcp,srflag,  &
                        swdfcs,vmnfcs,vmxfcs,slpfcs, &
-                       absfcs,slcfcs,smcfcs,stcfcs)
+                       absfcs,slcfcs,smcfcs,stcfcs, &
+                       stc_inc_tmp,slc_inc_tmp)
 
  use mpi
 
@@ -134,6 +137,7 @@ MODULE READ_WRITE_DATA
  integer, intent(in)              :: idim, jdim
 
  logical, intent(in)              :: do_nsst
+ logical, intent(in)              :: inc_file
 
  real, intent(in), optional       :: slifcs(lensfc),tsffcs(lensfc)
  real, intent(in), optional       :: swefcs(lensfc),tg3fcs(lensfc)
@@ -150,6 +154,8 @@ MODULE READ_WRITE_DATA
  real, intent(in), optional       :: vmxfcs(lensfc), slpfcs(lensfc)
  real, intent(in), optional       :: absfcs(lensfc), slcfcs(lensfc,lsoil)
  real, intent(in), optional       :: smcfcs(lensfc,lsoil), stcfcs(lensfc,lsoil)
+ real, intent(in), optional       :: stc_inc_tmp(lensfc,lsoil)
+ real, intent(in), optional       :: slc_inc_tmp(lensfc,lsoil)
 
  type(nsst_data), intent(in)      :: nsst
 
@@ -161,18 +167,21 @@ MODULE READ_WRITE_DATA
  character(len=3)  :: rankch
 
  integer           :: myrank, error, ncid, id_var
+ integer           :: varid_slc, varid_stc
+ integer           :: dim_soil
 
  call mpi_comm_rank(mpi_comm_world, myrank, error)
 
  write(rankch, '(i3.3)') (myrank+1)
 
- fnbgso = "./fnbgso." // rankch
+ if (.NOT.(inc_file)) then 
 
- print*
- print*,"update OUTPUT SFC DATA TO: ",trim(fnbgso)
+    fnbgso = "./fnbgso." // rankch
+    print*
+    print*,"update OUTPUT SFC DATA TO: ",trim(fnbgso)
 
- ERROR=NF90_OPEN(TRIM(fnbgso),NF90_WRITE,NCID)
- CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(fnbgso) )
+    ERROR=NF90_OPEN(TRIM(fnbgso),NF90_WRITE,NCID)
+    CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(fnbgso) )
 
  if(present(slifcs)) then
    error=nf90_inq_varid(ncid, "slmsk", id_var)
@@ -470,6 +479,47 @@ MODULE READ_WRITE_DATA
    error = nf90_put_var( ncid, id_var, dum3d)
    call netcdf_err(error, 'writing stc record' )
    call remove_checksum(ncid, id_var)
+ endif
+
+ else
+
+    fnbgso = "./xainc." // rankch
+    print*
+    print*,"Write increments onto cubed sphere tiles to: ", trim(fnbgso)
+
+    error=nf90_create(trim(fnbgso),NF90_64BIT_OFFSET,ncid)
+    CALL netcdf_err(error, 'OPENING FILE: '//trim(fnbgso) )
+
+    ! Define dimensions in the file.
+    error = nf90_def_dim(ncid, "xaxis_1", idim, dim_x)
+    call netcdf_err(error, 'defining xaxis_1')
+
+    error = nf90_def_dim(ncid, "yaxis_1", jdim, dim_y)
+    call netcdf_err(error, 'defining yaxis_1')
+
+    error = nf90_def_dim(ncid, "soil_levels",lsoil, dim_soil)
+    call netcdf_err(error, 'defining soil_levels')
+
+   ! Define variables in the file.
+   error=nf90_def_var(ncid, "slc_inc", NF90_DOUBLE, &
+       (/dim_x,dim_y,dim_soil/),varid_slc)
+   call netcdf_err(error, 'defining slc_inc');
+
+   error=nf90_def_var(ncid, "stc_inc", NF90_DOUBLE, &
+       (/dim_x,dim_y,dim_soil/),varid_stc)
+   call netcdf_err(error, 'defining stc_inc');
+
+   error = nf90_enddef(ncid)
+
+   ! Put variables in the file.
+   dum3d = reshape(stc_inc_tmp, (/idim,jdim,lsoil/))
+   error = nf90_put_var( ncid, varid_stc, dum3d)
+   call netcdf_err(error, 'writing stc_inc record' )
+
+   dum3d = reshape(slc_inc_tmp, (/idim,jdim,lsoil/))
+   error = nf90_put_var( ncid, varid_slc, dum3d)
+   call netcdf_err(error, 'writing slc_inc record' )
+
  endif
 
  if(do_nsst) then
