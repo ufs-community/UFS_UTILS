@@ -477,7 +477,7 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
                  stc_updated, slc_updated, zsoil)
 
     use mpi
-    use set_soilveg_snippet_mod, only: set_soilveg
+    use set_soilveg_snippet_mod, only: set_soilveg_noah, set_soilveg_noahmp
     use sflx_snippet,    only: frh2o
 
     implicit none
@@ -518,9 +518,9 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
     select case (lsm ) 
     case(lsm_noah)  
         ! initialise soil properties
-        call set_soilveg(isot, ivegsrc, maxsmc, bb, satpsi, iret)
+        call set_soilveg_noah(isot, ivegsrc, maxsmc, bb, satpsi, iret)
         if (iret < 0) then
-            print *, 'FATAL ERROR: problem in set_soilveg'
+            print *, 'FATAL ERROR: problem in set_soilveg_noah'
             call mpi_abort(mpi_comm_world, 10, ierr)
         endif
 

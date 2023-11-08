@@ -1,9 +1,13 @@
 !> @file
 !> @brief Routine to set Noah LSM soil and veg params needed for sflx_snippet
 !> @author Clara Draper
-
 !> Below was extracted from namelist_soilveg.f and set_soilveg.f 
 !! (couldn't get above to compile for doxygen)
+!> @author Yuan Xue: add Noah-MP LSM soil and veg params needed for global_cycle
+!> Noah-MP related parameters were extracted from noahmp_table.f
+!> isot (soil type) = 1: STATSGO must be selected if NoahMP is used
+!> ivet (vegetation type) = 1: IBGP is used by UFS offline Land DA for Noah-MP
+!> as of 07/13/2023
 
 module set_soilveg_snippet_mod
 
@@ -11,7 +15,8 @@ module set_soilveg_snippet_mod
 
  private
 
- public set_soilveg
+ public set_soilveg_noah
+ public set_soilveg_noahmp
 
 contains
 
@@ -23,7 +28,7 @@ contains
 !! @param[out] bb B exponent for each soil type
 !! @param[out] satpsi Saturated matric potential for each soil type
 !! @param[out] iret Return integer
-subroutine set_soilveg(isot,ivet, maxsmc, bb, satpsi, iret) 
+subroutine set_soilveg_noah(isot,ivet, maxsmc, bb, satpsi, iret) 
   implicit none
 
   integer, intent(in) :: isot,ivet
@@ -85,6 +90,43 @@ subroutine set_soilveg(isot,ivet, maxsmc, bb, satpsi, iret)
   
   iret = 0
 
-end subroutine set_soilveg
+end subroutine set_soilveg_noah
+
+subroutine set_soilveg_noahmp(isot,ivet, maxsmc, bb, satpsi,iret)
+
+  implicit none
+
+  integer, intent(in) :: isot,ivet !ivet is *not* used for now
+  real, dimension(30), intent(out)  :: maxsmc, bb, satpsi
+  integer, intent(out) :: iret
+
+ if (isot .eq. 1) then
+
+! set soil-dependent params (STATSGO is the only option for UFS, 07/13/2023)
+  maxsmc= (/0.339, 0.421, 0.434, 0.476, 0.484,&
+     &   0.439, 0.404, 0.464, 0.465, 0.406, 0.468, 0.468,                    &
+     &   0.439, 1.000, 0.200, 0.421, 0.468, 0.200,                           &
+     &   0.339, 0.339, 0.000, 0.000, 0.000, 0.000,                           &
+     &  0.000, 0.000, 0.000, 0.000, 0.000, 0.000/)
+  bb= (/2.79,  4.26, 4.74, 5.33, 3.86,  5.25,&
+     &    6.77,  8.72,  8.17, 10.73,  10.39, 11.55,                          &
+     &    5.25,  0.0,  2.79, 4.26,  11.55,  2.79,                            &
+     &    2.79,  0.00,  0.00, 0.00,  0.00,  0.00,                            &
+     &    0.00,  0.00,  0.00, 0.00,  0.00,  0.00/)
+  satpsi= (/0.069, 0.036, 0.141, 0.759, 0.955, &
+     &   0.355, 0.135, 0.617, 0.263, 0.098, 0.324, 0.468,                    &
+     &   0.355, 0.00, 0.069, 0.036, 0.468, 0.069,                            &
+     &   0.069, 0.00, 0.00, 0.00, 0.00, 0.00,                                &
+     &   0.00, 0.00, 0.00, 0.00, 0.00, 0.00/)
+
+ else
+    print*, 'For Noah-MP, set_soilveg is not supported for soil type ', isot 
+    iret = -1
+    return
+
+ endif
+
+ iret = 0
+end subroutine set_soilveg_noahmp
 
 end module set_soilveg_snippet_mod
