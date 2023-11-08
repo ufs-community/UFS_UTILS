@@ -521,7 +521,7 @@ ENDIF
  
  ! CALCULATE MASK FOR LAND INCREMENTS
  IF (DO_LNDINC)  &
-    CALL CALCULATE_LANDINC_MASK(SMCFCS(:,1),SWEFCS, VETFCS,  &
+    CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, &
                     LENSFC,VEG_TYPE_LANDICE,  LANDINC_MASK)
 
 !--------------------------------------------------------------------------------
@@ -659,7 +659,7 @@ ENDIF
         LANDINC_MASK_FG = LANDINC_MASK
 
         IF (DO_SFCCYCLE .OR. DO_SNO_INC)  THEN
-            CALL CALCULATE_LANDINC_MASK(SMCFCS(:,1),SWEFCS, VETFCS, LENSFC, &
+            CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, LENSFC, &
                                                         VEG_TYPE_LANDICE, LANDINC_MASK )
         ENDIF
 

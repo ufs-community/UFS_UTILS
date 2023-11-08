@@ -414,13 +414,14 @@ end subroutine add_increment_snow
 !! @param[in] vtype Model vegetation type
 !! @param[out] mask Land mask for increments
 !! @author Clara Draper @date March 2021
-subroutine calculate_landinc_mask(smc,swe,vtype,lensfc,veg_type_landice,mask)
+!! @author Yuan Xue: introduce stype to make the mask calculation more generic
+subroutine calculate_landinc_mask(swe,vtype,stype,lensfc,veg_type_landice,mask)
  
     implicit none
 
     integer, intent(in)           :: lensfc, veg_type_landice
-    real, intent(in)              :: smc(lensfc), swe(lensfc)
-    real, intent(in)              :: vtype(lensfc)
+    real, intent(in)              :: swe(lensfc)
+    real, intent(in)              :: vtype(lensfc),stype(lensfc)
     integer, intent(out)          :: mask(lensfc)
 
     integer :: i
@@ -429,7 +430,7 @@ subroutine calculate_landinc_mask(smc,swe,vtype,lensfc,veg_type_landice,mask)
 
     ! land (but not land-ice)
     do i=1,lensfc
-        if (smc(i) .LT. 0.99) then
+        if (nint(stype(i)) .GT. 0) then
           if (swe(i) .GT. 0.001) then ! snow covered land
                 mask(i) = 2
           else                        ! non-snow covered land
