@@ -567,6 +567,7 @@ The following parameters were used
         veg_type=$veg_type_src
         soil_type=$soil_type_src
         add_lake=$add_lake
+	lake_data_srce=$lake_data_srce
         binary_lake=$binary_lake
 	lake_cutoff=$lake_cutoff
 EOF
@@ -586,6 +587,7 @@ The following parameters were used
         veg_type=$veg_type_src
         soil_type=$soil_type_src
         add_lake=$add_lake
+	lake_data_srce=$lake_data_srce
         lake_cutoff=$lake_cutoff
         binary_lake=$binary_lake
         stretch_fac=$stretch_fac        # Stretching factor for the grid
