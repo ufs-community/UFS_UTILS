@@ -255,7 +255,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/oro_C${res}.mx${ocn}.tile${tile}.nc
     cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}.mx${ocn}_grid.tile${tile}.nc
     if [ $make_gsl_orog = true ]; then
-      cp $orog_dir/C${res}.oro.datadata_*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
+      cp $orog_dir/C${res}_oro_data*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
     fi
     tile=`expr $tile + 1 `
   done
@@ -486,6 +486,7 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
       exit $err
     fi
     cp $orog_dir/C${res}_oro_data_*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
+
   fi
 
   echo "Grid and orography files are now prepared for regional grid"
