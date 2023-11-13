@@ -7,9 +7,12 @@ module land_increments
     private
 
     public add_gsi_increment_soil
+    public add_jedi_increment_soil_temp
+    public add_jedi_increment_soil_moisture
     public add_increment_snow
     public calculate_landinc_mask
-    public apply_land_da_adjustments_soil
+    public apply_land_da_adjustments_soil_temp
+    public apply_land_da_adjustments_soil_moisture
     public apply_land_da_adjustments_snd
     public lsm_noah, lsm_noahmp
 
@@ -18,7 +21,15 @@ module land_increments
                                                      !! copied from GFS_typedefs.F90
 
     ! control state for soil analysis:
-    integer, parameter       :: lsoil_incr=3 !< number of layers to add incrments to
+    ! Yuan Xue: ONLY updating top 2 layers because analysis shown that
+    ! Pan-Arctic permafrost is too sensitive to slc adjustment due to soil temperature ingest in 3rd layer 
+    ! whenever soil temperature approaches freezing point during a synthetic
+    ! twin experiment.
+    ! This is indeed a generic issue due to opt_frz=1 (Niu and Yang, 2006 jhm)
+    ! A +/-0.05K difference in soil temp (slightly below tfreez) can lead to
+    ! 0.05-0.06m3/m3 difference in liquid soil moisture, which is also seen in the
+    ! surface layers. 
+    integer, parameter       :: lsoil_incr=2 !< number of layers to add incrments to
 
     real, parameter          :: tfreez=273.16 !< con_t0c  in physcons
 contains
@@ -372,6 +383,220 @@ subroutine add_gsi_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_upda
 
 end subroutine add_gsi_increment_soil
 
+ !! Similar to gsi based increment ingest, this routine is to
+ !! add jedi based stc increments to model state
+ !! Without any follow-up slc adjustment, add_gsi_increment_soil is identical to
+ !! add_jedi_increment_soil_temp plus add_jedi_increment_soil_moisture -- sanity checks are all done
+ !! @author Yuan Xue @date: 08/11/2023
+subroutine add_jedi_increment_soil_temp(stcinc,stc_state,&
+                                   stc_updated,&
+                                   soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,&
+                                   lsm,myrank)
+    use mpi
+
+    implicit none
+
+    integer, intent(in)      :: lensfc, lsoil, myrank, lsm
+    integer, intent(in)      :: soilsnow_tile(lensfc), soilsnow_fg_tile(lensfc)
+    real, intent(in)         :: stcinc(lensfc,lsoil)
+    real, intent(inout)      :: stc_state(lensfc, lsoil)
+    integer, intent(out)     :: stc_updated(lensfc)
+
+    integer                  :: ij
+    integer                  :: mask_tile, mask_fg_tile
+    logical                  :: upd_stc
+
+    integer                  :: k, nother, nsnowupd
+    integer                  :: nstcupd
+
+    stc_updated=0
+
+    if (lsm==lsm_noah) then
+        upd_stc=.true.
+    elseif (lsm==lsm_noahmp) then
+        upd_stc=.true.
+    endif
+
+    print*
+    print*,'adjust soil temp using jedi increments on cubed sphere tiles'
+    print*,'updating soil temps', upd_stc
+    print*,'adjusting first ', lsoil_incr, ' surface layers only'
+
+    ! initialize variables for counts statitics to be zeros
+    nother = 0 ! grid cells not land
+    nsnowupd = 0  ! grid cells with snow (temperature not yet updated)
+    nstcupd = 0 ! grid cells that are updated
+
+     ij_loop : do ij = 1, lensfc
+
+        mask_tile    = soilsnow_tile(ij)
+        mask_fg_tile = soilsnow_fg_tile(ij)
+
+        !----------------------------------------------------------------------
+        ! mask: 1  - soil, 2 - snow, 0 - land-ice, -1 - not land
+        !----------------------------------------------------------------------
+
+        if (mask_tile <= 0) then ! skip if neither soil nor snow
+         nother = nother + 1
+         cycle ij_loop
+        endif
+
+        !----------------------------------------------------------------------
+        ! if snow is present before or after snow update, skip soil analysis
+        !----------------------------------------------------------------------
+
+        if (mask_fg_tile == 2 .or. mask_tile == 2) then
+         nsnowupd = nsnowupd + 1
+         cycle ij_loop
+        endif
+
+        if (mask_tile == 1) then
+         !----------------------------------------------------------------------
+         !  add the interpolated increment to the background
+         !----------------------------------------------------------------------
+           do k = 1, lsoil_incr
+
+             if (upd_stc) then
+                stc_state(ij,k) = stc_state(ij,k) + stcinc(ij,k)
+                if (k==1) then
+                    stc_updated(ij) = 1
+                    nstcupd = nstcupd + 1
+                endif
+             endif
+
+           enddo
+
+        endif ! if soil/snow point
+
+    enddo ij_loop
+
+    write(*,'(a,i2)') ' statistics of grids number processed for rank : ',myrank
+    write(*,'(a,i8)') ' soil grid total', lensfc
+    write(*,'(a,i8)') ' soil grid cells stc updated = ',nstcupd
+    write(*,'(a,i8)') ' (not updated yet) snow grid cells = ', nsnowupd
+    write(*,'(a,i8)') ' grid cells, without soil or snow = ', nother
+
+end subroutine add_jedi_increment_soil_temp
+
+!! Add jedi based slc increments to model state
+!! @author Yuan Xue @date: 08/11/2023
+subroutine add_jedi_increment_soil_moisture(slcinc,stc_state,smc_state,slc_state,&
+                                   slc_updated, &
+                                   soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,&
+                                   lsm,myrank)
+    use mpi
+
+    implicit none
+
+    integer, intent(in)      :: lensfc, lsoil, myrank, lsm
+    integer, intent(in)      :: soilsnow_tile(lensfc), soilsnow_fg_tile(lensfc)
+    real, intent(in)         :: slcinc(lensfc,lsoil)
+    real, intent(in)         :: stc_state(lensfc, lsoil)
+    real, intent(inout)      :: slc_state(lensfc, lsoil)
+    real, intent(inout)      :: smc_state(lensfc, lsoil)
+    integer, intent(out)     :: slc_updated(lensfc)
+
+    integer                  :: ij
+    integer                  :: mask_tile, mask_fg_tile
+    logical                  :: upd_slc
+
+    integer                  :: k, nother, nsnowupd
+    integer                  :: nslcupd,  nfrozen, nfrozen_upd
+    logical                  :: soil_freeze, soil_ice
+
+
+    slc_updated=0
+
+    if (lsm==lsm_noah) then
+        upd_slc=.false. ! not coded
+    elseif (lsm==lsm_noahmp) then
+        upd_slc=.true.
+    endif
+
+    print*
+    print*,'adjust soil moisture using jedi increments on cubed sphere tiles'
+    print*,'updating soil moisture', upd_slc
+    print*,'adjusting first ', lsoil_incr, ' surface layers only'
+
+    ! initialize variables for counts statitics to be zeros
+    nother = 0 ! grid cells not land
+    nsnowupd = 0  ! grid cells with snow (not updated)
+    nslcupd = 0 ! grid cells that are updated
+    nfrozen = 0 ! not update as frozen soil
+    nfrozen_upd = 0 ! not update as frozen soil
+
+    ij_loop : do ij = 1, lensfc
+
+        mask_tile    = soilsnow_tile(ij)
+        mask_fg_tile = soilsnow_fg_tile(ij)
+
+        !----------------------------------------------------------------------
+        ! mask: 1  - soil, 2 - snow, 0 - land-ice, -1 - not land
+        !----------------------------------------------------------------------
+
+        if (mask_tile <= 0) then ! skip if neither soil nor snow
+         nother = nother + 1
+         cycle ij_loop
+        endif
+
+        !----------------------------------------------------------------------
+        ! if snow is present before or after snow update, skip soil analysis
+        !----------------------------------------------------------------------
+
+        if (mask_fg_tile == 2 .or. mask_tile == 2) then
+         nsnowupd = nsnowupd + 1
+         cycle ij_loop
+        endif
+
+        if (mask_tile == 1) then
+         !----------------------------------------------------------------------
+         !  add the interpolated increment to the background
+         !----------------------------------------------------------------------
+
+          soil_freeze=.false.
+          soil_ice=.false.
+           do k = 1, lsoil_incr
+
+             if ( stc_state(ij,k) < tfreez)  soil_freeze=.true.
+             if ( smc_state(ij,k) - slc_state(ij,k) > 0.001 )  soil_ice=.true.
+
+             if ( (stc_state(ij,k) < tfreez) .and. (.not. soil_freeze) .and. &
+                (k==1) ) &
+                   nfrozen_upd = nfrozen_upd + 1
+
+             ! do not do updates if this layer or any above is frozen
+             if ( (.not. soil_freeze ) .and. (.not. soil_ice ) ) then
+                if (upd_slc) then
+                if (k==1) then
+                    nslcupd = nslcupd + 1
+                    slc_updated(ij) = 1
+                endif
+                   ! apply zero limit here (higher, model-specific limits are
+                   ! later)
+                   slc_state(ij,k) = max(slc_state(ij,k) + slcinc(ij,k), 0.0)
+                   smc_state(ij,k) = max(smc_state(ij,k) + slcinc(ij,k), 0.0)
+                endif
+             else
+                if (k==1) nfrozen = nfrozen+1
+             endif
+
+           enddo
+
+       endif ! if soil/snow point
+
+    enddo ij_loop
+
+    write(*,'(a,i2)') ' statistics of grids number processed for rank : ',myrank
+    write(*,'(a,i8)') ' soil grid total', lensfc
+    write(*,'(a,i8)') ' soil grid cells slc updated = ',nslcupd
+    write(*,'(a,i8)') ' soil grid cells not updated, frozen = ',nfrozen
+    write(*,'(a,i8)') ' soil grid cells update, became frozen = ',nfrozen_upd
+    write(*,'(a,i8)') ' (not updated yet) snow grid cells = ', nsnowupd
+    write(*,'(a,i8)') ' grid cells, without soil or snow = ', nother
+
+end subroutine add_jedi_increment_soil_moisture
+
+
  !> Add snow depth increment to model snow depth state,
  !! and limit output to be non-negative. JEDI increments are
  !! calculated globally, so must be screened to land-only locations 
@@ -444,18 +669,17 @@ subroutine calculate_landinc_mask(swe,vtype,stype,lensfc,veg_type_landice,mask)
 
 end subroutine calculate_landinc_mask
 
-!> Make adjustments to dependent variables after applying land increments.
-!! These adjustments are model-dependent, and are currently only coded
-!! if full for Noah LSM. 
+!> Make adjustments to dependent variables after applying soil temp increments
+!! These adjustments are model-dependent
 !! For Noah LSM, copy relevent code blocks from model code (same as has
 !! been done in sfc_sub).
-!! For Noah-MP, have inserted place-holders to simply reset the model  
-!! variables back to the analysis if adjustments are needed. Later, will replace
-!! this with appropriate adjustmenets (in summary, for now we do not
-!! make STC updates if soils are frozen, and are also not applying the 
-!! appropriate max. values for SMC).
-!! Here: adjust (frozen) soil moisture to be consistent with changes in
-!! soil temperature from DA
+!! For Noah-MP, the adjustment scheme shown below as of 11/09/2023: 
+!! Case 1: frozen ==> frozen, recalculate slc following opt_frz=1, smc remains
+!! Case 2: unfrozen ==> frozen, recalculate slc following opt_frz=1, smc remains
+!! Case 3: frozen ==> unfrozen, melt all soil ice (if any)
+!! Case 4: unfrozen ==> unfrozen along with other cases (e.g., temp=tfreez), do nothing
+!! Note: For Case 3, Yuan Xue thoroughly evaluated a total of four options and the
+!! current option is found to be the best as of 11/09/2023
 !! @param[in] lsm Integer code for the LSM
 !! @param[in] isot Integer code for the soil type data set
 !! @param[in] ivegsrc Integer code for the vegetation type data set
@@ -471,65 +695,69 @@ end subroutine calculate_landinc_mask
 !! @param[in] slc_updated Integer to record whether SLC in each grid cell was updated
 !! @param[in] zsoil Depth of bottom of each soil layer
 !! @author Clara Draper @date April 2021
+!! @author Yuan Xue: isolate soil temperature and soil moisture adjustment
+!! routines @ date Sept 2023
 
-subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
+
+subroutine apply_land_da_adjustments_soil_temp(lsm, isot, ivegsrc,lensfc, &
                  lsoil, rsoiltype, mask, stc_bck, stc_adj, smc_adj, slc_adj, &
-                 stc_updated, slc_updated, zsoil)
+                 stc_updated)
 
     use mpi
     use set_soilveg_snippet_mod, only: set_soilveg_noah, set_soilveg_noahmp
     use sflx_snippet,    only: frh2o
 
     implicit none
- 
+
     integer, intent(in)           :: lsm, lensfc, lsoil, isot, ivegsrc
     real, intent(in)              :: rsoiltype(lensfc) ! soil types, as real
     integer, intent(in)           :: mask(lensfc)
     real, intent(in)              :: stc_bck(lensfc, lsoil)
-    integer, intent(in)           :: stc_updated(lensfc), slc_updated(lensfc)
-    real, intent(inout)           :: smc_adj(lensfc,lsoil), slc_adj(lensfc,lsoil) 
+    integer, intent(in)           :: stc_updated(lensfc)
+    real, intent(inout)           :: smc_adj(lensfc,lsoil),slc_adj(lensfc,lsoil)
     real, intent(inout)           :: stc_adj(lensfc, lsoil)
-    real(kind=4), intent(in)      :: zsoil(lsoil)
-    
+
 
     logical                       :: frzn_bck, frzn_anl
     logical                       :: soil_freeze, soil_ice
 
-    integer                       :: i, l, n_freeze, n_thaw, ierr, n_revert
-    integer                       :: myrank, soiltype, iret, n_stc, n_slc
-    logical                       :: upd_slc, upd_stc
+    integer                       :: i, l, n_freeze, n_thaw, ierr
+    integer                       :: myrank, soiltype, iret, n_stc
+    logical                       :: upd_stc
 
     real                          :: slc_new
 
     real, parameter               :: tfreez=273.16 !< con_t0c  in physcons
+
     real, dimension(30)           :: maxsmc, bb, satpsi
-    real, dimension(4)            :: dz ! layer thickness
+
+    real, parameter          :: hfus=0.3336e06 !< latent heat of fusion(j/kg)
+    real, parameter          :: grav=9.80616   !< gravity accel.(m/s2)
+    real                     :: smp !< for computing supercooled water within
+    !!frozen soil regime
 
     call mpi_comm_rank(mpi_comm_world, myrank, ierr)
 
-    if (lsm==lsm_noah) then 
+    if (lsm==lsm_noah) then
         upd_stc=.true.
-        upd_slc=.false.
-    elseif (lsm==lsm_noahmp) then 
+    elseif (lsm==lsm_noahmp) then
         upd_stc=.true.
-        upd_slc=.true.
     endif
 
-    select case (lsm ) 
-    case(lsm_noah)  
-        ! initialise soil properties
-        call set_soilveg_noah(isot, ivegsrc, maxsmc, bb, satpsi, iret)
-        if (iret < 0) then
+    select case (lsm )
+    case(lsm_noah)
+      call set_soilveg_noah(isot, ivegsrc, maxsmc, bb, satpsi, iret)
+      if (iret < 0) then
             print *, 'FATAL ERROR: problem in set_soilveg_noah'
             call mpi_abort(mpi_comm_world, 10, ierr)
-        endif
+      endif
 
-        print *, 'Adjusting noah model smc after stc DA update'
+      print *, 'Adjusting noah model smc after stc DA update'
 
-        n_freeze = 0
-        n_thaw = 0
-        
-        do i=1,lensfc
+      n_freeze = 0
+      n_thaw = 0
+
+      do i=1,lensfc
           if (mask(i) > 0) then ! if soil location
             do l = 1, lsoil
                frzn_bck = (stc_bck(i,l) .LT. tfreez )
@@ -546,8 +774,8 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
                ! make adjustment (same routine for both)
                soiltype = nint(rsoiltype(i))
                ! bb and maxsmc are in the namelist_soilveg, need soiltype index
-               call frh2o(stc_adj(i,l), smc_adj(i,l),slc_adj(i,l), maxsmc(soiltype), &
-                          bb(soiltype), satpsi(soiltype),slc_new)
+               call frh2o(stc_adj(i,l), smc_adj(i,l),slc_adj(i,l),&
+                          maxsmc(soiltype), bb(soiltype), satpsi(soiltype),slc_new)
 
                slc_adj(i,l) = max( min( slc_new, smc_adj(i,l)), 0.0 )
             enddo
@@ -555,44 +783,101 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
         enddo
         print *, 'adjusted: ', n_thaw,' thawed,', n_freeze, ' frozen'
 
-    case (lsm_noahmp) 
+ 
+    case (lsm_noahmp)
 
-        if (upd_stc) then
+    if (upd_stc) then
+        n_stc=0
+        call set_soilveg_noahmp(isot, ivegsrc, maxsmc, bb, satpsi, iret)
+        if (iret < 0) then
+            print *, 'FATAL ERROR: problem in set_soilveg_noahmp'
+            call mpi_abort(mpi_comm_world, 10, ierr)
+        endif
 
-          print *, 'Reverting frozen noah-mp model stc back to background'
-          n_revert=0
-          n_stc = 0
-          n_slc = 0
+        print *, 'Adjusting noah-mp model slc/stc after stc DA update'
 
-          do i=1,lensfc
+        do i=1,lensfc
           if (stc_updated(i) == 1 ) then
                 n_stc = n_stc+1
-                ! remove soil temperature increments if frozen
-                soil_freeze=.false.
-                soil_ice=.false.
-                do l = 1, lsoil_incr
-                   if ( min(stc_bck(i,l),stc_adj(i,l)) < tfreez)  soil_freeze=.true.
-                   if ( smc_adj(i,l) - slc_adj(i,l) > 0.001 )  soil_ice=.true.
-                   if ( soil_freeze .or. soil_ice ) then 
-                   ! for now, revert update. Later, adjust SMC/SLC for update.
-                      if (l==1) n_revert = n_revert+1
-                      stc_adj(i,l)=stc_bck(i,l)
-                   endif
-                enddo
-          endif
+                soiltype = nint(rsoiltype(i))
+            if (mask(i) == 1) then
+            do l = 1, lsoil_incr !Only adjusts top two layers
+               !case 1: frz ==> frz, recalculate slc, smc remains
+               !case 2: unfrz ==> frz, recalculate slc, smc remains
+               !both cases are considered in the following if case
+               if (stc_adj(i,l) .LT. tfreez )then
+                  !recompute supercool liquid water,smc_anl remain unchanged
+                  smp = hfus*(tfreez-stc_adj(i,l))/(grav*stc_adj(i,l)) !(m)
+                  slc_new=maxsmc(soiltype)*(smp/satpsi(soiltype))**(-1./bb(soiltype)) !(m3/m3)
+                  slc_adj(i,l) = max( min( slc_new, smc_adj(i,l)), 0.0 )
+               endif
+               !case 3: frz ==> unfrz, melt all soil ice (if any)
+               if ((stc_bck(i,l) .LT. tfreez) .and. &
+                   (stc_adj(i,l) .GT. tfreez))then
+                  slc_adj(i,l)=smc_adj(i,l)
+               endif
+             enddo
+            endif
+           endif
+         enddo
+
+     endif
+
+    case default
+        print *, 'FATAL ERROR: unrecognised LSM,', lsm
+        call mpi_abort(mpi_comm_world, 10, ierr)
+    end select
+
+    write(*,'(a,i2)') 'statistics of grids number processed for rank : ', myrank
+    write(*,'(a,i8)') ' soil grid total', lensfc
+    write(*,'(a,i8)') ' soil grid cells with stc update', n_stc
+
+end subroutine apply_land_da_adjustments_soil_temp          
+
+!> Make adjustments to dependent variables after applying soil moisture increments
+!! These adjustments are model-dependent
+!! For Noah LSM, no soil moisture adjustment is applied as of 11/09/2023 
+!! For Noah-MP, the adjustment is applying soil moisture mins as of 11/09/2023
+subroutine apply_land_da_adjustments_soil_moisture(lsm,lensfc, &
+                 lsoil, smc_adj, slc_adj, &
+                 slc_updated, zsoil)
+
+    use mpi
+
+    implicit none
+
+    integer, intent(in)           :: lsm, lensfc, lsoil
+    integer, intent(in)           :: slc_updated(lensfc)
+    real, intent(inout)           :: smc_adj(lensfc,lsoil)
+    real, intent(inout)           :: slc_adj(lensfc,lsoil)
+    real(kind=4), intent(in)      :: zsoil(lsoil)
+
+    integer                       :: i, l, ierr
+    integer                       :: myrank, n_slc
+    logical                       :: upd_slc
+    real, dimension(4)            :: dz ! layer thickness
+
+    call mpi_comm_rank(mpi_comm_world, myrank, ierr)
+
+    if (lsm==lsm_noah) then
+        upd_slc=.false.
+    elseif (lsm==lsm_noahmp) then
+        upd_slc=.true.
+    endif
+
+    select case (lsm)
+    case(lsm_noahmp)
+
+    if (upd_slc) then
+        n_slc = 0
+        dz(1) = -zsoil(1)
+          do l = 2,lsoil
+              dz(l) = -zsoil(l) + zsoil(l-1)
           enddo
-
-        endif  
-        if (upd_slc) then
-
-          dz(1) = -zsoil(1)
-          do l = 2,lsoil 
-              dz(l) = -zsoil(l) + zsoil(l-1) 
-          enddo 
-          print *, 'Applying soil moisture mins ' 
+          print *, 'Applying soil moisture mins '
 
           do i=1,lensfc
-          if (slc_updated(i) == 1 ) then 
+          if (slc_updated(i) == 1 ) then
               n_slc = n_slc+1
               ! apply SM bounds (later: add upper SMC limit)
               do l = 1, lsoil_incr
@@ -603,20 +888,19 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
               enddo
            endif
           enddo
-        endif
+     endif
 
-    case default 
+    case default
         print *, 'FATAL ERROR: unrecognised LSM,', lsm
         call mpi_abort(mpi_comm_world, 10, ierr)
     end select
 
-    write(*,'(a,i2)') 'statistics of grids number processed for rank : ', myrank 
+    write(*,'(a,i2)') 'statistics of grids number processed for rank : ', myrank
     write(*,'(a,i8)') ' soil grid total', lensfc
     write(*,'(a,i8)') ' soil grid cells with slc update', n_slc
-    write(*,'(a,i8)') ' soil grid cells with stc update', n_stc
-    write(*,'(a,i8)') ' soil grid cells reverted', n_revert
 
-end subroutine apply_land_da_adjustments_soil
+end subroutine apply_land_da_adjustments_soil_moisture
+
 
 !> Make adjustments to dependent variables after applying land increments.
 !! These adjustments are model-dependent, and are currently only coded

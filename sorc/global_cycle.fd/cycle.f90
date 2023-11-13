@@ -70,8 +70,9 @@
 !!  -DO_SFCCYCLE   Call sfccycle routine to update surface fields
 !!  -DO_LNDINC     Read in land increment files, and add increments to
 !!                 relevant states.
-!!  -DO_SOI_INC_GSI     Do land increments (on the Guassian grid) to soil states.
-!!  -DO_SNO_INC         Do land increments (on the cubed sphere tiles) to snow states.
+!!  -DO_SOI_INC_GSI   Do land increments (on the Guassian grid) to soil states.
+!!  -DO_SOI_INC_JEDI  Do land increments (on the cubed sphere tiles) to soil.
+!!  -DO_SNO_INC       Do land increments (on the cubed sphere tiles) to snow states.
 !!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
 !!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
 !!  - ZSEA1/2_MM   When running with NSST model, this is the lower/
@@ -302,10 +303,14 @@
  USE READ_WRITE_DATA
  use machine
  USE MPI
+ USE NETCDF
  USE LAND_INCREMENTS, ONLY: ADD_GSI_INCREMENT_SOIL,     &
+                            ADD_JEDI_INCREMENT_SOIL_TEMP, &
+                            ADD_JEDI_INCREMENT_SOIL_MOISTURE, &
                             ADD_INCREMENT_SNOW,     &
                             CALCULATE_LANDINC_MASK, &
-                            APPLY_LAND_DA_ADJUSTMENTS_SOIL, &
+                            APPLY_LAND_DA_ADJUSTMENTS_SOIL_TEMP, &
+                            APPLY_LAND_DA_ADJUSTMENTS_SOIL_MOISTURE, &
                             APPLY_LAND_DA_ADJUSTMENTS_SND, &
                             LSM_NOAH, LSM_NOAHMP
 
@@ -328,7 +333,7 @@
  CHARACTER(LEN=500)  :: LND_SOI_FILE
  CHARACTER(LEN=4)    :: INPUT_NML_FILE(SZ_NML)
 
- INTEGER             :: I, IERR
+ INTEGER             :: I, IERR, NCID, ID_VAR
  INTEGER             :: I_INDEX(LENSFC), J_INDEX(LENSFC)
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
@@ -366,6 +371,7 @@
  REAL, ALLOCATABLE   :: SLIFCS_FG(:)
  INTEGER, ALLOCATABLE :: LANDINC_MASK_FG(:), LANDINC_MASK(:)
  REAL, ALLOCATABLE   :: SND_BCK(:), SND_INC(:), SWE_BCK(:)
+ REAL, ALLOCATABLE   :: SLCINC(:,:), STCINC(:,:)
  REAL(KIND=KIND_IO8), ALLOCATABLE :: SLMASKL(:), SLMASKW(:)
 
  TYPE(NSST_DATA)     :: NSST
@@ -376,7 +382,7 @@
 
  REAL, DIMENSION(LENSFC,LSOIL) :: STC_INC_TMP, SLC_INC_TMP
 
- LOGICAL :: FILE_EXISTS, DO_SOI_INC_GSI, DO_SNO_INC
+ LOGICAL :: FILE_EXISTS, DO_SOI_INC_GSI, DO_SOI_INC_JEDI, DO_SNO_INC
 
 !--------------------------------------------------------------------------------
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
@@ -390,6 +396,7 @@
 
  DO_SNO_INC = .FALSE.
  DO_SOI_INC_GSI = .FALSE.
+ DO_SOI_INC_JEDI = .FALSE.
  
 
  SIG1T = 0.0            ! Not a dead start!
@@ -451,10 +458,25 @@ IF (DO_LNDINC) THEN
        DO_SOI_INC_GSI = .TRUE.
        PRINT*
        PRINT*," APPLYING SOIL INCREMENTS FROM THE GSI"
-       ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
-       ALLOCATE(LANDINC_MASK_FG(LENSFC))
+   ELSE
+       INQUIRE(FILE='xainc.001', EXIST=file_exists)
+       IF (file_exists) then
+         IERR=NF90_OPEN('xainc.001',NF90_NOWRITE,NCID)
+         IERR=NF90_INQ_VARID(NCID,"stc_inc",ID_VAR)
+         IF (IERR == 0) THEN
+            DO_SOI_INC_JEDI = .TRUE.
+            PRINT*
+            PRINT*," APPLYING SOIL INCREMENTS FROM THE JEDI"
+            ALLOCATE(SLCINC(LENSFC, LSOIL), STCINC(LENSFC, LSOIL))
+         ENDIF
+       ENDIF 
    ENDIF
+   ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
+   ALLOCATE(LANDINC_MASK_FG(LENSFC))
    ! FOR NOW, CODE SO CAN DO BOTH, BUT MIGHT NEED TO THINK ABOUT THIS SOME MORE.
+   ! NOTE: BOTH snow and soil related increment file are named as "xainc.00N"
+   ! This may create issues if doing soil and snow DA together
+   ! For now, just put an additional inquiry above to distinguish - Yuan Xue
    IF  (DO_SNO_INC) THEN
        ! ideally, would check here that sfcsub snow DA update is not also requested
        ! but latter is controlled by fnsol, which is read in within that routine.
@@ -476,6 +498,8 @@ ENDIF
 ! READ THE INPUT SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
+IF (.NOT. DO_SOI_INC_JEDI) THEN
+ 
  CALL READ_DATA(LSOIL,LENSFC,DO_NSST,.false.,IS_NOAHMP=IS_NOAHMP, &
                 TSFFCS=TSFFCS,SMCFCS=SMCFCS,   &
                 SWEFCS=SWEFCS,STCFCS=STCFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS,  &
@@ -487,6 +511,13 @@ ENDIF
                 VMNFCS=VMNFCS,VMXFCS=VMXFCS,SLCFCS=SLCFCS,SLPFCS=SLPFCS,  &
                 ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
                 ZSOIL=ZSOIL,   NSST=NSST)
+ELSE
+ CALL READ_DATA(LSOIL,LENSFC,DO_NSST,.false.,IS_NOAHMP=IS_NOAHMP, &
+                VEGFCS=VEGFCS, SOTFCS=SOTFCS, &
+                SWEFCS=SWEFCS,SLIFCS=SLIFCS,VETFCS=VETFCS,SNDFCS=SNDFCS,&
+                SMCFCS=SMCFCS,SLCFCS=SLCFCS,STCFCS=STCFCS,SLMASK=SLMASK,ZSOIL=ZSOIL)
+
+ENDIF
 
  IF (IS_NOAHMP) THEN 
         LSM=LSM_NOAHMP
@@ -650,7 +681,7 @@ ENDIF
     ENDIF
 
     ! SOIL INCREMENTS
-    IF (DO_SOI_INC_GSI) THEN
+    IF (DO_SOI_INC_GSI .OR. DO_SOI_INC_JEDI) THEN
 
        !--------------------------------------------------------------------------------
        ! re-calculate soilsnow mask if snow has been updated.
@@ -662,19 +693,22 @@ ENDIF
             CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, LENSFC, &
                                                         VEG_TYPE_LANDICE, LANDINC_MASK )
         ENDIF
-
+       
        !--------------------------------------------------------------------------------
        ! read increments in
        !--------------------------------------------------------------------------------
 
-        INQUIRE(FILE=trim(LND_SOI_FILE), EXIST=file_exists)
-        IF (.not. file_exists) then
+        IF (DO_SOI_INC_GSI) THEN
+          INQUIRE(FILE=trim(LND_SOI_FILE), EXIST=file_exists)
+          IF (.not. file_exists) then
             print *, 'FATAL ERROR: land increment update requested, but file does not exist: ', &
                     trim(lnd_soi_file)
             call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+          ENDIF
+          CALL READ_GSI_DATA(LND_SOI_FILE, 'LND', LSOIL=LSOIL)
+        ELSE IF (DO_SOI_INC_JEDI) THEN
+          CALL READ_DATA(LSOIL,LENSFC,.false.,.true.,SLCINC=SLCINC,STCINC=STCINC)
         ENDIF
-
-        CALL READ_GSI_DATA(LND_SOI_FILE, 'LND', LSOIL=LSOIL)
 
         !--------------------------------------------------------------------------------
         ! add increments to state vars
@@ -690,7 +724,19 @@ ENDIF
         SLC_BCK = SLCFCS
 
         ! below updates [STC/SMC/STC]FCS to hold the analysis
-        CALL ADD_GSI_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
+        ! ONLY isolate soil temperature and soil moisture ingest/adjust routines in
+        ! the jedi-related portion. In gsi-related part, it is *not* updated yet.
+        ! The gsi-related part is still using the old assimilation sequence
+        ! (i.e., soil moisture incr. ingest based on background state, not the
+        ! analysis state as edited in the new assimilation sequence)
+        ! The new assimilation/adjustment sequence in jedi is: 
+        ! a) ingest soil temp incr. 
+        ! b) adjust soil ice/liquid moisture as needed
+        ! c) ingest soil moisure incr. based on newly-adjusted soil state due to b)
+        ! d) ingest soil moisture incr.
+        ! e) adjust/bound soil moisture
+        IF (DO_SOI_INC_GSI) THEN
+          CALL ADD_GSI_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
                 STC_INC_TMP, SLC_INC_TMP, &
                 LANDINC_MASK,LANDINC_MASK_FG,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
 
@@ -698,14 +744,38 @@ ENDIF
         ! make any necessary adjustments to dependent variables
         !--------------------------------------------------------------------------------
 
-
-        CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL(LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
-            SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS, STC_UPDATED, &
-            SLC_UPDATED,ZSOIL)
+          CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL_TEMP(LSM, ISOT, IVEGSRC, LENSFC,&
+                                               LSOIL, SOTFCS, LANDINC_MASK_FG,&
+                                               STC_BCK, STCFCS, SMCFCS, SLCFCS,&
+                                               STC_UPDATED)
+          CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL_MOISTURE(LSM, LENSFC, &
+                                              LSOIL, SMCFCS, SLCFCS,&
+                                              SLC_UPDATED, ZSOIL)
 
         ! if read in GSI-based increments, save interpolated fields onto cubed sphere tiles
-        CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
+          CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
                    SLC_INC_TMP=SLC_INC_TMP,STC_INC_TMP=STC_INC_TMP)
+
+        ELSE IF (DO_SOI_INC_JEDI) THEN
+          CALL ADD_JEDI_INCREMENT_SOIL_TEMP(STCINC, STCFCS, &
+                                     STC_UPDATED, &
+                                     LANDINC_MASK, LANDINC_MASK_FG, LENSFC,&
+                                     LSOIL, LSM, MYRANK)
+          CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL_TEMP(LSM, ISOT, IVEGSRC, LENSFC,&
+                                               LSOIL, SOTFCS, LANDINC_MASK_FG,&
+                                               STC_BCK, STCFCS, SMCFCS, SLCFCS,&
+                                               STC_UPDATED)
+
+          CALL ADD_JEDI_INCREMENT_SOIL_MOISTURE(SLCINC, STCFCS, SMCFCS, SLCFCS,&
+                                     SLC_UPDATED, &
+                                     LANDINC_MASK, LANDINC_MASK_FG, LENSFC,&
+                                     LSOIL, LSM, MYRANK)
+          CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL_MOISTURE(LSM, LENSFC, &
+                                              LSOIL, SMCFCS, SLCFCS,&
+                                              SLC_UPDATED, ZSOIL)
+
+        ENDIF ! switch between reading gsi and jedi based increments
+
 
    ENDIF ! soil increments
 
@@ -721,6 +791,8 @@ ENDIF
    IF(ALLOCATED(SND_BCK)) DEALLOCATE(SND_BCK)
    IF(ALLOCATED(SWE_BCK)) DEALLOCATE(SWE_BCK)
    IF(ALLOCATED(SND_INC)) DEALLOCATE(SND_INC)
+   IF(ALLOCATED(SLCINC)) DEALLOCATE(SLCINC)
+   IF(ALLOCATED(STCINC)) DEALLOCATE(STCINC)
 
  ENDIF
 !--------------------------------------------------------------------------------
@@ -837,7 +909,7 @@ ENDIF
  INTEGER                  :: ISTART, IEND, JSTART, JEND
  INTEGER                  :: MASK_TILE, MASK_FG_TILE
  INTEGER                  :: ITILE, JTILE
- INTEGER                  :: MAX_SEARCH, J, IERR
+ INTEGER                  :: MAX_SEARCH, J, IERR 
  INTEGER                  :: IGAUSP1, JGAUSP1
  integer                  :: nintp,nsearched,nice,nland
  integer                  :: nfill,nfill_tice,nfill_clm
