@@ -1,8 +1,12 @@
 program ftst_land_increments
 
-! Test "apply_land_da_adjustments" using sample points.
+! Test "apply_land_da_adjustments_soil_temp" using sample points.
 !
 ! author: George Gayno (george.gayno@noaa.gov)
+! Yuan Xue: add a total of four testing points to test out
+! the newly added frozen soil ice fraction calculations
+! under different scenarios after ingesting 
+! soil temp increments
 
  use mpi
  use land_increments
@@ -14,14 +18,13 @@ program ftst_land_increments
 
  real, parameter :: EPSILON=0.001
 
- real(kind=4), allocatable :: zsoil(:)
  real, allocatable :: rsoiltype(:)
  integer, allocatable :: mask(:)
  real, allocatable :: stc_bck(:,:)
  real, allocatable :: smc_anl(:,:)
  real, allocatable :: slc_anl(:,:)
  real, allocatable :: stc_anl(:,:)
- integer, allocatable :: stc_updated(:), slc_updated(:)
+ integer, allocatable :: stc_updated(:)
 
  call mpi_init(ierr)
 
@@ -32,9 +35,8 @@ program ftst_land_increments
  ivegsrc = 1       ! IGBP vegetation type.
  lsoil = 4         ! Number of soil layers.
  
- lensfc= 3  ! Number of test points.
+ lensfc= 4  ! Number of test points.
  
- allocate(zsoil(lsoil))
  allocate(rsoiltype(lensfc))      ! Soil type.
  allocate(mask(lensfc))           ! Land mask
  allocate(stc_bck(lensfc,lsoil))  ! Background soil temperature (K).
@@ -42,18 +44,13 @@ program ftst_land_increments
  allocate(slc_anl(lensfc,lsoil))  ! Analyzed liquid soil moisture.
  allocate(stc_anl(lensfc,lsoil))  ! Analyzed soil temperature (K).
  allocate(stc_updated(lensfc))
- allocate(slc_updated(lensfc))
 
- zsoil(1) = -0.1
- zsoil(2) = -0.4
- zsoil(3) = -1.0
- zsoil(4) = -2.0
- slc_updated=1
  stc_updated=1
 
 ! Point 1 is above freezing before the adjustment
 ! and above freezing after the adjustment. Therefore,
-! the increments to STC and SLC will be retained.
+! the increments to STC will be retained.
+! temp: unfrozen ==> unfrozen
 
  rsoiltype(1) = 5.
  mask(1) = 1
@@ -61,55 +58,77 @@ program ftst_land_increments
 
  smc_anl(1,:) = .25
  slc_anl(1,:) = .25
- stc_anl(1,1:3) =  281.0 ! DA only updates 3 layers
+ stc_anl(1,1:2) =  281.0 ! DA only updates 2 layers
 
 ! Point 2 is below freezing before the adjustment
 ! and above freezing after the adjustment. Therefore,
-! the increment to STC will be removed, and SMC / SLC 
-! are unchanged.
+! all soil ice will be melted
+! temp: frozen ==> unfrozen
 
  rsoiltype(2) = 5.
  mask(2) = 1
- stc_bck(2,:) =  270.0
+ stc_bck(2,:) =  271.0
 
  smc_anl(2,:) = .25
  slc_anl(2,:) = .20
- stc_anl(2,1:3) =  274.0 
+ stc_anl(2,1:2) =  275.0 
 
-! Point 3 freezes. Therefore,
-! the increment to STC will be removed, and SMC / SLC
-! are unchanged.
+! Point 3 freezes before and after the adjustment. Therefore,
+! SLC will be recomputed, SMC remained unchanged
+! temp: frozen ==> frozen
 
  rsoiltype(3) = 5.
  mask(3) = 1
- stc_bck(3,:) =  274.0
+ stc_bck(3,:) =  272.0
 
  smc_anl(3,:) = .25
- slc_anl(3,:) = .25
- stc_anl(3,1:3) =  271.0
+ slc_anl(3,:) = .20
+ stc_anl(3,1:2) =  271.0
 
- call apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
+! Point 4 is above freezing before and below freezing after the adjustment
+! Therfore, SLC will be recomputed, SMC remained unchanged
+! temp: unfrozen ==> frozen
+
+ rsoiltype(4) = 5.
+ mask(4) = 1
+ stc_bck(4,:) =  280.0
+
+ smc_anl(4,:) = .25
+ slc_anl(4,:) = .25
+ stc_anl(4,1:2) =  271.0
+
+
+ call apply_land_da_adjustments_soil_temp(lsm, isot, ivegsrc,lensfc, &
            lsoil, rsoiltype, mask, stc_bck, stc_anl, smc_anl, slc_anl, &
-           stc_updated, slc_updated,zsoil)
+           stc_updated)
 
- do l = 1, 3
-   if (abs(smc_anl(1,l) - 0.25) > EPSILON) stop 2
-   if (abs(slc_anl(1,l) - 0.25) > EPSILON) stop 4
-   if (abs(stc_anl(1,l) - 281.) > EPSILON) stop 3
+ do l = 1,2 
+  !print*, 'Testing Point#1'
+  if (abs(smc_anl(1,l) - 0.25) > EPSILON) stop 2
+  if (abs(slc_anl(1,l) - 0.25) > EPSILON) stop 3 
+  if (abs(stc_anl(1,l) - 281.) > EPSILON) stop 4 
  enddo
 
- do l = 1, 3
-   if (abs(smc_anl(2,l) - 0.25) > EPSILON) stop 6
-   if (abs(slc_anl(2,l) - 0.20) > EPSILON) stop 8
-   if (abs(stc_anl(2,l) - 270.) > EPSILON) stop 5
+ do l = 1,2 
+  !print*, 'Testing Point#2'
+  if (abs(smc_anl(2,l) - 0.25) > EPSILON) stop 5 
+  if (abs(slc_anl(2,l) - 0.25) > EPSILON) stop 6 
+  if (abs(stc_anl(2,l) - 275.) > EPSILON) stop 7 
  enddo
 
- do l = 1, 3
-   if (abs(smc_anl(3,l) - 0.25) > EPSILON) stop 10
-   if (abs(slc_anl(3,l) - 0.25) > EPSILON) stop 12
-   if (abs(stc_anl(3,l) - 274.) > EPSILON) stop 11
+ do l = 1,2 
+  !print*, 'Testing Point#3'
+  if (abs(smc_anl(3,l) - 0.25) > EPSILON) stop 8 
+  if (abs(slc_anl(3,l) - 0.112) > EPSILON) stop 9
+  if (abs(stc_anl(3,l) - 271.) > EPSILON) stop 10
  enddo
 
+ do l = 1,2 
+  !print*, 'Testing Point#4'
+  if (abs(smc_anl(4,l) - 0.25) > EPSILON) stop 11
+  if (abs(slc_anl(4,l) - 0.112) > EPSILON) stop 12
+  if (abs(stc_anl(4,l) - 271.) > EPSILON) stop 13
+ enddo
  call mpi_finalize(ierr)
 
  deallocate(rsoiltype,stc_bck,smc_anl,slc_anl,stc_anl,mask)
