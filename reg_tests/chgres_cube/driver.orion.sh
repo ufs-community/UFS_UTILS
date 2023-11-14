@@ -102,7 +102,7 @@ TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=75G -t 0:15:00 -A 
 
 LOG_FILE4=${LOG_FILE}04
 export OMP_NUM_THREADS=6  # needs to match cpus-per-task
-TEST4=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 --mem=50G -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
+TEST4=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 --mem=75G -t 0:20:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
       --open-mode=append -o $LOG_FILE4 -e $LOG_FILE4 ./c96.gfs.sigio.sh)
 
 #-----------------------------------------------------------------------------
