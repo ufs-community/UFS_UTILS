@@ -370,7 +370,7 @@ contains
   !==================================================================================================
   subroutine loadparmset(name,iun)
 
-    use mpi
+    use mpi_f08
 
     use msis_constants, only      : maxnbf, csfxmod
 
