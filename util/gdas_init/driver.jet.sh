@@ -20,6 +20,9 @@ PROJECT_CODE=hfv3gfs
 QUEUE=batch
 PARTITION=xjet
 
+# Needed for NDATE utility
+module load prod_util/1.2.2
+
 source config
 
 if [ $EXTRACT_DATA == yes ]; then
