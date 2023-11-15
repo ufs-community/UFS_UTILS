@@ -65,10 +65,14 @@ cd $WORK_DIR
 # The stand-alone regional and global nest are assumed to be tile 7.
 #----------------------------------------------------------------------------------
 
-if [[ $GRIDTYPE == "nest" ]] || [[ $GRIDTYPE == "regional" ]]; then
+if [[ $GRIDTYPE == "nest" ]] || [[ $GRIDTYPE == "regional" ]] ; then
   the_orog_files='"C'${res}'_oro_data.tile7.nc"'
 else
-  the_orog_files='"oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile2.nc","oro_C'${res}.mx${ocn}'.tile3.nc","oro_C'${res}.mx${ocn}'.tile4.nc","oro_C'${res}.mx${ocn}'.tile5.nc","oro_C'${res}.mx${ocn}'.tile6.nc"'
+	if declare -p ocn &>/dev/null;then	
+  		the_orog_files='"oro_C'${res}.mx${ocn}'.tile1.nc","oro_C'${res}.mx${ocn}'.tile2.nc","oro_C'${res}.mx${ocn}'.tile3.nc","oro_C'${res}.mx${ocn}'.tile4.nc","oro_C'${res}.mx${ocn}'.tile5.nc","oro_C'${res}.mx${ocn}'.tile6.nc"'
+	else
+		the_orog_files='"oro_C'${res}'.tile1.nc","oro_C'${res}'.tile2.nc","oro_C'${res}'.tile3.nc","oro_C'${res}'.tile4.nc","oro_C'${res}'.tile5.nc","oro_C'${res}'.tile6.nc"'
+	fi
 fi
 #the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
 
@@ -105,7 +109,11 @@ if [[ $rc == 0 ]]; then
     for files in *.nc
     do
       if [[ -f $files ]]; then
-        mv $files ${SAVE_DIR}/C${res}.mx${ocn}.${files}
+	if declare -p ocn &>/dev/null; then
+        	mv $files ${SAVE_DIR}/C${res}.mx${ocn}.${files}
+	else
+		mv $files ${SAVE_DIR}/C${res}.${files}
+	fi
       fi
     done
   else

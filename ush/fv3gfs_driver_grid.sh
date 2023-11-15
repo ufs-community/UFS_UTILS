@@ -252,12 +252,19 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   tile=1
   while [ $tile -le $ntiles ]; do
-    cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/oro_C${res}.mx${ocn}.tile${tile}.nc
-    cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}.mx${ocn}_grid.tile${tile}.nc
-    if [ $make_gsl_orog = true ]; then
-      cp $orog_dir/C${res}_oro_data*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
-    fi
-    tile=`expr $tile + 1 `
+	
+  	if declare -p ocn &>/dev/null;then
+	cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/oro_C${res}.mx${ocn}.tile${tile}.nc
+   	cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}.mx${ocn}_grid.tile${tile}.nc
+        else
+	cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/oro_C${res}.tile${tile}.nc
+        cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}_grid.tile${tile}.nc
+	fi
+
+	 if [ $make_gsl_orog = true ]; then
+      		cp $orog_dir/C${res}_oro_data*.tile${tile}*.nc $out_dir/  # gsl drag suite oro_data files
+   	 fi
+    		tile=`expr $tile + 1 `
   done
 
   cp $grid_dir/C${res}_*mosaic.nc             $out_dir
