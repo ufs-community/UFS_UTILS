@@ -50,14 +50,7 @@ endif()
 
 SET(TEST_FILE_DIR "." CACHE STRING "Check this directory for test files before using FTP.")
 
-# Set the build type.
-if(DEFINED CMAKE_BUILD_TYPE)
-  string(TOUPPER ${CMAKE_BUILD_TYPE} UPPER_CMAKE_BUILD_TYPE)
-else()
-  set(UPPER_CMAKE_BUILD_TYPE "")
-endif()
-
-if(NOT UPPER_CMAKE_BUILD_TYPE MATCHES "^(DEBUG|RELEASE|RELWITHDEBINFO|MINSIZEREL)$")
+if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
   message(STATUS "Setting build type to 'Release' as none was specified.")
   set(CMAKE_BUILD_TYPE
       "Release"
