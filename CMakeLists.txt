@@ -50,6 +50,7 @@ endif()
 
 SET(TEST_FILE_DIR "." CACHE STRING "Check this directory for test files before using FTP.")
 
+# Set the build type.
 if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
   message(STATUS "Setting build type to 'Release' as none was specified.")
   set(CMAKE_BUILD_TYPE
