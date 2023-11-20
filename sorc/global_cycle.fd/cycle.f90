@@ -909,7 +909,7 @@ ENDIF
  !! @param[in] SLMSK_FG_TILE First guess land-sea mask on the cubed-sphere tile
  !! @param[inout] SKINT_TILE Skin temperature on the cubed-sphere tile
  !! @param[inout] SICET_TILE Ice temperature on the cubed-sphere tile
- !! @param[inout] sice_tile Ice concentration on the cubed-sphere tile
+ !! @param[in] sice_tile Ice concentration on the cubed-sphere tile
  !! @param[inout] SOILT_TILE Soil temperature on the cubed-sphere tile
  !! @param[in] NSST Data structure holding nsst fields
  !! @param[in] LENSFC Number of points on a tile
@@ -946,9 +946,9 @@ ENDIF
 
  REAL, INTENT(IN)         :: SLMSK_TILE(LENSFC), SLMSK_FG_TILE(LENSFC)
  real, intent(in)         :: tf_clm_tile(lensfc),tf_trd_tile(lensfc),sal_clm_tile(lensfc)
- REAL, INTENT(IN)         :: ZSEA1, ZSEA2
+ REAL, INTENT(IN)         :: ZSEA1, ZSEA2,sice_tile(lensfc)
  REAL, INTENT(INOUT)      :: RLA(LENSFC), RLO(LENSFC), SKINT_TILE(LENSFC)
- REAL, INTENT(INOUT)      :: SICET_TILE(LENSFC),sice_tile(lensfc),SOILT_TILE(LENSFC,LSOIL)
+ REAL, INTENT(INOUT)      :: SICET_TILE(LENSFC),SOILT_TILE(LENSFC,LSOIL)
 
  TYPE(NSST_DATA)          :: NSST
 
@@ -1091,6 +1091,10 @@ ENDIF
 
    MASK_TILE    = NINT(SLMSK_TILE(IJ))
    MASK_FG_TILE = NINT(SLMSK_FG_TILE(IJ))
+
+   if (sice_tile(ij) > 0. .and. mask_tile /= 2) then
+     print*,'bad ice point ',ij,sice_tile(ij),mask_tile
+   endif
 
 !
 !  when sea ice exists, get salinity dependent water temperature
