@@ -33,6 +33,8 @@ export JCAP=1534
 export LONB=3072
 export LATB=1536
 
+export OROFIX=$BASE_GSM/fix/orog/$CASE
+export OROFILE=${CASE}_oro_data
 export FIXgsm=$BASE_GSM/fix/am
 
 export DONST="NO"
