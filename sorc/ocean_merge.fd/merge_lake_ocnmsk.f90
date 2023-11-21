@@ -103,8 +103,8 @@ program merge_lake_ocnmsk
       else
         lake_depth(i,j)=0.
       end if
-!  slmsk(i,j) = ceiling(land_frac(i,j)) "ceiling is used for orog smoothing"
-      slmsk(i,j) = nint(land_frac(i,j)) ! nint got the land pts correct
+!       slmsk(i,j) = ceiling(land_frac(i,j))! "ceiling is used for orog smoothing"
+       slmsk(i,j) = nint(land_frac(i,j)) ! nint got the land pts correct
     end do
     end do
 

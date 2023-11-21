@@ -55,8 +55,11 @@ export lake_cutoff=${lake_cutoff:-0.50} # return 0 if lake_frac <  lake_cutoff &
 export binary_lake=${binary_lake:-1}    # return 1 if lake_frac >= lake_cutoff & add_lake=T
 
 export make_gsl_orog=${make_gsl_orog:-false} # when true, create GSL drag suite orog files.
+export vegsoilt_frac=${vegsoilt_frac:-.false.}
+
 
 if [ $gtype = uniform ];  then
+export ocn= ${ocn:-025}
   echo "Creating global uniform grid"
 elif [ $gtype = stretch ]; then
   export stretch_fac=${stretch_fac:-1.5}  # Stretching factor for the grid
@@ -143,10 +146,10 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   export orog_dir=$TEMP_DIR/$name/orog
 
 
-	if [ $gtype = uniform ]; then
-		out_dir=$out_dir/C$res.mx$ocn
-                
-                readme_name=readme.C$res.mx$ocn.txt
+	#if [ $gtype = uniform ]; then
+	if declare -p ocn &>/dev/null;then
+			out_dir=$out_dir/C$res.mx$ocn
+                	readme_name=readme.C$res.mx$ocn.txt
 	else
 
 	out_dir=$out_dir/C$res
@@ -257,7 +260,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 	cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/C${res}.mx${ocn}_oro_data.tile${tile}.nc
    	cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}_grid.tile${tile}.nc
         else
-	cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/oro_C${res}.tile${tile}.nc
+	cp $filter_dir/oro.C${res}.tile${tile}.nc $out_dir/C${res}_oro_data.tile${tile}.nc
         cp $grid_dir/C${res}_grid.tile${tile}.nc  $out_dir/C${res}_grid.tile${tile}.nc
 	fi
 
@@ -569,6 +572,7 @@ cat <<EOF > $readme_name
 The following # was used
 https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
+	creation date =$(date +%Y-%m-%d)
         gtype=$gtype
         make_gsl_orog=$make_gsl_orog
         vegsoilt_frac=$vegsoilt_frac
@@ -586,6 +590,7 @@ cat <<EOF > $readme_name
 The following # was used
 https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
+	creation date =$(date +%Y-%m-%d)
         gtype=$gtype
         vegsoilt_frac=$vegsoilt_frac
         veg_type=$veg_type_src
@@ -614,7 +619,8 @@ cat <<EOF > $readme_name
 The following # was used
 https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
-        gtype=$gtype
+        creation date =$(date +%Y-%m-%d)
+	gtype=$gtype
         res=-999                        # equivalent resolution is computed
         vegsoilt_frac=$vegsoilt_frac
         veg_type=$veg_type_src

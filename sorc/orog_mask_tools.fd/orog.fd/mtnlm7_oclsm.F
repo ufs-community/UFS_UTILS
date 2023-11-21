@@ -878,7 +878,7 @@ C
          END IF
 
          CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
-     & IM,JM,IMN,JMN,geolon_c,geolat_c,lake_frac)
+     & IM,JM,IMN,JMN,geolon_c,geolat_c,lake_frac,land_frac)
 
       tend=timef()
       write(6,*)' MAKEMT2 time= ',tend-tbeg
@@ -2044,7 +2044,7 @@ C
 !! @param[in] lat_c Latitude on the model grid corner points.
 !! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
-     1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c,lake_frac)
+     1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c,lake_frac,land_frac)
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
@@ -2053,7 +2053,7 @@ C
       real GLAT(JMN), GLON(IMN)
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
       real ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM)
-      real, intent(in) :: SLM(IM,JM), lake_frac(im,jm)
+      real, intent(in) :: SLM(IM,JM), lake_frac(im,jm),land_frac(im,jm)
       integer JST, JEN
       real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
       real    LONO(4),LATO(4),LONI,LATI
@@ -2176,7 +2176,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 ! ---  0 is ocean and 1 is land for slm
 ! ---  Step 1 is to only change SLM after GFS SLM is applied
 
-               IF(SLM(I,J).NE.0.) THEN
+               !IF(SLM(I,J).NE.0.) THEN
+               IF(SLM(I,J) .NE. 0. .OR. LAND_FRAC(I,J) > 0.) THEN
                   IF (XLAND > 0) THEN
                     ORO(I,J)= XL1 / XLAND
                   ELSE
@@ -2201,7 +2202,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 
          ELSEIF(XNSUM_ALL.GT.1.) THEN
 
-               IF(SLM(I,J).NE.0.) THEN
+               !IF(SLM(I,J).NE.0.) THEN
+               IF(SLM(I,J) .NE. 0. .OR. LAND_FRAC(I,J) > 0.) THEN
                   IF (XLAND_ALL > 0) THEN
                     ORO(I,J)= XL1_ALL / XLAND_ALL
                   ELSE
@@ -2231,8 +2233,9 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
          ENDIF
    
 ! set orog to 0 meters at ocean.
-         IF (LAKE_FRAC(I,J) .EQ. 0. .AND. SLM(I,J) .EQ. 0.)THEN
-           ORO(I,J) = 0.0
+!        IF (LAKE_FRAC(I,J) .EQ. 0. .AND. SLM(I,J) .EQ. 0.)THEN
+         IF (LAKE_FRAC(I,J) .EQ. 0. .AND. LAND_FRAC(I,J) .EQ. 0.)THEN 
+         ORO(I,J) = 0.0
          ENDIF
 
        ENDDO
