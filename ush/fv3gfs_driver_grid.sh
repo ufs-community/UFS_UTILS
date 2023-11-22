@@ -59,7 +59,7 @@ export vegsoilt_frac=${vegsoilt_frac:-.false.}
 
 
 if [ $gtype = uniform ];  then
-export ocn= ${ocn:-025}
+  export ocn=${ocn:-025}
   echo "Creating global uniform grid"
 elif [ $gtype = stretch ]; then
   export stretch_fac=${stretch_fac:-1.5}  # Stretching factor for the grid
@@ -274,7 +274,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   echo "Grid and orography files are now prepared."
 
-#exit 8
+exit 0
 
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
