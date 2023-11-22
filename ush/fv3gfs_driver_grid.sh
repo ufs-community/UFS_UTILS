@@ -46,6 +46,10 @@ set -eux
 # Makes FV3 cubed-sphere grid
 #----------------------------------------------------------------------------------
 
+
+export veg_type_src=${veg_type_src:-viirs.v3.igbp.30s}
+export soil_type_src=${soil_type_src:-bnu.v3.30s} 
+export lake_data_srce=${lake_data_srce:-MODISP_GLDBV3}
 export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
 export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest, regional_gfdl,
                                 # or regional_esg
@@ -56,7 +60,6 @@ export binary_lake=${binary_lake:-1}    # return 1 if lake_frac >= lake_cutoff &
 
 export make_gsl_orog=${make_gsl_orog:-false} # when true, create GSL drag suite orog files.
 export vegsoilt_frac=${vegsoilt_frac:-.false.}
-
 
 if [ $gtype = uniform ];  then
   export ocn=${ocn:-025}
@@ -274,7 +277,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
 
   echo "Grid and orography files are now prepared."
 
-exit 0
+#exit 0
 
 #----------------------------------------------------------------------------------
 #----------------------------------------------------------------------------------
