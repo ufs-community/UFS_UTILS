@@ -1260,7 +1260,7 @@
 
  print*
  print*,"OPEN VERTICAL COORD FILE: ", trim(vcoord_file_target_grid)
- open(14, file=trim(vcoord_file_target_grid), form='formatted', iostat=istat)
+ open(14, file=trim(vcoord_file_target_grid), form='formatted', iostat=istat, action='read')
  if (istat /= 0) then
    call error_handler("OPENING VERTICAL COORD FILE", istat)
  endif
