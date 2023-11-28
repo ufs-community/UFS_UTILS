@@ -367,7 +367,7 @@
                                       !! dead start. Set to zero for non-dead
                                       !! start.
  REAL, ALLOCATABLE   :: STC_BCK(:,:), SMC_BCK(:,:), SLC_BCK(:,:)
- REAL, ALLOCATABLE   :: SLIFCS_FG(:)
+ REAL, ALLOCATABLE   :: SLIFCS_FG(:), SICFCS_FG(:)
  INTEGER, ALLOCATABLE :: LANDINC_MASK_FG(:), LANDINC_MASK(:)
  REAL, ALLOCATABLE   :: SND_BCK(:), SND_INC(:), SWE_BCK(:)
  REAL(KIND=KIND_IO8), ALLOCATABLE :: SLMASKL(:), SLMASKW(:), LANDFRAC(:)
@@ -450,6 +450,7 @@
    ALLOCATE(NSST%Z_C(LENSFC))
    ALLOCATE(NSST%ZM(LENSFC))
    ALLOCATE(SLIFCS_FG(LENSFC))
+   ALLOCATE(SICFCS_FG(LENSFC))
  ENDIF
 
 IF (DO_LNDINC) THEN
@@ -500,6 +501,17 @@ ENDIF
                 ZSOIL=ZSOIL,   NSST=NSST)
 
 !STCFCS_SAVE = STCFCS
+
+!if (tile_num == 'tile6') then
+!  print*,'remove ice'
+!  slifcs(434252) = 0.
+!  sicfcs(434252) = 0.
+!  sihfcs(434252) = 0.
+!  print*,'add ice'
+!  slifcs(491001) = 2.
+!  sicfcs(491001) = .9
+!  sihfcs(491001) = 1.
+!endif
 
  print*,'is noahmp/fract grid ',is_noahmp, frac_grid
 
@@ -552,6 +564,15 @@ ENDIF
  ENDDO
 
  IF (DO_NSST) THEN
+   SICFCS_FG=SICFCS
+   do i=1,lensfc
+     if (slifcs(i) == 2.0 .and. sicfcs(i) < .01) then
+       print*,'bad ice 1 ',i,slifcs(i),sicfcs(i)
+     endif
+     if (slifcs(i) == 0.0 .and. sicfcs(i) > 0.) then
+       print*,'bad ice 2 ',i,slifcs(i),sicfcs(i)
+     endif
+   enddo
    IF (.NOT. DO_SFCCYCLE ) THEN
      PRINT*
      PRINT*,"FIRST GUESS MASK ADJUSTED BY IFD RECORD"
@@ -696,18 +717,33 @@ ENDIF
 
  IF(FRAC_GRID) DEALLOCATE(LANDFRAC)
 
+ if (tile_num == 'tile6') then
+   print*,'remove ice after cycle ', slifcs(434252),sicfcs(434252),sihfcs(434252)
+   print*,'add ice after cycle ', slifcs(491001),sicfcs(491001),sihfcs(491001)
+ endif
+
 !--------------------------------------------------------------------------------
 ! IF RUNNING WITH NSST, READ IN GSI FILE WITH THE UPDATED INCREMENTS (ON THE
 ! GAUSSIAN GRID), INTERPOLATE INCREMENTS TO THE CUBED-SPHERE TILE, AND PERFORM
 ! REQUIRED ADJUSTMENTS AND QC.
 !--------------------------------------------------------------------------------
 
+ if (do_nsst) then
+ print*,'ice check 2', tile_num
+ do i = 1, lensfc
+   if (sicfcs(i) /= sicfcs_fg(i)) then
+     print*,' ice update ',i,sicfcs(i),sicfcs_fg(i)
+   endif 
+ enddo
+ endif
+
  IF (DO_NSST) THEN
    IF (NST_FILE == "NULL") THEN
      PRINT*
      PRINT*,"NO GSI FILE.  ADJUST IFD FOR FORMER ICE POINTS."
      DO I = 1, LENSFC
-       IF (NINT(SLIFCS_FG(I)) == 2 .AND. NINT(SLIFCS(I)) == 0) THEN
+!      IF (NINT(SLIFCS_FG(I)) == 2 .AND. NINT(SLIFCS(I)) == 0) THEN
+       IF (SICFCS_FG(I) > 0.0 .AND. SICFCS(I) == 0) THEN
          NSST%IFD(I) = 3.0
        ENDIF
      ENDDO
@@ -733,8 +769,8 @@ ENDIF
 !
 !    update foundation & surface temperature for NSST
 !
-     CALL ADJUST_NSST(RLA,RLO,SLIFCS,SLIFCS_FG,TSFFCS,SITFCS,SICFCS,STCFCS, &
-                    NSST,LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2, &
+     CALL ADJUST_NSST(RLA,RLO,SLIFCS,SLIFCS_FG,TSFFCS,SITFCS,SICFCS,SICFCS_FG,&
+                    STCFCS,NSST,LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2, &
                     tf_clm_tile,tf_trd_tile,sal_clm_tile)
    ENDIF
  ENDIF
@@ -893,6 +929,7 @@ ENDIF
    DEALLOCATE(NSST%Z_C)
    DEALLOCATE(NSST%ZM)
    DEALLOCATE(SLIFCS_FG)
+   DEALLOCATE(SICFCS_FG)
  ENDIF
 
  RETURN
@@ -903,8 +940,8 @@ ENDIF
  !! grid), interpolate increments to the cubed-sphere tile, and
  !! perform required nsst adjustments and qc.
  !!
- !! @param[inout] RLA Latitude on the cubed-sphere tile
- !! @param[inout] RLO Longitude on the cubed-sphere tile
+ !! @param[in] RLA Latitude on the cubed-sphere tile
+ !! @param[in] RLO Longitude on the cubed-sphere tile
  !! @param[in] SLMSK_TILE Land-sea mask on the cubed-sphere tile
  !! @param[in] SLMSK_FG_TILE First guess land-sea mask on the cubed-sphere tile
  !! @param[inout] SKINT_TILE Skin temperature on the cubed-sphere tile
@@ -928,8 +965,8 @@ ENDIF
  !!
  !! @author Xu Li, George Gayno
  SUBROUTINE ADJUST_NSST(RLA,RLO,SLMSK_TILE,SLMSK_FG_TILE,SKINT_TILE,&
-                        SICET_TILE,sice_tile,SOILT_TILE,NSST,LENSFC,LSOIL,    &
-                        IDIM,JDIM,ZSEA1,ZSEA2, &
+                        SICET_TILE,sice_tile,sice_fg_tile,SOILT_TILE,NSST, &
+                        LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2, &
                         tf_clm_tile,tf_trd_tile,sal_clm_tile)
 
  USE UTILS
@@ -946,8 +983,9 @@ ENDIF
 
  REAL, INTENT(IN)         :: SLMSK_TILE(LENSFC), SLMSK_FG_TILE(LENSFC)
  real, intent(in)         :: tf_clm_tile(lensfc),tf_trd_tile(lensfc),sal_clm_tile(lensfc)
- REAL, INTENT(IN)         :: ZSEA1, ZSEA2,sice_tile(lensfc)
- REAL, INTENT(INOUT)      :: RLA(LENSFC), RLO(LENSFC), SKINT_TILE(LENSFC)
+ REAL, INTENT(IN)         :: ZSEA1, ZSEA2,sice_tile(lensfc),sice_fg_tile(lensfc)
+ REAL, INTENT(IN)         :: RLA(LENSFC), RLO(LENSFC)
+ REAL, INTENT(INOUT)      :: SKINT_TILE(LENSFC)
  REAL, INTENT(INOUT)      :: SICET_TILE(LENSFC),SOILT_TILE(LENSFC,LSOIL)
 
  TYPE(NSST_DATA)          :: NSST
@@ -957,7 +995,8 @@ ENDIF
  INTEGER                  :: IOPT, NRET, KGDS_GAUS(200)
  INTEGER                  :: IGAUS, JGAUS, IJ, II, JJ, III, JJJ, KRAD
  INTEGER                  :: ISTART, IEND, JSTART, JEND
- INTEGER                  :: MASK_TILE, MASK_FG_TILE
+!INTEGER                  :: MASK_TILE, MASK_FG_TILE
+ INTEGER,allocatable      :: MASK_TILE(:),MASK_FG_TILE(:)
  INTEGER                  :: ITILE, JTILE
  INTEGER                  :: MAX_SEARCH, J, IERR
  INTEGER                  :: IGAUSP1, JGAUSP1
@@ -1087,13 +1126,19 @@ ENDIF
 
  NSST%TFINC = 0.0
 
+ allocate(mask_tile(lensfc))
+ allocate(mask_fg_tile(lensfc))
+
+ MASK_TILE    = NINT(SLMSK_TILE)
+ MASK_FG_TILE = NINT(SLMSK_FG_TILE)
+
  IJ_LOOP : DO IJ = 1, LENSFC
 
-   MASK_TILE    = NINT(SLMSK_TILE(IJ))
-   MASK_FG_TILE = NINT(SLMSK_FG_TILE(IJ))
+!  MASK_TILE    = NINT(SLMSK_TILE(IJ))
+!  MASK_FG_TILE = NINT(SLMSK_FG_TILE(IJ))
 
-   if (sice_tile(ij) > 0. .and. mask_tile /= 2) then
-     print*,'bad ice point ',ij,sice_tile(ij),mask_tile
+   if (sice_tile(ij) > 0. .and. mask_tile(ij) /= 2) then
+     print*,'bad ice point ',ij,sice_tile(ij),mask_tile(ij)
    endif
 
 !
@@ -1104,7 +1149,7 @@ ENDIF
 ! SKIP LAND POINTS.  NSST NOT APPLIED AT LAND.
 !----------------------------------------------------------------------
 
-   IF (MASK_TILE == 1) THEN
+   IF (MASK_TILE(ij) == 1) THEN
      nland = nland + 1
      CYCLE IJ_LOOP  
    ENDIF
@@ -1112,7 +1157,7 @@ ENDIF
 !
 ! these are ice points.  set tref to tf_ice and update tmpsfc.
 !
-   if (mask_tile == 2) then
+   if (mask_tile(ij) == 2) then
      nsst%tref(ij)=tf_ice      ! water part tmp set
      skint_tile(ij)=(1.0-sice_tile(ij))*nsst%tref(ij)+sice_tile(ij)*sicet_tile(ij)
      nice = nice + 1
@@ -1132,11 +1177,11 @@ ENDIF
 ! weighted average of tf_ice and tf_clm. For NSST vars, set xz TO '30' AND ALL OTHER FIELDS TO ZERO.
 !----------------------------------------------------------------------
 
-   IF (MASK_FG_TILE == 2 .AND. MASK_TILE == 0) THEN
+   IF (mask_fg_tile(ij) == 2 .AND. mask_tile(ij) == 0) THEN
 !
 !    set background for the thaw (just melted water) situation
 !
-     call tf_thaw_set(nsst%tref,nint(slmsk_fg_tile),itile,jtile,tf_ice,tf_clm_tile(ij),tf_thaw,idim,jdim, &
+     call tf_thaw_set(nsst%tref,mask_fg_tile,itile,jtile,tf_ice,tf_clm_tile(ij),tf_thaw,idim,jdim, &
                       nset_thaw_s,nset_thaw_i,nset_thaw_c)
      call nsst_water_reset(nsst,ij,tf_thaw)
      nset_thaw = nset_thaw + 1
@@ -1326,7 +1371,7 @@ ENDIF
  write(*,'(a,I8)') ' nice = ',nice
  write(*,'(a,I8)') ' nland = ',nland
 
- DEALLOCATE(ID1, ID2, JDC, S2C)
+ DEALLOCATE(ID1, ID2, JDC, S2C, mask_tile, mask_fg_tile)
 
  END SUBROUTINE ADJUST_NSST
 
