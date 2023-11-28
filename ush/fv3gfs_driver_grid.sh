@@ -575,7 +575,7 @@ cat <<EOF > $readme_name
 The following # was used
 https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
-	creation date =$(date +%Y-%m-%d)
+	creation date=$(date +%Y-%m-%d)
         gtype=$gtype
         make_gsl_orog=$make_gsl_orog
         vegsoilt_frac=$vegsoilt_frac
@@ -593,14 +593,15 @@ cat <<EOF > $readme_name
 The following # was used
 https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
-	creation date =$(date +%Y-%m-%d)
+	creation date=$(date +%Y-%m-%d)
         gtype=$gtype
         vegsoilt_frac=$vegsoilt_frac
         veg_type=$veg_type_src
         soil_type=$soil_type_src
         make_gsl_orog=$make_gsl_orog
         vegsoilt_frac=$vegsoilt_frac
-        veg_type=$veg_type_src
+        veg_type=$veg_type_srci
+	lake_data_srce=$lake_data_srce
         soil_type=$soil_type_src
         add_lake=$add_lake
 	lake_data_srce=$lake_data_srce
@@ -622,12 +623,13 @@ cat <<EOF > $readme_name
 The following # was used
 https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
-        creation date =$(date +%Y-%m-%d)
+        creation date=$(date +%Y-%m-%d)
 	gtype=$gtype
         res=-999                        # equivalent resolution is computed
         vegsoilt_frac=$vegsoilt_frac
         veg_type=$veg_type_src
         soil_type=$soil_type_src
+	lake_data_srce=$lake_data_srce
         target_lon=$target_lon          # Center longitude of grid
         target_lat=target_lat           # Center latitude of grid
         idim=$idim                      # Dimension of grid in 'i' direction
