@@ -47,9 +47,10 @@ set -eux
 #----------------------------------------------------------------------------------
 
 
-export veg_type_src=${veg_type_src:-viirs.v3.igbp.30s}
-export soil_type_src=${soil_type_src:-bnu.v3.30s} 
+export veg_type_src=${veg_type_src:-modis.igbp.0.05}
+export soil_type_src=${soil_type_src:-statsgo.0.05} 
 export lake_data_srce=${lake_data_srce:-MODISP_GLDBV3}
+
 export res=${res:-96}           # resolution of tile: 48, 96, 128, 192, 384, 768, 1152, 3072
 export gtype=${gtype:-uniform}  # grid type: uniform, stretch, nest, regional_gfdl,
                                 # or regional_esg
@@ -62,7 +63,7 @@ export make_gsl_orog=${make_gsl_orog:-false} # when true, create GSL drag suite 
 export vegsoilt_frac=${vegsoilt_frac:-.false.}
 
 if [ $gtype = uniform ];  then
-  export ocn=${ocn:-025}
+ # export ocn=${ocn:-025}
   echo "Creating global uniform grid"
 elif [ $gtype = stretch ]; then
   export stretch_fac=${stretch_fac:-1.5}  # Stretching factor for the grid
@@ -226,9 +227,10 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
   fi
 
 
-
 	if [ $gtype = uniform ]; then
-  		 $script_dir/fv3gfs_ocean_merge.sh
+		if declare -p ocn &>/dev/null;then 
+ 			 $script_dir/fv3gfs_ocean_merge.sh
+		fi
 	fi
 
   set +x
@@ -600,8 +602,7 @@ The following parameters were used
         soil_type=$soil_type_src
         make_gsl_orog=$make_gsl_orog
         vegsoilt_frac=$vegsoilt_frac
-        veg_type=$veg_type_srci
-	lake_data_srce=$lake_data_srce
+        veg_type=$veg_type_src
         soil_type=$soil_type_src
         add_lake=$add_lake
 	lake_data_srce=$lake_data_srce
