@@ -83,15 +83,9 @@ export vegsoilt_frac='.false.'  # When true, outputs percent of each
                                # outputs the dominant category. A
                                # Fortran logical, so include the dots.
 
-<<<<<<< HEAD
-export veg_type_src="viirs.v2.igbp.30s" #  Vegetation type data.
-                                # For viirs-based vegetation type data, set to:
-                                # 1) "viirs.v2.igbp.30s" for global 30s data
-=======
 export veg_type_src="viirs.v3.igbp.30s" #  Vegetation type data.
                                 # For viirs-based vegetation type data, set to:
                                 # 1) "viirs.v3.igbp.30s" for global 30s data
->>>>>>> develop
                                 # For the modis-based data, set to:
                                 # 1) "modis.igbp.0.05" for global 0.05-deg data
                                 # 2) "modis.igbp.0.03" for global 0.03-deg data
@@ -99,15 +93,9 @@ export veg_type_src="viirs.v3.igbp.30s" #  Vegetation type data.
                                 # 4) "modis.igbp.nh.30s" for N Hemis 30s data
                                 # 5) "modis.igbp.30s" for global 30s data
 
-<<<<<<< HEAD
-export soil_type_src="bnu.v2.30s" #  Soil type data.
-                                # For Beijing Normal Univ. data, set to:
-                                # 1) "bnu.v2.30s" for global 30s data.
-=======
 export soil_type_src="bnu.v3.30s" #  Soil type data.
                                 # For Beijing Normal Univ. data, set to:
                                 # 1) "bnu.v3.30s" for global 30s data.
->>>>>>> develop
                                 # For STATSGO soil type data, set to:
                                 # 1) "statsgo.0.05" for global 0.05-deg data
                                 # 2) "statsgo.0.03" for global 0.03-deg data
@@ -124,6 +112,7 @@ if [ $gtype = uniform ]; then
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.50      # return 0 if lake_frac <  lake_cutoff & add_lake=T
   export binary_lake=1         # return 1 if lake_frac >= lake_cutoff & add_lake=T
+  export ocn=${ocn:-"100"}     # use one of  "025", "050", "100", "500". Cannot be empty	
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -162,12 +151,17 @@ fi
 #   home_dir - location of repository.
 #   TEMP_DIR - working directory.
 #   out_dir  - where files will be placed upon completion.
+#   ocean_mask_dir - where the ocean mask directories exists
+#   To create contents of the ocean mask dir refer to the README
+#   in /scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN
+#   TO BE UPDATED
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
 export out_dir=/work/noaa/stmp/$LOGNAME/my_grids
-
+export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN/
+# TO BE UPDATED
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
 #-----------------------------------------------------------------------
