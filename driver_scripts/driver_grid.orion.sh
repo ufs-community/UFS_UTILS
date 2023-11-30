@@ -160,8 +160,8 @@ fi
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
 export out_dir=/work/noaa/stmp/$LOGNAME/my_grids
-export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN/
-# TO BE UPDATED
+export ocean_mask_dir=/work/noaa/stmp/skumar/ocean_mask/CPLD_GRIDGEN/
+
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
 #-----------------------------------------------------------------------
