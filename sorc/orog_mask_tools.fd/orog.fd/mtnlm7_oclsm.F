@@ -184,6 +184,8 @@ C> @return 0 for success, error code otherwise.
 !! grid. When specified, will be interpolated to model tile.
 !! When not specified, program will create fields from
 !! raw high-resolution topography data.
+!! @param[in] MASK_ONLY Flag to generate the Land Mask only
+!! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
@@ -2042,6 +2044,8 @@ C
 !! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
 !! @param[in] lon_c Longitude of the model grid corner points.
 !! @param[in] lat_c Latitude on the model grid corner points.
+!! @param[in] lake_frac Fractional lake within the grid
+!! @param[in] land_frac Fractional land within the grid
 !! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
      1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c,lake_frac,land_frac)
@@ -2549,6 +2553,7 @@ C
 !! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
 !! @param[in] lon_c Longitude of model grid corner points.
 !! @param[in] lat_c Latitude of the model grid corner points.
+!! @param[in] SLM mask
 !! @author GFDL Programmer
       SUBROUTINE MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1           GLAT,IM,JM,IMN,JMN,lon_c,lat_c,SLM)

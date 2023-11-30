@@ -228,6 +228,18 @@
       return
     end subroutine netcdf_err
 
+!> Write the land mask file
+!!
+!! @param[in] im 'i' dimension of a model grid tile.
+!! @param[in] jm 'j' dimension of a model grid tile.
+!! @param[in] slm Land-sea mask.
+!! @param[in] land_frac Land fraction.
+!! @param[in] ntiles Number of tiles to output.
+!! @param[in] tile Tile number to output.
+!! @param[in] geolon Longitude on the model grid tile.
+!! @param[in] geolat Latitude on the model grid tile.
+!! @author George Gayno NOAA/EMC
+
   subroutine write_mask_netcdf(im, jm, slm, land_frac, ntiles, tile, geolon, geolat)
     implicit none
     integer, intent(in):: im, jm, ntiles, tile
@@ -307,6 +319,17 @@
     call netcdf_err(error, 'close file='//trim(outfile) )  
       
   end subroutine
+
+ 
+!> Read the land mask file
+!!
+!! @param[in] merge_file path 
+!! @param[in] slm Land-sea mask.
+!! @param[in] land_frac Land fraction.
+!! @param[in] lake_frac Lake fraction
+!! @param[in] im 'i' dimension of a model grid tile.
+!! @param[in] jm 'j' dimension of a model grid tile.
+!! @author George Gayno NOAA/EMC
 
   subroutine read_mask(merge_file,slm,land_frac,lake_frac,im,jm)
 

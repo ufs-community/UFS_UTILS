@@ -103,7 +103,7 @@ program merge_lake_ocnmsk
       else
         lake_depth(i,j)=0.
       end if
-!       slmsk(i,j) = ceiling(land_frac(i,j))! "ceiling is used for orog smoothing"
+!      slmsk(i,j) = ceiling(land_frac(i,j))! "ceiling is used for orog smoothing"
        slmsk(i,j) = nint(land_frac(i,j)) ! nint got the land pts correct
     end do
     end do
@@ -160,6 +160,7 @@ end subroutine handle_err
 !! @param[out] out_dir Directory where output file will be written.
 !! @param[out] atmres Atmosphere grid resolution.
 !! @param[out] ocnres Ocean grid resolution.
+!! @param[out] binary_lake or fractional lake 
 !! @author Rahul Mahajan
 !! @author Sanath Kumar
 subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres,ocnres,out_dir,binary_lake)
