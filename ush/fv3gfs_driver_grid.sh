@@ -226,11 +226,14 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     fi
   fi
 
-
 	if [ $gtype = uniform ]; then
-		if declare -p ocn &>/dev/null;then 
- 			 $script_dir/fv3gfs_ocean_merge.sh
-		fi
+	  if declare -p ocn &>/dev/null;then 
+ 	     $script_dir/fv3gfs_ocean_merge.sh
+	     err=$?
+             if [ $err != 0 ]; then
+                exit $err
+     	     fi
+           fi
 	fi
 
   set +x

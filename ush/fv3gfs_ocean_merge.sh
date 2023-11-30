@@ -15,10 +15,16 @@
     /
 EOF
 
-
+    echo Run ocean_merge program.
     time  ${exec_dir}/./ocean_merge
+  
+    rc=$?   
 
-    set -x
+	if [[ $rc -ne 0 ]] ; then
+     		echo FATAL ERROR running ocean_merge.
+     		exit $rc
+    	fi
+
     echo run orog 2nd time
     set +x
 	
