@@ -39,11 +39,7 @@
 #
 # veg_type_src - Input vegetation type data. Choices are:
 #                  For viirs-based vegetation type data, set to:
-<<<<<<< HEAD
-#                  - "viirs.v2.igbp.30s" for global 30s data
-=======
 #                  - "viirs.v3.igbp.30s" for global 30s data
->>>>>>> develop
 #                  For the modis-based vegetation data, set to:
 #                  - "modis.igbp.0.05" for global 0.05-deg data
 #                  - "modis.igbp.0.03" for global 0.03-deg data
@@ -53,13 +49,7 @@
 #
 # soil_type_src - Input soil type data. Choices are:
 #                   For Beijing Norm. Univ. soil type data
-<<<<<<< HEAD
-#                   - "bnu.v2.30s" for global 30s data
-=======
 #                   - "bnu.v3.30s" for global 30s data
->>>>>>> develop
-#                   For STATSGO soil type data
-#                   - "statsgo.0.05" for global 0.05-deg data
 #                   - "statsgo.0.03" for global 0.03-deg data
 #                   - "statsgo.conus.30s" for CONUS 30s data
 #                   - "statsgo.nh.30s" for NH 30s data
@@ -79,15 +69,10 @@ export res=768.mx025
 #export GRIDTYPE=regional
 #FIX_REG=/lfs/h2/emc/stmp/$LOGNAME/fix.reg
 
-<<<<<<< HEAD
-export veg_type_src="viirs.v2.igbp.30s"
 
-export soil_type_src="bnu.v2.30s"
-=======
 export veg_type_src="viirs.v3.igbp.30s"
 
 export soil_type_src="bnu.v3.30s"
->>>>>>> develop
 
 export WORK_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/work.sfc
 export SAVE_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/sfc.C${res}

@@ -12,17 +12,9 @@ set -x
 
 MEMBER=$1
 
-
 FIX_FV3=$UFS_DIR/fix
-FIX_FV3= /scratch2/NCEPDEV/stmp1/Sanath.Kumar/step3
-
 FIX_ORO=${FIX_FV3}/orog
-FIX_ORO= /scratch2/NCEPDEV/stmp1/Sanath.Kumar/sfc.C48.mx500
-
-
 FIX_AM=${FIX_FV3}/am
-
-MEMBER=gfs
 
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
@@ -56,13 +48,12 @@ cd $WORKDIR
 
 source $GDAS_INIT_DIR/set_fixed_files.sh
 
-ORO_NAME=oro_C48.mx500
 cat << EOF > fort.41
 
 &config
- fix_dir_target_grid="/scratch2/NCEPDEV/stmp1/Sanath.Kumar/sfc.C48.mx500"
- mosaic_file_target_grid="/scratch2/NCEPDEV/stmp1/Sanath.Kumar/step3/C48.mx500/C48_mosaic.nc"
- orog_dir_target_grid="/scratch2/NCEPDEV/stmp1/Sanath.Kumar/step3/C48.mx500"
+ fix_dir_target_grid="${FIX_ORO}/${ORO_DIR}/fix_sfc"
+ mosaic_file_target_grid="${FIX_ORO}/${ORO_DIR}/${CTAR}_mosaic.nc"
+ orog_dir_target_grid="${FIX_ORO}/${ORO_DIR}"
  orog_files_target_grid="${ORO_NAME}.tile1.nc","${ORO_NAME}.tile2.nc","${ORO_NAME}.tile3.nc","${ORO_NAME}.tile4.nc","${ORO_NAME}.tile5.nc","${ORO_NAME}.tile6.nc"
  data_dir_input_grid="${INPUT_DATA_DIR}"
  atm_files_input_grid="${ATMFILE}"
