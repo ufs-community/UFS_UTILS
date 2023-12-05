@@ -151,6 +151,18 @@ elif [[ $target = orion ]]; then
     PARTITION=orion
     ulimit -s unlimited
     SBATCH_COMMAND="./cpld_gridgen.sh"
+elif [[ $target = hercules ]]; then
+    STMP=${STMP:-/work/noaa/stmp/$USER}
+    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
+    #TODO Update to official location when testing is complete
+    #BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/hercules/reg_tests/cpld_gridgen/baseline_data
+    BASELINE_ROOT=/work/noaa/global/dhuber/noscrub/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    ACCOUNT=${ACCOUNT:-nems}
+    QUEUE=${QUEUE:-batch}
+    NCCMP=nccmp
+    PARTITION=hercules
+    ulimit -s unlimited
+    SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
     STMP=${STMP:-/lfs4/HFIP/h-nems/$USER}
     export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/mom6/20220805
