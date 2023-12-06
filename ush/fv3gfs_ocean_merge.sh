@@ -6,7 +6,7 @@
 
     cat << EOF > input.nml
      &mask_nml
-     ocean_mask_dir="$ocean_mask_dir/${ocn}/"
+     ocean_mask_dir="$ocean_mask_dir/C${res}/ocean_mask/${ocn}/"
      ocnres="mx${ocn}"
      lake_mask_dir="${TEMP_DIR}/C${res}/orog/"
      atmres="C${res}"
