@@ -1,12 +1,14 @@
 #!/bin/bash
 
 
+
     results_dir=$TEMP_DIR/ocean_merged/C${res}.mx${ocn}
     mkdir -p ${results_dir}
-
+    
+			
     cat << EOF > input.nml
      &mask_nml
-     ocean_mask_dir="$ocean_mask_dir/C${res}/ocean_mask/${ocn}/"
+     ocean_mask_dir="$(dirname $(dirname $home_dir))/fix/orog/C${res}/ocean_mask/${ocn}/"
      ocnres="mx${ocn}"
      lake_mask_dir="${TEMP_DIR}/C${res}/orog/"
      atmres="C${res}"

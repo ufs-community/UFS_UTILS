@@ -36,6 +36,8 @@ program merge_lake_ocnmsk
 
 
   call read_nml(pth1, pth2, atmres, ocnres, pth3,binary_lake)
+  
+  print *, pth1
   nodp_pt=0
   lake_pt=0  
   do tile=1,6

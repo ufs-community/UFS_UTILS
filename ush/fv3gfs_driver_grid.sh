@@ -112,8 +112,9 @@ export home_dir=${home_dir:-"$PWD/../"}
 export script_dir=$home_dir/ush
 export exec_dir=${exec_dir:-"$home_dir/exec"}
 export topo=$home_dir/fix/orog_raw
-
+export ocean_mask_dir=$home_dir/fix/orog
 export NCDUMP=${NCDUMP:-ncdump}
+
 
 rm -fr $TEMP_DIR
 mkdir -p $TEMP_DIR
@@ -527,7 +528,6 @@ export SAVE_DIR=$out_dir/sfc
 export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
 export input_sfc_climo_dir=$home_dir/fix/sfc_climo
-export ocean_mask_dir=$home_dir/fix/orog
 
 
 if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
