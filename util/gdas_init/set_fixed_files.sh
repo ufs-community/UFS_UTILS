@@ -15,8 +15,8 @@ if [ "${FRAC_ORO:-"no"}" = "yes" ]; then
   elif [ ${CTAR} == 'C384' ] || [ ${CTAR} == 'C768' ] || [ ${CTAR} == 'C1152' ]; then
     OCNRES='025'
   fi
-  ORO_DIR="${CTAR}.mx${OCNRES}_frac"
-  ORO_NAME="oro_${CTAR}.mx${OCNRES}"
+  ORO_DIR="${CTAR}"
+  ORO_NAME="${CTAR}.mx${OCNRES}_oro_data"
 else
   ORO_DIR="${CTAR}"
   ORO_NAME="${CTAR}_oro_data"
