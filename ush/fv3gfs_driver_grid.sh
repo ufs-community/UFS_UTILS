@@ -527,6 +527,8 @@ export SAVE_DIR=$out_dir/sfc
 export BASE_DIR=$home_dir
 export FIX_FV3=$out_dir
 export input_sfc_climo_dir=$home_dir/fix/sfc_climo
+export ocean_mask_dir=$home_dir/fix/orog
+
 
 if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   export HALO=$halop1
