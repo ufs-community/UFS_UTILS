@@ -112,7 +112,6 @@ export home_dir=${home_dir:-"$PWD/../"}
 export script_dir=$home_dir/ush
 export exec_dir=${exec_dir:-"$home_dir/exec"}
 export topo=$home_dir/fix/orog_raw
-export ocean_mask_dir=$home_dir/fix/orog
 export NCDUMP=${NCDUMP:-ncdump}
 
 
