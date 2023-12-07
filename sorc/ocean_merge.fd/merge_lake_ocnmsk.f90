@@ -19,7 +19,7 @@ program merge_lake_ocnmsk
 
   implicit none
 
-  character(len=220) :: pth1
+  character(len=120) :: pth1
   character(len=120) :: pth2,pth3
   character(len=10)  :: atmres,ocnres
   real, parameter    :: min_land=1.e-4, def_lakedp=10.
@@ -167,7 +167,7 @@ subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres,ocnres,out_dir,binary_
 
   integer :: unit=7, io_status
 
-  character(len=220), intent(out) :: ocean_mask_dir
+  character(len=120), intent(out) :: ocean_mask_dir
   character(len=120), intent(out) :: lake_mask_dir
   character(len=120), intent(out) :: out_dir
   character(len=10),  intent(out) :: atmres,ocnres
