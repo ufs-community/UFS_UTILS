@@ -112,7 +112,7 @@ if [ $gtype = uniform ]; then
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.50      # return 0 if lake_frac <  lake_cutoff & add_lake=T
   export binary_lake=1         # return 1 if lake_frac >= lake_cutoff & add_lake=T
-  export ocn=${ocn:-"100"}     # use one of  "025", "050", "100", "500". Cannot be empty	
+  export ocn=${ocn:-"025"}     # use one of  "025", "050", "100", "500". Cannot be empty	
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -151,16 +151,11 @@ fi
 #   home_dir - location of repository.
 #   TEMP_DIR - working directory.
 #   out_dir  - where files will be placed upon completion.
-#   ocean_mask_dir - where the ocean mask directories exists
-#   To create contents of the ocean mask dir refer to the README
-#   in /scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN
-#   TO BE UPDATED
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
 export out_dir=/work/noaa/stmp/$LOGNAME/my_grids
-export ocean_mask_dir=/work/noaa/stmp/skumar/ocean_mask/CPLD_GRIDGEN/
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.

@@ -155,16 +155,11 @@ fi
 #   home_dir - location of repository.
 #   TEMP_DIR - working directory.
 #   out_dir  - where files will be placed upon completion.
-#   ocean_mask_dir - where the ocean mask directories exists
-#   To create contents of the ocean mask dir refer to the README 
-#   in /scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids_ocean_fix/
-#export ocean_mask_dir=/scratch1/NCEPDEV/stmp4/Sanath.Kumar/ocean_mask/CPLD_GRIDGEN/
-export ocean_mask_dir=/scratch1/NCEPDEV/global/glopara/fix/orog/20231027
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids_ocean_fixed/
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
