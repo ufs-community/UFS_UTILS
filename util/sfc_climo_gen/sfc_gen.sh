@@ -50,6 +50,8 @@
 # soil_type_src - Input soil type data. Choices are:
 #                   For Beijing Norm. Univ. soil type data
 #                   - "bnu.v3.30s" for global 30s data
+#                   For STATSGO soil type data
+#                   - "statsgo.0.05" for global 0.05-deg data
 #                   - "statsgo.0.03" for global 0.03-deg data
 #                   - "statsgo.conus.30s" for CONUS 30s data
 #                   - "statsgo.nh.30s" for NH 30s data
@@ -68,7 +70,6 @@ export res=768.mx025
 #HALO=4
 #export GRIDTYPE=regional
 #FIX_REG=/lfs/h2/emc/stmp/$LOGNAME/fix.reg
-
 
 export veg_type_src="viirs.v3.igbp.30s"
 
