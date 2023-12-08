@@ -578,8 +578,6 @@ cd $out_dir
 if [ $gtype = uniform ] || [ $gtype = stretch ]; then
 
 cat <<EOF > $readme_name
-The following # was used
-https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
 	creation date=$(date +%Y-%m-%d)
         gtype=$gtype
@@ -596,8 +594,6 @@ elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
 
 
 cat <<EOF > $readme_name
-The following # was used
-https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
 	creation date=$(date +%Y-%m-%d)
         gtype=$gtype
@@ -625,8 +621,6 @@ EOF
 elif [ $gtype = regional_esg ] ; then
 
 cat <<EOF > $readme_name
-The following # was used
-https://github.com/sanatcumar/UFS_UTILS/tree/single_step
 The following parameters were used
         creation date=$(date +%Y-%m-%d)
 	gtype=$gtype
