@@ -29,7 +29,7 @@ program merge_lake_ocnmsk
  ! all instances of int_lake was changed to binary_lake  
   integer :: binary_lake
 
-  character(len=120) :: flnm
+  character(len=250) :: flnm
   integer :: ncid,ndims,nvars,natts,lat,lon,v1id,v2id,v3id,v4id,start(2),count(2),i,j,latid,lonid,ncid4, dims(2),tile,nodp_pt
   integer :: lake_pt,vlat
   real, allocatable :: lake_frac(:,:),lake_depth(:,:),land_frac(:,:),ocn_frac(:,:),slmsk(:,:),lat2d(:,:)

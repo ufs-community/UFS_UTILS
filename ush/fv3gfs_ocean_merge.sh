@@ -1,6 +1,18 @@
 #!/bin/bash
-
-
+# 
+# To generate the ocean mask 
+#
+# Check-out ufs-utils (and be sure to check out the ccpp submodule)
+# cd fix 
+# ./link_fixdirs.sh emc hera
+# cd ../reg_tests/cpld_gridgen
+# Edit the rt.conf and add the non-standard case(s) you want to generate
+# Note you need to keep/run the C384_025 case because the lower resolution cases depend on it to generate the remapping weights used to create the CICE ICs and/or do the Post jobs.
+# Edit rt.sh for proper accounts/partitions
+# Build and run the test using ./rt.sh -b >output 2>&1 &
+# Your results should be in /scratch1/NCEPDEV/stmp4/First.Last/CPLD_GRIDGEN/rt_#
+#
+#
 
     results_dir=$TEMP_DIR/ocean_merged/C${res}.mx${ocn}
     mkdir -p ${results_dir}
@@ -8,7 +20,7 @@
 			
     cat << EOF > input.nml
      &mask_nml
-     ocean_mask_dir="$(dirname $(dirname $home_dir))/fix/orog/C${res}/ocean_mask/${ocn}/"
+     ocean_mask_dir="${home_dir}/fix/orog/C${res}/ocean_mask/${ocn}/"
      ocnres="mx${ocn}"
      lake_mask_dir="${TEMP_DIR}/C${res}/orog/"
      atmres="C${res}"
