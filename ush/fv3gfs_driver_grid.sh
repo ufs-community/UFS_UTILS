@@ -572,13 +572,17 @@ fi
 # Make the README files with all relevant info to reproduce the outputs
 #------------------------------------------------------------------------------------
 
-cd $out_dir
+cd $home_dir
 
+commit_string=$(git log -1 --oneline)
+commit_num=$(echo $commit_string | cut -c1-7)
+cd $out_dir
 
 if [ $gtype = uniform ] || [ $gtype = stretch ]; then
 
 cat <<EOF > $readme_name
 The following parameters were used
+	commit_num=$commit_num
 	creation date=$(date +%Y-%m-%d)
         gtype=$gtype
         make_gsl_orog=$make_gsl_orog
@@ -595,6 +599,7 @@ elif [ $gtype = nest ] || [ $gtype = regional_gfdl ]; then
 
 cat <<EOF > $readme_name
 The following parameters were used
+        commit_num=$commit_num
 	creation date=$(date +%Y-%m-%d)
         gtype=$gtype
         vegsoilt_frac=$vegsoilt_frac
@@ -622,6 +627,7 @@ elif [ $gtype = regional_esg ] ; then
 
 cat <<EOF > $readme_name
 The following parameters were used
+        commit_num=$commit_num
         creation date=$(date +%Y-%m-%d)
 	gtype=$gtype
         res=-999                        # equivalent resolution is computed
