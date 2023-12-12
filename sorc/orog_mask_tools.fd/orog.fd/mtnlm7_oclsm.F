@@ -79,11 +79,15 @@ C> @return 0 for success, error code otherwise.
       integer fsize, ncid, error, id_dim, nx, ny
       character(len=256) :: OUTGRID = "none"
       character(len=256) :: INPUTOROG = "none"
+      character(len=256) :: merge_file = "none"
+      logical :: mask_only = .false.
       integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT,NW
       fsize=65536
       READ(5,*) MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
       READ(5,*) OUTGRID
       READ(5,*) INPUTOROG
+      READ(5,*) mask_only
+      READ(5,*) merge_file
 !      MTNRES=1
 !      IM=48
 !      JM=48
@@ -97,6 +101,8 @@ C> @return 0 for success, error code otherwise.
 !      INPUTOROG = "oro.288x144.nc"
       print*, "INPUTOROG=", trim(INPUTOROG)
       print*, "IM,JM=", IM, JM
+      print*, "MASK_ONLY", mask_only
+      print*, "MERGE_FILE", trim(merge_file)
 ! --- MTNRES defines the input (highest) elev resolution
 ! --- =1 is topo30 30" in units of 1/2 minute.
 !     so MTNRES for old values must be *2.
@@ -155,7 +161,7 @@ C> @return 0 for success, error code otherwise.
       endif         
          
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
-     &            OUTGRID,INPUTOROG)
+     &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       STOP
       END
 
@@ -178,15 +184,20 @@ C> @return 0 for success, error code otherwise.
 !! grid. When specified, will be interpolated to model tile.
 !! When not specified, program will create fields from
 !! raw high-resolution topography data.
+!! @param[in] MASK_ONLY Flag to generate the Land Mask only
+!! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
-     &     OUTGRID,INPUTOROG)
+     &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
 C
       integer                      :: IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
+      character(len=*), intent(in) :: MERGE_FILE
+
+      logical, intent(in) :: mask_only
 
       real, parameter :: MISSING_VALUE=-9999.
       real, PARAMETER :: PI=3.1415926535897931
@@ -222,7 +233,7 @@ C
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
       real, allocatable :: GEOLAT(:,:),GEOLAT_C(:,:),DY(:,:)
       real, allocatable :: SLM(:,:),ORO(:,:),VAR(:,:),ORF(:,:)
-      real, allocatable :: land_frac(:,:)
+      real, allocatable :: land_frac(:,:),lake_frac(:,:)
       real, allocatable :: THETA(:,:),GAMMA(:,:),SIGMA(:,:),ELVMAX(:,:)
       real, allocatable :: VAR4(:,:),SLMI(:,:)
       real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
@@ -652,7 +663,7 @@ C
       allocate (GEOLON(IM,JM),GEOLON_C(IM+1,JM+1),DX(IM,JM))
       allocate (GEOLAT(IM,JM),GEOLAT_C(IM+1,JM+1),DY(IM,JM))
       allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM))
-      allocate (land_frac(IM,JM))
+      allocate (land_frac(IM,JM),lake_frac(IM,JM))
 
 !--- reading grid file.
       grid_from_file = .false.
@@ -849,8 +860,28 @@ C
                                 !
       if(grid_from_file) then
        tbeg=timef()
-         CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,land_frac,VAR,VAR4,GLAT,
-     & IM,JM,IMN,JMN,geolon_c,geolat_c)
+
+         IF (MERGE_FILE == 'none') then
+           CALL MAKE_MASK(ZSLM,SLM,land_frac,GLAT,
+     &      IM,JM,IMN,JMN,geolon_c,geolat_c)
+            lake_frac=9999.9
+         ELSE
+           print*,'got here - read in external mask ',merge_file
+           CALL READ_MASK(MERGE_FILE,SLM,land_frac,lake_frac,im,jm)
+         ENDIF
+
+         IF (MASK_ONLY) THEN
+           print*,'got here computing mask only.'
+           CALL WRITE_MASK_NETCDF(IM,JM,SLM,land_frac,
+     1                  1,1,GEOLON,GEOLAT)
+
+           print*,' DONE.'
+           STOP
+         END IF
+
+         CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
+     & IM,JM,IMN,JMN,geolon_c,geolat_c,lake_frac,land_frac)
+
       tend=timef()
       write(6,*)' MAKEMT2 time= ',tend-tbeg
       else
@@ -886,7 +917,7 @@ C
        if(grid_from_file) then       
       tbeg=timef()
          CALL MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
-     1            IM,JM,IMN,JMN,geolon_c,geolat_c)
+     1            IM,JM,IMN,JMN,geolon_c,geolat_c,SLM)
       tend=timef()
       write(6,*)' MAKEPC2 time= ',tend-tbeg
        else
@@ -1158,7 +1189,10 @@ C
 ! ---  SLM is only field that will be altered by OCLSM
 ! ---  Ocean land sea mask ocean points made ocean in atm model
 ! ---  Land and Lakes and all other atm elv moments remain unchanged.  
-            if ( mskocn .eq. 1 ) then
+
+      IF (MERGE_FILE == 'none') then
+
+      MSK_OCN :      if ( mskocn .eq. 1 ) then
 
       DO j = 1,jm
         DO i = 1,numi(j)
@@ -1172,14 +1206,17 @@ C
               endif
         enddo
       enddo
-            endif
+            endif MSK_OCN
+      endif
       print *,' SLM(itest,jtest)=',slm(itest,jtest),itest,jtest
       print *,' ORO(itest,jtest)=',oro(itest,jtest),itest,jtest
 
       deallocate(SLMI)
 
+      IF (MERGE_FILE == 'none') then
+
 C  REMOVE ISOLATED POINTS
-      DO J=2,JM-1
+      iso_loop : DO J=2,JM-1
         JN=J-1
         JS=J+1
         RN=REAL(NUMI(JN))/REAL(NUMI(J))
@@ -1282,7 +1319,7 @@ C  REMOVE ISOLATED POINTS
             ENDDO
           ENDIF
         ENDDO
-      ENDDO
+      ENDDO iso_loop
 C--- print for testing after isolated points removed
       print *,' after isolated points removed'
        call minmxj(IM,JM,ORO,'     ORO')
@@ -1304,6 +1341,9 @@ C     print *,' JM=',JM,' numi=',numi
       print *,' SIGMA(itest,jtest)=',SIGMA(itest,jtest)
       print *,' ELVMAX(itest,jtest)=',ELVMAX(itest,jtest)
       print *,' EFAC=',EFAC
+
+      endif
+
 C
       DO J=1,JM
         DO I=1,numi(j)
@@ -1859,6 +1899,133 @@ C
 
       END   
       
+!> Create the land-mask, land fraction.
+!! This routine is used for the FV3GFS model.
+!!
+!! @param[in] zslm The high-resolution input land-mask dataset.
+!! @param[out] slm Land-mask on the model tile.
+!! @param[out] land_frac Land fraction on the model tile.
+!! @param[out] glat Latitude of each row of the high-resolution 
+!! orography and land-mask datasets.
+!! @param[in] im "i" dimension of the model grid.
+!! @param[in] jm "j" dimension of the model grid.
+!! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
+!! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
+!! @param[in] lon_c Longitude of the model grid corner points.
+!! @param[in] lat_c Latitude on the model grid corner points.
+!! @author GFDL Programmer
+      SUBROUTINE MAKE_MASK(zslm,SLM,land_frac,
+     1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
+      implicit none
+      real, parameter :: D2R = 3.14159265358979/180.
+      integer, parameter :: MAXSUM=20000000
+      integer IM, JM, IMN, JMN, jst, jen
+      real GLAT(JMN), GLON(IMN)
+      INTEGER ZSLM(IMN,JMN)
+      real land_frac(IM,JM)
+      real SLM(IM,JM)
+      real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
+      real    LONO(4),LATO(4),LONI,LATI
+      integer JM1,i,j,nsum,nsum_all,ii,jj,numx,i2
+      integer ilist(IMN)
+      real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1
+      real    XNSUM_ALL,XLAND_ALL,XWATR_ALL
+      logical inside_a_polygon
+C
+! ---- OCLSM holds the ocean (im,jm) grid
+      print *,' _____ SUBROUTINE MAKE_MASK '
+C---- GLOBAL XLAT AND XLON ( DEGREE )
+C
+      JM1 = JM - 1
+      DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
+C
+      DO J=1,JMN
+         GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
+      ENDDO
+      DO I=1,IMN
+         GLON(I) = 0. + (I-1) * DELXN + DELXN * 0.5
+      ENDDO
+ 
+      land_frac(:,:) = 0.0     
+C
+C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
+C
+C  (*j*)  for hard wired zero offset (lambda s =0) for terr05 
+!$omp parallel do
+!$omp* private (j,i,xnsum,xland,xwatr,nsum,xl1,xs1,xw1,lono,
+!$omp*          lato,jst,jen,ilist,numx,jj,i2,ii,loni,lati,
+!$omp*          xnsum_all,xland_all,xwatr_all,nsum_all)
+!$omp*          
+      DO J=1,JM
+!       print*, "J=", J
+       DO I=1,IM
+         XNSUM = 0.0
+         XLAND = 0.0
+         XWATR = 0.0
+         nsum = 0
+         XNSUM_ALL = 0.0
+         XLAND_ALL = 0.0
+         XWATR_ALL = 0.0
+         nsum_all = 0
+         
+         LONO(1) = lon_c(i,j) 
+         LONO(2) = lon_c(i+1,j) 
+         LONO(3) = lon_c(i+1,j+1) 
+         LONO(4) = lon_c(i,j+1) 
+         LATO(1) = lat_c(i,j) 
+         LATO(2) = lat_c(i+1,j) 
+         LATO(3) = lat_c(i+1,j+1) 
+         LATO(4) = lat_c(i,j+1) 
+         call get_index(IMN,JMN,4,LONO,LATO,DELXN,jst,jen,ilist,numx)
+         do jj = jst, jen; do i2 = 1, numx
+            ii = ilist(i2)
+            LONI = ii*DELXN
+            LATI = -90 + jj*DELXN
+
+            XLAND_ALL = XLAND_ALL + FLOAT(ZSLM(ii,jj))
+            XWATR_ALL = XWATR_ALL + FLOAT(1-ZSLM(ii,jj))
+            XNSUM_ALL = XNSUM_ALL + 1.
+            nsum_all = nsum_all+1
+            if(nsum_all > MAXSUM) then
+              print*, "nsum_all is greater than MAXSUM, increase MAXSUM"
+              call ABORT()
+            endif
+
+            if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
+     &          LONO*D2R,LATO*D2R))then
+
+               XLAND = XLAND + FLOAT(ZSLM(ii,jj))
+               XWATR = XWATR + FLOAT(1-ZSLM(ii,jj))
+               XNSUM = XNSUM + 1.
+               nsum = nsum+1
+               if(nsum > MAXSUM) then
+                 print*, "nsum is greater than MAXSUM, increase MAXSUM"
+                 call ABORT()
+               endif
+            endif
+         enddo ; enddo
+
+         
+         IF(XNSUM.GT.1.) THEN
+! --- SLM initialized with OCLSM calc from all land points except ....
+! ---  0 is ocean and 1 is land for slm
+! ---  Step 1 is to only change SLM after GFS SLM is applied
+               land_frac(i,j) = XLAND/XNSUM  
+               SLM(I,J) = FLOAT(NINT(XLAND/XNSUM))
+         ELSEIF(XNSUM_ALL.GT.1.) THEN
+               land_frac(i,j) = XLAND_ALL/XNSUM _ALL 
+               SLM(I,J) = FLOAT(NINT(XLAND_ALL/XNSUM_ALL))
+         ELSE
+               print*, "no source points in MAKE_MASK"
+               call ABORT()
+         ENDIF
+       ENDDO
+      ENDDO
+!$omp end parallel do
+      WRITE(6,*) "! MAKE_MASK DONE"
+C
+      RETURN
+      END SUBROUTINE MAKE_MASK
 !> Create the orography, land-mask, land fraction, standard 
 !! deviation of orography and the convexity on a model 
 !! cubed-sphere tile. This routine is used for the FV3GFS model.
@@ -1866,8 +2033,7 @@ C
 !! @param[in] zavg The high-resolution input orography dataset.
 !! @param[in] zslm The high-resolution input land-mask dataset.
 !! @param[out] oro Orography on the model tile.
-!! @param[out] slm Land-mask on the model tile.
-!! @param[out] land_frac Land fraction on the model tile.
+!! @param[in] slm Land-mask on the model tile.
 !! @param[out] var Standard deviation of orography on the model tile.
 !! @param[out] var4 Convexity on the model tile.
 !! @param[out] glat Latitude of each row of the high-resolution 
@@ -1878,9 +2044,11 @@ C
 !! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
 !! @param[in] lon_c Longitude of the model grid corner points.
 !! @param[in] lat_c Latitude on the model grid corner points.
+!! @param[in] lake_frac Fractional lake within the grid
+!! @param[in] land_frac Fractional land within the grid
 !! @author GFDL Programmer
-      SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,land_frac,VAR,VAR4,
-     1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
+      SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
+     1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c,lake_frac,land_frac)
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
@@ -1888,12 +2056,10 @@ C
       integer IM, JM, IMN, JMN
       real GLAT(JMN), GLON(IMN)
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
-      real land_frac(IM,JM)
-      real ORO(IM,JM),SLM(IM,JM),VAR(IM,JM),VAR4(IM,JM)
-      integer IST,IEN,JST, JEN
+      real ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM)
+      real, intent(in) :: SLM(IM,JM), lake_frac(im,jm),land_frac(im,jm)
+      integer JST, JEN
       real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
-      INTEGER mskocn,isave
-      LOGICAL FLAG, DEBUG
       real    LONO(4),LATO(4),LONI,LATI
       real    HEIGHT
       integer JM1,i,j,nsum,nsum_all,ii,jj,i1,numx,i2
@@ -1901,11 +2067,7 @@ C
       real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1,XW2,XW4
       real    XNSUM_ALL,XLAND_ALL,XWATR_ALL,HEIGHT_ALL
       real    XL1_ALL,XS1_ALL,XW1_ALL,XW2_ALL,XW4_ALL
-!jaa
-      real :: xnsum_j,xland_j,xwatr_j
       logical inside_a_polygon
-C==== DATA DEBUG/.TRUE./
-      DATA DEBUG/.FALSE./
 C
 ! ---- OCLSM holds the ocean (im,jm) grid
 ! ---  mskocn=1 Use ocean model sea land mask, OK and present,
@@ -1925,7 +2087,7 @@ C
          GLON(I) = 0. + (I-1) * DELXN + DELXN * 0.5
       ENDDO
  
-      land_frac(:,:) = 0.0     
+!     land_frac(:,:) = 0.0     
 C
 C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
 C
@@ -2012,19 +2174,27 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                XW2 = XW2 + HEIGHT ** 2
             endif
          enddo ; enddo
-
          
          IF(XNSUM.GT.1.) THEN
 ! --- SLM initialized with OCLSM calc from all land points except ....
 ! ---  0 is ocean and 1 is land for slm
 ! ---  Step 1 is to only change SLM after GFS SLM is applied
-               land_frac(i,j) = XLAND/XNSUM  
-               SLM(I,J) = FLOAT(NINT(XLAND/XNSUM))
-               IF(SLM(I,J).NE.0.) THEN
-                  ORO(I,J)= XL1 / XLAND
+
+               !IF(SLM(I,J).NE.0.) THEN
+               IF(SLM(I,J) .NE. 0. .OR. LAND_FRAC(I,J) > 0.) THEN
+                  IF (XLAND > 0) THEN
+                    ORO(I,J)= XL1 / XLAND
+                  ELSE
+                    ORO(I,J)= XS1 / XWATR
+                  ENDIF
                ELSE
-                  ORO(I,J)= XS1 / XWATR
+                  IF (XWATR > 0) THEN
+                    ORO(I,J)= XS1 / XWATR
+                  ELSE
+                    ORO(I,J)= XL1 / XLAND
+                  ENDIF
                ENDIF
+
                VAR(I,J)=SQRT(MAX(XW2/XNSUM-(XW1/XNSUM)**2,0.))
                do I1 = 1, NSUM
                   XW4 = XW4 + (hgt_1d(I1) - ORO(i,j)) ** 4
@@ -2033,14 +2203,24 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                IF(VAR(I,J).GT.1.) THEN
                   VAR4(I,J) = MIN(XW4/XNSUM/VAR(I,J) **4,10.)
                ENDIF
+
          ELSEIF(XNSUM_ALL.GT.1.) THEN
-               land_frac(i,j) = XLAND_ALL/XNSUM _ALL 
-               SLM(I,J) = FLOAT(NINT(XLAND_ALL/XNSUM_ALL))
-               IF(SLM(I,J).NE.0.) THEN
-                  ORO(I,J)= XL1_ALL / XLAND_ALL
+
+               !IF(SLM(I,J).NE.0.) THEN
+               IF(SLM(I,J) .NE. 0. .OR. LAND_FRAC(I,J) > 0.) THEN
+                  IF (XLAND_ALL > 0) THEN
+                    ORO(I,J)= XL1_ALL / XLAND_ALL
+                  ELSE
+                    ORO(I,J)= XS1_ALL / XWATR_ALL
+                  ENDIF
                ELSE
-                  ORO(I,J)= XS1_ALL / XWATR_ALL
+                  IF (XWATR_ALL > 0) THEN
+                    ORO(I,J)= XS1_ALL / XWATR_ALL
+                  ELSE
+                    ORO(I,J)= XL1_ALL / XLAND_ALL
+                  ENDIF
                ENDIF
+
                VAR(I,J)=SQRT(MAX(XW2_ALL/XNSUM_ALL-
      &                         (XW1_ALL/XNSUM_ALL)**2,0.))
                do I1 = 1, NSUM_ALL
@@ -2055,6 +2235,13 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                print*, "no source points in MAKEMT2"
                call ABORT()
          ENDIF
+   
+! set orog to 0 meters at ocean.
+!        IF (LAKE_FRAC(I,J) .EQ. 0. .AND. SLM(I,J) .EQ. 0.)THEN
+         IF (LAKE_FRAC(I,J) .EQ. 0. .AND. LAND_FRAC(I,J) .EQ. 0.)THEN 
+         ORO(I,J) = 0.0
+         ENDIF
+
        ENDDO
       ENDDO
 !$omp end parallel do
@@ -2366,9 +2553,10 @@ C
 !! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
 !! @param[in] lon_c Longitude of model grid corner points.
 !! @param[in] lat_c Latitude of the model grid corner points.
+!! @param[in] SLM mask
 !! @author GFDL Programmer
       SUBROUTINE MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
-     1           GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
+     1           GLAT,IM,JM,IMN,JMN,lon_c,lat_c,SLM)
 C
 C===  PC: principal coordinates of each Z avg orog box for L&M
 C
@@ -2379,11 +2567,12 @@ C
       real  :: GLAT(JMN),DELTAX(JMN)
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
       real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
-      real ORO(IM,JM),SLM(IM,JM),HL(IM,JM),HK(IM,JM)
+      real, intent(in) :: SLM(IM,JM)
+      real HL(IM,JM),HK(IM,JM)
       real HX2(IM,JM),HY2(IM,JM),HXY(IM,JM),HLPRIM(IM,JM)
       real THETA(IM,JM),GAMMA(IM,JM),SIGMA2(IM,JM),SIGMA(IM,JM)
-      real PI,CERTH,DELXN,DELTAY,XNSUM,XLAND,XWATR,XL1,XS1
-      real xfp,yfp,xfpyfp,xfp2,yfp2,HEIGHT
+      real PI,CERTH,DELXN,DELTAY,XNSUM,XLAND
+      real xfp,yfp,xfpyfp,xfp2,yfp2
       real hi0,hip1,hj0,hjp1,hijax,hi1j1
       real LONO(4),LATO(4),LONI,LATI
       integer i,j,i1,j1,i2,jst,jen,numx,i0,ip1,ijax
@@ -2412,22 +2601,18 @@ C
 C... DERIVITIVE TENSOR OF HEIGHT
 C
 !$omp parallel do
-!$omp* private (j,i,xnsum,xland,xwatr,xl1,xs1,xfp,yfp,xfpyfp,
+!$omp* private (j,i,xnsum,xland,xfp,yfp,xfpyfp,
 !$omp*          xfp2,yfp2,lono,lato,jst,jen,ilist,numx,j1,i2,i1,
-!$omp*          loni,lati,i0,ip1,height,hi0,hip1,hj0,hjp1,ijax,
+!$omp*          loni,lati,i0,ip1,hi0,hip1,hj0,hjp1,ijax,
 !$omp*          hijax,hi1j1)
-      DO J=1,JM
+      JLOOP : DO J=1,JM
 !        print*, "J=", J
-        DO I=1,IM
-          ORO(I,J)  = 0.0
+        ILOOP : DO I=1,IM
           HX2(I,J) = 0.0
           HY2(I,J) = 0.0
           HXY(I,J) = 0.0
           XNSUM = 0.0
           XLAND = 0.0
-          XWATR = 0.0
-          XL1 = 0.0
-            XS1 = 0.0
             xfp = 0.0
             yfp = 0.0
             xfpyfp = 0.0
@@ -2455,7 +2640,7 @@ C
               i1 = ilist(i2)         
               LONI = i1*DELXN
               LATI = -90 + j1*DELXN
-              if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
+              INSIDE : if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
      &           LONO*D2R,LATO*D2R))then
 
 C===  set the rest of the indexs for ave: 2pt staggered derivitive
@@ -2469,14 +2654,11 @@ C
                 if (i1 + 1 .gt. imn)  ip1 = ip1 - imn
 
                   XLAND = XLAND + FLOAT(ZSLM(I1,J1))
-                  XWATR = XWATR + FLOAT(1-ZSLM(I1,J1))
                   XNSUM = XNSUM + 1.
 C
-                  HEIGHT = FLOAT(ZAVG(I1,J1))
                   hi0 =  float(zavg(i0,j1))
                   hip1 =  float(zavg(ip1,j1))
 C
-                  IF(HEIGHT.LT.-990.) HEIGHT = 0.0
                   if(hi0 .lt. -990.)  hi0 = 0.0
                   if(hip1 .lt. -990.)  hip1 = 0.0
 C........           xfp = xfp + 0.5 * ( hip1 - hi0 ) / DELTAX(J1)
@@ -2535,9 +2717,7 @@ C ===    The above does an average across the pole for the bndry in j.
 C23456789012345678901234567890123456789012345678901234567890123456789012......
 C
                   xfpyfp = xfpyfp + xfp * yfp
-                  XL1 = XL1 + HEIGHT * FLOAT(ZSLM(I1,J1))
-                  XS1 = XS1 + HEIGHT * FLOAT(1-ZSLM(I1,J1))
-               ENDIF
+               ENDIF INSIDE
 C
 C === average the HX2, HY2 and HXY
 C === This will be done over all land
@@ -2547,19 +2727,21 @@ C
 C
 C ===  HTENSR 
 C
-           IF(XNSUM.GT.1.) THEN
-               SLM(I,J) = FLOAT(NINT(XLAND/XNSUM))
+         XNSUM_GT_1 : IF(XNSUM.GT.1.) THEN
                IF(SLM(I,J).NE.0.) THEN
-                  ORO(I,J)= XL1 / XLAND
-                  HX2(I,J) =  xfp2  / XLAND
-                  HY2(I,J) =  yfp2  / XLAND
-		  HXY(I,J) =  xfpyfp / XLAND
-               ELSE
-                  ORO(I,J)= XS1 / XWATR
+                  IF (XLAND > 0) THEN
+                    HX2(I,J) =  xfp2  / XLAND
+                    HY2(I,J) =  yfp2  / XLAND
+                    HXY(I,J) =  xfpyfp / XLAND
+                  ELSE
+                    HX2(I,J) =  xfp2  / XNSUM
+                    HY2(I,J) =  yfp2  / XNSUM
+                    HXY(I,J) =  xfpyfp / XNSUM
+                  ENDIF
                ENDIF
 C=== degub testing
       if (debug) then
-          print *," I,J,i1,j1,HEIGHT:", I,J,i1,j1,HEIGHT,
+          print *," I,J,i1,j1:", I,J,i1,j1,
      1         XLAND,SLM(i,j)
           print *," xfpyfp,xfp2,yfp2:",xfpyfp,xfp2,yfp2
           print *," HX2,HY2,HXY:",HX2(I,J),HY2(I,J),HXY(I,J)
@@ -2586,14 +2768,14 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
         else
              SIGMA(I,J)=0.
         endif
-           ENDIF
+           ENDIF XNSUM_GT_1
                   if (debug) then
        print *," I,J,THETA,SIGMA,GAMMA,",I,J,THETA(I,J),
      1                                       SIGMA(I,J),GAMMA(I,J)
        print *," HK,HL,HLPRIM:",HK(I,J),HL(I,J),HLPRIM(I,J)
                   endif
-        ENDDO
-      ENDDO
+        ENDDO ILOOP
+      ENDDO JLOOP
 !$omp end parallel do
       WRITE(6,*) "! MAKE Principal Coord  DONE"
 C
@@ -3279,7 +3461,7 @@ C
              print*, "at upper left i=,j=", i, j, lat, dlat,lat1,lat2
           endif          
           call get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
-     &     zavg,zslm,delxn, xnsum1_11, xnsum2_11, HC_11)          
+     &     zavg,delxn, xnsum1_11, xnsum2_11, HC_11)          
 
           !--- upper left 
           lon1 = lon-dlon*1.5
@@ -3290,7 +3472,7 @@ C
              print*, "at lower left i=,j=", i, j, lat, dlat,lat1,lat2
           endif
           call get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
-     &     zavg,zslm,delxn, xnsum1_12, xnsum2_12, HC_12)          
+     &     zavg,delxn, xnsum1_12, xnsum2_12, HC_12)          
 
           !--- lower right
           lon1 = lon-dlon*0.5
@@ -3301,7 +3483,7 @@ C
              print*, "at upper right i=,j=", i, j, lat, dlat,lat1,lat2
           endif
           call get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
-     &     zavg,zslm,delxn, xnsum1_21, xnsum2_21, HC_21)          
+     &     zavg,delxn, xnsum1_21, xnsum2_21, HC_21)          
 
           !--- upper right 
           lon1 = lon-dlon*0.5
@@ -3312,7 +3494,7 @@ C
              print*, "at lower right i=,j=", i, j, lat, dlat,lat1,lat2
           endif          
           call get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
-     &     zavg,zslm,delxn, xnsum1_22, xnsum2_22, HC_22)           
+     &     zavg,delxn, xnsum1_22, xnsum2_22, HC_22)           
                   
           OL(i,j,3) = (XNSUM1_22+XNSUM1_11)/(XNSUM2_22+XNSUM2_11)
           OL(i,j,4) = (XNSUM1_12+XNSUM1_21)/(XNSUM2_12+XNSUM2_21)
@@ -3327,7 +3509,7 @@ C
              print*, "at upper left i=,j=", i, j, lat, dlat,lat1,lat2
           endif
           call get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
-     &     zavg,zslm,delxn, xnsum1_11, xnsum2_11, HC_11)          
+     &     zavg,delxn, xnsum1_11, xnsum2_11, HC_11)          
 
           !--- upper left 
           lon1 = lon-dlon*2.0
@@ -3339,7 +3521,7 @@ C
           endif
           
           call get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
-     &     zavg,zslm,delxn, xnsum1_12, xnsum2_12, HC_12)          
+     &     zavg,delxn, xnsum1_12, xnsum2_12, HC_12)          
 
           !--- lower right
           lon1 = lon-dlon
@@ -3350,7 +3532,7 @@ C
              print*, "at upper right i=,j=", i, j, lat, dlat,lat1,lat2
           endif          
           call get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
-     &     zavg,zslm,delxn, xnsum1_21, xnsum2_21, HC_21)          
+     &     zavg,delxn, xnsum1_21, xnsum2_21, HC_21)          
 
           !--- upper right 
           lon1 = lon-dlon
@@ -3362,7 +3544,7 @@ C
           endif
           
           call get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
-     &     zavg,zslm,delxn, xnsum1_22, xnsum2_22, HC_22)           
+     &     zavg,delxn, xnsum1_22, xnsum2_22, HC_22)           
                   
           OL(i,j,1) = (XNSUM1_11+XNSUM1_21)/(XNSUM2_11+XNSUM2_21)
           OL(i,j,2) = (XNSUM1_21+XNSUM1_22)/(XNSUM2_21+XNSUM2_22)         
@@ -4575,12 +4757,12 @@ C
 
         real get_xnsum
         logical verbose
-        real lon1,lat1,lon2,lat2,oro,delxn
-        integer IMN,JMN
-        real    glat(JMN)
-        integer zavg(IMN,JMN),zslm(IMN,JMN)
+        real, intent(in) :: lon1,lat1,lon2,lat2,delxn
+        integer, intent(in) ::  IMN,JMN
+        real, intent(in) :: glat(JMN)
+        integer, intent(in) ::  zavg(IMN,JMN),zslm(IMN,JMN)
         integer i, j, ist, ien, jst, jen, i1
-        real    HEIGHT
+        real    oro, HEIGHT
         real    xland,xwatr,xl1,xs1,slm,xnsum
         !---figure out ist,ien,jst,jen
         do j = 1, JMN
@@ -4668,7 +4850,6 @@ C
 !! @param[in] glat Latitude of each row of the high-resolution
 !! orography data.
 !! @param[in] zavg The high-resolution orography.
-!! @param[in] zslm  The high-resolution land mask.
 !! @param[in] delxn Resolution of the high-res orography data.
 !! @param[out] xnsum1 The number of high-resolution orography
 !! above the critical value inside a model grid box.
@@ -4677,7 +4858,7 @@ C
 !! @param[out] hc Critical height.
 !! @author GFDL Programmer
       subroutine get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,
-     &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
+     &                   glat,zavg,delxn,xnsum1,xnsum2,HC)
         implicit none
 
         real, intent(out) :: xnsum1,xnsum2,HC
@@ -4685,7 +4866,7 @@ C
         real lon1,lat1,lon2,lat2,oro,delxn
         integer IMN,JMN
         real    glat(JMN)
-        integer zavg(IMN,JMN),zslm(IMN,JMN)
+        integer zavg(IMN,JMN)
         integer i, j, ist, ien, jst, jen, i1
         real    HEIGHT, var
         real    XW1,XW2,slm,xnsum
@@ -4764,7 +4945,6 @@ C
 !! @param[in] glat Latitude of each row of the high-resolution
 !! orography data.
 !! @param[in] zavg The high-resolution orography.
-!! @param[in] zslm  The high-resolution land mask.
 !! @param[in] delxn Resolution of the high-res orography data.
 !! @param[out] xnsum1 The number of high-resolution orography
 !! above the critical value inside a model grid box.
@@ -4773,14 +4953,14 @@ C
 !! @param[in] hc Critical height.
 !! @author GFDL Programmer
       subroutine get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,
-     &                   glat,zavg,zslm,delxn,xnsum1,xnsum2,HC)
+     &                   glat,zavg,delxn,xnsum1,xnsum2,HC)
         implicit none
 
         real, intent(out) :: xnsum1,xnsum2
         real lon1,lat1,lon2,lat2,oro,delxn
         integer IMN,JMN
         real    glat(JMN)
-        integer zavg(IMN,JMN),zslm(IMN,JMN)
+        integer zavg(IMN,JMN)
         integer i, j, ist, ien, jst, jen, i1
         real    HEIGHT, HC
         real    XW1,XW2,slm,xnsum

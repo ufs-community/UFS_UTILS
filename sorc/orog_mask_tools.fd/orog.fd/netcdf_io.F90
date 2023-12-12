@@ -227,3 +227,153 @@
 
       return
     end subroutine netcdf_err
+
+!> Write the land mask file
+!!
+!! @param[in] im 'i' dimension of a model grid tile.
+!! @param[in] jm 'j' dimension of a model grid tile.
+!! @param[in] slm Land-sea mask.
+!! @param[in] land_frac Land fraction.
+!! @param[in] ntiles Number of tiles to output.
+!! @param[in] tile Tile number to output.
+!! @param[in] geolon Longitude on the model grid tile.
+!! @param[in] geolat Latitude on the model grid tile.
+!! @author George Gayno NOAA/EMC
+
+  subroutine write_mask_netcdf(im, jm, slm, land_frac, ntiles, tile, geolon, geolat)
+    implicit none
+    integer, intent(in):: im, jm, ntiles, tile
+    real, intent(in), dimension(im,jm)  :: slm, geolon, geolat, land_frac
+    character(len=128) :: outfile
+    integer            :: error, ncid, i
+    integer            :: header_buffer_val = 16384      
+    integer            :: fsize=65536, inital = 0  
+    integer            :: dim1, dim2
+    integer            :: dim_lon, dim_lat
+    integer            :: id_geolon,id_geolat
+    integer            :: id_slmsk,id_land_frac
+    include "netcdf.inc"
+
+    if(ntiles > 1) then
+      write(outfile, '(a,i4.4,a)') 'out.oro.tile', tile, '.nc'
+    else
+      outfile = "out.oro.nc"
+    endif
+
+    dim1=im
+    dim2=jm
+    write(6,*) ' netcdf dims are: ',dim1, dim2
+      
+    !--- open the file
+    error = NF__CREATE(outfile, IOR(NF_NETCDF4,NF_CLASSIC_MODEL), inital, fsize, ncid)
+    call netcdf_err(error, 'Creating file '//trim(outfile) )
+    !--- define dimension
+    error = nf_def_dim(ncid, 'lon', dim1, dim_lon)
+    call netcdf_err(error, 'define dimension lon for file='//trim(outfile) )
+    error = nf_def_dim(ncid, 'lat', dim2, dim_lat)
+    call netcdf_err(error, 'define dimension lat for file='//trim(outfile) )  
+
+    !--- define field
+!---geolon
+    error = nf_def_var(ncid, 'geolon', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolon)
+    call netcdf_err(error, 'define var geolon for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_geolon, "long_name", 9, "Longitude")
+    call netcdf_err(error, 'define geolon name for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_geolon, "units", 12, "degrees_east")
+    call netcdf_err(error, 'define geolon units for file='//trim(outfile) )
+!---geolat
+    error = nf_def_var(ncid, 'geolat', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolat)
+    call netcdf_err(error, 'define var geolat for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_geolat, "long_name", 8, "Latitude")
+    call netcdf_err(error, 'define geolat name for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_geolat, "units", 13, "degrees_north")
+    call netcdf_err(error, 'define geolat units for file='//trim(outfile) )
+!---slmsk
+    error = nf_def_var(ncid, 'slmsk', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_slmsk)
+    call netcdf_err(error, 'define var slmsk for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_slmsk, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define slmsk coordinates for file='//trim(outfile) )
+!--- land_frac
+    error = nf_def_var(ncid, 'land_frac', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_land_frac)
+    call netcdf_err(error, 'define var land_frac for file='//trim(outfile) )
+    error = nf_put_att_text(ncid, id_land_frac, "coordinates", 13, "geolon geolat")
+    call netcdf_err(error, 'define land_frac coordinates for file='//trim(outfile) )
+
+    error = nf__enddef(ncid, header_buffer_val,4,0,4)
+    call netcdf_err(error, 'end meta define for file='//trim(outfile) )
+      
+    !--- write out data
+    error = nf_put_var_double( ncid, id_geolon, geolon(:dim1,:dim2))
+    call netcdf_err(error, 'write var geolon for file='//trim(outfile) )
+
+    error = nf_put_var_double( ncid, id_geolat, geolat(:dim1,:dim2))
+    call netcdf_err(error, 'write var geolat for file='//trim(outfile) )
+
+    error = nf_put_var_double( ncid, id_slmsk, slm(:dim1,:dim2))
+    call netcdf_err(error, 'write var slmsk for file='//trim(outfile) )
+
+    error = nf_put_var_double( ncid, id_land_frac, land_frac(:dim1,:dim2))
+    call netcdf_err(error, 'write var land_frac for file='//trim(outfile) )
+
+    error = nf_close(ncid) 
+    call netcdf_err(error, 'close file='//trim(outfile) )  
+      
+  end subroutine
+
+ 
+!> Read the land mask file
+!!
+!! @param[in] merge_file path 
+!! @param[in] slm Land-sea mask.
+!! @param[in] land_frac Land fraction.
+!! @param[in] lake_frac Lake fraction
+!! @param[in] im 'i' dimension of a model grid tile.
+!! @param[in] jm 'j' dimension of a model grid tile.
+!! @author George Gayno NOAA/EMC
+
+  subroutine read_mask(merge_file,slm,land_frac,lake_frac,im,jm)
+
+  implicit none
+  include "netcdf.inc"
+
+  character(len=*), intent(in) :: merge_file
+
+  integer, intent(in) :: im, jm
+
+  real, intent(out) :: land_frac(im,jm)
+  real, intent(out) :: lake_frac(im,jm)
+  real, intent(out) :: slm(im,jm)
+
+  integer ncid, error, fsize, id_var
+
+  fsize = 66536
+
+  print*, "merge_file=", trim(merge_file)
+  error=NF__OPEN(merge_file,NF_NOWRITE,fsize,ncid)
+  call netcdf_err(error, 'Open file '//trim(merge_file) )
+
+  error=nf_inq_varid(ncid, 'land_frac', id_var)
+  call netcdf_err(error, 'inquire varid of land_frac')
+  error=nf_get_var_double(ncid, id_var, land_frac)
+  call netcdf_err(error, 'inquire data of land_frac')
+
+  print*,'land_frac ',maxval(land_frac),minval(land_frac)
+
+  error=nf_inq_varid(ncid, 'slmsk', id_var)
+  call netcdf_err(error, 'inquire varid of slmsk')
+  error=nf_get_var_double(ncid, id_var, slm)
+  call netcdf_err(error, 'inquire data of slmsk')
+
+  print*,'slmsk ',maxval(slm),minval(slm)
+
+  error=nf_inq_varid(ncid, 'lake_frac', id_var)
+  call netcdf_err(error, 'inquire varid of lake_frac')
+  error=nf_get_var_double(ncid, id_var, lake_frac)
+  call netcdf_err(error, 'inquire data of lake_frac')
+
+  print*,'lake_frac ',maxval(lake_frac),minval(lake_frac)
+
+  error = nf_close(ncid) 
+  print*,'bot of read_mask'
+
+  end subroutine
