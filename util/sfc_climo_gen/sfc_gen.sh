@@ -6,9 +6,9 @@
 #
 # Set the following variables:
 #
-# res      - Grid resolution. Example: 384.
+# res      - Grid resolution. Example: 384 or 768.
 #
-# ocn      - Ocean grid resolution. Example: 025.
+# ocn      - Ocean mask resolution. Example 025 or 100.
 #            Comment out to use uncoupled grids.
 #
 # FIX_FV3  - Location of the pre-existing 'grid' and 'orography'
@@ -17,23 +17,22 @@
 #
 #            The required files are:
 #
-#            'mosaic' file - C${res}_mosaic.nc (Note: 'res' without
-#                                               the 'mx' extension.)
+#            'mosaic' file - C${res}_mosaic.nc
 #
 #            'grid' files - C${res}_grid.tile7.halo${HALO}.nc (regional grids).
 #                           C${res}_grid.tile[1-6].nc (global grids).
 #          
-#            'orog' files - When $ocn is not set:
+#            'orog' files - When $ocn is set:
+#                           - C${res}.mx${ocn}_oro_data.tile[1-6].nc (global grids).
+#
+#                           When $ocn is not set: 
 #                           - C${res}_oro_data.tile7.halo${HALO}.nc (regional grids).
 #                           - C${res}_oro_data.tile[1-6].nc (global grids).
-#
-#                           When $ocn is set:
-#                           - C${res}.mx${ocn}_oro_data.tile[1-6].nc (global grids).
 #
 # GRIDTYPE - set to 'regional' for regional grids. Otherwise,
 #            comment out.
 #
-# FIX_REG  - For regional grids. Hold links to the 'grid' and 'orog' files
+# FIX_REG  - For regional grids. Holds links to the 'grid' and 'orog' files
 #            with names expected by the program.
 #
 # HALO     - The number of halo rows/cols. Only for regional grids.

@@ -15,11 +15,6 @@ module load build.$target.$compiler
 module list
 
 # Needed for NDATE utility
-module load license_intel/S4
-module use /data/prod/hpc-stack/modulefiles/stack
-module load hpc/1.1.0
-module load hpc-intel/18.0.4
-module load hpc-impi/18.0.4
 module load prod_util/1.2.2
 
 PROJECT_CODE=star
