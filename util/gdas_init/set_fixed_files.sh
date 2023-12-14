@@ -1,23 +1,13 @@
 #!/bin/bash
 
 #---------------------------------------------------------------------------
-# Set directory names and file names for orog data
-# The old and new (support fractional grid) orog data have different file names
+# Set directory names and file names for orog data.
 #---------------------------------------------------------------------------
 
-if [ "${FRAC_ORO:-"no"}" = "yes" ]; then
-  if  [ ${CTAR} == 'C48' ] ; then
-    OCNRES='500'
-  elif [ ${CTAR} == 'C96' ] ; then
-    OCNRES='100'
-  elif [ ${CTAR} == 'C192' ] ; then
-    OCNRES='050'
-  elif [ ${CTAR} == 'C384' ] || [ ${CTAR} == 'C768' ] || [ ${CTAR} == 'C1152' ]; then
-    OCNRES='025'
-  fi
-  ORO_DIR="${CTAR}"
-  ORO_NAME="${CTAR}.mx${OCNRES}_oro_data"
-else
+if [ -z "${OCNRES}" ]; then  # for uncoupled runs.
   ORO_DIR="${CTAR}"
   ORO_NAME="${CTAR}_oro_data"
+else                         # for coupled runs.
+  ORO_DIR="${CTAR}"
+  ORO_NAME="${CTAR}.mx${OCNRES}_oro_data"
 fi
