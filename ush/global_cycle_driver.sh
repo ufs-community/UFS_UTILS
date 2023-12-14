@@ -9,6 +9,7 @@ set -eux
 #-------------------------------------------------------------------------------------------------
 
 export CASE=${CASE:-C768}                    # resolution of tile: 48, 96, 192, 384, 768, 1152, 3072
+ocn=${ocn:-""}                               # ocean grid resolution: 025, 100, etc.
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...
 export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
 export COMPONENT=${COMPONENT:-atmos}
@@ -80,7 +81,11 @@ for n in $(seq 1 $ntiles); do
   ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
 
   ln -fs $FIXfv3/C${CRES}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
-  ln -fs $FIXfv3/C${CRES}/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+  if [ -z "${ocn}" ];then
+    ln -fs $FIXfv3/C${CRES}/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+  else
+    ln -fs $FIXfv3/C${CRES}/C${CRES}.mx${ocn}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+  fi
   if [[ "$DO_SNO_INC" == ".true." ]] ; then  
         ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/xainc.00$n
   fi
