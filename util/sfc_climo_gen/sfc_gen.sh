@@ -9,7 +9,7 @@
 # res      - Grid resolution. Example: 384 or 768.
 #
 # ocn      - Ocean mask resolution. Example 025 or 100.
-#            Comment out to use uncoupled grids.
+#            Comment out to use uncoupled 'orog' files.
 #
 # FIX_FV3  - Location of the pre-existing 'grid' and 'orography'
 #            files. Defaults to ${BASE_DIR}/fix/orog/C${res}, where
