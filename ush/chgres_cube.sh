@@ -17,6 +17,13 @@ set -eux
 CRES=${CRES:-96}
 
 #----------------------------------------------------------------------------
+# Resolution of ocean grid. When declared, use the orography files
+# for coupled model runs. Example: 025, 050, 100.
+#----------------------------------------------------------------------------
+
+ocn=${ocn:-""}
+
+#----------------------------------------------------------------------------
 # Set up environment paths.
 #
 # HOMEufs - Location of root ufs_utils directory.
@@ -175,9 +182,15 @@ MOSAIC_FILE_TARGET_GRID=${MOSAIC_FILE_TARGET_GRID:-${FIXfv3}/C${CRES}_mosaic.nc}
 
 OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID:-NULL}
 if [ $OROG_FILES_TARGET_GRID == NULL ]; then
-  OROG_FILES_TARGET_GRID='C'${CRES}'_oro_data.tile1.nc","C'${CRES}'_oro_data.tile2.nc"'
-  OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile3.nc","C'${CRES}'_oro_data.tile4.nc"'
-  OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile5.nc","C'${CRES}'_oro_data.tile6.nc'
+  if [ -z "${ocn}" ];then
+    OROG_FILES_TARGET_GRID='C'${CRES}'_oro_data.tile1.nc","C'${CRES}'_oro_data.tile2.nc"'
+    OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile3.nc","C'${CRES}'_oro_data.tile4.nc"'
+    OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}'_oro_data.tile5.nc","C'${CRES}'_oro_data.tile6.nc'
+  else
+    OROG_FILES_TARGET_GRID='C'${CRES}.mx${ocn}'_oro_data.tile1.nc","C'${CRES}.mx${ocn}'_oro_data.tile2.nc"'
+    OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}.mx${ocn}'_oro_data.tile3.nc","C'${CRES}.mx${ocn}'_oro_data.tile4.nc"'
+    OROG_FILES_TARGET_GRID=${OROG_FILES_TARGET_GRID}',"C'${CRES}.mx${ocn}'_oro_data.tile5.nc","C'${CRES}.mx${ocn}'_oro_data.tile6.nc'
+  fi
 fi
 
 THOMPSON_AEROSOL_FILE=${THOMPSON_AEROSOL_FILE:-NULL}
