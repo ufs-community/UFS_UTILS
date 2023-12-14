@@ -6,7 +6,9 @@
 #
 # Set the following variables:
 #
-# res      - Grid resolution. Example: 384 or 384.mx025.
+# res      - Grid resolution. Example: 384 or 768.
+#
+# ocn      - Ocean mask resolution. Example 025 or 100.
 #
 # FIX_FV3  - Location of the pre-existing 'grid' and 'orography'
 #            files. Defaults to ${BASE_DIR}/fix/orog/C${res}, where
@@ -14,20 +16,22 @@
 #
 #            The required files are:
 #
-#            'mosaic' file - C${res}_mosaic.nc (Note: 'res' without
-#                                               the 'mx' extension.)
+#            'mosaic' file - C${res}_mosaic.nc
 #
 #            'grid' files - C${res}_grid.tile7.halo${HALO}.nc (regional grids).
 #                           C${res}_grid.tile[1-6].nc (global grids).
-#                           Note: 'res' without the 'mx' extension.
 #          
-#            'orog' files - C${res}_oro_data.tile7.halo${HALO}.nc (regional grids).
-#                           C${res}_oro_data.tile[1-6].nc (global grids).
+#            'orog' files - When $ocn is set:
+#                           - C${res}.mx${ocn}_oro_data.tile[1-6].nc (global grids).
+#
+#                           When $ocn is not set: 
+#                           - C${res}_oro_data.tile7.halo${HALO}.nc (regional grids).
+#                           - C${res}_oro_data.tile[1-6].nc (global grids).
 #
 # GRIDTYPE - set to 'regional' for regional grids. Otherwise,
 #            comment out.
 #
-# FIX_REG  - For regional grids. Hold links to the 'grid' and 'orog' files
+# FIX_REG  - For regional grids. Holds links to the 'grid' and 'orog' files
 #            with names expected by the program.
 #
 # HALO     - The number of halo rows/cols. Only for regional grids.
@@ -65,7 +69,8 @@
 
 set -x
 
-export res=768.mx025
+export res=768
+export ocn=025
 
 #HALO=4
 #export GRIDTYPE=regional
@@ -76,7 +81,7 @@ export veg_type_src="viirs.v3.igbp.30s"
 export soil_type_src="bnu.v3.30s"
 
 export WORK_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/work.sfc
-export SAVE_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/sfc.C${res}
+export SAVE_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/sfc.save
 
 export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
@@ -101,8 +106,7 @@ if [[ "$GRIDTYPE" = "regional" ]]; then
   HALO=$(( $HALO + 1 ))
   export HALO
 else
-  res2=${res//".mx"*}
-  export mosaic_file=$FIX_FV3/C${res2}_mosaic.nc
+  export mosaic_file=$FIX_FV3/C${res}_mosaic.nc
 fi
 
 export input_sfc_climo_dir=${BASE_DIR}/fix/sfc_climo
