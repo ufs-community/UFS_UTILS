@@ -45,8 +45,8 @@
 #                always work. Contact george.gayno@noaa.gov
 #                if you encounter problems.
 # OCNRES       - Ocean grid resolution. To use the 'orog'
-#                files for the coupled model, set to '025',
-#                '050', etc. Otherwise, comment out.
+#                files for the coupled model, set to 025,
+#                050, 100 or 500. Otherwise, comment out.
 #
 #-----------------------------------------------------------
 

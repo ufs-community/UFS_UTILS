@@ -18,7 +18,7 @@ CRES=${CRES:-96}
 
 #----------------------------------------------------------------------------
 # Resolution of ocean grid. When declared, use the orography files
-# for coupled model runs. Example: 025, 050, 100.
+# for coupled model runs. Choices are: 025, 050, 100 or 500.
 #----------------------------------------------------------------------------
 
 ocn=${ocn:-""}

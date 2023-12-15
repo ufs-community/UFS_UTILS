@@ -9,7 +9,7 @@ set -eux
 #-------------------------------------------------------------------------------------------------
 
 export CASE=${CASE:-C768}                    # resolution of tile: 48, 96, 192, 384, 768, 1152, 3072
-ocn=${ocn:-""}                               # ocean grid resolution: 025, 100, etc.
+ocn=${ocn:-""}                               # ocean grid resolution: 025, 050, 100 or 500.
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...
 export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
 export COMPONENT=${COMPONENT:-atmos}
