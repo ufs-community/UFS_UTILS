@@ -42,22 +42,22 @@ contains
     if(trim(res) .eq. '500')then
        ndest = 1
        allocate(destgrds(ndest))
-       destgrds = (/'5p0 '/)
+       destgrds = (/'5p00'/)
     end if
     if(trim(res) .eq. '100')then
        ndest = 2
        allocate(destgrds(ndest))
-       destgrds = (/'5p0 ', '1p0 '/)
+       destgrds = (/'5p00', '1p00'/)
     end if
     if(trim(res) .eq. '050')then
        ndest = 3
        allocate(destgrds(ndest))
-       destgrds = (/'5p0 ', '1p0 ', '0p5 '/)
+       destgrds = (/'5p00', '1p00', '0p50'/)
     end if
     if(trim(res) .eq. '025')then
        ndest = 4
        allocate(destgrds(ndest))
-       destgrds = (/'5p0 ', '1p0 ', '0p5 ', '0p25'/)
+       destgrds = (/'5p00', '1p00', '0p50', '0p25'/)
     end if
 
     !---------------------------------------------------------------------
