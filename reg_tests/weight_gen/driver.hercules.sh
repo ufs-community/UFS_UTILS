@@ -50,8 +50,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-#TODO Update to official location when testing is complete
-#export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/hercules/reg_tests/weight_gen
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/weight_gen
 export HOMEreg=/work/noaa/global/dhuber/noscrub/ufs_utils/reg_tests/weight_gen
 export HOMEufs=$PWD/../..
 

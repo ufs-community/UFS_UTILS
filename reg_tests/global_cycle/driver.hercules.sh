@@ -43,9 +43,7 @@ fi
 
 export DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-#TODO Update to official location when testing is complete
-#export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/hercules/reg_tests/global_cycle
-export HOMEreg=/work/noaa/global/dhuber/noscrub/ufs_utils/reg_tests/global_cycle
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 
