@@ -10,7 +10,7 @@ spack:
   - g2@3.4.5
   - ip@4.4.0 precision=d
   - nemsio@2.5.4
-  - sp@2.3.3
+  - sp@2.5.0
   - w3emc@2.10.0
   - sfcio@1.4.1
   - sigio@2.3.2
