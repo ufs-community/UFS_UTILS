@@ -19,4 +19,4 @@ spack:
   - esmf@8.4.2~debug~xerces+external-parallelio
   view: true
   concretizer:
-    unify: true
+    unify: when_possible
