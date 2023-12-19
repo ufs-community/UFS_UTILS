@@ -87,7 +87,7 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
 elif [[ "$(hostname)" =~ "Orion" ]]; then
     target="orion"
     module purge
-elif [[ "$(hostname)" =~ "hercules" || "$(hostname)" =~ "hercules" ]]; then
+elif [[ "$(hostname)" =~ "hercules" || "$(hostname)" =~ "Hercules" ]]; then
     target="hercules"
     module purge
 elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
