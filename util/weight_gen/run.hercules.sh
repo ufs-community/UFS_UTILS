@@ -11,7 +11,7 @@
 
 #-------------------------------------------------------------------------------
 #
-# Run the weight_gen program on Orion.
+# Run the weight_gen program on Hercules.
 #
 # Set WORK_DIR to your working directory.
 #
