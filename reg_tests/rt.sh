@@ -73,8 +73,8 @@ cd fix
 
 cd ../reg_tests
 
-#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] || [[ $target == "wcoss2" ]] ; then
-if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] ; then
+#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] || [[ $target == "hercules" ]] || [[ $target == "wcoss2" ]] ; then
+if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] || [[ $target == "hercules" ]] ; then
 
   cd cpld_gridgen
   export ACCOUNT=$PROJECT_CODE
@@ -116,7 +116,7 @@ done
 
 for dir in weight_gen ice_blend; do
     cd $dir
-    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] ; then
+    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] || [[ $target == "hercules" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss2" ]] ; then
         qsub -v WORK_DIR ./driver.$target.sh
