@@ -10,7 +10,8 @@
 #
 # Invoke the script with no arguments.  A set of tests will
 # be submitted to run in parallel. To check the queue, type:
-# "squeue -u $LOGNAME".
+#
+# $ sacctmgr show associations where user=$USER format=account%20,qos%50.
 #
 # Log output from each test will be placed in its own LOG_FILE.  
 # Once the suite has completed, a summary is placed in SUM_FILE.
