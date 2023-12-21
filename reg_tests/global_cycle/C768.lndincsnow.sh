@@ -36,6 +36,8 @@ export LATB=1536
 
 export FIXgsm=$BASE_GSM/fix/am
 
+export FIXfv3=$HOMEreg/fix
+
 export DONST="NO"
 export use_ufo=.true.
 
