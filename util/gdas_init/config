@@ -44,9 +44,6 @@
 #                or incomplete. So this option may not
 #                always work. Contact george.gayno@noaa.gov
 #                if you encounter problems.
-# OCNRES       - Ocean grid resolution. To use the 'orog'
-#                files for the coupled model, set to 025,
-#                050, 100 or 500. Otherwise, comment out.
 #
 #-----------------------------------------------------------
 
@@ -68,8 +65,6 @@ CDUMP=gdas
 
 CRES_HIRES=C192
 CRES_ENKF=C96
-
-OCNRES=100
 
 UFS_DIR=$PWD/../..
 
@@ -115,5 +110,5 @@ else
 
 fi
 
-export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF OCNRES
+export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
 export LEVS gfs_ver EXEC_DIR GDAS_INIT_DIR
