@@ -21,6 +21,8 @@
 #                               for regional grid.
 # mosaic_file                   Path/name of mosaic file.
 # res                           Resolution of cubed-sphere grid
+# ocn                           Resolution of ocean grid. When declared,
+#                               use the 'orog' files for the coupled model.
 # SAVE_DIR                      Directory where output is saved
 # WORK_DIR                      Temporary working directory
 # SOIL_TYPE_FILE                Path/name of input soil type data.
@@ -49,8 +51,6 @@ VEG_TYPE_FILE=${VEG_TYPE_FILE:-${input_sfc_climo_dir}/vegetation_type.${veg_type
 soil_type_src=${soil_type_src:-"statsgo.0.05"}
 SOIL_TYPE_FILE=${SOIL_TYPE_FILE:-${input_sfc_climo_dir}/soil_type.${soil_type_src}.nc}
 
-
-
 if [ ! -d $SAVE_DIR ]; then
   mkdir -p $SAVE_DIR
 fi
@@ -66,11 +66,11 @@ cd $WORK_DIR
 if [[ $GRIDTYPE == "nest" ]] || [[ $GRIDTYPE == "regional" ]] ; then
   the_orog_files='"C'${res}'_oro_data.tile7.nc"'
 else
-	if declare -p ocn &>/dev/null;then	
-		the_orog_files='"C'${res}.mx${ocn}'_oro_data.tile1.nc","C'${res}.mx${ocn}'_oro_data.tile2.nc","C'${res}.mx${ocn}'_oro_data.tile3.nc","C'${res}.mx${ocn}'_oro_data.tile4.nc","C'${res}.mx${ocn}'_oro_data.tile5.nc","C'${res}.mx${ocn}'_oro_data.tile6.nc"'
-	else
-		the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
-	fi
+  if declare -p ocn &>/dev/null;then	
+     the_orog_files='"C'${res}.mx${ocn}'_oro_data.tile1.nc","C'${res}.mx${ocn}'_oro_data.tile2.nc","C'${res}.mx${ocn}'_oro_data.tile3.nc","C'${res}.mx${ocn}'_oro_data.tile4.nc","C'${res}.mx${ocn}'_oro_data.tile5.nc","C'${res}.mx${ocn}'_oro_data.tile6.nc"'
+  else
+     the_orog_files='"C'${res}'_oro_data.tile1.nc","C'${res}'_oro_data.tile2.nc","C'${res}'_oro_data.tile3.nc","C'${res}'_oro_data.tile4.nc","C'${res}'_oro_data.tile5.nc","C'${res}'_oro_data.tile6.nc"'
+  fi
 fi
 
 cat << EOF > ./fort.41

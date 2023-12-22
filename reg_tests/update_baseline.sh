@@ -13,8 +13,8 @@ chmod 755 $base_dir
 
 if [ -d $base_dir_commit ];then
   chmod 777 $base_dir_commit
-  if [ -d $base_dir_commit/fix_sfc ]; then
-    chmod 777 $base_dir_commit/fix_sfc
+  if [ -d $base_dir_commit/sfc ]; then
+    chmod 777 $base_dir_commit/sfc
   fi
   rm -fr $base_dir_commit
 fi
@@ -32,17 +32,17 @@ done
 # The grid_gen tests have a subdirectory for
 # the surface climo fields.
 
-if [ -d ./fix_sfc ]; then
-  mkdir -p $base_dir_commit/fix_sfc
-  cd fix_sfc
+if [ -d ./sfc ]; then
+  mkdir -p $base_dir_commit/sfc
+  cd sfc
   for files in *.nc
   do 
     if [ -f $files ]; then
-      cp $files $base_dir_commit/fix_sfc
-      chmod 444 $base_dir_commit/fix_sfc/$files
+      cp $files $base_dir_commit/sfc
+      chmod 444 $base_dir_commit/sfc/$files
     fi
   done
-  chmod 555 $base_dir_commit/fix_sfc
+  chmod 555 $base_dir_commit/sfc
 fi
 
 chmod 555 $base_dir_commit

@@ -7,7 +7,9 @@
 # Set WORK_DIR to a general working location outside the UFS_UTILS directory.
 # The exact working directory (OUTDIR) will be WORK_DIR/reg_tests/chgres-cube.
 # Set the PROJECT_CODE and QUEUE as appropriate.  To see which projects you 
-# are authorized to use, type "saccount_params".
+# are authorized to use, type:
+#
+#   $ sacctmgr show associations where user-$USER format=account%20,qos%50.
 #
 # Invoke the script with no arguments.  A series of daily-chained
 # consistency tests will be submitted.  To check the queue, type:
@@ -35,7 +37,7 @@ ulimit -s unlimited
 export OUTDIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
 
-PROJECT_CODE="${PROJECT_CODE:-nesdis-rdo2}"
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------

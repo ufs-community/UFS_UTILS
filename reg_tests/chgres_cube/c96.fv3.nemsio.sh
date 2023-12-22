@@ -13,6 +13,7 @@ export DATA=$OUTDIR/c96_fv3_nemsio
 rm -fr $DATA
 
 export FIXfv3=${HOMEreg}/fix/C96
+export FIXsfc=${FIXfv3}/fix_sfc
 export COMIN=${HOMEreg}/input_data/fv3.nemsio
 export ATM_FILES_INPUT=gfs.t12z.atmf000.nemsio
 export SFC_FILES_INPUT=gfs.t12z.sfcf000.nemsio
