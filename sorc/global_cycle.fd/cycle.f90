@@ -407,12 +407,14 @@
 ! READ THE OROGRAPHY AND GRID POINT LAT/LONS FOR THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
+ ALLOCATE(LANDFRAC(LENSFC))
  IF(FRAC_GRID) THEN
    PRINT*,'- RUNNING WITH FRACTIONAL GRID.'
-   ALLOCATE(LANDFRAC(LENSFC))
+!  ALLOCATE(LANDFRAC(LENSFC))
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC,LANDFRAC=LANDFRAC)
  ELSE
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC)
+   LANDFRAC=-999.9
  ENDIF
 
  DO I = 1, IDIM
@@ -715,7 +717,7 @@ ENDIF
    DEALLOCATE(SLMASKL, SLMASKW)
  ENDIF
 
- IF(FRAC_GRID) DEALLOCATE(LANDFRAC)
+!IF(FRAC_GRID) DEALLOCATE(LANDFRAC)
 
 !if (tile_num == 'tile6') then
 !  print*,'remove ice after cycle ', slifcs(434252),sicfcs(434252),sihfcs(434252)
@@ -771,7 +773,7 @@ ENDIF
 !
      CALL ADJUST_NSST(RLA,RLO,SLIFCS,SLIFCS_FG,TSFFCS,SITFCS,SICFCS,SICFCS_FG,&
                     STCFCS,NSST,LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2, &
-                    tf_clm_tile,tf_trd_tile,sal_clm_tile)
+                    tf_clm_tile,tf_trd_tile,sal_clm_tile,landfrac,frac_grid)
    ENDIF
  ENDIF
 
@@ -967,7 +969,8 @@ ENDIF
  SUBROUTINE ADJUST_NSST(RLA,RLO,SLMSK_TILE,SLMSK_FG_TILE,SKINT_TILE,&
                         SICET_TILE,sice_tile,sice_fg_tile,SOILT_TILE,NSST, &
                         LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2, &
-                        tf_clm_tile,tf_trd_tile,sal_clm_tile)
+                        tf_clm_tile,tf_trd_tile,sal_clm_tile,LANDFRAC, &
+                        FRAC_GRID)
 
  USE UTILS
  USE GDSWZD_MOD
@@ -981,7 +984,9 @@ ENDIF
 
  INTEGER, INTENT(IN)      :: LENSFC, LSOIL, IDIM, JDIM
 
- REAL, INTENT(IN)         :: SLMSK_TILE(LENSFC), SLMSK_FG_TILE(LENSFC)
+ LOGICAL, INTENT(IN)      :: FRAC_GRID
+
+ REAL, INTENT(IN)         :: SLMSK_TILE(LENSFC), SLMSK_FG_TILE(LENSFC), LANDFRAC(LENSFC)
  real, intent(in)         :: tf_clm_tile(lensfc),tf_trd_tile(lensfc),sal_clm_tile(lensfc)
  REAL, INTENT(IN)         :: ZSEA1, ZSEA2,sice_tile(lensfc),sice_fg_tile(lensfc)
  REAL, INTENT(IN)         :: RLA(LENSFC), RLO(LENSFC)
@@ -1128,9 +1133,18 @@ ENDIF
 
  allocate(mask_tile(lensfc))
  allocate(mask_fg_tile(lensfc))
-
- MASK_TILE    = NINT(SLMSK_TILE)
- MASK_FG_TILE = NINT(SLMSK_FG_TILE)
+ 
+ IF(.NOT. FRAC_GRID) THEN
+   MASK_TILE    = NINT(SLMSK_TILE)
+   MASK_FG_TILE = NINT(SLMSK_FG_TILE)
+ ELSE
+   MASK_TILE=0
+   WHERE(SICE_TILE > 0.0) MASK_TILE=2
+   WHERE(LANDFRAC == 1.0) MASK_TILE=1
+   MASK_FG_TILE=0
+   WHERE(SICE_FG_TILE > 0.0) MASK_FG_TILE=2
+   WHERE(LANDFRAC == 1.0) MASK_FG_TILE=1
+ ENDIF
 
  IJ_LOOP : DO IJ = 1, LENSFC
 
@@ -1141,6 +1155,9 @@ ENDIF
      print*,'bad ice point ',ij,sice_tile(ij),mask_tile(ij)
    endif
 
+   if (sice_fg_tile(ij) > 0. .and. mask_fg_tile(ij) /= 2) then
+     print*,'bad fg ice point ',ij,sice_fg_tile(ij),mask_fg_tile(ij)
+   endif
 !
 !  when sea ice exists, get salinity dependent water temperature
 !
@@ -1250,7 +1267,9 @@ ENDIF
      SKINT_TILE(IJ) = MIN(SKINT_TILE(IJ), TMAX)
 
      SICET_TILE(IJ)   = SKINT_TILE(IJ)
-     SOILT_TILE(IJ,:) = SKINT_TILE(IJ)
+! Under fractional grids, soilt is used at points with at
+! least some land.
+     IF(.NOT. FRAC_GRID) SOILT_TILE(IJ,:) = SKINT_TILE(IJ)
 
 !----------------------------------------------------------------------
 ! NO NEARBY GSI/GAUSSIAN OPEN WATER POINTS. PERFORM A SPIRAL SEARCH TO
@@ -1313,7 +1332,7 @@ ENDIF
                SKINT_TILE(IJ) = MIN(SKINT_TILE(IJ), TMAX)
 
                SICET_TILE(IJ)   = SKINT_TILE(IJ)
-               SOILT_TILE(IJ,:) = SKINT_TILE(IJ)
+               IF(.NOT. FRAC_GRID) SOILT_TILE(IJ,:) = SKINT_TILE(IJ)
                CYCLE IJ_LOOP
 
              ENDIF ! GSI/Gaussian mask is open water
@@ -1357,7 +1376,7 @@ ENDIF
      SKINT_TILE(IJ) = MIN(SKINT_TILE(IJ), TMAX)
 
      SICET_TILE(IJ)   = SKINT_TILE(IJ)
-     SOILT_TILE(IJ,:) = SKINT_TILE(IJ)
+     IF (.NOT. FRAC_GRID) SOILT_TILE(IJ,:) = SKINT_TILE(IJ)
 
    ENDIF  ! NEARBY GAUSSIAN POINTS ARE OPEN WATER?
 
