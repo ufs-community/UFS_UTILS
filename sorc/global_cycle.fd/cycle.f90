@@ -717,10 +717,10 @@ ENDIF
 
  IF(FRAC_GRID) DEALLOCATE(LANDFRAC)
 
- if (tile_num == 'tile6') then
-   print*,'remove ice after cycle ', slifcs(434252),sicfcs(434252),sihfcs(434252)
-   print*,'add ice after cycle ', slifcs(491001),sicfcs(491001),sihfcs(491001)
- endif
+!if (tile_num == 'tile6') then
+!  print*,'remove ice after cycle ', slifcs(434252),sicfcs(434252),sihfcs(434252)
+!  print*,'add ice after cycle ', slifcs(491001),sicfcs(491001),sihfcs(491001)
+!endif
 
 !--------------------------------------------------------------------------------
 ! IF RUNNING WITH NSST, READ IN GSI FILE WITH THE UPDATED INCREMENTS (ON THE
@@ -1837,6 +1837,7 @@ subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,
 !
 ! read in rtg sst climatology without bitmap (surface mask) for mon1 and mon2
 !
+  print*,'before read_tf_clim_grb',trim(fin_tf_clm)
   call read_tf_clim_grb(trim(fin_tf_clm),tf_clm1,xlats,xlons,nlat,nlon,mon1)
   call read_tf_clim_grb(trim(fin_tf_clm),tf_clm2,xlats,xlons,nlat,nlon,mon2)
 !
