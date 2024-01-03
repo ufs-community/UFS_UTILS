@@ -14,6 +14,7 @@ rm -fr $DATA
 
 export CRES=96
 export FIXfv3=${HOMEreg}/fix/C96
+export FIXsfc=${FIXfv3}/fix_sfc
 export COMIN=${HOMEreg}/input_data/gefs.grib2
 
 export GRIB2_FILE_INPUT=gec00.t06z.pgrb2abf00

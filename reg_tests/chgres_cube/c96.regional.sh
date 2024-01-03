@@ -15,6 +15,7 @@ export DATA=$OUTDIR/c96_regional
 rm -fr $DATA
 
 export FIXfv3=${HOMEreg}/fix/C96.regional
+export FIXsfc=${FIXfv3}/fix_sfc
 export OROG_FILES_TARGET_GRID="C96_oro_data.tile7.nc"
 export COMIN=${HOMEreg}/input_data/fv3.nemsio
 export ATM_FILES_INPUT=gfs.t12z.atmf000.nemsio

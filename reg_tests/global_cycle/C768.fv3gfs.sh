@@ -50,6 +50,8 @@ export FNSLPC=$FIXgsm/global_slope.1x1.grb
 export FNABSC=$FIXgsm/global_mxsnoalb.uariz.t1534.3072.1536.rg.grb
 export FNAISC=$FIXgsm/CFSR.SEAICE.1982.2012.monthly.clim.grb
 
+export FIXfv3=$HOMEreg/fix
+
 export DONST="YES"
 export use_ufo=.true.
 
