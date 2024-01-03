@@ -21,6 +21,7 @@ export FHOUR=00
 export DELTSFC=6
 
 export CASE=C768
+export OCNRES=99999
 
 export COMIN=$HOMEreg/input_data
 export FNTSFA=$COMIN/gdas.t00z.rtgssthr.grb
@@ -32,8 +33,7 @@ export JCAP=1534
 export LONB=3072
 export LATB=1536
 
-export OROFIX=$BASE_GSM/fix/orog/$CASE
-export OROFILE=${CASE}_oro_data
+export OROFIX=$HOMEreg/fix/$CASE
 
 export FIXgsm=$BASE_GSM/fix/am
 
@@ -49,8 +49,6 @@ export FNVMXC=$FIXgsm/global_shdmax.0.144x0.144.grb
 export FNSLPC=$FIXgsm/global_slope.1x1.grb
 export FNABSC=$FIXgsm/global_mxsnoalb.uariz.t1534.3072.1536.rg.grb
 export FNAISC=$FIXgsm/CFSR.SEAICE.1982.2012.monthly.clim.grb
-
-export FIXfv3=$HOMEreg/fix
 
 export DONST="YES"
 export use_ufo=.true.

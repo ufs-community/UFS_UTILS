@@ -23,8 +23,6 @@ export FIXam=${FIXam:-$FIX_DIR/am}
 export OROFIX=${OROFIX:-$FIX_DIR/orog/${CASE}.mx${OCNRES}_frac}
 export FIX_SFC=${FIX_SFC:-$OROFIX/sfc}
 
-OROFILE=${OROFILE:-oro_${CASE}.mx${OCNRES}}
-
 ntiles=${ntiles:-6}
 DONST=${DONST:-"NO"}
 COMIN=${COMIN:-$pwd}
@@ -90,11 +88,11 @@ for n in $(seq 1 $ntiles); do
   chmod 644  $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
   ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
 
-  ln -fs $FIXfv3/C${CRES}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
-  if [ -z "${ocn}" ];then
-    ln -fs $FIXfv3/C${CRES}/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+  ln -fs $OROFIX/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
+  if (( OCNRES > 9999 ));then
+    ln -fs $OROFIX/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
   else
-    ln -fs $FIXfv3/C${CRES}/C${CRES}.mx${ocn}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+    ln -fs $OROFIX/C${CRES}.mx${OCNRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
   fi
 
   if [[ "$DO_SNO_INC" == ".true." ]] ; then  
@@ -103,6 +101,7 @@ for n in $(seq 1 $ntiles); do
 done
 
 $CYCLESH
+
 rc=$?
 if [[ $rc -ne 0 ]] ; then
     echo "***ERROR*** rc= $rc"
