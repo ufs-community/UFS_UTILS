@@ -1,14 +1,14 @@
 help([[
-Load environment to compile UFS_UTILS on S4 using Intel
+Load environment to compile UFS_UTILS on Hercules using Intel
 ]])
 
-prepend_path("MODULEPATH", "/data/prod/jedi/spack-stack/spack-stack-1.5.0/envs/unified-env/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/modulefiles/Core")
 
-stack_intel_ver=os.getenv("stack_intel_ver") or "2021.5.0"
-load(pathJoin("stack-intel", hpc_intel_ver))
+stack_intel_ver=os.getenv("stack_intel_ver") or "2021.9.0"
+load(pathJoin("stack-intel", stack_intel_ver))
 
-stack_impi_ver=os.getenv("stack_impi_ver") or "2021.5.0"
-load(pathJoin("stack-intel-oneapi-mpi", impi_ver))
+stack_impi_ver=os.getenv("stack_impi_ver") or "2021.9.0"
+load(pathJoin("stack-intel-oneapi-mpi", stack_impi_ver))
 
 cmake_ver=os.getenv("cmake_ver") or "3.23.1"
 load(pathJoin("cmake", cmake_ver))
