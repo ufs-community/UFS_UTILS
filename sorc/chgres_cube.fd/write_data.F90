@@ -2099,9 +2099,9 @@
      error = nf90_put_att(ncid, id_sheleg_land, "units", "none")
      call netcdf_err(error, 'DEFINING WEASD/SHELEG AT LAND UNITS' )
      error = nf90_put_att(ncid, id_sheleg_land, "coordinates", "geolon geolat")
-     call netcdf_err(error, 'DEFINING SHELEG AT LAND COORD' )
+     call netcdf_err(error, 'DEFINING WEASD/SHELEG AT LAND COORD' )
      error = nf90_put_att(ncid, id_sheleg_land, "missing_value", missing)
-     call netcdf_err(error, 'DEFINING SHELEG AT LAND MISSING FLAG' )
+     call netcdf_err(error, 'DEFINING WEASD/SHELEG AT LAND MISSING FLAG' )
 
      error = nf90_def_var(ncid, 'tg3', NF90_DOUBLE, (/dim_x,dim_y,dim_time/), id_tg3)
      call netcdf_err(error, 'DEFINING TG3' )
