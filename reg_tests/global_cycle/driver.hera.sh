@@ -30,7 +30,7 @@ module list
 WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-QUEUE="${QUEUE:-debug}"
+QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -60,8 +60,6 @@ export DATA="${DATA_DIR}/test1"
 export COMOUT=$DATA
 TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.fv3gfs \
       -o $LOG_FILE -e $LOG_FILE ./C768.fv3gfs.sh)
-
-exit
 
 LOG_FILE=consistency.log02
 export DATA="${DATA_DIR}/test2"

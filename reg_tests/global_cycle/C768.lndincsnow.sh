@@ -22,6 +22,7 @@ export FHOUR=00
 export DELTSFC=6
 
 export CASE=C768
+export OCNRES=99999
 
 export COMIN=$HOMEreg/input_data
 export FNTSFA=$COMIN/gdas.t00z.rtgssthr.grb
@@ -34,11 +35,8 @@ export JCAP=1534
 export LONB=3072
 export LATB=1536
 
-export OROFIX=$BASE_GSM/fix/orog/$CASE
-export OROFILE=${CASE}_oro_data
+export OROFIX=$HOMEreg/fix/$CASE
 export FIXgsm=$BASE_GSM/fix/am
-
-export FIXfv3=$HOMEreg/fix
 
 export DONST="NO"
 export use_ufo=.true.
