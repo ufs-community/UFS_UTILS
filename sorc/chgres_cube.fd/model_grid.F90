@@ -1406,7 +1406,6 @@
  call netcdf_err(error, 'reading orog_raw')
  land_frac = dummy
 
-!print*,'land frac ',dummy(idim/2,:)
  error = nf90_close(ncid)
 
  deallocate (dummy)
@@ -1438,6 +1437,7 @@
  if (ESMF_FieldIsCreated(longitude_w_input_grid)) then
    call ESMF_FieldDestroy(longitude_w_input_grid, rc=rc)
  endif
+ call ESMF_FieldDestroy(land_frac_target_grid, rc=rc)
  call ESMF_FieldDestroy(landmask_target_grid, rc=rc)
  call ESMF_FieldDestroy(latitude_target_grid, rc=rc)
  if (ESMF_FieldIsCreated(latitude_s_target_grid)) then
