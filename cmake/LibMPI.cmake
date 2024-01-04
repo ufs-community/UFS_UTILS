@@ -94,6 +94,17 @@ function (platform_name RETURN_VARIABLE)
 
     set (${RETURN_VARIABLE} "orion" PARENT_SCOPE)
 
+  elseif (SITENAME MATCHES "^Hercules-login-1.HPC.MsState.Edu" OR
+      SITENAME MATCHES "^Hercules-login-2.HPC.MsState.Edu" OR
+      SITENAME MATCHES "^Hercules-login-3.HPC.MsState.Edu" OR
+      SITENAME MATCHES "^Hercules-login-4.HPC.MsState.Edu" OR
+      SITENAME MATCHES "^hercules-login-1.hpc.msstate.edu" OR
+      SITENAME MATCHES "^hercules-login-2.hpc.msstate.edu" OR
+      SITENAME MATCHES "^hercules-login-3.hpc.msstate.edu" OR
+      SITENAME MATCHES "^hercules-login-4.hps.msstate.edu")
+
+    set (${RETURN_VARIABLE} "hercules" PARENT_SCOPE)
+
   elseif (SITENAME MATCHES "^cheyenne1.cheyenne.ucar.edu" OR
       SITENAME MATCHES "^cheyenne1.cheyenne.ucar.edu" OR
       SITENAME MATCHES "^cheyenne2.cheyenne.ucar.edu" OR

@@ -13,6 +13,7 @@ export DATA=$OUTDIR/c96_fv3_restart
 rm -fr $DATA
 
 export FIXfv3=${HOMEreg}/fix/C96
+export FIXsfc=${FIXfv3}/fix_sfc
 export COMIN=${HOMEreg}/input_data/fv3.restart
 export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export INPUT_TYPE='restart'

@@ -13,6 +13,7 @@ export DATA=$OUTDIR/c96_fv3_netcdf
 rm -fr $DATA
 
 export FIXfv3=${HOMEreg}/fix/C96
+export FIXsfc=${FIXfv3}/fix_sfc
 export COMIN=${HOMEreg}/input_data/fv3.netcdf
 export ATM_FILES_INPUT=gfs.t00z.atmf000.nc
 export SFC_FILES_INPUT=gfs.t00z.sfcf000.nc

@@ -35,6 +35,8 @@ export LATB=1536
 export FIXgsm=$BASE_GSM/fix/am
 export FNAISC=$FIXgsm/CFSR.SEAICE.1982.2012.monthly.clim.grb
 
+export FIXfv3=$HOMEreg/fix
+
 export DONST="YES"
 export use_ufo=.true.
 

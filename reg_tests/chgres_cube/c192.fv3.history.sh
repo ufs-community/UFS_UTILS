@@ -14,6 +14,7 @@ rm -fr $DATA
 
 export CRES=192
 export FIXfv3=${HOMEreg}/fix/C192
+export FIXsfc=${FIXfv3}/fix_sfc
 export COMIN=${HOMEreg}/input_data/fv3.history
 
 # Pay attention to the quotes.  Dont start/end with double quote.

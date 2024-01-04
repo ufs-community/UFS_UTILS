@@ -38,7 +38,7 @@
  character(len=500), public      :: sfc_files_input_grid(6) = "NULL" !<  File names containing input surface data. Not used for 'grib2' input type.
  character(len=500), public      :: vcoord_file_target_grid = "NULL" !<  Vertical coordinate definition file.
  character(len=500), public      :: thomp_mp_climo_file= "NULL" !<  Path/name to the Thompson MP climatology file.
- character(len=12),  public      :: cres_target_grid = "NULL" !<  Target grid resolution, i.e., C768.
+ character(len=15),  public      :: cres_target_grid = "NULL" !<  Target grid resolution, i.e., C768.
  character(len=500), public      :: atm_weight_file="NULL" !<  File containing pre-computed weights to horizontally interpolate atmospheric fields.
  character(len=25),  public      :: input_type="restart" !< Input data type: 
 !!                                 - "restart" for fv3 tiled warm restart
@@ -216,14 +216,14 @@
  orog_dir_input_grid = trim(orog_dir_input_grid) // '/'
 
 !-------------------------------------------------------------------------
-! Determine CRES of target grid from the name of the mosaic file.
+! Determine CRES of target grid from the name of the orography file.
 !-------------------------------------------------------------------------
 
- is = index(orog_files_target_grid(1), "C")
- ie = index(orog_files_target_grid(1), "_") - 1
+ is = 1
+ ie = index(orog_files_target_grid(1), "_oro_") - 1
 
- if (is == 0 .or. ie == 0) then
-   call error_handler("CANT DETERMINE CRES FROM MOSAIC FILE.", 1)
+ if (ie == 0) then
+   call error_handler("CANT DETERMINE CRES FROM OROG FILE.", 1)
  endif
 
  cres_target_grid = orog_files_target_grid(1)(is:ie)

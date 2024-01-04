@@ -37,7 +37,7 @@ source $GDAS_INIT_DIR/set_fixed_files.sh
 cat << EOF > fort.41
 
 &config
- fix_dir_target_grid="${FIX_ORO}/${ORO_DIR}/fix_sfc"
+ fix_dir_target_grid="${FIX_ORO}/${ORO_DIR}/sfc"
  mosaic_file_target_grid="${FIX_ORO}/${ORO_DIR}/${CTAR}_mosaic.nc"
  orog_dir_target_grid="${FIX_ORO}/${ORO_DIR}"
  orog_files_target_grid="${ORO_NAME}.tile1.nc","${ORO_NAME}.tile2.nc","${ORO_NAME}.tile3.nc","${ORO_NAME}.tile4.nc","${ORO_NAME}.tile5.nc","${ORO_NAME}.tile6.nc"

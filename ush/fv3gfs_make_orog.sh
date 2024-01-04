@@ -99,6 +99,13 @@ cp $executable .
 echo  $mtnres $lonb $latb $jcap $NR $NF1 $NF2 $efac $blat > INPS
 echo $OUTGRID >> INPS
 echo $orogfile >> INPS
+if [ -z ${ocn+x} ]; then
+  echo ".false." >> INPS
+else
+  echo ".true." >> INPS
+fi 
+echo "none" >> INPS
+
 cat INPS
 time $executable < INPS
 
