@@ -13,8 +13,9 @@ export DATA=$OUTDIR/c192_gfs_grib2
 rm -fr $DATA
 
 export CRES=192
-export FIXfv3=${HOMEreg}/fix/C192
-export FIXsfc=${FIXfv3}/fix_sfc
+export ocn=100
+export FIXfv3=${HOMEreg}/fix/C${CRES}
+
 export COMIN=${HOMEreg}/input_data/gfs.grib2
 
 export GRIB2_FILE_INPUT=gfs.t00z.pgrb2.0p50.f000
