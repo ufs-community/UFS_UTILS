@@ -201,7 +201,7 @@
  call calc_liq_soil_moisture
 
 !---------------------------------------------------------------------------------------------
-! Set z0 at land and sea ice.
+! Set z0 at water and sea ice.
 !---------------------------------------------------------------------------------------------
 
  call roughness
@@ -2623,7 +2623,7 @@
  enddo
  enddo
 
- print*,"- SET NON-ICE FLAG FOR TARGET GRID ICE TEMPERATURE."
+ print*,"- SET NON-ICE FLAG FOR TARGET GRID ICE COLUMN TEMPERATURE."
  call ESMF_FieldGet(ice_temp_target_grid, &
                      farrayPtr=ice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
