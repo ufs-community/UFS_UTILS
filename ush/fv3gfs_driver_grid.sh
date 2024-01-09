@@ -636,7 +636,7 @@ The following parameters were used
         soil_type=$soil_type_src
 	lake_data_srce=$lake_data_srce
         target_lon=$target_lon          # Center longitude of grid
-        target_lat=target_lat           # Center latitude of grid
+        target_lat=$target_lat          # Center latitude of grid
         idim=$idim                      # Dimension of grid in 'i' direction
         jdim=$jdim                      # Dimension of grid in 'j' direction
         delx=$delx                      # Grid spacing (in degrees) in the 'i' direction
