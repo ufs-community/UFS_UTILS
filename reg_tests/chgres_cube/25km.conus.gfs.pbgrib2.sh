@@ -14,7 +14,7 @@ rm -fr $DATA
 
 export CRES=405
 export KMRES=25km
-export FIXfv3=${HOMEreg}/fix.new/RRFS_CONUS_${KMRES}
+export FIXfv3=${HOMEreg}/fix/RRFS_CONUS_${KMRES}
 
 export COMIN=${HOMEreg}/input_data/gfs.pbgrib2
 
