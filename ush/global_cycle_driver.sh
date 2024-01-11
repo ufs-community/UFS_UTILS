@@ -20,7 +20,7 @@ export DMPDIR=${DMPDIR:-$NWPROD}
 export HOMEgfs=${HOMEgfs:-$NWPROD/gfs.v15.0.0}
 export FIX_DIR=${FIX_DIR:-$HOMEgfs/fix}   
 export FIXam=${FIXam:-$FIX_DIR/am}   
-export OROFIX=${OROFIX:-$FIX_DIR/orog/${CASE}.mx${OCNRES}_frac}
+export OROFIX=${OROFIX:-$FIX_DIR/orog/${CASE}}
 export FIX_SFC=${FIX_SFC:-$OROFIX/sfc}
 
 ntiles=${ntiles:-6}
