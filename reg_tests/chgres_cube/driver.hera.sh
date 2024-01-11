@@ -143,7 +143,7 @@ TEST8=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log09
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST09=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.gfssdf.grib2.conus \
+TEST9=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.gfssdf.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.gfssdf.grib2.sh)
 
 #-----------------------------------------------------------------------------
