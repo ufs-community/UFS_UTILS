@@ -34,7 +34,7 @@ module list
 
 ulimit -s unlimited
 
-export OUTDIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
+export OUTDIR="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
 export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
@@ -117,13 +117,13 @@ TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=75G -t 0:15:00 -A 
       --open-mode=append -o $LOG_FILE5 -e $LOG_FILE5 ./c96.gfs.nemsio.sh)
 
 #-----------------------------------------------------------------------------
-# Initialize regional C96 using FV3 gaussian nemsio files.
+# Initialize C96 using GEFS GRIB2 file.
 #-----------------------------------------------------------------------------
 
 LOG_FILE6=${LOG_FILE}06
 export OMP_NUM_THREADS=1  # needs to match cpus-per-task
-TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=75G -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.regional \
-      --open-mode=append -o $LOG_FILE6 -e $LOG_FILE6 ./c96.regional.sh)
+TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=75G -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c96.gefs.grib2 \
+      --open-mode=append -o $LOG_FILE6 -e $LOG_FILE6 ./c96.gefs.grib2.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize global C192 using GFS GRIB2 files.
@@ -216,21 +216,12 @@ TEST16=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=75G -t 0:10:00 -
       --open-mode=append -o $LOG_FILE16 -e $LOG_FILE16 ./25km.conus.gfs.pbgrib2.sh)
 
 #-----------------------------------------------------------------------------
-# Initialize C96 using GEFS GRIB2 file.
-#-----------------------------------------------------------------------------
-
-LOG_FILE17=${LOG_FILE}17
-export OMP_NUM_THREADS=1  # needs to match cpus-per-task
-TEST17=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=75G -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c96.gefs.grib2 \
-      --open-mode=append -o $LOG_FILE17 -e $LOG_FILE17 ./c96.gefs.grib2.sh)
-
-#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE \
-       -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15:$TEST16:$TEST17 << EOF
+       -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14:$TEST15:$TEST16 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF
