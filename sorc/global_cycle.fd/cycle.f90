@@ -630,21 +630,11 @@ ENDIF
 ! REQUIRED ADJUSTMENTS AND QC.
 !--------------------------------------------------------------------------------
 
- if (do_nsst) then
- print*,'ice check 2', tile_num
- do i = 1, lensfc
-   if (sicfcs(i) /= sicfcs_fg(i)) then
-     print*,' ice update ',i,sicfcs(i),sicfcs_fg(i)
-   endif 
- enddo
- endif
-
  IF (DO_NSST) THEN
    IF (NST_FILE == "NULL") THEN
      PRINT*
      PRINT*,"NO GSI FILE.  ADJUST IFD FOR FORMER ICE POINTS."
      DO I = 1, LENSFC
-!      IF (NINT(SLIFCS_FG(I)) == 2 .AND. NINT(SLIFCS(I)) == 0) THEN
        IF (SICFCS_FG(I) > 0.0 .AND. SICFCS(I) == 0) THEN
          NSST%IFD(I) = 3.0
        ENDIF
@@ -1049,16 +1039,6 @@ ENDIF
 
  IJ_LOOP : DO IJ = 1, LENSFC
 
-!  MASK_TILE    = NINT(SLMSK_TILE(IJ))
-!  MASK_FG_TILE = NINT(SLMSK_FG_TILE(IJ))
-
-   if (sice_tile(ij) > 0. .and. mask_tile(ij) /= 2) then
-     print*,'bad ice point ',ij,sice_tile(ij),mask_tile(ij)
-   endif
-
-   if (sice_fg_tile(ij) > 0. .and. mask_fg_tile(ij) /= 2) then
-     print*,'bad fg ice point ',ij,sice_fg_tile(ij),mask_fg_tile(ij)
-   endif
 !
 !  when sea ice exists, get salinity dependent water temperature
 !
@@ -1757,7 +1737,6 @@ subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,
 !
 ! read in rtg sst climatology without bitmap (surface mask) for mon1 and mon2
 !
-  print*,'before read_tf_clim_grb',trim(fin_tf_clm)
   call read_tf_clim_grb(trim(fin_tf_clm),tf_clm1,xlats,xlons,nlat,nlon,mon1)
   call read_tf_clim_grb(trim(fin_tf_clm),tf_clm2,xlats,xlons,nlat,nlon,mon2)
 !
