@@ -334,7 +334,6 @@
  INTEGER             :: I_INDEX(LENSFC), J_INDEX(LENSFC)
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
-! integer :: ichk, jchk, ijchk
 
  LOGICAL             :: IS_NOAHMP
  INTEGER             :: LSM
@@ -348,7 +347,6 @@
  REAL                :: ALBFCS(LENSFC,4), TG3FCS(LENSFC)
  REAL                :: CNPFCS(LENSFC), SMCFCS(LENSFC,LSOIL)
  REAL                :: STCFCS(LENSFC,LSOIL), SLIFCS(LENSFC)
-!REAL                :: STCFCS_SAVE(LENSFC,LSOIL)
  REAL                :: AISFCS(LENSFC), F10M(LENSFC)
  REAL                :: VEGFCS(LENSFC), VETFCS(LENSFC)
  REAL                :: SOTFCS(LENSFC), ALFFCS(LENSFC,2)
@@ -410,7 +408,6 @@
  ALLOCATE(LANDFRAC(LENSFC))
  IF(FRAC_GRID) THEN
    PRINT*,'- RUNNING WITH FRACTIONAL GRID.'
-!  ALLOCATE(LANDFRAC(LENSFC))
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC,LANDFRAC=LANDFRAC)
  ELSE
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC)
@@ -502,21 +499,6 @@ ENDIF
                 ABSFCS=ABSFCS,T2M=T2M      ,Q2M=Q2M      ,SLMASK=SLMASK,  &
                 ZSOIL=ZSOIL,   NSST=NSST)
 
-!STCFCS_SAVE = STCFCS
-
-!if (tile_num == 'tile6') then
-!  print*,'remove ice'
-!  slifcs(434252) = 0.
-!  sicfcs(434252) = 0.
-!  sihfcs(434252) = 0.
-!  print*,'add ice'
-!  slifcs(491001) = 2.
-!  sicfcs(491001) = .9
-!  sihfcs(491001) = 1.
-!endif
-
- print*,'is noahmp/fract grid ',is_noahmp, frac_grid
-
  IF (FRAC_GRID .AND. .NOT. IS_NOAHMP) THEN
    print *, 'FATAL ERROR: NOAH lsm update does not work with fractional grids.'
    call MPI_ABORT(MPI_COMM_WORLD, 18, IERR)
@@ -531,21 +513,6 @@ ENDIF
    print *, 'FATAL ERROR: Snow increment update does not work with NOAH_MP.'
    call MPI_ABORT(MPI_COMM_WORLD, 29, IERR)
  ENDIF
-
-!ichk = 282
-!jchk = 362
-!ijchk = (jchk-1) * idim + ichk
-!print*,'chk point after read_data ',tile_num,landfrac(ijchk),slmask(ijchk),vetfcs(ijchk),vegfcs(ijchk)
-
-!print*,'vegfcs check ',maxval(vegfcs),minval(vegfcs)
-!do i=1,lensfc
-!  if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
-!    print*,'bad point 1 ',tile_num,i,landfrac(i),vegfcs(i)
-!  endif
-!  if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
-!    print*,'bad point 2 ',tile_num,i,landfrac(i),vegfcs(i)
-!  endif
-!enddo
 
  IF (IS_NOAHMP) THEN 
         LSM=LSM_NOAHMP
@@ -567,14 +534,6 @@ ENDIF
 
  IF (DO_NSST) THEN
    SICFCS_FG=SICFCS
-   do i=1,lensfc
-     if (slifcs(i) == 2.0 .and. sicfcs(i) < .01) then
-       print*,'bad ice 1 ',i,slifcs(i),sicfcs(i)
-     endif
-     if (slifcs(i) == 0.0 .and. sicfcs(i) > 0.) then
-       print*,'bad ice 2 ',i,slifcs(i),sicfcs(i)
-     endif
-   enddo
    IF (.NOT. DO_SFCCYCLE ) THEN
      PRINT*
      PRINT*,"FIRST GUESS MASK ADJUSTED BY IFD RECORD"
@@ -620,13 +579,6 @@ ENDIF
          ENDIF
        ENDIF
 
-       if(nint(slmaskl(i)) == 1 .and. vegfcs(i) == 0.0) then
-        print*,'bad point 3 ',tile_num,i,landfrac(i),slmaskl(i),vegfcs(i)
-       endif
-       if(nint(slmaskl(i)) == 0 .and. vegfcs(i) > 0.0) then
-        print*,'bad point 4 ',tile_num,i,landfrac(i),slmaskw(i),vegfcs(i)
-       endif
-
      ENDDO
 
    ELSE
@@ -669,60 +621,8 @@ ENDIF
                min_ice, &
                IALB,ISOT,IVEGSRC,TILE_NUM,I_INDEX,J_INDEX)
 
-!  print*,'after call to sfccycle '
-
-!  print*,'chk point after sfccycle ',tile_num,landfrac(ijchk),slmask(ijchk),vetfcs(ijchk),vegfcs(ijchk)
-
-    goto 20
-
-     DO I=1,LENSFC
-       if(nint(slmaskl(i)) == 1 .and. vegfcs(i) == 0.0) then
-          if (nint(vetfcs(i)) /= 15) then
-        print*,'bad point 5 ',tile_num,i,landfrac(i),slmaskl(i),vegfcs(i)
-          endif
-       endif
-!       print*,'in loop after first if'
-       if(nint(slmaskl(i)) == 0 .and. vegfcs(i) > 0.0) then
-        print*,'bad point 6 ',tile_num,i,landfrac(i),slmaskw(i),vegfcs(i)
-       endif
-       if(landfrac(i) > 0.0_kind_io8 .and. vegfcs(i) == 0.0) then
-          if (nint(vetfcs(i)) /= 15) then
-        print*,'bad point 7 ',tile_num,i,landfrac(i),vegfcs(i)
-          endif
-       endif
-       if(landfrac(i) == 0.0_kind_io8 .and. vegfcs(i) > 0.0) then
-        print*,'bad point 8 ',tile_num,i,landfrac(i),vegfcs(i)
-       endif
-       if(nint(slmaskw(i)) == 1 .and. sicfcs(i) > 0.0) then
-        print*,'bad ice point ',tile_num,i,landfrac(i),sicfcs(i)
-       endif
-
-!      if(landfrac(i) > 0.0_kind_io8 .and. abs(stcfcs(i,1)-stcfcs_save(i,1)) > 0.001) then
-!       print*,'bad stc 1 point ',tile_num,i,stcfcs(i,1),stcfcs_save(i,1)
-!      endif
-!      if(landfrac(i) > 0.0_kind_io8 .and. abs(stcfcs(i,2)-stcfcs_save(i,2)) > 0.001) then
-!       print*,'bad stc 2 point ',tile_num,i,stcfcs(i,2),stcfcs_save(i,2)
-!      endif
-!      if(landfrac(i) > 0.0_kind_io8 .and. abs(stcfcs(i,3)-stcfcs_save(i,3)) > 0.001) then
-!       print*,'bad stc 3 point ',tile_num,i,stcfcs(i,3),stcfcs_save(i,3)
-!      endif
-!      if(landfrac(i) > 0.0_kind_io8 .and. abs(stcfcs(i,4)-stcfcs_save(i,4)) > 0.001) then
-!       print*,'bad stc 4 point ',tile_num,i,stcfcs(i,4),stcfcs_save(i,4)
-!      endif
-
-     ENDDO
-
- 20 continue
-
    DEALLOCATE(SLMASKL, SLMASKW)
  ENDIF
-
-!IF(FRAC_GRID) DEALLOCATE(LANDFRAC)
-
-!if (tile_num == 'tile6') then
-!  print*,'remove ice after cycle ', slifcs(434252),sicfcs(434252),sihfcs(434252)
-!  print*,'add ice after cycle ', slifcs(491001),sicfcs(491001),sihfcs(491001)
-!endif
 
 !--------------------------------------------------------------------------------
 ! IF RUNNING WITH NSST, READ IN GSI FILE WITH THE UPDATED INCREMENTS (ON THE
