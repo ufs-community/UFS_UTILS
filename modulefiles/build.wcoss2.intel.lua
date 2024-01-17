@@ -47,7 +47,7 @@ load(pathJoin("nemsio", nemsio_ver))
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
 
-sp_ver=os.getenv("sp_ver") or "2.3.3"
+sp_ver=os.getenv("sp_ver") or "2.5.0"
 load(pathJoin("sp", sp_ver))
 
 ip_ver=os.getenv("ip_ver") or "4.0.0"

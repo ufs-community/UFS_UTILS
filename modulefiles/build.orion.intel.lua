@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS on Orion using Intel
 ]])
 
-prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.5.0/envs/unified-env/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2022.0.2"
 load(pathJoin("stack-intel", stack_intel_ver))
@@ -25,7 +25,7 @@ load(pathJoin("ip", ip_ver))
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.4"
 load(pathJoin("nemsio", nemsio_ver))
 
-sp_ver=os.getenv("sp_ver") or "2.3.3"
+sp_ver=os.getenv("sp_ver") or "2.5.0"
 load(pathJoin("sp", sp_ver))
 
 w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
@@ -46,13 +46,13 @@ load(pathJoin("libpng", png_ver))
 netcdf_c_ver=os.getenv("netcdf_c_ver") or "4.9.2"
 load(pathJoin("netcdf-c", netcdf_c_ver))
 
-netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.0"
+netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.1"
 load(pathJoin("netcdf-fortran", netcdf_fortran_ver))
 
 nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
 load(pathJoin("nccmp", nccmp_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8.4.2"
+esmf_ver=os.getenv("esmf_ver") or "8.5.0"
 load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.0.6"

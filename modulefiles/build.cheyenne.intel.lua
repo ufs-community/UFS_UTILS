@@ -51,7 +51,7 @@ load(pathJoin("ip", ip_ver))
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.2"
 load(pathJoin("nemsio", nemsio_ver))
 
-sp_ver=os.getenv("sp_ver") or "2.3.3"
+sp_ver=os.getenv("sp_ver") or "2.5.0"
 load(pathJoin("sp", sp_ver))
 
 w3nco_ver=os.getenv("w3nco_ver") or "2.4.1"
