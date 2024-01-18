@@ -1666,14 +1666,8 @@ C
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
       DIMENSION ORO(IM,JM),SLM(IM,JM),VAR(IM,JM),VAR4(IM,JM)
       DIMENSION IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM),numi(jm)
-      INTEGER mskocn,isave
-      LOGICAL FLAG, DEBUG
-C==== DATA DEBUG/.TRUE./
-      DATA DEBUG/.FALSE./
+      LOGICAL FLAG
 C
-! ---- OCLSM holds the ocean (im,jm) grid
-! ---  mskocn=1 Use ocean model sea land mask, OK and present,
-! ---  mskocn=0 dont use Ocean model sea land mask, not OK, not present
       print *,' _____ SUBROUTINE MAKEMT '
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
@@ -2578,7 +2572,7 @@ C
       integer i,j,i1,j1,i2,jst,jen,numx,i0,ip1,ijax
       integer ilist(IMN)
       logical inside_a_polygon
-      LOGICAL FLAG, DEBUG
+      LOGICAL DEBUG
 C===  DATA DEBUG/.TRUE./
       DATA DEBUG/.FALSE./
 C
@@ -3238,22 +3232,20 @@ C
       real    XNSUM(IM,JM),XNSUM1(IM,JM),XNSUM2(IM,JM)
       real    XNSUM3(IM,JM),XNSUM4(IM,JM)
       real    VAR(IM,JM),OL(IM,JM,4)
-      LOGICAL FLAG
       integer i,j,ilist(IMN),numx,i1,j1,ii1
-      integer KWD,II,npts
+      integer KWD
       real    LONO(4),LATO(4),LONI,LATI
       real    DELXN,HC,HEIGHT,XNPU,XNPD,T
       integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
       logical inside_a_polygon
       real    lon,lat,dlon,dlat,dlat_old
       real    lon1,lat1,lon2,lat2
-      real    xnsum11,xnsum12,xnsum21,xnsum22,xnsumx
+      real    xnsum11,xnsum12,xnsum21,xnsum22
       real    HC_11, HC_12, HC_21, HC_22
       real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
       real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
       real    get_lon_angle, get_lat_angle, get_xnsum
-      integer ist, ien, jst, jen
-      real    xland,xwatr,xl1,xs1,oroavg,slm
+      integer jst, jen
 C   
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
@@ -3816,22 +3808,13 @@ C
       real    XNSUM(IM,JM),XNSUM1(IM,JM),XNSUM2(IM,JM)
       real    XNSUM3(IM,JM),XNSUM4(IM,JM)
       real    VAR(IM,JM),OL(IM,JM,4)
-      LOGICAL FLAG
       integer i,j,ilist(IMN),numx,i1,j1,ii1
-      integer KWD,II,npts
+      integer KWD
       real    LONO(4),LATO(4),LONI,LATI
-      real    DELXN,HC,HEIGHT,XNPU,XNPD,T
+      real    DELXN,HC,HEIGHT,T
       integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
       logical inside_a_polygon
-      real    lon,lat,dlon,dlat,dlat_old
-      real    lon1,lat1,lon2,lat2
-      real    xnsum11,xnsum12,xnsum21,xnsum22,xnsumx
-      real    HC_11, HC_12, HC_21, HC_22
-      real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
-      real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
-      real    get_lon_angle, get_lat_angle, get_xnsum
-      integer ist, ien, jst, jen
-      real    xland,xwatr,xl1,xs1,oroavg
+      integer jst, jen
       integer int_opt, ipopt(20), kgds_input(200), kgds_output(200)
       integer count_land_output
       integer ij, ijmdl_output, iret, num_mismatch_land, num
@@ -4434,10 +4417,9 @@ cc
       parameter   (ix=40*120,jx=50*120)
       parameter   (ia=60*120,ja=30*120)
 cc
-      integer*2    idat(ix,jx)
       integer      itopo
 cc
-      integer      i,j,inttyp
+      integer      inttyp
 cc
       real(kind=8) dloin,dlain,rlon,rlat
 cc
@@ -4480,7 +4462,7 @@ ccmr
 ccmr
       integer*2 ia(len)
       character*7 tile
-      integer iaamax, iaamin, len, j, m, ja, kount
+      integer iaamax, iaamin, len, m, ja, kount
       integer(8) sum2,std,mean,isum
       integer i_count_notset,kount_9
 ! --- missing is -9999
@@ -4756,7 +4738,6 @@ C
         implicit none
 
         real get_xnsum
-        logical verbose
         real, intent(in) :: lon1,lat1,lon2,lat2,delxn
         integer, intent(in) ::  IMN,JMN
         real, intent(in) :: glat(JMN)
@@ -4783,7 +4764,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
         !--- compute average oro
           oro = 0.0
@@ -4826,7 +4806,6 @@ C
                IF ( HEIGHT .gt. ORO ) get_xnsum = get_xnsum + 1
             enddo       
          enddo
-!         if(verbose) print*, "get_xnsum=", get_xnsum, oro
          
       end function get_xnsum  
       
@@ -4862,14 +4841,13 @@ C
         implicit none
 
         real, intent(out) :: xnsum1,xnsum2,HC
-        logical verbose
-        real lon1,lat1,lon2,lat2,oro,delxn
+        real lon1,lat1,lon2,lat2,delxn
         integer IMN,JMN
         real    glat(JMN)
         integer zavg(IMN,JMN)
         integer i, j, ist, ien, jst, jen, i1
         real    HEIGHT, var
-        real    XW1,XW2,slm,xnsum
+        real    XW1,XW2,xnsum
         !---figure out ist,ien,jst,jen
         do j = 1, JMN
            if( GLAT(J) .GT. lat1 ) then
@@ -4889,7 +4867,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
         !--- compute average oro
           xnsum = 0
@@ -4957,13 +4934,12 @@ C
         implicit none
 
         real, intent(out) :: xnsum1,xnsum2
-        real lon1,lat1,lon2,lat2,oro,delxn
+        real lon1,lat1,lon2,lat2,delxn
         integer IMN,JMN
         real    glat(JMN)
         integer zavg(IMN,JMN)
         integer i, j, ist, ien, jst, jen, i1
         real    HEIGHT, HC
-        real    XW1,XW2,slm,xnsum
         !---figure out ist,ien,jst,jen
         ! if lat1 or lat 2 is 90 degree. set jst = JMN
         jst = JMN
@@ -4986,7 +4962,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
          xnsum1 = 0
          xnsum2 = 0
@@ -5035,8 +5010,7 @@ c
       data inaq3/x'FFC00000'/
       data inaq4/x'FFFFFFFF'/
 c
-      real(kind=8)a(l),rtc,t1,t2
-      character*24 cn
+      real(kind=8)a(l)
       character*(*) c
 c     t1=rtc()
 cgwv        print *, ' nanc call ',c

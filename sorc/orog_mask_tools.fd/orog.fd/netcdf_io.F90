@@ -25,7 +25,7 @@
     real, intent(in), dimension(im,jm)  :: slm, oro, orf, geolon, geolat, land_frac
     real, intent(in), dimension(im,jm,14):: hprime
     character(len=128) :: outfile
-    integer            :: error, ncid, i
+    integer            :: error, ncid
     integer            :: header_buffer_val = 16384      
     integer            :: fsize=65536, inital = 0  
     integer            :: dim1, dim2
@@ -245,7 +245,7 @@
     integer, intent(in):: im, jm, ntiles, tile
     real, intent(in), dimension(im,jm)  :: slm, geolon, geolat, land_frac
     character(len=128) :: outfile
-    integer            :: error, ncid, i
+    integer            :: error, ncid
     integer            :: header_buffer_val = 16384      
     integer            :: fsize=65536, inital = 0  
     integer            :: dim1, dim2
