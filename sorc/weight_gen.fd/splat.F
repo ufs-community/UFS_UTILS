@@ -170,7 +170,7 @@ C  EQUALLY-SPACED LATITUDES EXCLUDING POLES
           BWORK(JS)=-D1/(4*(JS-1)**2-1)
         ENDDO
 
-        call ludcmp(awork,jho,jhe,ipvt,d)
+        call ludcmp(awork,jho,jhe,ipvt)
         call lubksb(awork,jho,jhe,ipvt,bwork)
 
         WLAT(1)=0.
