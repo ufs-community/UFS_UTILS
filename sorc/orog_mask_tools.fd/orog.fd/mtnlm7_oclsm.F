@@ -207,7 +207,7 @@ C
       integer :: kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,i1,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
-      integer :: M,N,IMT,IRET,ios,iosg,latg2,istat,itest,jtest
+      integer :: IMT,IRET,ios,iosg,latg2,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
@@ -224,7 +224,7 @@ C
       integer, allocatable :: IWORK(:,:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
-      real :: PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
+      real :: PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS
       real :: sumdif,avedif
 
       real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
@@ -245,11 +245,8 @@ C
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
 
-
-      complex :: ffj(im/2+1)
-
       logical :: grid_from_file,output_binary,fexist,opened
-      logical :: SPECTR, REVLAT, FILTER
+      logical :: SPECTR, REVLAT
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
       logical :: LB(IM*JM)
@@ -277,7 +274,6 @@ C
 !
       DEGRAD = 180./PI
       SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
-      FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 & NF0
 !     MSKSRC = 0             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       MSKSRC = 1             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
@@ -1366,67 +1362,25 @@ C
       ENDDO
 !
        call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
-! --- Quadratic filter applied by default.
-! --- NF0 is normally set to an even value beyond the previous truncation, 
-! --- for example, for jcap=382, NF0=254+2
-! --- NF1 is set as jcap+2 (and/or nearest even), eg., for t382, NF1=382+2=384
-! --- if no filter is desired then NF1=NF0=0 and ORF=ORO
-! --- if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1
 !
       deallocate(VAR4)
       allocate (ORF(IM,JM))
-      IF ( NF1 - NF0 .eq. 0 ) FILTER=.FALSE.
-      print *,' NF1, NF0, FILTER=',NF1,NF0,FILTER
-      IF (FILTER) THEN
-C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
-        do j=1,jm
-          if(numi(j).lt.im) then
-            ffj=cmplx(0.,0.)
-            call spfft1(numi(j),im/2+1,numi(j),1,ffj,oro(1,j),-1)
-            call spfft1(im,im/2+1,im,1,ffj,oro(1,j),+1)
-          endif
-        enddo
-        CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORO,-1)
-!
-      print *,' about to apply spectral filter '
-        FFF=1./(NF1-NF0)**2
-        I=0
-        DO M=0,NM
-        DO N=M,NM+NR*M
-          IF(N.GT.NF0) THEN
-            WWW=MAX(1.-FFF*(N-NF0)**2,0.)
-            ORS(I+1)=ORS(I+1)*WWW
-            ORS(I+2)=ORS(I+2)*WWW
-          ENDIF
-        I=I+2
-        ENDDO
-        ENDDO
-!
-        CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORF,+1)
-        do j=1,jm
-          if(numi(j).lt.im) then
-            call spfft1(im,im/2+1,im,1,ffj,orf(1,j),-1)
-            call spfft1(numi(j),im/2+1,numi(j),1,ffj,orf(1,j),+1)
-          endif
-        enddo
+      print *,' NF1, NF0=',NF1,NF0
 
-      ELSE
-        IF (REVLAT) THEN
-          CALL REVERS(IM, JM, numi, SLM, WORK1)
-          CALL REVERS(IM, JM, numi, ORO, WORK1)
-          DO IMT=1,NMT
-            CALL REVERS(IM, JM, numi, HPRIME(1,1,IMT), WORK1)
-          ENDDO
-        ENDIF
-        ORS=0.
-        ORF=ORO
+      IF (REVLAT) THEN
+        CALL REVERS(IM, JM, numi, SLM, WORK1)
+        CALL REVERS(IM, JM, numi, ORO, WORK1)
+        DO IMT=1,NMT
+          CALL REVERS(IM, JM, numi, HPRIME(1,1,IMT), WORK1)
+        ENDDO
       ENDIF
+      ORS=0.
+      ORF=ORO
 
       deallocate (WORK1)
 
        call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
       print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
-      print *,' after spectral filter is applied'
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,ORF,'     ORF')
 C
@@ -4321,85 +4275,6 @@ csela....................................................
 C
       RETURN
       END
-
-!> Perform multiple fast fourier transforms.
-!!
-!! This subprogram performs multiple fast fourier transforms
-!! between complex amplitudes in fourier space and real values
-!! in cyclic physical space.
-!!
-!! Subprograms called (NCEPLIB SP Library):
-!!  - scrft Complex to real fourier transform
-!!  - dcrft Complex to real fourier transform
-!!  - srcft Real to complex fourier transform
-!!  - drcft Real to complex fourier transform
-!!
-!! Program history log:
-!! 1998-12-18  Mark Iredell
-!!
-!! @param[in] imax Integer number of values in the cyclic physical
-!! space. See limitations on imax in remarks below.
-!! @param[in] incw Integer first dimension of the complex amplitude array.
-!! (incw >= imax/2+1).
-!! @param[in] incg Integer first dimension of the real value array.
-!! (incg >= imax).
-!! @param[in] kmax Integer number of transforms to perform.
-!! @param[in] w Complex amplitudes on input if idir>0, and on output
-!! if idir<0.
-!! @param[in] g Real values on input if idir<0, and on output if idir>0.
-!! @param[in] idir Integer direction flag. idir>0 to transform from
-!! fourier to physical space. idir<0 to transform from physical to
-!! fourier space.
-!!
-!! @note The restrictions on imax are that it must be a multiple
-!! of 1 to 25 factors of two, up to 2 factors of three,
-!! and up to 1 factor of five, seven and eleven.
-!!
-!! @author Mark Iredell ORG: W/NMC23 @date 96-02-20
-      SUBROUTINE SPFFT1(IMAX,INCW,INCG,KMAX,W,G,IDIR)
-        IMPLICIT NONE
-        INTEGER,INTENT(IN):: IMAX,INCW,INCG,KMAX,IDIR
-        COMPLEX,INTENT(INOUT):: W(INCW,KMAX)
-        REAL,INTENT(INOUT):: G(INCG,KMAX)
-        REAL:: AUX1(25000+INT(0.82*IMAX))
-        REAL:: AUX2(20000+INT(0.57*IMAX))
-        INTEGER:: NAUX1,NAUX2
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        NAUX1=25000+INT(0.82*IMAX)
-        NAUX2=20000+INT(0.57*IMAX)
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-C  FOURIER TO PHYSICAL TRANSFORM.
-        SELECT CASE(IDIR)
-        CASE(1:)
-          SELECT CASE(DIGITS(1.))
-          CASE(DIGITS(1._4))
-            CALL SCRFT(1,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL SCRFT(0,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          CASE(DIGITS(1._8))
-            CALL DCRFT(1,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL DCRFT(0,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          END SELECT
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-C  PHYSICAL TO FOURIER TRANSFORM.
-        CASE(:-1)
-          SELECT CASE(DIGITS(1.))
-          CASE(DIGITS(1._4))
-            CALL SRCFT(1,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL SRCFT(0,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          CASE(DIGITS(1._8))
-            CALL DRCFT(1,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL DRCFT(0,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          END SELECT
-        END SELECT
-      END SUBROUTINE
 
 !> Read input global 30-arc second orography data.
 !!
