@@ -16,11 +16,6 @@ C> 5. unfiltered gridded orography on model physics grid
 C> 6. grib sea-land mask on model physics grid
 C> 7. grib gridded orography on model physics grid
 C>
-C> The orography is only filtered for wavenumbers greater than nf0. For
-C> wavenumbers n between nf0 and nf1, the orography is filtered by the
-C> factor 1-((n-nf0)/(nf1-nf0))**2. The filtered orography will not have
-C> information beyond wavenumber nf1.
-C>
 C> PROGRAM HISTORY LOG:
 C> -  92-04-16  IREDELL
 C> -  98-02-02  IREDELL  FILTER
@@ -37,17 +32,10 @@ C>  - 04-09-04   minus sign here in MAKEOA IST and IEN as in MAKEMT!
 C>  - 05-09-05   if test on HK and HLPRIM for GAMMA SQRT
 C>  - 07-08-07   replace 8' with 30" incl GICE, conintue w/ S-Y. lake slm
 C>  - 08-08-07  All input 30", UMD option, and filter as described below
-C> Quadratic filter applied by default.
-C> NF0 is normally set to an even value beyond the previous truncation, 
-C> for example, for jcap=382, NF0=254+2
-C> NF1 is set as jcap+2 (and/or nearest even), eg., for t382, NF1=382+2=384
-C> if no filter is desired then NF1=NF0=0 and ORF=ORO
-C> but if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1
 C>       
 C>   INPUT FILES:
 C>  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
 C>                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),
-C>                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).
 C>                  RESPECTIVELY READ IN FREE FORMAT.
 C>  -   UNIT235    - GTOPO 30" AVR for ZAVG elevation
 C>  -   UNIT10     - 30" UMD land (lake) cover mask  see MSKSRC switch
@@ -81,9 +69,9 @@ C> @return 0 for success, error code otherwise.
       character(len=256) :: INPUTOROG = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
-      integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT,NW
+      integer :: MTNRES,IM,JM,NM,NR,EFAC,BLAT,NW
       fsize=65536
-      READ(5,*) MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
+      READ(5,*) MTNRES,IM,JM,NM,NR,EFAC,BLAT
       READ(5,*) OUTGRID
       READ(5,*) INPUTOROG
       READ(5,*) mask_only
@@ -92,8 +80,6 @@ C> @return 0 for success, error code otherwise.
 !      IM=48
 !      JM=48
 !      NM=46
-!      NF0=0             
-!      NF1=0              
 !      efac=0
 !      blat=0
 !      NR=0
@@ -110,7 +96,7 @@ C> @return 0 for success, error code otherwise.
 ! --- other possibilities are =8 for 4' and =4 for 2' see
 !     HJ for T1000 test. Must set to 1 for now.
       MTNRES=1
-      print*, MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
+      print*, MTNRES,IM,JM,NM,NR,EFAC,BLAT
       NW=(NM+1)*((NR+1)*NM+2)
       IMN = 360*120/MTNRES
       JMN = 180*120/MTNRES
@@ -160,7 +146,7 @@ C> @return 0 for success, error code otherwise.
          
       endif         
          
-      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
+      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       STOP
       END
@@ -173,8 +159,6 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] JM "j" dimension of the model grid tile.
 !! @param[in] NM Spectral truncation.
 !! @param[in] NR Rhomboidal flag.
-!! @param[in] NF0 First order spectral filter parameters.
-!! @param[in] NF1 Second order spectral filter parameters.
 !! @param[in] NW Number of waves.
 !! @param[in] EFAC Factor to adjust orography by its variance.
 !! @param[in] BLAT When less than zero, reverse latitude/
@@ -187,12 +171,12 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] MASK_ONLY Flag to generate the Land Mask only
 !! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
+      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
 C
-      integer                      :: IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW
+      integer                      :: IMN,JMN,IM,JM,NM,NR,NW
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
       character(len=*), intent(in) :: MERGE_FILE
@@ -379,8 +363,8 @@ C
 !
 
 !  --- IMN,JMN
-      print*, ' IM, JM, NM, NR, NF0, NF1, EFAC, BLAT'
-      print*, IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
+      print*, ' IM, JM, NM, NR, EFAC, BLAT'
+      print*, IM,JM,NM,NR,EFAC,BLAT
        print *,'  imn,jmn,glob(imn,jmn)=',imn,jmn,glob(imn,jmn)
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
@@ -1365,7 +1349,6 @@ C
 !
       deallocate(VAR4)
       allocate (ORF(IM,JM))
-      print *,' NF1, NF0=',NF1,NF0
 
       IF (REVLAT) THEN
         CALL REVERS(IM, JM, numi, SLM, WORK1)
