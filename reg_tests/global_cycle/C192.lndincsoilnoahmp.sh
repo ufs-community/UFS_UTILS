@@ -73,9 +73,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo
-  echo "*****************************************"
-  echo "<<< C192 LANDINC SOIL-NOAHP CYCLE TEST FAILED. >>>"
-  echo "*****************************************"
+  echo "**********************************************"
+  echo "<<< C192 LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
+  echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
     $BASE_GSM/reg_tests/update_baseline.sh $HOMEreg "c192.lndincsoilnoahmp" $commit_num
   fi
