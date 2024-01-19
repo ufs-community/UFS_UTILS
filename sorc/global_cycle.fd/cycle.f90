@@ -845,6 +845,7 @@ ENDIF
  !! @param[inout] SKINT_TILE Skin temperature on the cubed-sphere tile
  !! @param[inout] SICET_TILE Ice temperature on the cubed-sphere tile
  !! @param[in] sice_tile Ice concentration on the cubed-sphere tile
+ !! @param[in] sice_fg_tile First guess ice concentration on the cubed-sphere tile
  !! @param[inout] SOILT_TILE Soil temperature on the cubed-sphere tile
  !! @param[in] NSST Data structure holding nsst fields
  !! @param[in] LENSFC Number of points on a tile
@@ -860,6 +861,8 @@ ENDIF
  !! @param[in] tf_trd_tile Climatolocial reference temperature trend on the
  !! cubed-sphere tile.
  !! @param[in] sal_clm_tile Climatological salinity on the cubed-sphere tile.
+ !! @param[in] LANDFRAC Land fraction
+ !! @param[in] FRAC_GRID Process fractional grid when true.
  !!
  !! @author Xu Li, George Gayno
  SUBROUTINE ADJUST_NSST(RLA,RLO,SLMSK_TILE,SLMSK_FG_TILE,SKINT_TILE,&
