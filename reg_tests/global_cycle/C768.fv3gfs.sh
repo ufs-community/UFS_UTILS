@@ -21,6 +21,7 @@ export FHOUR=00
 export DELTSFC=6
 
 export CASE=C768
+export OCNRES=99999
 
 export COMIN=$HOMEreg/input_data
 export FNTSFA=$COMIN/gdas.t00z.rtgssthr.grb
@@ -32,10 +33,22 @@ export JCAP=1534
 export LONB=3072
 export LATB=1536
 
-export FIXgsm=$BASE_GSM/fix/am
-export FNAISC=$FIXgsm/CFSR.SEAICE.1982.2012.monthly.clim.grb
+export OROFIX=$HOMEreg/fix/$CASE
 
-export FIXfv3=$HOMEreg/fix
+export FIXgsm=$BASE_GSM/fix/am
+
+export FNALBC2=$FIXgsm/global_albedo4.1x1.grb
+export FNALBC=$FIXgsm/global_snowfree_albedo.bosu.t1534.3072.1536.rg.grb
+export FNALBC=$FIXgsm/global_snowfree_albedo.bosu.t1534.3072.1536.rg.grb
+export FNTG3C=$FIXgsm/global_tg3clim.2.6x1.5.grb
+export FNVETC=$FIXgsm/global_vegtype.igbp.t1534.3072.1536.rg.grb
+export FNSOTC=$FIXgsm/global_soiltype.statsgo.t1534.3072.1536.rg.grb
+export FNVEGC=$FIXgsm/global_vegfrac.0.144.decpercent.grb
+export FNVMNC=$FIXgsm/global_shdmin.0.144x0.144.grb
+export FNVMXC=$FIXgsm/global_shdmax.0.144x0.144.grb
+export FNSLPC=$FIXgsm/global_slope.1x1.grb
+export FNABSC=$FIXgsm/global_mxsnoalb.uariz.t1534.3072.1536.rg.grb
+export FNAISC=$FIXgsm/CFSR.SEAICE.1982.2012.monthly.clim.grb
 
 export DONST="YES"
 export use_ufo=.true.
