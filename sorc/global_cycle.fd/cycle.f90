@@ -42,7 +42,7 @@
 !!                     file.
 !!  - $NST_FILE        Gaussian GSI file which contains NSST
 !!                     TREF increments
-!!  - $LND_SOI_FILE    Gaussian GSI file which contains soil state
+!!  - $LND_SOI_FILE.$NNN    Gaussian GSI file which contains soil state
 !!                     increments
 !!  - xainc.$NNN       The cubed-sphere increment file (contains 
 !!                     increments calculated by JEDI on the native 
@@ -377,6 +377,7 @@
  INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
 
  LOGICAL :: FILE_EXISTS, DO_SOI_INC, DO_SNO_INC
+ CHARACTER(LEN=3)       :: RANKCH
 
 !--------------------------------------------------------------------------------
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
@@ -457,7 +458,7 @@ IF (DO_LNDINC) THEN
      print *, 'FATAL ERROR: land increment update does not work with fractional grids.'
      call MPI_ABORT(MPI_COMM_WORLD, 17, IERR)
    ENDIF
-   ! identify variables to be updates, and allocate arrays.
+   ! identify variables to be updated, and allocate arrays.
    IF  (TRIM(LND_SOI_FILE) .NE. "NULL") THEN
        DO_SOI_INC = .TRUE.
        PRINT*
@@ -723,6 +724,10 @@ ENDIF
        !--------------------------------------------------------------------------------
        ! read increments in
        !--------------------------------------------------------------------------------
+
+        WRITE(RANKCH, '(I3.3)') (MYRANK+1)
+
+        LND_SOI_FILE = trim(LND_SOI_FILE) // "." //  RANKCH
 
         INQUIRE(FILE=trim(LND_SOI_FILE), EXIST=file_exists)
         IF (.not. file_exists) then
