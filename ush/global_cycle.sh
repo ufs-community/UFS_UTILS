@@ -29,8 +29,6 @@
 #                   Default is /nwprod2.
 #     HOMEgfs       Directory for gfs.  Default is 
 #                   $BASEDIR/gfs.v15.0.0.
-#     FIXSUBDA      Sub-directory where fixed climatology files reside.
-#                   Defaults to fix/am.
 #     FIXam        Directory for the global fixed climatology files.
 #                   Defaults to $HOMEgfs/fix/am
 #     EXECgfs       Directory of the program executable.  Defaults to
@@ -226,13 +224,17 @@ if [[ "$VERBOSE" = "YES" ]] ; then
 fi
 
 CASE=${CASE:-C768}
+OCNRES=${OCNRES:-100}
 
 #  Directories.
 gfs_ver=${gfs_ver:-v15.0.0}
 BASEDIR=${BASEDIR:-${NWROOT:-/nwprod2}}
 HOMEgfs=${HOMEgfs:-$BASEDIR/gfs_ver.${gfs_ver}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
-FIXam=${FIXam:-$HOMEgfs/fix/am}
+FIX_DIR=${FIX_DIR:-$HOMEgfs/fix}
+FIXam=${FIXam:-$FIX_DIR/am}
+OROFIX=${OROFIX:-$FIX_DIR/orog/${CASE}.mx${OCNRES}_frac}
+FIX_SFC=${FIX_SFC:-$OROFIX/sfc}
 DATA=${DATA:-$(pwd)}
 COMIN=${COMIN:-$(pwd)}
 COMOUT=${COMOUT:-$(pwd)}
@@ -269,6 +271,7 @@ DO_SNO_INC=${DO_SNO_INC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
+FRAC_GRID=${FRAC_GRID:-.false.}
 
 FNGLAC=${FNGLAC:-${FIXam}/global_glacier.2x2.grb}
 FNMXIC=${FNMXIC:-${FIXam}/global_maxice.2x2.grb}
@@ -276,18 +279,18 @@ FNTSFC=${FNTSFC:-${FIXam}/RTGSST.1982.2012.monthly.clim.grb}
 FNSALC=${FNSALC:-${FIXam}/global_salclm.t1534.3072.1536.nc}
 FNSNOC=${FNSNOC:-${FIXam}/global_snoclim.1.875.grb}
 FNZORC=${FNZORC:-igbp}
-FNALBC2=${FNALBC2:-${FIXam}/global_albedo4.1x1.grb}
 FNAISC=${FNAISC:-${FIXam}/IMS-NIC.blended.ice.monthly.clim.grb}
-FNTG3C=${FNTG3C:-${FIXam}/global_tg3clim.2.6x1.5.grb}
-FNVEGC=${FNVEGC:-${FIXam}/global_vegfrac.0.144.decpercent.grb}
-FNALBC=${FNALBC:-${FIXam}/global_snowfree_albedo.bosu.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.rg.grb}
-FNVETC=${FNVETC:-${FIXam}/global_vegtype.igbp.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.rg.grb}
-FNSOTC=${FNSOTC:-${FIXam}/global_soiltype.statsgo.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.rg.grb}
 FNSMCC=${FNSMCC:-${FIXam}/global_soilmgldas.statsgo.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.grb}
-FNABSC=${FNABSC:-${FIXam}/global_mxsnoalb.uariz.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.rg.grb}
-FNVMNC=${FNVMNC:-${FIXam}/global_shdmin.0.144x0.144.grb}
-FNVMXC=${FNVMXC:-${FIXam}/global_shdmax.0.144x0.144.grb}
-FNSLPC=${FNSLPC:-${FIXam}/global_slope.1x1.grb}
+FNALBC2=${FNALBC2:-${FIX_SFC}/${CASE}.mx${OCNRES}.facsf.tileX.nc}
+FNTG3C=${FNTG3C:-${FIX_SFC}/${CASE}.mx${OCNRES}.substrate_temperature.tileX.nc}
+FNVEGC=${FNVEGC:-${FIX_SFC}/${CASE}.mx${OCNRES}.vegetation_greenness.tileX.nc}
+FNALBC=${FNALBC:-${FIX_SFC}/${CASE}.mx${OCNRES}.snowfree_albedo.tileX.nc}
+FNVETC=${FNVETC:-${FIX_SFC}/${CASE}.mx${OCNRES}.vegetation_type.tileX.nc}
+FNSOTC=${FNSOTC:-${FIX_SFC}/${CASE}.mx${OCNRES}.soil_type.tileX.nc}
+FNABSC=${FNABSC:-${FIX_SFC}/${CASE}.mx${OCNRES}.maximum_snow_albedo.tileX.nc}
+FNVMNC=${FNVMNC:-${FIX_SFC}/${CASE}.mx${OCNRES}.vegetation_greenness.tileX.nc}
+FNVMXC=${FNVMXC:-${FIX_SFC}/${CASE}.mx${OCNRES}.vegetation_greenness.tileX.nc}
+FNSLPC=${FNSLPC:-${FIX_SFC}/${CASE}.mx${OCNRES}.slope_type.tileX.nc}
 FNMSKH=${FNMSKH:-${FIXam}/global_slmask.t1534.3072.1536.grb}
 NST_FILE=${NST_FILE:-"NULL"}
 LND_SOI_FILE=${LND_SOI_FILE:-"NULL"}
@@ -322,10 +325,6 @@ ln -fs $FNTSFC sstclm
 ln -fs $FNSALC salclm
 
 # If the appropriate resolution fix file is not present, use the highest resolution available (T1534)
-[[ ! -f $FNALBC ]] && FNALBC="$FIXam/global_snowfree_albedo.bosu.t1534.3072.1536.rg.grb"
-[[ ! -f $FNVETC ]] && FNVETC="$FIXam/global_vegtype.igbp.t1534.3072.1536.rg.grb"
-[[ ! -f $FNSOTC ]] && FNSOTC="$FIXam/global_soiltype.statsgo.t1534.3072.1536.rg.grb"
-[[ ! -f $FNABSC ]] && FNABSC="$FIXam/global_mxsnoalb.uariz.t1534.3072.1536.rg.grb"
 [[ ! -f $FNSMCC ]] && FNSMCC="$FIXam/global_soilmgldas.statsgo.t1534.3072.1536.grb"
 
 ################################################################################
@@ -381,7 +380,8 @@ cat << EOF > fort.36
   iy=$iy, im=$im, id=$id, ih=$ih, fh=$FHOUR,
   deltsfc=$DELTSFC,ialb=$IALB,use_ufo=$use_ufo,donst=$DONST,
   do_sfccycle=$DO_SFCCYCLE,do_lndinc=$DO_LNDINC,isot=$ISOT,ivegsrc=$IVEGSRC,
-  zsea1_mm=$zsea1,zsea2_mm=$zsea2,MAX_TASKS=$MAX_TASKS_CY
+  zsea1_mm=$zsea1,zsea2_mm=$zsea2,MAX_TASKS=$MAX_TASKS_CY,
+  frac_grid=$FRAC_GRID
  /
 EOF
 

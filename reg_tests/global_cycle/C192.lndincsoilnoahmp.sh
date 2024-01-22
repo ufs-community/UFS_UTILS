@@ -24,6 +24,7 @@ export FHOUR=00
 export DELTSFC=6
 
 export CASE=C192
+export OCNRES=99999
 
 export COMIN=$HOMEreg/input_data_noahmp
 
@@ -33,9 +34,8 @@ export JCAP=1534
 export LONB=3072
 export LATB=1536
 
+export OROFIX=$HOMEreg/fix/$CASE
 export FIXgsm=$BASE_GSM/fix/am
-
-export FIXfv3=$HOMEreg/fix
 
 export DONST="NO"
 export use_ufo=.true.
@@ -73,9 +73,9 @@ done
 set +x
 if [ $test_failed -ne 0 ]; then
   echo
-  echo "*****************************************"
-  echo "<<< C192 LANDINC SOIL-NOAHP CYCLE TEST FAILED. >>>"
-  echo "*****************************************"
+  echo "**********************************************"
+  echo "<<< C192 LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
+  echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
     $BASE_GSM/reg_tests/update_baseline.sh $HOMEreg "c192.lndincsoilnoahmp" $commit_num
   fi

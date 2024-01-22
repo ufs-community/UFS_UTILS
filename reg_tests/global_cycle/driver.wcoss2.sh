@@ -76,8 +76,13 @@ export COMOUT=$DATA
 TEST3=$(qsub -V -o ${LOG_FILE}03 -e ${LOG_FILE}03 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
         -N c768.lndincsnow -l select=1:ncpus=12:mem=8GB $PWD/C768.lndincsnow.sh)
 
+export DATA="${DATA_DIR}/test4"
+export COMOUT=$DATA
+TEST4=$(qsub -V -o ${LOG_FILE}04 -e ${LOG_FILE}04 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
+        -N c48.noahmp.frac -l select=1:ncpus=12:mem=8GB $PWD/C48.noahmp.fracgrid.sh)
+
 qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
-        -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3 << EOF
+        -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4 << EOF
 #!/bin/bash
 cd $reg_dir
 grep -a '<<<' ${LOG_FILE}?? | grep -v echo > summary.log
