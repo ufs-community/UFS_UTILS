@@ -664,8 +664,8 @@ MODULE READ_WRITE_DATA
  end subroutine remove_checksum
 
  !> Read latitude and longitude for the cubed-sphere tile from the
- !! 'grid' file.  Read the filtered and unfiltered orography from
- !! the 'orography' file.
+ !! 'grid' file.  Read the filtered and unfiltered orography and
+ !! optionally the land fraction from the 'orography' file.
  !!
  !! @param[in] IDIM 'i' dimension of cubed-sphere tile.
  !! @param[in] JDIM 'j' dimension of cubed-sphere tile.
@@ -675,11 +675,13 @@ MODULE READ_WRITE_DATA
  !! @param[out] OROG Filtered orography.
  !! @param[out] OROG_UF Unfiltered orography.
  !! @param[out] TILE_NUM Cubed-sphere tile number
+ !! @param[out] LANDFRAC Land fraction.
  !! @author George Gayno NOAA/EMC
  SUBROUTINE READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,&
-                              TILE_NUM,IDIM,JDIM,IJDIM)
+                              TILE_NUM,IDIM,JDIM,IJDIM,LANDFRAC)
 
  USE MPI
+ USE MACHINE
 
  IMPLICIT NONE
 
@@ -689,6 +691,7 @@ MODULE READ_WRITE_DATA
 
  REAL, INTENT(OUT)      :: RLA(IJDIM),RLO(IJDIM)
  REAL, INTENT(OUT)      :: OROG(IJDIM),OROG_UF(IJDIM)
+ REAL(KIND=KIND_IO8), INTENT(OUT), OPTIONAL  :: LANDFRAC(IJDIM)
 
  CHARACTER(LEN=50)      :: FNOROG, FNGRID
  CHARACTER(LEN=3)       :: RANKCH
@@ -798,6 +801,14 @@ MODULE READ_WRITE_DATA
  CALL NETCDF_ERR(ERROR, 'ERROR READING orog_filt RECORD' )
  OROG = RESHAPE(DUMMY4, (/IJDIM/))
 
+ IF(PRESENT(LANDFRAC))THEN
+   ERROR=NF90_INQ_VARID(NCID_OROG, 'land_frac', ID_VAR)
+   CALL NETCDF_ERR(ERROR, 'ERROR READING land_frac ID' )
+   ERROR=NF90_GET_VAR(NCID_OROG, ID_VAR, DUMMY4)
+   CALL NETCDF_ERR(ERROR, 'ERROR READING land_frac RECORD' )
+   LANDFRAC = RESHAPE(DUMMY4, (/IJDIM/))
+ ENDIF
+
  DEALLOCATE(DUMMY4)
 
  ERROR = NF90_CLOSE(NCID_OROG)
@@ -861,7 +872,7 @@ MODULE READ_WRITE_DATA
  CHARACTER(LEN=1)                 :: K_CH
  CHARACTER(LEN=10)                :: INCVAR
  CHARACTER(LEN=80)                :: err_msg
- INTEGER                          :: K, I 
+ INTEGER                          :: K
 
  PRINT*
  PRINT*, "READ INPUT GSI DATA FROM: "//TRIM(GSI_FILE)
@@ -1694,7 +1705,6 @@ subroutine get_tf_clm_dim(file_sst,mlat_sst,mlon_sst)
   integer,parameter:: lu_sst = 21   ! fortran unit number of grib sst file
 
   integer :: iret
-  integer :: mscan,kb1
   integer :: kf,kg,k,j,ierr
   integer, dimension(22):: jgds,kgds
   integer, dimension(25):: jpds,kpds
@@ -1752,15 +1762,14 @@ subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
   real,    dimension(nlon),      intent(out) :: xlons
   real,    dimension(nlon,nlat), intent(out) :: sal
 ! Local variables
-  integer :: ncid,ntime
+  integer :: ncid
 
   integer, parameter :: ndims = 3
   character (len = *), parameter :: lat_name = "latitude"
   character (len = *), parameter :: lon_name = "longitude"
   character (len = *), parameter :: t_name = "time"
   character (len = *), parameter :: sal_name="sal"
-  integer :: no_fill,fill_value
-  integer :: time_varid,lon_varid, lat_varid, z_varid, sal_varid
+  integer :: time_varid,lon_varid, lat_varid, sal_varid
 
   ! The start and count arrays will tell the netCDF library where to read our data.
   integer, dimension(ndims) :: start, count
@@ -1771,10 +1780,6 @@ subroutine read_salclm_gfs_nc(filename,sal,xlats,xlons,nlat,nlon,itime)
   character (len = *), parameter :: time_units = "months"
   character (len = *), parameter :: lat_units = "degrees_north"
   character (len = *), parameter :: lon_units = "degrees_east"
-
-  integer :: missv
-! Loop indices
-  integer :: i,j
 
 ! Open the file. 
   call nc_check( nf90_open(filename, nf90_nowrite, ncid) )
