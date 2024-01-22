@@ -144,7 +144,7 @@ C> @return 0 for success, error code otherwise.
          error=nf_close(ncid)
          call netcdf_err(error, 'close file '//trim(OUTGRID) )
          
-      endif         
+      endif
          
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
@@ -653,7 +653,7 @@ C
       j_south_pole = 0
       i_north_pole = 0
       j_north_pole = 0
-      if( trim(OUTGRID) .NE. "none" ) then
+      USE_OUTGRID : if( trim(OUTGRID) .NE. "none" ) then
          grid_from_file = .true.
          inquire(file=trim(OUTGRID), exist=fexist)
          if(.not. fexist) then
@@ -834,11 +834,12 @@ C
 !     &                   //trim(OUTGRID) )
 !         dy(1:IM+1,1:JM) = tmpvar(1:nx+1:2,2:ny:2)
          deallocate(tmpvar)         
-      endif
+      endif USE_OUTGRID
+
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
                                 !
-      if(grid_from_file) then
+!     if(grid_from_file) then
        tbeg=timef()
 
          IF (MERGE_FILE == 'none') then
@@ -864,10 +865,10 @@ C
 
       tend=timef()
       write(6,*)' MAKEMT2 time= ',tend-tbeg
-      else
-        CALL MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
-     &   IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-      endif
+!     else
+!       CALL MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
+!    &   IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
+!     endif
 
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,SLM,'     SLM')
@@ -894,16 +895,16 @@ C
 C ===  Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
 C
       allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
-       if(grid_from_file) then       
+!      if(grid_from_file) then       
       tbeg=timef()
          CALL MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
      1            IM,JM,IMN,JMN,geolon_c,geolat_c,SLM)
       tend=timef()
       write(6,*)' MAKEPC2 time= ',tend-tbeg
-       else
-         CALL MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
-     1            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-       endif
+!      else
+!        CALL MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
+!    1            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
+!      endif
 
        call minmxj(IM,JM,THETA,'   THETA')
        call minmxj(IM,JM,GAMMA,'   GAMMA')
@@ -923,7 +924,7 @@ C
 
        call minmxj(IM,JM,ORO,'     ORO')
        print*, "inputorog=", trim(INPUTOROG)
-       if(grid_from_file) then
+!      if(grid_from_file) then
          if(trim(INPUTOROG) == "none") then
            print*, "calling MAKEOA2 to compute OA, OL"
       tbeg=timef()
@@ -1046,12 +1047,12 @@ C
            deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
 
          endif
-       else
-         CALL MAKEOA(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
-     1            WORK1,WORK2,WORK3,WORK4,
-     2            WORK5,WORK6,
-     3            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-       endif
+!      else
+!        CALL MAKEOA(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
+!    1            WORK1,WORK2,WORK3,WORK4,
+!    2            WORK5,WORK6,
+!    3            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
+!      endif
 
 !      Deallocate 2d vars
        deallocate(IST,IEN)
@@ -1525,21 +1526,21 @@ C
       do i=1,im
         xlon(i) = DELXN*(i-1)
       enddo
-      IF(trim(OUTGRID) == "none") THEN
-        do j=1,jm
-         do i=1,im
-           geolon(i,j) = xlon(i)
-           geolat(i,j) = xlat(j)
-         enddo
-        enddo
-      else
+!     IF(trim(OUTGRID) == "none") THEN
+!       do j=1,jm
+!        do i=1,im
+!          geolon(i,j) = xlon(i)
+!          geolat(i,j) = xlat(j)
+!        enddo
+!       enddo
+!     else
         do j = 1, jm
            xlat(j) = geolat(1,j)
         enddo
         do i = 1, im
            xlon(i) = geolon(i,1)
         enddo
-      endif
+!     endif
       tend=timef()
       write(6,*)' Binary output time= ',tend-tbeg
       tbeg=timef()
@@ -1565,177 +1566,7 @@ C
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
-      END
-
-!> Create the orography, land-mask, standard deviation of
-!! orography and the convexity on a model gaussian grid.
-!! This routine was used for the spectral GFS model.
-!!
-!! @param[in] zavg The high-resolution input orography dataset.
-!! @param[in] zslm The high-resolution input land-mask dataset.
-!! @param[out] oro Orography on the model grid.
-!! @param[out] slm Land-mask on the model grid.
-!! @param[out] var Standard deviation of orography on the model grid.
-!! @param[out] var4 Convexity on the model grid.
-!! @param[out] glat Latitude of each row of the high-resolution 
-!! orography and land-mask datasets.
-!! @param[out] ist This is the 'i' index of high-resolution data set
-!! at the east edge of the model grid cell.
-!! the high-resolution dataset with respect to the 'east' edge
-!! @param[out] ien This is the 'i' index of high-resolution data set
-!! at the west edge of the model grid cell.
-!! @param[out] jst  This is the 'j' index of high-resolution data set
-!! at the south edge of the model grid cell.
-!! @param[out] jen This is the 'j' index of high-resolution data set
-!! at the north edge of the model grid cell.
-!! @param[in] im "i" dimension of the model grid.
-!! @param[in] jm "j" dimension of the model grid.
-!! @param[in] imn "i" dimension of the hi-res input orog/mask dataset.
-!! @param[in] jmn "j" dimension of the hi-res input orog/mask dataset.
-!! @param[in] xlat The latitude of each row of the model grid.
-!! @param[in] numi For reduced gaussian grids, the number of 'i' points
-!! for each 'j' row.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
-     1 GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-      DIMENSION GLAT(JMN),XLAT(JM)
-!     REAL*4 OCLSM
-      INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
-      DIMENSION ORO(IM,JM),SLM(IM,JM),VAR(IM,JM),VAR4(IM,JM)
-      DIMENSION IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM),numi(jm)
-      LOGICAL FLAG
-C
-      print *,' _____ SUBROUTINE MAKEMT '
-C---- GLOBAL XLAT AND XLON ( DEGREE )
-C
-      JM1 = JM - 1
-      DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
-C
-      DO J=1,JMN
-         GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-      ENDDO
-C
-C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
-C
-C  (*j*)  for hard wired zero offset (lambda s =0) for terr05 
-      DO J=1,JM
-       DO I=1,numi(j)
-         IM1 = numi(j) - 1
-         DELX  = 360./numi(j)       ! GAUSSIAN GRID RESOLUTION
-         FACLON  = DELX / DELXN
-         IST(I,j) = FACLON * FLOAT(I-1) - FACLON * 0.5 + 1
-         IEN(I,j) = FACLON * FLOAT(I) - FACLON * 0.5 + 1
-!        IST(I,j) = FACLON * FLOAT(I-1) + 1.0001
-!        IEN(I,j) = FACLON * FLOAT(I)   + 0.0001
-C
-         IF (IST(I,j) .LE. 0)      IST(I,j) = IST(I,j) + IMN
-         IF (IEN(I,j) .LT. IST(I,j)) IEN(I,j) = IEN(I,j) + IMN
-!
-!          if ( I .lt. 10  .and. J .ge. JM-1 )
-!    1   PRINT*,' MAKEMT: I j IST IEN ',I,j,IST(I,j),IEN(I,j)
-       ENDDO
-!          if ( J .ge. JM-1 ) then
-!     print *,' *** FACLON=',FACLON, 'numi(j=',j,')=',numi(j)
-!          endif
-      ENDDO
-      print *,' DELX=',DELX,' DELXN=',DELXN
-      DO J=1,JM-1
-         FLAG=.TRUE.
-         DO J1=1,JMN
-            XXLAT = (XLAT(J)+XLAT(J+1))/2.
-            IF(FLAG.AND.GLAT(J1).GT.XXLAT) THEN
-              JST(J) = J1
-              JEN(J+1) = J1 - 1
-              FLAG = .FALSE.
-            ENDIF
-         ENDDO
-CX     PRINT*, ' J JST JEN ',J,JST(J),JEN(J),XLAT(J),GLAT(J1)
-      ENDDO
-      JST(JM) = MAX(JST(JM-1) - (JEN(JM-1)-JST(JM-1)),1)
-      JEN(1)  = MIN(JEN(2) + (JEN(2)-JST(2)),JMN)      
-!      PRINT*, ' JM JST JEN=',JST(JM),JEN(JM),XLAT(JM),GLAT(JMN)
-C
-C...FIRST, AVERAGED HEIGHT
-C
-      DO J=1,JM
-        DO I=1,numi(j)
-            ORO(I,J)  = 0.0
-            VAR(I,J)  = 0.0
-            VAR4(I,J) = 0.0
-            XNSUM = 0.0
-            XLAND = 0.0
-            XWATR = 0.0
-            XL1 = 0.0
-            XS1 = 0.0
-            XW1 = 0.0
-            XW2 = 0.0
-            XW4 = 0.0
-            DO II1 = 1, IEN(I,J) - IST(I,J) + 1
-               I1 = IST(I,J) + II1 - 1
-               IF(I1.LE.0.)  I1 = I1 + IMN
-               IF(I1.GT.IMN) I1 = I1 - IMN
-!        if ( i .le. 10 .and. i .ge. 1 ) then 
-!             if (j .eq. JM )
-!    &print *,' J,JST,JEN,IST,IEN,I1=',
-!    &J,JST(j),JEN(J),IST(I,j),IEN(I,j),I1
-!        endif
-               DO J1=JST(J),JEN(J)
-                  XLAND = XLAND + FLOAT(ZSLM(I1,J1))
-                  XWATR = XWATR + FLOAT(1-ZSLM(I1,J1))
-                  XNSUM = XNSUM + 1.
-                  HEIGHT = FLOAT(ZAVG(I1,J1)) 
-C.........
-                  IF(HEIGHT.LT.-990.) HEIGHT = 0.0
-                  XL1 = XL1 + HEIGHT * FLOAT(ZSLM(I1,J1))
-                  XS1 = XS1 + HEIGHT * FLOAT(1-ZSLM(I1,J1))
-                  XW1 = XW1 + HEIGHT
-                  XW2 = XW2 + HEIGHT ** 2
-C   check antarctic pole 
-!        if ( i .le. 10 .and. i .ge. 1 )then
-!           if (j .ge. JM-1 )then
-C=== degub testing
-!     print *," I,J,I1,J1,XL1,XS1,XW1,XW2:",I,J,I1,J1,XL1,XS1,XW1,XW2
-! 153 format(1x,' ORO,ELVMAX(i=',i4,' j=',i4,')=',2E14.5,3f5.1)
-!          endif
-!        endif
-               ENDDO
-            ENDDO
-            IF(XNSUM.GT.1.) THEN
-! --- SLM initialized with OCLSM calc from all land points except ....
-! ---  0 is ocean and 1 is land for slm
-! ---  Step 1 is to only change SLM after GFS SLM is applied
-                 
-               SLM(I,J) = FLOAT(NINT(XLAND/XNSUM))
-               IF(SLM(I,J).NE.0.) THEN
-                  ORO(I,J)= XL1 / XLAND
-               ELSE
-                  ORO(I,J)= XS1 / XWATR
-               ENDIF
-               VAR(I,J)=SQRT(MAX(XW2/XNSUM-(XW1/XNSUM)**2,0.))
-            DO II1 = 1, IEN(I,j) - IST(I,J) + 1
-               I1 = IST(I,J) + II1 - 1
-                  IF(I1.LE.0.) I1 = I1 + IMN
-                  IF(I1.GT.IMN) I1 = I1 - IMN
-                  DO J1=JST(J),JEN(J)
-                     HEIGHT = FLOAT(ZAVG(I1,J1)) 
-                     IF(HEIGHT.LT.-990.) HEIGHT = 0.0
-                     XW4 = XW4 + (HEIGHT-ORO(I,J)) ** 4
-                  ENDDO
-               ENDDO
-               IF(VAR(I,J).GT.1.) THEN
-!          if ( I .lt. 20  .and. J .ge. JM-19 ) then
-!     print *,'I,J,XW4,XNSUM,VAR(I,J)',I,J,XW4,XNSUM,VAR(I,J)
-!          endif
-                  VAR4(I,J) = MIN(XW4/XNSUM/VAR(I,J) **4,10.)
-               ENDIF
-            ENDIF
-         ENDDO
-      ENDDO
-      WRITE(6,*) "! MAKEMT ORO SLM VAR VAR4 DONE"
-C
-
-      RETURN
-      END
+      END SUBROUTINE TERSUB
 
 !> Determine the location of a cubed-sphere point within
 !! the high-resolution orography data.  The location is
@@ -2181,290 +2012,7 @@ C
       deallocate(hgt_1d)
       deallocate(hgt_1d_all)
       RETURN
-      END
-
-!> Make the principle coordinates - slope of orography, 
-!! anisotropy, angle of mountain range with respect to east.
-!! This routine is used for spectral GFS gaussian grids.
-!!
-!! @param[in] zavg The high-resolution input orography dataset.
-!! @param[in] zslm The high-resolution input land-mask dataset.
-!! @param[out] theta Angle of mountain range with respect to
-!! east for each model point.
-!! @param[out] gamma Anisotropy for each model point.
-!! @param[out] sigma Slope of orography for each model point.
-!! @param[out] glat Latitude of each row of the high-resolution 
-!! orography and land-mask datasets.
-!! @param[out] ist This is the 'i' index of high-resolution data set
-!! at the east edge of the model grid cell.
-!! @param[out] ien This is the 'i' index of high-resolution data set
-!! at the west edge of the model grid cell.
-!! @param[out] jst  This is the 'j' index of high-resolution data set
-!! at the south edge of the model grid cell.
-!! @param[out] jen This is the 'j' index of high-resolution data set
-!! at the north edge of the model grid cell.
-!! @param[in] im "i" dimension of the model grid tile.
-!! @param[in] jm "j" dimension of the model grid tile.
-!! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
-!! @param[in] jmn "j" dimension of the hi-res input orog/mask datasets.
-!! @param[in] xlat The latitude of each row of the model grid.
-!! @param[in] numi For reduced gaussian grids, the number of 'i' points
-!! for each 'j' row.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
-     1           GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-C
-C===  PC: principal coordinates of each Z avg orog box for L&M
-C
-      parameter(REARTH=6.3712E+6)
-      DIMENSION GLAT(JMN),XLAT(JM),DELTAX(JMN)
-      INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
-      DIMENSION ORO(IM,JM),SLM(IM,JM),HL(IM,JM),HK(IM,JM)
-      DIMENSION HX2(IM,JM),HY2(IM,JM),HXY(IM,JM),HLPRIM(IM,JM)
-      DIMENSION THETA(IM,JM),GAMMA(IM,JM),SIGMA2(IM,JM),SIGMA(IM,JM)
-      DIMENSION IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM),numi(jm)
-      LOGICAL FLAG, DEBUG
-C===  DATA DEBUG/.TRUE./
-      DATA DEBUG/.FALSE./
-C
-      PI = 4.0 * ATAN(1.0)
-      CERTH = PI * REARTH
-C---- GLOBAL XLAT AND XLON ( DEGREE )
-C
-      JM1 = JM - 1
-      DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
-      DELTAY =  CERTH / FLOAT(JMN)
-      print *, 'MAKEPC: DELTAY=',DELTAY
-C
-      DO J=1,JMN
-         GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-         DELTAX(J) = DELTAY * COS(GLAT(J)*PI/180.0)
-      ENDDO
-C
-C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
-C
-      DO J=1,JM
-      DO I=1,numi(j)
-C        IM1 = numi(j) - 1
-         DELX  = 360./numi(j)       ! GAUSSIAN GRID RESOLUTION
-         FACLON  = DELX / DELXN
-         IST(I,j) = FACLON * FLOAT(I-1) - FACLON * 0.5
-         IST(I,j) = IST(I,j) + 1
-         IEN(I,j) = FACLON * FLOAT(I) - FACLON * 0.5
-C              if (debug) then
-C          if ( I .lt. 10 .and. J .lt. 10 )
-C    1     PRINT*, ' I j IST IEN ',I,j,IST(I,j),IEN(I,j)
-C              endif
-!        IST(I,j) = FACLON * FLOAT(I-1) + 1.0001
-!        IEN(I,j) = FACLON * FLOAT(I)   + 0.0001
-         IF (IST(I,j) .LE. 0)      IST(I,j) = IST(I,j) + IMN
-         IF (IEN(I,j) .LT. IST(I,j)) IEN(I,j) = IEN(I,j) + IMN
-               if (debug) then
-           if ( I .lt. 10 .and. J .lt. 10 )
-     1     PRINT*, ' I j IST IEN ',I,j,IST(I,j),IEN(I,j)
-               endif
-         IF (IEN(I,j) .LT. IST(I,j)) 
-     1 print *,' MAKEPC: IEN < IST: I,J,IST(I,J),IEN(I,J)',
-     2 I,J,IST(I,J),IEN(I,J)
-      ENDDO
-      ENDDO
-      DO J=1,JM-1
-         FLAG=.TRUE.
-         DO J1=1,JMN
-            XXLAT = (XLAT(J)+XLAT(J+1))/2.
-            IF(FLAG.AND.GLAT(J1).GT.XXLAT) THEN
-              JST(J) = J1
-              JEN(J+1) = J1 - 1
-              FLAG = .FALSE.
-            ENDIF
-         ENDDO
-      ENDDO
-      JST(JM) = MAX(JST(JM-1) - (JEN(JM-1)-JST(JM-1)),1)
-      JEN(1)  = MIN(JEN(2) + (JEN(2)-JST(2)),JMN)
-               if (debug) then
-        PRINT*, ' IST,IEN(1,1-numi(1,JM))',IST(1,1),IEN(1,1), 
-     1  IST(numi(JM),JM),IEN(numi(JM),JM), numi(JM)
-        PRINT*, ' JST,JEN(1,JM) ',JST(1),JEN(1),JST(JM),JEN(JM) 
-                endif
-C
-C... DERIVITIVE TENSOR OF HEIGHT
-C
-      DO J=1,JM
-        DO I=1,numi(j)
-            ORO(I,J)  = 0.0
-            HX2(I,J) = 0.0
-            HY2(I,J) = 0.0
-            HXY(I,J) = 0.0
-            XNSUM = 0.0
-            XLAND = 0.0
-            XWATR = 0.0
-            XL1 = 0.0
-            XS1 = 0.0
-            xfp = 0.0
-            yfp = 0.0
-            xfpyfp = 0.0
-            xfp2 = 0.0
-            yfp2 = 0.0
-            HL(I,J) = 0.0
-            HK(I,J) = 0.0
-            HLPRIM(I,J) = 0.0
-            THETA(I,J) = 0.0 
-            GAMMA(I,J) = 0.
-            SIGMA2(I,J) = 0.
-            SIGMA(I,J) = 0.
-C
-            DO II1 = 1, IEN(I,J) - IST(I,J) + 1
-               I1 = IST(I,J) + II1 - 1
-               IF(I1.LE.0.)  I1 = I1 + IMN
-               IF(I1.GT.IMN) I1 = I1 - IMN
-C
-C===  set the rest of the indexs for ave: 2pt staggered derivitive
-C
-                i0 = i1 - 1
-                if (i1 - 1 .le. 0 )   i0 = i0 + imn
-                if (i1 - 1 .gt. imn)  i0 = i0 - imn
-C
-                ip1 = i1 + 1
-                if (i1 + 1 .le. 0 )   ip1 = ip1 + imn
-                if (i1 + 1 .gt. imn)  ip1 = ip1 - imn
-C
-               DO J1=JST(J),JEN(J)
-                if (debug) then
-                   if ( I1 .eq. IST(I,J) .and. J1 .eq. JST(J) ) 
-     1   PRINT*, ' J, J1,IST,JST,DELTAX,GLAT ',
-     2             J,J1,IST(I,J),JST(J),DELTAX(J1),GLAT(J1)  
-                   if ( I1 .eq. IEN(I,J) .and. J1 .eq. JEN(J) ) 
-     1   PRINT*, ' J, J1,IEN,JEN,DELTAX,GLAT ',
-     2             J,J1,IEN(I,J),JEN(J),DELTAX(J1),GLAT(J1)  
-                endif
-                  XLAND = XLAND + FLOAT(ZSLM(I1,J1))
-                  XWATR = XWATR + FLOAT(1-ZSLM(I1,J1))
-                  XNSUM = XNSUM + 1.
-C
-                  HEIGHT = FLOAT(ZAVG(I1,J1))
-                  hi0 =  float(zavg(i0,j1))
-                  hip1 =  float(zavg(ip1,j1))
-C
-                  IF(HEIGHT.LT.-990.) HEIGHT = 0.0
-                  if(hi0 .lt. -990.)  hi0 = 0.0
-                  if(hip1 .lt. -990.)  hip1 = 0.0
-C........           xfp = xfp + 0.5 * ( hip1 - hi0 ) / DELTAX(J1)
-           xfp = 0.5 * ( hip1 - hi0 ) / DELTAX(J1)
-          xfp2 = xfp2 + 0.25 * ( ( hip1 - hi0 )/DELTAX(J1) )** 2 
-C
-! --- not at boundaries
-!RAB                 if ( J1 .ne. JST(1)  .and. J1 .ne. JEN(JM) ) then
-                 if ( J1 .ne. JST(JM)  .and. J1 .ne. JEN(1) ) then
-                  hj0 =  float(zavg(i1,j1-1))
-                  hjp1 =  float(zavg(i1,j1+1))
-                  if(hj0 .lt. -990.)  hj0 = 0.0
-                  if(hjp1 .lt. -990.)  hjp1 = 0.0
-C.......          yfp = yfp + 0.5 * ( hjp1 - hj0 ) / DELTAY
-                  yfp = 0.5 * ( hjp1 - hj0 ) / DELTAY
-                  yfp2 = yfp2 + 0.25 * ( ( hjp1 - hj0 )/DELTAY )**2   
-C
-C..............elseif ( J1 .eq. JST(J) .or. J1 .eq. JEN(JM) ) then
-C ===     the NH pole: NB J1 goes from High at NP to Low toward SP
-C
-!RAB                 elseif ( J1 .eq. JST(1) ) then
-                 elseif ( J1 .eq. JST(JM) ) then
-		 ijax = i1 + imn/2 
-               if (ijax .le. 0 )   ijax = ijax + imn
-               if (ijax .gt. imn)  ijax = ijax - imn
-C..... at N pole we stay at the same latitude j1 but cross to opp side
-                 hijax = float(zavg(ijax,j1))
-                 hi1j1 = float(zavg(i1,j1))
-                  if(hijax .lt. -990.)  hijax = 0.0
-                  if(hi1j1 .lt. -990.)  hi1j1 = 0.0
-C.......        yfp = yfp + 0.5 * ( ( 0.5 * ( hijax + hi1j1) ) - hi1j1 )/DELTAY
-        yfp = 0.5 * ( ( 0.5 * ( hijax - hi1j1 ) ) )/DELTAY
-        yfp2 = yfp2 + 0.25 * ( ( 0.5 *  ( hijax - hi1j1) ) 
-     1                                              / DELTAY )**2
-C
-C ===     the SH pole: NB J1 goes from High at NP to Low toward SP
-C
-!RAB                 elseif ( J1 .eq. JEN(JM) ) then
-                 elseif ( J1 .eq. JEN(1) ) then
-		 ijax = i1 + imn/2 
-               if (ijax .le. 0 )   ijax = ijax + imn
-               if (ijax .gt. imn)  ijax = ijax - imn
-                 hijax = float(zavg(ijax,j1))
-                 hi1j1 = float(zavg(i1,j1))
-                  if(hijax  .lt. -990.)  hijax = 0.0
-                  if(hi1j1  .lt. -990.)  hi1j1 = 0.0
-             if ( i1 .lt. 5 )print *,' S.Pole i1,j1 :',i1,j1,hijax,hi1j1
-C.....        yfp = yfp + 0.5 *  (0.5 * ( hijax - hi1j1) )/DELTAY  
-        yfp = 0.5 *  (0.5 * ( hijax - hi1j1) )/DELTAY  
-        yfp2 = yfp2 + 0.25 * (  (0.5 * (hijax - hi1j1) )
-     1                                                 / DELTAY )**2  
-                 endif
-C
-C ===    The above does an average across the pole for the bndry in j.
-C23456789012345678901234567890123456789012345678901234567890123456789012......
-C
-                  xfpyfp = xfpyfp + xfp * yfp
-                  XL1 = XL1 + HEIGHT * FLOAT(ZSLM(I1,J1))
-                  XS1 = XS1 + HEIGHT * FLOAT(1-ZSLM(I1,J1))
-C
-C === average the HX2, HY2 and HXY
-C === This will be done over all land
-C
-               ENDDO
-            ENDDO
-C
-C ===  HTENSR 
-C
-           IF(XNSUM.GT.1.) THEN
-               SLM(I,J) = FLOAT(NINT(XLAND/XNSUM))
-               IF(SLM(I,J).NE.0.) THEN
-                  ORO(I,J)= XL1 / XLAND
-                  HX2(I,J) =  xfp2  / XLAND
-                  HY2(I,J) =  yfp2  / XLAND
-		  HXY(I,J) =  xfpyfp / XLAND
-               ELSE
-                  ORO(I,J)= XS1 / XWATR
-               ENDIF
-C=== degub testing
-      if (debug) then
-          print *," I,J,i1,j1,HEIGHT:", I,J,i1,j1,HEIGHT,
-     1         XLAND,SLM(i,j)
-          print *," xfpyfp,xfp2,yfp2:",xfpyfp,xfp2,yfp2
-          print *," HX2,HY2,HXY:",HX2(I,J),HY2(I,J),HXY(I,J)
-      ENDIF
-C
-C === make the principal axes, theta, and the degree of anisotropy, 
-C === and sigma2, the slope parameter
-C
-               HK(I,J) = 0.5 * ( HX2(I,J) + HY2(I,J) )
-               HL(I,J) = 0.5 * ( HX2(I,J) - HY2(I,J) )
-               HLPRIM(I,J) = SQRT(HL(I,J)*HL(I,J) + HXY(I,J)*HXY(I,J))
-           IF( HL(I,J).NE. 0. .AND. SLM(I,J) .NE. 0. ) THEN
-C
-             THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J)) * 180.0 / PI
-C ===   for testing print out in degrees
-C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
-            ENDIF
-             SIGMA2(I,J) =  ( HK(I,J) + HLPRIM(I,J) )
-        if ( SIGMA2(I,J) .GE. 0. ) then 
-             SIGMA(I,J) =  SQRT(SIGMA2(I,J) )
-             if (sigma2(i,j) .ne. 0. .and. 
-     &        HK(I,J) .GE. HLPRIM(I,J) ) 
-     1       GAMMA(I,J) = sqrt( (HK(I,J) - HLPRIM(I,J)) / SIGMA2(I,J) )
-        else
-             SIGMA(I,J)=0.
-        endif
-           ENDIF
-                  if (debug) then
-       print *," I,J,THETA,SIGMA,GAMMA,",I,J,THETA(I,J),
-     1                                       SIGMA(I,J),GAMMA(I,J)
-       print *," HK,HL,HLPRIM:",HK(I,J),HL(I,J),HLPRIM(I,J)
-                  endif
-        ENDDO
-      ENDDO
-      WRITE(6,*) "! MAKE Principal Coord  DONE"
-C
-      RETURN
-      END
+      END SUBROUTINE MAKEMT2
 
 !> Make the principle coordinates - slope of orography, 
 !! anisotropy, angle of mountain range with respect to east.
@@ -2713,366 +2261,6 @@ C
       RETURN
       END SUBROUTINE MAKEPC2
       
-!> Create orographic asymmetry and orographic length scale on
-!! the model grid.  This routine is used for the spectral
-!! GFS gaussian grid.
-!!
-!! @param[in] zavg The high-resolution input orography dataset.
-!! @param[in] var Standard deviation of orography on the model grid.
-!! @param[out] glat Latitude of each row of input terrain dataset.
-!! @param[out] oa4 Orographic asymmetry on the model grid. Four
-!! directional components - W/S/SW/NW
-!! @param[out] ol Orographic length scale on the model grid. Four
-!! directional components - W/S/SW/NW
-!! @param[out] ioa4 Count of oa4 values between certain thresholds.
-!! @param[out] elvmax Maximum elevation on the model grid.
-!! @param[in] oro Orography on the model grid.
-!! @param[out] oro1 Save array for model grid orography.
-!! @param[out] xnsum Number of high-resolution orography points
-!! higher than the model grid box average.
-!! @param[out] xnsum1 Number of high-resolution orography points
-!! higher than the critical height.
-!! @param[out] xnsum2 Total number of high-resolution orography points
-!! within a model grid box.
-!! @param[out] xnsum3 Same as xnsum1, except shifted by half a 
-!! model grid box.
-!! @param[out] xnsum4 Same as xnsum2, except shifted by half a
-!! model grid box.
-!! @param[out] ist This is the 'i' index of high-resolution data set
-!! at the east edge of the model grid cell.
-!! @param[out] ien This is the 'i' index of high-resolution data set
-!! at the west edge of the model grid cell.
-!! @param[out] jst  This is the 'j' index of high-resolution data set
-!! at the south edge of the model grid cell.
-!! @param[out] jen This is the 'j' index of high-resolution data set
-!! at the north edge of the model grid cell.
-!! @param[in] im "i" dimension of the model grid.
-!! @param[in] jm "j" dimension of the model grid.
-!! @param[in] imn "i" dimension of the input terrain dataset.
-!! @param[in] jmn "j" dimension of the input terrain dataset.
-!! @param[in] xlat The latitude of each row of the model grid.
-!! @param[in] numi For reduced gaussian grids, the number of 'i' points
-!! for each 'j' row.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE MAKEOA(ZAVG,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
-     1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
-     2           IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-      DIMENSION GLAT(JMN),XLAT(JM)
-      INTEGER ZAVG(IMN,JMN)
-      DIMENSION ORO(IM,JM),ORO1(IM,JM),ELVMAX(IM,JM),ZMAX(IM,JM)
-      DIMENSION OA4(IM,JM,4),IOA4(IM,JM,4)
-      DIMENSION IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM)
-      DIMENSION XNSUM(IM,JM),XNSUM1(IM,JM),XNSUM2(IM,JM)
-      DIMENSION XNSUM3(IM,JM),XNSUM4(IM,JM)
-      DIMENSION VAR(IM,JM),OL(IM,JM,4),numi(jm)
-      LOGICAL FLAG
-C
-C---- GLOBAL XLAT AND XLON ( DEGREE )
-C
-! --- IM1 = IM - 1 removed (not used in this sub)
-      JM1 = JM - 1
-      DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
-C
-      DO J=1,JMN
-         GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-      ENDDO
-      print *,' IM=',IM,' JM=',JM,' IMN=',IMN,' JMN=',JMN
-C
-C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
-C
-      DO j=1,jm
-      DO I=1,numi(j)
-         DELX  = 360./numi(j)       ! GAUSSIAN GRID RESOLUTION
-         FACLON  = DELX / DELXN
-C ---  minus sign here in IST and IEN as in MAKEMT!
-         IST(I,j) = FACLON * FLOAT(I-1) - FACLON * 0.5
-         IST(I,j) = IST(I,j) + 1
-         IEN(I,j) = FACLON * FLOAT(I) - FACLON * 0.5
-!        IST(I,j) = FACLON * FLOAT(I-1) + 1.0001
-!        IEN(I,j) = FACLON * FLOAT(I)   + 0.0001
-         IF (IST(I,j) .LE. 0)      IST(I,j) = IST(I,j) + IMN
-         IF (IEN(I,j) .LT. IST(I,j)) IEN(I,j) = IEN(I,j) + IMN
-cx         PRINT*, ' I j IST IEN ',I,j,IST(I,j),IEN(I,j)
-           if ( I .lt. 3  .and. J .lt. 3 )
-     1PRINT*,' MAKEOA: I j IST IEN ',I,j,IST(I,j),IEN(I,j)
-           if ( I .lt. 3  .and. J .ge. JM-1 )
-     1PRINT*,' MAKEOA: I j IST IEN ',I,j,IST(I,j),IEN(I,j)
-      ENDDO
-      ENDDO
-      print *,'MAKEOA: DELXN,DELX,FACLON',DELXN,DELX,FACLON
-      print *, '  ***** ready to start JST JEN section '
-      DO J=1,JM-1
-         FLAG=.TRUE.
-         DO J1=1,JMN
-! --- XXLAT added as in MAKEMT and in next line as well
-            XXLAT = (XLAT(J)+XLAT(J+1))/2.
-            IF(FLAG.AND.GLAT(J1).GT.XXLAT) THEN
-              JST(J) = J1
-! ---         JEN(J+1) = J1 - 1
-              FLAG = .FALSE.
-           if ( J .eq. 1 )
-     1PRINT*,' MAKEOA: XX j JST JEN ',j,JST(j),JEN(j)
-            ENDIF
-         ENDDO
-           if ( J .lt. 3 )
-     1PRINT*,' MAKEOA: j JST JEN ',j,JST(j),JEN(j)
-           if ( J .ge. JM-2 )
-     1PRINT*,' MAKEOA: j JST JEN ',j,JST(j),JEN(j)
-C        FLAG=.TRUE.
-C        DO J1=JST(J),JMN
-C           IF(FLAG.AND.GLAT(J1).GT.XLAT(J)) THEN
-C             JEN(J) = J1 - 1
-C             FLAG = .FALSE.
-C           ENDIF
-C        ENDDO
-      ENDDO
-      JST(JM) = MAX(JST(JM-1) - (JEN(JM-1)-JST(JM-1)),1)
-      JEN(1)  = MIN(JEN(2) + (JEN(2)-JST(2)),JMN)
-      print *,' ***** JST(1) JEN(1) ',JST(1),JEN(1)
-      print *,' ***** JST(JM) JEN(JM) ',JST(JM),JEN(JM)
-C
-      DO J=1,JM
-        DO I=1,numi(j)
-          XNSUM(I,J) = 0.0
-          ELVMAX(I,J) = ORO(I,J)
-          ZMAX(I,J)   = 0.0
-        ENDDO
-      ENDDO
-!
-! --- # of peaks > ZAVG value and ZMAX(IM,JM) -- ORO is already avg.
-! ---  to JM or to JM1
-      DO J=1,JM
-        DO I=1,numi(j)
-            DO II1 = 1, IEN(I,J) - IST(I,J) + 1
-               I1 = IST(I,J) + II1 - 1
-! --- next line as in makemt (I1 not II1) (*j*) 20070701
-             IF(I1.LE.0.)  I1 = I1 + IMN
-             IF (I1 .GT. IMN) I1 = I1 - IMN
-             DO J1=JST(J),JEN(J)
-                HEIGHT = FLOAT(ZAVG(I1,J1))
-                IF(HEIGHT.LT.-990.) HEIGHT = 0.0
-                IF ( HEIGHT .gt. ORO(I,J) ) then
-                   if ( HEIGHT .gt. ZMAX(I,J) )ZMAX(I,J) = HEIGHT
-                   XNSUM(I,J) = XNSUM(I,J) + 1
-                  ENDIF
-             ENDDO
-            ENDDO
-           if ( I .lt. 5  .and. J .ge. JM-5 ) then
-      print *,' I,J,ORO(I,J),XNSUM(I,J),ZMAX(I,J):',
-     1         I,J,ORO(I,J),XNSUM(I,J),ZMAX(I,J)
-           endif
-        ENDDO
-      ENDDO
-!
-C....     make ELVMAX  ORO from MAKEMT sub
-C
-! ---  this will make work1 array take on oro's values on return
-      DO J=1,JM
-        DO I=1,numi(j)
-
-          ORO1(I,J) = ORO(I,J)
-          ELVMAX(I,J) = ZMAX(I,J) 
-        ENDDO
-      ENDDO
-C........
-C      The MAX elev peak (no averaging)
-C........
-!     DO J=1,JM
-!       DO I=1,numi(j)
-!           DO II1 = 1, IEN(I,J) - IST(I,J) + 1
-!              I1 = IST(I,J) + II1 - 1
-!              IF(I1.LE.0.)  I1 = I1 + IMN
-!              IF(I1.GT.IMN) I1 = I1 - IMN
-!              DO J1=JST(J),JEN(J)
-!              if ( ELVMAX(I,J) .lt. ZMAX(I1,J1)) 
-!    1              ELVMAX(I,J)   =  ZMAX(I1,J1)
-!              ENDDO
-!           ENDDO
-!        ENDDO
-!     ENDDO
-C
-C---- COUNT NUMBER OF MODE. HIGHER THAN THE HC, CRITICAL HEIGHT
-C     IN A GRID BOX
-      DO J=1,JM
-        DO I=1,numi(j)
-          XNSUM1(I,J) = 0.0
-          XNSUM2(I,J) = 0.0
-          XNSUM3(I,J) = 0.0
-          XNSUM4(I,J) = 0.0
-        ENDDO
-      ENDDO
-! ---                 loop 
-      DO J=1,JM1
-        DO I=1,numi(j)
-           HC = 1116.2 - 0.878 * VAR(I,J)
-!          print *,' I,J,HC,VAR:',I,J,HC,VAR(I,J)
-            DO II1 = 1, IEN(I,J) - IST(I,J) + 1
-               I1 = IST(I,J) + II1 - 1
-!     IF (I1.LE.0.) print *,' I1 less than 0',I1,II1,IST(I,J),IEN(I,J) 
-!               if ( J .lt. 3 .or. J .gt. JM-2 ) then 
-!     IF(I1 .GT. IMN)print *,' I1 > IMN',J,I1,II1,IMN,IST(I,J),IEN(I,J) 
-!               endif
-             IF(I1.GT.IMN) I1 = I1 - IMN
-             DO J1=JST(J),JEN(J)
-               IF(FLOAT(ZAVG(I1,J1)) .GT. HC)
-     1            XNSUM1(I,J) = XNSUM1(I,J) + 1
-               XNSUM2(I,J) = XNSUM2(I,J) + 1
-             ENDDO
-           ENDDO
-C
-           INCI = NINT((IEN(I,j)-IST(I,j)) * 0.5)
-           ISTTT = MIN(MAX(IST(I,j)-INCI,1),IMN)
-           IEDDD = MIN(MAX(IEN(I,j)-INCI,1),IMN)
-C
-           INCJ = NINT((JEN(J)-JST(J)) * 0.5)
-           JSTTT = MIN(MAX(JST(J)-INCJ,1),JMN)
-           JEDDD = MIN(MAX(JEN(J)-INCJ,1),JMN)
-!               if ( J .lt. 3 .or. J .gt. JM-3 )  then
-!                 if(I .lt. 3 .or. I .gt. IM-3) then
-!        print *,' INCI,ISTTT,IEDDD,INCJ,JSTTT,JEDDD:',
-!    1  I,J,INCI,ISTTT,IEDDD,INCJ,JSTTT,JEDDD  
-!                 endif
-!               endif
-C
-           DO I1=ISTTT,IEDDD
-             DO J1=JSTTT,JEDDD
-               IF(FLOAT(ZAVG(I1,J1)) .GT. HC)
-     1            XNSUM3(I,J) = XNSUM3(I,J) + 1
-               XNSUM4(I,J) = XNSUM4(I,J) + 1
-             ENDDO
-           ENDDO
-cx         print*,' i j hc var ',i,j,hc,var(i,j)
-cx         print*,'xnsum12 ',xnsum1(i,j),xnsum2(i,j)
-cx         print*,'xnsum34 ',xnsum3(i,j),xnsum4(i,j)
-        ENDDO
-      ENDDO
-C
-C---- CALCULATE THE 3D OROGRAPHIC ASYMMETRY FOR 4 WIND DIRECTIONS
-C---- AND THE 3D OROGRAPHIC SUBGRID OROGRAPHY FRACTION
-C     (KWD = 1  2  3  4)
-C     ( WD = W  S SW NW)
-C
-C
-      DO KWD = 1, 4
-        DO J=1,JM
-          DO I=1,numi(j)
-            OA4(I,J,KWD) = 0.0
-          ENDDO
-        ENDDO
-      ENDDO
-C
-      DO J=1,JM-2
-        DO I=1,numi(j)
-        II = I + 1
-        IF (II .GT. numi(j)) II = II - numi(j)
-          XNPU = XNSUM(I,J)    + XNSUM(I,J+1)
-          XNPD = XNSUM(II,J)   + XNSUM(II,J+1)
-          IF (XNPD .NE. XNPU) OA4(II,J+1,1) = 1. - XNPD / MAX(XNPU , 1.)
-          OL(II,J+1,1) = (XNSUM3(I,J+1)+XNSUM3(II,J+1))/
-     1                   (XNSUM4(I,J+1)+XNSUM4(II,J+1))
-!          if ( I .lt. 20  .and. J .ge. JM-19 ) then
-!        PRINT*,' MAKEOA: I J IST IEN ',I,j,IST(I,J),IEN(I,J)
-!        PRINT*,' HC VAR ',HC,VAR(i,j)
-!        PRINT*,' MAKEOA: XNSUM(I,J)=',XNSUM(I,J),XNPU, XNPD
-!        PRINT*,' MAKEOA: XNSUM3(I,J+1),XNSUM3(II,J+1)',
-!    1                    XNSUM3(I,J+1),XNSUM3(II,J+1)
-!        PRINT*,' MAKEOA: II, OA4(II,J+1,1), OL(II,J+1,1):',
-!    1                    II, OA4(II,J+1,1), OL(II,J+1,1)
-!          endif
-        ENDDO
-      ENDDO
-      DO J=1,JM-2
-        DO I=1,numi(j)
-        II = I + 1
-        IF (II .GT. numi(j)) II = II - numi(j)
-          XNPU = XNSUM(I,J+1)   + XNSUM(II,J+1)
-          XNPD = XNSUM(I,J)     + XNSUM(II,J)
-          IF (XNPD .NE. XNPU) OA4(II,J+1,2) = 1. - XNPD / MAX(XNPU , 1.)
-          OL(II,J+1,2) = (XNSUM3(II,J)+XNSUM3(II,J+1))/
-     1                   (XNSUM4(II,J)+XNSUM4(II,J+1))
-        ENDDO
-      ENDDO
-      DO J=1,JM-2
-        DO I=1,numi(j)
-        II = I + 1
-        IF (II .GT. numi(j)) II = II - numi(j)
-          XNPU = XNSUM(I,J+1)  + ( XNSUM(I,J) + XNSUM(II,J+1) )*0.5
-          XNPD = XNSUM(II,J)   + ( XNSUM(I,J) + XNSUM(II,J+1) )*0.5
-          IF (XNPD .NE. XNPU) OA4(II,J+1,3) = 1. - XNPD / MAX(XNPU , 1.)
-          OL(II,J+1,3) = (XNSUM1(II,J)+XNSUM1(I,J+1))/
-     1                   (XNSUM2(II,J)+XNSUM2(I,J+1))
-        ENDDO
-      ENDDO
-      DO J=1,JM-2
-        DO I=1,numi(j)
-        II = I + 1
-        IF (II .GT. numi(j)) II = II - numi(j)
-          XNPU = XNSUM(I,J)    + ( XNSUM(II,J) + XNSUM(I,J+1) )*0.5
-          XNPD = XNSUM(II,J+1) + ( XNSUM(II,J) + XNSUM(I,J+1) )*0.5
-          IF (XNPD .NE. XNPU) OA4(II,J+1,4) = 1. - XNPD / MAX(XNPU , 1.)
-          OL(II,J+1,4) = (XNSUM1(I,J)+XNSUM1(II,J+1))/
-     1                   (XNSUM2(I,J)+XNSUM2(II,J+1))
-        ENDDO
-      ENDDO
-C
-      DO KWD = 1, 4
-        DO I=1,numi(j)
-          OL(I,1,KWD)  = OL(I,2,KWD)
-          OL(I,JM,KWD) = OL(I,JM-1,KWD)
-        ENDDO
-      ENDDO
-C
-      DO KWD=1,4
-        DO J=1,JM
-          DO I=1,numi(j)
-            T = OA4(I,J,KWD)
-            OA4(I,J,KWD) = SIGN( MIN( ABS(T), 1. ), T )
-          ENDDO
-        ENDDO
-      ENDDO
-C
-      NS0 = 0
-      NS1 = 0
-      NS2 = 0
-      NS3 = 0
-      NS4 = 0
-      NS5 = 0
-      NS6 = 0
-      DO KWD=1,4
-      DO J=1,JM
-      DO I=1,numi(j)
-         T = ABS( OA4(I,J,KWD) )
-         IF(T .EQ. 0.) THEN
-            IOA4(I,J,KWD) = 0
-            NS0 = NS0 + 1
-         ELSE IF(T .GT. 0. .AND. T .LE. 1.) THEN
-            IOA4(I,J,KWD) = 1
-            NS1 = NS1 + 1
-         ELSE IF(T .GT. 1. .AND. T .LE. 10.) THEN
-            IOA4(I,J,KWD) = 2
-            NS2 = NS2 + 1
-         ELSE IF(T .GT. 10. .AND. T .LE. 100.) THEN
-            IOA4(I,J,KWD) = 3
-            NS3 = NS3 + 1
-         ELSE IF(T .GT. 100. .AND. T .LE. 1000.) THEN
-            IOA4(I,J,KWD) = 4
-            NS4 = NS4 + 1
-         ELSE IF(T .GT. 1000. .AND. T .LE. 10000.) THEN
-            IOA4(I,J,KWD) = 5
-            NS5 = NS5 + 1
-         ELSE IF(T .GT. 10000.) THEN
-            IOA4(I,J,KWD) = 6
-            NS6 = NS6 + 1
-         ENDIF
-      ENDDO
-      ENDDO
-      ENDDO
-C
-      WRITE(6,*) "! MAKEOA EXIT"
-C
-      RETURN
-      END SUBROUTINE MAKEOA
-
 !> Convert the 'x' direction distance of a cubed-sphere grid
 !! point to the corresponding distance in longitude.
 !!
