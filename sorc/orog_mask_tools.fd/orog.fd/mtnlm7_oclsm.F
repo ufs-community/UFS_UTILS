@@ -71,15 +71,7 @@ C> @return 0 for success, error code otherwise.
       READ(5,*) INPUTOROG
       READ(5,*) mask_only
       READ(5,*) merge_file
-!      MTNRES=1
-!      IM=48
-!      JM=48
-!      NM=46
-!      efac=0
-!      blat=0
-!      NR=0
-!      OUTGRID = "C48_grid.tile1.nc"
-!      INPUTOROG = "oro.288x144.nc"
+
       print*, "INPUTOROG=", trim(INPUTOROG)
       print*, "IM,JM=", IM, JM
       print*, "MASK_ONLY", mask_only
@@ -97,11 +89,14 @@ C> @return 0 for success, error code otherwise.
       JMN = 180*120/MTNRES
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
 
-! --- read the grid resolution if the OUTGRID exists.
-      if( trim(OUTGRID) .NE. "none" ) then
+! --- Read the grid resolution from 'grid' file OUTGRID.
+
+      READ_GRID_FILE : if( trim(OUTGRID) .NE. "none" ) then
+
          inquire(file=trim(OUTGRID), exist=fexist)
          if(.not. fexist) then
-            print*, "file "//trim(OUTGRID)//" does not exist"
+            print*, "FATAL ERROR: file "
+     &             //trim(OUTGRID)//" does not exist"
             CALL ERREXIT(4)
          endif
          do ncid = 103, 512
@@ -109,7 +104,7 @@ C> @return 0 for success, error code otherwise.
            if( .NOT.opened )exit
          end do
 
-         print*, "outgrid=", trim(outgrid)
+         print*, "READ outgrid=", trim(outgrid)
          error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
          call netcdf_err(error, 'Open file '//trim(OUTGRID) )
          error=nf_inq_dimid(ncid, 'nx', id_dim)
@@ -138,8 +133,13 @@ C> @return 0 for success, error code otherwise.
          endif
          error=nf_close(ncid)
          call netcdf_err(error, 'close file '//trim(OUTGRID) )
+
+      else
+
+        print*, "FATAL ERROR: SPECIFY OUTGRID"
+        CALL ERREXIT(8)
          
-      endif
+      endif READ_GRID_FILE
          
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
