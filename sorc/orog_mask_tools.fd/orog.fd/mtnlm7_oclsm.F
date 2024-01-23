@@ -89,7 +89,7 @@ C> @return 0 for success, error code otherwise.
       JMN = 180*120/MTNRES
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
 
-! --- Read the grid resolution from 'grid' file OUTGRID.
+! --- Read the model grid resolution from 'grid' file OUTGRID.
 
       READ_GRID_FILE : if( trim(OUTGRID) .NE. "none" ) then
 
@@ -1434,21 +1434,12 @@ C
       do i=1,im
         xlon(i) = DELXN*(i-1)
       enddo
-!     IF(trim(OUTGRID) == "none") THEN
-!       do j=1,jm
-!        do i=1,im
-!          geolon(i,j) = xlon(i)
-!          geolat(i,j) = xlat(j)
-!        enddo
-!       enddo
-!     else
-        do j = 1, jm
-           xlat(j) = geolat(1,j)
-        enddo
-        do i = 1, im
-           xlon(i) = geolon(i,1)
-        enddo
-!     endif
+      do j = 1, jm
+         xlat(j) = geolat(1,j)
+      enddo
+      do i = 1, im
+         xlon(i) = geolon(i,1)
+      enddo
       tend=timef()
       write(6,*)' Binary output time= ',tend-tbeg
       tbeg=timef()
