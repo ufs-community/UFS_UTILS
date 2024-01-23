@@ -223,7 +223,7 @@ C
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
 
-      logical :: grid_from_file,output_binary,fexist,opened
+      logical :: output_binary,fexist,opened
       logical :: SPECTR, REVLAT
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
@@ -606,15 +606,15 @@ C
       allocate (land_frac(IM,JM),lake_frac(IM,JM))
 
 !--- reading grid file.
-      grid_from_file = .false.
       is_south_pole = .false.
       is_north_pole = .false.
       i_south_pole = 0
       j_south_pole = 0
       i_north_pole = 0
       j_north_pole = 0
-      USE_OUTGRID : if( trim(OUTGRID) .NE. "none" ) then
-         grid_from_file = .true.
+
+! Read 'grid' file
+
          inquire(file=trim(OUTGRID), exist=fexist)
          if(.not. fexist) then
             print*, "file "//trim(OUTGRID)//" does not exist"
@@ -633,25 +633,7 @@ C
      &                   trim(OUTGRID) )
          nx = 2*IM
          ny = 2*JM
-!         error=nf_inq_dimlen(ncid,id_dim,nx)
-!         print*, "nx = ", nx, id_dim
-!         call netcdf_err(error, 'inquire dimension nx length '//
-!     &       'from file '//trim(OUTGRID) )
-!         error=nf_inq_dimid(ncid, 'ny', id_dim)
-!         call netcdf_err(error, 'inquire dimension ny from file '//
-!     &                   trim(OUTGRID) )
-!         error=nf_inq_dimlen(ncid,id_dim,ny)
-!         call netcdf_err(error, 'inquire dimension ny length '//
-!     &       'from file '//trim(OUTGRID) )
-!        IM should equal nx/2 and JM should equal ny/2
-!         if(IM .ne. nx/2) then
-!            print*, "IM=",IM, " /= grid file nx/2=",nx/2
-!            CALL ERREXIT(4)
-!         endif
-!         if(JM .ne. ny/2) then
-!            print*, "JM=",JM, " /= grid file ny/2=",ny/2
-!            CALL ERREXIT(4)
-!         endif
+
          print*, "Read the grid from file "//trim(OUTGRID)
 
          allocate(tmpvar(nx+1,ny+1))
@@ -758,7 +740,6 @@ C
             endif            
          endif
          
-         
          allocate(tmpvar(nx,ny))
          error=nf_inq_varid(ncid, 'area', id_var)
          call netcdf_err(error, 'inquire varid of area from file '
@@ -774,32 +755,10 @@ C
                dy(i,j) = dx(i,j)
             enddo
          enddo
-!         allocate(tmpvar(nx,ny+1))
-
-!         error=nf_inq_varid(ncid, 'dx', id_var)
-!         call netcdf_err(error, 'inquire varid of dx from file '
-!     &                   //trim(OUTGRID) )
-!         error=nf_get_var_double(ncid, id_var, tmpvar)
-!         call netcdf_err(error, 'inquire data of dx from file '
-!     &                   //trim(OUTGRID) )
-!         dx(1:IM,1:JM+1) = tmpvar(2:nx:2,1:ny+1:2)
-!         deallocate(tmpvar)
-
-!          allocate(tmpvar(nx+1,ny))
-!         error=nf_inq_varid(ncid, 'dy', id_var)
-!         call netcdf_err(error, 'inquire varid of dy from file '
-!     &                   //trim(OUTGRID) )
-!         error=nf_get_var_double(ncid, id_var, tmpvar)
-!         call netcdf_err(error, 'inquire data of dy from file '
-!     &                   //trim(OUTGRID) )
-!         dy(1:IM+1,1:JM) = tmpvar(1:nx+1:2,2:ny:2)
-         deallocate(tmpvar)         
-      endif USE_OUTGRID
 
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
                                 !
-!     if(grid_from_file) then
        tbeg=timef()
 
          IF (MERGE_FILE == 'none') then
@@ -825,10 +784,6 @@ C
 
       tend=timef()
       write(6,*)' MAKEMT2 time= ',tend-tbeg
-!     else
-!       CALL MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
-!    &   IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-!     endif
 
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,SLM,'     SLM')
@@ -855,16 +810,12 @@ C
 C ===  Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
 C
       allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
-!      if(grid_from_file) then       
+
       tbeg=timef()
          CALL MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
      1            IM,JM,IMN,JMN,geolon_c,geolat_c,SLM)
       tend=timef()
       write(6,*)' MAKEPC2 time= ',tend-tbeg
-!      else
-!        CALL MAKEPC(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
-!    1            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-!      endif
 
        call minmxj(IM,JM,THETA,'   THETA')
        call minmxj(IM,JM,GAMMA,'   GAMMA')
@@ -884,7 +835,7 @@ C
 
        call minmxj(IM,JM,ORO,'     ORO')
        print*, "inputorog=", trim(INPUTOROG)
-!      if(grid_from_file) then
+
          if(trim(INPUTOROG) == "none") then
            print*, "calling MAKEOA2 to compute OA, OL"
       tbeg=timef()
@@ -1007,12 +958,6 @@ C
            deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
 
          endif
-!      else
-!        CALL MAKEOA(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
-!    1            WORK1,WORK2,WORK3,WORK4,
-!    2            WORK5,WORK6,
-!    3            IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-!      endif
 
 !      Deallocate 2d vars
        deallocate(IST,IEN)
