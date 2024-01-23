@@ -54,12 +54,7 @@ C>  -   UNIT55     - UNFILTERED GRIDDED OROGRAPHY (IM,JM)
 C>  -   UNIT57     - GRIB GRIDDED OROGRAPHY (IM,JM)
 C>
 C>   SUBPROGRAMS CALLED:
-C>  -   UNIQUE:
 C>  -   TERSUB     - MAIN SUBPROGRAM
-C>  -   SPLAT      - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES
-C>  -   LIBRARY:
-C>  -   SPTEZ      - SPHERICAL TRANSFORM
-C>  -   GBYTES     - UNPACK BITS
 C>
 C> @return 0 for success, error code otherwise.
       include 'netcdf.inc'
@@ -208,10 +203,9 @@ C
       integer, allocatable :: IWORK(:,:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
-      real :: PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS
-      real :: sumdif,avedif
+      real :: DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS
 
-      real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
+      real, allocatable :: WGTCLT(:),XLAT(:)
       real, allocatable :: XLON(:),ORS(:),oaa(:),ola(:),GLAT(:)
 
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
@@ -246,7 +240,7 @@ C
       allocate (glob(IMN,JMN))
 
 ! reals
-      allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
+      allocate (WGTCLT(JM),XLAT(JM))
       allocate (XLON(IM),ORS(NW),oaa(4),ola(4),GLAT(JMN))
 
       allocate (ZAVG(IMN,JMN))
@@ -487,48 +481,14 @@ C----  30" sea land mask. 0 are water (lake or ocean)
         enddo
         print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID',
      &          numi
-C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
       endif
-!       print *,ios,latg2,'TERRAIN ON GAUSSIAN GRID',numi
-      
 !
 !    This code assumes that lat runs from north to south for gg!
 !
-
       print *,' SPECTR=',SPECTR,' REVLAT=',REVLAT,' ** with GICE-07 **'
-      IF (SPECTR) THEN
-        CALL SPLAT(4,JM,COSCLT,WGTCLT)
-        DO J=1,JM/2
-          RCLT(J)      = ACOS(COSCLT(J))
-        ENDDO
-        DO J = 1,JM/2
-           PHI = RCLT(J) * DEGRAD
-           XLAT(J) = 90. - PHI
-           XLAT(JM-J+1) =  PHI - 90.
-        ENDDO
-      ELSE
-        CALL SPLAT(0,JM,COSCLT,WGTCLT)
-        DO J=1,JM
-          RCLT(J) = ACOS(COSCLT(J))
-          XLAT(J) = 90.0 - RCLT(J) * DEGRAD
-        ENDDO
-      ENDIF
 
       allocate (GICE(IMN+1,3601))
 !
-       sumdif = 0.
-       DO J = JM/2,2,-1
-       DIFFX(J) = xlat(J) - XLAT(j-1)
-       sumdif = sumdif + DIFFX(J)
-       ENDDO
-       avedif=sumdif/(float(JM/2))
-!      print *,' XLAT= avedif: ',avedif
-!      write (6,107) (xlat(J)-xlat(j-1),J=JM,2,-1)
-       print *,' XLAT='
-       write (6,106) (xlat(J),J=JM,1,-1)
-  106 format( 10(f7.3,1x))   
-  107 format( 10(f9.5,1x))   
-C
       DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
 C
       DO J=1,JMN
@@ -1397,6 +1357,9 @@ C   check antarctic pole
       ENDDO
       tend=timef()
       write(6,*)' Timer 5 time= ',tend-tbeg
+
+! This 'output_binary' section is no longer used and should be removed.
+
       if (output_binary) then
       tbeg=timef()
 C       OUTPUT BINARY FIELDS
@@ -1452,9 +1415,9 @@ C  OUTPUT GRIB FIELDS
       KGDS(1)=4
       KGDS(2)=IM
       KGDS(3)=JM
-      KGDS(4)=90000-180000/PI*RCLT(1)
+!     KGDS(4)=90000-180000/PI*RCLT(1)
       KGDS(6)=128
-      KGDS(7)=180000/PI*RCLT(1)-90000
+!     KGDS(7)=180000/PI*RCLT(1)-90000
       KGDS(8)=-NINT(360000./IM)
       KGDS(9)=NINT(360000./IM)
       KGDS(10)=JM/2
@@ -1554,7 +1517,7 @@ C
 
 !     Deallocate 1d vars
       deallocate(JST,JEN,KPDS,KGDS,numi,lonsperlat)
-      deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
+      deallocate(WGTCLT,XLAT,XLON,ORS,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
       deallocate (OCLSM)
