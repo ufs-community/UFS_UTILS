@@ -141,7 +141,7 @@ C> @return 0 for success, error code otherwise.
          
       endif READ_GRID_FILE
          
-      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NW,EFAC,BLAT,
+      CALL TERSUB(IMN,JMN,IM,JM,NR,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       STOP
       END
@@ -152,7 +152,6 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] JMN "j" dimension of the input terrain dataset.
 !! @param[in] IM "i" dimension of the model grid tile.
 !! @param[in] JM "j" dimension of the model grid tile.
-!! @param[in] NM Spectral truncation.
 !! @param[in] NR Rhomboidal flag.
 !! @param[in] NW Number of waves.
 !! @param[in] EFAC Factor to adjust orography by its variance.
@@ -166,12 +165,12 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] MASK_ONLY Flag to generate the Land Mask only
 !! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NW,EFAC,BLAT,
+      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NR,NW,EFAC,BLAT,
      &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
 C
-      integer                      :: IMN,JMN,IM,JM,NM,NR,NW
+      integer                      :: IMN,JMN,IM,JM,NR,NW
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
       character(len=*), intent(in) :: MERGE_FILE
@@ -179,7 +178,6 @@ C
       logical, intent(in) :: mask_only
 
       real, parameter :: MISSING_VALUE=-9999.
-      real, PARAMETER :: PI=3.1415926535897931
       integer, PARAMETER :: NMT=14
 
       integer :: efac,blat,zsave1,zsave2,itopo,kount
@@ -192,7 +190,7 @@ C
       integer(1) :: i3save
       integer(2) :: i2save
 
-      integer, allocatable :: JST(:),JEN(:),numi(:)
+      integer, allocatable :: numi(:)
       integer, allocatable :: lonsperlat(:)
 
       integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
@@ -202,7 +200,7 @@ C
 
       integer, allocatable :: IWORK(:,:,:)
 
-      real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
+      real :: maxlat, minlat,timef,tbeg,tend,tbeg1
       real :: DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS
 
       real, allocatable :: WGTCLT(:),XLAT(:)
@@ -224,7 +222,7 @@ C
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
 
       logical :: fexist,opened
-      logical :: SPECTR, REVLAT
+      logical :: REVLAT
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
 
@@ -232,7 +230,7 @@ C
       tbeg=timef()
       fsize = 65536
 ! integers
-      allocate (JST(JM),JEN(JM),numi(jm))
+      allocate (numi(jm))
       allocate (lonsperlat(jm/2))
       allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
       allocate (glob(IMN,JMN))
@@ -248,8 +246,6 @@ C
 !
 !  SET CONSTANTS AND ZERO FIELDS
 !
-      DEGRAD = 180./PI
-      SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
 !     MSKSRC = 0             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       MSKSRC = 1             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
@@ -355,8 +351,8 @@ C
 !
 
 !  --- IMN,JMN
-      print*, ' IM, JM, NM, NR, EFAC, BLAT'
-      print*, IM,JM,NM,NR,EFAC,BLAT
+      print*, ' IM, JM, NR, EFAC, BLAT'
+      print*, IM,JM,NR,EFAC,BLAT
        print *,'  imn,jmn,glob(imn,jmn)=',imn,jmn,glob(imn,jmn)
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
@@ -483,7 +479,7 @@ C----  30" sea land mask. 0 are water (lake or ocean)
 !
 !    This code assumes that lat runs from north to south for gg!
 !
-      print *,' SPECTR=',SPECTR,' REVLAT=',REVLAT,' ** with GICE-07 **'
+      print *,' REVLAT=',REVLAT,' ** with GICE-07 **'
 
       allocate (GICE(IMN+1,3601))
 !
@@ -1318,7 +1314,7 @@ C   check antarctic pole
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
 !     Deallocate 1d vars
-      deallocate(JST,JEN,numi,lonsperlat)
+      deallocate(numi,lonsperlat)
       deallocate(WGTCLT,XLAT,XLON,ORS,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
