@@ -65,21 +65,23 @@ C> @return 0 for success, error code otherwise.
       READ(5,*) mask_only
       READ(5,*) merge_file
 
-      print*, "INPUTOROG=", trim(INPUTOROG)
-      print*, "IM,JM=", IM, JM
-      print*, "MASK_ONLY", mask_only
-      print*, "MERGE_FILE", trim(merge_file)
+      print*, "INPUTOROG: ", trim(INPUTOROG)
+      print*, "OUTGRID: ", trim(INPUTOROG)
+      print*, "IM,JM: ", IM, JM
+      print*, "MASK_ONLY: ", mask_only
+      print*, "MERGE_FILE: ", trim(merge_file)
+
 ! --- MTNRES defines the input (highest) elev resolution
 ! --- =1 is topo30 30" in units of 1/2 minute.
 !     so MTNRES for old values must be *2.
 !     =16 is now Song Yu's 8' orog the old ops standard
 ! --- other possibilities are =8 for 4' and =4 for 2' see
 !     HJ for T1000 test. Must set to 1 for now.
-      MTNRES=1
-      print*, MTNRES,IM,JM,EFAC,BLAT
+
+      print*, "MTNRES,EFAC,BLAT: ",MTNRES,EFAC,BLAT
+
       IMN = 360*120/MTNRES
       JMN = 180*120/MTNRES
-      print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
 
 ! --- Read the model grid resolution from 'grid' file OUTGRID.
 
