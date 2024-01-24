@@ -29,8 +29,13 @@
 #                   Default is /nwprod2.
 #     HOMEgfs       Directory for gfs.  Default is 
 #                   $BASEDIR/gfs.v15.0.0.
-#     FIXam        Directory for the global fixed climatology files.
-#                   Defaults to $HOMEgfs/fix/am
+#     FIX_DIR       Directory for fixed data. Default is $HOMEgfs/fix.
+#     FIXam         Directory for the global fixed climatology files.
+#                   Defaults to $FIX_DIR/am
+#     OROFIX        Directory for model orography data. Default is 
+#                   $FIX_DIR/orog/${CASE}
+#     FIX_SFC       Directory for model surface climatological data.
+#                   Default is $OROFIX/sfc.
 #     EXECgfs       Directory of the program executable.  Defaults to
 #                   $HOMEgfs/exec
 #     DATA          Working directory
