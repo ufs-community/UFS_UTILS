@@ -64,9 +64,9 @@ C> @return 0 for success, error code otherwise.
       character(len=256) :: INPUTOROG = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
-      integer :: MTNRES,IM,JM,NM,NR,EFAC,BLAT,NW
+      integer :: MTNRES,IM,JM,EFAC,BLAT
       fsize=65536
-      READ(5,*) MTNRES,IM,JM,NM,NR,EFAC,BLAT
+      READ(5,*) MTNRES,IM,JM,EFAC,BLAT
       READ(5,*) OUTGRID
       READ(5,*) INPUTOROG
       READ(5,*) mask_only
@@ -83,8 +83,7 @@ C> @return 0 for success, error code otherwise.
 ! --- other possibilities are =8 for 4' and =4 for 2' see
 !     HJ for T1000 test. Must set to 1 for now.
       MTNRES=1
-      print*, MTNRES,IM,JM,NM,NR,EFAC,BLAT
-      NW=(NM+1)*((NR+1)*NM+2)
+      print*, MTNRES,IM,JM,EFAC,BLAT
       IMN = 360*120/MTNRES
       JMN = 180*120/MTNRES
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
@@ -141,7 +140,7 @@ C> @return 0 for success, error code otherwise.
          
       endif READ_GRID_FILE
          
-      CALL TERSUB(IMN,JMN,IM,JM,NR,NW,EFAC,BLAT,
+      CALL TERSUB(IMN,JMN,IM,JM,EFAC,BLAT,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       STOP
       END
@@ -152,8 +151,6 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] JMN "j" dimension of the input terrain dataset.
 !! @param[in] IM "i" dimension of the model grid tile.
 !! @param[in] JM "j" dimension of the model grid tile.
-!! @param[in] NR Rhomboidal flag.
-!! @param[in] NW Number of waves.
 !! @param[in] EFAC Factor to adjust orography by its variance.
 !! @param[in] BLAT When less than zero, reverse latitude/
 !! longitude for output.
@@ -165,12 +162,12 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] MASK_ONLY Flag to generate the Land Mask only
 !! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NR,NW,EFAC,BLAT,
+      SUBROUTINE TERSUB(IMN,JMN,IM,JM,EFAC,BLAT,
      &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
 C
-      integer                      :: IMN,JMN,IM,JM,NR,NW
+      integer, intent(in)          :: IMN,JMN,IM,JM
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
       character(len=*), intent(in) :: MERGE_FILE
@@ -204,7 +201,7 @@ C
       real :: DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS
 
       real, allocatable :: WGTCLT(:),XLAT(:)
-      real, allocatable :: XLON(:),ORS(:),oaa(:),ola(:),GLAT(:)
+      real, allocatable :: XLON(:),oaa(:),ola(:),GLAT(:)
 
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
       real, allocatable :: GEOLAT(:,:),GEOLAT_C(:,:),DY(:,:)
@@ -237,7 +234,7 @@ C
 
 ! reals
       allocate (WGTCLT(JM),XLAT(JM))
-      allocate (XLON(IM),ORS(NW),oaa(4),ola(4),GLAT(JMN))
+      allocate (XLON(IM),oaa(4),ola(4),GLAT(JMN))
 
       allocate (ZAVG(IMN,JMN))
       allocate (ZSLM(IMN,JMN))
@@ -351,8 +348,8 @@ C
 !
 
 !  --- IMN,JMN
-      print*, ' IM, JM, NR, EFAC, BLAT'
-      print*, IM,JM,NR,EFAC,BLAT
+      print*, ' IM, JM, EFAC, BLAT'
+      print*, IM,JM,EFAC,BLAT
        print *,'  imn,jmn,glob(imn,jmn)=',imn,jmn,glob(imn,jmn)
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
@@ -1257,7 +1254,6 @@ C
           CALL REVERS(IM, JM, numi, HPRIME(1,1,IMT), WORK1)
         ENDDO
       ENDIF
-      ORS=0.
       ORF=ORO
 
       deallocate (WORK1)
@@ -1315,7 +1311,7 @@ C   check antarctic pole
 
 !     Deallocate 1d vars
       deallocate(numi,lonsperlat)
-      deallocate(WGTCLT,XLAT,XLON,ORS,oaa,ola,GLAT)
+      deallocate(WGTCLT,XLAT,XLON,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
       deallocate (OCLSM)
