@@ -71,10 +71,16 @@ export COMOUT=$DATA
 TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.lndincsnow \
       --partition=xjet -o $LOG_FILE -e $LOG_FILE ./C768.lndincsnow.sh)
 
+LOG_FILE=consistency.log04
+export DATA="${DATA_DIR}/test4"
+export COMOUT=$DATA
+TEST4=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c48.noahmp.frac \
+      --partition=xjet -o $LOG_FILE -e $LOG_FILE ./C48.noahmp.fracgrid.sh)
+
 LOG_FILE=consistency.log
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d\
-       afterok:$TEST1:$TEST2:$TEST3 << EOF
+       afterok:$TEST1:$TEST2:$TEST3:$TEST4 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}* > ./summary.log
 EOF
