@@ -1,20 +1,9 @@
 C> @file
-C> Terrain maker for global spectral model.
+C> Terrain maker for the ufs weather model.
 C> @author Mark Iredell @date 92-04-16
   
-C> This program creates 7 terrain-related files computed from the navy
-C> 10-minute terrain dataset. The model physics grid parameters and
-C> spectral truncation and filter parameters are read by this program as
-C> input.
-C>      
-C> The 7 files produced are:
-C> 1. sea-land mask on model physics grid
-C> 2. gridded orography on model physics grid
-C> 3. mountain std dev on model physics grid
-C> 4. spectral orography in spectral domain
-C> 5. unfiltered gridded orography on model physics grid
-C> 6. grib sea-land mask on model physics grid
-C> 7. grib gridded orography on model physics grid
+C> This program creates land mask and fraction, terrain and gravity wave
+C> drag fields for a single tile of the cubed sphere grid. 
 C>
 C> PROGRAM HISTORY LOG:
 C> -  92-04-16  IREDELL
@@ -34,32 +23,36 @@ C>  - 07-08-07   replace 8' with 30" incl GICE, conintue w/ S-Y. lake slm
 C>  - 08-08-07  All input 30", UMD option, and filter as described below
 C>       
 C>   INPUT FILES:
-C>  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
-C>                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),
-C>                  RESPECTIVELY READ IN FREE FORMAT.
+C>  -   UNIT5      - RESOLUTION OF INPUT OROG DATA (MTNRES), I-DIMENSION
+C>                   OF CUBED SPHERE TILE (IM), J-DIMENSION OF TILE
+C>                   (JM), FACTOR TO ADJUST OROGRAPHY BY ITS VARIABLE
+C>                   (EFAC), LATITUDE REVERSAL FLAG (BLAT), 
+C>                   RESPECTIVELY READ IN FREE FORMAT.
 C>  -   UNIT235    - GTOPO 30" AVR for ZAVG elevation
 C>  -   UNIT10     - 30" UMD land (lake) cover mask  see MSKSRC switch
-C>  -  XUNIT11     - GTOPO AVR
-C>  -  XUNIT12     - GTOPO STD DEV
-C>  -  XUNIT13     - GTOPO MAX
 C>  -   UNIT14     - GTOPO SLM (10' NAVY if switched to get lakes 
 C>  -   UNIT15     - GICE Grumbine 30" RAMP Antarctica orog IMNx3616
 C>  -   UNIT25     - Ocean land-sea mask on gaussian grid         
+C>  -   NCID       - 'GRID' FILE FOR THE CUBED SPHERE TILE (OUTGRID).
+C>  -   NCID       - (INPUTOROG) Input orography/GWD file on gaussian
+C>                   grid. When specified, will be interpolated to model tile.
+C>  -   NCID       - Mask/land fraction on the cubed sphere tile.   
+C>                   (optional).
 C>
 C>   OUTPUT FILES:
-C>  -   UNIT51     - SEA-LAND MASK (IM,JM)
-C>  -   UNIT52     - GRIDDED OROGRAPHY (IM,JM)
-C>  -   UNIT54     - SPECTRAL OROGRAPHY ((NM+1)*((NR+1)*NM+2))
-C>  -   UNIT55     - UNFILTERED GRIDDED OROGRAPHY (IM,JM)
-C>  -   UNIT57     - GRIB GRIDDED OROGRAPHY (IM,JM)
+C>  -   NCID       - Mask/land fraction on the cubed sphere tile.   
+C>                   (optional).
+C>  -   NCID       - The final orography file on the cubed sphere tile.
+C>                   Contains mask, terrain and GWD fields.
 C>
 C>   SUBPROGRAMS CALLED:
 C>  -   TERSUB     - MAIN SUBPROGRAM
 C>
 C> @return 0 for success, error code otherwise.
+      implicit none
       include 'netcdf.inc'
       logical fexist, opened
-      integer fsize, ncid, error, id_dim, nx, ny
+      integer fsize, ncid, error, id_dim, nx, ny, imn, jmn
       character(len=256) :: OUTGRID = "none"
       character(len=256) :: INPUTOROG = "none"
       character(len=256) :: merge_file = "none"
