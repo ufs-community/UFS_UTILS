@@ -79,6 +79,7 @@ MODULE READ_WRITE_DATA
    !! @param[in] lensfc Total number of points on a tile.
    !! @param[in] lsoil Number of soil layers.
    !! @param[in] do_nsst When true, nsst fields were processed.
+   !! @param[in] inc_file When true, write out increments to files
    !! @param[in] nsst Data structure containing nsst fields.
    !! @param[in] slifcs Land-sea mask.
    !! @param[in] tsffcs Skin temperature.
@@ -114,7 +115,8 @@ MODULE READ_WRITE_DATA
    !! @param[in] slcfcs Liquid portion of volumetric soil moisture.
    !! @param[in] smcfcs Total volumetric soil moisture.
    !! @param[in] stcfcs Soil temperature.
-   !!
+   !! @param[in] stc_inc_tmp Soil temperature increments on the cubed-sphere tiles
+   !! @param[in] slc_inc_tmp Liquid soil moisture increments on the cubed-sphere tiles
    !! @author George Gayno NOAA/EMC
    !! @author Yuan Xue: gsi-based soil increments are interpolated onto the
    !! cubed sphered tiles for assimilation, hence, add capability to write out 
@@ -1064,9 +1066,11 @@ MODULE READ_WRITE_DATA
  !! @param[out] SLMASK Land-sea mask without ice flag.
  !! @param[out] ZSOIL Soil layer thickness.
  !! @param[out] NSST Data structure containing nsst fields.
+ !! @param[in] SLCINC Liquid soil moisture increments on the cubed-sphere tiles
+ !! @param[in] STCINC Soil temperature increments on the cubed-sphere tiles
  !! @author George Gayno NOAA/EMC
- !! @author Yuan Xue: add capability to read soil related increments from cubed
- !! sphere tiles
+ !! @author Yuan Xue: add capability to read soil related increments on the cubed
+ !!                   sphere tiles from files
  SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,INC_FILE,IS_NOAHMP, &
                       TSFFCS,SMCFCS,SWEFCS,STCFCS, &
                       TG3FCS,ZORFCS, &

@@ -21,7 +21,7 @@ module set_soilveg_snippet_mod
 contains
 
 !> This subroutine initializes soil and vegetation
-!! parameters needed in global_cycle/land_increment.f90 
+!! parameters needed in global_cycle/land_increment.f90 for noah
 !! @param[in] isot Soil type
 !! @param[in] ivet Vegetation type
 !! @param[out] maxsmc Maximum soil moisture for each soil type
@@ -92,6 +92,15 @@ subroutine set_soilveg_noah(isot,ivet, maxsmc, bb, satpsi, iret)
 
 end subroutine set_soilveg_noah
 
+!> This subroutine initializes soil and vegetation
+!! parameters needed in global_cycle/land_increment.f90 for noah-mp
+!! @param[in] isot Soil type
+!! @param[in] ivet Vegetation type
+!! @param[out] maxsmc Maximum soil moisture for each soil type
+!! @param[out] bb B exponent for each soil type
+!! @param[out] satpsi Saturated matric potential for each soil type
+!! @param[out] iret Return integer
+!! @Author: Yuan Xue
 subroutine set_soilveg_noahmp(isot,ivet, maxsmc, bb, satpsi,iret)
 
   implicit none

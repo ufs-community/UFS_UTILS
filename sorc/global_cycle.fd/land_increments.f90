@@ -60,8 +60,11 @@ contains
  !! @param[in] JDIM 'J' dimension of a tile
  !! @param[in] lsm Integer flag indicating which land model is used (1-Noah, 2-Noah-MP)
  !! @param[in] MYRANK MPI rank number
- !!
+ !! @param[out] stc_inc_tmp Soil temperature increments on the cubed-sphere tile
+ !! @param[out] slc_inc_tmp Liquid soil moisture increments on the cubed-sphere tile
  !! @author Clara Draper. @date March 2021
+ !! @author Yuan Xue. @date 11/08/2023: add capability to save interpolated
+ !!                                     GSI increments onto cubed-sphere tiles
 
 subroutine add_gsi_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated, slc_updated, &
                         stc_inc_tmp, slc_inc_tmp, &
@@ -383,11 +386,22 @@ subroutine add_gsi_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_upda
 
 end subroutine add_gsi_increment_soil
 
- !! Similar to gsi based increment ingest, this routine is to
+ !> Similar to gsi based increment ingest, this routine is to
  !! add jedi based stc increments to model state
  !! Without any follow-up slc adjustment, add_gsi_increment_soil is identical to
  !! add_jedi_increment_soil_temp plus add_jedi_increment_soil_moisture -- sanity checks are all done
- !! @author Yuan Xue @date: 08/11/2023
+ !! @param[in] STCINC Soil temperature increments on the cubed-sphere tile
+ !! @param[inout] STC_STATE Soil temperature state vector
+ !! @param[out] STC_UPDATED Integer to record if STC in each grid is updated
+ !! @param[in] SOILSNOW_TILE Land mask for increments on the cubed-sphere tile
+ !! @param[in] SOILSNOW_FG_TILE First guess land mask for increments on the
+ !!            cubed-sphere tile
+ !! @param[in] LENSFC Number of land points on a tile
+ !! @param[in] LSOIL Number of soil layers
+ !! @param[in] lsm Integer flag indicating which land model is used (1-Noah,
+ !!            2-Noah-MP)
+ !! @param[in] MYRANK MPI rank number
+ !! @author Yuan Xue @date: 11/08/2023
 subroutine add_jedi_increment_soil_temp(stcinc,stc_state,&
                                    stc_updated,&
                                    soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,&
@@ -478,8 +492,21 @@ subroutine add_jedi_increment_soil_temp(stcinc,stc_state,&
 
 end subroutine add_jedi_increment_soil_temp
 
-!! Add jedi based slc increments to model state
-!! @author Yuan Xue @date: 08/11/2023
+!> Add jedi based slc (liquid soil moisture) increments to model state
+!! @param[in] SLCINC Liquid soil moisture increments on the cubed-sphere tile
+!! @param[in] STC_STATE Soil temperature state vector
+!! @param[inout] SMC_STATE Total soil moisture state vector
+!! @param[inout] SLC_STATE Liquid soil moisture state vector
+!! @param[out] SLC_UPDATED Integer to record if SLC in each grid is updated
+!! @param[in] SOILSNOW_TILE Land mask for increments on the cubed-sphere tile
+!! @param[in] SOILSNOW_FG_TILE First guess land mask for increments on the
+!!            cubed-sphere tile
+!! @param[in] LENSFC Number of land points on a tile
+!! @param[in] LSOIL Number of soil layers
+!! @param[in] lsm Integer flag indicating which land model is used (1-Noah,
+!!            2-Noah-MP)
+!! @param[in] MYRANK MPI rank number
+!! @author Yuan Xue @date: 11/08/2023
 subroutine add_jedi_increment_soil_moisture(slcinc,stc_state,smc_state,slc_state,&
                                    slc_updated, &
                                    soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,&
@@ -634,7 +661,7 @@ end subroutine add_increment_snow
 !!
 !! @param[in] lensfc  Number of land points for this tile 
 !! @param[in] veg_type_landice Value of vegetion class that indicates land-ice
-!! @param[in] smc Model soil moisture.
+!! @param[in] stype Soil type
 !! @param[in] swe Model snow water equivalent
 !! @param[in] vtype Model vegetation type
 !! @param[out] mask Land mask for increments
@@ -688,16 +715,13 @@ end subroutine calculate_landinc_mask
 !! @param[in] rsoiltype Array of input soil types
 !! @param[in] mask Mask indicating surface type
 !! @param[in] stc_bck Background soil temperature states
-!! @param[in] stc_adj Analysis soil temperature states
+!! @param[inout] stc_adj Analysis soil temperature states
 !! @param[inout] smc_adj Analysis soil moisture states
 !! @param[inout] slc_adj Analysis liquid soil moisture states
 !! @param[in] stc_updated Integer to record whether STC in each grid cell was updated
-!! @param[in] slc_updated Integer to record whether SLC in each grid cell was updated
-!! @param[in] zsoil Depth of bottom of each soil layer
 !! @author Clara Draper @date April 2021
 !! @author Yuan Xue: isolate soil temperature and soil moisture adjustment
-!! routines @ date Sept 2023
-
+!!                   routines @ date Sept 2023
 
 subroutine apply_land_da_adjustments_soil_temp(lsm, isot, ivegsrc,lensfc, &
                  lsoil, rsoiltype, mask, stc_bck, stc_adj, smc_adj, slc_adj, &
@@ -838,6 +862,14 @@ end subroutine apply_land_da_adjustments_soil_temp
 !! These adjustments are model-dependent
 !! For Noah LSM, no soil moisture adjustment is applied as of 11/09/2023 
 !! For Noah-MP, the adjustment is applying soil moisture mins as of 11/09/2023
+!! @param[in] lsm Integer code for the LSM
+!! @param[in] lensfc Number of land points for this tile
+!! @param[in] lsoil Number of soil layers
+!! @param[inout] smc_adj Analysis soil moisture states
+!! @param[inout] slc_adj Analysis liquid soil moisture states
+!! @param[in] slc_updated Integer to record if SLC in each grid cell was updated
+!! @param[in] zsoil Depth of bottom of each soil layer
+
 subroutine apply_land_da_adjustments_soil_moisture(lsm,lensfc, &
                  lsoil, smc_adj, slc_adj, &
                  slc_updated, zsoil)
