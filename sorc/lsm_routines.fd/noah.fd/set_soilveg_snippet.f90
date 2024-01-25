@@ -100,7 +100,6 @@ end subroutine set_soilveg_noah
 !! @param[out] bb B exponent for each soil type
 !! @param[out] satpsi Saturated matric potential for each soil type
 !! @param[out] iret Return integer
-!! @Author: Yuan Xue
 subroutine set_soilveg_noahmp(isot,ivet, maxsmc, bb, satpsi,iret)
 
   implicit none
