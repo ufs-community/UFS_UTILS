@@ -320,7 +320,7 @@ C
 C- READ_G for global 30" terrain 
 C
        print *,' About to call read_g, ITOPO=',ITOPO
-          if ( ITOPO .ne. 0 ) call read_g(glob,ITOPO)
+          if ( ITOPO .ne. 0 ) call read_g(glob)
 ! --- transpose even though glob 30" is from S to N and NCEP std is N to S
        do j=1,jmn/2
        do I=1,imn
@@ -935,10 +935,10 @@ C
      &                   //trim(INPUTOROG) )
            
            print*, "calling MAKEOA3 to compute OA, OL"
-           CALL MAKEOA3(ZAVG,zslm,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,SLM,
+           CALL MAKEOA3(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,SLM,
      1            WORK1,WORK2,WORK3,WORK4,WORK5,WORK6,
      2            IM,JM,IMN,JMN,geolon_c,geolat_c,
-     3            geolon,geolat,is_south_pole,is_north_pole,nx_in,ny_in,
+     3            geolon,geolat,nx_in,ny_in,
      4            oa_in,ol_in,slm_in,lon_in,lat_in)
 
            deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
@@ -1243,10 +1243,10 @@ C
       allocate (ORF(IM,JM))
 
       IF (REVLAT) THEN
-        CALL REVERS(IM, JM, numi, SLM, WORK1)
-        CALL REVERS(IM, JM, numi, ORO, WORK1)
+        CALL REVERS(IM, JM, SLM, WORK1)
+        CALL REVERS(IM, JM, ORO, WORK1)
         DO IMT=1,NMT
-          CALL REVERS(IM, JM, numi, HPRIME(1,1,IMT), WORK1)
+          CALL REVERS(IM, JM, HPRIME(1,1,IMT), WORK1)
         ENDDO
       ENDIF
       ORF=ORO
@@ -2617,7 +2617,6 @@ C
 !! is computed from the high-resolution orography data.
 !!
 !! @param[in] zavg High-resolution orography data.
-!! @param[in] zslm High-resolution land-mask data.  Not used.
 !! @param[in] var Standard deviation of orography on the model grid.
 !! @param[out] glat Latitude of each row of input terrain dataset.
 !! @param[out] oa4 Orographic asymmetry on the model grid. Four
@@ -2644,8 +2643,6 @@ C
 !! @param[in] lat_c Corner point latitudes of the model grid points.
 !! @param[in] lon_t Center point longitudes of the model grid points.
 !! @param[in] lat_t Center point latitudes of the model grid points.
-!! @param[in] is_south_pole Not used.
-!! @param[in] is_north_pole Not used.
 !! @param[in] imi 'i' dimension of input gfs orography data.
 !! @param[in] jmi 'j' dimension of input gfs orography data.
 !! @param[in] oa_in Asymmetry on the input gfs orography data.
@@ -2654,10 +2651,10 @@ C
 !! @param[in] lon_in Longitude on the input gfs orography data.
 !! @param[in] lat_in Latitude on the input gfs orography data.
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE MAKEOA3(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
+      SUBROUTINE MAKEOA3(ZAVG,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,SLM,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
-     3           is_south_pole,is_north_pole,IMI,JMI,OA_IN,OL_IN,
+     3           IMI,JMI,OA_IN,OL_IN,
      4           slm_in,lon_in,lat_in)
 
 ! Required when using iplib v4.0 or higher.
@@ -2671,7 +2668,7 @@ C
       real, PARAMETER :: R2D=180./3.14159265358979
       integer IM,JM,IMN,JMN,IMI,JMI
       real    GLAT(JMN)
-      INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
+      INTEGER ZAVG(IMN,JMN)
       real    SLM(IM,JM)
       real    ORO(IM,JM),ORO1(IM,JM),ELVMAX(IM,JM),ZMAX(IM,JM)
       real    OA4(IM,JM,4)
@@ -2681,7 +2678,6 @@ C
       real    lon_in(IMI,JMI), lat_in(IMI,JMI)
       real    lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
       real    lon_t(IM,JM), lat_t(IM,JM)
-      logical is_south_pole(IM,JM), is_north_pole(IM,JM)
       real    XNSUM(IM,JM),XNSUM1(IM,JM),XNSUM2(IM,JM)
       real    XNSUM3(IM,JM),XNSUM4(IM,JM)
       real    VAR(IM,JM),OL(IM,JM,4)
@@ -3042,15 +3038,13 @@ C
 !!
 !! @param [in] im 'i' dimension of the 2-d array.
 !! @param [in] jm 'j' dimension of the 2-d array.
-!! @param [in] numi Not used.
 !! @param [inout] f The two-dimensional array to
 !! be processed.
 !! @param [out] wrk Two-dimensional work array.
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE REVERS(IM, JM, numi, F, WRK)
+      SUBROUTINE REVERS(IM, JM, F, WRK)
 !
       REAL F(IM,JM), WRK(IM,JM)
-      integer numi(jm)
       imb2 = im / 2
       do i=1,im*jm
          WRK(i,1) = F(i,1)
@@ -3202,9 +3196,8 @@ C
 !> Read input global 30-arc second orography data.
 !!
 !! @param[out] glob The orography data.
-!! @param[in] itopo Not used.
 !! @author Jordan Alpert NOAA/EMC
-      subroutine read_g(glob,ITOPO)
+      subroutine read_g(glob)
       implicit none
 cc
       integer*2    glob(360*120,180*120)
@@ -3214,8 +3207,6 @@ cc
 cc
       parameter   (ix=40*120,jx=50*120)
       parameter   (ia=60*120,ja=30*120)
-cc
-      integer      itopo
 cc
       integer      inttyp
 cc
