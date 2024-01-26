@@ -5,7 +5,7 @@ spack:
       compiler: [intel, gcc@10:10, apple-clang@14]
   specs:
   - netcdf-c@4.9.2
-  - netcdf-fortran@4.6.0
+  - netcdf-fortran@4.6.1
   - bacio@2.4.1
   - g2@3.4.5
   - ip@4.4.0 precision=d
@@ -15,8 +15,8 @@ spack:
   - sfcio@1.4.1
   - sigio@2.3.2
   - nccmp@1.9.0.1
-  - parallelio@2.5.9+fortran~pnetcdf
-  - esmf@8.4.2~debug~xerces+external-parallelio
+  - parallelio@2.5.10+fortran~pnetcdf
+  - esmf@8.6.0
   view: true
   concretizer:
     unify: when_possible
