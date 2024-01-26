@@ -1,7 +1,5 @@
 list(APPEND fortran_src
   scrip.F90
-  lapack_gen.F
-  splat.F
 )
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
@@ -14,6 +12,7 @@ set(exe_name weight_gen)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
+  sp::sp_d
   NetCDF::NetCDF_Fortran)
 
 install(TARGETS ${exe_name})
