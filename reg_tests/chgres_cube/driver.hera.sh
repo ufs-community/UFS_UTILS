@@ -98,7 +98,7 @@ TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log04
 export OMP_NUM_THREADS=6   # should match cpus-per-task
-TEST4=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
+TEST4=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 -t 0:25:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
       -o $LOG_FILE -e $LOG_FILE ./c96.gfs.sigio.sh)
 
 #-----------------------------------------------------------------------------

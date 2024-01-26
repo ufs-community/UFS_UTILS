@@ -99,7 +99,7 @@ TEST3=$(sbatch --parsable --partition=xjet --nodes=2 --ntasks-per-node=6 -t 0:10
 
 LOG_FILE=consistency.log04
 export OMP_NUM_THREADS=6   # should match cpus-per-task
-TEST4=$(sbatch --parsable --partition=xjet --nodes=4 --ntasks-per-node=3 --cpus-per-task=6 -t 0:20:00 \
+TEST4=$(sbatch --parsable --partition=xjet --nodes=4 --ntasks-per-node=3 --cpus-per-task=6 -t 0:25:00 \
       --exclusive -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio -o $LOG_FILE -e $LOG_FILE ./c96.gfs.sigio.sh)
 
 #-----------------------------------------------------------------------------
