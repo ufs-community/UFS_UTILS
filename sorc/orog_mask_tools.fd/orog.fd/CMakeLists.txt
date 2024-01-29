@@ -27,6 +27,7 @@ target_link_libraries(
   PUBLIC
   w3emc::w3emc_d
   ip::ip_d
+  sp::sp_d
   NetCDF::NetCDF_Fortran)
 
 if(OpenMP_Fortran_FOUND)
