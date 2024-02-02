@@ -36,7 +36,7 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export DATA="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
+export DATA="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/weight_gen"
 
 #-----------------------------------------------------------------------------
