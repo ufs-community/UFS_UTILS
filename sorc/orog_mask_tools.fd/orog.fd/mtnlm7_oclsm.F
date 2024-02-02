@@ -29,8 +29,7 @@ C>                   (JM), FACTOR TO ADJUST OROGRAPHY BY ITS VARIABLE
 C>                   (EFAC), LATITUDE REVERSAL FLAG (BLAT), 
 C>                   RESPECTIVELY READ IN FREE FORMAT.
 C>  -   UNIT235    - GTOPO 30" AVR for ZAVG elevation
-C>  -   UNIT10     - 30" UMD land (lake) cover mask  see MSKSRC switch
-C>  -   UNIT14     - GTOPO SLM (10' NAVY if switched to get lakes 
+C>  -   NCID       - 30" UMD land cover mask.
 C>  -   UNIT15     - GICE Grumbine 30" RAMP Antarctica orog IMNx3616
 C>  -   UNIT25     - Ocean land-sea mask on gaussian grid         
 C>  -   NCID       - 'GRID' FILE FOR THE CUBED SPHERE TILE (OUTGRID).
@@ -172,9 +171,9 @@ C
       real, parameter :: MISSING_VALUE=-9999.
       integer, PARAMETER :: NMT=14
 
-      integer :: efac,blat,zsave1,zsave2,itopo,kount
-      integer :: kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
-      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,i1,error,id_dim
+      integer :: efac,blat,zsave1,zsave2,itopo
+      integer :: mskocn,notocn
+      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
       integer :: IMT,ios,iosg,latg2,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
@@ -238,8 +237,6 @@ C
 !
 !  SET CONSTANTS AND ZERO FIELDS
 !
-!     MSKSRC = 0             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
-      MSKSRC = 1             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
       ITOPO  = 1             ! topo 30" read, otherwise tiles (opt offline)
       MSKOCN = 1             ! Ocean land sea mask =1, =0 if not present
@@ -256,66 +253,18 @@ C
       print *,' Ocean LSM Reversed:  NOTOCN=',notocn
                     endif
                       endif
-C
-C --- old S-Y. files
-C- OPEN(UNIT=11,FORM='FORMATTED',ERR=900) ! average
-C- OPEN(UNIT=12,FORM='FORMATTED',ERR=900) ! Std Dev
-C- OPEN(UNIT=13,FORM='FORMATTED',ERR=900) ! maximum
-C- OPEN(UNIT=14,FORM='FORMATTED',ERR=900) ! sea-land-lake-mask
-C
-! ---      READ(11,11) ZAVG
-! ---      READ(12,11) ZVAR
-! ---      READ(13,11) ZMAX
-! --- 11    FORMAT(20I4)
-!
-! ---  MSKSRC 0 navy 10' lake mask, =1 for 30" UMD lake mask, 
-! ---  MSKSRC internally set if above fails at -1 for no lakes
-! ---
-           IF (MSKSRC .eq. 0 ) then 
-              READ(14,12,iostat=ios) ZSLMX
-   12    FORMAT(80I1)
-      if (ios.ne.0) then 
-            MSKSRC=-1
-          print *,' navy10 lake mask rd fail -- ios,MSKSRC:',ios,MSKSRC
-      endif
-           ELSE
-      print *,' Attempt to open/read UMD 30" slmsk MSKSRC=',MSKSRC
-! --- not 0 so MSKSRC=1 and attempt to open/read UMD 30" slmsk
-!     open(10,file=
-!    &"/scratch2/portfolios/NCEPDEV/global/noscrub/Jordan.Alpert/wx23ja
-!    &/terrain30/landcover30.fixed", 
-!    & recl=43200*21600, access='direct',iostat=istat)
-       open(10,file="landcover30.fixed",
-     & recl=43200*21600, access='direct',iostat=istat)
 
-                  IF (istat.ne.0) then
-                   MSKSRC=-1
-      print *,' UMD lake mask open failed -- ios,MSKSRC:',istat,MSKSRC
-                  ELSE 
-!
-              read(10, rec=1,iostat=istat) UMD
-      print *,' UMD lake mask opened OK   -- ios,MSKSRC:',istat,MSKSRC
-!
-                  ENDIF
-! --------------
-              IF (istat.ne.0) then
-! --- When UMD read fails attempt to read navy 10'
-      print *,' UMD lake mask rd err -- trying navy 10',istat
-                MSKSRC=0
-          print *,' ***** MSKSRC set to 0 MSKSRC=',MSKSRC
-               if (MSKSRC .eq. 0 ) then 
-                   READ(14,12,iostat=ios) ZSLMX
-                  if (ios.ne.0)  then
-                   MSKSRC=-1
-           print *,' navy10 lake mask rd fail - ios,MSKSRC:',ios,MSKSRC
-                  endif
-               endif
-              ELSE
-           print *,' UMD lake, UMD(50,50)=',UMD(50,50),MSKSRC
-              ENDIF
-! --------------
-! ---      good UMD land cover read and MSKSRC=1
-           ENDIF        
+      print *,' Attempt to open/read UMD 30sec slmsk.'
+
+      error=NF__OPEN("landcover30.fixed.nc",NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file landcover30.fixed.nc' )
+      error=nf_inq_varid(ncid, 'land_mask', id_var)
+      call netcdf_err(error, 'inquire varid of land_mask')
+      error=nf_get_var_int1(ncid, id_var, UMD)
+      call netcdf_err(error, 'inquire data of land_mask')
+      error = nf_close(ncid)
+
+      print *,' UMD lake, UMD(50,50)=',UMD(50,50)
 C
 C- READ_G for global 30" terrain 
 C
@@ -360,82 +309,30 @@ C
 ! --- ZAVG initialize from glob
       ZAVG=glob
 
-           SELECTCASE(MSKSRC)
-C----  30" sea land mask. 0 are water (lake or ocean)
-              CASE(1)
-! --- transpose even though glob 30" is from S to N and NCEP std is N to S
-       do j=1,jmn/2
-       do I=1,imn
+! --- transpose mask even though glob 30" is from N to S and NCEP std is S to N
+      do j=1,jmn/2
+      do I=1,imn
         jt=jmn - j + 1
         i3save = UMD(I,j)
         UMD(I,j)=UMD(I,jt)
         UMD(I,jt) = i3save
-       enddo
-       enddo 
+      enddo
+      enddo 
 ! --- transpose UMD as USGS 30" is from dateline and NCEP std is 0
-       do j=1,jmn
-       do i=1,imn/2
+      do j=1,jmn
+      do i=1,imn/2
         it=imn/2 + i 
         i3save = UMD(i,J)
         UMD(i,J)=UMD(it,J)
         UMD(it,J) = i3save
-       enddo
-       enddo
-! ---   UMD slmsk with 30" lakes
-          do j=1,jmn
-          do i=1,imn
-           if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
-          enddo
-          enddo
-! --- Global land in slm plus lakes on 30" grid and elev set over globe
-! ---
-! ---   When navy 10' mask is set MSKSRC=0
-              CASE(0)
-! ---  MSKSRC 0 navy 10' lake mask, =1 for 30" UMD lake mask, -1 no lakes
-       print *,' NAVY 10 (8) slmsk for lakes, MSKSRC=',MSKSRC 
-         kount = 0
-         kount2 = 0
-       do j=1,jmn
-          oldslm = ZSLM(IMN,j)
-        do i=1,imn
-          i1 = i + 1
-! ---    slmsk with 10' lakes
-            if ( glob(i,j) .eq. -9999 ) then 
-               ZSLM(i,j) = 0
-               kount = kount + 1
-            endif
-           islmx=(i-1)/16 + 1
-           jslmx=(j-1)/16 + 1
-          if ( ZSLMX(islmx,jslmx) .eq. 0 ) then
-       if ( j .gt. 8 .and. j .lt. JMN-8 ) then
-              if (i1 .gt. IMN ) i1 = i1 - IMN
-! -----
-      if(ZSLM(i,j).eq.1 .and. oldslm .eq. 1 .and. ZSLM(i1,j).eq.1)then  
-       if (i .ne. 1) oldslm = ZSLM(i,j)
-       ZSLM(i,j) = 0
-       kount2 = kount2 + 1
-      endif 
-! -----
-       endif
-          endif
-        enddo
-       enddo
-! ---
-              CASE(-1)
-      print *,' ***** set slm from 30" glob, MSKSRC=',MSKSRC
-         kount = 0
-         kount2 = 0
-       do j=1,jmn
-        do i=1,imn
-          i1 = i + 1
-! ---   UMD slmsk with 10' lakes  and set ZAVG from 30" glob
-            if ( glob(i,j) .eq. -9999 ) then 
-               ZSLM(i,j) = 0
-               kount = kount + 1
-            endif
-        enddo
-       enddo
-           END SELECT
+      enddo
+      enddo
+! ---  Non-land is 0.
+      do j=1,jmn
+      do i=1,imn
+         if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
+      enddo
+      enddo
 
       deallocate (ZSLMX,UMD,glob)
 ! ---
