@@ -269,7 +269,7 @@ C
 C- READ_G for global 30" terrain 
 C
        print *,' About to call read_g, ITOPO=',ITOPO
-          if ( ITOPO .ne. 0 ) call read_g(glob)
+       if ( ITOPO .ne. 0 ) call read_g(glob)
 ! --- transpose even though glob 30" is from S to N and NCEP std is N to S
        do j=1,jmn/2
        do I=1,imn
@@ -3096,44 +3096,28 @@ C
 !! @author Jordan Alpert NOAA/EMC
       subroutine read_g(glob)
       implicit none
-cc
-      integer*2    glob(360*120,180*120)
-cc
-      integer      ix,jx
-      integer      ia,ja
-cc
-      parameter   (ix=40*120,jx=50*120)
-      parameter   (ia=60*120,ja=30*120)
-cc
-      integer      inttyp
-cc
-      real(kind=8) dloin,dlain,rlon,rlat
-cc
-      open(235, file="./fort.235", access='direct', recl=43200*21600*2)
-      read(235,rec=1)glob
-      close(235)
-cc
+
+      include 'netcdf.inc'
+
+      integer*2, intent(out) :: glob(360*120,180*120)
+
+      integer :: ncid, error, id_var, fsize
+
+      fsize=65536
+
+      error=NF__OPEN("fort.235",NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file fort.235' )
+      error=nf_inq_varid(ncid, 'topo', id_var)
+      call netcdf_err(error, 'Inquire varid of topo')
+      error=nf_get_var_int2(ncid, id_var, glob)
+      call netcdf_err(error, 'Read topo')
+      error = nf_close(ncid)
+
       print*,' '
       call maxmin     (glob,360*120*180*120,'global0')
-cc
-cc
-      dloin=1.d0/120.d0
-      dlain=1.d0/120.d0
-cc
-      rlon= -179.995833333333333333333333d0
-      rlat=   89.995833333333333333333333d0
-cc
-      inttyp=-1  !  average rectangular subset
-ccmr  inttyp= 1  !  take closest grid point value
-ccmr  inttyp= 0  !  interpolate from four closest grid point values
-cc
-!     call la2ga_gtopo30(glob,360*120,180*120,
-!    &           dloin,dlain,rlon,rlat,inttyp,
-!    &           .true.,glob,
-!    &           0,lonf,latg)
-cc
+
       return
-      end
+      end subroutine read_g
 
 !> Print the maximum, mininum, mean and
 !! standard deviation of an array.
