@@ -9,6 +9,7 @@ add_subdirectory(lake.fd)
 add_subdirectory(inland.fd)
 add_subdirectory(mask.fd)
 add_subdirectory(topo.fd)
+add_subdirectory(ramp.fd)
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)
