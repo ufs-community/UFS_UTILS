@@ -28,13 +28,14 @@
  dy = 1.0_8/120.0_8
 
  lat11 =  -(90.0_8) + dy*0.5_8
- lon11 = -180.0_8 + dx*0.5_8
+ lon11 = 0.0_8 + dx*0.5_8
 
  allocate(lons(idim),lats(jdim),topo(idim,jdim))
  allocate(lons_corner(idim_p1),lats_corner(jdim_p1))
 
  do i = 1, idim
    lons(i) = real((i-1),8) * dx + lon11
+   if (lons(i) > 360.0_8) lons(i) = 360.0_8 - lons(i)
    print*,'lon ',i,lons(i)
  enddo
 
@@ -43,11 +44,12 @@
    print*,'lat ',i,lats(i)
  enddo
 
- lat11 =  90.0_8
- lon11 = -180.0_8
+ lat11 =  -90.0_8
+ lon11 = 0.0_8
 
  do i = 1, idim_p1
    lons_corner(i) = real((i-1),8) * dx + lon11
+   if (lons_corner(i) > 360.0_8) lons_corner(i) = 360.0_8 - lons_corner(i)
    print*,'lon_corner ',i,lons_corner(i)
  enddo
 
@@ -67,6 +69,9 @@
 
  print*,'topo ', maxval(topo),minval(topo)
 
+ print*,'point 1/1 ',topo(1,1)
+ print*,'point idim/jdim ',topo(idim,jdim)
+
  filenetcdf="./thirty.second.antarctic.new.nc"
 
  print*,"- CREATE FILE: ", trim(filenetcdf)
@@ -85,7 +90,7 @@
  status=nf90_def_dim(ncid, 'jdim_p1', (jdim+1), dim_jp1)
  if (status /= nf90_noerr) stop 5
 
- status=nf90_put_att(ncid, nf90_global, 'source', 'RAMP TOPOGRAPHY DATA')
+ status=nf90_put_att(ncid, nf90_global, 'source', 'RADARSAT ANTARCTIC MAPPING PROJECT (RAMP) TOPOGRAPHY DATA')
  if (status /= nf90_noerr) stop 6
 
  status=nf90_put_att(ncid, nf90_global, 'projection', 'regular lat/lon')
@@ -127,7 +132,7 @@
  status=nf90_put_att(ncid, id_lon_corner, 'units', 'degrees')
  if (status /= nf90_noerr) stop 88
 
- status=nf90_def_var(ncid, 'topo', nf90_short, (/dim_i,dim_j/), id_data)
+ status=nf90_def_var(ncid, 'topo', nf90_float, (/dim_i,dim_j/), id_data)
  if (status /= nf90_noerr) stop 20
 
  status=nf90_put_att(ncid, id_data, 'long_name', 'topography')
