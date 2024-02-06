@@ -30,7 +30,7 @@ module list
 set -x
 ulimit -s unlimited
 
-export WORK_DIR="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
+export WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 QUEUE="${QUEUE:-batch}"
 PROJECT_CODE=${PROJECT_CODE:-fv3-cpu}
