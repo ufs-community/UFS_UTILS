@@ -54,8 +54,9 @@ fi
 
 export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
 export DO_LNDINC=${DO_LNDINC:-".false."}
-export LND_SOI_FILE=${LND_SOI_FILE:-"NULL"}
-export DO_SNO_INC=${DO_SNO_INC:-".false."}
+export GSI_SOI_FILE=${GSI_SOI_FILE:-"NULL"}
+export DO_SNO_INC_JEDI=${DO_SNO_INC_JEDI:-".false."}
+export DO_SOI_INC_JEDI=${DO_SOI_INC_JEDI:-".false."}
 export FRAC_GRID=${FRAC_GRID:-".false."}
 
 CRES=$(echo $CASE | cut -c 2-)
@@ -95,8 +96,12 @@ for n in $(seq 1 $ntiles); do
     ln -fs $OROFIX/C${CRES}.mx${OCNRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
   fi
 
-  if [[ "$DO_SNO_INC" == ".true." ]] ; then  
+  if [[ "$DO_SNO_INC_JEDI" == ".true." ]] ; then  
         ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/xainc.00$n
+  fi
+
+  if [[ "$DO_SOI_INC_JEDI" == ".true." ]] ; then
+        ln -fs $HOMEgfs/tests/global_cycle/data/soil_xainc.00$n $DATA/.
   fi
 done
 

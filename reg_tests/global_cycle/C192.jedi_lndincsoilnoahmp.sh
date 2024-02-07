@@ -3,7 +3,8 @@
 #------------------------------------------------------------------
 # Run global_cycle for a C192 case to test the ingest and
 # application of soil moisture and temperature increments
-# from the GSI, into Noah-MP restarts.
+# on the cubed-sphere grid into Noah-MP restarts, which should
+# yield identical results as compared with the GSI case.
 # Compare output to a baseline set of files using the 'nccmp' 
 # utility.
 #------------------------------------------------------------------
@@ -28,8 +29,6 @@ export OCNRES=99999
 
 export COMIN=$HOMEreg/input_data_noahmp
 
-export LND_SOI_FILE=$COMIN/sfcincr_gsi
-
 export JCAP=1534
 export LONB=3072
 export LATB=1536
@@ -42,6 +41,7 @@ export use_ufo=.true.
 
 export DO_SFCCYCLE=".FALSE." 
 export DO_LNDINC=".TRUE." 
+export DO_SOI_INC_JEDI=".true."
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
@@ -51,7 +51,7 @@ $BASE_GSM/ush/global_cycle_driver.sh
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< C192 LANDINC SOIL NOAHMP CYCLE TEST FAILED. >>>"
+  echo "<<< C192 JEDI based LANDINC SOIL NOAHMP CYCLE TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -74,15 +74,15 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo
   echo "**********************************************"
-  echo "<<< C192 LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
+  echo "<<< C192 JEDI based LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
   echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $BASE_GSM/reg_tests/update_baseline.sh $HOMEreg "c192.lndincsoilnoahmp" $commit_num
+    $BASE_GSM/reg_tests/update_baseline.sh $HOMEreg "c192.jedi_lndincsoilnoahmp" $commit_num
   fi
 else
   echo
   echo "*****************************************"
-  echo "<<< C192 LANDINC SOIL-NOAHMP CYCLE TEST PASSED. >>>"
+  echo "<<< C192 JEDI based LANDINC SOIL-NOAHMP CYCLE TEST PASSED. >>>"
   echo "*****************************************"
 fi
 

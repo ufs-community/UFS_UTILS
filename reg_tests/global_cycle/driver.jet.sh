@@ -62,8 +62,8 @@ TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 LOG_FILE=consistency.log02
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
-TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.lndincsoilnoahmp \
-      --partition=xjet -o $LOG_FILE -e $LOG_FILE ./C192.lndincsoilnoahmp.sh)
+TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gsi_lndincsoilnoahmp \
+      --partition=xjet -o $LOG_FILE -e $LOG_FILE ./C192.gsi_lndincsoilnoahmp.sh)
 
 LOG_FILE=consistency.log03
 export DATA="${DATA_DIR}/test3"
@@ -76,6 +76,12 @@ export DATA="${DATA_DIR}/test4"
 export COMOUT=$DATA
 TEST4=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c48.noahmp.frac \
       --partition=xjet -o $LOG_FILE -e $LOG_FILE ./C48.noahmp.fracgrid.sh)
+
+LOG_FILE=consistency.log05
+export DATA="${DATA_DIR}/test5"
+export COMOUT=$DATA
+TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.jedi_lndincsoilnoahmp \
+     -o $LOG_FILE -e $LOG_FILE ./C192.jedi_lndincsoilnoahmp.sh)
 
 LOG_FILE=consistency.log
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J summary -o $LOG_FILE -e $LOG_FILE \

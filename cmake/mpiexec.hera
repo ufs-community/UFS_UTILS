@@ -6,7 +6,7 @@
 #   $2+ - Executable and its arguments
 #
 
-ACCOUNT=fv3-cpu
+ACCOUNT=da-cpu
 QOS=debug
 
 NP=$1

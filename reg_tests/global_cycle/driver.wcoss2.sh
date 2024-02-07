@@ -69,7 +69,7 @@ TEST1=$(qsub -V -o ${LOG_FILE}01 -e ${LOG_FILE}01 -q $QUEUE -A $PROJECT_CODE -l 
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
 TEST2=$(qsub -V -o ${LOG_FILE}02 -e ${LOG_FILE}02 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c192.lndincsoilnoahmp -l select=1:ncpus=12:mem=8GB $PWD/C192.lndincsoilnoahmp.sh)
+        -N c192.gsi_lndincsoilnoahmp -l select=1:ncpus=12:mem=8GB $PWD/C192.gsi_lndincsoilnoahmp.sh)
 
 export DATA="${DATA_DIR}/test3"
 export COMOUT=$DATA
