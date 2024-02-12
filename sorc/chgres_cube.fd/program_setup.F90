@@ -89,8 +89,10 @@
  integer, public                 :: regional = 0 !<  For regional target grids.  When '1' remove boundary halo region from atmospheric/surface data and
                                                  !! output atmospheric boundary file. When '2' output boundary file only. Default is '0' (global grids).
  integer, public                 :: halo_bndy = 0 !< Number of row/cols of lateral halo, where pure lateral bndy conditions are applied (regional target grids).
- integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model tendencies and lateral boundary tendencies are applied. Regional target grids only.
- integer, public                 :: nsoill_out = 4 !<  Number of soil levels desired in the output data. chgres_cube can interpolate from 9 input to 4 output levels. DEFAULT: 4.
+ integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model 
+                                                   !! tendencies and lateral boundary tendencies are applied. Regional target grids only.
+ integer, public                 :: nsoill_out = 4 !< Number of soil levels desired in the output data. 
+                                                   !! chgres_cube can interpolate from 9 input to 4 output levels. DEFAULT: 4.
 
  logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
  logical, public                 :: convert_nst = .false. !< Convert nst data when true.
@@ -158,7 +160,6 @@
 
  integer                     :: is, ie, ierr
 
-
  namelist /config/ varmap_file, &
                    mosaic_file_target_grid, &
                    fix_dir_target_grid,     &
@@ -224,7 +225,7 @@
  if (ie == 0) then
    call error_handler("CANT DETERMINE CRES FROM OROG FILE.", 1)
  endif
-   
+
  cres_target_grid = orog_files_target_grid(1)(is:ie)
 
  if (.not. convert_sfc .and. .not. convert_atm) then

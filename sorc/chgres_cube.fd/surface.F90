@@ -29,7 +29,7 @@
                                  srflag_target_grid, soil_temp_target_grid, &
                                  seaice_depth_target_grid, snow_liq_equiv_target_grid, &
                                  seaice_skin_temp_target_grid, skin_temp_target_grid, &
-                                 snow_depth_target_grid, z0_target_grid, &
+                                 snow_depth_target_grid, &
                                  c_d_target_grid, c_0_target_grid, &
                                  d_conv_target_grid, dt_cool_target_grid, &
                                  ifd_target_grid, qrain_target_grid, &
@@ -40,7 +40,11 @@
                                  xtts_target_grid, xzts_target_grid, &
                                  z_c_target_grid, zm_target_grid, &
                                  soilm_tot_target_grid, lai_target_grid, &
-                                 soilm_liq_target_grid
+                                 soilm_liq_target_grid, ice_temp_target_grid, &
+                                 snow_depth_at_ice_target_grid, &
+                                 z0_water_target_grid, &
+                                 z0_ice_target_grid, sst_target_grid, &
+                                 snow_liq_equiv_at_ice_target_grid
 
  use write_data, only : write_fv3_sfc_data_netcdf
 
@@ -76,6 +80,9 @@
                                        !< gravity
  real, parameter, private           :: hlice       = 3.335E5
                                        !< latent heat of fusion
+
+ real(esmf_kind_r8), parameter, private :: missing = -1.e20_esmf_kind_r8
+                                           !< flag for non-active points.
                                        
 
  type realptr_2d
@@ -194,7 +201,7 @@
  call calc_liq_soil_moisture
 
 !---------------------------------------------------------------------------------------------
-! Set z0 at land and sea ice.
+! Set z0 at water and sea ice.
 !---------------------------------------------------------------------------------------------
 
  call roughness
@@ -218,6 +225,12 @@
  call cleanup_input_sfc_data
 
  if (convert_nst) call cleanup_input_nst_data
+
+!---------------------------------------------------------------------------------------------
+! Update land mask for ice.
+!---------------------------------------------------------------------------------------------
+ 
+ call update_landmask
 
 !---------------------------------------------------------------------------------------------
 ! Write data to file.
@@ -346,6 +359,7 @@
  real(esmf_kind_r8), allocatable    :: data_one_tile2(:,:)
  real(esmf_kind_r8), allocatable    :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), allocatable    :: latitude_one_tile(:,:)
+ real(esmf_kind_r8), allocatable    :: fice_target_one_tile(:,:)
  real(esmf_kind_r8), pointer        :: seaice_fract_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: srflag_target_ptr(:,:)
  real(esmf_kind_r8), pointer        :: terrain_from_input_ptr(:,:)
@@ -354,6 +368,7 @@
  real(esmf_kind_r8), pointer        :: landmask_input_ptr(:,:)
  real(esmf_kind_r8), pointer        :: veg_type_input_ptr(:,:)
  real(esmf_kind_r8), allocatable    :: veg_type_target_one_tile(:,:)
+ real(esmf_kind_r8)                 :: ice_lim
 
  type(esmf_regridmethod_flag)       :: method
  type(esmf_routehandle)             :: regrid_bl_no_mask
@@ -519,7 +534,7 @@
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 1
 
  mask_target_ptr = 0
- where (landmask_target_ptr == 1) mask_target_ptr = 1
+ where (landmask_target_ptr == 1) mask_target_ptr = 1 ! some or all land.
  
  print*,"- CALL FieldCreate FOR TERRAIN FROM INPUT GRID LAND."
  terrain_from_input_grid_land = ESMF_FieldCreate(target_grid, &
@@ -642,19 +657,27 @@
    enddo
    nullify(veg_type_target_ptr) 
  endif
+
  print*,"- CALL FieldRegridRelease."
  call ESMF_FieldRegridRelease(routehandle=regrid_all_land, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridRelease", rc)
     
 !-----------------------------------------------------------------------
-! Next, determine the sea ice fraction on target grid.  
-! Interpolate.
+! Next, determine the sea ice fraction on the fractional target grid.  
+! For fractional grids, the ice fraction is not scaled for the
+! fraction of non-land. So if a point is 50% land and non-land,
+! an ice frac of 100% means the entire non-land portion is ice covered.
 !-----------------------------------------------------------------------
 
  mask_input_ptr = 1
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 0
  
+!-----------------------------------------------------------------------
+! Map to grid points that are partial or all non-land. That is 
+! indicated where seamask_target is '1'.
+!-----------------------------------------------------------------------
+
  mask_target_ptr = int(seamask_target_ptr,kind=esmf_kind_i4)
 
  method=ESMF_REGRIDMETHOD_CONSERVE
@@ -727,32 +750,27 @@
      call search(data_one_tile, mask_target_one_tile, i_target, j_target, tile, 91, &
                  latitude=latitude_one_tile)
    endif
+   
+!------------------------------------------------------------------------------
+! To reduce the potenitally large number of target grid points with a very
+! small amount of open water, set any point with ice between 95-100% to 100%.
+!------------------------------------------------------------------------------
 
-   print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
-   call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldGather", rc)
-   
-   
+   ice_lim = 0.95_esmf_kind_r8
+
    if (localpet == 0) then
      do j = 1, j_target
      do i = 1, i_target
-       if (data_one_tile(i,j) > 1.0_esmf_kind_r8) then
+       if (data_one_tile(i,j) > ice_lim) then
          data_one_tile(i,j) = 1.0_esmf_kind_r8
        endif
        if (data_one_tile(i,j) < 0.15_esmf_kind_r8) data_one_tile(i,j) = 0.0_esmf_kind_r8
-       if (data_one_tile(i,j) >= 0.15_esmf_kind_r8) mask_target_one_tile(i,j) = 2
      enddo
      enddo
    endif
 
    print*,"- CALL FieldScatter FOR TARGET GRID SEAICE FRACTION TILE: ", tile
    call ESMF_FieldScatter(seaice_fract_target_grid, data_one_tile, rootPet=0, tile=tile, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-      call error_handler("IN FieldScatter", rc)
-
-   print*,"- CALL FieldScatter FOR TARGET LANDMASK TILE: ", tile
-   call ESMF_FieldScatter(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldScatter", rc)
 
@@ -773,16 +791,10 @@
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 2) mask_input_ptr = 1
 
- print*,"- CALL FieldGet FOR TARGET land sea mask."
- call ESMF_FieldGet(landmask_target_grid, &
-                    farrayPtr=landmask_target_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
  mask_target_ptr = 0 
  do j = clb_target(2), cub_target(2)
  do i = clb_target(1), cub_target(1)
-   if (landmask_target_ptr(i,j) == 2) mask_target_ptr(i,j) = 1
+   if (seaice_fract_target_ptr(i,j) > 0.0) mask_target_ptr(i,j) = 1
  enddo
  enddo
 
@@ -791,7 +803,7 @@
 
  print*,"- CALL FieldRegridStore for 3d seaice fields."
  call ESMF_FieldRegridStore(soil_temp_input_grid, &
-                            soil_temp_target_grid, &
+                            ice_temp_target_grid, &
                             srcmaskvalues=(/0/), &
                             dstmaskvalues=(/0/), &
                             polemethod=ESMF_POLEMETHOD_NONE, &
@@ -801,6 +813,7 @@
                             routehandle=regrid_seaice, &
                             regridmethod=method, &
                             unmappedDstList=unmapped_ptr, rc=rc)
+
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldRegridStore", rc)
 
@@ -810,20 +823,23 @@
  bundle_seaice_input = ESMF_FieldBundleCreate(name="sea ice input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
- call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_target_grid, &
-                          snow_liq_equiv_target_grid, seaice_skin_temp_target_grid, &
-                          soil_temp_target_grid/), rc=rc)
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+
+ call ESMF_FieldBundleAdd(bundle_seaice_target, (/seaice_depth_target_grid, snow_depth_at_ice_target_grid, &
+                          snow_liq_equiv_at_ice_target_grid, seaice_skin_temp_target_grid, &
+                          ice_temp_target_grid/), rc=rc)
+
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
+
  call ESMF_FieldBundleAdd(bundle_seaice_input, (/seaice_depth_input_grid, snow_depth_input_grid, &
                           snow_liq_equiv_input_grid, seaice_skin_temp_input_grid, &
                           soil_temp_input_grid/), rc=rc)                          
-  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
+
  call ESMF_FieldBundleGet(bundle_seaice_target,fieldCount=num_fields,rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleGet", rc)
- 
 
  allocate(search_nums(num_fields))
  allocate(dozero(num_fields))
@@ -841,16 +857,22 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleDestroy", rc)
 
+ if (localpet == 0) then
+   allocate(fice_target_one_tile(i_target,j_target))
+ else
+   allocate(fice_target_one_tile(0,0))
+ endif
+
  do tile = 1, num_tiles_target_grid
 
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
-   call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
+   call ESMF_FieldGather(seaice_fract_target_grid, fice_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
    if (localpet == 0) then   
-     where(mask_target_one_tile == 1) mask_target_one_tile = 0
-     where(mask_target_one_tile == 2) mask_target_one_tile = 1
+     mask_target_one_tile = 0
+     where(fice_target_one_tile > 0.0) mask_target_one_tile = 1
      call search_many(num_fields,bundle_seaice_target,tile, search_nums,localpet, &
                     mask=mask_target_one_tile)
    else
@@ -860,6 +882,7 @@
  enddo
 
  deallocate(search_nums)
+
  call ESMF_FieldBundleDestroy(bundle_seaice_target,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
       call error_handler("IN FieldBundleDestroy", rc)
@@ -870,21 +893,26 @@
     call error_handler("IN FieldRegridRelease", rc)
 
 !---------------------------------------------------------------------------------------------
-! Now interpolate water fields. 
+! Now interpolate open water fields. 
 !---------------------------------------------------------------------------------------------
 
  mask_input_ptr = 0
  where (nint(landmask_input_ptr) == 0) mask_input_ptr = 1
 
+!---------------------------------------------------------------------------------------------
+! Set target mask - want points with at least some open water.
+!---------------------------------------------------------------------------------------------
+
  mask_target_ptr = 0
- where (landmask_target_ptr == 0) mask_target_ptr = 1
+ where (seamask_target_ptr == 1) mask_target_ptr = 1  ! some or all non-land.
+ where (seaice_fract_target_ptr  == 1.0_esmf_kind_r8) mask_target_ptr = 0 ! all ice.
 
  method=ESMF_REGRIDMETHOD_CONSERVE
  isrctermprocessing = 1
 
  print*,"- CALL FieldRegridStore for water fields."
  call ESMF_FieldRegridStore(skin_temp_input_grid, &
-                            skin_temp_target_grid, &
+                            sst_target_grid, &
                             srcmaskvalues=(/0/), &
                             dstmaskvalues=(/0/), &
                             polemethod=ESMF_POLEMETHOD_NONE, &
@@ -903,9 +931,12 @@
  bundle_water_input = ESMF_FieldBundleCreate(name="water input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
- call ESMF_FieldBundleAdd(bundle_water_target, (/skin_temp_target_grid, z0_target_grid/), rc=rc)
+
+ call ESMF_FieldBundleAdd(bundle_water_target, (/sst_target_grid, z0_water_target_grid/), rc=rc)
+
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
+
  call ESMF_FieldBundleAdd(bundle_water_input, (/skin_temp_input_grid, z0_input_grid/), rc=rc)  
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
@@ -964,8 +995,13 @@
 
  do tile = 1, num_tiles_target_grid
 
+   print*,"- CALL FieldGather FOR TARGET SEAMASK TILE: ", tile
+   call ESMF_FieldGather(seamask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGather", rc)
+
    print*,"- CALL FieldGather FOR TARGET LANDMASK TILE: ", tile
-   call ESMF_FieldGather(landmask_target_grid, mask_target_one_tile, rootPet=0, tile=tile, rc=rc)
+   call ESMF_FieldGather(seaice_fract_target_grid, fice_target_one_tile, rootPet=0, tile=tile, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
@@ -974,11 +1010,12 @@
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldGather", rc)
 
+! Mask must be points with some water, but no ice.
    if (localpet == 0) then
      allocate(water_target_one_tile(i_target,j_target))
      water_target_one_tile = 0
-     where(mask_target_one_tile == 0) water_target_one_tile = 1
-
+     where(mask_target_one_tile == 1) water_target_one_tile = 1 ! some or all non-land.
+     where(fice_target_one_tile == 1.0_esmf_kind_r8) water_target_one_tile = 0 ! all ice
      call search_many(num_fields,bundle_water_target, tile,search_nums,localpet, &
                 latitude=latitude_one_tile,mask=water_target_one_tile)
    else
@@ -989,7 +1026,7 @@
 
  enddo
 
- deallocate(latitude_one_tile,search_nums)
+ deallocate(latitude_one_tile,search_nums,fice_target_one_tile)
  
  call ESMF_FieldBundleDestroy(bundle_water_target,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1008,7 +1045,7 @@
  where (nint(landmask_input_ptr) == 1) mask_input_ptr = 1
 
  mask_target_ptr = 0
- where (landmask_target_ptr == 1) mask_target_ptr = 1
+ where (landmask_target_ptr == 1) mask_target_ptr = 1 ! some or all land.
 
  method=ESMF_REGRIDMETHOD_CONSERVE
  isrctermprocessing = 1
@@ -1058,7 +1095,6 @@
  call ESMF_FieldBundleDestroy(bundle_allland_input,rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleDestroy", rc)
-  
 
  do tile = 1, num_tiles_target_grid
 
@@ -1070,7 +1106,7 @@
    if (localpet == 0) then
      allocate(land_target_one_tile(i_target,j_target))
      land_target_one_tile = 0
-     where(mask_target_one_tile == 1) land_target_one_tile = 1
+     where(mask_target_one_tile == 1) land_target_one_tile = 1 ! some or all land.
    
      call search_many(num_fields,bundle_allland_target, &
                     tile,search_nums,localpet, mask=land_target_one_tile)
@@ -1100,8 +1136,6 @@
                     farrayPtr=veg_type_input_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
-
- print*,'land ice check ',veg_type_landice_input
 
  mask_input_ptr = 0
  where (nint(veg_type_input_ptr) == veg_type_landice_input) mask_input_ptr = 1
@@ -1237,8 +1271,8 @@
  where (nint(veg_type_input_ptr) == veg_type_landice_input) mask_input_ptr = 0
 
  mask_target_ptr = 0
- where (landmask_target_ptr == 1) mask_target_ptr = 1
- where (nint(veg_type_target_ptr) == veg_type_landice_target) mask_target_ptr = 0
+ where (landmask_target_ptr == 1) mask_target_ptr = 1  ! some or all land.
+ where (nint(veg_type_target_ptr) == veg_type_landice_target) mask_target_ptr = 0 ! land ice.
 
  method=ESMF_REGRIDMETHOD_NEAREST_STOD
  isrctermprocessing = 1
@@ -1278,12 +1312,6 @@
  
  
  if (.not. sotyp_from_climo) then 
-!   call ESMF_FieldBundleAdd(bundle_nolandice_target, (/soil_type_target_grid/), rc=rc)
-!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!      call error_handler("IN FieldBundleAdd", rc)
-!   call ESMF_FieldBundleAdd(bundle_nolandice_input, (/soil_type_input_grid/), rc=rc)
-!   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-!      call error_handler("IN FieldBundleAdd", rc)
    print*,"- CALL Field_Regrid ."
    call ESMF_FieldRegrid(soil_type_input_grid, &
                          soil_type_target_grid, &
@@ -1305,10 +1333,6 @@
      call ij_to_i_j(unmapped_ptr(ij), i_target, j_target, i, j)
      soil_type_target_ptr(i,j) = -9999.9 
    enddo
- !  call ESMF_FieldBundleGet(bundle_nolandice_target,fieldCount=num_fields,rc=rc)
- !  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
- !     call error_handler("IN FieldBundleGet", rc)
- !  sotyp_ind = 3
  endif
  
  if (.not. vgfrc_from_climo) then 
@@ -1368,11 +1392,6 @@
  
  search_nums(1:5) = (/85,7,224,85,86/)
  dozero(1:5) = (/.False.,.False.,.True.,.True.,.False./)
- 
- !if (.not.sotyp_from_climo) then
- !  search_nums(sotyp_ind) = 226
- !  dozero(sotyp_ind) = .False.
- !endif
  
  if (.not. vgfrc_from_climo) then
    search_nums(vgfrc_ind) = 224
@@ -1569,7 +1588,7 @@
    do i = clb(1), cub(1)
 
 !---------------------------------------------------------------------------------------------
-! Check land points that are not permanent land ice.  
+! Check points with some land (that are not permanent land ice).
 !---------------------------------------------------------------------------------------------
 
      if (landmask_ptr(i,j) == 1 .and. nint(veg_type_ptr(i,j)) /= veg_type_landice_target) then
@@ -1852,7 +1871,7 @@
    do i = clb(1), cub(1)
 
 !---------------------------------------------------------------------------------------------
-! Check land points that are not permanent land ice.  
+! Check points with some land (that are not permanent land ice).  
 !---------------------------------------------------------------------------------------------
 
      if (landmask_ptr(i,j) == 1 .and. nint(veg_type_ptr(i,j)) /= veg_type_landice_target) then
@@ -2001,7 +2020,7 @@
  
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 1) then
+   if (landmask_ptr(i,j) == 1) then ! partial or all land
      terrain_diff = abs(terrain_input_ptr(i,j) - terrain_target_ptr(i,j))
      if (terrain_diff > 100.0) then
        do k = clb(3), cub(3)
@@ -2135,29 +2154,26 @@
  
  end subroutine adjust_soil_levels
 
-!> Set roughness length at land and sea ice. At land, roughness is
-!! set from a lookup table based on the vegetation type. At sea ice,
-!! roughness is set to 1 cm.
+!> Set roughness length at points with some sea ice to 1 cm.
+!! Set flag value at points with some or all open water.
 !!
 !! @author George Gayno NOAA/EMC
  subroutine roughness
 
- use model_grid, only                : landmask_target_grid
- use static_data, only               : veg_type_target_grid
+ use model_grid, only                : landmask_target_grid, &
+                                       seamask_target_grid
 
  implicit none
 
  integer                            :: clb(2), cub(2), i, j, rc
  integer(esmf_kind_i8), pointer     :: landmask_ptr(:,:)
+ integer(esmf_kind_i8), pointer     :: seamask_ptr(:,:)
 
- real                               :: z0_igbp(20)
- real(esmf_kind_r8), pointer        :: data_ptr(:,:)
- real(esmf_kind_r8), pointer        :: veg_type_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: data_ptr2(:,:)
+ real(esmf_kind_r8), pointer        :: data_ptr3(:,:)
+ real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
 
- data z0_igbp /1.089, 2.653, 0.854, 0.826, 0.800, 0.050,  &
-               0.030, 0.856, 0.856, 0.150, 0.040, 0.130,  &
-               1.000, 0.250, 0.011, 0.011, 0.001, 0.076,  &
-               0.050, 0.030/
+ print*,"- SET ROUGHNESS."
 
  print*,"- CALL FieldGet FOR TARGET GRID LAND-SEA MASK."
  call ESMF_FieldGet(landmask_target_grid, &
@@ -2167,36 +2183,63 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- CALL FieldGet FOR TARGET GRID VEGETATION TYPE."
- call ESMF_FieldGet(veg_type_target_grid, &
-                    farrayPtr=veg_type_ptr, rc=rc)
+ print*,"- CALL FieldGet FOR TARGET GRID SEA ICE."
+ call ESMF_FieldGet(seaice_fract_target_grid, &
+                    farrayPtr=fice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- CALL FieldGet FOR TARGET GRID Z0."
- call ESMF_FieldGet(z0_target_grid, &
-                    farrayPtr=data_ptr, rc=rc)
+ print*,"- CALL FieldGet FOR TARGET GRID Z0 WATER."
+ call ESMF_FieldGet(z0_water_target_grid, &
+                      farrayPtr=data_ptr3, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+      call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET SEA MASK."
+ call ESMF_FieldGet(seamask_target_grid, &
+                      farrayPtr=seamask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID Z0 ICE."
+ call ESMF_FieldGet(z0_ice_target_grid, &
+                      farrayPtr=data_ptr2, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+
+! At points with some ice, set to nominal value of 1 cm. Elsewhere, set to flag value.
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 2) then
-     data_ptr(i,j) = 1.0
-   elseif (landmask_ptr(i,j) == 1) then
-     data_ptr(i,j) = z0_igbp(nint(veg_type_ptr(i,j))) * 100.0
+   if (fice_ptr(i,j) > 0.0) then
+     data_ptr2(i,j) = 1.0
+   else
+     data_ptr2(i,j) = missing
+   endif
+ enddo
+ enddo
+
+! Roughness at points with some or all open water. Here we set a flag value at points
+! that are all ice or points that are all land (seamask = 0).
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0) then
+     data_ptr3(i,j) = missing
    endif
  enddo
  enddo
 
  end subroutine roughness
 
-!> Perform some quality control checks before output.
+!> Perform some quality control checks and set flag values
+!! at non-active points.
 !!
 !! @author George Gayno NOAA/EMC
  subroutine qc_check
 
- use model_grid, only                : landmask_target_grid
+ use model_grid, only                : landmask_target_grid, &
+                                       seamask_target_grid
 
  use static_data, only               : alvsf_target_grid, &
                                        alvwf_target_grid, &
@@ -2217,9 +2260,11 @@
 
  integer                            :: clb(2), cub(2), i, j, rc
  integer(esmf_kind_i8), pointer     :: landmask_ptr(:,:)
+ integer(esmf_kind_i8), pointer     :: seamask_ptr(:,:)
 
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
  real(esmf_kind_r8), pointer        :: data3d_ptr(:,:,:)
+ real(esmf_kind_r8), pointer        :: ice_ptr(:,:,:)
  real(esmf_kind_r8), pointer        :: soilmt_ptr(:,:,:)
  real(esmf_kind_r8), pointer        :: soilml_ptr(:,:,:)
  real(esmf_kind_r8), pointer        :: veg_greenness_ptr(:,:)
@@ -2228,12 +2273,29 @@
  real(esmf_kind_r8), pointer        :: skint_ptr(:,:)
  real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: hice_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: tg3_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: snod_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: snol_ptr(:,:)
+
+ print*,'- PERFORM QC CHECK'
 
  print*,"- CALL FieldGet FOR TARGET GRID LAND-SEA MASK."
  call ESMF_FieldGet(landmask_target_grid, &
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=landmask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID SEA MASK."
+ call ESMF_FieldGet(seamask_target_grid, &
+                    farrayPtr=seamask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID SEA ICE FRACTION."
+ call ESMF_FieldGet(seaice_fract_target_grid, &
+                    farrayPtr=fice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
@@ -2245,7 +2307,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land.
  enddo
  enddo
 
@@ -2257,7 +2319,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land.
  enddo
  enddo
 
@@ -2269,11 +2331,11 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) veg_type_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) veg_type_ptr(i,j) = 0.0 ! all non-land.
  enddo
  enddo
 
- print*,"- SET TARGET GRID ALVSF AT NON-LAND."
+ print*,"- SET TARGET GRID ALVSF FLAG AT NON-LAND."
  call ESMF_FieldGet(alvsf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2281,11 +2343,11 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = missing ! gfs physics flag value
  enddo
  enddo
 
- print*,"- SET TARGET GRID ALVWF AT NON-LAND."
+ print*,"- SET TARGET GRID ALVWF FLAG AT NON-LAND."
  call ESMF_FieldGet(alvwf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2293,11 +2355,11 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = missing ! gfs physics flag value
  enddo
  enddo
 
- print*,"- SET TARGET GRID ALNSF AT NON-LAND."
+ print*,"- SET TARGET GRID ALNSF FLAG AT NON-LAND."
  call ESMF_FieldGet(alnsf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2305,11 +2367,11 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = missing ! gfs physics flag value
  enddo
  enddo
 
- print*,"- SET TARGET GRID ALNWF AT NON-LAND."
+ print*,"- SET TARGET GRID ALNWF FLAG AT NON-LAND."
  call ESMF_FieldGet(alnwf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2317,7 +2379,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.06 ! gfs physics flag value
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = missing ! gfs physics flag value
  enddo
  enddo
 
@@ -2329,11 +2391,11 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
- print*,"- SET NON-LAND FLAG FOR TARGET GRID FACSF."
+ print*,"- SET NON-LAND FLAG FOR TARGET GRID FACWF."
  call ESMF_FieldGet(facwf_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2341,7 +2403,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2353,7 +2415,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2365,7 +2427,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2377,7 +2439,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) veg_greenness_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) veg_greenness_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2389,7 +2451,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) /= 1) data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) data_ptr(i,j) = 0.0 ! all non-land
  enddo
  enddo
 
@@ -2398,6 +2460,8 @@
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
+
+! The 0.01 indicates bare ground.
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
@@ -2411,53 +2475,91 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- SET TARGET GRID SKIN TEMP AT ICE POINTS."
+ print*,"- CALL FieldGet FOR TARGET GRID SKIN TEMP."
  call ESMF_FieldGet(skin_temp_target_grid, &
                     farrayPtr=skint_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- CALL FieldGet FOR TARGET GRID SEA ICE FRACTION."
- call ESMF_FieldGet(seaice_fract_target_grid, &
-                    farrayPtr=fice_ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
-
- print*,"- SET TARGET GRID SEA ICE DEPTH TO ZERO AT NON-ICE POINTS."
+ print*,"- CALL FieldGet FOR TARGET GRID ICE DEPTH."
  call ESMF_FieldGet(seaice_depth_target_grid, &
                     farrayPtr=hice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+! Under some model configurations, ice can form at t=00. New ice needs
+! a valid skin temperature. Therefore, at open water (potential
+! ice points) set to 'frz_ice'.
+
+ print*,"- SET TARGET GRID SEA ICE DEPTH TO ZERO AT NON-ICE POINTS."
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (fice_ptr(i,j) > 0.0) then
-     skint_ptr(i,j) = (fice_ptr(i,j) * seaice_skint_ptr(i,j)) +  &
-                      ( (1.0 - fice_ptr(i,j)) * frz_ice )
-   else
-     seaice_skint_ptr(i,j) = skint_ptr(i,j)
+   if (fice_ptr(i,j) == 0.0) then
+     if (seamask_ptr(i,j) == 0) then ! all land
+       seaice_skint_ptr(i,j) = missing
+     else
+       seaice_skint_ptr(i,j) = frz_ice ! some water and no ice
+     endif
      hice_ptr(i,j) = 0.0
    endif
  enddo
  enddo
 
- print*,"- SET TARGET GRID SUBSTRATE TEMP AT ICE."
- call ESMF_FieldGet(substrate_temp_target_grid, &
+ print*,"- SET TARGET GRID SST FLAG VALUE."
+ call ESMF_FieldGet(sst_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
+! Set flag at points with all ice or points that are all land (seamask=0).
+
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 2) then  ! sea ice
-     data_ptr(i,j) = frz_ice
-   elseif (landmask_ptr(i,j) == 0) then  ! open water flag value.
-     data_ptr(i,j) = skint_ptr(i,j)
+   if (fice_ptr(i,j) == 1.0_esmf_kind_r8 .or. seamask_ptr(i,j) == 0.0) then
+     data_ptr(i,j) = missing
    endif
  enddo
  enddo
 
- print*,"- ZERO OUT TARGET GRID SNOW DEPTH AT OPEN WATER."
+ print*,"- SET MISSING FLAG AT TARGET GRID SUBSTRATE TEMP."
+ call ESMF_FieldGet(substrate_temp_target_grid, &
+                    farrayPtr=tg3_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc)
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) == 0.0) then  ! completely non-land.
+     tg3_ptr(i,j) = missing
+   endif
+ enddo
+ enddo
+
+ print*,"- SET MISSING FLAG AT TARGET GRID SNOW FIELDS AT ICE."
+
+ print*,"- CALL FieldGet FOR TARGET GRID SNOW DEPTH AT ICE."
+ call ESMF_FieldGet(snow_depth_at_ice_target_grid, &
+                    farrayPtr=snod_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID SNOW LIQ EQUIV AT ICE."
+ call ESMF_FieldGet(snow_liq_equiv_at_ice_target_grid, &
+                  farrayPtr=snol_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc)
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) == 0.0) then ! points with no ice.
+     snol_ptr(i,j) = missing
+     snod_ptr(i,j) = missing
+   end if
+ enddo
+ enddo
+
+ print*,"- SET NON-LAND FLAG AT TARGET GRID SNOW DEPTH."
  call ESMF_FieldGet(snow_depth_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2465,13 +2567,13 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) then  ! open water
-     data_ptr(i,j) = 0.0
+   if (landmask_ptr(i,j) == 0) then  ! all non-land
+     data_ptr(i,j) = missing
    end if
  enddo
  enddo
 
- print*,"- ZERO OUT TARGET GRID SNOW LIQ AT OPEN WATER."
+ print*,"- SET NON-LAND FLAG AT TARGET GRID SNOW LIQ."
  call ESMF_FieldGet(snow_liq_equiv_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2479,9 +2581,9 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) then  ! open water
-     data_ptr(i,j) = 0.0
-   endif
+   if (landmask_ptr(i,j) == 0) then  ! all non-land
+       data_ptr(i,j) = missing
+   end if
  enddo
  enddo
 
@@ -2491,7 +2593,7 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
 
- print*,"- SET NON-LAND FLAG VALUE FOR  TARGET GRID LIQUID SOIL MOISTURE."
+ print*,"- SET NON-LAND FLAG VALUE FOR TARGET GRID LIQUID SOIL MOISTURE."
  call ESMF_FieldGet(soilm_liq_target_grid, &
                     farrayPtr=soilml_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2499,7 +2601,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 2 .or. landmask_ptr(i,j) == 0 .or. &
+   if (landmask_ptr(i,j) == 0 .or. &
        nint(veg_type_ptr(i,j)) == veg_type_landice_target) then
      soilmt_ptr(i,j,:) = 1.0
      soilml_ptr(i,j,:) = 1.0
@@ -2507,16 +2609,48 @@
  enddo
  enddo
 
- print*,"- SET OPEN WATER FLAG FOR TARGET GRID SOIL TEMPERATURE."
+ print*,"- SET NON-LAND FLAG FOR TARGET GRID SOIL TEMPERATURE."
  call ESMF_FieldGet(soil_temp_target_grid, &
                     farrayPtr=data3d_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN FieldGet", rc)
+   call error_handler("IN FieldGet", rc)
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   if (landmask_ptr(i,j) == 0) then
-     data3d_ptr(i,j,:) = skint_ptr(i,j)  ! open water flag value.
+   if (landmask_ptr(i,j) == 0) then ! all non-land.
+     data3d_ptr(i,j,:) = missing
+   endif
+ enddo
+ enddo
+
+ print*,"- SET NON-ICE FLAG FOR TARGET GRID ICE COLUMN TEMPERATURE."
+ call ESMF_FieldGet(ice_temp_target_grid, &
+                     farrayPtr=ice_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+! Under some model configurations, ice can form at t=00. New ice needs
+! a valid ice column temperature. Therefore, at open water (potential
+! ice points) set to 'frz_ice'.
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (fice_ptr(i,j) == 0.0) then
+     if (seamask_ptr(i,j) == 0) then ! all land
+       ice_ptr(i,j,:) = missing
+     else
+       ice_ptr(i,j,:) = frz_ice  ! some water and no ice
+     endif
+   endif
+ enddo
+ enddo
+
+ print*,"- SET NON-LAND FLAG FOR TARGET GRID SKIN TEMPERATURE."
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+   if (landmask_ptr(i,j) == 0) then ! all non-land.
+     skint_ptr(i,j) = missing
    endif
  enddo
  enddo
@@ -2531,7 +2665,7 @@
 !! @author George Gayno NOAA/EMC
  subroutine nst_land_fill
 
- use model_grid, only         : landmask_target_grid
+ use model_grid, only         : seamask_target_grid
 
  implicit none
 
@@ -2542,14 +2676,21 @@
  integer, PARAMETER                 :: nst_fill = 0.0
 
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
+ real(esmf_kind_r8), pointer        :: fice_ptr(:,:)
  real(esmf_kind_r8), pointer        :: skint_ptr(:,:)
 
  type(esmf_field)                   :: temp_field
  type(esmf_fieldbundle)             :: nst_bundle
 
- print*,"- CALL FieldGet FOR TARGET GRID LANDMASK."
- call ESMF_FieldGet(landmask_target_grid, &
+ print*,"- CALL FieldGet FOR TARGET GRID SEAMASK."
+ call ESMF_FieldGet(seamask_target_grid, &
                     farrayPtr=mask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- CALL FieldGet FOR TARGET GRID SEAICE FRACT."
+ call ESMF_FieldGet(seaice_fract_target_grid, &
+                    farrayPtr=fice_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
     
@@ -2577,7 +2718,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
- where(mask_ptr /= 0) data_ptr = skint_ptr
+ where(mask_ptr == 0) data_ptr = skint_ptr  ! all land
+ where(fice_ptr > 0.0) data_ptr = frz_ice ! points with some ice
 
 ! xz
 
@@ -2587,7 +2729,8 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
     call error_handler("IN FieldGet", rc)
 
- where(mask_ptr /= 0) data_ptr = xz_fill
+ where(mask_ptr == 0) data_ptr = xz_fill ! all land
+ where(fice_ptr > 0.0) data_ptr = xz_fill ! points with some ice
 
  do i = 1,num_nst_fields_minus2
    
@@ -2599,7 +2742,8 @@
     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
      call error_handler("IN FieldGet", rc)
      
-   where(mask_ptr /= 0) data_ptr = nst_fill
+   where(mask_ptr == 0) data_ptr = nst_fill  ! all land
+   where(fice_ptr > 0.0) data_ptr = nst_fill ! points with some ice
 
  enddo
 
@@ -2735,6 +2879,22 @@
 
  target_ptr = init_val
 
+ print*,"- CALL FieldCreate FOR TARGET GRID SNOW LIQ EQUIV AT SEA ICE."
+ snow_liq_equiv_at_ice_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="snow_liq_equiv_at_ice_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid snow liq equiv at sea ice."
+ call ESMF_FieldGet(snow_liq_equiv_at_ice_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
  print*,"- CALL FieldCreate FOR TARGET GRID SNOW DEPTH."
  snow_depth_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
@@ -2745,6 +2905,22 @@
 
  print*,"- INITIALIZE TARGET grid snow depth."
  call ESMF_FieldGet(snow_depth_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID SNOW DEPTH AT SEA ICE."
+ snow_depth_at_ice_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="snow_depth_at_ice_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid snow depth at sea ice."
+ call ESMF_FieldGet(snow_depth_at_ice_target_grid, &
                     farrayPtr=target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
@@ -2777,6 +2953,22 @@
 
  print*,"- INITIALIZE TARGET sea ice depth."
  call ESMF_FieldGet(seaice_depth_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID sst."
+ sst_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="sst_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET sst."
+ call ESMF_FieldGet(sst_target_grid, &
                     farrayPtr=target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
@@ -2863,16 +3055,32 @@
 
  target_ptr = init_val
 
- print*,"- CALL FieldCreate FOR TARGET GRID Z0."
- z0_target_grid = ESMF_FieldCreate(target_grid, &
+ print*,"- CALL FieldCreate FOR TARGET GRID Z0_ICE."
+ z0_ice_target_grid = ESMF_FieldCreate(target_grid, &
                                      typekind=ESMF_TYPEKIND_R8, &
-                                     name="z0_target_grid", &
+                                     name="z0_ice_target_grid", &
                                      staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate", rc)
 
- print*,"- INITIALIZE TARGET grid z0."
- call ESMF_FieldGet(z0_target_grid, &
+ print*,"- INITIALIZE TARGET grid z0_ice."
+ call ESMF_FieldGet(z0_ice_target_grid, &
+                    farrayPtr=target_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID Z0_WATER."
+ z0_water_target_grid = ESMF_FieldCreate(target_grid, &
+                                     typekind=ESMF_TYPEKIND_R8, &
+                                     name="z0_water_target_grid", &
+                                     staggerloc=ESMF_STAGGERLOC_CENTER, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid z0_water."
+ call ESMF_FieldGet(z0_water_target_grid, &
                     farrayPtr=target_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldGet", rc)
@@ -2910,6 +3118,24 @@
     call error_handler("IN FieldGet", rc)
 
  target_ptr = init_val
+
+ print*,"- CALL FieldCreate FOR TARGET GRID SEA ICE COLUMN TEMPERATURE."
+ ice_temp_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="ice_temp_target_grid", &
+                                   ungriddedLBound=(/1/), &
+                                   ungriddedUBound=(/lsoil_target/), rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", rc)
+
+ print*,"- INITIALIZE TARGET grid ice temp"
+ call ESMF_FieldGet(ice_temp_target_grid, &
+                    farrayPtr=target_ptr_3d, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ target_ptr_3d = init_val
 
  print*,"- CALL FieldCreate FOR TARGET GRID SOIL TEMPERATURE."
  soil_temp_target_grid = ESMF_FieldCreate(target_grid, &
@@ -3123,6 +3349,65 @@
     call error_handler("IN FieldCreate", rc)
 
  end subroutine create_nst_esmf_fields
+
+!> Update landmask for sea ice.
+!!
+!! The model requires the landmask record be present. However, the data
+!! is recomputed in FV3ATM routine fv3atm_sfc_io.F90 after it is read in. Here,
+!! compute it using the same algorithm as the model and output it as
+!! a diagnostic.
+!!
+!! @author George Gayno
+ subroutine update_landmask
+
+ use model_grid, only : landmask_target_grid, land_frac_target_grid
+
+ implicit none
+
+ integer                        :: i, j, rc, clb(2), cub(2)
+ integer(esmf_kind_i8), pointer :: mask_ptr(:,:)
+
+ real(esmf_kind_r8), pointer    :: ice_ptr(:,:)
+ real(esmf_kind_r8), pointer    :: land_frac_ptr(:,:)
+
+ print*,"- UPDATE TARGET LANDMASK WITH ICE RECORD."
+
+ print*,"- GET TARGET grid sea ice fraction."
+ call ESMF_FieldGet(seaice_fract_target_grid, &
+                    farrayPtr=ice_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- GET TARGET landmask."
+ call ESMF_FieldGet(landmask_target_grid, &
+                    farrayPtr=mask_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ print*,"- GET TARGET land fraction."
+ call ESMF_FieldGet(land_frac_target_grid, &
+                    computationalLBound=clb, &
+                    computationalUBound=cub, &
+                    farrayPtr=land_frac_ptr, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldGet", rc)
+
+ do j = clb(2), cub(2)
+ do i = clb(1), cub(1)
+
+   mask_ptr(i,j) = ceiling(land_frac_ptr(i,j))
+   if (mask_ptr(i,j) /= 1) then
+     if(ice_ptr(i,j) > 0.0) then
+       mask_ptr(i,j) = 2
+     else
+       mask_ptr(i,j) = 0
+     endif
+   endif
+  
+ enddo
+ enddo
+
+ end subroutine update_landmask
 
 !> Convert 1d index to 2d indices.
 !!

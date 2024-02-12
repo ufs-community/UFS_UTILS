@@ -13,8 +13,9 @@ export DATA=$OUTDIR/c192_fv3_history
 rm -fr $DATA
 
 export CRES=192
-export FIXfv3=${HOMEreg}/fix/C192
-export FIXsfc=${FIXfv3}/fix_sfc
+export ocn=100
+export FIXfv3=${HOMEreg}/fix/C${CRES}
+
 export COMIN=${HOMEreg}/input_data/fv3.history
 
 # Pay attention to the quotes.  Dont start/end with double quote.
@@ -22,8 +23,8 @@ export ATM_FILES_INPUT='dynf000.tile1.nc","dynf000.tile2.nc","dynf000.tile3.nc",
 export SFC_FILES_INPUT='phyf000.tile1.nc","phyf000.tile2.nc","phyf000.tile3.nc","phyf000.tile4.nc","phyf000.tile5.nc","phyf000.tile6.nc'
 export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export INPUT_TYPE='history'
-export MOSAIC_FILE_INPUT_GRID="${HOMEreg}/fix/C96/C96_mosaic.nc"
-export OROG_DIR_INPUT_GRID=${HOMEreg}/fix/C96
+export MOSAIC_FILE_INPUT_GRID="${HOMEreg}/fix/C96.history.file/C96_mosaic.nc"
+export OROG_DIR_INPUT_GRID=${HOMEreg}/fix/C96.history.file
 export OROG_FILES_INPUT_GRID='C96_oro_data.tile1.nc","C96_oro_data.tile2.nc","C96_oro_data.tile3.nc","C96_oro_data.tile4.nc","C96_oro_data.tile5.nc","C96_oro_data.tile6.nc'
 export TRACERS_TARGET='"sphum","liq_wat","o3mr"'
 export TRACERS_INPUT='"spfh","clwmr","o3mr"'
