@@ -18,8 +18,10 @@ fi
 export DATA=$OUTDIR/c96_gfs_sigio
 rm -fr $DATA
 
-export FIXfv3=${HOMEreg}/fix/C96
-export FIXsfc=${FIXfv3}/fix_sfc
+export CRES=96
+export ocn=100
+export FIXfv3=${HOMEreg}/fix/C${CRES}
+
 export COMIN=${HOMEreg}/input_data/gfs.sigio
 export ATM_FILES_INPUT=gdas.t00z.sanl
 export SFC_FILES_INPUT=gdas.t00z.sfcanl

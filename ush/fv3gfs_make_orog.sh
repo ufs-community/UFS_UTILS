@@ -57,9 +57,15 @@ fi
 if [ ! -s $workdir ]; then mkdir -p $workdir ;fi
 if [ ! -s $outdir ]; then mkdir -p $outdir ;fi
 
+#jcap is for Gaussian grid
+#jcap=`expr $latb - 2 `
+jcap=0
+NF1=0
+NF2=0
 mtnres=1
 efac=0
 blat=0
+NR=0
 
 if [ $is_latlon -eq 1 ]; then
   OUTGRID="none"
@@ -87,7 +93,7 @@ if [ $is_latlon -eq 0 ]; then
 fi
 cp $executable .
 
-echo  $mtnres $lonb $latb $efac $blat > INPS
+echo  $mtnres $lonb $latb $jcap $NR $NF1 $NF2 $efac $blat > INPS
 echo $OUTGRID >> INPS
 echo $orogfile >> INPS
 if [ -z ${ocn+x} ]; then

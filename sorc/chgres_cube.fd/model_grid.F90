@@ -70,10 +70,11 @@
  type(esmf_field),  public              :: longitude_w_input_grid
                                            !< longitude of 'west' edge of grid
                                            !! box, input grid
-
  type(esmf_field),  public              :: landmask_target_grid
-                                           !< land mask target grid - '1' land;
-                                           !! '0' non-land
+                                           !< land mask target grid - '1' some or all land;
+                                           !! '0' all non-land
+ type(esmf_field),  public              :: land_frac_target_grid
+                                           !< land fraction, target grid
  type(esmf_field),  public              :: latitude_target_grid
                                            !< latitude of grid center, target grid
  type(esmf_field),  public              :: latitude_s_target_grid
@@ -91,8 +92,8 @@
                                            !< longitude of 'west' edge of grid
                                            !! box, target grid
  type(esmf_field),  public              :: seamask_target_grid
-                                           !< sea mask target grid - '1' non-land;
-                                           !! '0' land
+                                           !< sea mask target grid - '1' some or all non-land;
+                                           !! '0' all land
  type(esmf_field),  public              :: terrain_target_grid
                                            !< terrain height target grid
 
@@ -415,8 +416,6 @@
  integer                      :: extra, error, ncid
  integer, allocatable         :: decomptile(:,:)
 
- integer(esmf_kind_i8), allocatable    :: landmask_one_tile(:,:)
-
  real(esmf_kind_r8), allocatable       :: latitude_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_s_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_w_one_tile(:,:)
@@ -551,7 +550,6 @@
    allocate(latitude_one_tile(i_input,j_input))
    allocate(latitude_s_one_tile(i_input,jp1_input))
    allocate(latitude_w_one_tile(ip1_input,j_input))
-   allocate(landmask_one_tile(i_input,j_input))
  else
    allocate(longitude_one_tile(0,0))
    allocate(longitude_s_one_tile(0,0))
@@ -559,7 +557,6 @@
    allocate(latitude_one_tile(0,0))
    allocate(latitude_s_one_tile(0,0))
    allocate(latitude_w_one_tile(0,0))
-   allocate(landmask_one_tile(0,0))
  endif
 
  do tile = 1, num_tiles_input_grid
@@ -601,7 +598,6 @@
  deallocate(latitude_one_tile)
  deallocate(latitude_s_one_tile)
  deallocate(latitude_w_one_tile)
- deallocate(landmask_one_tile)
 
  end subroutine define_input_grid_mosaic
 
@@ -906,6 +902,7 @@
  integer(esmf_kind_i8), allocatable    :: landmask_one_tile(:,:)
  integer(esmf_kind_i8), allocatable    :: seamask_one_tile(:,:)
  
+ real(esmf_kind_r8), allocatable       :: land_frac_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_s_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_w_one_tile(:,:)
@@ -993,6 +990,14 @@
 ! seamask (1 - non-land, 0 -land).  Read lat/lon on target grid.
 !-----------------------------------------------------------------------
 
+ print*,"- CALL FieldCreate FOR TARGET GRID LAND FRACTION."
+ land_frac_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="target_grid_landmask", rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", error)
+
  print*,"- CALL FieldCreate FOR TARGET GRID LANDMASK."
  landmask_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_I8, &
@@ -1071,6 +1076,7 @@
     call error_handler("IN FieldCreate", error)
 
  if (localpet == 0) then
+   allocate(land_frac_one_tile(i_target,j_target))
    allocate(landmask_one_tile(i_target,j_target))
    allocate(seamask_one_tile(i_target,j_target))
    allocate(latitude_one_tile(i_target,j_target))
@@ -1081,6 +1087,7 @@
    allocate(longitude_w_one_tile(ip1_target,j_target))
    allocate(terrain_one_tile(i_target,j_target))
  else
+   allocate(land_frac_one_tile(0,0))
    allocate(landmask_one_tile(0,0))
    allocate(seamask_one_tile(0,0))
    allocate(longitude_one_tile(0,0))
@@ -1096,14 +1103,22 @@
    if (localpet == 0) then
      the_file = trim(orog_dir_target_grid) // trim(orog_files_target_grid(tile))
      call get_model_mask_terrain(trim(the_file), i_target, j_target, landmask_one_tile, &
-                                 terrain_one_tile)
-     seamask_one_tile = 0
-     where(landmask_one_tile == 0) seamask_one_tile = 1
+                                 terrain_one_tile, land_frac_one_tile)
+     
+     seamask_one_tile = 0  ! all land
+     where(floor(land_frac_one_tile) == 0) seamask_one_tile = 1  ! at least some non-land.
+     landmask_one_tile = 0 ! all non-land
+     where(ceiling(land_frac_one_tile) == 1) landmask_one_tile = 1  ! at least some land
+
      call get_model_latlons(mosaic_file_target_grid, orog_dir_target_grid, num_tiles_target_grid, tile, &
                             i_target, j_target, ip1_target, jp1_target, latitude_one_tile, &
                             latitude_s_one_tile, latitude_w_one_tile, longitude_one_tile, &
                             longitude_s_one_tile, longitude_w_one_tile)
    endif
+   print*,"- CALL FieldScatter FOR TARGET GRID LAND FRACTION. TILE IS: ", tile
+   call ESMF_FieldScatter(land_frac_target_grid, land_frac_one_tile, rootpet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", error)
    print*,"- CALL FieldScatter FOR TARGET GRID LANDMASK. TILE IS: ", tile
    call ESMF_FieldScatter(landmask_target_grid, landmask_one_tile, rootpet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1142,6 +1157,7 @@
       call error_handler("IN FieldScatter", error)
  enddo
 
+ deallocate(land_frac_one_tile)
  deallocate(landmask_one_tile)
  deallocate(seamask_one_tile)
  deallocate(longitude_one_tile)
@@ -1322,8 +1338,9 @@
 !! @param [in] jdim  "j" dimension of tile
 !! @param [out] mask  land mask of tile
 !! @param [out] terrain  terrain height of tile
+!! @param [out] land_frac  The fraction of the grid point that is land.
 !! @author George Gayno NCEP/EMC   
- subroutine get_model_mask_terrain(orog_file, idim, jdim, mask, terrain)
+ subroutine get_model_mask_terrain(orog_file, idim, jdim, mask, terrain, land_frac)
 
  use netcdf
 
@@ -1335,6 +1352,7 @@
  integer(esmf_kind_i8), intent(out) :: mask(idim,jdim)
 
  real(esmf_kind_i8), intent(out)    :: terrain(idim,jdim)
+ real(esmf_kind_i8), intent(out)    :: land_frac(idim,jdim)
 
  integer                            :: error, lat, lon
  integer                            :: ncid, id_dim, id_var
@@ -1381,6 +1399,13 @@
  call netcdf_err(error, 'reading orog_raw')
  terrain = dummy
 
+ print*,"- READ LAND FRACTION."
+ error=nf90_inq_varid(ncid, 'land_frac', id_var)
+ call netcdf_err(error, 'reading land_frac id')
+ error=nf90_get_var(ncid, id_var, dummy)
+ call netcdf_err(error, 'reading orog_raw')
+ land_frac = dummy
+
  error = nf90_close(ncid)
 
  deallocate (dummy)
@@ -1412,6 +1437,7 @@
  if (ESMF_FieldIsCreated(longitude_w_input_grid)) then
    call ESMF_FieldDestroy(longitude_w_input_grid, rc=rc)
  endif
+ call ESMF_FieldDestroy(land_frac_target_grid, rc=rc)
  call ESMF_FieldDestroy(landmask_target_grid, rc=rc)
  call ESMF_FieldDestroy(latitude_target_grid, rc=rc)
  if (ESMF_FieldIsCreated(latitude_s_target_grid)) then
