@@ -459,7 +459,19 @@ C
 ! GICE: Grumbine 30" Antarctica orog IMNx3616 from S to N & wraped E-W.
 ! NB: Zfields are S to N and W-E!
        iosg = 0
-       READ(15,iostat=iosg) GICE
+      error=NF__OPEN("./fort.15",NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file fort.15' )
+      error=nf_inq_varid(ncid, 'topo', id_var)
+      call netcdf_err(error, 'inquire varid of topo')
+      error=nf_get_var_real(ncid, id_var, GICE)
+      iosg=error
+      call netcdf_err(error, 'inquire data of topo')
+      error = nf_close(ncid)
+
+      print*,'after ramp read ',maxval(gice),minval(gice)
+      stop4
+      
+!      READ(15,iostat=iosg) GICE
        if(iosg .ne. 0 ) then
         print *,' *** Err on reading GICE record, iosg=',iosg
         print *,' exec continues but NO GICE correction done '

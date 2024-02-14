@@ -81,7 +81,7 @@ echo "indir = $indir"
 
 cd $workdir
 
-cp ${indir}/thirty.second.antarctic.new.bin fort.15
+cp ${indir}/thirty.second.antarctic.new.nc fort.15
 cp ${indir}/landcover30.fixed.nc .
 cp ${indir}/gmted2010.30sec.nc  fort.235
 if [ $inorogexist -eq 1 ]; then
