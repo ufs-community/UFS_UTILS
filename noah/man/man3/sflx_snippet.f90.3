@@ -1,19 +1,20 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/lsm_routines.fd/noah.fd/sflx_snippet.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "noah" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/lsm_routines.fd/noah.fd/sflx_snippet.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "noah" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/lsm_routines.fd/noah.fd/sflx_snippet.f90 \- Snippets of noah model from sflx\&.F needed for land DA updates\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/lsm_routines.fd/noah.fd/sflx_snippet.f90 \- 
+.PP
+Snippets of noah model from sflx\&.F needed for land DA updates\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Functions/Subroutines"
+.SS "Data Types"
 
 .in +1c
 .ti -1c
-.RI "subroutine, public \fBsflx_snippet::frh2o\fP (tkelv, smc, sh2o, smcmax, bexp, psis, liqwat)"
+.RI "module \fBsflx_snippet\fP"
 .br
-.RI "Calculate the liquid water (slc) for a given total moisture content and soil temperature\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -29,33 +30,6 @@ Clara Draper
 
 .PP
 Definition in file \fBsflx_snippet\&.f90\fP\&.
-.SH "Function/Subroutine Documentation"
-.PP 
-.SS "subroutine, public sflx_snippet::frh2o (real, intent(in) tkelv, real, intent(in) smc, real, intent(in) sh2o, real, intent(in) smcmax, real, intent(in) bexp, real, intent(in) psis, real, intent(out) liqwat)"
-
-.PP
-Calculate the liquid water (slc) for a given total moisture content and soil temperature\&. Used here to update slc when DA update to stc crosses freezing\&. Note this is an approximation, since in sflx\&.F (noah) the change in slc estimated by this routine is often clipped, depending on the net energy input to the soil layer\&. Also, this routine is being called using stc, but in sflx\&.F it is called using the soil temp at the midpoint of the layer\&. However, testing shows the affects of these approximations is small (O(0\&.001 m3/m3))\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fItkelv\fP Soil temperature in K 
-.br
-\fIsmc\fP Soil moisture 
-.br
-\fIsh2o\fP Input liquid soil moisture 
-.br
-\fIsmcmax\fP Max soil moisture 
-.br
-\fIbexp\fP B exponent 
-.br
-\fIpsis\fP Saturated matric potential 
-.br
-\fIliqwat\fP Output liquid soil moisture 
-.RE
-.PP
-
-.PP
-Definition at line 34 of file sflx_snippet\&.f90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for noah from the source code\&.

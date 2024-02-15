@@ -1,6 +1,6 @@
 var interfacepmat2_1_1avco =
 [
-    [ "AVCO", "interfacepmat2_1_1avco.html#acef3e7182ff9a93770e768e27c3fc03f", null ],
-    [ "DAVCO", "interfacepmat2_1_1avco.html#a49f03de74302bfaaacaa8d1fc25636aa", null ],
-    [ "TAVCO", "interfacepmat2_1_1avco.html#a46787b6c53036556770602283a4826d1", null ]
+    [ "avco", "interfacepmat2_1_1avco.html#ae423a113e2c1fb317108a5fc6e35d5a9", null ],
+    [ "davco", "interfacepmat2_1_1avco.html#a03b4166e4f18cefccefc311e9073da21", null ],
+    [ "tavco", "interfacepmat2_1_1avco.html#ab8d0ef93b679b473fc4c3ef64b1a602b", null ]
 ];

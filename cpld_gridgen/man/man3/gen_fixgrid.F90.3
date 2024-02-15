@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/cpld_gridgen.fd/gen_fixgrid.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/gen_fixgrid.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/cpld_gridgen.fd/gen_fixgrid.F90 \- Generate fixed grid files required for coupled model\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/gen_fixgrid.F90 \- 
+.PP
+Generate fixed grid files required for coupled model\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,7 +15,7 @@
 .ti -1c
 .RI "program \fBgen_fixgrid\fP"
 .br
-.RI "Generate fixed grid files required for coupled model using the MOM6 super grid file and ocean mask file\&. "
+.RI "\fIGenerate fixed grid files required for coupled model using the MOM6 super grid file and ocean mask file\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -51,6 +53,8 @@ Denise.Worthen@noaa.gov
 
 .PP
 Definition at line 16 of file gen_fixgrid\&.F90\&.
+.PP
+References topoedits::add_topoedits(), grdvars::allocate_all(), topoedits::apply_topoedits(), debugprint::checkpoint(), debugprint::checkseam(), debugprint::checkxlatlon(), vertices::fill_bottom(), vertices::fill_top(), vertices::fill_vertices(), angles::find_ang(), angles::find_angq(), mapped_mask::make_frac_land(), postwgts::make_postwgts(), inputnml::read_inputnml(), cicegrid::write_cicegrid(), scripgrid::write_scripgrid(), and tripolegrid::write_tripolegrid()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

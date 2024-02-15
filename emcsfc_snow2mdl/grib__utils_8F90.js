@@ -6,5 +6,5 @@ var grib__utils_8F90 =
     [ "grib2_null", "grib__utils_8F90.html#adffeca48f5856efec29e2174413f18cd", null ],
     [ "grib_check", "grib__utils_8F90.html#afb32109d497155b14ab1db47cbaaf364", null ],
     [ "init_grib2", "grib__utils_8F90.html#a51864b4717ca8fb9cc712eb5c391983d", null ],
-    [ "SKGB2", "grib__utils_8F90.html#adbf31159380f03144c4db26f0389d025", null ]
+    [ "skgb2", "grib__utils_8F90.html#aef0131ff1bc5f61f551de1345e711fa4", null ]
 ];

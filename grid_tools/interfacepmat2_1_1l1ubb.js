@@ -1,5 +1,5 @@
 var interfacepmat2_1_1l1ubb =
 [
-    [ "DL1UBB", "interfacepmat2_1_1l1ubb.html#a63e9d8d2a24ab985320bb1b97eedb179", null ],
-    [ "L1UBB", "interfacepmat2_1_1l1ubb.html#aa9450336a73dd3f95870dd1d2623557f", null ]
+    [ "l1ubb", "interfacepmat2_1_1l1ubb.html#a410c3815c2445a2b7359a1498487cb58", null ],
+    [ "dl1ubb", "interfacepmat2_1_1l1ubb.html#a7e68cc74847b49b38604393df2d4c8d1", null ]
 ];

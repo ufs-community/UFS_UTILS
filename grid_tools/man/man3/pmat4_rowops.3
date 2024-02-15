@@ -1,8 +1,8 @@
-.TH "pmat4::rowops" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::rowops" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat4::rowops
+pmat4::rowops \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,14 +12,14 @@ pmat4::rowops
 .ti -1c
 .RI "subroutine \fBrowops\fP (m, n, ipiv, tt, v, vv)"
 .br
-.RI "Apply the row-operations, implied by ipiv and tt returned by rowgram, to the single column vector, v, to produce the transformed vector vv\&. "
+.RI "\fIApply the row-operations, implied by ipiv and tt returned by rowgram, to the single column vector, v, to produce the transformed vector vv\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 90 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat4::rowops::rowops (integer(spi), intent(in) m, integer(spi), intent(in) n, integer(spi), dimension(n), intent(in) ipiv, real(dp), dimension(m,n), intent(in) tt, real(dp), dimension(m), intent(in) v, real(dp), dimension(m), intent(out) vv)\fC [private]\fP"
+.SS "subroutine pmat4::rowops::rowops (integer(spi), intent(in)m, integer(spi), intent(in)n, integer(spi), dimension(n), intent(in)ipiv, real(dp), dimension(m,n), intent(in)tt, real(dp), dimension(m), intent(in)v, real(dp), dimension(m), intent(out)vv)\fC [private]\fP"
 
 .PP
 Apply the row-operations, implied by ipiv and tt returned by rowgram, to the single column vector, v, to produce the transformed vector vv\&. 
@@ -46,7 +46,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1400 of file pmat4\&.f90\&.
+Definition at line 1399 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

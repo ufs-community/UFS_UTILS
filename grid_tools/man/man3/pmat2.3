@@ -1,8 +1,10 @@
-.TH "pmat2" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2 \- Routines dealing with the operations of banded matrices\&.  
+pmat2 \- 
+.PP
+Routines dealing with the operations of banded matrices\&.  
 
 .SH SYNOPSIS
 .br
@@ -95,189 +97,193 @@ pmat2 \- Routines dealing with the operations of banded matrices\&.
 .RI "interface \fBwrtb\fP"
 .br
 .in -1c
-.SS "Functions/Subroutines"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
-.RI "subroutine, public \fBAVCO\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine, public \fBavco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Compute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. "
+.RI "\fICompute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBCAD1B\fP (m1, mah1, mah2, mirror2, a)"
+.RI "subroutine, public \fBcad1b\fP (m1, mah1, mah2, mirror2, a)"
 .br
-.RI "Incorporate operand symmetry and clip near end-1 of a band matrix operator\&. "
+.RI "\fIIncorporate operand symmetry and clip near end-1 of a band matrix operator\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBCAD2B\fP (m1, m2, mah1, mah2, mirror2, a)"
+.RI "subroutine, public \fBcad2b\fP (m1, m2, mah1, mah2, mirror2, a)"
 .br
-.RI "Incorporate symmetry and clip near end-2 of a band matrix\&. "
-.ti -1c
-.RI "pure subroutine \fBCLIB\fP (m1, m2, mah1, mah2, a)"
-.br
-.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
+.RI "\fIIncorporate symmetry and clip near end-2 of a band matrix\&. \fP"
 .ti -1c
 .RI "pure subroutine \fBclib_c\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
+.RI "\fIClip (set to zero) the unused values in a banded matrix representation\&. \fP"
 .ti -1c
 .RI "pure subroutine \fBclib_d\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "Clip (set to zero) the unused values in a banded matrix representation\&. "
+.RI "\fIClip (set to zero) the unused values in a banded matrix representation\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBCSB1B\fP (m1, mah1, mah2, mirror2, a)"
+.RI "subroutine, public \fBcsb1b\fP (m1, mah1, mah2, mirror2, a)"
 .br
-.RI "Like \fBcad1b\fP, but for antisymmetric operand\&. "
+.RI "\fILike \fBcad1b\fP, but for antisymmetric operand\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBCSB2B\fP (m1, m2, mah1, mah2, mirror2, a)"
+.RI "subroutine, public \fBcsb2b\fP (m1, m2, mah1, mah2, mirror2, a)"
 .br
-.RI "Incorporate operand antisymmetry and clip near end-2 of a band matrix\&. "
+.RI "\fIIncorporate operand antisymmetry and clip near end-2 of a band matrix\&. \fP"
 .ti -1c
-.RI "subroutine \fBDAVCO\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine \fBdavco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Double precision version of subroutine avco for midpoint interpolation\&. "
+.RI "\fIDouble precision version of subroutine avco for midpoint interpolation\&. \fP"
 .ti -1c
-.RI "subroutine \fBDDFCO\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine \fBddfco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Double precision version of dfco for compact differentiation coefficients\&. "
+.RI "\fIDouble precision version of dfco for compact differentiation coefficients\&. \fP"
 .ti -1c
-.RI "subroutine \fBDDFCO2\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine \fBddfco2\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Double precision version of DFCO2 to get 2nd-derivative coefficients\&. "
+.RI "\fIDouble precision version of DFCO2 to get 2nd-derivative coefficients\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBDFCO\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine, public \fBdfco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. "
+.RI "\fICompute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBDFCO2\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine, public \fBdfco2\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Compute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. "
+.RI "\fICompute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. \fP"
 .ti -1c
-.RI "subroutine \fBDL1UBB\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.RI "subroutine \fBdl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "Double precision version of L1UBB\&. "
+.RI "\fIDouble precision version of L1UBB\&. \fP"
 .ti -1c
-.RI "subroutine \fBDL1UEB\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.RI "subroutine \fBdl1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "Double precision version of L1UEB\&. "
+.RI "\fIDouble precision version of L1UEB\&. \fP"
 .ti -1c
-.RI "subroutine \fBDLDLTB\fP (m, mah1, a)"
+.RI "subroutine \fBdldltb\fP (m, mah1, a)"
 .br
-.RI "[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. "
+.RI "\fI[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. \fP"
 .ti -1c
-.RI "subroutine \fBDLDUB\fP (m, mah1, mah2, a)"
+.RI "subroutine \fBdldub\fP (m, mah1, mah2, a)"
 .br
-.RI "[L]*[D]*[U] factoring of double precision band-matrix\&. "
+.RI "\fI[L]*[D]*[U] factoring of double precision band-matrix\&. \fP"
 .ti -1c
-.RI "subroutine \fBdltdlbv\fP (m, mah1, a, v)"
+.RI "subroutine, public \fBl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) "
+.RI "\fI[L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. \fP"
 .ti -1c
-.RI "subroutine \fBDUDLB\fP (m, mah1, mah2, a)"
+.RI "subroutine, public \fBl1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal "
+.RI "\fIForm the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. \fP"
 .ti -1c
-.RI "subroutine \fBdudlbv\fP (m, mah1, mah2, a, v)"
+.RI "subroutine, public \fBldltb\fP (m, mah1, a)"
 .br
-.RI "Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. "
+.RI "\fI[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBL1UBB\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.RI "subroutine, public \fBldub\fP (m, mah1, mah2, a)"
 .br
-.RI "[L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
+.RI "\fI[L]*[D]*[U] factoring of single precision band-matrix\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBL1UEB\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.RI "subroutine, public \fBlinbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
-.ti -1c
-.RI "subroutine, public \fBLDLTB\fP (m, mah1, a)"
-.br
-.RI "[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. "
-.ti -1c
-.RI "subroutine, public \fBLDUB\fP (m, mah1, mah2, a)"
-.br
-.RI "[L]*[D]*[U] factoring of single precision band-matrix\&. "
-.ti -1c
-.RI "subroutine, public \fBLINBV\fP (m, mah1, mah2, a, v)"
-.br
-.RI "Solve LINear system with square Banded-matrix and vector V\&. "
+.RI "\fISolve LINear system with square Banded-matrix and vector V\&. \fP"
 .ti -1c
 .RI "subroutine, public \fBltdlbv\fP (m, mah1, a, v)"
 .br
-.RI "Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) "
+.RI "\fILike udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) \fP"
 .ti -1c
-.RI "subroutine \fBTAVCO\fP (xa, xb, a, b)"
+.RI "subroutine \fBtavco\fP (xa, xb, a, b)"
 .br
-.RI "Simplified computation of compact midpoint interpolation coefficients\&. "
+.RI "\fISimplified computation of compact midpoint interpolation coefficients\&. \fP"
 .ti -1c
-.RI "subroutine \fBTDFCO\fP (xa, xb, a, b)"
+.RI "subroutine \fBtdfco\fP (xa, xb, a, b)"
 .br
-.RI "Simplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. "
+.RI "\fISimplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. \fP"
 .ti -1c
-.RI "subroutine \fBTDFCO2\fP (xa, xb, a, b)"
+.RI "subroutine \fBtdfco2\fP (xa, xb, a, b)"
 .br
-.RI "Simplified computation of compact 2nd-derivative coefficients\&. "
+.RI "\fISimplified computation of compact 2nd-derivative coefficients\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBU1LBV\fP (m, mah1, mah2, a, v)"
+.RI "subroutine, public \fBu1lbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Back-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. "
+.RI "\fIBack-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBU1LBX\fP (mx, mah1, mah2, my, a, v)"
+.RI "subroutine, public \fBu1lbx\fP (mx, mah1, mah2, my, a, v)"
 .br
-.RI "Special back-substitution step of parallel linear inversion involving Banded matrix and X-right-Vectors\&. "
+.RI "\fISpecial back-substitution step of parallel linear inversion involving Banded matrix and X-right-Vectors\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBU1LBY\fP (my, mah1, mah2, mx, a, v)"
+.RI "subroutine, public \fBu1lby\fP (my, mah1, mah2, mx, a, v)"
 .br
-.RI "Special Back-substitution step of parallel linear inversion involving Banded matrix and Y-right-Vectors\&. "
+.RI "\fISpecial Back-substitution step of parallel linear inversion involving Banded matrix and Y-right-Vectors\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBU1LVB\fP (m, mah1, mah2, v, a)"
+.RI "subroutine, public \fBu1lvb\fP (m, mah1, mah2, v, a)"
 .br
-.RI "Special Back-substitution step of linear inversion involving left-Vector and Banded matrix\&. "
+.RI "\fISpecial Back-substitution step of linear inversion involving left-Vector and Banded matrix\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBU1LXB\fP (mx, mah1, mah2, my, v, a)"
+.RI "subroutine, public \fBu1lxb\fP (mx, mah1, mah2, my, v, a)"
 .br
-.RI "Special Back-substitution step of parallel linear inversion involving Banded matrix and X-left-Vectors\&. "
+.RI "\fISpecial Back-substitution step of parallel linear inversion involving Banded matrix and X-left-Vectors\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBU1LYB\fP (my, mah1, mah2, mx, v, a)"
+.RI "subroutine, public \fBu1lyb\fP (my, mah1, mah2, mx, v, a)"
 .br
-.RI "Special Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. "
+.RI "\fISpecial Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBUDLB\fP (m, mah1, mah2, a)"
+.RI "subroutine, public \fBudlb\fP (m, mah1, mah2, a)"
 .br
-.RI "[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal "
+.RI "\fI[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal \fP"
 .ti -1c
-.RI "subroutine, public \fBUDLBV\fP (m, mah1, mah2, a, v)"
+.RI "subroutine, public \fBudlbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. "
+.RI "\fIBack-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBUDLBX\fP (mx, mah1, mah2, my, a, v)"
+.RI "subroutine, public \fBudlbx\fP (mx, mah1, mah2, my, a, v)"
 .br
-.RI "Back-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. "
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBUDLBY\fP (my, mah1, mah2, mx, a, v)"
+.RI "subroutine, public \fBudlby\fP (my, mah1, mah2, mx, a, v)"
 .br
-.RI "Back-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. "
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBUDLVB\fP (m, mah1, mah2, v, a)"
+.RI "subroutine, public \fBudlvb\fP (m, mah1, mah2, v, a)"
 .br
-.RI "Back-substitution step of linear inversion involving row-Vector and Banded matrix\&. "
+.RI "\fIBack-substitution step of linear inversion involving row-Vector and Banded matrix\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBUDLXB\fP (mx, mah1, mah2, my, v, a)"
+.RI "subroutine, public \fBudlxb\fP (mx, mah1, mah2, my, v, a)"
 .br
-.RI "Back-substitution step of parallel linear inversion involving Banded matrix and row-X-Vectors\&. "
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and row-X-Vectors\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBUDLYB\fP (my, mah1, mah2, mx, v, a)"
+.RI "subroutine, public \fBudlyb\fP (my, mah1, mah2, mx, v, a)"
 .br
-.RI "BACk-substitution step of parallel linear inversion involving Banded matrix and row-Y-Vectors\&. "
+.RI "\fIBACk-substitution step of parallel linear inversion involving Banded matrix and row-Y-Vectors\&. \fP"
 .ti -1c
-.RI "subroutine, public \fBWRTB\fP (m1, m2, mah1, mah2, a)"
+.RI "subroutine, public \fBwrtb\fP (m1, m2, mah1, mah2, a)"
 .br
-.RI "Convenient routine for interactively writing out the real contents of a band matrix\&. "
+.RI "\fIConvenient routine for interactively writing out the real contents of a band matrix\&. \fP"
 .in -1c
-.SS "Variables"
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "pure subroutine \fBclib\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "\fIClip (set to zero) the unused values in a banded matrix representation\&. \fP"
+.ti -1c
+.RI "subroutine \fBdltdlbv\fP (m, mah1, a, v)"
+.br
+.RI "\fILike udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) \fP"
+.ti -1c
+.RI "subroutine \fBdudlb\fP (m, mah1, mah2, a)"
+.br
+.RI "\fI[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal \fP"
+.ti -1c
+.RI "subroutine \fBdudlbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "\fIBack-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. \fP"
+.in -1c
+.SS "Private Attributes"
 
 .in +1c
 .ti -1c
 .RI "real(dp), parameter \fBzero\fP =0"
 .br
-.RI "Double precision real zero\&. "
+.RI "\fIDouble precision real zero\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -285,11 +291,11 @@ Routines dealing with the operations of banded matrices\&.
 
 The three special routines allow the construction of compact or conventional interpolation and differencing stencils to a general order of accuracy\&. These are:
 .IP "\(bu" 2
-avco() Averaging, or interpolating;
+\fBavco()\fP Averaging, or interpolating;
 .IP "\(bu" 2
-dfco() Differentiating (once);
+\fBdfco()\fP Differentiating (once);
 .IP "\(bu" 2
-dfco2() Differentiating (twice)\&.
+\fBdfco2()\fP Differentiating (twice)\&.
 .PP
 .PP
 Other routines provide the tools for applying compact schemes, and for the construction and application of recursive filters\&.
@@ -307,9 +313,11 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .RE
 .PP
 
-.SH "Function/Subroutine Documentation"
+.PP
+Definition at line 21 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine, public pmat2::AVCO (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(sp), dimension(na), intent(in) za, real(sp), dimension(nb), intent(in) zb, real(sp), intent(in) z0, real(sp), dimension(na), intent(out) a, real(sp), dimension(nb), intent(out) b)"
+.SS "subroutine, public \fBpmat2::avco\fP (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)"
 
 .PP
 Compute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. 
@@ -343,10 +351,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 100 of file pmat2\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine, public pmat2::CAD1B (integer(spi), intent(in) m1, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(0:m1\-1,\-mah1:mah2), intent(inout) a)"
+Definition at line 99 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::cad1b\fP (integer(spi), intent(in)m1, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(0:m1-1,-mah1:mah2), intent(inout)a)"
 
 .PP
 Incorporate operand symmetry and clip near end-1 of a band matrix operator\&. 
@@ -376,8 +382,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 426 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::CAD2B (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(1\-m1:0,m1\-m2\-mah1:m1\-m2+mah2), intent(inout) a)"
+Definition at line 425 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::cad2b\fP (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(1-m1:0,m1-m2-mah1:m1-m2+mah2), intent(inout)a)"
 
 .PP
 Incorporate symmetry and clip near end-2 of a band matrix\&. 
@@ -409,8 +415,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 477 of file pmat2\&.f90\&.
-.SS "pure subroutine pmat2::CLIB (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+Definition at line 476 of file pmat2\&.f90\&.
+.SS "pure subroutine pmat2::clib (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m1,-mah1:mah2), intent(inout)a)\fC [private]\fP"
 
 .PP
 Clip (set to zero) the unused values in a banded matrix representation\&. 
@@ -440,8 +446,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 370 of file pmat2\&.f90\&.
-.SS "pure subroutine pmat2::clib_c (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, complex(dpc), dimension(m1,\-mah1:mah2), intent(inout) a)"
+Definition at line 369 of file pmat2\&.f90\&.
+.SS "pure subroutine pmat2::clib_c (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, complex(dpc), dimension(m1,-mah1:mah2), intent(inout)a)"
 
 .PP
 Clip (set to zero) the unused values in a banded matrix representation\&. 
@@ -471,10 +477,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 406 of file pmat2\&.f90\&.
-.PP
-References pietc::c0\&.
-.SS "pure subroutine pmat2::clib_d (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m1,\-mah1:mah2), intent(inout) a)"
+Definition at line 405 of file pmat2\&.f90\&.
+.SS "pure subroutine pmat2::clib_d (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m1,-mah1:mah2), intent(inout)a)"
 
 .PP
 Clip (set to zero) the unused values in a banded matrix representation\&. 
@@ -504,10 +508,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 388 of file pmat2\&.f90\&.
-.PP
-References pietc::u0\&.
-.SS "subroutine, public pmat2::CSB1B (integer(spi), intent(in) m1, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(0:m1\-1,\-mah1:mah2), intent(inout) a)"
+Definition at line 387 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::csb1b\fP (integer(spi), intent(in)m1, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(0:m1-1,-mah1:mah2), intent(inout)a)"
 
 .PP
 Like \fBcad1b\fP, but for antisymmetric operand\&. 
@@ -537,8 +539,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 451 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::CSB2B (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(1\-m1:0,m1\-m2\-mah1:m1\-m2+mah2), intent(inout) a)"
+Definition at line 450 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::csb2b\fP (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(1-m1:0,m1-m2-mah1:m1-m2+mah2), intent(inout)a)"
 
 .PP
 Incorporate operand antisymmetry and clip near end-2 of a band matrix\&. 
@@ -570,8 +572,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 504 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::DAVCO (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)"
+Definition at line 503 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::davco (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)"
 
 .PP
 Double precision version of subroutine avco for midpoint interpolation\&. 
@@ -605,10 +607,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 134 of file pmat2\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat2::DDFCO (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)"
+Definition at line 133 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::ddfco (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)"
 
 .PP
 Double precision version of dfco for compact differentiation coefficients\&. 
@@ -642,10 +642,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 225 of file pmat2\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat2::DDFCO2 (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)"
+Definition at line 224 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::ddfco2 (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)"
 
 .PP
 Double precision version of DFCO2 to get 2nd-derivative coefficients\&. 
@@ -679,10 +677,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 318 of file pmat2\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine, public pmat2::DFCO (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(sp), dimension(na), intent(in) za, real(sp), dimension(nb), intent(in) zb, real(sp), intent(in) z0, real(sp), dimension(na), intent(out) a, real(sp), dimension(nb), intent(out) b)"
+Definition at line 317 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::dfco\fP (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)"
 
 .PP
 Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. 
@@ -716,8 +712,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 190 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::DFCO2 (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(sp), dimension(na), intent(in) za, real(sp), dimension(nb), intent(in) zb, real(sp), intent(in) z0, real(sp), dimension(na), intent(out) a, real(sp), dimension(nb), intent(out) b)"
+Definition at line 189 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::dfco2\fP (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)"
 
 .PP
 Compute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. 
@@ -751,8 +747,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 283 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::DL1UBB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a, real(dp), dimension(m,\-mbh1:mbh2), intent(inout) b)"
+Definition at line 282 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dl1ubb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(dp), dimension(m,-mah1:mah2), intent(inout)a, real(dp), dimension(m,-mbh1:mbh2), intent(inout)b)"
 
 .PP
 Double precision version of L1UBB\&. 
@@ -786,10 +782,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 771 of file pmat2\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat2::DL1UEB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(dp), dimension(0:,\-mah1:), intent(inout) a, real(dp), dimension(:,\-mbh1:), intent(inout) b)"
+Definition at line 770 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dl1ueb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(dp), dimension(0:,-mah1:), intent(inout)a, real(dp), dimension(:,-mbh1:), intent(inout)b)"
 
 .PP
 Double precision version of L1UEB\&. 
@@ -823,10 +817,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 855 of file pmat2\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat2::DLDLTB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(dp), dimension(m,\-mah1:0), intent(inout) a)"
+Definition at line 854 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dldltb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(inout)a)"
 
 .PP
 [L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix 
@@ -852,10 +844,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 645 of file pmat2\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat2::DLDUB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a)"
+Definition at line 644 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dldub (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(inout)a)"
 
 .PP
 [L]*[D]*[U] factoring of double precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
@@ -883,10 +873,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 571 of file pmat2\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat2::dltdlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(dp), dimension(m,\-mah1:0), intent(in) a, real(dp), dimension(m), intent(inout) v)\fC [private]\fP"
+Definition at line 570 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dltdlbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(in)a, real(dp), dimension(m), intent(inout)v)\fC [private]\fP"
 
 .PP
 Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
@@ -914,8 +902,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 980 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::DUDLB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+Definition at line 979 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dudlb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(inout)a)\fC [private]\fP"
 
 .PP
 [U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal 
@@ -943,8 +931,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 704 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::dudlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m,\-mah1:mah2), intent(in) a, real(dp), dimension(m), intent(inout) v)\fC [private]\fP"
+Definition at line 703 of file pmat2\&.f90\&.
+.PP
+References pmat2::ldub::dldub()\&.
+.SS "subroutine pmat2::dudlbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(in)a, real(dp), dimension(m), intent(inout)v)\fC [private]\fP"
 
 .PP
 Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. Output vector is [U**-1]*[D**-1]*[L**-1]*v
@@ -974,8 +964,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 921 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::L1UBB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m,\-mbh1:mbh2), intent(inout) b)"
+Definition at line 920 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::l1ubb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(sp), dimension(m,-mah1:mah2), intent(inout)a, real(sp), dimension(m,-mbh1:mbh2), intent(inout)b)"
 
 .PP
 [L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. 
@@ -1009,8 +999,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 733 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::L1UEB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(sp), dimension(0:m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m,\-mbh1:mbh2), intent(inout) b)"
+Definition at line 732 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::l1ueb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(sp), dimension(0:m,-mah1:mah2), intent(inout)a, real(sp), dimension(m,-mbh1:mbh2), intent(inout)b)"
 
 .PP
 Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. This is a special adaptation of L1UBB used to process quadrature weights for QEDBV etc in which the initial quadrature value is provided as input instead of being implicitly assumed zero (which is the case for QZDBV etc)\&.
@@ -1044,8 +1034,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 818 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::LDLTB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(sp), dimension(m,\-mah1:0), intent(inout) a)"
+Definition at line 817 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::ldltb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(inout)a)"
 
 .PP
 [L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix\&.
@@ -1071,8 +1061,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 609 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::LDUB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a)"
+Definition at line 608 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::ldub\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a)"
 
 .PP
 [L]*[D]*[U] factoring of single precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
@@ -1100,8 +1090,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 532 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::LINBV (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m), intent(inout) v)"
+Definition at line 531 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::linbv\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a, real(sp), dimension(m), intent(inout)v)"
 
 .PP
 Solve LINear system with square Banded-matrix and vector V\&. 
@@ -1131,8 +1121,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1323 of file pmat2\&.f90\&.
-.SS "subroutine, public \fBpmat2::ltdlbv\fP (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(sp), dimension(m,\-mah1:0), intent(in) a, real(sp), dimension(m), intent(inout) v)"
+Definition at line 1322 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::ltdlbv\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(in)a, real(sp), dimension(m), intent(inout)v)"
 
 .PP
 Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
@@ -1160,8 +1150,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 950 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::TAVCO (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)"
+Definition at line 949 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::tavco (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)"
 
 .PP
 Simplified computation of compact midpoint interpolation coefficients\&. 
@@ -1189,10 +1179,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 165 of file pmat2\&.f90\&.
+Definition at line 164 of file pmat2\&.f90\&.
 .PP
-References zero\&.
-.SS "subroutine pmat2::TDFCO (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)"
+References pmat2::avco::davco()\&.
+.SS "subroutine pmat2::tdfco (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)"
 
 .PP
 Simplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. 
@@ -1220,10 +1210,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 258 of file pmat2\&.f90\&.
+Definition at line 257 of file pmat2\&.f90\&.
 .PP
-References zero\&.
-.SS "subroutine pmat2::TDFCO2 (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)"
+References pmat2::dfco::ddfco()\&.
+.SS "subroutine pmat2::tdfco2 (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)"
 
 .PP
 Simplified computation of compact 2nd-derivative coefficients\&. 
@@ -1251,10 +1241,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 350 of file pmat2\&.f90\&.
+Definition at line 349 of file pmat2\&.f90\&.
 .PP
-References zero\&.
-.SS "subroutine, public pmat2::U1LBV (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(in) a, real(sp), dimension(m), intent(inout) v)"
+References pmat2::dfco2::ddfco2()\&.
+.SS "subroutine, public \fBpmat2::u1lbv\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(in)a, real(sp), dimension(m), intent(inout)v)"
 
 .PP
 Back-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. 
@@ -1284,8 +1274,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1155 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::U1LBX (integer(spi), intent(in) mx, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) my, real(sp), dimension(mx,\-mah1:mah2), intent(in) a, real(sp), dimension(mx,my), intent(inout) v)"
+Definition at line 1154 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lbx\fP (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)"
 
 .PP
 Special back-substitution step of parallel linear inversion involving Banded matrix and X-right-Vectors\&. 
@@ -1317,8 +1307,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1186 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::U1LBY (integer(spi), intent(in) my, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mx, real(sp), dimension(my,\-mah1:mah2), intent(in) a, real(sp), dimension(mx,my), intent(inout) v)"
+Definition at line 1185 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lby\fP (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(my,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)"
 
 .PP
 Special Back-substitution step of parallel linear inversion involving Banded matrix and Y-right-Vectors\&. 
@@ -1350,8 +1340,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1214 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::U1LVB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m), intent(inout) v, real(sp), dimension(m,\-mah1:mah2), intent(in) a)"
+Definition at line 1213 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lvb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m), intent(inout)v, real(sp), dimension(m,-mah1:mah2), intent(in)a)"
 
 .PP
 Special Back-substitution step of linear inversion involving left-Vector and Banded matrix\&. 
@@ -1381,8 +1371,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1240 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::U1LXB (integer(spi), intent(in) mx, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) my, real(sp), dimension(mx,my), intent(inout) v, real(sp), dimension(mx,\-mah1:mah2), intent(in) a)"
+Definition at line 1239 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lxb\fP (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(mx,-mah1:mah2), intent(in)a)"
 
 .PP
 Special Back-substitution step of parallel linear inversion involving Banded matrix and X-left-Vectors\&. 
@@ -1414,8 +1404,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1271 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::U1LYB (integer(spi), intent(in) my, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mx, real(sp), dimension(mx,my), intent(inout) v, real(sp), dimension(my,\-mah1:mah2), intent(in) a)"
+Definition at line 1270 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lyb\fP (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(my,-mah1:mah2), intent(in)a)"
 
 .PP
 Special Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. 
@@ -1447,8 +1437,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1299 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::UDLB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a)"
+Definition at line 1298 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a)"
 
 .PP
 [U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal 
@@ -1476,8 +1466,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 683 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::UDLBV (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(in) a, real(sp), dimension(m), intent(inout) v)"
+Definition at line 682 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlbv\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(in)a, real(sp), dimension(m), intent(inout)v)"
 
 .PP
 Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. Output vector is [U**-1]*[D**-1]*[L**-1]*v
@@ -1507,8 +1497,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 892 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::UDLBX (integer(spi), intent(in) mx, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) my, real(sp), dimension(mx,\-mah1:mah2), intent(in) a, real(sp), dimension(mx,my), intent(inout) v)"
+Definition at line 891 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlbx\fP (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)"
 
 .PP
 Back-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. 
@@ -1540,8 +1530,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1011 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::UDLBY (integer(spi), intent(in) my, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mx, real(sp), dimension(my,\-mah1:mah2), intent(in) a, real(sp), dimension(mx,my), intent(inout) v)"
+Definition at line 1010 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlby\fP (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(my,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)"
 
 .PP
 Back-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. 
@@ -1573,8 +1563,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1040 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::UDLVB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m), intent(inout) v, real(sp), dimension(m,\-mah1:mah2), intent(in) a)"
+Definition at line 1039 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlvb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m), intent(inout)v, real(sp), dimension(m,-mah1:mah2), intent(in)a)"
 
 .PP
 Back-substitution step of linear inversion involving row-Vector and Banded matrix\&. 
@@ -1604,8 +1594,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1067 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::UDLXB (integer(spi), intent(in) mx, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) my, real(sp), dimension(mx,my), intent(inout) v, real(sp), dimension(mx,\-mah1:mah2), intent(in) a)"
+Definition at line 1066 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlxb\fP (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(mx,-mah1:mah2), intent(in)a)"
 
 .PP
 Back-substitution step of parallel linear inversion involving Banded matrix and row-X-Vectors\&. 
@@ -1637,8 +1627,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1099 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::UDLYB (integer(spi), intent(in) my, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mx, real(sp), dimension(mx,my), intent(inout) v, real(sp), dimension(my,\-mah1:mah2), intent(in) a)"
+Definition at line 1098 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlyb\fP (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(my,-mah1:mah2), intent(in)a)"
 
 .PP
 BACk-substitution step of parallel linear inversion involving Banded matrix and row-Y-Vectors\&. 
@@ -1670,8 +1660,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1128 of file pmat2\&.f90\&.
-.SS "subroutine, public pmat2::WRTB (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m1,\-mah1:mah2), intent(in) a)"
+Definition at line 1127 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::wrtb\fP (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m1,-mah1:mah2), intent(in)a)"
 
 .PP
 Convenient routine for interactively writing out the real contents of a band matrix\&. 
@@ -1701,8 +1691,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1341 of file pmat2\&.f90\&.
-.SH "Variable Documentation"
+Definition at line 1340 of file pmat2\&.f90\&.
+.SH "Field Documentation"
 .PP 
 .SS "real(dp), parameter pmat2::zero =0\fC [private]\fP"
 
@@ -1710,8 +1700,7 @@ Definition at line 1341 of file pmat2\&.f90\&.
 Double precision real zero\&. 
 .PP
 Definition at line 54 of file pmat2\&.f90\&.
-.PP
-Referenced by TAVCO(), TDFCO(), and TDFCO2()\&.
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

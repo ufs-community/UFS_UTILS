@@ -1,8 +1,8 @@
-.TH "pesg::xmtog_ak_rr" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::xmtog_ak_rr" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::xmtog_ak_rr
+pesg::xmtog_ak_rr \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pesg::xmtog_ak_rr
 .ti -1c
 .RI "subroutine \fBxmtog_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, xm, lat, lon, ff)"
 .br
-.RI "For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point\&. "
+.RI "\fIFor an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point\&. \fP"
 .ti -1c
 .RI "subroutine \fBxmtog_ak_rr_m\fP (A, K, plat, plon, pazi, xm, lat, lon, ff)"
 .br
-.RI "Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians)\&. "
+.RI "\fIGiven the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians)\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 53 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::xmtog_ak_rr::xmtog_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) lat, real(dp), intent(out) lon, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xmtog_ak_rr::xmtog_ak_rr_g (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(2), intent(in)xm, real(dp), intent(out)lat, real(dp), intent(out)lon, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point\&. If instead the transformation is invalid for any reason, then return the raised failure flag, FF=\&.true\&.
@@ -60,8 +60,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2063 of file pesg\&.f90\&.
-.SS "subroutine pesg::xmtog_ak_rr::xmtog_ak_rr_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) lat, real(dp), intent(out) lon, logical, intent(out) ff)\fC [private]\fP"
+Definition at line 2061 of file pesg\&.f90\&.
+.SS "subroutine pesg::xmtog_ak_rr::xmtog_ak_rr_m (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), dimension(2), intent(in)xm, real(dp), intent(out)lat, real(dp), intent(out)lon, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians)\&. If the transformation is invalid for any reason, return instead with a raised failure flag, FF= \&.true\&.
@@ -94,7 +94,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2015 of file pesg\&.f90\&.
+Definition at line 2014 of file pesg\&.f90\&.
+.PP
+Referenced by pesg::xmtog_ak_dd_g(), pesg::xmtog_ak_dd_m(), and pesg::xmtog_ak_rr_g()\&.
 
 .SH "Author"
 .PP 

@@ -1,8 +1,8 @@
-.TH "pmat5::gtoc" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::gtoc" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat5::gtoc
+pmat5::gtoc \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,34 +12,34 @@ pmat5::gtoc
 .ti -1c
 .RI "subroutine \fBdgtoc\fP (dlat, dlon, xe)"
 .br
-.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. \fP"
 .ti -1c
 .RI "subroutine \fBdgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
 .br
-.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. \fP"
 .ti -1c
 .RI "subroutine \fBdgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
 .br
-.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. \fP"
 .ti -1c
 .RI "subroutine \fBsgtoc\fP (dlat, dlon, xe)"
 .br
-.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. \fP"
 .ti -1c
 .RI "subroutine \fBsgtocd\fP (dlat, dlon, xe, dxedlat, dxedlon)"
 .br
-.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. \fP"
 .ti -1c
 .RI "subroutine \fBsgtocdd\fP (dlat, dlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
 .br
-.RI "Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. "
+.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 41 of file pmat5\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat5::gtoc::dgtoc (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe)\fC [private]\fP"
+.SS "subroutine pmat5::gtoc::dgtoc (real(dp), intent(in)dlat, real(dp), intent(in)dlon, real(dp), dimension(3), intent(out)xe)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Double precision version\&.
@@ -60,8 +60,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 445 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::gtoc::dgtocd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+Definition at line 444 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoc::dgtocd (real(dp), intent(in)dlat, real(dp), intent(in)dlon, real(dp), dimension(3), intent(out)xe, real(dp), dimension(3), intent(out)dxedlat, real(dp), dimension(3), intent(out)dxedlon)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the partial derivatives of xe wrt latitude and longitude\&. Double precision version\&.
@@ -86,8 +86,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 496 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::gtoc::dgtocdd (real(dp), intent(in) dlat, real(dp), intent(in) dlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
+Definition at line 495 of file pmat5\&.f90\&.
+.PP
+Referenced by pmat5::sgtocd()\&.
+.SS "subroutine pmat5::gtoc::dgtocdd (real(dp), intent(in)dlat, real(dp), intent(in)dlon, real(dp), dimension(3), intent(out)xe, real(dp), dimension(3), intent(out)dxedlat, real(dp), dimension(3), intent(out)dxedlon, real(dp), dimension(3), intent(out)ddxedlatdlat, real(dp), dimension(3), intent(out)ddxedlatdlon, real(dp), dimension(3), intent(out)ddxedlondlon)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the 1st and 2nd partial derivatives of xe wrt latitude and longitude\&. Double precision version\&.
@@ -118,8 +120,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 565 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::gtoc::sgtoc (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe)\fC [private]\fP"
+Definition at line 563 of file pmat5\&.f90\&.
+.PP
+Referenced by pmat5::sgrtocdd(), and pmat5::sgtocdd()\&.
+.SS "subroutine pmat5::gtoc::sgtoc (real(sp), intent(in)dlat, real(sp), intent(in)dlon, real(sp), dimension(3), intent(out)xe)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Single precision version\&.
@@ -145,8 +149,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 423 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::gtoc::sgtocd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
+Definition at line 422 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoc::sgtocd (real(sp), intent(in)dlat, real(sp), intent(in)dlon, real(sp), dimension(3), intent(out)xe, real(sp), dimension(3), intent(out)dxedlat, real(sp), dimension(3), intent(out)dxedlon)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the partial derivatives of xe wrt latitude and longitude\&. Single precision version\&.
@@ -171,8 +175,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 470 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::gtoc::sgtocdd (real(sp), intent(in) dlat, real(sp), intent(in) dlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
+Definition at line 469 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoc::sgtocdd (real(sp), intent(in)dlat, real(sp), intent(in)dlon, real(sp), dimension(3), intent(out)xe, real(sp), dimension(3), intent(out)dxedlat, real(sp), dimension(3), intent(out)dxedlon, real(sp), dimension(3), intent(out)ddxedlatdlat, real(sp), dimension(3), intent(out)ddxedlatdlon, real(sp), dimension(3), intent(out)ddxedlondlon)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Also, return the 1st and 2nd partial derivatives of xe wrt latitude and longitude\&. Single precision version\&.
@@ -203,7 +207,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 528 of file pmat5\&.f90\&.
+Definition at line 526 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

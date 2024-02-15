@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pesg.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pesg.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pesg.f90 \- Routines to perform ESG regional grid mappings\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pesg.f90 \- 
+.PP
+Routines to perform ESG regional grid mappings\&.  
 
 .SH SYNOPSIS
 .br
@@ -59,6 +61,10 @@
 .RI "interface \fBpesg::hgrid_ak_rr\fP"
 .br
 .ti -1c
+.RI "module \fBpesg\fP"
+.br
+.RI "\fISuite of routines to perform the 2-parameter family of Extended Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the the two parameters, A and K, of those mappings for a given rectangular domain's principal (median) semi-arcs with respect to a domain-averaged measure of distortion\&. \fP"
+.ti -1c
 .RI "interface \fBpesg::xctoxm_ak\fP"
 .br
 .ti -1c
@@ -94,198 +100,6 @@
 .ti -1c
 .RI "interface \fBpesg::zttozm\fP"
 .br
-.in -1c
-.SS "Modules"
-
-.in +1c
-.ti -1c
-.RI "module \fBpesg\fP"
-.br
-.RI "Suite of routines to perform the 2-parameter family of Extended Schmidt Gnomonic (ESG) regional grid mappings, and to optimize the the two parameters, A and K, of those mappings for a given rectangular domain's principal (median) semi-arcs with respect to a domain-averaged measure of distortion\&. "
-.in -1c
-.SS "Functions/Subroutines"
-
-.in +1c
-.ti -1c
-.RI "subroutine, public \fBpesg::bestesg_geo\fP (lam, garcx, garcy, a, k, marcx, marcy, q, ff)"
-.br
-.RI "Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given geographical half-spans, garcx and garcy, as well as the corresponding map-space half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::bestesg_map\fP (lam, marcx, marcy, a, k, garcx, garcy, q, ff)"
-.br
-.RI "Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given map-coordinate half-spans, marcx and marcy, as well as the corresponding geographical half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. "
-.ti -1c
-.RI "subroutine \fBpesg::gaulegh\fP (m, x, w)"
-.br
-.RI "This Gauss-Legendre quadrature integrates exactly any even polynomial up to degree m*4-2 in the half-interval [0,1]\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::get_edges\fP (arcx, arcy, edgex, edgey)"
-.br
-.RI "For angles (degrees) of the arcs spanning the halfwidths between the region's center and its x and y edges, get the two cartesian vectors that represent the locations of these edge midpoints in the positive x and y directions\&. "
-.ti -1c
-.RI "subroutine \fBpesg::get_meanqd\fP (ngh, lam, xg, wg, ak, ma, q, qdak, qdma, ga, gadak, gadma, ff)"
-.br
-.RI "For a parameter vector, ak and a map-space domain-parameter vector, ma, return the lambda-parameterized quality diagnostic, Q, and the geographic domain-parameter vector ga\&. "
-.ti -1c
-.RI "subroutine \fBpesg::get_meanqs\fP (n, ngh, lam, xg, wg, aks, mas, qs, ff)"
-.br
-.RI "Like getmeanqd, except for n different values, aks, of ak and n different values, mas of ma, and without any of the derivatives\&. "
-.ti -1c
-.RI "subroutine \fBpesg::get_qofv\fP (lam, v1, v2, v3, v4, q)"
-.br
-.RI "The quadratic quantity Q depends linearly on v1 and v4 (which are already quadratic diagnostics of EL) and quadratically on v2 and v3 (which are linear diagnostics of EL)\&. "
-.ti -1c
-.RI "subroutine \fBpesg::get_qofvd\fP (lam, v2, v3, v1d, v2d, v3d, v4d, qd)"
-.br
-.RI "Like \fBget_qofv\fP, but for (only) the 2-vector derivatives of Q\&. "
-.ti -1c
-.RI "subroutine \fBpesg::get_qsofvs\fP (n, lam, v1s, v2s, v3s, v4s, qs)"
-.br
-.RI "General util to convert value\&. "
-.ti -1c
-.RI "subroutine \fBpesg::get_qx\fP (j0, v1, v2, v3, v4)"
-.br
-.RI "From a jacobian matrix, j0, get a sufficient set of v\&. "
-.ti -1c
-.RI "subroutine \fBpesg::get_qxd\fP (j0, j0d, v1, v2, v3, v4, v1d, v2d, v3d, v4d)"
-.br
-.RI "From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set of v\&. "
-.ti -1c
-.RI "subroutine \fBpesg::gtoxm_ak_dd_g\fP (A, K, pdlat, pdlon, pdazi, delx, dely, dlat, dlon, xm, ff)"
-.br
-.RI "Like gtoxm_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. "
-.ti -1c
-.RI "subroutine \fBpesg::gtoxm_ak_dd_m\fP (A, K, pdlat, pdlon, pdazi, dlat, dlon, xm, ff)"
-.br
-.RI "Like gtoxm_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. "
-.ti -1c
-.RI "subroutine \fBpesg::gtoxm_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, lat, lon, xm, ff)"
-.br
-.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
-.ti -1c
-.RI "subroutine \fBpesg::gtoxm_ak_rr_m\fP (A, K, plat, plon, pazi, lat, lon, xm, ff)"
-.br
-.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
-.ti -1c
-.RI "subroutine \fBpesg::guessak_geo\fP (asp, arc, ak)"
-.br
-.RI "Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical (degree) units measured along the rectangle's median, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. "
-.ti -1c
-.RI "subroutine \fBpesg::guessak_map\fP (asp, tmarcx, ak)"
-.br
-.RI "Given an aspect ratio, asp<=1, and major semi-axis, arc, in map-space nondimensional units, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::hgrid_ak\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, re, delxre, delyre, glat, glon, garea, ff)"
-.br
-.RI "Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, in dimensional units upon return\&. "
-.ti -1c
-.RI "subroutine \fBpesg::hgrid_ak_c\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, re, delxre, delyre, glat, glon, garea, dx, dy, dangle_dx, dangle_dy, ff)"
-.br
-.RI "Like hgrid_ak_rr_c except the argument list includes the earth radius, re, and this is used to express the map-space grid increments in the dimensional units, delxre, delyre on entry, and to express the grid cell areas, garea, and the x- and y- grid steps, dx and dy, in dimensional units upon return\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::hgrid_ak_dc\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, xc, xcd, garea, ff)"
-.br
-.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::hgrid_ak_dd\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, ff)"
-.br
-.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. "
-.ti -1c
-.RI "subroutine \fBpesg::hgrid_ak_dd_c\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, dx, dy, dangle_dx, dangle_dy, ff)"
-.br
-.RI "Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely) are in degrees instead of radians\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::hgrid_ak_rc\fP (lx, ly, nx, ny, A, K, plat, plon, pazi, delx, dely, xc, xcd, garea, ff)"
-.br
-.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::hgrid_ak_rr\fP (lx, ly, nx, ny, A, K, plat, plon, pazi, delx, dely, glat, glon, garea, ff)"
-.br
-.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. "
-.ti -1c
-.RI "subroutine \fBpesg::hgrid_ak_rr_c\fP (lx, ly, nx, ny, a, k, plat, plon, pazi, delx, dely, glat, glon, garea, dx, dy, angle_dx, angle_dy, ff)"
-.br
-.RI "Use a and k as the parameters of an extended Schmidt-transformed gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::xctoxm_ak\fP (a, k, xc, xm, ff)"
-.br
-.RI "Inverse mapping of \fBxmtoxc_ak\fP\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xctoxs\fP (xc, xs)"
-.br
-.RI "Inverse of xstoxc\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xmtog_ak_dd_g\fP (A, K, pdlat, pdlon, pdazi, delx, dely, xm, dlat, dlon, ff)"
-.br
-.RI "Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xmtog_ak_dd_m\fP (A, K, pdlat, pdlon, pdazi, xm, dlat, dlon, ff)"
-.br
-.RI "Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xmtog_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, xm, lat, lon, ff)"
-.br
-.RI "For an ESG map with parameters, (A,K), and geographical orientation, given by plon,plat,pazi (radians), and given a point in grid-space units as the 2-vector, xm, return the geographical coordinates, lat, lon, (radians) of this point\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xmtog_ak_rr_m\fP (A, K, plat, plon, pazi, xm, lat, lon, ff)"
-.br
-.RI "Given the ESG map specified by parameters (A,K) and geographical center and orientation, plat,plon,pazi (radians), and a position, in map-space coordinates given by the 2-vector, xm, return the geographical coordinates, lat and lon (radians)\&. "
-.ti -1c
-.RI "subroutine, public \fBpesg::xmtoxc_ak\fP (a, k, xm, xc, xcd, ff)"
-.br
-.RI "Assuming the A-K parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian matrix, xcd\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xmtoxc_vak\fP (ak, xm, xc, xcd, ff)"
-.br
-.RI "Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping with parameter vector, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, the Jacobian matrix, xcd\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xmtoxc_vak1\fP (ak, xm, xc, xcd, xc1, xcd1, ff)"
-.br
-.RI "Like xmtoxc_vak, _ak, but also return derivatives wrt ak\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xmtoxt\fP (a, xm, xt, xtd, ff)"
-.br
-.RI "Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xmtoxt1\fP (a, xm, xt, xtd, xt1, xtd1, ff)"
-.br
-.RI "Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, the derivatives, wrt a, of these quantities\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xstoxc\fP (xs, xc, xcd)"
-.br
-.RI "Standard transformation from polar stereographic map coordinates, xs, to cartesian, xc, assuming the projection axis is polar\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xstoxc1\fP (xs, xc, xcd, xcdd)"
-.br
-.RI "Standard transformation from polar stereographic map coordinates, xs, to cartesian, xc, assuming the projection axis is polar\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xstoxt\fP (k, xs, xt, ff)"
-.br
-.RI "Inverse of xttoxs\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xttoxm\fP (a, xt, xm, ff)"
-.br
-.RI "Inverse of xmtoxt\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xttoxs\fP (k, xt, xs, xsd, ff)"
-.br
-.RI "Scaled gnomonic plane xt to standard stereographic plane xs\&. "
-.ti -1c
-.RI "subroutine \fBpesg::xttoxs1\fP (k, xt, xs, xsd, xsdd, xs1, xsd1, ff)"
-.br
-.RI "Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. "
-.ti -1c
-.RI "subroutine \fBpesg::zmtozt\fP (a, zm, zt, ztd, ff)"
-.br
-.RI "Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd, for positive and negative A and for the limiting case, A --> 0\&. "
-.ti -1c
-.RI "subroutine \fBpesg::zmtozt1\fP (a, zm, zt, ztd, zt1, ztd1, ff)"
-.br
-.RI "Like zmtozt, but also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd\&. "
-.ti -1c
-.RI "subroutine \fBpesg::zttozm\fP (a, zt, zm, ff)"
-.br
-.RI "Inverse of zmtozt\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

@@ -1,23 +1,25 @@
-.TH "search_util" 3 "Mon Oct 23 2023" "Version 1.11.0" "chgres_cube" \" -*- nroff -*-
+.TH "search_util" 3 "Thu Feb 15 2024" "Version 1.12.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-search_util \- Replace undefined values with a valid value\&.  
+search_util \- 
+.PP
+Replace undefined values with a valid value\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Functions/Subroutines"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "subroutine, public \fBsearch\fP (field, mask, idim, jdim, tile, field_num, latitude, terrain_land, soilt_climo)"
 .br
-.RI "Replace undefined surface values\&. "
+.RI "\fIReplace undefined surface values\&. \fP"
 .ti -1c
 .RI "subroutine \fBsst_guess\fP (latitude, sst)"
 .br
-.RI "Set default Sea Surface Temperature (SST) based on latitude\&. "
+.RI "\fISet default Sea Surface Temperature (SST) based on latitude\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -33,9 +35,11 @@ George Gayno NCEP/EMC
 .RE
 .PP
 
-.SH "Function/Subroutine Documentation"
+.PP
+Definition at line 15 of file search_util\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine, public search_util::search (real(esmf_kind_r8), dimension(idim,jdim), intent(inout) field, integer(esmf_kind_i8), dimension(idim,jdim), intent(in) mask, integer, intent(in) idim, integer, intent(in) jdim, integer, intent(in) tile, integer, intent(in) field_num, real(esmf_kind_r8), dimension(idim,jdim), intent(in), optional latitude, real(esmf_kind_r8), dimension(idim,jdim), intent(in), optional terrain_land, real(esmf_kind_r8), dimension(idim,jdim), intent(in), optional soilt_climo)"
+.SS "subroutine, public search_util::search (real(esmf_kind_r8), dimension(idim,jdim), intent(inout)field, integer(esmf_kind_i8), dimension(idim,jdim), intent(in)mask, integer, intent(in)idim, integer, intent(in)jdim, integer, intent(in)tile, integer, intent(in)field_num, real(esmf_kind_r8), dimension(idim,jdim), intent(in), optionallatitude, real(esmf_kind_r8), dimension(idim,jdim), intent(in), optionalterrain_land, real(esmf_kind_r8), dimension(idim,jdim), intent(in), optionalsoilt_climo)"
 
 .PP
 Replace undefined surface values\&. Replace undefined values on the model grid with a valid value at a nearby neighbor\&. Undefined values are typically associated with isolated islands where there is no source data\&.
@@ -72,12 +76,12 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 47 of file search_util\&.F90\&.
+Definition at line 46 of file search_util\&.F90\&.
 .PP
 References sst_guess()\&.
 .PP
 Referenced by surface::interp(), sfc_input_data::read_input_sfc_grib2_file(), and surface::search_many()\&.
-.SS "subroutine search_util::sst_guess (real(esmf_kind_r8), intent(in) latitude, real(esmf_kind_r8), intent(out) sst)"
+.SS "subroutine search_util::sst_guess (real(esmf_kind_r8), intent(in)latitude, real(esmf_kind_r8), intent(out)sst)"
 
 .PP
 Set default Sea Surface Temperature (SST) based on latitude\&. Based loosely on the average annual SST values from \&./am/cfs_oi2sst1x1monclim19822001\&.grb
@@ -98,9 +102,10 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 235 of file search_util\&.F90\&.
+Definition at line 234 of file search_util\&.F90\&.
 .PP
 Referenced by search()\&.
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

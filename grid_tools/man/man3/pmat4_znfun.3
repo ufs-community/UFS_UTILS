@@ -1,8 +1,8 @@
-.TH "pmat4::znfun" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::znfun" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat4::znfun
+pmat4::znfun \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,14 +12,14 @@ pmat4::znfun
 .ti -1c
 .RI "subroutine \fBznfun\fP (n, z, zn, znd, zndd, znddd)"
 .br
-.RI "For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. "
+.RI "\fIFor a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 104 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat4::znfun::znfun (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn, real(dp), intent(out) znd, real(dp), intent(out) zndd, real(dp), intent(out) znddd)\fC [private]\fP"
+.SS "subroutine pmat4::znfun::znfun (integer(spi), intent(in)n, real(dp), intent(in)z, real(dp), intent(out)zn, real(dp), intent(out)znd, real(dp), intent(out)zndd, real(dp), intent(out)znddd)\fC [private]\fP"
 
 .PP
 For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. 
@@ -46,7 +46,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1960 of file pmat4\&.f90\&.
+Definition at line 1959 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

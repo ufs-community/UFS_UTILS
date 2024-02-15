@@ -1,8 +1,8 @@
-.TH "pmat2::dfco2" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::dfco2" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::dfco2
+pmat2::dfco2 \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,59 +10,24 @@ pmat2::dfco2
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBDDFCO2\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine \fBdfco2\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Double precision version of DFCO2 to get 2nd-derivative coefficients\&. "
+.RI "\fICompute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. \fP"
 .ti -1c
-.RI "subroutine \fBDFCO2\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine \fBddfco2\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Compute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. "
+.RI "\fIDouble precision version of DFCO2 to get 2nd-derivative coefficients\&. \fP"
 .ti -1c
-.RI "subroutine \fBTDFCO2\fP (xa, xb, a, b)"
+.RI "subroutine \fBtdfco2\fP (xa, xb, a, b)"
 .br
-.RI "Simplified computation of compact 2nd-derivative coefficients\&. "
+.RI "\fISimplified computation of compact 2nd-derivative coefficients\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 58 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::dfco2::DDFCO2 (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)\fC [private]\fP"
-
-.PP
-Double precision version of DFCO2 to get 2nd-derivative coefficients\&. 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIna\fP number of 2nd-derivative (d) points in compact formula 
-.br
-\fInb\fP number of source points (c) 
-.br
-\fIza\fP coordinates of 2nd-derivative points 
-.br
-\fIzb\fP coordinates of source points 
-.br
-\fIz0\fP nominal coordinate of application 
-.br
-\fIa\fP coefficients A for derivative points 
-.br
-\fIb\fP coefficients B for source points 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-R\&. J\&. Purser, Tsukasa Fujita (JMA) 
-.RE
-.PP
-\fBDate:\fP
-.RS 4
-1999 
-.RE
-.PP
-
-.PP
-Definition at line 318 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::dfco2::DFCO2 (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(sp), dimension(na), intent(in) za, real(sp), dimension(nb), intent(in) zb, real(sp), intent(in) z0, real(sp), dimension(na), intent(out) a, real(sp), dimension(nb), intent(out) b)\fC [private]\fP"
+.SS "subroutine pmat2::dfco2::dfco2 (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)\fC [private]\fP"
 
 .PP
 Compute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. 
@@ -96,8 +61,47 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 283 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::dfco2::TDFCO2 (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)\fC [private]\fP"
+Definition at line 282 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::dfco2::ddfco2 (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)\fC [private]\fP"
+
+.PP
+Double precision version of DFCO2 to get 2nd-derivative coefficients\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIna\fP number of 2nd-derivative (d) points in compact formula 
+.br
+\fInb\fP number of source points (c) 
+.br
+\fIza\fP coordinates of 2nd-derivative points 
+.br
+\fIzb\fP coordinates of source points 
+.br
+\fIz0\fP nominal coordinate of application 
+.br
+\fIa\fP coefficients A for derivative points 
+.br
+\fIb\fP coefficients B for source points 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 317 of file pmat2\&.f90\&.
+.PP
+Referenced by pmat2::tdfco2()\&.
+.SS "subroutine pmat2::dfco2::tdfco2 (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)\fC [private]\fP"
 
 .PP
 Simplified computation of compact 2nd-derivative coefficients\&. 
@@ -125,7 +129,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 350 of file pmat2\&.f90\&.
+Definition at line 349 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

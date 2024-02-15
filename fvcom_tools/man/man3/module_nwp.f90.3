@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/module_nwp.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/module_nwp.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/module_nwp.f90 \- Defines FV3LAM and FVCOM forecast data structure\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/module_nwp.f90 \- 
+.PP
+Defines FV3LAM and FVCOM forecast data structure\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,46 +15,10 @@
 .ti -1c
 .RI "type \fBmodule_nwp::fcst_nwp\fP"
 .br
-.in -1c
-.SS "Modules"
-
-.in +1c
 .ti -1c
 .RI "module \fBmodule_nwp\fP"
 .br
-.RI "This module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures\&. "
-.in -1c
-.SS "Functions/Subroutines"
-
-.in +1c
-.ti -1c
-.RI "subroutine \fBmodule_nwp::finish_nwp\fP (this, itype, wcstart)"
-.br
-.RI "Finish and deallocate\&. "
-.ti -1c
-.RI "subroutine \fBmodule_nwp::get_time_ind_nwp\fP (this, filename, instr, outindex)"
-.br
-.RI "This subroutine searches the FVCOM 'Times' variable and returns the matching index\&. "
-.ti -1c
-.RI "subroutine \fBmodule_nwp::initial_nwp\fP (this, itype, wcstart)"
-.br
-.RI "This subroutine defines the number of variables and their names for each NWP data type\&. "
-.ti -1c
-.RI "subroutine \fBmodule_nwp::list_initial_nwp\fP (this)"
-.br
-.RI "This subroutine lists the setup for NWP data that was done by the initial_nwp subroutine\&. "
-.ti -1c
-.RI "subroutine \fBmodule_nwp::read_nwp\fP (this, filename, itype, wcstart, numlon, numlat, numtimes, time_to_get, mask, sst, ice, sfcT, iceT, sfcTl, zorl, hice, ybegin, yend)"
-.br
-.RI "This subroutine initializes arrays to receive the NWP data, and opens the file and gets the data\&. "
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "type(ncio) \fBmodule_nwp::ncdata\fP"
-.br
-.RI "Wrapper object for netCDF data file\&. "
+.RI "\fIThis module defines FV3LAM and FVCOM forecast data structure and the method to read and write observations from and to those data structures\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 

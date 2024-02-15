@@ -1,8 +1,8 @@
-.TH "psym2::eigensym2" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "psym2::eigensym2" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-psym2::eigensym2
+psym2::eigensym2 \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ psym2::eigensym2
 .ti -1c
 .RI "subroutine \fBeigensym2\fP (em, vv, oo)"
 .br
-.RI "Get the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo, of the symmetric 2*2 matrix, em\&. "
+.RI "\fIGet the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo, of the symmetric 2*2 matrix, em\&. \fP"
 .ti -1c
 .RI "subroutine \fBeigensym2d\fP (em, vv, oo, vvd, ood, ff)"
 .br
-.RI "For a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and the diagonal matrix of eigenvalues, oo\&. "
+.RI "\fIFor a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and the diagonal matrix of eigenvalues, oo\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 21 of file psym2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine psym2::eigensym2::eigensym2 (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) vv, real(dp), dimension(2,2), intent(out) oo)\fC [private]\fP"
+.SS "subroutine psym2::eigensym2::eigensym2 (real(dp), dimension(2,2), intent(in)em, real(dp), dimension(2,2), intent(out)vv, real(dp), dimension(2,2), intent(out)oo)\fC [private]\fP"
 
 .PP
 Get the orthogonal eigenvectors, vv, and diagonal matrix of eigenvalues, oo, of the symmetric 2*2 matrix, em\&. 
@@ -44,10 +44,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 43 of file psym2\&.f90\&.
+Definition at line 42 of file psym2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine psym2::eigensym2::eigensym2d (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) vv, real(dp), dimension(2,2), intent(out) oo, real(dp), dimension(2,2,2,2), intent(out) vvd, real(dp), dimension(2,2,2,2), intent(out) ood, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine psym2::eigensym2::eigensym2d (real(dp), dimension(2,2), intent(in)em, real(dp), dimension(2,2), intent(out)vv, real(dp), dimension(2,2), intent(out)oo, real(dp), dimension(2,2,2,2), intent(out)vvd, real(dp), dimension(2,2,2,2), intent(out)ood, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 For a symmetric 2*2 matrix, em, return the normalized eigenvectors, vv, and the diagonal matrix of eigenvalues, oo\&. If the two eigenvalues are equal, proceed no further and raise the logical failure flag, ff, to \&.true\&.; otherwise, return with vvd=d(vv)/d(em) and ood=d(oo)/d(em) and ff=\&.false\&., and maintain the symmetries between the last two of the indices of these derivatives\&.
@@ -74,7 +74,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 76 of file psym2\&.f90\&.
+Definition at line 75 of file psym2\&.f90\&.
 
 .SH "Author"
 .PP 

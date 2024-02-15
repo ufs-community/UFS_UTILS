@@ -1,59 +1,20 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/kinds.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/kinds.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/kinds.f90 \- Hold specification kinds for variable declaration\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/kinds.f90 \- 
+Hold specification kinds for variable declaration\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Modules"
+.SS "Data Types"
 
 .in +1c
 .ti -1c
 .RI "module \fBkinds\fP"
 .br
-.RI "Module to hold specification kinds for variable declaration\&. "
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "real(r_kind), parameter, public \fBkinds::drmissing\fP =\-99999\&.0"
-.br
-.RI "Fill value for double real missing data\&. "
-.ti -1c
-.RI "integer, parameter, public \fBkinds::i_byte\fP = 1"
-.br
-.RI "generic specification kind for default byte\&. "
-.ti -1c
-.RI "integer, parameter, public \fBkinds::i_kind\fP = 4"
-.br
-.RI "generic specification kind for default integer\&. "
-.ti -1c
-.RI "integer, parameter, public \fBkinds::i_short\fP = 2"
-.br
-.RI "generic specification kind for default short\&. "
-.ti -1c
-.RI "real(i_kind), parameter, public \fBkinds::imissing\fP =\-99999"
-.br
-.RI "Fill value for integer missing data\&. "
-.ti -1c
-.RI "integer, parameter, public \fBkinds::len_sta_name\fP = 8"
-.br
-.RI "Name length\&. "
-.ti -1c
-.RI "integer, parameter, public \fBkinds::r_kind\fP = 8"
-.br
-.RI "generic specification kind for default floating point "
-.ti -1c
-.RI "integer, parameter, public \fBkinds::r_single\fP = 4"
-.br
-.RI "specification kind for single precision (4-byte) real variable\&. "
-.ti -1c
-.RI "real(r_single), parameter, public \fBkinds::rmissing\fP =\-99999\&.0"
-.br
-.RI "Fill value for single real missing data\&. "
+.RI "\fIModule to hold specification kinds for variable declaration\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -69,6 +30,54 @@ David Wright, University of Michigan
 
 .PP
 Definition in file \fBkinds\&.f90\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "module kinds"
+.PP 
+Module to hold specification kinds for variable declaration\&. 
+
+This module is based on (copied from) Paul vanDelst's type_kinds module found in the community radiative transfer model
+.PP
+\fBAuthor:\fP
+.RS 4
+David Wright, University of Michigan 
+.RE
+.PP
+
+.PP
+Definition at line 11 of file kinds\&.f90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+real(\fBr_kind\fP), parameter, public \fIdrmissing\fP Fill value for double real missing data\&. 
+.br
+.PP
+integer, parameter, public \fIi_byte\fP generic specification kind for default byte\&. 
+.br
+.PP
+integer, parameter, public \fIi_kind\fP generic specification kind for default integer\&. 
+.br
+.PP
+integer, parameter, public \fIi_short\fP generic specification kind for default short\&. 
+.br
+.PP
+real(\fBi_kind\fP), parameter, public \fIimissing\fP Fill value for integer missing data\&. 
+.br
+.PP
+integer, parameter, public \fIlen_sta_name\fP Name length\&. 
+.br
+.PP
+integer, parameter, public \fIr_kind\fP generic specification kind for default floating point 
+.br
+.PP
+integer, parameter, public \fIr_single\fP specification kind for single precision (4-byte) real variable\&. 
+.br
+.PP
+real(\fBr_single\fP), parameter, public \fIrmissing\fP Fill value for single real missing data\&. 
+.br
+.PP
+.RE
+.PP
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for fvcom_tools from the source code\&.

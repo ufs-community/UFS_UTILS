@@ -1,107 +1,21 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/sfc_climo_gen.fd/program_setup.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/program_setup.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/sfc_climo_gen.fd/program_setup.f90 \- Program setup\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/program_setup.f90 \- 
+.PP
+Program setup\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Modules"
+.SS "Data Types"
 
 .in +1c
 .ti -1c
 .RI "module \fBprogram_setup\fP"
 .br
-.RI "Set up program execution\&. "
-.in -1c
-.SS "Functions/Subroutines"
-
-.in +1c
-.ti -1c
-.RI "subroutine, public \fBprogram_setup::read_setup_namelist\fP (localpet)"
-.br
-.RI "Read program setup namelist\&. "
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "logical, public \fBprogram_setup::fract_vegsoil_type\fP = \&.false\&."
-.br
-.RI "When true, output the percentage of each soil and vegetation type category, and the dominant category within a model grid box\&. "
-.ti -1c
-.RI "integer, public \fBprogram_setup::halo\fP = 0"
-.br
-.RI "Number of row/cols defining the lateral boundary halo\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_facsf_file\fP = 'NULL'"
-.br
-.RI "File containing input fractional coverage data for strong zenith angle dependent albedo\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_leaf_area_index_file\fP = 'NULL'"
-.br
-.RI "File containing input leaf area index data\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_maximum_snow_albedo_file\fP = 'NULL'"
-.br
-.RI "File containing input maximum snow albedo data\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_slope_type_file\fP = 'NULL'"
-.br
-.RI "File containing input slope type data\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_snowfree_albedo_file\fP = 'NULL'"
-.br
-.RI "File containing input snow-free albedo data\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_soil_color_file\fP = 'NULL'"
-.br
-.RI "File containing input soil color data\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_soil_type_file\fP = 'NULL'"
-.br
-.RI "File containing input soil type data\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_substrate_temperature_file\fP = 'NULL'"
-.br
-.RI "File containing input soil substrate temperature data\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_vegetation_greenness_file\fP = 'NULL'"
-.br
-.RI "File containing input vegetation greenness data\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::input_vegetation_type_file\fP = 'NULL'"
-.br
-.RI "File containing input vegetation type data\&. "
-.ti -1c
-.RI "character(len=50), public \fBprogram_setup::leaf_area_index_method\fP ='bilinear'"
-.br
-.RI "Interpolation method for leaf area index\&. "
-.ti -1c
-.RI "character(len=50), public \fBprogram_setup::maximum_snow_albedo_method\fP ='bilinear'"
-.br
-.RI "Interpolation method for max snow albedo\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::mosaic_file_mdl\fP = 'NULL'"
-.br
-.RI "Model grid mosaic file\&. "
-.ti -1c
-.RI "character(len=500), public \fBprogram_setup::orog_dir_mdl\fP = 'NULL'"
-.br
-.RI "Directory containing the model grid orography files\&. "
-.ti -1c
-.RI "character(len=500), dimension(6), public \fBprogram_setup::orog_files_mdl\fP = 'NULL'"
-.br
-.RI "Model grid orography filenames\&. "
-.ti -1c
-.RI "character(len=50), public \fBprogram_setup::snowfree_albedo_method\fP ='bilinear'"
-.br
-.RI "Interpolation method for snowfree albedo\&. "
-.ti -1c
-.RI "character(len=50), public \fBprogram_setup::vegetation_greenness_method\fP ='bilinear'"
-.br
-.RI "Interpolation method for vegetation greenness\&. "
+.RI "\fISet up program execution\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 

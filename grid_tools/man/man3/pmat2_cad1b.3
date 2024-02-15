@@ -1,8 +1,8 @@
-.TH "pmat2::cad1b" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::cad1b" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::cad1b
+pmat2::cad1b \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,16 +10,16 @@ pmat2::cad1b
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBCAD1B\fP (m1, mah1, mah2, mirror2, a)"
+.RI "subroutine \fBcad1b\fP (m1, mah1, mah2, mirror2, a)"
 .br
-.RI "Incorporate operand symmetry and clip near end-1 of a band matrix operator\&. "
+.RI "\fIIncorporate operand symmetry and clip near end-1 of a band matrix operator\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 60 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::cad1b::CAD1B (integer(spi), intent(in) m1, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(0:m1\-1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+.SS "subroutine pmat2::cad1b::cad1b (integer(spi), intent(in)m1, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(0:m1-1,-mah1:mah2), intent(inout)a)\fC [private]\fP"
 
 .PP
 Incorporate operand symmetry and clip near end-1 of a band matrix operator\&. 
@@ -49,7 +49,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 426 of file pmat2\&.f90\&.
+Definition at line 425 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

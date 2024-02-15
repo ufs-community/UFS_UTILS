@@ -1,5 +1,5 @@
 var interfacepmat2_1_1ldub =
 [
-    [ "DLDUB", "interfacepmat2_1_1ldub.html#a4f97445ab31ad5601c7d470c4889fb75", null ],
-    [ "LDUB", "interfacepmat2_1_1ldub.html#a0b6ba04df748e267fe8162929b30b31c", null ]
+    [ "ldub", "interfacepmat2_1_1ldub.html#a556dd6da7c68f34acfc7b9de8e49a775", null ],
+    [ "dldub", "interfacepmat2_1_1ldub.html#ac8f80a63e81eb293d4534519a2379e09", null ]
 ];

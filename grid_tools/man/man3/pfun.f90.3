@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pfun.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pfun.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/grid_tools.fd/regional_esg_grid.fd/pfun.f90 \- Routine evaluating useful functions not always available in Fortran\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pfun.f90 \- 
+.PP
+Routine evaluating useful functions not always available in Fortran\&.  
 
 .SH SYNOPSIS
 .br
@@ -32,6 +34,10 @@
 .RI "interface \fBpfun::havh\fP"
 .br
 .ti -1c
+.RI "module \fBpfun\fP"
+.br
+.RI "\fIThis module is for evaluating several useful real-valued functions that are not always available in Fortran compilers\&. \fP"
+.ti -1c
 .RI "interface \fBpfun::sech\fP"
 .br
 .ti -1c
@@ -49,106 +55,6 @@
 .ti -1c
 .RI "interface \fBpfun::sinoxm\fP"
 .br
-.in -1c
-.SS "Modules"
-
-.in +1c
-.ti -1c
-.RI "module \fBpfun\fP"
-.br
-.RI "This module is for evaluating several useful real-valued functions that are not always available in Fortran compilers\&. "
-.in -1c
-.SS "Functions/Subroutines"
-
-.in +1c
-.ti -1c
-.RI "real(dp) function \fBpfun::ahav_d\fP (a)"
-.br
-.RI "Arc-haversine function for double precision real\&. "
-.ti -1c
-.RI "real(sp) function \fBpfun::ahav_s\fP (a)"
-.br
-.RI "Arc-haversine function for single precision real\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::ahavh_d\fP (a)"
-.br
-.RI "Hyperbolic arc-haversine for double precision real\&. "
-.ti -1c
-.RI "real(sp) function \fBpfun::ahavh_s\fP (a)"
-.br
-.RI "Hyperbolic arc-haversine for single precision real\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::atanh_d\fP (t)"
-.br
-.RI "Hyperbolic arc-tangent for double precision real\&. "
-.ti -1c
-.RI "real(sp) function \fBpfun::atanh_s\fP (t)"
-.br
-.RI "Hyperbolic arc-tangent for single precision real\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::gd_d\fP (x)"
-.br
-.RI "Gudermannian function (related to Mercator map projections) "
-.ti -1c
-.RI "real(sp) function \fBpfun::gd_s\fP (x)"
-.br
-.RI "Gudermannian function (related to Mercator map projections) "
-.ti -1c
-.RI "real(dp) function \fBpfun::gdi_d\fP (y)"
-.br
-.RI "Inverse Gudermannian function for double precision real\&. "
-.ti -1c
-.RI "real(sp) function \fBpfun::gdi_s\fP (y)"
-.br
-.RI "Inverse Gudermannian function for single precision real\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::hav_d\fP (t)"
-.br
-.RI "Haversine function for double precision real (for geometry on the sphere)\&. "
-.ti -1c
-.RI "real(sp) function \fBpfun::hav_s\fP (t)"
-.br
-.RI "Haversine function for single precision real (for geometry on the sphere)\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::havh_d\fP (t)"
-.br
-.RI "Hyperbolic-haversine for double precision real (for pseudosphere geometry)\&. "
-.ti -1c
-.RI "real(sp) function \fBpfun::havh_s\fP (t)"
-.br
-.RI "Hyperbolic-haversine for single precision real (for pseudosphere geometry)\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::sech_d\fP (x)"
-.br
-.RI "Hyperbolic secant for double precision real\&. "
-.ti -1c
-.RI "real(sp) function \fBpfun::sech_s\fP (x)"
-.br
-.RI "Hyperbolic secant for single precision real\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::sechs_d\fP (x)"
-.br
-.RI "Hyperbolic secant-squared function (logistic distribution)\&. "
-.ti -1c
-.RI "real(sp) function \fBpfun::sechs_s\fP (x)"
-.br
-.RI "Hyperbolic secant-squared function (logistic distribution)\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::sinhox_d\fP (x)"
-.br
-.RI "Evaluate the symmetric real function sinh(x)/x\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::sinhoxm_d\fP (x)"
-.br
-.RI "Evaluate the symmetric real function sinh(x)/x-1\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::sinox_d\fP (x)"
-.br
-.RI "Evaluate the symmetric real function sin(x)/x\&. "
-.ti -1c
-.RI "real(dp) function \fBpfun::sinoxm_d\fP (x)"
-.br
-.RI "Evaluate the symmetric real function sin(x)/x-1, still accurate near x=0\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

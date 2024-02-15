@@ -1,23 +1,25 @@
-.TH "output_frac_cats" 3 "Mon Oct 23 2023" "Version 1.11.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "output_frac_cats" 3 "Thu Feb 15 2024" "Version 1.12.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-output_frac_cats \- Output categorical data such as vegetation type\&.  
+output_frac_cats \- 
+.PP
+Output categorical data such as vegetation type\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Functions/Subroutines"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "subroutine, public \fBoutput_driver\fP (data_one_tile, dom_cat_one_tile, lat_one_tile, lon_one_tile, i_mdl, j_mdl, num_categories, tile)"
 .br
-.RI "Driver routine to output model categorical data\&. "
+.RI "\fIDriver routine to output model categorical data\&. \fP"
 .ti -1c
 .RI "subroutine \fBwriteit\fP (out_file, iout, jout, num_categories, latitude, longitude, data_pct, dominant_cat)"
 .br
-.RI "Write data to a netcdf file\&. "
+.RI "\fIWrite data to a netcdf file\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -36,9 +38,11 @@ George Gayno NCEP/EMC
 .RE
 .PP
 
-.SH "Function/Subroutine Documentation"
+.PP
+Definition at line 10 of file output_frac_cats\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine, public output_frac_cats::output_driver (real(esmf_kind_r4), dimension(i_mdl,j_mdl,num_categories), intent(in) data_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) dom_cat_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) lat_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in) lon_one_tile, integer, intent(in) i_mdl, integer, intent(in) j_mdl, integer, intent(in) num_categories, integer, intent(in) tile)"
+.SS "subroutine, public output_frac_cats::output_driver (real(esmf_kind_r4), dimension(i_mdl,j_mdl,num_categories), intent(in)data_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in)dom_cat_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in)lat_one_tile, real(esmf_kind_r4), dimension(i_mdl,j_mdl), intent(in)lon_one_tile, integer, intent(in)i_mdl, integer, intent(in)j_mdl, integer, intent(in)num_categories, integer, intent(in)tile)"
 
 .PP
 Driver routine to output model categorical data\&. 
@@ -74,12 +78,12 @@ George Gayno
 .PP
 
 .PP
-Definition at line 33 of file output_frac_cats\&.F90\&.
+Definition at line 31 of file output_frac_cats\&.F90\&.
 .PP
-References source_grid::field_names, model_grid::grid_tiles, program_setup::halo, and writeit()\&.
+References writeit()\&.
 .PP
 Referenced by interp_frac_cats()\&.
-.SS "subroutine output_frac_cats::writeit (character(len=*), intent(in) out_file, integer, intent(in) iout, integer, intent(in) jout, integer, intent(in) num_categories, real(esmf_kind_r4), dimension(iout,jout), intent(in) latitude, real(esmf_kind_r4), dimension(iout,jout), intent(in) longitude, real(esmf_kind_r4), dimension(iout,jout,num_categories), intent(in) data_pct, real(esmf_kind_r4), dimension(iout,jout), intent(in) dominant_cat)"
+.SS "subroutine output_frac_cats::writeit (character(len=*), intent(in)out_file, integer, intent(in)iout, integer, intent(in)jout, integer, intent(in)num_categories, real(esmf_kind_r4), dimension(iout,jout), intent(in)latitude, real(esmf_kind_r4), dimension(iout,jout), intent(in)longitude, real(esmf_kind_r4), dimension(iout,jout,num_categories), intent(in)data_pct, real(esmf_kind_r4), dimension(iout,jout), intent(in)dominant_cat)"
 
 .PP
 Write data to a netcdf file\&. 
@@ -105,11 +109,12 @@ Write data to a netcdf file\&.
 .PP
 
 .PP
-Definition at line 114 of file output_frac_cats\&.F90\&.
+Definition at line 112 of file output_frac_cats\&.F90\&.
 .PP
-References source_grid::day_of_rec, source_grid::field_names, utils::netcdf_err(), source_grid::num_time_recs, and source_grid::source\&.
+References utils::netcdf_err()\&.
 .PP
 Referenced by output_driver()\&.
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

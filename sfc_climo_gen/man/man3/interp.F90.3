@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/sfc_climo_gen.fd/interp.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/interp.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/sfc_climo_gen.fd/interp.F90 \- Read the input source data and interpolate it to the model grid\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/interp.F90 \- 
+.PP
+Read the input source data and interpolate it to the model grid\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,11 +15,11 @@
 .ti -1c
 .RI "subroutine \fBadjust_for_landice\fP (field, vegt, idim, jdim, field_ch)"
 .br
-.RI "Ensure consistent fields at land ice points\&. "
+.RI "\fIEnsure consistent fields at land ice points\&. \fP"
 .ti -1c
 .RI "subroutine \fBinterp\fP (localpet, method, input_file)"
 .br
-.RI "Read the input source data and interpolate it to the model grid\&. "
+.RI "\fIRead the input source data and interpolate it to the model grid\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -40,7 +42,7 @@ George Gayno
 Definition in file \fBinterp\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine adjust_for_landice (real(esmf_kind_r4), dimension(idim,jdim), intent(inout) field, real(esmf_kind_i4), dimension(idim,jdim), intent(in) vegt, integer, intent(in) idim, integer, intent(in) jdim, character(len=*), intent(in) field_ch)"
+.SS "subroutine adjust_for_landice (real(esmf_kind_r4), dimension(idim,jdim), intent(inout)field, real(esmf_kind_i4), dimension(idim,jdim), intent(in)vegt, integer, intent(in)idim, integer, intent(in)jdim, character(len=*), intent(in)field_ch)"
 
 .PP
 Ensure consistent fields at land ice points\&. Land ice is vegetation type 15 (variable landice)\&. output is Model field\&.
@@ -65,10 +67,10 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 291 of file interp\&.F90\&.
+Definition at line 290 of file interp\&.F90\&.
 .PP
 Referenced by interp()\&.
-.SS "subroutine interp (integer localpet, type(esmf_regridmethod_flag), intent(in) method, character(len=*), intent(in) input_file)"
+.SS "subroutine interp (integerlocalpet, type(esmf_regridmethod_flag), intent(in)method, character(len=*), intent(in)input_file)"
 
 .PP
 Read the input source data and interpolate it to the model grid\&. 
@@ -94,9 +96,9 @@ George Gayno
 .PP
 
 .PP
-Definition at line 14 of file interp\&.F90\&.
+Definition at line 13 of file interp\&.F90\&.
 .PP
-References adjust_for_landice(), model_grid::data_field_mdl, utils::error_handler(), source_grid::field_names, program_setup::fract_vegsoil_type, source_grid::grid_src, model_grid::i_mdl, source_grid::i_src, model_grid::j_mdl, source_grid::j_src, model_grid::latitude_field_mdl, model_grid::longitude_field_mdl, model_grid::mask_field_mdl, model_grid::missing, utils::netcdf_err(), source_grid::num_fields, model_grid::num_tiles, source_grid::num_time_recs, output(), search(), and model_grid::vegt_field_mdl\&.
+References adjust_for_landice(), utils::error_handler(), utils::netcdf_err(), output(), and search()\&.
 .PP
 Referenced by driver()\&.
 .SH "Author"

@@ -1,5 +1,5 @@
 var interfacepmat2_1_1udlb =
 [
-    [ "DUDLB", "interfacepmat2_1_1udlb.html#a312cae0e3431b93713f6f770e00dce89", null ],
-    [ "UDLB", "interfacepmat2_1_1udlb.html#a89587252aaed7cac7df22a261b756633", null ]
+    [ "udlb", "interfacepmat2_1_1udlb.html#a1fd8ca63703ad48482afa294ca2d6688", null ],
+    [ "dudlb", "interfacepmat2_1_1udlb.html#ae189d57b2993465b7d3a5304b8e23ec0", null ]
 ];

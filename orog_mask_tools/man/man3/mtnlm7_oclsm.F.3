@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.F" 3 "Mon Oct 23 2023" "Version 1.11.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.F" 3 "Thu Feb 15 2024" "Version 1.12.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.F \- Terrain maker for global spectral model\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.F \- 
+.PP
+Terrain maker for global spectral model\&.  
 
 .SH SYNOPSIS
 .br
@@ -11,133 +13,137 @@
 
 .in +1c
 .ti -1c
-.RI "program \fB__mtnlm7_oclsm\&.F__\fP"
+.RI "program \fB__mtnlm7_oclsm\&.f__\fP"
 .br
-.RI "This program creates 7 terrain-related files computed from the navy 10-minute terrain dataset\&. "
+.RI "\fIThis program creates 7 terrain-related files computed from the navy 10-minute terrain dataset\&. \fP"
 .ti -1c
 .RI "subroutine \fBget_index\fP (IMN, JMN, npts, lonO, latO, DELXN, jst, jen, ilist, numx)"
 .br
-.RI "Determine the location of a cubed-sphere point within the high-resolution orography data\&. "
+.RI "\fIDetermine the location of a cubed-sphere point within the high-resolution orography data\&. \fP"
 .ti -1c
 .RI "real function \fBget_lat_angle\fP (dy, DEGRAD)"
 .br
-.RI "Convert the 'y' direction distance of a cubed-sphere grid point to the corresponding distance in latitude\&. "
+.RI "\fIConvert the 'y' direction distance of a cubed-sphere grid point to the corresponding distance in latitude\&. \fP"
 .ti -1c
 .RI "real function \fBget_lon_angle\fP (dx, lat, DEGRAD)"
 .br
-.RI "Convert the 'x' direction distance of a cubed-sphere grid point to the corresponding distance in longitude\&. "
+.RI "\fIConvert the 'x' direction distance of a cubed-sphere grid point to the corresponding distance in longitude\&. \fP"
 .ti -1c
 .RI "subroutine \fBget_mismatch_index\fP (im_in, jm_in, geolon_in, geolat_in, bitmap_in, num_out, lon_out, lat_out, iindx, jindx)"
 .br
-.RI "For unmapped land points, find the nearest land point on the input data and pass back its i/j index\&. "
+.RI "\fIFor unmapped land points, find the nearest land point on the input data and pass back its i/j index\&. \fP"
 .ti -1c
 .RI "real function \fBget_xnsum\fP (lon1, lat1, lon2, lat2, IMN, JMN, glat, zavg, zslm, delxn)"
 .br
-.RI "Count the number of high-resolution orography points that are higher than the model grid box average orography height\&. "
+.RI "\fICount the number of high-resolution orography points that are higher than the model grid box average orography height\&. \fP"
 .ti -1c
-.RI "subroutine \fBget_xnsum2\fP (lon1, lat1, lon2, lat2, IMN, JMN, glat, zavg, zslm, delxn, xnsum1, xnsum2, HC)"
+.RI "subroutine \fBget_xnsum2\fP (lon1, lat1, lon2, lat2, IMN, JMN, glat, zavg, delxn, xnsum1, xnsum2, HC)"
 .br
-.RI "Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. "
+.RI "\fICount the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. \fP"
 .ti -1c
-.RI "subroutine \fBget_xnsum3\fP (lon1, lat1, lon2, lat2, IMN, JMN, glat, zavg, zslm, delxn, xnsum1, xnsum2, HC)"
+.RI "subroutine \fBget_xnsum3\fP (lon1, lat1, lon2, lat2, IMN, JMN, glat, zavg, delxn, xnsum1, xnsum2, HC)"
 .br
-.RI "Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. "
+.RI "\fICount the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. \fP"
 .ti -1c
 .RI "subroutine \fBgg2rg\fP (im, jm, numi, a)"
 .br
-.RI "Convert from a full grid to a reduced grid\&. "
+.RI "\fIConvert from a full grid to a reduced grid\&. \fP"
 .ti -1c
 .RI "logical function \fBinside_a_polygon\fP (lon1, lat1, npts, lon2, lat2)"
 .br
-.RI "Check if a point is inside a polygon\&. "
+.RI "\fICheck if a point is inside a polygon\&. \fP"
 .ti -1c
 .RI "subroutine \fBinterpolate_mismatch\fP (im_in, jm_in, data_in, num_out, data_out, iindx, jindx)"
 .br
-.RI "Replace unmapped model land points with the nearest land point on the input grid\&. "
+.RI "\fIReplace unmapped model land points with the nearest land point on the input grid\&. \fP"
 .ti -1c
 .RI "subroutine \fBlatlon2xyz\fP (siz, lon, lat, x, y, z)"
 .br
-.RI "Convert from latitude and longitude to x,y,z coordinates\&. "
+.RI "\fIConvert from latitude and longitude to x,y,z coordinates\&. \fP"
 .ti -1c
-.RI "subroutine \fBMAKEMT\fP (ZAVG, ZSLM, ORO, SLM, VAR, VAR4, GLAT, IST, IEN, JST, JEN, IM, JM, IMN, JMN, XLAT, numi)"
+.RI "subroutine \fBmake_mask\fP (zslm, SLM, land_frac, GLAT, IM, JM, IMN, JMN, lon_c, lat_c)"
 .br
-.RI "Create the orography, land-mask, standard deviation of orography and the convexity on a model gaussian grid\&. "
+.RI "\fICreate the land-mask, land fraction\&. \fP"
 .ti -1c
-.RI "subroutine \fBMAKEMT2\fP (ZAVG, ZSLM, ORO, SLM, land_frac, VAR, VAR4, GLAT, IM, JM, IMN, JMN, lon_c, lat_c)"
+.RI "subroutine \fBmakemt\fP (ZAVG, ZSLM, ORO, SLM, VAR, VAR4, GLAT, IST, IEN, JST, JEN, IM, JM, IMN, JMN, XLAT, numi)"
 .br
-.RI "Create the orography, land-mask, land fraction, standard deviation of orography and the convexity on a model cubed-sphere tile\&. "
+.RI "\fICreate the orography, land-mask, standard deviation of orography and the convexity on a model gaussian grid\&. \fP"
 .ti -1c
-.RI "subroutine \fBMAKEOA\fP (ZAVG, VAR, GLAT, OA4, OL, IOA4, ELVMAX, ORO, oro1, XNSUM, XNSUM1, XNSUM2, XNSUM3, XNSUM4, IST, IEN, JST, JEN, IM, JM, IMN, JMN, XLAT, numi)"
+.RI "subroutine \fBmakemt2\fP (ZAVG, ZSLM, ORO, SLM, VAR, VAR4, GLAT, IM, JM, IMN, JMN, lon_c, lat_c, \fBlake_frac\fP, land_frac)"
 .br
-.RI "Create orographic asymmetry and orographic length scale on the model grid\&. "
+.RI "\fICreate the orography, land-mask, land fraction, standard deviation of orography and the convexity on a model cubed-sphere tile\&. \fP"
 .ti -1c
-.RI "subroutine \fBMAKEOA2\fP (ZAVG, zslm, VAR, GLAT, OA4, OL, IOA4, ELVMAX, ORO, oro1, XNSUM, XNSUM1, XNSUM2, XNSUM3, XNSUM4, IM, JM, IMN, JMN, lon_c, lat_c, lon_t, lat_t, dx, dy, is_south_pole, is_north_pole)"
+.RI "subroutine \fBmakeoa\fP (ZAVG, VAR, GLAT, OA4, OL, IOA4, ELVMAX, ORO, oro1, XNSUM, XNSUM1, XNSUM2, XNSUM3, XNSUM4, IST, IEN, JST, JEN, IM, JM, IMN, JMN, XLAT, numi)"
 .br
-.RI "Create orographic asymmetry and orographic length scale on the model grid\&. "
+.RI "\fICreate orographic asymmetry and orographic length scale on the model grid\&. \fP"
 .ti -1c
-.RI "subroutine \fBMAKEOA3\fP (ZAVG, zslm, VAR, GLAT, OA4, OL, IOA4, ELVMAX, ORO, SLM, oro1, XNSUM, XNSUM1, XNSUM2, XNSUM3, XNSUM4, IM, JM, IMN, JMN, lon_c, lat_c, lon_t, lat_t, is_south_pole, is_north_pole, IMI, JMI, OA_IN, OL_IN, slm_in, lon_in, lat_in)"
+.RI "subroutine \fBmakeoa2\fP (ZAVG, zslm, VAR, GLAT, OA4, OL, IOA4, ELVMAX, ORO, oro1, XNSUM, XNSUM1, XNSUM2, XNSUM3, XNSUM4, IM, JM, IMN, JMN, lon_c, lat_c, lon_t, lat_t, dx, dy, is_south_pole, is_north_pole)"
 .br
-.RI "Create orographic asymmetry and orographic length scale on the model grid\&. "
+.RI "\fICreate orographic asymmetry and orographic length scale on the model grid\&. \fP"
 .ti -1c
-.RI "subroutine \fBMAKEPC\fP (ZAVG, ZSLM, THETA, GAMMA, SIGMA, GLAT, IST, IEN, JST, JEN, IM, JM, IMN, JMN, XLAT, numi)"
+.RI "subroutine \fBmakeoa3\fP (ZAVG, zslm, VAR, GLAT, OA4, OL, IOA4, ELVMAX, ORO, SLM, oro1, XNSUM, XNSUM1, XNSUM2, XNSUM3, XNSUM4, IM, JM, IMN, JMN, lon_c, lat_c, lon_t, lat_t, is_south_pole, is_north_pole, IMI, JMI, OA_IN, OL_IN, slm_in, lon_in, lat_in)"
 .br
-.RI "Make the principle coordinates - slope of orography, anisotropy, angle of mountain range with respect to east\&. "
+.RI "\fICreate orographic asymmetry and orographic length scale on the model grid\&. \fP"
 .ti -1c
-.RI "subroutine \fBMAKEPC2\fP (ZAVG, ZSLM, THETA, GAMMA, SIGMA, GLAT, IM, JM, IMN, JMN, lon_c, lat_c)"
+.RI "subroutine \fBmakepc\fP (ZAVG, ZSLM, THETA, GAMMA, SIGMA, GLAT, IST, IEN, JST, JEN, IM, JM, IMN, JMN, XLAT, numi)"
 .br
-.RI "Make the principle coordinates - slope of orography, anisotropy, angle of mountain range with respect to east\&. "
+.RI "\fIMake the principle coordinates - slope of orography, anisotropy, angle of mountain range with respect to east\&. \fP"
+.ti -1c
+.RI "subroutine \fBmakepc2\fP (ZAVG, ZSLM, THETA, GAMMA, SIGMA, GLAT, IM, JM, IMN, JMN, lon_c, lat_c, SLM)"
+.br
+.RI "\fIMake the principle coordinates - slope of orography, anisotropy, angle of mountain range with respect to east\&. \fP"
 .ti -1c
 .RI "subroutine \fBmaxmin\fP (ia, len, tile)"
 .br
-.RI "Print the maximum, mininum, mean and standard deviation of an array\&. "
+.RI "\fIPrint the maximum, mininum, mean and standard deviation of an array\&. \fP"
 .ti -1c
 .RI "subroutine \fBminmaxj\fP (IM, JM, A, title)"
 .br
-.RI "Print out the maximum and minimum values of an array and their i/j location\&. "
+.RI "\fIPrint out the maximum and minimum values of an array and their i/j location\&. \fP"
 .ti -1c
 .RI "subroutine \fBminmxj\fP (IM, JM, A, title)"
 .br
-.RI "Print out the maximum and minimum values of an array\&. "
+.RI "\fIPrint out the maximum and minimum values of an array\&. \fP"
 .ti -1c
 .RI "subroutine \fBmnmxja\fP (IM, JM, A, imax, jmax, title)"
 .br
-.RI "Print out the maximum and minimum values of an array\&. "
+.RI "\fIPrint out the maximum and minimum values of an array\&. \fP"
 .ti -1c
 .RI "subroutine \fBnanc\fP (a, l, c)"
 .br
-.RI "Report NaNS and NaNQ within an address range for 8-byte real words\&. "
+.RI "\fIReport NaNS and NaNQ within an address range for 8-byte real words\&. \fP"
 .ti -1c
 .RI "subroutine \fBread_g\fP (glob, ITOPO)"
 .br
-.RI "Read input global 30-arc second orography data\&. "
+.RI "\fIRead input global 30-arc second orography data\&. \fP"
 .ti -1c
-.RI "subroutine \fBREVERS\fP (IM, JM, numi, F, WRK)"
+.RI "subroutine \fBrevers\fP (IM, JM, numi, F, WRK)"
 .br
-.RI "Reverse the east-west and north-south axes in a two-dimensional array\&. "
+.RI "\fIReverse the east-west and north-south axes in a two-dimensional array\&. \fP"
 .ti -1c
 .RI "subroutine \fBrg2gg\fP (im, jm, numi, a)"
 .br
-.RI "Convert from a reduced grid to a full grid\&. "
+.RI "\fIConvert from a reduced grid to a full grid\&. \fP"
 .ti -1c
-.RI "subroutine \fBSPFFT1\fP (IMAX, INCW, INCG, KMAX, W, G, IDIR)"
+.RI "subroutine \fBspfft1\fP (IMAX, INCW, INCG, KMAX, W, G, IDIR)"
 .br
-.RI "Perform multiple fast fourier transforms\&. "
+.RI "\fIPerform multiple fast fourier transforms\&. \fP"
 .ti -1c
 .RI "real function \fBspherical_angle\fP (v1, v2, v3)"
 .br
-.RI "Compute spherical angle\&. "
+.RI "\fICompute spherical angle\&. \fP"
 .ti -1c
 .RI "real function \fBspherical_distance\fP (theta1, phi1, theta2, phi2)"
 .br
-.RI "Compute a great circle distance between two points\&. "
+.RI "\fICompute a great circle distance between two points\&. \fP"
 .ti -1c
-.RI "subroutine \fBTERSUB\fP (IMN, JMN, IM, JM, NM, NR, NF0, NF1, NW, EFAC, BLAT, OUTGRID, INPUTOROG)"
+.RI "subroutine \fBtersub\fP (IMN, JMN, IM, JM, NM, NR, NF0, NF1, NW, EFAC, BLAT, OUTGRID, INPUTOROG, MASK_ONLY, MERGE_FILE)"
 .br
-.RI "Driver routine to compute terrain\&. "
+.RI "\fIDriver routine to compute terrain\&. \fP"
 .ti -1c
 .RI "real function \fBtimef\fP ()"
 .br
-.RI "Get the date/time for the system clock\&. "
+.RI "\fIGet the date/time for the system clock\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -160,7 +166,7 @@ Mark Iredell
 Definition in file \fBmtnlm7_oclsm\&.F\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "program __mtnlm7_oclsm\&.F__ ()"
+.SS "program __mtnlm7_oclsm\&.f__ ()"
 
 .PP
 This program creates 7 terrain-related files computed from the navy 10-minute terrain dataset\&. The model physics grid parameters and spectral truncation and filter parameters are read by this program as input\&.
@@ -232,9 +238,9 @@ UNIT14 - GTOPO SLM (10' NAVY if switched to get lakes
 .IP "  \(bu" 4
 UNIT15 - GICE Grumbine 30" RAMP Antarctica orog IMNx3616
 .IP "  \(bu" 4
-UNIT25 - Ocean land-sea mask on gaussian grid 
-.br
- OUTPUT FILES:
+UNIT25 - Ocean land-sea mask on gaussian grid
+.PP
+OUTPUT FILES:
 .IP "  \(bu" 4
 UNIT51 - SEA-LAND MASK (IM,JM)
 .IP "  \(bu" 4
@@ -272,8 +278,8 @@ GBYTES - UNPACK BITS
 .PP
 Definition at line 78 of file mtnlm7_oclsm\&.F\&.
 .PP
-References netcdf_err()\&.
-.SS "subroutine get_index (integer, intent(in) IMN, integer, intent(in) JMN, integer npts, real, dimension(npts), intent(in) lonO, real, dimension(npts), intent(in) latO, real, intent(in) DELXN, integer, intent(out) jst, integer, intent(out) jen, integer, dimension(imn), intent(out) ilist, integer, intent(out) numx)"
+References netcdf_err(), and tersub()\&.
+.SS "subroutine get_index (integer, intent(in)IMN, integer, intent(in)JMN, integernpts, real, dimension(npts), intent(in)lonO, real, dimension(npts), intent(in)latO, real, intent(in)DELXN, integer, intent(out)jst, integer, intent(out)jen, integer, dimension(imn), intent(out)ilist, integer, intent(out)numx)"
 
 .PP
 Determine the location of a cubed-sphere point within the high-resolution orography data\&. The location is described by the range of i/j indices on the high-res grid\&.
@@ -308,10 +314,10 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 1790 of file mtnlm7_oclsm\&.F\&.
+Definition at line 1828 of file mtnlm7_oclsm\&.F\&.
 .PP
-Referenced by MAKEMT2(), MAKEOA2(), MAKEOA3(), and MAKEPC2()\&.
-.SS "real function get_lat_angle (real dy, real DEGRAD)"
+Referenced by make_mask(), makemt2(), makeoa2(), makeoa3(), and makepc2()\&.
+.SS "real function get_lat_angle (realdy, realDEGRAD)"
 
 .PP
 Convert the 'y' direction distance of a cubed-sphere grid point to the corresponding distance in latitude\&. 
@@ -335,8 +341,10 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 2992 of file mtnlm7_oclsm\&.F\&.
-.SS "real function get_lon_angle (real dx, real lat, real DEGRAD)"
+Definition at line 3173 of file mtnlm7_oclsm\&.F\&.
+.PP
+Referenced by makeoa2()\&.
+.SS "real function get_lon_angle (realdx, reallat, realDEGRAD)"
 
 .PP
 Convert the 'x' direction distance of a cubed-sphere grid point to the corresponding distance in longitude\&. 
@@ -362,8 +370,10 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 2973 of file mtnlm7_oclsm\&.F\&.
-.SS "subroutine get_mismatch_index (integer, intent(in) im_in, integer, intent(in) jm_in, real, dimension(im_in,jm_in), intent(in) geolon_in, real, dimension(im_in,jm_in), intent(in) geolat_in, logical*1, dimension(im_in,jm_in), intent(in) bitmap_in, integer, intent(in) num_out, real, dimension(num_out), intent(in) lon_out, real, dimension(num_out), intent(in) lat_out, integer, dimension(num_out), intent(out) iindx, integer, dimension(num_out), intent(out) jindx)"
+Definition at line 3154 of file mtnlm7_oclsm\&.F\&.
+.PP
+Referenced by makeoa2()\&.
+.SS "subroutine get_mismatch_index (integer, intent(in)im_in, integer, intent(in)jm_in, real, dimension(im_in,jm_in), intent(in)geolon_in, real, dimension(im_in,jm_in), intent(in)geolat_in, logical*1, dimension(im_in,jm_in), intent(in)bitmap_in, integer, intent(in)num_out, real, dimension(num_out), intent(in)lon_out, real, dimension(num_out), intent(in)lat_out, integer, dimension(num_out), intent(out)iindx, integer, dimension(num_out), intent(out)jindx)"
 
 .PP
 For unmapped land points, find the nearest land point on the input data and pass back its i/j index\&. 
@@ -398,12 +408,12 @@ GFDL progammer
 .PP
 
 .PP
-Definition at line 3470 of file mtnlm7_oclsm\&.F\&.
+Definition at line 3650 of file mtnlm7_oclsm\&.F\&.
 .PP
 References spherical_distance()\&.
 .PP
-Referenced by MAKEOA3()\&.
-.SS "real function get_xnsum (real lon1, real lat1, real lon2, real lat2, integer IMN, integer JMN, real, dimension(jmn) glat, integer, dimension(imn,jmn) zavg, integer, dimension(imn,jmn) zslm, real delxn)"
+Referenced by makeoa3()\&.
+.SS "real function get_xnsum (real, intent(in)lon1, real, intent(in)lat1, real, intent(in)lon2, real, intent(in)lat2, integer, intent(in)IMN, integer, intent(in)JMN, real, dimension(jmn), intent(in)glat, integer, dimension(imn,jmn), intent(in)zavg, integer, dimension(imn,jmn), intent(in)zslm, real, intent(in)delxn)"
 
 .PP
 Count the number of high-resolution orography points that are higher than the model grid box average orography height\&. 
@@ -443,8 +453,10 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 4574 of file mtnlm7_oclsm\&.F\&.
-.SS "subroutine get_xnsum2 (real lon1, real lat1, real lon2, real lat2, integer IMN, integer JMN, real, dimension(jmn) glat, integer, dimension(imn,jmn) zavg, integer, dimension(imn,jmn) zslm, real delxn, real, intent(out) xnsum1, real, intent(out) xnsum2, real, intent(out) HC)"
+Definition at line 4754 of file mtnlm7_oclsm\&.F\&.
+.PP
+Referenced by makeoa2()\&.
+.SS "subroutine get_xnsum2 (reallon1, reallat1, reallon2, reallat2, integerIMN, integerJMN, real, dimension(jmn)glat, integer, dimension(imn,jmn)zavg, realdelxn, real, intent(out)xnsum1, real, intent(out)xnsum2, real, intent(out)HC)"
 
 .PP
 Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. The critical value is a function of the standard deviation of orography\&.
@@ -467,8 +479,6 @@ Count the number of high-resolution orography points that are higher than a crit
 .br
 \fIzavg\fP The high-resolution orography\&. 
 .br
-\fIzslm\fP The high-resolution land mask\&. 
-.br
 \fIdelxn\fP Resolution of the high-res orography data\&. 
 .br
 \fIxnsum1\fP The number of high-resolution orography above the critical value inside a model grid box\&. 
@@ -485,10 +495,10 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 4681 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4860 of file mtnlm7_oclsm\&.F\&.
 .PP
-Referenced by MAKEOA2()\&.
-.SS "subroutine get_xnsum3 (real lon1, real lat1, real lon2, real lat2, integer IMN, integer JMN, real, dimension(jmn) glat, integer, dimension(imn,jmn) zavg, integer, dimension(imn,jmn) zslm, real delxn, real, intent(out) xnsum1, real, intent(out) xnsum2, real HC)"
+Referenced by makeoa2()\&.
+.SS "subroutine get_xnsum3 (reallon1, reallat1, reallon2, reallat2, integerIMN, integerJMN, real, dimension(jmn)glat, integer, dimension(imn,jmn)zavg, realdelxn, real, intent(out)xnsum1, real, intent(out)xnsum2, realHC)"
 
 .PP
 Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. Unlike routine \fBget_xnsum2()\fP, this routine does not compute the critical value\&. Rather, it is passed in\&.
@@ -511,8 +521,6 @@ Count the number of high-resolution orography points that are higher than a crit
 .br
 \fIzavg\fP The high-resolution orography\&. 
 .br
-\fIzslm\fP The high-resolution land mask\&. 
-.br
 \fIdelxn\fP Resolution of the high-res orography data\&. 
 .br
 \fIxnsum1\fP The number of high-resolution orography above the critical value inside a model grid box\&. 
@@ -529,10 +537,10 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 4777 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4955 of file mtnlm7_oclsm\&.F\&.
 .PP
-Referenced by MAKEOA2()\&.
-.SS "subroutine gg2rg (integer, intent(in) im, integer, intent(in) jm, integer, dimension(jm), intent(in) numi, real, dimension(im,jm), intent(inout) a)"
+Referenced by makeoa2()\&.
+.SS "subroutine gg2rg (integer, intent(in)im, integer, intent(in)jm, integer, dimension(jm), intent(in)numi, real, dimension(im,jm), intent(inout)a)"
 
 .PP
 Convert from a full grid to a reduced grid\&. 
@@ -555,8 +563,8 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4072 of file mtnlm7_oclsm\&.F\&.
-.SS "logical function inside_a_polygon (real lon1, real lat1, integer npts, real, dimension(npts) lon2, real, dimension(npts) lat2)"
+Definition at line 4253 of file mtnlm7_oclsm\&.F\&.
+.SS "logical function inside_a_polygon (reallon1, reallat1, integernpts, real, dimension(npts)lon2, real, dimension(npts)lat2)"
 
 .PP
 Check if a point is inside a polygon\&. 
@@ -586,10 +594,12 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 4478 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4659 of file mtnlm7_oclsm\&.F\&.
 .PP
 References latlon2xyz(), and spherical_angle()\&.
-.SS "subroutine interpolate_mismatch (integer, intent(in) im_in, integer, intent(in) jm_in, real, dimension(im_in,jm_in), intent(in) data_in, integer, intent(in) num_out, real, dimension(num_out), intent(out) data_out, integer, dimension(num_out), intent(in) iindx, integer, dimension(num_out), intent(in) jindx)"
+.PP
+Referenced by make_mask(), makemt2(), makeoa2(), makeoa3(), and makepc2()\&.
+.SS "subroutine interpolate_mismatch (integer, intent(in)im_in, integer, intent(in)jm_in, real, dimension(im_in,jm_in), intent(in)data_in, integer, intent(in)num_out, real, dimension(num_out), intent(out)data_out, integer, dimension(num_out), intent(in)iindx, integer, dimension(num_out), intent(in)jindx)"
 
 .PP
 Replace unmapped model land points with the nearest land point on the input grid\&. 
@@ -618,10 +628,10 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 3551 of file mtnlm7_oclsm\&.F\&.
+Definition at line 3731 of file mtnlm7_oclsm\&.F\&.
 .PP
-Referenced by MAKEOA3()\&.
-.SS "subroutine latlon2xyz (integer, intent(in) siz, real, dimension(siz), intent(in) lon, real, dimension(siz), intent(in) lat, real, dimension(siz), intent(out) x, real, dimension(siz), intent(out) y, real, dimension(siz), intent(out) z)"
+Referenced by makeoa3()\&.
+.SS "subroutine latlon2xyz (integer, intent(in)siz, real, dimension(siz), intent(in)lon, real, dimension(siz), intent(in)lat, real, dimension(siz), intent(out)x, real, dimension(siz), intent(out)y, real, dimension(siz), intent(out)z)"
 
 .PP
 Convert from latitude and longitude to x,y,z coordinates\&. 
@@ -648,10 +658,50 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 4406 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4587 of file mtnlm7_oclsm\&.F\&.
 .PP
 Referenced by inside_a_polygon()\&.
-.SS "subroutine MAKEMT (integer, dimension(imn,jmn) ZAVG, integer, dimension(imn,jmn) ZSLM, dimension(im,jm) ORO, dimension(im,jm) SLM, dimension(im,jm) VAR, dimension(im,jm) VAR4, dimension(jmn) GLAT, dimension(im,jm) IST, dimension(im,jm) IEN, dimension(jm) JST, dimension(jm) JEN,  IM,  JM,  IMN,  JMN, dimension(jm) XLAT, dimension(jm) numi)"
+.SS "subroutine make_mask (integer, dimension(imn,jmn)zslm, real, dimension(im,jm)SLM, real, dimension(im,jm)land_frac, real, dimension(jmn)GLAT, integerIM, integerJM, integerIMN, integerJMN, real, dimension(im+1,jm+1)lon_c, real, dimension(im+1,jm+1)lat_c)"
+
+.PP
+Create the land-mask, land fraction\&. This routine is used for the FV3GFS model\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIzslm\fP The high-resolution input land-mask dataset\&. 
+.br
+\fIslm\fP Land-mask on the model tile\&. 
+.br
+\fIland_frac\fP Land fraction on the model tile\&. 
+.br
+\fIglat\fP Latitude of each row of the high-resolution orography and land-mask datasets\&. 
+.br
+\fIim\fP 'i' dimension of the model grid\&. 
+.br
+\fIjm\fP 'j' dimension of the model grid\&. 
+.br
+\fIimn\fP 'i' dimension of the hi-res input orog/mask datasets\&. 
+.br
+\fIjmn\fP 'j' dimension of the hi-res input orog/mask datasets\&. 
+.br
+\fIlon_c\fP Longitude of the model grid corner points\&. 
+.br
+\fIlat_c\fP Latitude on the model grid corner points\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+GFDL Programmer 
+.RE
+.PP
+
+.PP
+Definition at line 1917 of file mtnlm7_oclsm\&.F\&.
+.PP
+References get_index(), and inside_a_polygon()\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine makemt (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)ZSLM, dimension(im,jm)ORO, dimension(im,jm)SLM, dimension(im,jm)VAR, dimension(im,jm)VAR4, dimension(jmn)GLAT, dimension(im,jm)IST, dimension(im,jm)IEN, dimension(jm)JST, dimension(jm)JEN, IM, JM, IMN, JMN, dimension(jm)XLAT, dimension(jm)numi)"
 
 .PP
 Create the orography, land-mask, standard deviation of orography and the convexity on a model gaussian grid\&. This routine was used for the spectral GFS model\&.
@@ -700,8 +750,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 1624 of file mtnlm7_oclsm\&.F\&.
-.SS "subroutine MAKEMT2 (integer, dimension(imn,jmn) ZAVG, integer, dimension(imn,jmn) ZSLM, real, dimension(im,jm) ORO, real, dimension(im,jm) SLM, real, dimension(im,jm) land_frac, real, dimension(im,jm) VAR, real, dimension(im,jm) VAR4, real, dimension(jmn) GLAT, integer IM, integer JM, integer IMN, integer JMN, real, dimension(im+1,jm+1) lon_c, real, dimension(im+1,jm+1) lat_c)"
+Definition at line 1662 of file mtnlm7_oclsm\&.F\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine makemt2 (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)ZSLM, real, dimension(im,jm)ORO, real, dimension(im,jm), intent(in)SLM, real, dimension(im,jm)VAR, real, dimension(im,jm)VAR4, real, dimension(jmn)GLAT, integerIM, integerJM, integerIMN, integerJMN, real, dimension(im+1,jm+1)lon_c, real, dimension(im+1,jm+1)lat_c, real, dimension(im,jm), intent(in)lake_frac, real, dimension(im,jm), intent(in)land_frac)"
 
 .PP
 Create the orography, land-mask, land fraction, standard deviation of orography and the convexity on a model cubed-sphere tile\&. This routine is used for the FV3GFS model\&.
@@ -715,8 +767,6 @@ Create the orography, land-mask, land fraction, standard deviation of orography 
 \fIoro\fP Orography on the model tile\&. 
 .br
 \fIslm\fP Land-mask on the model tile\&. 
-.br
-\fIland_frac\fP Land fraction on the model tile\&. 
 .br
 \fIvar\fP Standard deviation of orography on the model tile\&. 
 .br
@@ -735,6 +785,10 @@ Create the orography, land-mask, land fraction, standard deviation of orography 
 \fIlon_c\fP Longitude of the model grid corner points\&. 
 .br
 \fIlat_c\fP Latitude on the model grid corner points\&. 
+.br
+\fIlake_frac\fP Fractional lake within the grid 
+.br
+\fIland_frac\fP Fractional land within the grid 
 .RE
 .PP
 \fBAuthor:\fP
@@ -744,10 +798,12 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 1884 of file mtnlm7_oclsm\&.F\&.
+Definition at line 2050 of file mtnlm7_oclsm\&.F\&.
 .PP
-References get_index()\&.
-.SS "subroutine MAKEOA (integer, dimension(imn,jmn) ZAVG, dimension(im,jm) VAR, dimension(jmn) GLAT, dimension(im,jm,4) OA4, dimension(im,jm,4) OL, dimension(im,jm,4) IOA4, dimension(im,jm) ELVMAX, dimension(im,jm) ORO, dimension(im,jm) oro1, dimension(im,jm) XNSUM, dimension(im,jm) XNSUM1, dimension(im,jm) XNSUM2, dimension(im,jm) XNSUM3, dimension(im,jm) XNSUM4, dimension(im,jm) IST, dimension(im,jm) IEN, dimension(jm) JST, dimension(jm) JEN,  IM,  JM,  IMN,  JMN, dimension(jm) XLAT, dimension(jm) numi)"
+References get_index(), inside_a_polygon(), and lake_frac()\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine makeoa (integer, dimension(imn,jmn)ZAVG, dimension(im,jm)VAR, dimension(jmn)GLAT, dimension(im,jm,4)OA4, dimension(im,jm,4)OL, dimension(im,jm,4)IOA4, dimension(im,jm)ELVMAX, dimension(im,jm)ORO, dimension(im,jm)oro1, dimension(im,jm)XNSUM, dimension(im,jm)XNSUM1, dimension(im,jm)XNSUM2, dimension(im,jm)XNSUM3, dimension(im,jm)XNSUM4, dimension(im,jm)IST, dimension(im,jm)IEN, dimension(jm)JST, dimension(jm)JEN, IM, JM, IMN, JMN, dimension(jm)XLAT, dimension(jm)numi)"
 
 .PP
 Create orographic asymmetry and orographic length scale on the model grid\&. This routine is used for the spectral GFS gaussian grid\&.
@@ -810,8 +866,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 2647 of file mtnlm7_oclsm\&.F\&.
-.SS "subroutine MAKEOA2 (integer, dimension(imn,jmn) ZAVG, integer, dimension(imn,jmn) zslm, real, dimension(im,jm) VAR, real, dimension(jmn) GLAT, real, dimension(im,jm,4) OA4, real, dimension(im,jm,4) OL, integer, dimension(im,jm,4) IOA4, real, dimension(im,jm) ELVMAX, real, dimension(im,jm) ORO, real, dimension(im,jm) oro1, real, dimension(im,jm) XNSUM, real, dimension(im,jm) XNSUM1, real, dimension(im,jm) XNSUM2, real, dimension(im,jm) XNSUM3, real, dimension(im,jm) XNSUM4, integer IM, integer JM, integer IMN, integer JMN, real, dimension(im+1,jm+1) lon_c, real, dimension(im+1,jm+1) lat_c, real, dimension(im,jm) lon_t, real, dimension(im,jm) lat_t, real, dimension(im,jm) dx, real, dimension(im,jm) dy, logical, dimension(im,jm) is_south_pole, logical, dimension(im,jm) is_north_pole)"
+Definition at line 2826 of file mtnlm7_oclsm\&.F\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine makeoa2 (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)zslm, real, dimension(im,jm)VAR, real, dimension(jmn)GLAT, real, dimension(im,jm,4)OA4, real, dimension(im,jm,4)OL, integer, dimension(im,jm,4)IOA4, real, dimension(im,jm)ELVMAX, real, dimension(im,jm)ORO, real, dimension(im,jm)oro1, real, dimension(im,jm)XNSUM, real, dimension(im,jm)XNSUM1, real, dimension(im,jm)XNSUM2, real, dimension(im,jm)XNSUM3, real, dimension(im,jm)XNSUM4, integerIM, integerJM, integerIMN, integerJMN, real, dimension(im+1,jm+1)lon_c, real, dimension(im+1,jm+1)lat_c, real, dimension(im,jm)lon_t, real, dimension(im,jm)lat_t, real, dimension(im,jm)dx, real, dimension(im,jm)dy, logical, dimension(im,jm)is_south_pole, logical, dimension(im,jm)is_north_pole)"
 
 .PP
 Create orographic asymmetry and orographic length scale on the model grid\&. This routine is used for the cubed-sphere grid\&.
@@ -880,10 +938,12 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 3042 of file mtnlm7_oclsm\&.F\&.
+Definition at line 3220 of file mtnlm7_oclsm\&.F\&.
 .PP
-References get_index(), get_xnsum2(), and get_xnsum3()\&.
-.SS "subroutine MAKEOA3 (integer, dimension(imn,jmn) ZAVG, integer, dimension(imn,jmn) zslm, real, dimension(im,jm) VAR, real, dimension(jmn) GLAT, real, dimension(im,jm,4) OA4, real, dimension(im,jm,4) OL, integer, dimension(im,jm,4) IOA4, real, dimension(im,jm) ELVMAX, real, dimension(im,jm) ORO, real, dimension(im,jm) SLM, real, dimension(im,jm) oro1, real, dimension(im,jm) XNSUM, real, dimension(im,jm) XNSUM1, real, dimension(im,jm) XNSUM2, real, dimension(im,jm) XNSUM3, real, dimension(im,jm) XNSUM4, integer IM, integer JM, integer IMN, integer JMN, real, dimension(im+1,jm+1) lon_c, real, dimension(im+1,jm+1) lat_c, real, dimension(im,jm) lon_t, real, dimension(im,jm) lat_t, logical, dimension(im,jm) is_south_pole, logical, dimension(im,jm) is_north_pole, integer IMI, integer JMI, real, dimension(imi,jmi,4) OA_IN, real, dimension(imi,jmi,4) OL_IN, real, dimension(imi,jmi) slm_in, real, dimension(imi,jmi) lon_in, real, dimension(imi,jmi) lat_in)"
+References get_index(), get_lat_angle(), get_lon_angle(), get_xnsum(), get_xnsum2(), get_xnsum3(), and inside_a_polygon()\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine makeoa3 (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)zslm, real, dimension(im,jm)VAR, real, dimension(jmn)GLAT, real, dimension(im,jm,4)OA4, real, dimension(im,jm,4)OL, integer, dimension(im,jm,4)IOA4, real, dimension(im,jm)ELVMAX, real, dimension(im,jm)ORO, real, dimension(im,jm)SLM, real, dimension(im,jm)oro1, real, dimension(im,jm)XNSUM, real, dimension(im,jm)XNSUM1, real, dimension(im,jm)XNSUM2, real, dimension(im,jm)XNSUM3, real, dimension(im,jm)XNSUM4, integerIM, integerJM, integerIMN, integerJMN, real, dimension(im+1,jm+1)lon_c, real, dimension(im+1,jm+1)lat_c, real, dimension(im,jm)lon_t, real, dimension(im,jm)lat_t, logical, dimension(im,jm)is_south_pole, logical, dimension(im,jm)is_north_pole, integerIMI, integerJMI, real, dimension(imi,jmi,4)OA_IN, real, dimension(imi,jmi,4)OL_IN, real, dimension(imi,jmi)slm_in, real, dimension(imi,jmi)lon_in, real, dimension(imi,jmi)lat_in)"
 
 .PP
 Create orographic asymmetry and orographic length scale on the model grid\&. This routine is used for the cubed-sphere grid\&. The asymmetry and length scales are interpolated from an existing gfs orography file\&. The maximum elevation is computed from the high-resolution orography data\&.
@@ -964,10 +1024,12 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 3611 of file mtnlm7_oclsm\&.F\&.
+Definition at line 3788 of file mtnlm7_oclsm\&.F\&.
 .PP
-References get_index(), get_mismatch_index(), and interpolate_mismatch()\&.
-.SS "subroutine MAKEPC (integer, dimension(imn,jmn) ZAVG, integer, dimension(imn,jmn) ZSLM, dimension(im,jm) THETA, dimension(im,jm) GAMMA, dimension(im,jm) SIGMA, dimension(jmn) GLAT, dimension(im,jm) IST, dimension(im,jm) IEN, dimension(jm) JST, dimension(jm) JEN,  IM,  JM,  IMN,  JMN, dimension(jm) XLAT, dimension(jm) numi)"
+References get_index(), get_mismatch_index(), inside_a_polygon(), and interpolate_mismatch()\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine makepc (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)ZSLM, dimension(im,jm)THETA, dimension(im,jm)GAMMA, dimension(im,jm)SIGMA, dimension(jmn)GLAT, dimension(im,jm)IST, dimension(im,jm)IEN, dimension(jm)JST, dimension(jm)JEN, IM, JM, IMN, JMN, dimension(jm)XLAT, dimension(jm)numi)"
 
 .PP
 Make the principle coordinates - slope of orography, anisotropy, angle of mountain range with respect to east\&. This routine is used for spectral GFS gaussian grids\&.
@@ -1014,8 +1076,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 2098 of file mtnlm7_oclsm\&.F\&.
-.SS "subroutine MAKEPC2 (integer, dimension(imn,jmn) ZAVG, integer, dimension(imn,jmn) ZSLM, real, dimension(im,jm) THETA, real, dimension(im,jm) GAMMA, real, dimension(im,jm) SIGMA, real, dimension(jmn) GLAT, integer IM, integer JM, integer IMN, integer JMN, real, dimension(im+1,jm+1) lon_c, real, dimension(im+1,jm+1) lat_c)"
+Definition at line 2283 of file mtnlm7_oclsm\&.F\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine makepc2 (integer, dimension(imn,jmn)ZAVG, integer, dimension(imn,jmn)ZSLM, real, dimension(im,jm)THETA, real, dimension(im,jm)GAMMA, real, dimension(im,jm)SIGMA, real, dimension(jmn)GLAT, integerIM, integerJM, integerIMN, integerJMN, real, dimension(im+1,jm+1)lon_c, real, dimension(im+1,jm+1)lat_c, real, dimension(im,jm), intent(in)SLM)"
 
 .PP
 Make the principle coordinates - slope of orography, anisotropy, angle of mountain range with respect to east\&. This routine is used for the FV3GFS cubed-sphere grid\&.
@@ -1045,6 +1109,8 @@ Make the principle coordinates - slope of orography, anisotropy, angle of mounta
 \fIlon_c\fP Longitude of model grid corner points\&. 
 .br
 \fIlat_c\fP Latitude of the model grid corner points\&. 
+.br
+\fISLM\fP mask 
 .RE
 .PP
 \fBAuthor:\fP
@@ -1054,10 +1120,12 @@ GFDL Programmer
 .PP
 
 .PP
-Definition at line 2372 of file mtnlm7_oclsm\&.F\&.
+Definition at line 2558 of file mtnlm7_oclsm\&.F\&.
 .PP
-References get_index()\&.
-.SS "subroutine maxmin (integer*2, dimension(len) ia, integer len, character*7 tile)"
+References get_index(), and inside_a_polygon()\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine maxmin (integer*2, dimension(len)ia, integerlen, character*7tile)"
 
 .PP
 Print the maximum, mininum, mean and standard deviation of an array\&. 
@@ -1078,10 +1146,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4296 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4477 of file mtnlm7_oclsm\&.F\&.
 .PP
 Referenced by read_g()\&.
-.SS "subroutine minmaxj (integer IM, integer JM, real(kind=4), dimension(im,jm) A, character*8 title)"
+.SS "subroutine minmaxj (integerIM, integerJM, real(kind=4), dimension(im,jm)A, character*8title)"
 
 .PP
 Print out the maximum and minimum values of an array and their i/j location\&. Also print out the number of undefined points\&.
@@ -1104,8 +1172,8 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4354 of file mtnlm7_oclsm\&.F\&.
-.SS "subroutine minmxj (integer IM, integer JM, real, dimension(im,jm) A, character*8 title)"
+Definition at line 4535 of file mtnlm7_oclsm\&.F\&.
+.SS "subroutine minmxj (integerIM, integerJM, real, dimension(im,jm)A, character*8title)"
 
 .PP
 Print out the maximum and minimum values of an array\&. 
@@ -1128,10 +1196,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4098 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4279 of file mtnlm7_oclsm\&.F\&.
 .PP
-Referenced by TERSUB()\&.
-.SS "subroutine mnmxja (integer IM, integer JM, real, dimension(im,jm) A, integer imax, integer jmax, character*8 title)"
+Referenced by tersub()\&.
+.SS "subroutine mnmxja (integerIM, integerJM, real, dimension(im,jm)A, integerimax, integerjmax, character*8title)"
 
 .PP
 Print out the maximum and minimum values of an array\&. Pass back the i/j location of the maximum value\&.
@@ -1158,10 +1226,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4133 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4314 of file mtnlm7_oclsm\&.F\&.
 .PP
-Referenced by TERSUB()\&.
-.SS "subroutine nanc ( a,  l, character*(*) c)"
+Referenced by tersub()\&.
+.SS "subroutine nanc (a, l, character*(*)c)"
 
 .PP
 Report NaNS and NaNQ within an address range for 8-byte real words\&. This routine prints a single line for each call and prints a message and returns to the caller on detection of the FIRST NaN in the range\&. If no NaN values are found it returns silently\&.
@@ -1182,8 +1250,8 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4840 of file mtnlm7_oclsm\&.F\&.
-.SS "subroutine read_g (integer*2, dimension(360*120,180*120) glob, integer ITOPO)"
+Definition at line 5019 of file mtnlm7_oclsm\&.F\&.
+.SS "subroutine read_g (integer*2, dimension(360*120,180*120)glob, integerITOPO)"
 
 .PP
 Read input global 30-arc second orography data\&. 
@@ -1202,12 +1270,12 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4245 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4426 of file mtnlm7_oclsm\&.F\&.
 .PP
 References maxmin()\&.
 .PP
-Referenced by TERSUB()\&.
-.SS "subroutine REVERS ( IM,  JM, integer, dimension(jm) numi, real, dimension(im,jm) F, real, dimension(im,jm) WRK)"
+Referenced by tersub()\&.
+.SS "subroutine revers (IM, JM, integer, dimension(jm)numi, real, dimension(im,jm)F, real, dimension(im,jm)WRK)"
 
 .PP
 Reverse the east-west and north-south axes in a two-dimensional array\&. 
@@ -1232,8 +1300,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4009 of file mtnlm7_oclsm\&.F\&.
-.SS "subroutine rg2gg (integer, intent(in) im, integer, intent(in) jm, integer, dimension(jm), intent(in) numi, real, dimension(im,jm), intent(inout) a)"
+Definition at line 4190 of file mtnlm7_oclsm\&.F\&.
+.PP
+Referenced by tersub()\&.
+.SS "subroutine rg2gg (integer, intent(in)im, integer, intent(in)jm, integer, dimension(jm), intent(in)numi, real, dimension(im,jm), intent(inout)a)"
 
 .PP
 Convert from a reduced grid to a full grid\&. 
@@ -1256,10 +1326,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 4046 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4227 of file mtnlm7_oclsm\&.F\&.
 .PP
-Referenced by TERSUB()\&.
-.SS "subroutine SPFFT1 (integer, intent(in) IMAX, integer, intent(in) INCW, integer, intent(in) INCG, integer, intent(in) KMAX, complex, dimension(incw,kmax), intent(inout) W, real, dimension(incg,kmax), intent(inout) G, integer, intent(in) IDIR)"
+Referenced by tersub()\&.
+.SS "subroutine spfft1 (integer, intent(in)IMAX, integer, intent(in)INCW, integer, intent(in)INCG, integer, intent(in)KMAX, complex, dimension(incw,kmax), intent(inout)W, real, dimension(incg,kmax), intent(inout)G, integer, intent(in)IDIR)"
 
 .PP
 Perform multiple fast fourier transforms\&. This subprogram performs multiple fast fourier transforms between complex amplitudes in fourier space and real values in cyclic physical space\&.
@@ -1311,8 +1381,10 @@ Mark Iredell ORG: W/NMC23
 .PP
 
 .PP
-Definition at line 4195 of file mtnlm7_oclsm\&.F\&.
-.SS "real function spherical_angle (real, dimension(3) v1, real, dimension(3) v2, real, dimension(3) v3)"
+Definition at line 4376 of file mtnlm7_oclsm\&.F\&.
+.PP
+Referenced by tersub()\&.
+.SS "real function spherical_angle (real, dimension(3)v1, real, dimension(3)v2, real, dimension(3)v3)"
 
 .PP
 Compute spherical angle\&. 
@@ -1338,10 +1410,10 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 4428 of file mtnlm7_oclsm\&.F\&.
+Definition at line 4609 of file mtnlm7_oclsm\&.F\&.
 .PP
 Referenced by inside_a_polygon()\&.
-.SS "real function spherical_distance (real, intent(in) theta1, real, intent(in) phi1, real, intent(in) theta2, real, intent(in) phi2)"
+.SS "real function spherical_distance (real, intent(in)theta1, real, intent(in)phi1, real, intent(in)theta2, real, intent(in)phi2)"
 
 .PP
 Compute a great circle distance between two points\&. 
@@ -1369,10 +1441,10 @@ GFDL programmer
 .PP
 
 .PP
-Definition at line 3434 of file mtnlm7_oclsm\&.F\&.
+Definition at line 3615 of file mtnlm7_oclsm\&.F\&.
 .PP
 Referenced by get_mismatch_index()\&.
-.SS "subroutine TERSUB (integer IMN, integer JMN, integer IM, integer JM, integer NM, integer NR, integer NF0, integer NF1, integer NW, integer EFAC, integer BLAT, character(len=*), intent(in) OUTGRID, character(len=*), intent(in) INPUTOROG)"
+.SS "subroutine tersub (integerIMN, integerJMN, integerIM, integerJM, integerNM, integerNR, integerNF0, integerNF1, integerNW, integerEFAC, integerBLAT, character(len=*), intent(in)OUTGRID, character(len=*), intent(in)INPUTOROG, logical, intent(in)MASK_ONLY, character(len=*), intent(in)MERGE_FILE)"
 
 .PP
 Driver routine to compute terrain\&. 
@@ -1404,6 +1476,10 @@ Driver routine to compute terrain\&.
 \fIOUTGRID\fP The 'grid' file for the model tile\&. 
 .br
 \fIINPUTOROG\fP Input orography/GWD file on gaussian grid\&. When specified, will be interpolated to model tile\&. When not specified, program will create fields from raw high-resolution topography data\&. 
+.br
+\fIMASK_ONLY\fP Flag to generate the Land Mask only 
+.br
+\fIMERGE_FILE\fP Ocean merge file 
 .RE
 .PP
 \fBAuthor:\fP
@@ -1413,9 +1489,11 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 184 of file mtnlm7_oclsm\&.F\&.
+Definition at line 190 of file mtnlm7_oclsm\&.F\&.
 .PP
-References minmxj(), mnmxja(), netcdf_err(), read_g(), rg2gg(), timef(), and write_netcdf()\&.
+References lake_frac(), make_mask(), makemt(), makemt2(), makeoa(), makeoa2(), makeoa3(), makepc(), makepc2(), minmxj(), mnmxja(), netcdf_err(), read_g(), read_mask(), revers(), rg2gg(), spfft1(), timef(), write_mask_netcdf(), and write_netcdf()\&.
+.PP
+Referenced by __mtnlm7_oclsm\&.f__()\&.
 .SS "real function timef ()"
 
 .PP
@@ -1433,9 +1511,9 @@ timef
 .PP
 
 .PP
-Definition at line 4889 of file mtnlm7_oclsm\&.F\&.
+Definition at line 5068 of file mtnlm7_oclsm\&.F\&.
 .PP
-Referenced by TERSUB()\&.
+Referenced by tersub()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for orog_mask_tools from the source code\&.

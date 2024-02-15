@@ -1,8 +1,8 @@
-.TH "pesg::get_qx" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::get_qx" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::get_qx
+pesg::get_qx \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pesg::get_qx
 .ti -1c
 .RI "subroutine \fBget_qx\fP (j0, v1, v2, v3, v4)"
 .br
-.RI "From a jacobian matrix, j0, get a sufficient set of v\&. "
+.RI "\fIFrom a jacobian matrix, j0, get a sufficient set of v\&. \fP"
 .ti -1c
 .RI "subroutine \fBget_qxd\fP (j0, j0d, v1, v2, v3, v4, v1d, v2d, v3d, v4d)"
 .br
-.RI "From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set of v\&. "
+.RI "\fIFrom a jacobian matrix, j0, and its derivative, j0d, get a sufficient set of v\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 37 of file pesg\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::get_qx::get_qx (real(dp), dimension(3,2), intent(in) j0, real(dp), intent(out) v1, real(dp), intent(out) v2, real(dp), intent(out) v3, real(dp), intent(out) v4)\fC [private]\fP"
+.SS "subroutine pesg::get_qx::get_qx (real(dp), dimension(3,2), intent(in)j0, real(dp), intent(out)v1, real(dp), intent(out)v2, real(dp), intent(out)v3, real(dp), intent(out)v4)\fC [private]\fP"
 
 .PP
 From a jacobian matrix, j0, get a sufficient set of v\&. \&. diagnostics such that, from averages of these v, we can later compute the collective variance of Q(lam) that they imply for any choice of the 'lambda' parameter, lam\&. Note that v1 and v4 are quadratic diagnostics of EL, while v2 and v3 are linear\&.
@@ -48,10 +48,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 512 of file pesg\&.f90\&.
+Definition at line 511 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::get_qx::get_qxd (real(dp), dimension(3,2), intent(in) j0, real(dp), dimension(3,2,2), intent(in) j0d, real(dp), intent(out) v1, real(dp), intent(out) v2, real(dp), intent(out) v3, real(dp), intent(out) v4, real(dp), dimension(2), intent(out) v1d, real(dp), dimension(2), intent(out) v2d, real(dp), dimension(2), intent(out) v3d, real(dp), dimension(2), intent(out) v4d)\fC [private]\fP"
+.SS "subroutine pesg::get_qx::get_qxd (real(dp), dimension(3,2), intent(in)j0, real(dp), dimension(3,2,2), intent(in)j0d, real(dp), intent(out)v1, real(dp), intent(out)v2, real(dp), intent(out)v3, real(dp), intent(out)v4, real(dp), dimension(2), intent(out)v1d, real(dp), dimension(2), intent(out)v2d, real(dp), dimension(2), intent(out)v3d, real(dp), dimension(2), intent(out)v4d)\fC [private]\fP"
 
 .PP
 From a jacobian matrix, j0, and its derivative, j0d, get a sufficient set of v\&. \&. diagnostics such that, from average of these diagnostics, we can later compute the collective variance of Q and its derivative\&.
@@ -86,7 +86,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 542 of file pesg\&.f90\&.
+Definition at line 541 of file pesg\&.f90\&.
 
 .SH "Author"
 .PP 

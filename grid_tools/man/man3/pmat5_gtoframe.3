@@ -1,8 +1,8 @@
-.TH "pmat5::gtoframe" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::gtoframe" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat5::gtoframe
+pmat5::gtoframe \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,26 +12,26 @@ pmat5::gtoframe
 .ti -1c
 .RI "subroutine \fBgtoframem\fP (plat, plon, orth)"
 .br
-.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.RI "\fIFrom the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. \fP"
 .ti -1c
 .RI "subroutine \fBgtoframev\fP (plat, plon, xp, yp, zp)"
 .br
-.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.RI "\fIGiven a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. \fP"
 .ti -1c
 .RI "subroutine \fBsgtoframem\fP (splat, splon, sorth)"
 .br
-.RI "From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. "
+.RI "\fIFrom the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. \fP"
 .ti -1c
 .RI "subroutine \fBsgtoframev\fP (splat, splon, sxp, syp, szp)"
 .br
-.RI "Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. "
+.RI "\fIGiven a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 43 of file pmat5\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat5::gtoframe::gtoframem (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3,3), intent(out) orth)\fC [private]\fP"
+.SS "subroutine pmat5::gtoframe::gtoframem (real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), dimension(3,3), intent(out)orth)\fC [private]\fP"
 
 .PP
 From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. Double precision version\&.
@@ -52,8 +52,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 617 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::gtoframe::gtoframev (real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), dimension(3), intent(out) xp, real(dp), dimension(3), intent(out) yp, real(dp), dimension(3), intent(out) zp)\fC [private]\fP"
+Definition at line 616 of file pmat5\&.f90\&.
+.PP
+Referenced by pmat5::sgtoframem()\&.
+.SS "subroutine pmat5::gtoframe::gtoframev (real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), dimension(3), intent(out)xp, real(dp), dimension(3), intent(out)yp, real(dp), dimension(3), intent(out)zp)\fC [private]\fP"
 
 .PP
 Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. Double precision version\&.
@@ -78,8 +80,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 662 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::gtoframe::sgtoframem (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3,3), intent(out) sorth)\fC [private]\fP"
+Definition at line 661 of file pmat5\&.f90\&.
+.PP
+Referenced by pmat5::gtoframem(), and pmat5::sgtoframev()\&.
+.SS "subroutine pmat5::gtoframe::sgtoframem (real(sp), intent(in)splat, real(sp), intent(in)splon, real(sp), dimension(3,3), intent(out)sorth)\fC [private]\fP"
 
 .PP
 From the degree lat and lon (plat and plon) return the standard orthogonal 3D frame at this location as an orthonormal matrix, orth\&. Single precision version\&.
@@ -100,8 +104,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 600 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::gtoframe::sgtoframev (real(sp), intent(in) splat, real(sp), intent(in) splon, real(sp), dimension(3), intent(out) sxp, real(sp), dimension(3), intent(out) syp, real(sp), dimension(3), intent(out) szp)\fC [private]\fP"
+Definition at line 599 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::gtoframe::sgtoframev (real(sp), intent(in)splat, real(sp), intent(in)splon, real(sp), dimension(3), intent(out)sxp, real(sp), dimension(3), intent(out)syp, real(sp), dimension(3), intent(out)szp)\fC [private]\fP"
 
 .PP
 Given a geographical point by its degrees lat and lon, plat and plon, return its standard orthogonal cartesian frame, {xp,yp,zp} in earth-centered coordinates\&. Single precision version\&.
@@ -126,7 +130,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 637 of file pmat5\&.f90\&.
+Definition at line 636 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

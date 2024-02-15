@@ -1,8 +1,8 @@
-.TH "pmat4::rottoax" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::rottoax" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat4::rottoax
+pmat4::rottoax \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,14 +12,14 @@ pmat4::rottoax
 .ti -1c
 .RI "subroutine \fBrottoax\fP (orth33, ax3)"
 .br
-.RI "Assuming that given orth33 is a 3*3 proper rotation matrix, derive an axial 3-vector, ax3, such that orth33 is implied by ax3 when the latter is interpreted as encoding a rotation (as in subroutine axtorot)\&. "
+.RI "\fIAssuming that given orth33 is a 3*3 proper rotation matrix, derive an axial 3-vector, ax3, such that orth33 is implied by ax3 when the latter is interpreted as encoding a rotation (as in subroutine axtorot)\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 92 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat4::rottoax::rottoax (real(dp), dimension(3,3), intent(in) orth33, real(dp), dimension(3), intent(out) ax3)\fC [private]\fP"
+.SS "subroutine pmat4::rottoax::rottoax (real(dp), dimension(3,3), intent(in)orth33, real(dp), dimension(3), intent(out)ax3)\fC [private]\fP"
 
 .PP
 Assuming that given orth33 is a 3*3 proper rotation matrix, derive an axial 3-vector, ax3, such that orth33 is implied by ax3 when the latter is interpreted as encoding a rotation (as in subroutine axtorot)\&. Note that such ax3 are not unique -- adding any multiple of 2*pi times the parallel unit vector leads to the same orth33\&.
@@ -38,7 +38,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1518 of file pmat4\&.f90\&.
+Definition at line 1517 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

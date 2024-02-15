@@ -1,8 +1,8 @@
-.TH "pmat2::avco" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::avco" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::avco
+pmat2::avco \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,24 +10,24 @@ pmat2::avco
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBAVCO\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine \fBavco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Compute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. "
+.RI "\fICompute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. \fP"
 .ti -1c
-.RI "subroutine \fBDAVCO\fP (na, nb, za, zb, z0, a, b)"
+.RI "subroutine \fBdavco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "Double precision version of subroutine avco for midpoint interpolation\&. "
+.RI "\fIDouble precision version of subroutine avco for midpoint interpolation\&. \fP"
 .ti -1c
-.RI "subroutine \fBTAVCO\fP (xa, xb, a, b)"
+.RI "subroutine \fBtavco\fP (xa, xb, a, b)"
 .br
-.RI "Simplified computation of compact midpoint interpolation coefficients\&. "
+.RI "\fISimplified computation of compact midpoint interpolation coefficients\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 56 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::avco::AVCO (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(sp), dimension(na), intent(in) za, real(sp), dimension(nb), intent(in) zb, real(sp), intent(in) z0, real(sp), dimension(na), intent(out) a, real(sp), dimension(nb), intent(out) b)\fC [private]\fP"
+.SS "subroutine pmat2::avco::avco (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)\fC [private]\fP"
 
 .PP
 Compute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. 
@@ -61,8 +61,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 100 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::avco::DAVCO (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)\fC [private]\fP"
+Definition at line 99 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::avco::davco (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)\fC [private]\fP"
 
 .PP
 Double precision version of subroutine avco for midpoint interpolation\&. 
@@ -96,8 +98,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 134 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::avco::TAVCO (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)\fC [private]\fP"
+Definition at line 133 of file pmat2\&.f90\&.
+.PP
+Referenced by pmat2::tavco()\&.
+.SS "subroutine pmat2::avco::tavco (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)\fC [private]\fP"
 
 .PP
 Simplified computation of compact midpoint interpolation coefficients\&. 
@@ -125,7 +129,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 165 of file pmat2\&.f90\&.
+Definition at line 164 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

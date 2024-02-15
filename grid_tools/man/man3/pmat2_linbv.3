@@ -1,8 +1,8 @@
-.TH "pmat2::linbv" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::linbv" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::linbv
+pmat2::linbv \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,16 +10,16 @@ pmat2::linbv
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBLINBV\fP (m, mah1, mah2, a, v)"
+.RI "subroutine \fBlinbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Solve LINear system with square Banded-matrix and vector V\&. "
+.RI "\fISolve LINear system with square Banded-matrix and vector V\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 82 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::linbv::LINBV (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m), intent(inout) v)\fC [private]\fP"
+.SS "subroutine pmat2::linbv::linbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a, real(sp), dimension(m), intent(inout)v)\fC [private]\fP"
 
 .PP
 Solve LINear system with square Banded-matrix and vector V\&. 
@@ -49,7 +49,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1323 of file pmat2\&.f90\&.
+Definition at line 1322 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

@@ -1,8 +1,8 @@
-.TH "pmat::swpvv" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::swpvv" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat::swpvv
+pmat::swpvv \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,22 +12,22 @@ pmat::swpvv
 .ti -1c
 .RI "subroutine \fBcswpvv\fP (d, e)"
 .br
-.RI "Swap a pair of complex vectors\&. "
+.RI "\fISwap a pair of complex vectors\&. \fP"
 .ti -1c
 .RI "subroutine \fBdswpvv\fP (d, e)"
 .br
-.RI "Swap a pair of double precision vectors\&. "
+.RI "\fISwap a pair of double precision vectors\&. \fP"
 .ti -1c
 .RI "subroutine \fBsswpvv\fP (d, e)"
 .br
-.RI "Swap a pair of single precision vectors\&. "
+.RI "\fISwap a pair of single precision vectors\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 26 of file pmat\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat::swpvv::cswpvv (complex(dpc), dimension(:), intent(inout) d, complex(dpc), dimension(:), intent(inout) e)\fC [private]\fP"
+.SS "subroutine pmat::swpvv::cswpvv (complex(dpc), dimension(:), intent(inout)d, complex(dpc), dimension(:), intent(inout)e)\fC [private]\fP"
 
 .PP
 Swap a pair of complex vectors\&. 
@@ -46,8 +46,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 72 of file pmat\&.f90\&.
-.SS "subroutine pmat::swpvv::dswpvv (real(dp), dimension(:), intent(inout) d, real(dp), dimension(:), intent(inout) e)\fC [private]\fP"
+Definition at line 71 of file pmat\&.f90\&.
+.PP
+Referenced by pmat::cinvmtf(), and pmat::cldumf()\&.
+.SS "subroutine pmat::swpvv::dswpvv (real(dp), dimension(:), intent(inout)d, real(dp), dimension(:), intent(inout)e)\fC [private]\fP"
 
 .PP
 Swap a pair of double precision vectors\&. 
@@ -66,8 +68,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 61 of file pmat\&.f90\&.
-.SS "subroutine pmat::swpvv::sswpvv (real(sp), dimension(:), intent(inout) d, real(sp), dimension(:), intent(inout) e)\fC [private]\fP"
+Definition at line 60 of file pmat\&.f90\&.
+.PP
+Referenced by pmat::dinvmtf(), and pmat::dldumf()\&.
+.SS "subroutine pmat::swpvv::sswpvv (real(sp), dimension(:), intent(inout)d, real(sp), dimension(:), intent(inout)e)\fC [private]\fP"
 
 .PP
 Swap a pair of single precision vectors\&. 
@@ -86,7 +90,9 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 50 of file pmat\&.f90\&.
+Definition at line 49 of file pmat\&.f90\&.
+.PP
+Referenced by pmat::sinvmtf(), and pmat::sldumf()\&.
 
 .SH "Author"
 .PP 

@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/grid_tools.fd/filter_topo.fd/utils.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/filter_topo.fd/utils.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/grid_tools.fd/filter_topo.fd/utils.F90 \- Utility routines\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/filter_topo.fd/utils.F90 \- 
+.PP
+Utility routines\&.  
 
 .SH SYNOPSIS
 .br
@@ -10,73 +12,13 @@
 \fC#include <netcdf\&.inc>\fP
 .br
 
-.SS "Modules"
+.SS "Data Types"
 
 .in +1c
 .ti -1c
 .RI "module \fButils\fP"
 .br
-.RI "Module that contains general utility routines\&. "
-.in -1c
-.SS "Functions/Subroutines"
-
-.in +1c
-.ti -1c
-.RI "subroutine \fButils::fill_regional_halo\fP (data, halo)"
-.br
-.RI "This routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid\&. "
-.ti -1c
-.RI "subroutine \fButils::handle_err\fP (status, string)"
-.br
-.RI "Prints an error message to standard output, then halts program execution with a bad status\&. "
-.ti -1c
-.RI "subroutine \fButils::read_namelist\fP"
-.br
-.RI "Read the program namelist file\&. "
-.in -1c
-.SS "Variables"
-
-.in +1c
-.ti -1c
-.RI "character(len=512) \fButils::grid_file\fP = 'atmos_mosaic\&.nc'"
-.br
-.RI "Path/name of the grid mosaic file\&. "
-.ti -1c
-.RI "integer \fButils::grid_type\fP = 0"
-.br
-.RI "Grid type\&. "
-.ti -1c
-.RI "character(len=128) \fButils::mask_field\fP = 'slmsk'"
-.br
-.RI "NetCDF record name of the land/sea mask\&. "
-.ti -1c
-.RI "logical \fButils::nested\fP = \&.false\&."
-.br
-.RI "If true, process a global grid with a nest\&. "
-.ti -1c
-.RI "logical \fButils::regional\fP = \&.false\&."
-.br
-.RI "If true, process a stand-alone regional grid\&. "
-.ti -1c
-.RI "real \fButils::res\fP = 48\&."
-.br
-.RI "The 'CRES' resolution\&. "
-.ti -1c
-.RI "real \fButils::stretch_fac\fP = 1\&.0"
-.br
-.RI "Grid stretching factor\&. "
-.ti -1c
-.RI "character(len=128) \fButils::topo_field\fP = 'orog_filt'"
-.br
-.RI "NetCDF record name of the filtered topography (or orography)\&. "
-.ti -1c
-.RI "character(len=512) \fButils::topo_file\fP = 'orog'"
-.br
-.RI "Path/name of the topography (or orography) file\&. "
-.ti -1c
-.RI "logical \fButils::zero_ocean\fP = \&.true\&."
-.br
-.RI "If true, no diffusive flux into water/ocean area (preserve islands)\&. "
+.RI "\fIModule that contains general utility routines\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 

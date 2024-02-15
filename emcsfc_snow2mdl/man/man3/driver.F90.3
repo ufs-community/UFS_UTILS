@@ -1,8 +1,9 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/driver.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/driver.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_snow2mdl.fd/driver.F90 \- Create a snow cover and snow depth analysis\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/driver.F90 \- 
+Create a snow cover and snow depth analysis\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,7 +14,7 @@
 .ti -1c
 .RI "program \fBdriver\fP"
 .br
-.RI "Create a snow cover and snow depth analysis on a nam or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow cover and/or afwa depth data\&. "
+.RI "\fICreate a snow cover and snow depth analysis on a nam or global gfs gaussian grid using nesdis/ims snow cover, autosnow snow cover and/or afwa depth data\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -73,9 +74,10 @@ autosnow sh snow cover data (grib 2)
 nesdis/ims weekly nh snow cover climatology (grib 2) (used to qc input snow data)\&.
 .PP
 .PP
-output files: 
-.br
- - snow cover and depth on the model grid (grib1 or grib2)
+output files:
+.IP "\(bu" 2
+snow cover and depth on the model grid (grib1 or grib2)
+.PP
 .PP
 exit states (non-zero condition is fatal):
 .IP "\(bu" 2
@@ -93,9 +95,9 @@ exit states (non-zero condition is fatal):
 .IP "\(bu" 2
 50 - error converting to grib2 grid description template
 .IP "\(bu" 2
-53 - bad nesdis/ims data\&. 
-.br
- - 54 - bad input snow data selection
+53 - bad nesdis/ims data\&.
+.IP "\(bu" 2
+54 - bad input snow data selection
 .IP "\(bu" 2
 55 - error in iplib interpolation routine
 .IP "\(bu" 2
@@ -173,9 +175,7 @@ nesdis/ims and afwa - An analysis of snow cover and depth on the model grid is p
 gfs grid:
 .PP
 .IP "1." 4
-nesdis/ims and autosnow only - An analysis of snow cover and depth on the model grid is produced\&. 
-.br
- Cover is determined from the ims and autosnow data\&. If cover is greater than the user-defined threshold (variable snow_cvr_threshold), the the depth is set to the user-defined default depth (variable min_snow_depth)\&.
+nesdis/ims and autosnow only - An analysis of snow cover and depth on the model grid is produced\&. Cover is determined from the ims and autosnow data\&. If cover is greater than the user-defined threshold (variable snow_cvr_threshold), the the depth is set to the user-defined default depth (variable min_snow_depth)\&.
 .IP "2." 4
 afwa only - An analysis of snow cover and depth on the model grid is produced\&. Depth is determined from the afwa data\&. Cover is set to 100% where afwa indicates snow and 0% otherwise\&.
 .IP "3." 4
@@ -198,8 +198,6 @@ Program History Log
 \fBReturns:\fP
 .RS 4
 0 for success, error code otherwise\&. 
-.br
- 
 .RE
 .PP
 \fBAuthor:\fP

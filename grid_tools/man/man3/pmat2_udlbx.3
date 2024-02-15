@@ -1,8 +1,8 @@
-.TH "pmat2::udlbx" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::udlbx" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::udlbx
+pmat2::udlbx \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,16 +10,16 @@ pmat2::udlbx
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBUDLBX\fP (mx, mah1, mah2, my, a, v)"
+.RI "subroutine \fBudlbx\fP (mx, mah1, mah2, my, a, v)"
 .br
-.RI "Back-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. "
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 71 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::udlbx::UDLBX (integer(spi), intent(in) mx, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) my, real(sp), dimension(mx,\-mah1:mah2), intent(in) a, real(sp), dimension(mx,my), intent(inout) v)\fC [private]\fP"
+.SS "subroutine pmat2::udlbx::udlbx (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)\fC [private]\fP"
 
 .PP
 Back-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. 
@@ -51,7 +51,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1011 of file pmat2\&.f90\&.
+Definition at line 1010 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

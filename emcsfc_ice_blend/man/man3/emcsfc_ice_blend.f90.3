@@ -1,8 +1,9 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "emcsfc_ice_blend" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "emcsfc_ice_blend" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90 \- Create blended ice product for gfs/gdas cycles\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90 \- 
+Create blended ice product for gfs/gdas cycles\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,7 +14,7 @@
 .ti -1c
 .RI "program \fBemcsfc_ice_blend\fP"
 .br
-.RI "Create a global 5-minute blended ice concentration dataset for use by GDAS/GFS\&. "
+.RI "\fICreate a global 5-minute blended ice concentration dataset for use by GDAS/GFS\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -54,9 +55,10 @@ fort\&.11 - NH IMS ice data, interpolated to the 5-minute grid (grib 2)
 .IP "\(bu" 2
 fort\&.15 - global 5-minute MMAB ice concentration file (grib 2)
 .IP "\(bu" 2
-fort\&.17 - global 5-minute MMAB land mask file (grib 2)\&. 
-.br
- output files:
+fort\&.17 - global 5-minute MMAB land mask file (grib 2)\&.
+.PP
+.PP
+output files:
 .IP "\(bu" 2
 fort\&.51 - global 5-minute blended ice concentration file (grib 2)
 .PP
@@ -113,9 +115,9 @@ If IMS and MMAB indicate a point as water, then
 .IP "  \(bu" 4
 The blended value is set to zero if the IMS concentration is less than 50%\&.
 .IP "  \(bu" 4
-If the IMS concentration is >=50%, then the neighboring 5-minute data is checked for ice\&. 
-.br
- * If the 5-minute point is ice free, but at least one of its neighbors has ice, the blended value is set to the IMS ice concentration\&. Examination of the 5-minute showed isolated open water points within large areas of ice\&. This logic attempts to remove these likely wrong points\&.
+If the IMS concentration is >=50%, then the neighboring 5-minute data is checked for ice\&.
+.IP "    \(bu" 6
+If the 5-minute point is ice free, but at least one of its neighbors has ice, the blended value is set to the IMS ice concentration\&. Examination of the 5-minute showed isolated open water points within large areas of ice\&. This logic attempts to remove these likely wrong points\&.
 .IP "    \(bu" 6
 If (i) is false, then the blended value is set to the 5-minute value or 15%, whichever is greater\&. 15% is the lower threshold in the MMAB 5-minute product\&.
 .PP

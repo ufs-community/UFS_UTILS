@@ -1,6 +1,6 @@
 var interfacepmat2_1_1dfco2 =
 [
-    [ "DDFCO2", "interfacepmat2_1_1dfco2.html#aeb24962f4022807a2d8328fffb422c85", null ],
-    [ "DFCO2", "interfacepmat2_1_1dfco2.html#a8730b0e9971d89a27c8a9365f03a79a7", null ],
-    [ "TDFCO2", "interfacepmat2_1_1dfco2.html#a3c1adfc240e174a0ecf0a5851825f7e2", null ]
+    [ "dfco2", "interfacepmat2_1_1dfco2.html#a4a17871d965c274830155885af082cae", null ],
+    [ "ddfco2", "interfacepmat2_1_1dfco2.html#a0a9350013e15821ae06fc4019598ce24", null ],
+    [ "tdfco2", "interfacepmat2_1_1dfco2.html#afa4f64cda622685d936e2f8aed1bf282", null ]
 ];

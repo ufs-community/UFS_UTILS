@@ -1,8 +1,8 @@
-.TH "pmat2::csb2b" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::csb2b" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::csb2b
+pmat2::csb2b \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,16 +10,16 @@ pmat2::csb2b
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBCSB2B\fP (m1, m2, mah1, mah2, mirror2, a)"
+.RI "subroutine \fBcsb2b\fP (m1, m2, mah1, mah2, mirror2, a)"
 .br
-.RI "Incorporate operand antisymmetry and clip near end-2 of a band matrix\&. "
+.RI "\fIIncorporate operand antisymmetry and clip near end-2 of a band matrix\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 63 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::csb2b::CSB2B (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mirror2, real(sp), dimension(1\-m1:0,m1\-m2\-mah1:m1\-m2+mah2), intent(inout) a)\fC [private]\fP"
+.SS "subroutine pmat2::csb2b::csb2b (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(1-m1:0,m1-m2-mah1:m1-m2+mah2), intent(inout)a)\fC [private]\fP"
 
 .PP
 Incorporate operand antisymmetry and clip near end-2 of a band matrix\&. 
@@ -51,7 +51,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 504 of file pmat2\&.f90\&.
+Definition at line 503 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

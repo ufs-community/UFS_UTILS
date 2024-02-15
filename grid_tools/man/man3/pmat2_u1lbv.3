@@ -1,8 +1,8 @@
-.TH "pmat2::u1lbv" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::u1lbv" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::u1lbv
+pmat2::u1lbv \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,16 +10,16 @@ pmat2::u1lbv
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBU1LBV\fP (m, mah1, mah2, a, v)"
+.RI "subroutine \fBu1lbv\fP (m, mah1, mah2, a, v)"
 .br
-.RI "Back-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. "
+.RI "\fIBack-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 76 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::u1lbv::U1LBV (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(in) a, real(sp), dimension(m), intent(inout) v)\fC [private]\fP"
+.SS "subroutine pmat2::u1lbv::u1lbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(in)a, real(sp), dimension(m), intent(inout)v)\fC [private]\fP"
 
 .PP
 Back-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. 
@@ -49,7 +49,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1155 of file pmat2\&.f90\&.
+Definition at line 1154 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

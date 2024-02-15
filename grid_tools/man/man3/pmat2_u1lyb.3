@@ -1,8 +1,8 @@
-.TH "pmat2::u1lyb" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::u1lyb" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::u1lyb
+pmat2::u1lyb \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,16 +10,16 @@ pmat2::u1lyb
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBU1LYB\fP (my, mah1, mah2, mx, v, a)"
+.RI "subroutine \fBu1lyb\fP (my, mah1, mah2, mx, v, a)"
 .br
-.RI "Special Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. "
+.RI "\fISpecial Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 81 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::u1lyb::U1LYB (integer(spi), intent(in) my, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mx, real(sp), dimension(mx,my), intent(inout) v, real(sp), dimension(my,\-mah1:mah2), intent(in) a)\fC [private]\fP"
+.SS "subroutine pmat2::u1lyb::u1lyb (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(my,-mah1:mah2), intent(in)a)\fC [private]\fP"
 
 .PP
 Special Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. 
@@ -51,7 +51,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 1299 of file pmat2\&.f90\&.
+Definition at line 1298 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

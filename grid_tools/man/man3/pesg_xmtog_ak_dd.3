@@ -1,8 +1,8 @@
-.TH "pesg::xmtog_ak_dd" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::xmtog_ak_dd" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::xmtog_ak_dd
+pesg::xmtog_ak_dd \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pesg::xmtog_ak_dd
 .ti -1c
 .RI "subroutine \fBxmtog_ak_dd_g\fP (A, K, pdlat, pdlon, pdazi, delx, dely, xm, dlat, dlon, ff)"
 .br
-.RI "Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. "
+.RI "\fILike xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. \fP"
 .ti -1c
 .RI "subroutine \fBxmtog_ak_dd_m\fP (A, K, pdlat, pdlon, pdazi, xm, dlat, dlon, ff)"
 .br
-.RI "Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. "
+.RI "\fILike xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 55 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::xmtog_ak_dd::xmtog_ak_dd_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) dlat, real(dp), intent(out) dlon, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xmtog_ak_dd::xmtog_ak_dd_g (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)pdlat, real(dp), intent(in)pdlon, real(dp), intent(in)pdazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(2), intent(in)xm, real(dp), intent(out)dlat, real(dp), intent(out)dlon, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. 
@@ -60,8 +60,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2118 of file pesg\&.f90\&.
-.SS "subroutine pesg::xmtog_ak_dd::xmtog_ak_dd_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), dimension(2), intent(in) xm, real(dp), intent(out) dlat, real(dp), intent(out) dlon, logical, intent(out) ff)\fC [private]\fP"
+Definition at line 2116 of file pesg\&.f90\&.
+.SS "subroutine pesg::xmtog_ak_dd::xmtog_ak_dd_m (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)pdlat, real(dp), intent(in)pdlon, real(dp), intent(in)pdazi, real(dp), dimension(2), intent(in)xm, real(dp), intent(out)dlat, real(dp), intent(out)dlon, logical, intent(out)ff)\fC [private]\fP"
 
 .PP
 Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. 
@@ -94,7 +94,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 2087 of file pesg\&.f90\&.
+Definition at line 2086 of file pesg\&.f90\&.
 
 .SH "Author"
 .PP 

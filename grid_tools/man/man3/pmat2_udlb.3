@@ -1,8 +1,8 @@
-.TH "pmat2::udlb" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::udlb" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::udlb
+pmat2::udlb \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,49 +10,20 @@ pmat2::udlb
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBDUDLB\fP (m, mah1, mah2, a)"
+.RI "subroutine \fBudlb\fP (m, mah1, mah2, a)"
 .br
-.RI "[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal "
+.RI "\fI[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal \fP"
 .ti -1c
-.RI "subroutine \fBUDLB\fP (m, mah1, mah2, a)"
+.RI "subroutine \fBdudlb\fP (m, mah1, mah2, a)"
 .br
-.RI "[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal "
+.RI "\fI[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 69 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::udlb::DUDLB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
-
-.PP
-[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIm\fP number of rows of A 
-.br
-\fImah1\fP number of subdiagonals of A 
-.br
-\fImah2\fP number of superdiagonals of A 
-.br
-\fIa\fP Input double precision band matrix A; output its factors encoded as [U-I]+[D**-1]+[L-I] 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-R\&. J\&. Purser, Tsukasa Fujita (JMA) 
-.RE
-.PP
-\fBDate:\fP
-.RS 4
-1999 
-.RE
-.PP
-
-.PP
-Definition at line 704 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::udlb::UDLB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+.SS "subroutine pmat2::udlb::udlb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a)\fC [private]\fP"
 
 .PP
 [U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal 
@@ -80,7 +51,38 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 683 of file pmat2\&.f90\&.
+Definition at line 682 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::udlb::dudlb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(inout)a)\fC [private]\fP"
+
+.PP
+[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of rows of A 
+.br
+\fImah1\fP number of subdiagonals of A 
+.br
+\fImah2\fP number of superdiagonals of A 
+.br
+\fIa\fP Input double precision band matrix A; output its factors encoded as [U-I]+[D**-1]+[L-I] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 703 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

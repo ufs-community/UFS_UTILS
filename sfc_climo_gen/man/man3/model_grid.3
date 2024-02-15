@@ -1,83 +1,87 @@
-.TH "model_grid" 3 "Mon Oct 23 2023" "Version 1.11.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "model_grid" 3 "Thu Feb 15 2024" "Version 1.12.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-model_grid \- This module defines the model grid\&.  
+model_grid \- 
+.PP
+This module defines the model grid\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Functions/Subroutines"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "subroutine, public \fBdefine_model_grid\fP (localpet, npets)"
 .br
-.RI "Define model grid\&. "
+.RI "\fIDefine model grid\&. \fP"
 .ti -1c
 .RI "subroutine \fBget_model_info\fP (orog_file, mask, land_frac, lat2d, lon2d, idim, jdim)"
 .br
-.RI "Get model information\&. "
+.RI "\fIGet model information\&. \fP"
 .ti -1c
 .RI "subroutine, public \fBmodel_grid_cleanup\fP"
 .br
-.RI "Model grid cleanup\&. "
+.RI "\fIModel grid cleanup\&. \fP"
 .in -1c
-.SS "Variables"
+.SS "Data Fields"
 
 .in +1c
 .ti -1c
 .RI "type(esmf_field), public \fBdata_field_mdl\fP"
 .br
-.RI "ESMF field object that holds the data interpolated to model grid\&. "
+.RI "\fIESMF field object that holds the data interpolated to model grid\&. \fP"
 .ti -1c
 .RI "type(esmf_grid), public \fBgrid_mdl\fP"
 .br
-.RI "ESMF grid object for the model grid\&. "
+.RI "\fIESMF grid object for the model grid\&. \fP"
 .ti -1c
-.RI "character(len=5), dimension(:), allocatable, public \fBgrid_tiles\fP"
+.RI "character(len=5), dimension(:), 
 .br
-.RI "Array of model grid tile names\&. "
+allocatable, public \fBgrid_tiles\fP"
+.br
+.RI "\fIArray of model grid tile names\&. \fP"
 .ti -1c
 .RI "integer, public \fBi_mdl\fP"
 .br
-.RI "i dimension of model tile\&. "
+.RI "\fIi dimension of model tile\&. \fP"
 .ti -1c
 .RI "integer, public \fBij_mdl\fP"
 .br
-.RI "Total number of points on a model tile\&. "
+.RI "\fITotal number of points on a model tile\&. \fP"
 .ti -1c
 .RI "integer, public \fBj_mdl\fP"
 .br
-.RI "j dimension of model tile\&. "
+.RI "\fIj dimension of model tile\&. \fP"
 .ti -1c
 .RI "type(esmf_field), public \fBland_frac_field_mdl\fP"
 .br
-.RI "ESMF field object that holds the model land fraction\&. "
+.RI "\fIESMF field object that holds the model land fraction\&. \fP"
 .ti -1c
 .RI "type(esmf_field), public \fBlatitude_field_mdl\fP"
 .br
-.RI "ESMF field object that holds the model grid latitude\&. "
+.RI "\fIESMF field object that holds the model grid latitude\&. \fP"
 .ti -1c
 .RI "type(esmf_field), public \fBlongitude_field_mdl\fP"
 .br
-.RI "ESMF field object that holds the model grid longitude\&. "
+.RI "\fIESMF field object that holds the model grid longitude\&. \fP"
 .ti -1c
 .RI "type(esmf_field), public \fBmask_field_mdl\fP"
 .br
-.RI "ESMF field object that holds the model land mask\&. "
+.RI "\fIESMF field object that holds the model land mask\&. \fP"
 .ti -1c
-.RI "real(kind=4), public \fBmissing\fP = \-999\&."
+.RI "real(kind=4), public \fBmissing\fP = -999\&."
 .br
-.RI "Value assigned to undefined points (i\&.e\&., ocean points for a land field)\&. "
+.RI "\fIValue assigned to undefined points (i\&.e\&., ocean points for a land field)\&. \fP"
 .ti -1c
 .RI "integer, public \fBnum_tiles\fP"
 .br
-.RI "Total number of model grid tiles\&. "
+.RI "\fITotal number of model grid tiles\&. \fP"
 .ti -1c
 .RI "type(esmf_field), public \fBvegt_field_mdl\fP"
 .br
-.RI "ESMF field object that holds the vegetation type on the model grid\&. "
+.RI "\fIESMF field object that holds the vegetation type on the model grid\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -96,9 +100,11 @@ George Gayno
 .RE
 .PP
 
-.SH "Function/Subroutine Documentation"
+.PP
+Definition at line 10 of file model_grid\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine, public model_grid::define_model_grid (integer, intent(in) localpet, integer, intent(in) npets)"
+.SS "subroutine, public model_grid::define_model_grid (integer, intent(in)localpet, integer, intent(in)npets)"
 
 .PP
 Define model grid\&. Define the model grid from the mosaic and orography files\&. Create the ESMF grid object for the model grid\&.
@@ -107,10 +113,7 @@ Define model grid\&. Define the model grid from the mosaic and orography files\&
 .RS 4
 \fIlocalpet\fP this mpi task 
 .br
-.br
 \fInpets\fP total number of mpi tasks 
-.br
- 
 .RE
 .PP
 \fBAuthor:\fP
@@ -125,12 +128,12 @@ George Gayno
 .PP
 
 .PP
-Definition at line 62 of file model_grid\&.F90\&.
+Definition at line 61 of file model_grid\&.F90\&.
 .PP
-References data_field_mdl, utils::error_handler(), program_setup::fract_vegsoil_type, get_model_info(), grid_mdl, grid_tiles, i_mdl, ij_mdl, j_mdl, land_frac_field_mdl, latitude_field_mdl, longitude_field_mdl, mask_field_mdl, program_setup::mosaic_file_mdl, utils::netcdf_err(), num_tiles, program_setup::orog_dir_mdl, program_setup::orog_files_mdl, and vegt_field_mdl\&.
+References utils::error_handler(), get_model_info(), and utils::netcdf_err()\&.
 .PP
 Referenced by driver()\&.
-.SS "subroutine model_grid::get_model_info (character(len=*), intent(in) orog_file, integer(esmf_kind_i4), dimension(idim,jdim), intent(out) mask, real(esmf_kind_r4), dimension(idim,jdim), intent(out) land_frac, real(esmf_kind_r4), dimension(idim,jdim), intent(out) lat2d, real(esmf_kind_r4), dimension(idim,jdim), intent(out) lon2d, integer, intent(in) idim, integer, intent(in) jdim)"
+.SS "subroutine model_grid::get_model_info (character(len=*), intent(in)orog_file, integer(esmf_kind_i4), dimension(idim,jdim), intent(out)mask, real(esmf_kind_r4), dimension(idim,jdim), intent(out)land_frac, real(esmf_kind_r4), dimension(idim,jdim), intent(out)lat2d, real(esmf_kind_r4), dimension(idim,jdim), intent(out)lon2d, integer, intent(in)idim, integer, intent(in)jdim)"
 
 .PP
 Get model information\&. Read model land/sea mask, land fraction and lat/lon from the orography file\&.
@@ -164,7 +167,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 312 of file model_grid\&.F90\&.
+Definition at line 311 of file model_grid\&.F90\&.
 .PP
 References utils::error_handler(), and utils::netcdf_err()\&.
 .PP
@@ -186,12 +189,10 @@ George Gayno
 .PP
 
 .PP
-Definition at line 424 of file model_grid\&.F90\&.
-.PP
-References data_field_mdl, grid_mdl, land_frac_field_mdl, latitude_field_mdl, longitude_field_mdl, mask_field_mdl, and vegt_field_mdl\&.
+Definition at line 423 of file model_grid\&.F90\&.
 .PP
 Referenced by driver()\&.
-.SH "Variable Documentation"
+.SH "Field Documentation"
 .PP 
 .SS "type(esmf_field), public model_grid::data_field_mdl"
 
@@ -199,104 +200,79 @@ Referenced by driver()\&.
 ESMF field object that holds the data interpolated to model grid\&. 
 .PP
 Definition at line 29 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp(), and model_grid_cleanup()\&.
 .SS "type(esmf_grid), public model_grid::grid_mdl"
 
 .PP
 ESMF grid object for the model grid\&. 
 .PP
 Definition at line 28 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp_frac_cats(), and model_grid_cleanup()\&.
 .SS "character(len=5), dimension(:), allocatable, public model_grid::grid_tiles"
 
 .PP
 Array of model grid tile names\&. 
 .PP
 Definition at line 18 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), output(), and output_frac_cats::output_driver()\&.
 .SS "integer, public model_grid::i_mdl"
 
 .PP
 i dimension of model tile\&. 
 .PP
 Definition at line 20 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp(), and interp_frac_cats()\&.
 .SS "integer, public model_grid::ij_mdl"
 
 .PP
 Total number of points on a model tile\&. 
 .PP
 Definition at line 22 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid()\&.
 .SS "integer, public model_grid::j_mdl"
 
 .PP
 j dimension of model tile\&. 
 .PP
 Definition at line 21 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp(), and interp_frac_cats()\&.
 .SS "type(esmf_field), public model_grid::land_frac_field_mdl"
 
 .PP
 ESMF field object that holds the model land fraction\&. When running with fractional grids, will be between zero and one\&. For non- fractional grids, will contain a fill value\&. 
 .PP
 Definition at line 31 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp_frac_cats(), and model_grid_cleanup()\&.
 .SS "type(esmf_field), public model_grid::latitude_field_mdl"
 
 .PP
 ESMF field object that holds the model grid latitude\&. 
 .PP
 Definition at line 41 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp(), interp_frac_cats(), and model_grid_cleanup()\&.
 .SS "type(esmf_field), public model_grid::longitude_field_mdl"
 
 .PP
 ESMF field object that holds the model grid longitude\&. 
 .PP
 Definition at line 43 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp(), interp_frac_cats(), and model_grid_cleanup()\&.
 .SS "type(esmf_field), public model_grid::mask_field_mdl"
 
 .PP
 ESMF field object that holds the model land mask\&. Equal to '1' if point is partial or all land\&. Equal to zero is point is all non-land\&. 
 .PP
 Definition at line 37 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp(), interp_frac_cats(), and model_grid_cleanup()\&.
-.SS "real(kind=4), public model_grid::missing = \-999\&."
+.SS "real(kind=4), public model_grid::missing = -999\&."
 
 .PP
 Value assigned to undefined points (i\&.e\&., ocean points for a land field)\&. 
 .PP
 Definition at line 25 of file model_grid\&.F90\&.
-.PP
-Referenced by interp(), and output()\&.
 .SS "integer, public model_grid::num_tiles"
 
 .PP
 Total number of model grid tiles\&. 
 .PP
 Definition at line 23 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp(), and interp_frac_cats()\&.
 .SS "type(esmf_field), public model_grid::vegt_field_mdl"
 
 .PP
 ESMF field object that holds the vegetation type on the model grid\&. 
 .PP
 Definition at line 45 of file model_grid\&.F90\&.
-.PP
-Referenced by define_model_grid(), interp(), and model_grid_cleanup()\&.
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

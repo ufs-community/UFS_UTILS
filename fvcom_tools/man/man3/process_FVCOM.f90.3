@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/process_FVCOM.f90" 3 "Mon Oct 23 2023" "Version 1.11.0" "fvcom_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/process_FVCOM.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/fvcom_tools.fd/process_FVCOM.f90 \- This is the code to put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/process_FVCOM.f90 \- 
+.PP
+This is the code to put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&.  
 
 .SH SYNOPSIS
 .br
@@ -11,9 +13,9 @@
 
 .in +1c
 .ti -1c
-.RI "program \fBprocess_FVCOM\fP"
+.RI "program \fBprocess_fvcom\fP"
 .br
-.RI "Put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&. "
+.RI "\fIPut lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -24,7 +26,7 @@ This is the code to put lake surface temperature and aerial ice concentration fr
 Definition in file \fBprocess_FVCOM\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "program process_FVCOM ()"
+.SS "program process_fvcom ()"
 
 .PP
 Put lake surface temperature and aerial ice concentration from GLERL-provided FVCOM forecast files (which have already been mapped to the FV3-LAM grid) into sfc_data\&.nc\&. This script will take four variables from the command line:
@@ -56,8 +58,6 @@ David Wright, University of Michigan and GLERL
 
 .PP
 Definition at line 32 of file process_FVCOM\&.f90\&.
-.PP
-References kinds::i_kind, kinds::r_kind, and kinds::r_single\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for fvcom_tools from the source code\&.

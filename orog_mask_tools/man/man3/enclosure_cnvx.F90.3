@@ -1,8 +1,10 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/enclosure_cnvx.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/lake.fd/enclosure_cnvx.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/orog_mask_tools.fd/lake.fd/enclosure_cnvx.F90 \- Test whether a point is inside a spherical convex polygon\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/lake.fd/enclosure_cnvx.F90 \- 
+.PP
+Test whether a point is inside a spherical convex polygon\&.  
 
 .SH SYNOPSIS
 .br
@@ -11,9 +13,9 @@
 
 .in +1c
 .ti -1c
-.RI "logical function \fBenclosure_cnvx\fP (v, n, p, co_gc)"
+.RI "LOGICAL function \fBenclosure_cnvx\fP (v, n, p, co_gc)"
 .br
-.RI "Test whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices\&. "
+.RI "\fITest whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -31,7 +33,7 @@ N Wang
 Definition in file \fBenclosure_cnvx\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "logical function enclosure_cnvx (real*8, dimension(2,n), intent(in) v, integer, intent(in) n, real*8, dimension(2), intent(in) p, integer, intent(out) co_gc)"
+.SS "LOGICAL function enclosure_cnvx (real*8, dimension(2,n), intent(in)v, integer, intent(in)n, real*8, dimension(2), intent(in)p, integer, intent(out)co_gc)"
 
 .PP
 Test whether a given point 'p' is inside a convex spherical polygon defined with a series of 'n' vertices\&. Both the test point and the polygon are specified in latitude and longitude radians\&. It is assumed that a side of a spherical polygon is a great-circle arc that connects 2 adjacent vertices of the polygon\&.
@@ -59,7 +61,9 @@ N Wang
 .PP
 
 .PP
-Definition at line 50 of file enclosure_cnvx\&.F90\&.
+Definition at line 49 of file enclosure_cnvx\&.F90\&.
+.PP
+Referenced by cal_lake_frac_depth()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for orog_mask_tools from the source code\&.

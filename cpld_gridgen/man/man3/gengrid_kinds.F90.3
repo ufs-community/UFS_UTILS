@@ -1,43 +1,20 @@
-.TH "/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/cpld_gridgen.fd/gengrid_kinds.F90" 3 "Mon Oct 23 2023" "Version 1.11.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/gengrid_kinds.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/lfs/h2/emc/global/noscrub/George.Gayno/ufs_utils.git/UFS_UTILS/sorc/cpld_gridgen.fd/gengrid_kinds.F90 \- Define type-kind variables\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/gengrid_kinds.F90 \- 
+.PP
+Define type-kind variables\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Variables"
+.SS "Data Types"
 
 .in +1c
 .ti -1c
-.RI "integer, parameter \fBgengrid_kinds::cl\fP = 256"
+.RI "module \fBgengrid_kinds\fP"
 .br
-.RI "a long length character string "
-.ti -1c
-.RI "integer, parameter \fBgengrid_kinds::cm\fP = 64"
-.br
-.RI "a medium length character string "
-.ti -1c
-.RI "integer, parameter \fBgengrid_kinds::cs\fP = 24"
-.br
-.RI "a short length character string "
-.ti -1c
-.RI "integer, parameter \fBgengrid_kinds::dbl_kind\fP = selected_real_kind(12)"
-.br
-.RI "8 byte real "
-.ti -1c
-.RI "integer, parameter \fBgengrid_kinds::int8_kind\fP = selected_int_kind (13)"
-.br
-.RI "8 byte integer "
-.ti -1c
-.RI "integer, parameter \fBgengrid_kinds::int_kind\fP = selected_int_kind ( 6)"
-.br
-.RI "4 byte integer "
-.ti -1c
-.RI "integer, parameter \fBgengrid_kinds::real_kind\fP = selected_real_kind( 6)"
-.br
-.RI "4 byte real "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -60,50 +37,37 @@ Denise.Worthen@noaa.gov
 
 .PP
 Definition in file \fBgengrid_kinds\&.F90\fP\&.
-.SH "Variable Documentation"
+.SH "Data Type Documentation"
 .PP 
-.SS "integer, parameter gengrid_kinds::cl = 256"
-
+.SH "module gengrid_kinds"
+.PP 
+Definition at line 8 of file gengrid_kinds\&.F90\&.
 .PP
-a long length character string 
+\fBData Fields:\fP
+.RS 4
+integer, parameter \fIcl\fP a long length character string 
+.br
 .PP
-Definition at line 18 of file gengrid_kinds\&.F90\&.
-.SS "integer, parameter gengrid_kinds::cm = 64"
-
+integer, parameter \fIcm\fP a medium length character string 
+.br
 .PP
-a medium length character string 
+integer, parameter \fIcs\fP a short length character string 
+.br
 .PP
-Definition at line 19 of file gengrid_kinds\&.F90\&.
-.SS "integer, parameter gengrid_kinds::cs = 24"
-
+integer, parameter \fIdbl_kind\fP 8 byte real 
+.br
 .PP
-a short length character string 
+integer, parameter \fIint8_kind\fP 8 byte integer 
+.br
 .PP
-Definition at line 20 of file gengrid_kinds\&.F90\&.
-.SS "integer, parameter gengrid_kinds::dbl_kind = selected_real_kind(12)"
-
+integer, parameter \fIint_kind\fP 4 byte integer 
+.br
 .PP
-8 byte real 
+integer, parameter \fIreal_kind\fP 4 byte real 
+.br
 .PP
-Definition at line 13 of file gengrid_kinds\&.F90\&.
-.SS "integer, parameter gengrid_kinds::int8_kind = selected_int_kind (13)"
-
+.RE
 .PP
-8 byte integer 
-.PP
-Definition at line 16 of file gengrid_kinds\&.F90\&.
-.SS "integer, parameter gengrid_kinds::int_kind = selected_int_kind ( 6)"
-
-.PP
-4 byte integer 
-.PP
-Definition at line 15 of file gengrid_kinds\&.F90\&.
-.SS "integer, parameter gengrid_kinds::real_kind = selected_real_kind( 6)"
-
-.PP
-4 byte real 
-.PP
-Definition at line 12 of file gengrid_kinds\&.F90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

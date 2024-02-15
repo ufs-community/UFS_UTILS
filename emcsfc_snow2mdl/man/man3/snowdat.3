@@ -1,195 +1,209 @@
-.TH "snowdat" 3 "Mon Oct 23 2023" "Version 1.11.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "snowdat" 3 "Thu Feb 15 2024" "Version 1.12.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-snowdat \- Read and qc afwa, nesdis/ims and autosnow snow data\&.  
+snowdat \- 
+.PP
+Read and qc afwa, nesdis/ims and autosnow snow data\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Functions/Subroutines"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "subroutine \fBafwa_check\fP (hemi)"
 .br
-.RI "Check for corrupt afwa data\&. "
+.RI "\fICheck for corrupt afwa data\&. \fP"
 .ti -1c
 .RI "subroutine \fBnh_climo_check\fP (kgds_data, snow_data, bitmap_data, idata, jdata, isrc, bad)"
 .br
-.RI "Check for corrupt nh snow cover data\&. "
+.RI "\fICheck for corrupt nh snow cover data\&. \fP"
 .ti -1c
 .RI "subroutine \fBread_afwa_binary\fP (file_name, snow_dep_afwa)"
 .br
-.RI "Read afwa binary snow depth file\&. "
+.RI "\fIRead afwa binary snow depth file\&. \fP"
 .ti -1c
 .RI "subroutine \fBread_afwa_mask\fP (file_name, bitmap_afwa)"
 .br
-.RI "Read afwa land mask file to get a bitmap\&. "
+.RI "\fIRead afwa land mask file to get a bitmap\&. \fP"
 .ti -1c
 .RI "subroutine \fBreadafwa\fP"
 .br
-.RI "Read snow depth data and masks\&. "
+.RI "\fIRead snow depth data and masks\&. \fP"
 .ti -1c
 .RI "subroutine \fBreadautosnow\fP"
 .br
-.RI "Read autosnow snow cover\&. "
+.RI "\fIRead autosnow snow cover\&. \fP"
 .ti -1c
 .RI "subroutine \fBreadnesdis\fP"
 .br
-.RI "Read nesdis/ims snow cover/ice data\&. "
+.RI "\fIRead nesdis/ims snow cover/ice data\&. \fP"
 .in -1c
-.SS "Variables"
+.SS "Data Fields"
 
 .in +1c
 .ti -1c
 .RI "real \fBafwa_res\fP"
 .br
-.RI "Resolution of afwa data in km\&. "
+.RI "\fIResolution of afwa data in km\&. \fP"
 .ti -1c
 .RI "real \fBautosnow_res\fP"
 .br
-.RI "Resolution of autosnow in km\&. "
+.RI "\fIResolution of autosnow in km\&. \fP"
 .ti -1c
 .RI "logical \fBbad_afwa_global\fP"
 .br
-.RI "When true, the global afwa data failed its quality control check\&. "
+.RI "\fIWhen true, the global afwa data failed its quality control check\&. \fP"
 .ti -1c
 .RI "logical \fBbad_afwa_nh\fP"
 .br
-.RI "When true, the northern hemisphere afwa data failed its quality control check\&. "
+.RI "\fIWhen true, the northern hemisphere afwa data failed its quality control check\&. \fP"
 .ti -1c
 .RI "logical \fBbad_afwa_sh\fP"
 .br
-.RI "When true, the southern hemisphere afwa data failed its quality control check\&. "
+.RI "\fIWhen true, the southern hemisphere afwa data failed its quality control check\&. \fP"
 .ti -1c
 .RI "logical \fBbad_nesdis\fP"
 .br
-.RI "When true, the nesdis data failed its quality control check\&. "
+.RI "\fIWhen true, the nesdis data failed its quality control check\&. \fP"
 .ti -1c
-.RI "logical *1, dimension(:,:), allocatable \fBbitmap_afwa_global\fP"
+.RI "logical *1, dimension(:,:), 
 .br
-.RI "The global afwa data grib bitmap\&. "
+allocatable \fBbitmap_afwa_global\fP"
+.br
+.RI "\fIThe global afwa data grib bitmap\&. \fP"
 .ti -1c
-.RI "logical *1, dimension(:,:), allocatable \fBbitmap_afwa_nh\fP"
+.RI "logical *1, dimension(:,:), 
 .br
-.RI "The northern hemisphere afwa data grib bitmap\&. "
+allocatable \fBbitmap_afwa_nh\fP"
+.br
+.RI "\fIThe northern hemisphere afwa data grib bitmap\&. \fP"
 .ti -1c
-.RI "logical *1, dimension(:,:), allocatable \fBbitmap_afwa_sh\fP"
+.RI "logical *1, dimension(:,:), 
 .br
-.RI "The southern hemisphere afwa data grib bitmap\&. "
+allocatable \fBbitmap_afwa_sh\fP"
+.br
+.RI "\fIThe southern hemisphere afwa data grib bitmap\&. \fP"
 .ti -1c
-.RI "logical *1, dimension(:,:), allocatable \fBbitmap_autosnow\fP"
+.RI "logical *1, dimension(:,:), 
 .br
-.RI "autosnow data grib bitmap (false-non land, true-land)\&. "
+allocatable \fBbitmap_autosnow\fP"
+.br
+.RI "\fIautosnow data grib bitmap (false-non land, true-land)\&. \fP"
 .ti -1c
-.RI "logical *1, dimension(:,:), allocatable \fBbitmap_nesdis\fP"
+.RI "logical *1, dimension(:,:), 
 .br
-.RI "nesdis data grib bitmap (false-non land, true-land)\&. "
+allocatable \fBbitmap_nesdis\fP"
+.br
+.RI "\fInesdis data grib bitmap (false-non land, true-land)\&. \fP"
 .ti -1c
 .RI "integer \fBiafwa\fP"
 .br
-.RI "i-dimension of afwa grid "
+.RI "\fIi-dimension of afwa grid \fP"
 .ti -1c
 .RI "integer \fBiautosnow\fP"
 .br
-.RI "i-dimension of autosnow grid "
+.RI "\fIi-dimension of autosnow grid \fP"
 .ti -1c
 .RI "integer \fBinesdis\fP"
 .br
-.RI "i-dimension of nesdis grid "
+.RI "\fIi-dimension of nesdis grid \fP"
 .ti -1c
 .RI "integer \fBjafwa\fP"
 .br
-.RI "j-dimension of afwa grid "
+.RI "\fIj-dimension of afwa grid \fP"
 .ti -1c
 .RI "integer \fBjautosnow\fP"
 .br
-.RI "j-dimension of autosnow grid "
+.RI "\fIj-dimension of autosnow grid \fP"
 .ti -1c
 .RI "integer \fBjnesdis\fP"
 .br
-.RI "j-dimension of nesdis grid "
+.RI "\fIj-dimension of nesdis grid \fP"
 .ti -1c
 .RI "integer, dimension(200) \fBkgds_afwa_global\fP"
 .br
-.RI "grib1 grid description section for global afwa data\&. "
+.RI "\fIgrib1 grid description section for global afwa data\&. \fP"
 .ti -1c
 .RI "integer, dimension(200) \fBkgds_afwa_nh\fP"
 .br
-.RI "grib1 grid description section for northern hemisphere 16th mesh afwa data\&. "
+.RI "\fIgrib1 grid description section for northern hemisphere 16th mesh afwa data\&. \fP"
 .ti -1c
 .RI "integer, dimension(200) \fBkgds_afwa_nh_8th\fP"
 .br
-.RI "grib1 grid description section for northern hemisphere 8th mesh afwa data\&. "
+.RI "\fIgrib1 grid description section for northern hemisphere 8th mesh afwa data\&. \fP"
 .ti -1c
 .RI "integer, dimension(200) \fBkgds_afwa_sh\fP"
 .br
-.RI "grib1 grid description section for southern hemisphere 16th mesh afwa data\&. "
+.RI "\fIgrib1 grid description section for southern hemisphere 16th mesh afwa data\&. \fP"
 .ti -1c
 .RI "integer, dimension(200) \fBkgds_afwa_sh_8th\fP"
 .br
-.RI "grib1 grid description section for southern hemisphere 8th mesh afwa data\&. "
+.RI "\fIgrib1 grid description section for southern hemisphere 8th mesh afwa data\&. \fP"
 .ti -1c
 .RI "integer, dimension(200) \fBkgds_autosnow\fP"
 .br
-.RI "autosnow grid description section (grib section 2) "
+.RI "\fIautosnow grid description section (grib section 2) \fP"
 .ti -1c
 .RI "integer, dimension(200) \fBkgds_nesdis\fP"
 .br
-.RI "nesdis/ims grid description section (grib section 2) "
+.RI "\fInesdis/ims grid description section (grib section 2) \fP"
 .ti -1c
 .RI "integer \fBmesh_nesdis\fP"
 .br
-.RI "nesdis/ims data is 96th mesh (or bediant) "
+.RI "\fInesdis/ims data is 96th mesh (or bediant) \fP"
 .ti -1c
 .RI "real \fBnesdis_res\fP"
 .br
-.RI "Resolution of the nesdis data in km\&. "
+.RI "\fIResolution of the nesdis data in km\&. \fP"
 .ti -1c
-.RI "integer *1, dimension(:,:), allocatable \fBsea_ice_nesdis\fP"
+.RI "integer *1, dimension(:,:), 
 .br
-.RI "nesdis/ims sea ice flag (0-open water, 1-ice) "
+allocatable \fBsea_ice_nesdis\fP"
+.br
+.RI "\fInesdis/ims sea ice flag (0-open water, 1-ice) \fP"
 .ti -1c
 .RI "real, dimension(:,:), allocatable \fBsnow_cvr_autosnow\fP"
 .br
-.RI "autosnow snow cover flag (0-no, 100-yes) "
+.RI "\fIautosnow snow cover flag (0-no, 100-yes) \fP"
 .ti -1c
 .RI "real, dimension(:,:), allocatable \fBsnow_cvr_nesdis\fP"
 .br
-.RI "nesdis/ims snow cover flag (0-no, 100-yes) "
+.RI "\fInesdis/ims snow cover flag (0-no, 100-yes) \fP"
 .ti -1c
 .RI "real, dimension(:,:), allocatable \fBsnow_dep_afwa_global\fP"
 .br
-.RI "The global afwa snow depth\&. "
+.RI "\fIThe global afwa snow depth\&. \fP"
 .ti -1c
 .RI "real, dimension(:,:), allocatable \fBsnow_dep_afwa_nh\fP"
 .br
-.RI "Northern hemisphere afwa snow depth\&. "
+.RI "\fINorthern hemisphere afwa snow depth\&. \fP"
 .ti -1c
 .RI "real, dimension(:,:), allocatable \fBsnow_dep_afwa_sh\fP"
 .br
-.RI "Southern hemisphere afwa snow depth\&. "
+.RI "\fISouthern hemisphere afwa snow depth\&. \fP"
 .ti -1c
 .RI "logical \fBuse_autosnow\fP"
 .br
-.RI "True if autosnow data to be used\&. "
+.RI "\fITrue if autosnow data to be used\&. \fP"
 .ti -1c
 .RI "logical \fBuse_global_afwa\fP"
 .br
-.RI "True if global hemisphere afwa data to be used\&. "
+.RI "\fITrue if global hemisphere afwa data to be used\&. \fP"
 .ti -1c
 .RI "logical \fBuse_nesdis\fP"
 .br
-.RI "True if nesdis/ims data to be used\&. "
+.RI "\fITrue if nesdis/ims data to be used\&. \fP"
 .ti -1c
 .RI "logical \fBuse_nh_afwa\fP"
 .br
-.RI "True if northern hemisphere afwa data to be used\&. "
+.RI "\fITrue if northern hemisphere afwa data to be used\&. \fP"
 .ti -1c
 .RI "logical \fBuse_sh_afwa\fP"
 .br
-.RI "True if southern hemisphere afwa data to be used\&. "
+.RI "\fITrue if southern hemisphere afwa data to be used\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -222,9 +236,11 @@ snow_dep_afwa_Xh - afwa snow depth data (inches*10 on input, meters on output)
 use_xh_afwa - true if afwa data to be used 
 .PP
 
-.SH "Function/Subroutine Documentation"
+.PP
+Definition at line 26 of file snowdat\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine snowdat::afwa_check (integer, intent(in) hemi)"
+.SS "subroutine snowdat::afwa_check (integer, intent(in)hemi)"
 
 .PP
 Check for corrupt afwa data\&. 
@@ -246,12 +262,10 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1126 of file snowdat\&.F90\&.
-.PP
-References bad_afwa_nh, bad_afwa_sh, kgds_afwa_nh, kgds_afwa_sh, snow_dep_afwa_nh, and snow_dep_afwa_sh\&.
+Definition at line 1125 of file snowdat\&.F90\&.
 .PP
 Referenced by readafwa()\&.
-.SS "subroutine snowdat::nh_climo_check (integer, dimension(200), intent(in) kgds_data, real, dimension(idata,jdata), intent(in) snow_data, logical*1, dimension(idata,jdata), intent(in) bitmap_data, integer, intent(in) idata, integer, intent(in) jdata, integer, intent(in) isrc, logical, intent(out) bad)"
+.SS "subroutine snowdat::nh_climo_check (integer, dimension(200), intent(in)kgds_data, real, dimension(idata,jdata), intent(in)snow_data, logical*1, dimension(idata,jdata), intent(in)bitmap_data, integer, intent(in)idata, integer, intent(in)jdata, integer, intent(in)isrc, logical, intent(out)bad)"
 
 .PP
 Check for corrupt nh snow cover data\&. 
@@ -297,12 +311,12 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 855 of file snowdat\&.F90\&.
+Definition at line 854 of file snowdat\&.F90\&.
 .PP
-References program_setup::climo_qc_file, grib2_free(), grib2_null(), program_setup::grib_century, program_setup::grib_day, program_setup::grib_month, and program_setup::grib_year\&.
+References grib2_free(), and grib2_null()\&.
 .PP
 Referenced by readafwa(), and readnesdis()\&.
-.SS "subroutine snowdat::read_afwa_binary (character*(*), intent(in) file_name, real, dimension(\fBiafwa\fP,\fBjafwa\fP), intent(out) snow_dep_afwa)"
+.SS "subroutine snowdat::read_afwa_binary (character*(*), intent(in)file_name, real, dimension(\fBiafwa\fP,\fBjafwa\fP), intent(out)snow_dep_afwa)"
 
 .PP
 Read afwa binary snow depth file\&. 
@@ -338,10 +352,10 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1234 of file snowdat\&.F90\&.
+Definition at line 1233 of file snowdat\&.F90\&.
 .PP
 Referenced by readafwa()\&.
-.SS "subroutine snowdat::read_afwa_mask (character*(*), intent(in) file_name, logical*1, dimension(\fBiafwa\fP,\fBjafwa\fP), intent(out) bitmap_afwa)"
+.SS "subroutine snowdat::read_afwa_mask (character*(*), intent(in)file_name, logical*1, dimension(\fBiafwa\fP,\fBjafwa\fP), intent(out)bitmap_afwa)"
 
 .PP
 Read afwa land mask file to get a bitmap\&. 
@@ -372,7 +386,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 1317 of file snowdat\&.F90\&.
+Definition at line 1316 of file snowdat\&.F90\&.
 .PP
 Referenced by readafwa()\&.
 .SS "subroutine snowdat::readafwa ()"
@@ -412,9 +426,9 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 532 of file snowdat\&.F90\&.
+Definition at line 531 of file snowdat\&.F90\&.
 .PP
-References afwa_check(), program_setup::afwa_lsmask_nh_file, program_setup::afwa_lsmask_sh_file, afwa_res, program_setup::afwa_snow_global_file, program_setup::afwa_snow_nh_file, program_setup::afwa_snow_sh_file, bad_afwa_global, bad_afwa_nh, bad_afwa_sh, bitmap_afwa_global, bitmap_afwa_nh, bitmap_afwa_sh, gdt_to_gds(), grib2_null(), grib_check(), iafwa, jafwa, kgds_afwa_global, kgds_afwa_nh, kgds_afwa_nh_8th, kgds_afwa_sh, kgds_afwa_sh_8th, nh_climo_check(), read_afwa_binary(), read_afwa_mask(), snow_dep_afwa_global, snow_dep_afwa_nh, snow_dep_afwa_sh, use_global_afwa, use_nh_afwa, and use_sh_afwa\&.
+References afwa_check(), gdt_to_gds(), grib2_null(), grib_check(), nh_climo_check(), read_afwa_binary(), and read_afwa_mask()\&.
 .PP
 Referenced by driver()\&.
 .SS "subroutine snowdat::readautosnow ()"
@@ -431,9 +445,7 @@ condition codes: all fatal 74 - bad open of autosnow file 75 - bad read of autos
 .PP
 \fBNote:\fP
 .RS 4
-Autosnow data is available only for southern hemis\&. Autosnow data is in grib 2\&. 
-.br
- 
+Autosnow data is available only for southern hemis\&. Autosnow data is in grib 2\&.
 .RE
 .PP
 \fBAuthor:\fP
@@ -448,9 +460,9 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 118 of file snowdat\&.F90\&.
+Definition at line 117 of file snowdat\&.F90\&.
 .PP
-References program_setup::autosnow_file, autosnow_res, bitmap_autosnow, gdt_to_gds(), grib2_free(), grib2_null(), iautosnow, jautosnow, kgds_autosnow, snow_cvr_autosnow, and use_autosnow\&.
+References gdt_to_gds(), grib2_free(), and grib2_null()\&.
 .PP
 Referenced by driver()\&.
 .SS "subroutine snowdat::readnesdis ()"
@@ -482,12 +494,12 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 223 of file snowdat\&.F90\&.
+Definition at line 222 of file snowdat\&.F90\&.
 .PP
-References bad_nesdis, bitmap_nesdis, gdt_to_gds(), grib2_free(), grib2_null(), grib_check(), inesdis, jnesdis, kgds_nesdis, mesh_nesdis, program_setup::nesdis_lsmask_file, nesdis_res, program_setup::nesdis_snow_file, nh_climo_check(), sea_ice_nesdis, snow_cvr_nesdis, and use_nesdis\&.
+References gdt_to_gds(), grib2_free(), grib2_null(), grib_check(), and nh_climo_check()\&.
 .PP
 Referenced by driver()\&.
-.SH "Variable Documentation"
+.SH "Field Documentation"
 .PP 
 .SS "real snowdat::afwa_res"
 
@@ -495,296 +507,223 @@ Referenced by driver()\&.
 Resolution of afwa data in km\&. 
 .PP
 Definition at line 84 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readafwa()\&.
 .SS "real snowdat::autosnow_res"
 
 .PP
 Resolution of autosnow in km\&. 
 .PP
 Definition at line 83 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readautosnow()\&.
 .SS "logical snowdat::bad_afwa_global"
 
 .PP
 When true, the global afwa data failed its quality control check\&. 
 .PP
 Definition at line 66 of file snowdat\&.F90\&.
-.PP
-Referenced by readafwa()\&.
 .SS "logical snowdat::bad_afwa_nh"
 
 .PP
 When true, the northern hemisphere afwa data failed its quality control check\&. 
 .PP
 Definition at line 60 of file snowdat\&.F90\&.
-.PP
-Referenced by afwa_check(), and readafwa()\&.
 .SS "logical snowdat::bad_afwa_sh"
 
 .PP
 When true, the southern hemisphere afwa data failed its quality control check\&. 
 .PP
 Definition at line 62 of file snowdat\&.F90\&.
-.PP
-Referenced by afwa_check(), and readafwa()\&.
 .SS "logical snowdat::bad_nesdis"
 
 .PP
 When true, the nesdis data failed its quality control check\&. 
 .PP
 Definition at line 64 of file snowdat\&.F90\&.
-.PP
-Referenced by readnesdis()\&.
 .SS "logical*1, dimension(:,:), allocatable snowdat::bitmap_afwa_global"
 
 .PP
 The global afwa data grib bitmap\&. (false-non land, true-land)\&. 
 .PP
 Definition at line 68 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readafwa()\&.
 .SS "logical*1, dimension(:,:), allocatable snowdat::bitmap_afwa_nh"
 
 .PP
 The northern hemisphere afwa data grib bitmap\&. (false-non land, true-land)\&. 
 .PP
 Definition at line 70 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readafwa()\&.
 .SS "logical*1, dimension(:,:), allocatable snowdat::bitmap_afwa_sh"
 
 .PP
 The southern hemisphere afwa data grib bitmap\&. (false-non land, true-land)\&. 
 .PP
 Definition at line 72 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readafwa()\&.
 .SS "logical*1, dimension(:,:), allocatable snowdat::bitmap_autosnow"
 
 .PP
 autosnow data grib bitmap (false-non land, true-land)\&. 
 .PP
 Definition at line 75 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readautosnow()\&.
 .SS "logical*1, dimension(:,:), allocatable snowdat::bitmap_nesdis"
 
 .PP
 nesdis data grib bitmap (false-non land, true-land)\&. 
 .PP
 Definition at line 74 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readnesdis()\&.
 .SS "integer snowdat::iafwa"
 
 .PP
 i-dimension of afwa grid 
 .PP
 Definition at line 40 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readafwa()\&.
 .SS "integer snowdat::iautosnow"
 
 .PP
 i-dimension of autosnow grid 
 .PP
 Definition at line 41 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readautosnow()\&.
 .SS "integer snowdat::inesdis"
 
 .PP
 i-dimension of nesdis grid 
 .PP
 Definition at line 42 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readnesdis()\&.
 .SS "integer snowdat::jafwa"
 
 .PP
 j-dimension of afwa grid 
 .PP
 Definition at line 43 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readafwa()\&.
 .SS "integer snowdat::jautosnow"
 
 .PP
 j-dimension of autosnow grid 
 .PP
 Definition at line 44 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readautosnow()\&.
 .SS "integer snowdat::jnesdis"
 
 .PP
 j-dimension of nesdis grid 
 .PP
 Definition at line 45 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readnesdis()\&.
 .SS "integer, dimension(200) snowdat::kgds_afwa_global"
 
 .PP
 grib1 grid description section for global afwa data\&. 
 .PP
 Definition at line 46 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readafwa()\&.
 .SS "integer, dimension(200) snowdat::kgds_afwa_nh"
 
 .PP
 grib1 grid description section for northern hemisphere 16th mesh afwa data\&. 
 .PP
 Definition at line 48 of file snowdat\&.F90\&.
-.PP
-Referenced by afwa_check(), snow2mdl::interp(), and readafwa()\&.
 .SS "integer, dimension(200) snowdat::kgds_afwa_nh_8th"
 
 .PP
 grib1 grid description section for northern hemisphere 8th mesh afwa data\&. 
 .PP
 Definition at line 50 of file snowdat\&.F90\&.
-.PP
-Referenced by readafwa()\&.
 .SS "integer, dimension(200) snowdat::kgds_afwa_sh"
 
 .PP
 grib1 grid description section for southern hemisphere 16th mesh afwa data\&. 
 .PP
 Definition at line 52 of file snowdat\&.F90\&.
-.PP
-Referenced by afwa_check(), snow2mdl::interp(), and readafwa()\&.
 .SS "integer, dimension(200) snowdat::kgds_afwa_sh_8th"
 
 .PP
 grib1 grid description section for southern hemisphere 8th mesh afwa data\&. 
 .PP
 Definition at line 54 of file snowdat\&.F90\&.
-.PP
-Referenced by readafwa()\&.
 .SS "integer, dimension(200) snowdat::kgds_autosnow"
 
 .PP
 autosnow grid description section (grib section 2) 
 .PP
 Definition at line 56 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readautosnow()\&.
 .SS "integer, dimension(200) snowdat::kgds_nesdis"
 
 .PP
 nesdis/ims grid description section (grib section 2) 
 .PP
 Definition at line 57 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readnesdis()\&.
 .SS "integer snowdat::mesh_nesdis"
 
 .PP
 nesdis/ims data is 96th mesh (or bediant) 
 .PP
 Definition at line 58 of file snowdat\&.F90\&.
-.PP
-Referenced by readnesdis()\&.
 .SS "real snowdat::nesdis_res"
 
 .PP
 Resolution of the nesdis data in km\&. 
 .PP
 Definition at line 85 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readnesdis()\&.
 .SS "integer*1, dimension(:,:), allocatable snowdat::sea_ice_nesdis"
 
 .PP
 nesdis/ims sea ice flag (0-open water, 1-ice) 
 .PP
 Definition at line 59 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readnesdis()\&.
 .SS "real, dimension(:,:), allocatable snowdat::snow_cvr_autosnow"
 
 .PP
 autosnow snow cover flag (0-no, 100-yes) 
 .PP
 Definition at line 87 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readautosnow()\&.
 .SS "real, dimension(:,:), allocatable snowdat::snow_cvr_nesdis"
 
 .PP
 nesdis/ims snow cover flag (0-no, 100-yes) 
 .PP
 Definition at line 86 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readnesdis()\&.
 .SS "real, dimension(:,:), allocatable snowdat::snow_dep_afwa_global"
 
 .PP
 The global afwa snow depth\&. 
 .PP
 Definition at line 88 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readafwa()\&.
 .SS "real, dimension(:,:), allocatable snowdat::snow_dep_afwa_nh"
 
 .PP
 Northern hemisphere afwa snow depth\&. 
 .PP
 Definition at line 89 of file snowdat\&.F90\&.
-.PP
-Referenced by afwa_check(), snow2mdl::interp(), and readafwa()\&.
 .SS "real, dimension(:,:), allocatable snowdat::snow_dep_afwa_sh"
 
 .PP
 Southern hemisphere afwa snow depth\&. 
 .PP
 Definition at line 90 of file snowdat\&.F90\&.
-.PP
-Referenced by afwa_check(), snow2mdl::interp(), and readafwa()\&.
 .SS "logical snowdat::use_autosnow"
 
 .PP
 True if autosnow data to be used\&. 
 .PP
 Definition at line 80 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readautosnow()\&.
 .SS "logical snowdat::use_global_afwa"
 
 .PP
 True if global hemisphere afwa data to be used\&. 
 .PP
 Definition at line 79 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), readafwa(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
 .SS "logical snowdat::use_nesdis"
 
 .PP
 True if nesdis/ims data to be used\&. 
 .PP
 Definition at line 81 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), and readnesdis()\&.
 .SS "logical snowdat::use_nh_afwa"
 
 .PP
 True if northern hemisphere afwa data to be used\&. 
 .PP
 Definition at line 77 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), readafwa(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
 .SS "logical snowdat::use_sh_afwa"
 
 .PP
 True if southern hemisphere afwa data to be used\&. 
 .PP
 Definition at line 78 of file snowdat\&.F90\&.
-.PP
-Referenced by snow2mdl::interp(), readafwa(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for emcsfc_snow2mdl from the source code\&.

@@ -1,8 +1,8 @@
-.TH "pmat5::frametwist" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::frametwist" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat5::frametwist
+pmat5::frametwist \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pmat5::frametwist
 .ti -1c
 .RI "subroutine \fBframetwist\fP (xp, yp, zp, xv, yv, zv, twist)"
 .br
-.RI "Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. "
+.RI "\fIGiven a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. \fP"
 .ti -1c
 .RI "subroutine \fBsframetwist\fP (sxp, syp, szp, sxv, syv, szv, stwist)"
 .br
-.RI "Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. "
+.RI "\fIGiven a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 46 of file pmat5\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat5::frametwist::frametwist (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(in) xv, real(dp), dimension(3), intent(in) yv, real(dp), dimension(3), intent(in) zv, real(dp), intent(out) twist)\fC [private]\fP"
+.SS "subroutine pmat5::frametwist::frametwist (real(dp), dimension(3), intent(in)xp, real(dp), dimension(3), intent(in)yp, real(dp), dimension(3), intent(in)zp, real(dp), dimension(3), intent(in)xv, real(dp), dimension(3), intent(in)yv, real(dp), dimension(3), intent(in)zv, real(dp), intent(out)twist)\fC [private]\fP"
 
 .PP
 Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. Note that, by symmetry, transposing P and V leads to the opposite twist\&. Double precision version\&.
@@ -52,10 +52,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 778 of file pmat5\&.f90\&.
+Definition at line 777 of file pmat5\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat5::frametwist::sframetwist (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(in) sxv, real(sp), dimension(3), intent(in) syv, real(sp), dimension(3), intent(in) szv, real(sp), intent(out) stwist)\fC [private]\fP"
+.SS "subroutine pmat5::frametwist::sframetwist (real(sp), dimension(3), intent(in)sxp, real(sp), dimension(3), intent(in)syp, real(sp), dimension(3), intent(in)szp, real(sp), dimension(3), intent(in)sxv, real(sp), dimension(3), intent(in)syv, real(sp), dimension(3), intent(in)szv, real(sp), intent(out)stwist)\fC [private]\fP"
 
 .PP
 Given a principal cartesian orthonormal frame, {xp,yp,zp} (i\&.e\&., at P with Earth-centered cartesians, zp), and another similar frame {xv,yv,zv} at V with Earth-centered cartesians zv, find the relative rotation angle, 'twist' by which the frame at V is rotated in the counterclockwise sense relative to the parallel-transportation of P's frame to V\&. Note that, by symmetry, transposing P and V leads to the opposite twist\&. Single precision version\&.
@@ -84,7 +84,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 751 of file pmat5\&.f90\&.
+Definition at line 750 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

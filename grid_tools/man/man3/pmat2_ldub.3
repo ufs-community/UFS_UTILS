@@ -1,8 +1,8 @@
-.TH "pmat2::ldub" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::ldub" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::ldub
+pmat2::ldub \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -10,49 +10,20 @@ pmat2::ldub
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBDLDUB\fP (m, mah1, mah2, a)"
+.RI "subroutine \fBldub\fP (m, mah1, mah2, a)"
 .br
-.RI "[L]*[D]*[U] factoring of double precision band-matrix\&. "
+.RI "\fI[L]*[D]*[U] factoring of single precision band-matrix\&. \fP"
 .ti -1c
-.RI "subroutine \fBLDUB\fP (m, mah1, mah2, a)"
+.RI "subroutine \fBdldub\fP (m, mah1, mah2, a)"
 .br
-.RI "[L]*[D]*[U] factoring of single precision band-matrix\&. "
+.RI "\fI[L]*[D]*[U] factoring of double precision band-matrix\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 64 of file pmat2\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::ldub::DLDUB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
-
-.PP
-[L]*[D]*[U] factoring of double precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIm\fP The number of rows of array A 
-.br
-\fImah1\fP the left half-bandwidth of fortran array A 
-.br
-\fImah2\fP the right half-bandwidth of fortran array A 
-.br
-\fIa\fP input as the asymmetric band matrix, [A]\&. On output, it contains the factors in the encoding, [L-I]+[D**-1]+[U-I], I=identity\&. 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-R\&. J\&. Purser, Tsukasa Fujita (JMA) 
-.RE
-.PP
-\fBDate:\fP
-.RS 4
-1999 
-.RE
-.PP
-
-.PP
-Definition at line 571 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::ldub::LDUB (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+.SS "subroutine pmat2::ldub::ldub (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a)\fC [private]\fP"
 
 .PP
 [L]*[D]*[U] factoring of single precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
@@ -80,7 +51,40 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 532 of file pmat2\&.f90\&.
+Definition at line 531 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::ldub::dldub (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(inout)a)\fC [private]\fP"
+
+.PP
+[L]*[D]*[U] factoring of double precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP The number of rows of array A 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIa\fP input as the asymmetric band matrix, [A]\&. On output, it contains the factors in the encoding, [L-I]+[D**-1]+[U-I], I=identity\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 570 of file pmat2\&.f90\&.
+.PP
+Referenced by pmat2::dudlb()\&.
 
 .SH "Author"
 .PP 

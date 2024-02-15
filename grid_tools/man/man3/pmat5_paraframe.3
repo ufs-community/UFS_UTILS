@@ -1,8 +1,8 @@
-.TH "pmat5::paraframe" 3 "Mon Oct 23 2023" "Version 1.11.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::paraframe" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat5::paraframe
+pmat5::paraframe \- 
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pmat5::paraframe
 .ti -1c
 .RI "subroutine \fBparaframe\fP (xp, yp, zp, xv, yv, zv)"
 .br
-.RI "Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. "
+.RI "\fITake a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. \fP"
 .ti -1c
 .RI "subroutine \fBsparaframe\fP (sxp, syp, szp, sxv, syv, szv)"
 .br
-.RI "Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. "
+.RI "\fITake a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 45 of file pmat5\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat5::paraframe::paraframe (real(dp), dimension(3), intent(in) xp, real(dp), dimension(3), intent(in) yp, real(dp), dimension(3), intent(in) zp, real(dp), dimension(3), intent(out) xv, real(dp), dimension(3), intent(out) yv, real(dp), dimension(3), intent(in) zv)\fC [private]\fP"
+.SS "subroutine pmat5::paraframe::paraframe (real(dp), dimension(3), intent(in)xp, real(dp), dimension(3), intent(in)yp, real(dp), dimension(3), intent(in)zp, real(dp), dimension(3), intent(out)xv, real(dp), dimension(3), intent(out)yv, real(dp), dimension(3), intent(in)zv)\fC [private]\fP"
 
 .PP
 Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. Double precision version\&.
@@ -50,10 +50,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 719 of file pmat5\&.f90\&.
+Definition at line 718 of file pmat5\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat5::paraframe::sparaframe (real(sp), dimension(3), intent(in) sxp, real(sp), dimension(3), intent(in) syp, real(sp), dimension(3), intent(in) szp, real(sp), dimension(3), intent(out) sxv, real(sp), dimension(3), intent(out) syv, real(sp), dimension(3), intent(in) szv)\fC [private]\fP"
+.SS "subroutine pmat5::paraframe::sparaframe (real(sp), dimension(3), intent(in)sxp, real(sp), dimension(3), intent(in)syp, real(sp), dimension(3), intent(in)szp, real(sp), dimension(3), intent(out)sxv, real(sp), dimension(3), intent(out)syv, real(sp), dimension(3), intent(in)szv)\fC [private]\fP"
 
 .PP
 Take a principal reference orthonormal frame, {xp,yp,zp} and a dependent point defined by unit vector, zv, and complete the V-frame cartesian components, {xv,yv}, that are the result of parallel-transport of {xp,yp} along the geodesic between P and V\&. Single precision version\&.
@@ -80,7 +80,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 696 of file pmat5\&.f90\&.
+Definition at line 695 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 
