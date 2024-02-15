@@ -1,0 +1,72 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/interp_frac_cats.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/interp_frac_cats.F90 \- 
+.PP
+Read the input cateogorical source data and interpolate percent of each category to the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBinterp_frac_cats\fP (localpet, input_file)"
+.br
+.RI "\fIRead the input source data and interpolate it to the model grid\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read the input cateogorical source data and interpolate percent of each category to the model grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition in file \fBinterp_frac_cats\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine interp_frac_cats (integer, intent(in)localpet, character(len=*), intent(in)input_file)"
+
+.PP
+Read the input source data and interpolate it to the model grid\&. Outputs the percentage of each category within a model grid box and the dominant category\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP this mpi task 
+.br
+\fIinput_file\fP filename of input source data\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition at line 14 of file interp_frac_cats\&.F90\&.
+.PP
+References utils::error_handler(), utils::netcdf_err(), output_frac_cats::output_driver(), and search_frac_cats()\&.
+.PP
+Referenced by driver()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

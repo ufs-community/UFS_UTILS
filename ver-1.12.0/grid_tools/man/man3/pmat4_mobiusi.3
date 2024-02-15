@@ -1,0 +1,57 @@
+.TH "pmat4::mobiusi" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::mobiusi \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBzmobiusi\fP (aa, bb, cc, dd, zz, infz, zw, infw)"
+.br
+.RI "\fIPerform the inverse of the mobius transformation with coefficients, {aa,bb,cc,dd}\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 109 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat4::mobiusi::zmobiusi (complex(dpc), intent(in)aa, complex(dpc), intent(in)bb, complex(dpc), intent(in)cc, complex(dpc), intent(in)dd, complex(dpc), intent(in)zz, logical, intent(in)infz, complex(dpc), intent(out)zw, logical, intent(out)infw)\fC [private]\fP"
+
+.PP
+Perform the inverse of the mobius transformation with coefficients, {aa,bb,cc,dd}\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIaa\fP inverse Mobius transformation coefficient 
+.br
+\fIbb\fP inverse Mobius transformation coefficient 
+.br
+\fIcc\fP inverse Mobius transformation coefficient 
+.br
+\fIdd\fP inverse Mobius transformation coefficient 
+.br
+\fIzz\fP complex input argument 
+.br
+\fIinfz\fP logical indicator for zz the point at infinity 
+.br
+\fIzw\fP complex output argument 
+.br
+\fIinfw\fP logical indicator for zw the point at infinity 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2335 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

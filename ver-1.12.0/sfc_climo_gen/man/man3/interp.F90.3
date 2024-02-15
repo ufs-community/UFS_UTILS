@@ -1,0 +1,106 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/interp.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/interp.F90 \- 
+.PP
+Read the input source data and interpolate it to the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBadjust_for_landice\fP (field, vegt, idim, jdim, field_ch)"
+.br
+.RI "\fIEnsure consistent fields at land ice points\&. \fP"
+.ti -1c
+.RI "subroutine \fBinterp\fP (localpet, method, input_file)"
+.br
+.RI "\fIRead the input source data and interpolate it to the model grid\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read the input source data and interpolate it to the model grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition in file \fBinterp\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine adjust_for_landice (real(esmf_kind_r4), dimension(idim,jdim), intent(inout)field, real(esmf_kind_i4), dimension(idim,jdim), intent(in)vegt, integer, intent(in)idim, integer, intent(in)jdim, character(len=*), intent(in)field_ch)"
+
+.PP
+Ensure consistent fields at land ice points\&. Land ice is vegetation type 15 (variable landice)\&. output is Model field\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfield\fP Model field before adjustments for land ice\&. 
+.br
+\fIvegt\fP Vegetation type on the model tile\&. 
+.br
+\fIidim\fP i dimension of model tile\&. 
+.br
+\fIjdim\fP j dimension of model tile\&. 
+.br
+\fIfield_ch\fP Field name\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 290 of file interp\&.F90\&.
+.PP
+Referenced by interp()\&.
+.SS "subroutine interp (integerlocalpet, type(esmf_regridmethod_flag), intent(in)method, character(len=*), intent(in)input_file)"
+
+.PP
+Read the input source data and interpolate it to the model grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP this mpi task 
+.br
+\fImethod\fP interpolation method\&.defined where mask=1 
+.br
+\fIinput_file\fP filename of input source data\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition at line 13 of file interp\&.F90\&.
+.PP
+References adjust_for_landice(), utils::error_handler(), utils::netcdf_err(), output(), and search()\&.
+.PP
+Referenced by driver()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

@@ -1,0 +1,50 @@
+.TH "sflx_snippet" 3 "Thu Feb 15 2024" "Version 1.12.0" "noah" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+sflx_snippet \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBfrh2o\fP"
+.br
+.RI "\fICalculate the liquid water (slc) for a given total moisture content and soil temperature\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 5 of file sflx_snippet\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public sflx_snippet::frh2o ()"
+
+.PP
+Calculate the liquid water (slc) for a given total moisture content and soil temperature\&. Used here to update slc when DA update to stc crosses freezing\&. Note this is an approximation, since in sflx\&.F (noah) the change in slc estimated by this routine is often clipped, depending on the net energy input to the soil layer\&. Also, this routine is being called using stc, but in sflx\&.F it is called using the soil temp at the midpoint of the layer\&. However, testing shows the affects of these approximations is small (O(0\&.001 m3/m3))\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItkelv\fP Soil temperature in K 
+.br
+\fIsmc\fP Soil moisture 
+.br
+\fIsh2o\fP Input liquid soil moisture 
+.br
+\fIsmcmax\fP Max soil moisture 
+.br
+\fIbexp\fP B exponent 
+.br
+\fIpsis\fP Saturated matric potential 
+.br
+\fIliqwat\fP Output liquid soil moisture 
+.RE
+.PP
+
+.PP
+Definition at line 28 of file sflx_snippet\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for noah from the source code\&.

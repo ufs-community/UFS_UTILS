@@ -1,0 +1,51 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog_gsl.fd/module_gsl_oro_data_sm_scale.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog_gsl.fd/module_gsl_oro_data_sm_scale.f90 \- 
+.PP
+Calculates small-scale GWD orographic stats for FV3GFS grids\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "module \fBgsl_oro_data_sm_scale\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Calculates small-scale GWD orographic stats for FV3GFS grids\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Michael Toy, NOAA/GSL 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2021-03-12
+.RE
+.PP
+This module calculates the parameters required for the subgrid- scale orographic gravity-wave drag (GWDO) scheme on the FV3 grid\&. These parameters are for the small-scale GWD (Tsiringakis et al\&., 2017) and the turbulent orographic form drag (TOFD) (Beljaars, 2004) schemes of the GSL drag suite\&. 30 second (~1km) global topography is used\&. The topographic data comes from the 'fix' file HGT\&.Beljaars_filtered\&.lat-lon\&.30s_res\&.nc\&. The output fields are:
+.IP "\(bu" 2
+stddev standard deviation of subgrid-scale topograpy
+.IP "\(bu" 2
+convexity convexity (kurtosis) of subgrid-scale topography
+.IP "\(bu" 2
+ol{1,2,3,4} orographic effective lengths of subgrid-scale topography for 4 orientations: 1-westerly, 2-southerly, 3-southwesterly, 4-northwesterly
+.IP "\(bu" 2
+oa{1,2,3,4} orographic asymmetries of subgrid-scale topography for 4 orientations: 1-westerly, 2-southerly, 3-southwesterly, 4-northwesterly
+.PP
+.PP
+Based on code by Michael Duda provided by NCAR/MMM 
+.PP
+Definition in file \fBmodule_gsl_oro_data_sm_scale\&.f90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.

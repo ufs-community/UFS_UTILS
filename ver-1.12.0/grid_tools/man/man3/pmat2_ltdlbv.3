@@ -1,0 +1,89 @@
+.TH "pmat2::ltdlbv" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::ltdlbv \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBltdlbv\fP (m, mah1, a, v)"
+.br
+.RI "\fILike udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) \fP"
+.ti -1c
+.RI "subroutine \fBdltdlbv\fP (m, mah1, a, v)"
+.br
+.RI "\fILike udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 68 of file pmat2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat2::ltdlbv::ltdlbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(in)a, real(sp), dimension(m), intent(inout)v)\fC [private]\fP"
+
+.PP
+Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fIa\fP encodes the L*D*L^T factorization of the linear-system matrix, as supplied by subroutine LDLTB 
+.br
+\fIv\fP input as right-hand-side vector, output as solution vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 949 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::ltdlbv::dltdlbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(in)a, real(dp), dimension(m), intent(inout)v)\fC [private]\fP"
+
+.PP
+Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB 
+.br
+\fIv\fP input as right-hand-side vector, output as solution vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 979 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

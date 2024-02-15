@@ -1,0 +1,449 @@
+.TH "surface_target_data" 3 "Thu Feb 15 2024" "Version 1.12.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+surface_target_data \- 
+.PP
+Module to hold ESMF fields associated with the target grid surface data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBcleanup_target_nst_data\fP"
+.br
+.RI "\fIFree up memory once the target grid nst fields are no longer needed\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBcleanup_target_sfc_data\fP"
+.br
+.RI "\fIFree up memory once the target grid surface fields are no longer needed\&. \fP"
+.in -1c
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBc_0_target_grid\fP"
+.br
+.RI "\fICoefficient 1 to calculate d(tz)/d(ts)\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBc_d_target_grid\fP"
+.br
+.RI "\fICoefficient 2 to calculate d(tz)/d(ts)\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBcanopy_mc_target_grid\fP"
+.br
+.RI "\fICanopy moisture content\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBd_conv_target_grid\fP"
+.br
+.RI "\fIThickness of free convection layer\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBdt_cool_target_grid\fP"
+.br
+.RI "\fISub-layer cooling amount\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBf10m_target_grid\fP"
+.br
+.RI "\fIlog((z0+10)*1/z0) See sfc_diff\&.f for details\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBffmm_target_grid\fP"
+.br
+.RI "\fIlog((z0+z1)*1/z0) See sfc_diff\&.f for details\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBifd_target_grid\fP"
+.br
+.RI "\fIModel mode index\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBlai_target_grid\fP"
+.br
+.RI "\fILeaf area index\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBq2m_target_grid\fP"
+.br
+.RI "\fI2-m specific humidity\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBqrain_target_grid\fP"
+.br
+.RI "\fISensible heat flux due to rainfall\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_depth_target_grid\fP"
+.br
+.RI "\fISea ice depth\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_fract_target_grid\fP"
+.br
+.RI "\fISea ice fraction\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_skin_temp_target_grid\fP"
+.br
+.RI "\fISea ice skin temperature\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBskin_temp_target_grid\fP"
+.br
+.RI "\fISkin temperature/sst\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsnow_depth_target_grid\fP"
+.br
+.RI "\fIPhysical snow depth\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsnow_liq_equiv_target_grid\fP"
+.br
+.RI "\fILiquid equivalent snow depth\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsoil_temp_target_grid\fP"
+.br
+.RI "\fI3-d soil temperature\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsoilm_liq_target_grid\fP"
+.br
+.RI "\fI3-d liquid soil moisture\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsoilm_tot_target_grid\fP"
+.br
+.RI "\fI3-d total soil moisture\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsrflag_target_grid\fP"
+.br
+.RI "\fISnow/rain flag\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBt2m_target_grid\fP"
+.br
+.RI "\fI2-m temperatrure\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBtprcp_target_grid\fP"
+.br
+.RI "\fIPrecipitation\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBtref_target_grid\fP"
+.br
+.RI "\fIReference temperature\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBustar_target_grid\fP"
+.br
+.RI "\fIFriction velocity\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBw_0_target_grid\fP"
+.br
+.RI "\fICoefficient 3 to calculate d(tz)/d(ts)\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBw_d_target_grid\fP"
+.br
+.RI "\fICoefficient 4 to calculate d(tz)/d(ts)\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBxs_target_grid\fP"
+.br
+.RI "\fISalinity content in diurnal thermocline layer\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBxt_target_grid\fP"
+.br
+.RI "\fIHeat content in diurnal thermocline layer\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBxtts_target_grid\fP"
+.br
+.RI "\fId(xt)/d(ts)\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBxu_target_grid\fP"
+.br
+.RI "\fIu-current content in diurnal thermocline layer\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBxv_target_grid\fP"
+.br
+.RI "\fIv-current content in diurnal thermocline layer\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBxz_target_grid\fP"
+.br
+.RI "\fIDiurnal thermocline layer thickness\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBxzts_target_grid\fP"
+.br
+.RI "\fId(xz)/d(ts)\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBz0_target_grid\fP"
+.br
+.RI "\fIRoughness length\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBz_c_target_grid\fP"
+.br
+.RI "\fISub-layer cooling thickness\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBzm_target_grid\fP"
+.br
+.RI "\fIOceanic mixed layer depth\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Module to hold ESMF fields associated with the target grid surface data\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 9 of file surface_target_data\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public surface_target_data::cleanup_target_nst_data ()"
+
+.PP
+Free up memory once the target grid nst fields are no longer needed\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 144 of file surface_target_data\&.F90\&.
+.PP
+Referenced by surface::surface_driver()\&.
+.SS "subroutine, public surface_target_data::cleanup_target_sfc_data ()"
+
+.PP
+Free up memory once the target grid surface fields are no longer needed\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 111 of file surface_target_data\&.F90\&.
+.PP
+Referenced by surface::cleanup_all_target_sfc_data()\&.
+.SH "Field Documentation"
+.PP 
+.SS "type(esmf_field), public surface_target_data::c_0_target_grid"
+
+.PP
+Coefficient 1 to calculate d(tz)/d(ts)\&. 
+.PP
+Definition at line 62 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::c_d_target_grid"
+
+.PP
+Coefficient 2 to calculate d(tz)/d(ts)\&. 
+.PP
+Definition at line 60 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::canopy_mc_target_grid"
+
+.PP
+Canopy moisture content\&. 
+.PP
+Definition at line 18 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::d_conv_target_grid"
+
+.PP
+Thickness of free convection layer\&. 
+.PP
+Definition at line 64 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::dt_cool_target_grid"
+
+.PP
+Sub-layer cooling amount\&. 
+.PP
+Definition at line 66 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::f10m_target_grid"
+
+.PP
+log((z0+10)*1/z0) See sfc_diff\&.f for details\&. 
+.PP
+Definition at line 20 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::ffmm_target_grid"
+
+.PP
+log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. 
+.PP
+Definition at line 23 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::ifd_target_grid"
+
+.PP
+Model mode index\&. 0-diurnal model not started; 1-diurnal model started\&. 
+.PP
+Definition at line 68 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::lai_target_grid"
+
+.PP
+Leaf area index\&. 
+.PP
+Definition at line 56 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::q2m_target_grid"
+
+.PP
+2-m specific humidity\&. 
+.PP
+Definition at line 26 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::qrain_target_grid"
+
+.PP
+Sensible heat flux due to rainfall\&. 
+.PP
+Definition at line 71 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::seaice_depth_target_grid"
+
+.PP
+Sea ice depth\&. 
+.PP
+Definition at line 28 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::seaice_fract_target_grid"
+
+.PP
+Sea ice fraction\&. 
+.PP
+Definition at line 30 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::seaice_skin_temp_target_grid"
+
+.PP
+Sea ice skin temperature\&. 
+.PP
+Definition at line 32 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::skin_temp_target_grid"
+
+.PP
+Skin temperature/sst\&. 
+.PP
+Definition at line 34 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::snow_depth_target_grid"
+
+.PP
+Physical snow depth\&. 
+.PP
+Definition at line 40 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::snow_liq_equiv_target_grid"
+
+.PP
+Liquid equivalent snow depth\&. 
+.PP
+Definition at line 38 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::soil_temp_target_grid"
+
+.PP
+3-d soil temperature\&. 
+.PP
+Definition at line 42 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::soilm_liq_target_grid"
+
+.PP
+3-d liquid soil moisture\&. 
+.PP
+Definition at line 44 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::soilm_tot_target_grid"
+
+.PP
+3-d total soil moisture\&. 
+.PP
+Definition at line 46 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::srflag_target_grid"
+
+.PP
+Snow/rain flag\&. 
+.PP
+Definition at line 36 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::t2m_target_grid"
+
+.PP
+2-m temperatrure\&. 
+.PP
+Definition at line 48 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::tprcp_target_grid"
+
+.PP
+Precipitation\&. 
+.PP
+Definition at line 50 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::tref_target_grid"
+
+.PP
+Reference temperature\&. 
+.PP
+Definition at line 73 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::ustar_target_grid"
+
+.PP
+Friction velocity\&. 
+.PP
+Definition at line 52 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::w_0_target_grid"
+
+.PP
+Coefficient 3 to calculate d(tz)/d(ts)\&. 
+.PP
+Definition at line 77 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::w_d_target_grid"
+
+.PP
+Coefficient 4 to calculate d(tz)/d(ts)\&. 
+.PP
+Definition at line 75 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::xs_target_grid"
+
+.PP
+Salinity content in diurnal thermocline layer\&. 
+.PP
+Definition at line 79 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::xt_target_grid"
+
+.PP
+Heat content in diurnal thermocline layer\&. 
+.PP
+Definition at line 82 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::xtts_target_grid"
+
+.PP
+d(xt)/d(ts)\&. 
+.PP
+Definition at line 93 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::xu_target_grid"
+
+.PP
+u-current content in diurnal thermocline layer\&. 
+.PP
+Definition at line 85 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::xv_target_grid"
+
+.PP
+v-current content in diurnal thermocline layer\&. 
+.PP
+Definition at line 88 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::xz_target_grid"
+
+.PP
+Diurnal thermocline layer thickness\&. 
+.PP
+Definition at line 91 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::xzts_target_grid"
+
+.PP
+d(xz)/d(ts)\&. 
+.PP
+Definition at line 95 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::z0_target_grid"
+
+.PP
+Roughness length\&. 
+.PP
+Definition at line 54 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::z_c_target_grid"
+
+.PP
+Sub-layer cooling thickness\&. 
+.PP
+Definition at line 97 of file surface_target_data\&.F90\&.
+.SS "type(esmf_field), public surface_target_data::zm_target_grid"
+
+.PP
+Oceanic mixed layer depth\&. 
+.PP
+Definition at line 99 of file surface_target_data\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

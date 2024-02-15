@@ -1,0 +1,686 @@
+.TH "pfun" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pfun \- 
+.PP
+This module is for evaluating several useful real-valued functions that are not always available in Fortran compilers\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBahav\fP"
+.br
+.ti -1c
+.RI "interface \fBahavh\fP"
+.br
+.ti -1c
+.RI "interface \fBatanh\fP"
+.br
+.ti -1c
+.RI "interface \fBgd\fP"
+.br
+.ti -1c
+.RI "interface \fBgdi\fP"
+.br
+.ti -1c
+.RI "interface \fBhav\fP"
+.br
+.ti -1c
+.RI "interface \fBhavh\fP"
+.br
+.ti -1c
+.RI "interface \fBsech\fP"
+.br
+.ti -1c
+.RI "interface \fBsechs\fP"
+.br
+.ti -1c
+.RI "interface \fBsinhox\fP"
+.br
+.ti -1c
+.RI "interface \fBsinhoxm\fP"
+.br
+.ti -1c
+.RI "interface \fBsinox\fP"
+.br
+.ti -1c
+.RI "interface \fBsinoxm\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBahav_d\fP (a)"
+.br
+.RI "\fIArc-haversine function for double precision real\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBahav_s\fP (a)"
+.br
+.RI "\fIArc-haversine function for single precision real\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBahavh_d\fP (a)"
+.br
+.RI "\fIHyperbolic arc-haversine for double precision real\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBahavh_s\fP (a)"
+.br
+.RI "\fIHyperbolic arc-haversine for single precision real\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBatanh_d\fP (t)"
+.br
+.RI "\fIHyperbolic arc-tangent for double precision real\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBatanh_s\fP (t)"
+.br
+.RI "\fIHyperbolic arc-tangent for single precision real\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBhav_d\fP (t)"
+.br
+.RI "\fIHaversine function for double precision real (for geometry on the sphere)\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBhavh_d\fP (t)"
+.br
+.RI "\fIHyperbolic-haversine for double precision real (for pseudosphere geometry)\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBhavh_s\fP (t)"
+.br
+.RI "\fIHyperbolic-haversine for single precision real (for pseudosphere geometry)\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBsech_d\fP (x)"
+.br
+.RI "\fIHyperbolic secant for double precision real\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBsech_s\fP (x)"
+.br
+.RI "\fIHyperbolic secant for single precision real\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBsechs_s\fP (x)"
+.br
+.RI "\fIHyperbolic secant-squared function (logistic distribution)\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBsinhox_d\fP (x)"
+.br
+.RI "\fIEvaluate the symmetric real function sinh(x)/x\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBsinhoxm_d\fP (x)"
+.br
+.RI "\fIEvaluate the symmetric real function sinh(x)/x-1\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBsinox_d\fP (x)"
+.br
+.RI "\fIEvaluate the symmetric real function sin(x)/x\&. \fP"
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBgd_d\fP (x)"
+.br
+.RI "\fIGudermannian function (related to Mercator map projections) \fP"
+.ti -1c
+.RI "real(sp) function \fBgd_s\fP (x)"
+.br
+.RI "\fIGudermannian function (related to Mercator map projections) \fP"
+.ti -1c
+.RI "real(dp) function \fBgdi_d\fP (y)"
+.br
+.RI "\fIInverse Gudermannian function for double precision real\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBgdi_s\fP (y)"
+.br
+.RI "\fIInverse Gudermannian function for single precision real\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBhav_s\fP (t)"
+.br
+.RI "\fIHaversine function for single precision real (for geometry on the sphere)\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBsechs_d\fP (x)"
+.br
+.RI "\fIHyperbolic secant-squared function (logistic distribution)\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBsinoxm_d\fP (x)"
+.br
+.RI "\fIEvaluate the symmetric real function sin(x)/x-1, still accurate near x=0\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+This module is for evaluating several useful real-valued functions that are not always available in Fortran compilers\&. 
+
+These have applications in map transformations, spherical and pseudo-spherical surface geometry, probability distributions, and splines\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 11 of file pfun\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function pfun::ahav_d (real(dp), intent(in)a)"
+
+.PP
+Arc-haversine function for double precision real\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+t arc-haversine function of a 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 156 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::ahav_s (real(sp), intent(in)a)"
+
+.PP
+Arc-haversine function for single precision real\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+t arc-haversine function of a 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 143 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::ahavh_d (real(dp), intent(in)a)"
+
+.PP
+Hyperbolic arc-haversine for double precision real\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+t hyperbolic arc-haversine of a 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 184 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::ahavh_s (real(sp), intent(in)a)"
+
+.PP
+Hyperbolic arc-haversine for single precision real\&. 
+.PP
+\fBNote:\fP
+.RS 4
+The minus sign in the hyperbolic arc-haversine definition\&.
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+t hyperbolic arc-haversine of a 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 171 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::atanh_d (real(dp), intent(in)t)"
+
+.PP
+Hyperbolic arc-tangent for double precision real\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a hyperbolic arc-tangent of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 215 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::atanh_s (real(sp), intent(in)t)"
+
+.PP
+Hyperbolic arc-tangent for single precision real\&. (compilers now have this)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a hyperbolic arc-tangent of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 197 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::gd_d (real(dp), intent(in)x)\fC [private]\fP"
+
+.PP
+Gudermannian function (related to Mercator map projections) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP double precision real argument of function 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+y Gudermannian function of x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::gd_s (real(sp), intent(in)x)\fC [private]\fP"
+
+.PP
+Gudermannian function (related to Mercator map projections) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP single precision real argument of function 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+y Gudermannian function of x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 40 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::gdi_d (real(dp), intent(in)y)\fC [private]\fP"
+
+.PP
+Inverse Gudermannian function for double precision real\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIy\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+x inverse Gudermannian function of y 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 77 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::gdi_s (real(sp), intent(in)y)\fC [private]\fP"
+
+.PP
+Inverse Gudermannian function for single precision real\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIy\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+x inverse Gudermannian function of y 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 65 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::hav_d (real(dp), intent(in)t)"
+
+.PP
+Haversine function for double precision real (for geometry on the sphere)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a haversine function of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 102 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::hav_s (real(sp), intent(in)t)\fC [private]\fP"
+
+.PP
+Haversine function for single precision real (for geometry on the sphere)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a haversine function of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 89 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::havh_d (real(dp), intent(in)t)"
+
+.PP
+Hyperbolic-haversine for double precision real (for pseudosphere geometry)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a hyperbolic-haversine function of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 130 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::havh_s (real(sp), intent(in)t)"
+
+.PP
+Hyperbolic-haversine for single precision real (for pseudosphere geometry)\&. 
+.PP
+\fBNote:\fP
+.RS 4
+The minus sign in the hyperbolic-haversine definition\&.
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a hyperbolic-haversine function of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 117 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::sech_d (real(dp), intent(in)x)"
+
+.PP
+Hyperbolic secant for double precision real\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+r hyperbolic secant of x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 250 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::sech_s (real(sp), intent(in)x)"
+
+.PP
+Hyperbolic secant for single precision real\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+r hyperbolic secant of x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 233 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::sechs_d (real(dp), intent(in)x)\fC [private]\fP"
+
+.PP
+Hyperbolic secant-squared function (logistic distribution)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+r sech-squared of x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 278 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::sechs_s (real(sp), intent(in)x)"
+
+.PP
+Hyperbolic secant-squared function (logistic distribution)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+r sech-squared of x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 266 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::sinhox_d (real(dp), intent(in)x)"
+
+.PP
+Evaluate the symmetric real function sinh(x)/x\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+r sinh(x)/x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 344 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::sinhoxm_d (real(dp), intent(in)x)"
+
+.PP
+Evaluate the symmetric real function sinh(x)/x-1\&. still accurate near x=0\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+r sinh(x)-1 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 324 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::sinox_d (real(dp), intent(in)x)"
+
+.PP
+Evaluate the symmetric real function sin(x)/x\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+r sin(x)/x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 310 of file pfun\&.f90\&.
+.SS "real(dp) function pfun::sinoxm_d (real(dp), intent(in)x)\fC [private]\fP"
+
+.PP
+Evaluate the symmetric real function sin(x)/x-1, still accurate near x=0\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+r sin(x)/x-1 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 290 of file pfun\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

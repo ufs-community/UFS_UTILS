@@ -1,0 +1,83 @@
+.TH "utils" 3 "Thu Feb 15 2024" "Version 1.12.0" "global_cycle" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils \- 
+.PP
+Module containing utility routines\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBremap_coef\fP (is, ie, js, je, im, jm, lon, lat, id1, id2, jdc, s2c, agrid)"
+.br
+.RI "\fIGenerate the weights and index of the grids used in the bilinear interpolation\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Module containing utility routines\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 7 of file utils\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public utils::remap_coef (integer, intent(in)is, integer, intent(in)ie, integer, intent(in)js, integer, intent(in)je, integer, intent(in)im, integer, intent(in)jm, real, dimension(im), intent(in)lon, real, dimension(jm), intent(in)lat, integer, dimension(is:ie,js:je), intent(out)id1, integer, dimension(is:ie,js:je), intent(out)id2, integer, dimension(is:ie,js:je), intent(out)jdc, real, dimension(is:ie,js:je,4), intent(out)s2c, real, dimension(is:ie,js:je,2), intent(in)agrid)"
+
+.PP
+Generate the weights and index of the grids used in the bilinear interpolation\&. This routine was taken from the forecast model - \&./atmos_cubed_sphere/tools/fv_treat_da_inc\&.f90\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIis\fP Start index in x-direction of the source array\&. 
+.br
+\fIie\fP End index in x-direction of the source array\&. 
+.br
+\fIjs\fP Start index in y-direction of the source array\&. 
+.br
+\fIje\fP End index in y-direction of the source array\&. 
+.br
+\fIim\fP x-dimension of the source array\&. 
+.br
+\fIjm\fP y-dimension of the source array\&. 
+.br
+\fIlon\fP 1-d array of longitudes (in radians)\&. 
+.br
+\fIlat\fP 1-d array of latitudes (in radians)\&. 
+.br
+\fIagrid\fP 2-d array for lon [agrid(:,:,1)] & lat [agrid(:,:,2)] (in radians)\&. 
+.br
+\fIs2c\fP Bi-linear interpolation weights of the four nearby grids of the source array\&. 
+.br
+\fIid1\fP Index 1 in x-direction of the nearby grids of the source array\&. 
+.br
+\fIid2\fP Index 2 in x-direction of the nearby grids of the source array\&. 
+.br
+\fIjdc\fP Index in y-direction of the nearby grid of the source array\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Xu Li 
+.RE
+.PP
+
+.PP
+Definition at line 38 of file utils\&.F90\&.
+.PP
+Referenced by land_increments::add_increment_soil(), adjust_nsst(), and intp_tile()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for global_cycle from the source code\&.

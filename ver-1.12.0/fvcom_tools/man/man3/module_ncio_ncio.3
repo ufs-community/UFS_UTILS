@@ -1,0 +1,1016 @@
+.TH "module_ncio::ncio" 3 "Thu Feb 15 2024" "Version 1.12.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_ncio::ncio \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "generic \fBadd_new_var\fP => \fBadd_new_var_2d\fP,\fBadd_new_var_3d\fP"
+.br
+.RI "\fIAdd a new 2d or 3d variable to ouput file\&. \fP"
+.ti -1c
+.RI "procedure \fBadd_new_var_2d\fP"
+.br
+.RI "\fIAdd a new 2d variable to output file\&. \fP"
+.ti -1c
+.RI "procedure \fBadd_new_var_3d\fP"
+.br
+.RI "\fIAdd a new 3d variable to output file\&. \fP"
+.ti -1c
+.RI "procedure \fBclose\fP => \fBclose_nc\fP"
+.br
+.RI "\fIClose netCDF file\&. \fP"
+.ti -1c
+.RI "procedure \fBconvert_theta2t_2dgrid\fP"
+.br
+.RI "\fIConvert theta T (Kelvin) to T (deg C)\&. \fP"
+.ti -1c
+.RI "generic \fBget_att\fP => \fBget_att_nc_int\fP, \fBget_att_nc_real\fP, \fBget_att_nc_string\fP"
+.br
+.RI "\fIGet attribute\&. \fP"
+.ti -1c
+.RI "procedure \fBget_att_nc_int\fP"
+.br
+.RI "\fIGet attribute\&. \fP"
+.ti -1c
+.RI "procedure \fBget_att_nc_real\fP"
+.br
+.RI "\fIGet attribute\&. \fP"
+.ti -1c
+.RI "procedure \fBget_att_nc_string\fP"
+.br
+.RI "\fIGet attribute\&. \fP"
+.ti -1c
+.RI "procedure \fBget_dim\fP => \fBget_dim_nc\fP"
+.br
+.RI "\fIread in dimension from the nc file \fP"
+.ti -1c
+.RI "generic \fBget_var\fP => \fBget_var_nc_double_1d\fP, \fBget_var_nc_double_2d\fP,\fBget_var_nc_double_3d\fP,\fBget_var_nc_real_1d\fP, \fBget_var_nc_real_2d\fP,\fBget_var_nc_real_3d\fP,\fBget_var_nc_short_1d\fP, \fBget_var_nc_short_2d\fP,\fBget_var_nc_int_1d\fP, \fBget_var_nc_int_2d\fP,\fBget_var_nc_int_3d\fP,\fBget_var_nc_char_1d\fP, \fBget_var_nc_char_2d\fP,\fBget_var_nc_char_3d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_char\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_char_1d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_char_2d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_char_3d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_double\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_double_1d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_double_2d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_double_3d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_int\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_int_1d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_int_2d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_int_3d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_real\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_real_1d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_real_2d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_real_3d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_short\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_short_1d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBget_var_nc_short_2d\fP"
+.br
+.RI "\fIRead in a 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBhandle_err\fP"
+.br
+.RI "\fIHandle netCDF errors\&. \fP"
+.ti -1c
+.RI "procedure \fBopen\fP => \fBopen_nc\fP"
+.br
+.RI "\fIOpen netCDF file\&. \fP"
+.ti -1c
+.RI "generic \fBreplace_var\fP => \fBreplace_var_nc_double_1d\fP, \fBreplace_var_nc_double_2d\fP,\fBreplace_var_nc_double_3d\fP,\fBreplace_var_nc_real_1d\fP, \fBreplace_var_nc_real_2d\fP,\fBreplace_var_nc_real_3d\fP,\fBreplace_var_nc_int_1d\fP, \fBreplace_var_nc_int_2d\fP,\fBreplace_var_nc_int_3d\fP,\fBreplace_var_nc_char_1d\fP, \fBreplace_var_nc_char_2d\fP,\fBreplace_var_nc_char_3d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_char\fP"
+.br
+.RI "\fIReplace character type variable\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_char_1d\fP"
+.br
+.RI "\fIReplace character type variable\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_char_2d\fP"
+.br
+.RI "\fIReplace character type variable\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_char_3d\fP"
+.br
+.RI "\fIReplace 3D character type variable\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_double\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_double_1d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_double_2d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_double_3d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_int\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_int_1d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_int_2d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_int_3d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_real\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_real_1d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_real_2d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.ti -1c
+.RI "procedure \fBreplace_var_nc_real_3d\fP"
+.br
+.RI "\fIReplace 1d, 2d, 3d, or 4d field from the nc file\&. \fP"
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "integer \fBdebug_level\fP"
+.br
+.RI "\fIDebug level\&. \fP"
+.ti -1c
+.RI "character(len=40), dimension(4) \fBdimname\fP"
+.br
+.RI "\fIName of dims\&. \fP"
+.ti -1c
+.RI "integer, dimension(4) \fBends\fP"
+.br
+.RI "\fICounts of dims\&. \fP"
+.ti -1c
+.RI "character(len=256) \fBfilename\fP"
+.br
+.RI "\fIName of data file\&. \fP"
+.ti -1c
+.RI "integer \fBncid\fP"
+.br
+.RI "\fIFile ID\&. \fP"
+.ti -1c
+.RI "integer \fBndims\fP"
+.br
+.RI "\fINumber of dims\&. \fP"
+.ti -1c
+.RI "integer \fBstatus\fP"
+.br
+.RI "\fIReturn code\&. \fP"
+.ti -1c
+.RI "integer \fBxtype\fP"
+.br
+.RI "\fIType of data\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 16 of file module_ncio\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "generic module_ncio::ncio::add_new_var ()\fC [private]\fP"
+
+.PP
+Add a new 2d or 3d variable to ouput file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 88 of file module_ncio\&.f90\&.
+.PP
+References add_new_var_2d(), and add_new_var_3d()\&.
+.SS "procedure module_ncio::ncio::add_new_var_2d ()\fC [private]\fP"
+
+.PP
+Add a new 2d variable to output file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 90 of file module_ncio\&.f90\&.
+.PP
+Referenced by add_new_var()\&.
+.SS "procedure module_ncio::ncio::add_new_var_3d ()\fC [private]\fP"
+
+.PP
+Add a new 3d variable to output file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 91 of file module_ncio\&.f90\&.
+.PP
+Referenced by add_new_var()\&.
+.SS "procedure module_ncio::ncio::close ()\fC [private]\fP"
+
+.PP
+Close netCDF file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 28 of file module_ncio\&.f90\&.
+.PP
+References module_ncio::close_nc()\&.
+.SS "procedure module_ncio::ncio::convert_theta2t_2dgrid ()\fC [private]\fP"
+
+.PP
+Convert theta T (Kelvin) to T (deg C)\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 87 of file module_ncio\&.f90\&.
+.SS "generic module_ncio::ncio::get_att ()\fC [private]\fP"
+
+.PP
+Get attribute\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 30 of file module_ncio\&.f90\&.
+.PP
+References get_att_nc_int(), get_att_nc_real(), and get_att_nc_string()\&.
+.SS "procedure module_ncio::ncio::get_att_nc_int ()\fC [private]\fP"
+
+.PP
+Get attribute\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 31 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_att()\&.
+.SS "procedure module_ncio::ncio::get_att_nc_real ()\fC [private]\fP"
+
+.PP
+Get attribute\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 32 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_att()\&.
+.SS "procedure module_ncio::ncio::get_att_nc_string ()\fC [private]\fP"
+
+.PP
+Get attribute\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 33 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_att()\&.
+.SS "procedure module_ncio::ncio::get_dim ()\fC [private]\fP"
+
+.PP
+read in dimension from the nc file 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 29 of file module_ncio\&.f90\&.
+.PP
+References module_ncio::get_dim_nc()\&.
+.SS "generic module_ncio::ncio::get_var ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 34 of file module_ncio\&.f90\&.
+.PP
+References get_var_nc_char_1d(), get_var_nc_char_2d(), get_var_nc_char_3d(), get_var_nc_double_1d(), get_var_nc_double_2d(), get_var_nc_double_3d(), get_var_nc_int_1d(), get_var_nc_int_2d(), get_var_nc_int_3d(), get_var_nc_real_1d(), get_var_nc_real_2d(), get_var_nc_real_3d(), get_var_nc_short_1d(), and get_var_nc_short_2d()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_char ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 58 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::get_var_nc_char_1d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 59 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_char_2d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 60 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_char_3d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 61 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_double ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 54 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::get_var_nc_double_1d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 55 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_double_2d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 56 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_double_3d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 57 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_int ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 46 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::get_var_nc_int_1d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 47 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_int_2d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 48 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_int_3d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 49 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_real ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 50 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::get_var_nc_real_1d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 51 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_real_2d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 52 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_real_3d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 53 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_short ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 43 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::get_var_nc_short_1d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 44 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::get_var_nc_short_2d ()\fC [private]\fP"
+
+.PP
+Read in a 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 45 of file module_ncio\&.f90\&.
+.PP
+Referenced by get_var()\&.
+.SS "procedure module_ncio::ncio::handle_err ()\fC [private]\fP"
+
+.PP
+Handle netCDF errors\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 86 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::open ()\fC [private]\fP"
+
+.PP
+Open netCDF file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 27 of file module_ncio\&.f90\&.
+.PP
+References module_ncio::open_nc()\&.
+.SS "generic module_ncio::ncio::replace_var ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 62 of file module_ncio\&.f90\&.
+.PP
+References replace_var_nc_char_1d(), replace_var_nc_char_2d(), replace_var_nc_char_3d(), replace_var_nc_double_1d(), replace_var_nc_double_2d(), replace_var_nc_double_3d(), replace_var_nc_int_1d(), replace_var_nc_int_2d(), replace_var_nc_int_3d(), replace_var_nc_real_1d(), replace_var_nc_real_2d(), and replace_var_nc_real_3d()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_char ()\fC [private]\fP"
+
+.PP
+Replace character type variable\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 82 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_char_1d ()\fC [private]\fP"
+
+.PP
+Replace character type variable\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 83 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_char_2d ()\fC [private]\fP"
+
+.PP
+Replace character type variable\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 84 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_char_3d ()\fC [private]\fP"
+
+.PP
+Replace 3D character type variable\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 85 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_double ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 78 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_double_1d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 79 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_double_2d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 80 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_double_3d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 81 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_int ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 70 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_int_1d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 71 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_int_2d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 72 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_int_3d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 73 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_real ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 74 of file module_ncio\&.f90\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_real_1d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 75 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_real_2d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 76 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SS "procedure module_ncio::ncio::replace_var_nc_real_3d ()\fC [private]\fP"
+
+.PP
+Replace 1d, 2d, 3d, or 4d field from the nc file\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 77 of file module_ncio\&.f90\&.
+.PP
+Referenced by replace_var()\&.
+.SH "Field Documentation"
+.PP 
+.SS "integer module_ncio::ncio::debug_level\fC [private]\fP"
+
+.PP
+Debug level\&. 
+.PP
+Definition at line 20 of file module_ncio\&.f90\&.
+.SS "character(len=40), dimension(4) module_ncio::ncio::dimname\fC [private]\fP"
+
+.PP
+Name of dims\&. 
+.PP
+Definition at line 25 of file module_ncio\&.f90\&.
+.SS "integer, dimension(4) module_ncio::ncio::ends\fC [private]\fP"
+
+.PP
+Counts of dims\&. 
+.PP
+Definition at line 23 of file module_ncio\&.f90\&.
+.SS "character(len=256) module_ncio::ncio::filename\fC [private]\fP"
+
+.PP
+Name of data file\&. 
+.PP
+Definition at line 17 of file module_ncio\&.f90\&.
+.SS "integer module_ncio::ncio::ncid\fC [private]\fP"
+
+.PP
+File ID\&. 
+.PP
+Definition at line 18 of file module_ncio\&.f90\&.
+.SS "integer module_ncio::ncio::ndims\fC [private]\fP"
+
+.PP
+Number of dims\&. 
+.PP
+Definition at line 22 of file module_ncio\&.f90\&.
+.SS "integer module_ncio::ncio::status\fC [private]\fP"
+
+.PP
+Return code\&. 
+.PP
+Definition at line 19 of file module_ncio\&.f90\&.
+.SS "integer module_ncio::ncio::xtype\fC [private]\fP"
+
+.PP
+Type of data\&. 
+.PP
+Definition at line 24 of file module_ncio\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.

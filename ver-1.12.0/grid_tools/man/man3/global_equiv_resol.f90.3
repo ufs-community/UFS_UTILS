@@ -1,0 +1,89 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/global_equiv_resol.fd/global_equiv_resol.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/global_equiv_resol.fd/global_equiv_resol.f90 \- 
+.PP
+Compute the global equivalent resolution for regional grids\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcheck\fP (status)"
+.br
+.RI "\fICheck results of netCDF call\&. \fP"
+.ti -1c
+.RI "program \fBglobal_equiv_resol\fP"
+.br
+.RI "\fICompute the global equivalent resolution for regional grids using the average model grid cell size in meters squared\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Compute the global equivalent resolution for regional grids\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Gerard Ketefian NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition in file \fBglobal_equiv_resol\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine check (integer, intent(in)status)"
+
+.PP
+Check results of netCDF call\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstatus\fP return code to check 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Gerard Ketefian NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition at line 192 of file global_equiv_resol\&.f90\&.
+.SS "program global_equiv_resol ()"
+
+.PP
+Compute the global equivalent resolution for regional grids using the average model grid cell size in meters squared\&. 
+.IP "\(bu" 2
+RES(in km) = (360 degrees / 4*CRES) * 111 km
+.PP
+.PP
+Using the average cell size the equivalent global resolution is:
+.PP
+.IP "\(bu" 2
+CRES = NINT((2*PI*RADIUS_OF_EARTH)/(4*AVG_CELL_SIZE)
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+Gerard Ketefian NOAA/GSL 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise 
+.RE
+.PP
+
+.PP
+Definition at line 16 of file global_equiv_resol\&.f90\&.
+.PP
+References check()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

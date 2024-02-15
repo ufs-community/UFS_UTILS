@@ -1,0 +1,189 @@
+.TH "pmat::ldum" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat::ldum \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcldum\fP (a, ipiv, d)"
+.br
+.RI "\fIPerform L*D*U decomposition, with pivoting, of square matrix\&. \fP"
+.ti -1c
+.RI "subroutine \fBcldumf\fP (a, ipiv, d, ff)"
+.br
+.RI "\fIPerform l-d-u decomposition of square matrix a in place with pivoting\&. \fP"
+.ti -1c
+.RI "subroutine \fBdldum\fP (a, ipiv, d)"
+.br
+.RI "\fIPerform L*D*U decomposition, with pivoting, of square matrix\&. \fP"
+.ti -1c
+.RI "subroutine \fBdldumf\fP (a, ipiv, d, ff)"
+.br
+.RI "\fIPerform l-d-u decomposition of square matrix a in place with pivoting\&. \fP"
+.ti -1c
+.RI "subroutine \fBsldum\fP (a, ipiv, d)"
+.br
+.RI "\fIPerform L*D*U decomposition, with pivoting, of square matrix\&. \fP"
+.ti -1c
+.RI "subroutine \fBsldumf\fP (a, ipiv, d, ff)"
+.br
+.RI "\fIPerform l-d-u decomposition of square matrix a in place with pivoting\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 27 of file pmat\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat::ldum::cldum (complex(dpc), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, complex(dpc), intent(out)d)\fC [private]\fP"
+
+.PP
+Perform L*D*U decomposition, with pivoting, of square matrix\&. Complex double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP input square matrix, output L,D,U factors 
+.br
+\fId\fP determinant sign change indicator (+1 or -1) 
+.br
+\fIipiv\fP vector of pivots 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 508 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldum::cldumf (complex(dpc), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, complex(dpc), intent(out)d, logical, intent(out)ff)\fC [private]\fP"
+
+.PP
+Perform l-d-u decomposition of square matrix a in place with pivoting\&. Complex double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIipiv\fP vector encoding the pivoting sequence 
+.br
+\fId\fP indicator for possible sign change of determinant 
+.br
+\fIff,:\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 659 of file pmat\&.f90\&.
+.PP
+Referenced by pmat::cinvmtf(), pmat::cldum(), pmat::clinmmtf(), and pmat::clinmvtf()\&.
+.SS "subroutine pmat::ldum::dldum (real(dp), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, real(dp), intent(out)d)\fC [private]\fP"
+
+.PP
+Perform L*D*U decomposition, with pivoting, of square matrix\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP input square matrix, output L,D,U factors 
+.br
+\fId\fP determinant sign change indicator (+1 or -1) 
+.br
+\fIipiv\fP vector of pivots 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 492 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldum::dldumf (real(dp), dimension(:,:), intent(inout)a, integer, dimension(:), intent(out)ipiv, real(dp), intent(out)d, logical(spi), intent(out)ff)\fC [private]\fP"
+
+.PP
+Perform l-d-u decomposition of square matrix a in place with pivoting\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIipiv\fP vector encoding the pivoting sequence 
+.br
+\fId\fP indicator for possible sign change of determinant 
+.br
+\fIff,:\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 592 of file pmat\&.f90\&.
+.PP
+Referenced by pmat::dinvmtf(), pmat::dldum(), pmat::dlinmmtf(), and pmat::dlinmvtf()\&.
+.SS "subroutine pmat::ldum::sldum (real(sp), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, real(sp), intent(out)d)\fC [private]\fP"
+
+.PP
+Perform L*D*U decomposition, with pivoting, of square matrix\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP input square matrix, output L,D,U factors 
+.br
+\fId\fP determinant sign change indicator (+1 or -1) 
+.br
+\fIipiv\fP vector of pivots 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 476 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldum::sldumf (real(sp), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, real(sp), intent(out)d, logical, intent(out)ff)\fC [private]\fP"
+
+.PP
+Perform l-d-u decomposition of square matrix a in place with pivoting\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP square matrix to be factorized 
+.br
+\fIipiv\fP vector encoding the pivoting sequence 
+.br
+\fId\fP indicator for possible sign change of determinant 
+.br
+\fIff,:\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 525 of file pmat\&.f90\&.
+.PP
+Referenced by pmat::sinvmtf(), pmat::sldum(), pmat::slinmmtf(), and pmat::slinmvtf()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

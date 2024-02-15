@@ -1,0 +1,47 @@
+.TH "pesg::gaulegh" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::gaulegh \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgaulegh\fP (m, x, w)"
+.br
+.RI "\fIThis Gauss-Legendre quadrature integrates exactly any even polynomial up to degree m*4-2 in the half-interval [0,1]\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 58 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::gaulegh::gaulegh (integer(spi), intent(in)m, real(dp), dimension(m), intent(out)x, real(dp), dimension(m), intent(out)w)\fC [private]\fP"
+
+.PP
+This Gauss-Legendre quadrature integrates exactly any even polynomial up to degree m*4-2 in the half-interval [0,1]\&. This code is liberally adapted from the algorithm given in Press et al\&., Numerical Recipes\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of nodes in half-interval 
+.br
+\fIx\fP nodes and weights 
+.br
+\fIw\fP nodes and weights 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1851 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

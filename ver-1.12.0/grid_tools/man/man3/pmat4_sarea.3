@@ -1,0 +1,231 @@
+.TH "pmat4::sarea" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::sarea \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBdqarea_d\fP (rlat, drlata, drlona, drlatb, drlonb, drlatc, drlonc)"
+.br
+.RI "\fICompute the area of the spherical quadrilateral with a vertex at latitude rlat, and three other vertices at A, B, and C in turn, whose incremented latitudes and longitudes are drlata,drlona (for A), drlatb,drlonb (for B), and drlatc,drlonc (for C)\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBdqarea_s\fP (rlat, drlata, drlona, drlatb, drlonb, drlatc, drlonc)"
+.br
+.RI "\fICompute the area of the spherical quadrilateral with a vertex at latitude rlat, and three other vertices at A, B, and C in turn, whose incremented latitudes and longitudes are drlata,drlona (for A), drlatb,drlonb (for B), and drlatc,drlonc (for C)\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBdtarea_d\fP (rlat, drlata, drlona, drlatb, drlonb)"
+.br
+.RI "\fICompute the area of the spherical triangle with a vertex at latitude rlat, and two other vertices, A and B, whose incremented latitudes and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B)\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBdtarea_s\fP (rlat, drlata, drlona, drlatb, drlonb)"
+.br
+.RI "\fICompute the area of the spherical triangle with a vertex at latitude rlat, and two other vertices, A and B, whose incremented latitudes and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B)\&. \fP"
+.ti -1c
+.RI "real(dp) function \fBsarea_d\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the area of the spherical triangle, {v1,v2,v3}\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBsarea_s\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the area of the spherical triangle, {v1,v2,v3}, measured in the right-handed sense, by dropping a perpendicular to u0 on the longest side so that the area becomes the sum of areas of the two simpler right-angled triangles\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 81 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function pmat4::sarea::dqarea_d (real(dp), intent(in)rlat, real(dp), intent(in)drlata, real(dp), intent(in)drlona, real(dp), intent(in)drlatb, real(dp), intent(in)drlonb, real(dp), intent(in)drlatc, real(dp), intent(in)drlonc)\fC [private]\fP"
+
+.PP
+Compute the area of the spherical quadrilateral with a vertex at latitude rlat, and three other vertices at A, B, and C in turn, whose incremented latitudes and longitudes are drlata,drlona (for A), drlatb,drlonb (for B), and drlatc,drlonc (for C)\&. The computations are designed to give a proportionately accurate area estimate even when the quadrilateral is very small, provided the diagonal making the B-increment is not disproportionately small compared to the characteristic size of the quadrilateral\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP latitude of reference point 
+.br
+\fIdrlata\fP incremental latitude of point A 
+.br
+\fIdrlona\fP incremental longitude of point A 
+.br
+\fIdrlatb\fP incremental latitude of point B 
+.br
+\fIdrlonb\fP incremental longitude of point B 
+.br
+\fIdrlatc\fP incremental latitude of point C 
+.br
+\fIdrlonc\fP incremental longitude of point C 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+area 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 896 of file pmat4\&.f90\&.
+.SS "real(sp) function pmat4::sarea::dqarea_s (real(sp), intent(in)rlat, real(sp), intent(in)drlata, real(sp), intent(in)drlona, real(sp), intent(in)drlatb, real(sp), intent(in)drlonb, real(sp), intent(in)drlatc, real(sp), intent(in)drlonc)\fC [private]\fP"
+
+.PP
+Compute the area of the spherical quadrilateral with a vertex at latitude rlat, and three other vertices at A, B, and C in turn, whose incremented latitudes and longitudes are drlata,drlona (for A), drlatb,drlonb (for B), and drlatc,drlonc (for C)\&. The computations are designed to give a proportionately accurate area estimate even when the quadrilateral is very small, provided the diagonal making the B-increment is not disproportionately small compared to the characteristic size of the quadrilateral\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP latitude of reference point 
+.br
+\fIdrlata\fP incremental latitude of point A 
+.br
+\fIdrlona\fP incremental longitude of point A 
+.br
+\fIdrlatb\fP incremental latitude of point B 
+.br
+\fIdrlonb\fP incremental longitude of point B 
+.br
+\fIdrlatc\fP incremental latitude of point C 
+.br
+\fIdrlonc\fP incremental longitude of point C 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+area result 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 867 of file pmat4\&.f90\&.
+.SS "real(dp) function pmat4::sarea::dtarea_d (real(dp), intent(in)rlat, real(dp), intent(in)drlata, real(dp), intent(in)drlona, real(dp), intent(in)drlatb, real(dp), intent(in)drlonb)\fC [private]\fP"
+
+.PP
+Compute the area of the spherical triangle with a vertex at latitude rlat, and two other vertices, A and B, whose incremented latitudes and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B)\&. The computations are designed to give a proportionately accurate area estimate even when the triangle is very small, provided the B-increment is not disproportionately small compared to the other two sides\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP latitude of reference point 
+.br
+\fIdrlata\fP incremental latitude of A 
+.br
+\fIdrlona\fP incremental longitude of A 
+.br
+\fIdrlatb\fP incremental latitude of B 
+.br
+\fIdrlonb\fP incremental longitude of B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+area result 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 824 of file pmat4\&.f90\&.
+.SS "real(sp) function pmat4::sarea::dtarea_s (real(sp), intent(in)rlat, real(sp), intent(in)drlata, real(sp), intent(in)drlona, real(sp), intent(in)drlatb, real(sp), intent(in)drlonb)\fC [private]\fP"
+
+.PP
+Compute the area of the spherical triangle with a vertex at latitude rlat, and two other vertices, A and B, whose incremented latitudes and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B)\&. The computations are designed to give a proportionately accurate area estimate even when the triangle is very small, provided the B-increment is not disproportionately small compared to the other two sides\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP latitude of reference point 
+.br
+\fIdrlata\fP incremental latitude of A 
+.br
+\fIdrlona\fP incremental longitude of A 
+.br
+\fIdrlatb\fP incremental latitude of B 
+.br
+\fIdrlonb\fP incremental longitude of B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+area result 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 785 of file pmat4\&.f90\&.
+.SS "real(dp) function pmat4::sarea::sarea_d (real(dp), dimension(3), intent(in)v1, real(dp), dimension(3), intent(in)v2, real(dp), dimension(3), intent(in)v3)\fC [private]\fP"
+
+.PP
+Compute the area of the spherical triangle, {v1,v2,v3}\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP unit-3-vector vertex of the spherical triangle 
+.br
+\fIv2\fP unit-3-vector vertex of the spherical triangle 
+.br
+\fIv3\fP unit-3-vector vertex of the spherical triangle 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+area result 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 722 of file pmat4\&.f90\&.
+.SS "real(sp) function pmat4::sarea::sarea_s (real(sp), dimension(3), intent(in)v1, real(sp), dimension(3), intent(in)v2, real(sp), dimension(3), intent(in)v3)\fC [private]\fP"
+
+.PP
+Compute the area of the spherical triangle, {v1,v2,v3}, measured in the right-handed sense, by dropping a perpendicular to u0 on the longest side so that the area becomes the sum of areas of the two simpler right-angled triangles\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP area of the spherical triangle 
+.br
+\fIv2\fP area of the spherical triangle 
+.br
+\fIv3\fP area of the spherical triangle 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+area result 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 667 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

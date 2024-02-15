@@ -1,0 +1,94 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/charstrings.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "cpld_gridgen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/charstrings.F90 \- 
+.PP
+Define required character string variables\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "module \fBcharstrings\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Define required character string variables\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module contains the character string variables 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBcharstrings\&.F90\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "module charstrings"
+.PP 
+Definition at line 8 of file charstrings\&.F90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+character(len=cs) \fIatmres\fP The ATM resolution, e\&.g\&. C96, C192, C384 
+.br
+.PP
+character(len=cs) \fIcdate\fP The date stamp of file creation\&. 
+.br
+.PP
+character(len=cl) \fIdirout\fP The directory where output files will be written\&. 
+.br
+.PP
+character(len=cl) \fIdirsrc\fP The source directory containing the fix files for MOM6\&. 
+.br
+.PP
+character(len=cl) \fIeditsfile\fP The name of the topo edits file (resolution specific) 
+.br
+.PP
+character(len=cl) \fIfv3dir\fP The directory containing the FV3 mosaic files\&. 
+.br
+.PP
+character(len=cl) \fIhistory\fP A documentation string\&. 
+.br
+.PP
+character(len=cl) \fIlogmsg\fP An informational message\&. 
+.br
+.PP
+character(len=cl) \fImaskfile\fP The name of the MOM6 mask file\&. 
+.br
+.PP
+character(len=cs) \fImaskname\fP The variable name of the mask field\&. 
+.br
+.PP
+character(len=cs) \fIres\fP The Ocean/Ice resolution, e\&.g\&. 500 (5deg), 100 (1deg) 050 (1/2deg), 025 (1/4deg) 
+.br
+.PP
+character(len=2), dimension(4) \fIstaggerlocs\fP The named stagger locations of the grid\&. 
+.br
+.PP
+character(len=cl) \fItopofile\fP The name of the MOM6 bathymetry file\&. 
+.br
+.PP
+character(len=cs) \fItoponame\fP The name of the bathymetry field\&. 
+.br
+.PP
+.RE
+.PP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for cpld_gridgen from the source code\&.

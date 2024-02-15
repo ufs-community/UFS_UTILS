@@ -1,0 +1,77 @@
+.TH "pmat4::dlltoxy" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::dlltoxy \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdlltoxy_d\fP (rlat, drlat, drlon, x2)"
+.br
+.RI "\fIFrom a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. \fP"
+.ti -1c
+.RI "subroutine \fBdlltoxy_s\fP (rlat, drlat, drlon, x2)"
+.br
+.RI "\fIFrom a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 84 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat4::dlltoxy::dlltoxy_d (real(dp), intent(in)rlat, real(dp), intent(in)drlat, real(dp), intent(in)drlon, real(dp), dimension(2), intent(out)x2)\fC [private]\fP"
+
+.PP
+From a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. Double precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP latitude 
+.br
+\fIdrlat\fP latitude 
+.br
+\fIdrlon\fP longitudes 
+.br
+\fIx2\fP output 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 935 of file pmat4\&.f90\&.
+.SS "subroutine pmat4::dlltoxy::dlltoxy_s (real(sp), intent(in)rlat, real(sp), intent(in)drlat, real(sp), intent(in)drlon, real(sp), dimension(2), intent(out)x2)\fC [private]\fP"
+
+.PP
+From a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. Single precision version\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrlat\fP latitude 
+.br
+\fIdrlat\fP latitude 
+.br
+\fIdrlon\fP longitudes 
+.br
+\fIx2\fP output 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 915 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

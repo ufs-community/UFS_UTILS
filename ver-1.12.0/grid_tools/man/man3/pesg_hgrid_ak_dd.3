@@ -1,0 +1,131 @@
+.TH "pesg::hgrid_ak_dd" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::hgrid_ak_dd \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBhgrid_ak_dd\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, ff)"
+.br
+.RI "\fIUse a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. \fP"
+.ti -1c
+.RI "subroutine \fBhgrid_ak_dd_c\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, gdlat, gdlon, garea, dx, dy, dangle_dx, dangle_dy, ff)"
+.br
+.RI "\fILike hgrid_ak_rr_c, except all the angle arguments (but not delx,dely) are in degrees instead of radians\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 46 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::hgrid_ak_dd::hgrid_ak_dd (integer(spi), intent(in)lx, integer(spi), intent(in)ly, integer(spi), intent(in)nx, integer(spi), intent(in)ny, real(dp), intent(in)a, real(dp), intent(in)k, real(dp), intent(in)pdlat, real(dp), intent(in)pdlon, real(dp), intent(in)pdazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)gdlat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)gdlon, real(dp), dimension(lx:lx+nx-1,ly:ly+ny-1), intent(out)garea, logical, intent(out)ff)\fC [private]\fP"
+
+.PP
+Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. Like \fBhgrid_ak_rr\fP, return the grid points' lats and lons, except that here the angles are returned in degrees\&. Garea, the area of each grid cell, is returned as in \fBhgrid_ak_rr\fP, and a failure flag, ff, raised when a failure occurs anywhere in these calculations\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP number of the grid spaces in x 
+.br
+\fIny\fP number of the grid spaces in y 
+.br
+\fIa\fP parameter of an ESG mapping 
+.br
+\fIk\fP parameter of an ESG mapping 
+.br
+\fIpdlat\fP degrees latitude of the projection center of mapping 
+.br
+\fIpdlon\fP degrees longitude of the projection center of mapping 
+.br
+\fIpdazi\fP degrees azimuth of orientation of mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid (in radians) 
+.br
+\fIdely\fP central y-spacing of the grid (in radians) 
+.br
+\fIgdlat\fP array of grid point latitudes (in degrees) 
+.br
+\fIgdlon\fP array of grid point longitudes (in dgrees) 
+.br
+\fIgarea\fP array of grid cell areas (in steradians) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1628 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::hgrid_ak_dd::hgrid_ak_dd_c (integer(spi), intent(in)lx, integer(spi), intent(in)ly, integer(spi), intent(in)nx, integer(spi), intent(in)ny, real(dp), intent(in)a, real(dp), intent(in)k, real(dp), intent(in)pdlat, real(dp), intent(in)pdlon, real(dp), intent(in)pdazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)gdlat, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)gdlon, real(dp), dimension(lx:lx+nx-1,ly:ly+ny-1), intent(out)garea, real(dp), dimension(lx:lx+nx-1,ly:ly+ny  ), intent(out)dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny-1), intent(out)dy, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)dangle_dx, real(dp), dimension(lx:lx+nx  ,ly:ly+ny  ), intent(out)dangle_dy, logical, intent(out)ff)\fC [private]\fP"
+
+.PP
+Like hgrid_ak_rr_c, except all the angle arguments (but not delx,dely) are in degrees instead of radians\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIpdlat\fP latitude defining projection center of the mapping 
+.br
+\fIpdlon\fP longitude defining projection center of the mapping 
+.br
+\fIpdazi\fP azimuth of the orientation of the mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid (in radians) 
+.br
+\fIdely\fP central y-spacing of the grid (in radians) 
+.br
+\fIgdlat\fP array of grid point degree-latitudes 
+.br
+\fIgdlon\fP array of grid point degree-longitudes 
+.br
+\fIgarea\fP array of grid-cell areas (steradians) 
+.br
+\fIdx\fP step sizes of the grid-cell edges in x (earth radius=1 unit) 
+.br
+\fIdy\fP step sizes of the grid-cell edges in y (earth radius=1 unit) 
+.br
+\fIdangle_dx\fP azimuth rotation of the x grid steps, dx (degrees) 
+.br
+\fIdangle_dy\fP azimuth rotation of the y grid steps, dy (degrees) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1671 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

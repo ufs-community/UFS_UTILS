@@ -1,0 +1,42 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/vertices.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "cpld_gridgen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/vertices.F90 \- 
+.PP
+Fill the vertices for any stagger location\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "module \fBvertices\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Fill the vertices for any stagger location\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module fills the vertices for any stagger location\&. The i,j indices of the source lat and lon arrays are modified by the vertex offsets to give the latitudes and longitues of each vertex for the desired stagger lcation\&. The routine fill_vertices will fill the vertex values of all non-boundary rows for any stagger locations\&. For the Ct and Cu grids, the fill_bottom routine fills the bottom most vertex values\&. For the Cv and Bu grids, the routine fill_top fills the topmost vertex values using the values from across the tripole seam\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBvertices\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for cpld_gridgen from the source code\&.

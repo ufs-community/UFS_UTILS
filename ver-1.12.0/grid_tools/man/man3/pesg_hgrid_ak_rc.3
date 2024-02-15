@@ -1,0 +1,73 @@
+.TH "pesg::hgrid_ak_rc" 3 "Thu Feb 15 2024" "Version 1.12.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::hgrid_ak_rc \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBhgrid_ak_rc\fP (lx, ly, nx, ny, A, K, plat, plon, pazi, delx, dely, xc, xcd, garea, ff)"
+.br
+.RI "\fIUse a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 45 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::hgrid_ak_rc::hgrid_ak_rc (integer(spi), intent(in)lx, integer(spi), intent(in)ly, integer(spi), intent(in)nx, integer(spi), intent(in)ny, real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(3,  lx:lx+nx  ,ly:ly+ny  ), intent(out)xc, real(dp), dimension(3,2,lx:lx+nx  ,ly:ly+ny  ), intent(out)xcd, real(dp), dimension(    lx:lx+nx-1,ly:ly+ny-1), intent(out)garea, logical, intent(out)ff)\fC [private]\fP"
+
+.PP
+Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (plat,plon) and twisted about this center by an azimuth angle of pazi counterclockwise (these angles in radians)\&. Assume the radius of the earth is unity, and using the central mapping point as the coordinate origin, set up the grid with central x-spacing delx and y-spacing dely\&. The grid index location of the left-lower corner of the domain is (lx,ly) (typically both NEGATIVE)\&. The numbers of the grid spaces in x and y directions are nx and ny\&. (Note that, for a centered rectangular grid lx and ly are negative and, in magnitude, half the values of nx and ny respectively\&.) Return the unit cartesian vectors xc of the grid points and their jacobian matrices xcd wrt the map coordinates, and return a rectangular array, garea, of dimensions nx-1 by ny-1, that contains the areas of each of the grid cells
+.PP
+If all goes well, return a lowered failure flag, ff=\&.false\&. \&. But if, for some reason, it is not possible to complete this task, return the raised failure flag, ff=\&.TRUE\&. \&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlx\fP center-relative x grid index for left edge of the domain 
+.br
+\fIly\fP center-relative y grid index for lower edge of the domain 
+.br
+\fInx\fP numbers of the grid spaces in x 
+.br
+\fIny\fP numbers of the grid spaces in y 
+.br
+\fIa\fP parameters of the ESG mapping centered at (plat,plon) 
+.br
+\fIk\fP parameters of the ESG mapping centered at (plat,plon) 
+.br
+\fIplat\fP latitude of the projection center of the mapping (radians) 
+.br
+\fIplon\fP longitude of the projection center of the mapping (radians) 
+.br
+\fIpazi\fP azimuth of orientation of mapping at its center 
+.br
+\fIdelx\fP central x-spacing of the grid (in radians) 
+.br
+\fIdely\fP central y-spacing of the grid (in radians) 
+.br
+\fIxc\fP Earth-centered unit cartesian 3-vectors at each grid point 
+.br
+\fIxcd\fP Jacobian matrices, d(xc)/d(xm), at each grid point 
+.br
+\fIgarea\fP rectangular array of grid-cell areas (steradians) 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 1539 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

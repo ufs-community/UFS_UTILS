@@ -1,0 +1,91 @@
+.TH "angles" 3 "Thu Feb 15 2024" "Version 1.12.0" "cpld_gridgen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+angles \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBfind_ang\fP"
+.br
+.RI "\fIFind the rotation angle on center (Ct) grid points\&. \fP"
+.ti -1c
+.RI "subroutine \fBfind_angq\fP"
+.br
+.RI "\fIFind the rotation angle on corner grid (Bu) points using the full MOM6 supergrid\&. \fP"
+.ti -1c
+.RI "real(dbl_kind) function \fBmodulo_around_point\fP (x, xc, Lx)"
+.br
+.RI "\fIReturn the modulo value of x in an interval [xc-(Lx/2) xc+(Lx/2)] If Lx<=0, then it returns x without applying modulo arithmetic\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 10 of file angles\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine angles::find_ang ()"
+
+.PP
+Find the rotation angle on center (Ct) grid points\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 131 of file angles\&.F90\&.
+.PP
+References modulo_around_point()\&.
+.PP
+Referenced by gen_fixgrid()\&.
+.SS "subroutine angles::find_angq ()"
+
+.PP
+Find the rotation angle on corner grid (Bu) points using the full MOM6 supergrid\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 25 of file angles\&.F90\&.
+.PP
+References modulo_around_point()\&.
+.PP
+Referenced by gen_fixgrid()\&.
+.SS "real(dbl_kind) function angles::modulo_around_point (real(dbl_kind), intent(in)x, real(dbl_kind), intent(in)xc, real(dbl_kind), intent(in)Lx)"
+
+.PP
+Return the modulo value of x in an interval [xc-(Lx/2) xc+(Lx/2)] If Lx<=0, then it returns x without applying modulo arithmetic\&. From src/initialization/MOM_shared_initialization\&.F90: 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP Value to which to apply modulo arithmetic 
+.br
+\fIxc\fP Center of modulo range 
+.br
+\fILx\fP Modulo range width 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+x_mod Value x shifted by an integer multiple of Lx to be close to xc 
+.RE
+.PP
+
+.PP
+Definition at line 188 of file angles\&.F90\&.
+.PP
+Referenced by find_ang(), and find_angq()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for cpld_gridgen from the source code\&.

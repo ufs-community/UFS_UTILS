@@ -1,0 +1,86 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/inland.fd/nb.F90" 3 "Thu Feb 15 2024" "Version 1.12.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/inland.fd/nb.F90 \- 
+.PP
+This module contains the subroutines that find the adjacent neighbors of a given cell, in a cubed sphere grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "module \fBcs_nb\fP"
+.br
+.ti -1c
+.RI "type \fBcs_nb::nb_gp_idx\fP"
+.br
+.RI "\fINeighboring cell descriptor\&. \fP"
+.ti -1c
+.RI "type \fBcs_nb::nb_tile_idx\fP"
+.br
+.RI "\fINeighboring tile descriptor\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+This module contains the subroutines that find the adjacent neighbors of a given cell, in a cubed sphere grid\&. 
+
+Each neighbor is in the form of (i,j,tile)\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+July 1, 2020 
+.RE
+.PP
+
+.PP
+Definition in file \fBnb\&.F90\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "type cs_nb::nb_gp_idx"
+.PP 
+Neighboring cell descriptor\&. 
+
+
+.PP
+Definition at line 17 of file nb\&.F90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+integer \fIgp_type\fP Cell boundary type from bndry function\&. 
+.br
+.PP
+integer, dimension(3, 8) \fIijt\fP Neighboring cell indices\&. 
+.br
+.PP
+.RE
+.PP
+.SH "type cs_nb::nb_tile_idx"
+.PP 
+Neighboring tile descriptor\&. 
+
+
+.PP
+Definition at line 11 of file nb\&.F90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+character(1) \fInb_tile_bndry\fP Neighbor tile boundary (l)eft, (r)ight, (t)op, (b)ottom\&. 
+.br
+.PP
+integer \fInb_tile_num\fP Neighbor tile number (1\&.\&.6) 
+.br
+.PP
+.RE
+.PP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.
