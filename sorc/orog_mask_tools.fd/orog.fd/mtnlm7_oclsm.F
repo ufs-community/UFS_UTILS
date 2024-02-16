@@ -49,9 +49,9 @@ C>  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
 C>                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),
 C>                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).
 C>                  RESPECTIVELY READ IN FREE FORMAT.
-C>  -   UNIT235    - GTOPO 30" AVR for ZAVG elevation
-C>  -   NCID       - 30" UMD land cover mask.
-C>  -   UNIT15     - GICE Grumbine 30" RAMP Antarctica orog IMNx3616
+C>  -   UNIT235    - GTOPO 30" AVR for ZAVG elevation (NetCDF)
+C>  -   NCID       - 30" UMD land cover mask. (NetCDF)
+C>  -   UNIT15     - GICE Grumbine 30" RAMP Antarctica orog IMNx3601. (NetCDF)
 C>  -   UNIT25     - Ocean land-sea mask on gaussian grid         
 C>
 C>   OUTPUT FILES:
@@ -296,9 +296,9 @@ C
       error=NF__OPEN("landcover30.fixed.nc",NF_NOWRITE,fsize,ncid)
       call netcdf_err(error, 'Open file landcover30.fixed.nc' )
       error=nf_inq_varid(ncid, 'land_mask', id_var)
-      call netcdf_err(error, 'inquire varid of land_mask')
+      call netcdf_err(error, 'Inquire varid of land_mask')
       error=nf_get_var_int1(ncid, id_var, UMD)
-      call netcdf_err(error, 'inquire data of land_mask')
+      call netcdf_err(error, 'Inquire data of land_mask')
       error = nf_close(ncid)
 
       print *,' UMD lake, UMD(50,50)=',UMD(50,50)
@@ -456,27 +456,25 @@ C
      & ' Before GICE ZAVG(1,52)=',ZAVG(1,52),ZSLM(1,52)
       print *,
      & ' Before GICE ZAVG(1,112)=',ZAVG(1,JMN-112),ZSLM(1,112)
-! GICE: Grumbine 30" Antarctica orog IMNx3616 from S to N & wraped E-W.
-! NB: Zfields are S to N and W-E!
-       iosg = 0
+
+! Read 30-sec Antarctica RAMP data. Points scan from South
+! to North, and from Greenwich to Greenwich.
+
+      iosg = 0
       error=NF__OPEN("./fort.15",NF_NOWRITE,fsize,ncid)
-      call netcdf_err(error, 'Open file fort.15' )
+      call netcdf_err(error, 'Opening RAMP file fort.15' )
       error=nf_inq_varid(ncid, 'topo', id_var)
-      call netcdf_err(error, 'inquire varid of topo')
+      call netcdf_err(error, 'Inquire varid of RAMP topo')
       error=nf_get_var_real(ncid, id_var, GICE)
       iosg=error
-      call netcdf_err(error, 'inquire data of topo')
+      call netcdf_err(error, 'Inquire data of RAMP topo')
       error = nf_close(ncid)
-
-      print*,'after ramp read ',maxval(gice),minval(gice)
       
-!      READ(15,iostat=iosg) GICE
-       if(iosg .ne. 0 ) then
+      if(iosg .ne. 0 ) then
         print *,' *** Err on reading GICE record, iosg=',iosg
         print *,' exec continues but NO GICE correction done '
-!       stop
-       else
-        print *,' GICE 30" Antarctica RAMP orog 43200x3616 read OK'
+      else
+        print *,' GICE 30" Antarctica RAMP orog 43201x3601 read OK'
         print *,' Processing! '
         print *,' Processing! '
         print *,' Processing! '
@@ -496,7 +494,7 @@ C
      &' orig:',i5,i4,' Lat=',f7.3,f8.2,'E',' GICE=',f8.1)
          enddo
          enddo
-       endif
+      endif
 
       deallocate (GICE)
 
