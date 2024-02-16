@@ -469,7 +469,6 @@ C
       error = nf_close(ncid)
 
       print*,'after ramp read ',maxval(gice),minval(gice)
-      stop4
       
 !      READ(15,iostat=iosg) GICE
        if(iosg .ne. 0 ) then
