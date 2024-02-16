@@ -82,8 +82,8 @@ envir=${envir:-"prod"}
 NWROOT=${NWROOT:-"/nw${envir}"}
 
 HOMEgfs=${HOMEgfs:-${NWPROD:-$NWROOT/gfs.${gfs_ver:?}}}
-FIXam=${FIXam:-$HOMEgfs/fix/am}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
+FIXgfs=${FIXgfs:-$HOMEgfs/fix}
  
 # output com directory.
 COMOUT=${COMOUT:-$PWD}
@@ -91,7 +91,7 @@ COMOUT=${COMOUT:-$PWD}
 # the input data.  ims may be grib1 or grib2.  five_min files are grib 2.
 IMS_FILE=${IMS_FILE:-"ims.grib2"} 
 FIVE_MIN_ICE_FILE=${FIVE_MIN_ICE_FILE:-"seaice.5min.grib2"} 
-FIVE_MIN_ICE_MASK_FILE=${FIVE_MIN_ICE_MASK_FILE:-${FIXam}/emcsfc_gland5min.grib2}
+FIVE_MIN_ICE_MASK_FILE=${FIVE_MIN_ICE_MASK_FILE:-${FIXgfs}/am/emcsfc_gland5min.grib2}
 
 # the output ice blend data (grib)
 BLENDED_ICE_FILE=${BLENDED_ICE_FILE:-seaice.5min.blend}

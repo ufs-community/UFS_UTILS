@@ -72,7 +72,6 @@ RUN=${RUN:-"gfs"}
 export HOMEgfs=${HOMEgfs:-$NWROOT/gfs.${gfs_ver:?}}
 export USHgfs=${USHgfs:-$HOMEgfs/ush}
 export FIXgfs=${FIXgfs:-$HOMEgfs/fix}
-FIXgfs_am=${FIXgfs_am:-$HOMEgfs/fix/am}
 export EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 
 # output com directory.
@@ -116,7 +115,7 @@ export IMS_FILE=${IMS_FILE:-"ims.grib2"}
 export FIVE_MIN_ICE_FILE=${FIVE_MIN_ICE_FILE:-"seaice.5min.grib2"}
 
 # landmask file for global 5-minute data (grib 2)
-export FIVE_MIN_ICE_MASK_FILE=${FIVE_MIN_ICE_MASK_FILE:-${FIXgfs_am}/emcsfc_gland5min.grib2}
+export FIVE_MIN_ICE_MASK_FILE=${FIVE_MIN_ICE_MASK_FILE:-${FIXgfs}/am/emcsfc_gland5min.grib2}
 
 # the output ice blend data (grib)
 export BLENDED_ICE_FILE=${BLENDED_ICE_FILE:-seaice.5min.blend}
@@ -182,10 +181,10 @@ LATB=${LATB:-"1536"}
 
 resolution="${JCAP}.${LONB}.${LATB}"
 
-export MODEL_SLMASK_FILE=${SLMASK:-$FIXgfs_am/global_slmask.t${resolution}.grb}
-export MODEL_LATITUDE_FILE=${MDL_LATS:-$FIXgfs_am/global_latitudes.t${resolution}.grb}
-export MODEL_LONGITUDE_FILE=${MDL_LONS:-$FIXgfs_am/global_longitudes.t${resolution}.grb}
-export GFS_LONSPERLAT_FILE=${LONSPERLAT:-$FIXgfs_am/global_lonsperlat.t${resolution}.txt}
+export MODEL_SLMASK_FILE=${SLMASK:-${FIXgfs}/am/global_slmask.t${resolution}.grb}
+export MODEL_LATITUDE_FILE=${MDL_LATS:-${FIXgfs}/am/global_latitudes.t${resolution}.grb}
+export MODEL_LONGITUDE_FILE=${MDL_LONS:-${FIXgfs}/am/global_longitudes.t${resolution}.grb}
+export GFS_LONSPERLAT_FILE=${LONSPERLAT:-${FIXgfs}/am/global_lonsperlat.t${resolution}.txt}
 export MODEL_SNOW_FILE=${FNSNOAJCAP:-${RUN}.${cycle}.snogrb_t${resolution}}
 export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP:-${COMINgfs_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
 
@@ -240,10 +239,10 @@ LATB_ENKF=${LATB_ENKF:-"576"}
 
 resolution="${JCAP_ENKF}.${LONB_ENKF}.${LATB_ENKF}"
 
-export MODEL_SLMASK_FILE=${SLMASK_ENKF:-$FIXgfs_am/global_slmask.t${resolution}.grb}
-export MODEL_LATITUDE_FILE=${MDL_LATS_ENKF:-$FIXgfs_am/global_latitudes.t${resolution}.grb}
-export MODEL_LONGITUDE_FILE=${MDL_LONS_ENKF:-$FIXgfs_am/global_longitudes.t${resolution}.grb}
-export GFS_LONSPERLAT_FILE=${LONSPERLAT_ENKF:-$FIXgfs_am/global_lonsperlat.t${resolution}.txt}
+export MODEL_SLMASK_FILE=${SLMASK_ENKF:-${FIXgfs}/am/global_slmask.t${resolution}.grb}
+export MODEL_LATITUDE_FILE=${MDL_LATS_ENKF:-${FIXgfs}/am/global_latitudes.t${resolution}.grb}
+export MODEL_LONGITUDE_FILE=${MDL_LONS_ENKF:-${FIXgfs}/am/global_longitudes.t${resolution}.grb}
+export GFS_LONSPERLAT_FILE=${LONSPERLAT_ENKF:-${FIXgfs}/am/global_lonsperlat.t${resolution}.txt}
 export MODEL_SNOW_FILE=${FNSNOAJCAP_ENKF:-${RUN}.${cycle}.snogrb_t${resolution}}
 export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP_ENKF:-${COMINgfs_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
 
