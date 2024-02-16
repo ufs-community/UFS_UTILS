@@ -1569,14 +1569,11 @@ C
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
       DIMENSION ORO(IM,JM),SLM(IM,JM),VAR(IM,JM),VAR4(IM,JM)
       DIMENSION IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM),numi(jm)
-      INTEGER mskocn,isave
       LOGICAL FLAG, DEBUG
 C==== DATA DEBUG/.TRUE./
       DATA DEBUG/.FALSE./
 C
 ! ---- OCLSM holds the ocean (im,jm) grid
-! ---  mskocn=1 Use ocean model sea land mask, OK and present,
-! ---  mskocn=0 dont use Ocean model sea land mask, not OK, not present
       print *,' _____ SUBROUTINE MAKEMT '
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
@@ -2481,7 +2478,7 @@ C
       integer i,j,i1,j1,i2,jst,jen,numx,i0,ip1,ijax
       integer ilist(IMN)
       logical inside_a_polygon
-      LOGICAL FLAG, DEBUG
+      LOGICAL DEBUG
 C===  DATA DEBUG/.TRUE./
       DATA DEBUG/.FALSE./
 C
@@ -3141,22 +3138,20 @@ C
       real    XNSUM(IM,JM),XNSUM1(IM,JM),XNSUM2(IM,JM)
       real    XNSUM3(IM,JM),XNSUM4(IM,JM)
       real    VAR(IM,JM),OL(IM,JM,4)
-      LOGICAL FLAG
       integer i,j,ilist(IMN),numx,i1,j1,ii1
-      integer KWD,II,npts
+      integer KWD
       real    LONO(4),LATO(4),LONI,LATI
       real    DELXN,HC,HEIGHT,XNPU,XNPD,T
       integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
       logical inside_a_polygon
       real    lon,lat,dlon,dlat,dlat_old
       real    lon1,lat1,lon2,lat2
-      real    xnsum11,xnsum12,xnsum21,xnsum22,xnsumx
+      real    xnsum11,xnsum12,xnsum21,xnsum22
       real    HC_11, HC_12, HC_21, HC_22
       real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
       real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
       real    get_lon_angle, get_lat_angle, get_xnsum
-      integer ist, ien, jst, jen
-      real    xland,xwatr,xl1,xs1,oroavg,slm
+      integer jst, jen
 C   
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
@@ -4920,7 +4915,6 @@ c
       data inaq4/x'FFFFFFFF'/
 c
       real(kind=8)a(l),rtc,t1,t2
-      character*24 cn
       character*(*) c
 c     t1=rtc()
 cgwv        print *, ' nanc call ',c
