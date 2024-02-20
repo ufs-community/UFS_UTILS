@@ -99,11 +99,17 @@
  status=nf90_put_att(ncid, id_lat, 'long_name', 'grid cell center latitude')
  if (status /= nf90_noerr) stop 10
 
+ status=nf90_put_att(ncid, id_lat, 'units', 'degrees')
+ if (status /= nf90_noerr) stop 65
+
  status=nf90_def_var(ncid, 'lat_corner', nf90_double, dim_jp1, id_lat_corner)
  if (status /= nf90_noerr) stop 37
 
  status=nf90_put_att(ncid, id_lat_corner, 'long_name', 'grid cell corner latitude')
  if (status /= nf90_noerr) stop 38
+
+ status=nf90_put_att(ncid, id_lat_corner, 'units', 'degrees')
+ if (status /= nf90_noerr) stop 68
 
  status=nf90_def_var(ncid, 'lon', nf90_double, dim_i, id_lon)
  if (status /= nf90_noerr) stop 16
@@ -111,14 +117,23 @@
  status=nf90_put_att(ncid, id_lon, 'long_name', 'grid cell center longitude')
  if (status /= nf90_noerr) stop 10
 
+ status=nf90_put_att(ncid, id_lon, 'units', 'degrees')
+ if (status /= nf90_noerr) stop 69
+
  status=nf90_def_var(ncid, 'lon_corner', nf90_double, dim_ip1, id_lon_corner)
  if (status /= nf90_noerr) stop 16
 
  status=nf90_put_att(ncid, id_lon_corner, 'long_name', 'grid cell corner longitude')
  if (status /= nf90_noerr) stop 40
 
+ status=nf90_put_att(ncid, id_lon_corner, 'units', 'degrees')
+ if (status /= nf90_noerr) stop 70
+
  status=nf90_def_var(ncid, 'land_mask', nf90_byte, (/dim_i,dim_j/), id_data)
  if (status /= nf90_noerr) stop 20
+
+ status=nf90_put_att(ncid, id_data, 'units', 'category')
+ if (status /= nf90_noerr) stop 75
 
  status=nf90_put_att(ncid, id_data, 'Non-land', int((/0/)))
  if (status /= nf90_noerr) stop 55
