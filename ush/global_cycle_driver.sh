@@ -15,9 +15,10 @@ export CDUMP=${CDUMP:-gfs}                   # gfs or gdas
 export COMPONENT=${COMPONENT:-atmos}
 
 pwd=$(pwd)
-export NWPROD=${NWPROD:-$pwd}
-export DMPDIR=${DMPDIR:-$NWPROD}
-export HOMEgfs=${HOMEgfs:-$NWPROD/gfs.v15.0.0}
+export DMPDIR=${DMPDIR:-$pwd}
+export envir=${envir:-prod}
+export gfs_ver=${gfs_ver:-v15.0.0}
+export HOMEgfs=${HOMEgfs:-/nw${envir}/gfs.${gfs_ver}}
 export FIXgfs=${FIXgfs:-$HOMEgfs/fix}   
 export OROFIX=${OROFIX:-$FIXgfs/orog/${CASE}}
 export FIX_SFC=${FIX_SFC:-$OROFIX/sfc}

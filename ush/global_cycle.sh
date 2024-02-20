@@ -26,10 +26,9 @@
 #     LONB_CASE     j-dimension of the global climatology files. NOT the
 #                   j-dimension of the model grid. Computed from CASE by default.
 #     OCNRES        Ocean grid resolution. '100' is one degree.
-#     BASEDIR       Root directory where all scripts and fixed files reside.
-#                   Default is /nwprod2.
 #     HOMEgfs       Directory for gfs.  Default is 
-#                   $BASEDIR/gfs.v15.0.0.
+#                   nwprod/gfs.v15.0.0.
+#     envir         Environment - i.e., 'prod' or 'para'. Default is 'prod'.
 #     FIXgfs        Directory for fixed data. Default is $HOMEgfs/fix.
 #     OROFIX        Directory for model orography data. Default is 
 #                   $FIXgfs/orog/${CASE}
@@ -232,8 +231,8 @@ OCNRES=${OCNRES:-100}
 
 #  Directories.
 gfs_ver=${gfs_ver:-v15.0.0}
-BASEDIR=${BASEDIR:-${NWROOT:-/nwprod2}}
-HOMEgfs=${HOMEgfs:-$BASEDIR/gfs_ver.${gfs_ver}}
+envir=${envir:-prod}
+HOMEgfs=${HOMEgfs:-/nw${envir}/gfs_ver.${gfs_ver}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 FIXgfs=${FIXgfs:-$HOMEgfs/fix}
 OROFIX=${OROFIX:-$FIXgfs/orog/${CASE}}

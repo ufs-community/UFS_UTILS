@@ -74,8 +74,7 @@ fi
 #------------------------------------------------------------------------
 
 envir=${envir:-"prod"}
-NWROOT=${NWROOT:-"/nw${envir}"}
-HOMEgfs=${HOMEgfs:-$NWROOT/gfs.${gfs_ver:?}}
+HOMEgfs=${HOMEgfs:-/nw${envir}/gfs.${gfs_ver:?}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 FIXgfs=${FIXgfs:-$HOMEgfs/fix}
 
