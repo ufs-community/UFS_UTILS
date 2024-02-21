@@ -73,8 +73,8 @@ fi
 # Path names
 #------------------------------------------------------------------------
 
-envir=${envir:-"prod"}
-HOMEgfs=${HOMEgfs:-/nw${envir}/gfs.${gfs_ver:?}}
+PACKAGEROOT=${PACKAGEROOT:-/lfs/h1/ops/prod/packages}
+HOMEgfs=${HOMEgfs:-$PACKAGEROOT/gfs.${gfs_ver:?}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 FIXgfs=${FIXgfs:-$HOMEgfs/fix}
 

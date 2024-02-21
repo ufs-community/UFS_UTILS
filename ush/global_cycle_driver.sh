@@ -16,9 +16,9 @@ export COMPONENT=${COMPONENT:-atmos}
 
 pwd=$(pwd)
 export DMPDIR=${DMPDIR:-$pwd}
-export envir=${envir:-prod}
+export PACKAGEROOT=${PACKAGEROOT:-/lfs/h1/ops/prod/packages}
 export gfs_ver=${gfs_ver:-v15.0.0}
-export HOMEgfs=${HOMEgfs:-/nw${envir}/gfs.${gfs_ver}}
+export HOMEgfs=${HOMEgfs:-${PACKAGEROOT}/gfs.${gfs_ver}}
 export FIXgfs=${FIXgfs:-$HOMEgfs/fix}   
 
 ntiles=${ntiles:-6}

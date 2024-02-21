@@ -27,8 +27,8 @@
 #                   j-dimension of the model grid. Computed from CASE by default.
 #     OCNRES        Ocean grid resolution. '100' is one degree.
 #     HOMEgfs       Directory for gfs.  Default is 
-#                   nwprod/gfs.v15.0.0.
-#     envir         Environment - i.e., 'prod' or 'para'. Default is 'prod'.
+#                   PACKAGEROOT/gfs.v15.0.0.
+#     PACKAGEROOT   Location of gfs package.
 #     FIXgfs        Directory for fixed data. Default is $HOMEgfs/fix.
 #     EXECgfs       Directory of the program executable.  Defaults to
 #                   $HOMEgfs/exec
@@ -227,8 +227,8 @@ OCNRES=${OCNRES:-100}
 
 #  Directories.
 gfs_ver=${gfs_ver:-v15.0.0}
-envir=${envir:-prod}
-HOMEgfs=${HOMEgfs:-/nw${envir}/gfs_ver.${gfs_ver}}
+PACKAGEROOT=${PACKAGEROOT:-/lfs/h1/ops/prod/packages}
+HOMEgfs=${HOMEgfs:-${PACKAGEROOT}/gfs_ver.${gfs_ver}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 FIXgfs=${FIXgfs:-$HOMEgfs/fix}
 DATA=${DATA:-$(pwd)}
