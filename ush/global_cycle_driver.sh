@@ -20,8 +20,6 @@ export envir=${envir:-prod}
 export gfs_ver=${gfs_ver:-v15.0.0}
 export HOMEgfs=${HOMEgfs:-/nw${envir}/gfs.${gfs_ver}}
 export FIXgfs=${FIXgfs:-$HOMEgfs/fix}   
-export OROFIX=${OROFIX:-$FIXgfs/orog/${CASE}}
-export FIX_SFC=${FIX_SFC:-$OROFIX/sfc}
 
 ntiles=${ntiles:-6}
 DONST=${DONST:-"NO"}
@@ -88,11 +86,11 @@ for n in $(seq 1 $ntiles); do
   chmod 644  $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
   ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
 
-  ln -fs $OROFIX/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
+  ln -fs $FIXgfs/orog/${CASE}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
   if (( OCNRES > 9999 ));then
-    ln -fs $OROFIX/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+    ln -fs $FIXgfs/orog/${CASE}/C${CRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
   else
-    ln -fs $OROFIX/C${CRES}.mx${OCNRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
+    ln -fs $FIXgfs/orog/${CASE}/C${CRES}.mx${OCNRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
   fi
 
   if [[ "$DO_SNO_INC" == ".true." ]] ; then  
