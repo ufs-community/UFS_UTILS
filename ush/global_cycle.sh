@@ -61,7 +61,7 @@
 #     FNZORC        Input roughness climatology.
 #                   Defaults to igbp vegetation type-based lookup table
 #                   FNVETC must be set to igbp file:
-#                   ${FIXam}/global_vegtype.igbp.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.rg.grb
+#                   ${FIXgfs}/am/global_vegtype.igbp.t$JCAP_CASE.$LONB_CASE.$LATB_CASE.rg.grb
 #     FNALBC        Input 4-component albedo climatology GRIB file.
 #                   defaults to ${FIXgfs}/orog/${CASE}/sfc/${CASE}.mx${OCNRES}.snowfree_albedo.tileX.nc
 #     FNALBC2       Input 'facsf' and 'facwf' albedo climatology GRIB file.
