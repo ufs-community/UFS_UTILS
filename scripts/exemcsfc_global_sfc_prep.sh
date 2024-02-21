@@ -63,13 +63,10 @@ then
   set -x
 fi
 
-# path names
-export envir=${envir:-"prod"}
-export NWROOT=${NWROOT:-"/nw${envir}"}
-
 RUN=${RUN:-"gfs"}
 
-export HOMEgfs=${HOMEgfs:-$NWROOT/gfs.${gfs_ver:?}}
+export PACKAGEROOT=${PACKAGEROOT:-/lfs/h1/ops/prod/packages}
+export HOMEgfs=${HOMEgfs:-${PACKAGEROOT}/gfs.${gfs_ver:?}}
 export USHgfs=${USHgfs:-$HOMEgfs/ush}
 export FIXgfs=${FIXgfs:-$HOMEgfs/fix}
 export EXECgfs=${EXECgfs:-$HOMEgfs/exec}
