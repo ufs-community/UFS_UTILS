@@ -101,7 +101,7 @@ for n in $(seq 1 $ntiles); do
   fi
 
   if [[ "$DO_SOI_INC_JEDI" == ".true." ]] ; then
-        ln -fs $HOMEgfs/tests/global_cycle/data/soil_xainc.00$n $DATA/.
+        ln -fs $COMIN/soil_xainc.00$n $DATA/.
   fi
 done
 

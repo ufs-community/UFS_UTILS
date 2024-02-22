@@ -62,7 +62,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.lndincsoilnoahmp/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.jedi_lndincsoilnoahmp/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
