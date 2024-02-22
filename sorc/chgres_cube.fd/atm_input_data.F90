@@ -3018,6 +3018,14 @@ else ! is native coordinate (hybrid).
      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
      call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
 
+   elseif (gfld%igdtnum == 1) then ! grid definition template number - non-E stagger rotated lat/lon grid
+
+     latin1 = real(float(gfld%igdtmpl(20))/1.0E6, kind=esmf_kind_r4)
+     lov = real(float(gfld%igdtmpl(21))/1.0E6, kind=esmf_kind_r4)
+
+     print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
+     call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha) 
+
    elseif (gfld%igdtnum == 30) then ! grid definition template number - lambert conformal grid.
 
      lov = real(float(gfld%igdtmpl(14))/1.0E6, kind=esmf_kind_r4)
@@ -3087,7 +3095,7 @@ else ! is native coordinate (hybrid).
           u(:,:,vlev) = u_tmp
           v(:,:,vlev) = v_tmp
         endif
-      else if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
+      else if (gfld%igdtnum == 32769 .or. gfld%igdtnum == 1) then ! grid definition template number - rotated lat/lon grid
         ws = sqrt(u_tmp**2 + v_tmp**2)
         wd = real((atan2(-u_tmp,-v_tmp) / d2r), kind=esmf_kind_r4) ! calculate grid-relative wind direction
         wd = real((wd + alpha + 180.0), kind=esmf_kind_r4) ! Rotate from grid- to earth-relative direction

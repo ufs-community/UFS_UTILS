@@ -54,7 +54,7 @@
 !!                                    gaussian nemsio files
 !!                                 - "gfs_sigio" for spectral gfs
 !!                                    gfs sigio/sfcio files.
- character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current supported options are: "GFS", "HRRR", "NAM", "RAP". Default: "GFS"
+ character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current supported options are: "GFS", "HRRR", "NAM", "RAP", "RRFS". Default: "GFS"
  
  integer, parameter, public      :: max_tracers=100 !< Maximum number of atmospheric tracers processed.
  integer, public                 :: num_tracers !< Number of atmospheric tracers to be processed.
@@ -318,8 +318,8 @@
 !-------------------------------------------------------------------------
 
  if (trim(input_type) == "grib2") then
-   if (.not. any((/character(4)::"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
-     call error_handler( "KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. " // &
+   if (.not. any((/character(4)::"GFS","NAM","RAP","HRRR","RRFS"/)==trim(external_model))) then
+     call error_handler( "KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, HRRR, AND RRFS. " // &
     "IF YOU WISH TO PROCESS GRIB2 DATA FROM ANOTHER MODEL, YOU MAY ATTEMPT TO DO SO AT YOUR OWN RISK. " // &
     "ONE WAY TO DO THIS IS PROVIDE NAM FOR external_model AS IT IS A RELATIVELY STRAIGHT-" // &
     "FORWARD REGIONAL GRIB2 FILE. YOU MAY ALSO COMMENT OUT THIS ERROR MESSAGE IN " // &
