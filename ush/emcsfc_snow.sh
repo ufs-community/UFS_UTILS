@@ -73,11 +73,10 @@ fi
 # Path names
 #------------------------------------------------------------------------
 
-envir=${envir:-"prod"}
-NWROOT=${NWROOT:-"/nw${envir}"}
-HOMEgfs=${HOMEgfs:-$NWROOT/gfs.${gfs_ver:?}}
+PACKAGEROOT=${PACKAGEROOT:-/lfs/h1/ops/prod/packages}
+HOMEgfs=${HOMEgfs:-$PACKAGEROOT/gfs.${gfs_ver:?}}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
-FIXam=${FIXam:-$HOMEgfs/fix/am}
+FIXgfs=${FIXgfs:-$HOMEgfs/fix}
 
 COMOUT=${COMOUT:-$PWD}
 
@@ -114,7 +113,7 @@ IMS_FILE=${IMS_FILE:-"imssnow96.grb.grib2"}
 # File of snow cover climo used to qc the input snow data
 #------------------------------------------------------------------------
 
-CLIMO_QC=${CLIMO_QC:-${FIXam}/emcsfc_snow_cover_climo.grib2}
+CLIMO_QC=${CLIMO_QC:-${FIXgfs}/am/emcsfc_snow_cover_climo.grib2}
 
 #------------------------------------------------------------------------
 # Output snow analysis on model grid
