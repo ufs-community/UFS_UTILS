@@ -9,6 +9,7 @@ https://github.com/ufs-community/UFS_UTILS.
 
 ## Documentation for Previous Versions of UFS_UTILS
 
+* [UFS_UTILS Version 1.12.0](ver-1.12.0/index.html)
 * [UFS_UTILS Version 1.11.0](ver-1.11.0/index.html)
 * [UFS_UTILS Version 1.10.0](ver-1.10.0/index.html)
 * [UFS_UTILS Version 1.9.0](ver-1.9.0/index.html)
