@@ -73,9 +73,11 @@
 !!  -DO_SFCCYCLE   Call sfccycle routine to update surface fields
 !!  -DO_LNDINC     Read in land increment files, and add increments to
 !!                 relevant states.
+!!                 NOTE: We do not have a GSI snow analysis
 !!  -DO_SOI_INC_GSI     Do land increments to soil states on Gaussian grids.
 !!  -DO_SOI_INC_JEDI    Do land increments to soil states on cubed-sphere tiles.
-!!  -DO_SNO_INC_JEDI    Do land increments to snow states on cubed-sphere tiles.
+!!  -DO_SNO_INC_JEDI    Do land increments to snow states on cubed-sphere tiles
+!!                      (Noah land model only).
 !!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
 !!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
 !!  - ZSEA1/2_MM   When running with NSST model, this is the lower/

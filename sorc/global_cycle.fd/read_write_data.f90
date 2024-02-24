@@ -1035,8 +1035,8 @@ MODULE READ_WRITE_DATA
  !! @param[in] LSOIL Number of soil layers.
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
- !! @param[in] DO_SNO_INC_JEDI When true, supply snow increment file
- !! @param[in] DO_SOI_INC_JEDI When true, supply soil increment file
+ !! @param[in] DO_SNO_INC_JEDI When true, read in snow increment file
+ !! @param[in] DO_SOI_INC_JEDI When true, read in soil increment file
  !! @param[in] INC_FILE When true, read from an increment file.
  !!                     False reads from a restart file.
  !!                     increments are on the cubed-sphere tiles
