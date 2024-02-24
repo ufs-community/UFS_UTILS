@@ -1147,7 +1147,7 @@ MODULE READ_WRITE_DATA
  WRITE(RANKCH, '(I3.3)') (MYRANK+1)
  
  IF ((INC_FILE) .and. (DO_SNO_INC_JEDI)) THEN
-        FNBGSI = "./xainc." // RANKCH
+        FNBGSI = "./snow_xainc." // RANKCH
  ELSEIF ((INC_FILE) .and. (DO_SOI_INC_JEDI)) THEN
         FNBGSI = "./soil_xainc." // RANKCH
  ELSE

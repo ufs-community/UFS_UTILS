@@ -44,7 +44,7 @@
 !!                     TREF increments
 !!  - $GSI_SOI_FILE.$NNN    Gaussian GSI file which contains soil state
 !!                     increments
-!!  - xainc.$NNN       The cubed-sphere snow increment file (contains 
+!!  - snow_xainc.$NNN       The cubed-sphere snow increment file (contains 
 !!                     increments calculated by JEDI on the native 
 !!                     model grid). 
 !!  - soil_xainc.$NNN  The cubed-sphere soil increment file (contains
@@ -693,7 +693,7 @@ ENDIF
 
     ! make sure incr. files exist
     WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-    JEDI_SNO_FILE = "xainc." //  RANKCH
+    JEDI_SNO_FILE = "snow_xainc." //  RANKCH
 
     INQUIRE(FILE=trim(JEDI_SNO_FILE), EXIST=file_exists)
     IF (.not. file_exists) then

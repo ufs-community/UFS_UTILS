@@ -97,7 +97,7 @@ for n in $(seq 1 $ntiles); do
   fi
 
   if [[ "$DO_SNO_INC_JEDI" == ".true." ]] ; then  
-        ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/xainc.00$n
+        ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/snow_xainc.00$n
   fi
 
   if [[ "$DO_SOI_INC_JEDI" == ".true." ]] ; then
