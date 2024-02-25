@@ -42,7 +42,7 @@
 !!                     file.
 !!  - $NST_FILE        Gaussian GSI file which contains NSST
 !!                     TREF increments
-!!  - $GSI_SOI_FILE.$NNN    Gaussian GSI file which contains soil state
+!!  - $sfcincr_gsi.$NNN    Gaussian GSI file which contains soil state
 !!                     increments
 !!  - snow_xainc.$NNN       The cubed-sphere snow increment file (contains 
 !!                     increments calculated by JEDI on the native 
@@ -91,8 +91,6 @@
 !!                 (max_tasks-1).
 !!  -NST_FILE       path/name of the gaussian GSI file which contains NSST
 !!                 TREF increments.
-!!  -GSI_SOI_FILE  path/name of the gaussian GSI file which contains soil
-!!                 state increments.
 !!
 !!  -2005-02-03:  Iredell   for global_analysis
 !!  -2014-11-30:  xuli      add nst_anl
@@ -393,10 +391,9 @@
 ! increments.
 !--------------------------------------------------------------------------------
  
- NAMELIST/NAMSFCD/ NST_FILE, GSI_SOI_FILE, DO_SNO_INC_JEDI, DO_SOI_INC_JEDI
+ NAMELIST/NAMSFCD/ NST_FILE, DO_SNO_INC_JEDI, DO_SOI_INC_JEDI, DO_SOI_INC_GSI
 
  DATA NST_FILE/'NULL'/
- DATA GSI_SOI_FILE/'NULL'/
 
  DO_SNO_INC_JEDI = .FALSE.
  DO_SOI_INC_GSI = .FALSE.
@@ -469,10 +466,14 @@ IF (DO_LNDINC) THEN
      call MPI_ABORT(MPI_COMM_WORLD, 17, IERR)
    ENDIF
    ! identify variables to be updated, and allocate arrays.
-   IF  (TRIM(GSI_SOI_FILE) .NE. "NULL") THEN
-       DO_SOI_INC_GSI = .TRUE.
+   IF  (DO_SOI_INC_GSI .and. DO_SOI_INC_JEDI) THEN
        PRINT*
-       PRINT*," APPLYING SOIL INCREMENTS FROM THE GSI"
+       PRINT*, 'FATAL ERROR: Can not do gsi and jedi soil updates at the same time, choose one!'
+       CALL MPI_ABORT(MPI_COMM_WORLD, 15, IERR) 
+   ENDIF
+   IF  (DO_SOI_INC_GSI .or. DO_SOI_INC_JEDI) THEN
+       PRINT*
+       PRINT*," APPLYING SOIL INCREMENTS"
        ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
        ALLOCATE(LANDINC_MASK_FG(LENSFC))
    ENDIF
@@ -729,12 +730,7 @@ ENDIF
     ENDIF
 
     ! SOIL INCREMENTS
-    IF ((DO_SOI_INC_GSI) .and. (DO_SOI_INC_JEDI)) THEN
-
-      print *, 'FATAL ERROR: Can not do gsi and jedi soil update at the same time -- choose one!'
-      call MPI_ABORT(MPI_COMM_WORLD, 15, IERR) 
-
-    ELSEIF (DO_SOI_INC_GSI) THEN
+    IF (DO_SOI_INC_GSI) THEN
 
        !--------------------------------------------------------------------------------
        ! re-calculate soilsnow mask if snow has been updated.
@@ -747,20 +743,20 @@ ENDIF
                                                         VEG_TYPE_LANDICE, LANDINC_MASK )
         ENDIF
 
+       ! make sure incr. files exist
+       WRITE(RANKCH, '(I3.3)') (MYRANK+1)
+       GSI_SOI_FILE = "sfcincr_gsi." //  RANKCH
+
+       INQUIRE(FILE=trim(GSI_SOI_FILE), EXIST=file_exists)
+       IF (.not. file_exists) then
+          print *, 'FATAL ERROR: gsi soil increment (gaussian grid) update requested, &
+                    but file does not exist : ', trim(gsi_soi_file)
+          call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+       ENDIF
+
        !--------------------------------------------------------------------------------
        ! read increments in
        !--------------------------------------------------------------------------------
-
-        WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-
-        GSI_SOI_FILE = trim(GSI_SOI_FILE) // "." //  RANKCH
-
-        INQUIRE(FILE=trim(GSI_SOI_FILE), EXIST=file_exists)
-        IF (.not. file_exists) then
-            print *, 'FATAL ERROR: land increment update requested, but file does not exist: ', &
-                    trim(gsi_soi_file)
-            call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-        ENDIF
 
         CALL READ_GSI_DATA(GSI_SOI_FILE, 'LND', LSOIL=LSOIL)
 
@@ -794,12 +790,9 @@ ENDIF
                 SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS, STC_UPDATED, &
                 SLC_UPDATED,ZSOIL)
 
-   ELSEIF (DO_SOI_INC_JEDI) THEN
+   ENDIF ! gsi soil increments
 
-       PRINT*
-       PRINT*," APPLYING SOIL INCREMENTS FROM THE JEDI"
-       ALLOCATE(STC_BCK(LENSFC, LSOIL))
-       ALLOCATE(LANDINC_MASK_FG(LENSFC))
+   IF (DO_SOI_INC_JEDI) THEN
 
        !--------------------------------------------------------------------------------
        ! re-calculate soilsnow mask if snow has been updated.
@@ -852,7 +845,7 @@ ENDIF
                 SLC_UPDATED,ZSOIL)
 
 
-   ENDIF ! soil increments
+   ENDIF ! jedi soil increments
 
 !--------------------------------------------------------------------------------
 ! clean up

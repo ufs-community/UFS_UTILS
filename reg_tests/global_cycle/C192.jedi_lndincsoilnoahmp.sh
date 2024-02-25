@@ -4,7 +4,7 @@
 # Run global_cycle for a C192 case to test the ingest and
 # application of soil moisture and temperature increments
 # on the cubed-sphere grid into Noah-MP restarts, which should
-# yield identical results as compared with the GSI case.
+# yield (almost) identical results as compared with the GSI case.
 # Compare output to a baseline set of files using the 'nccmp' 
 # utility.
 #------------------------------------------------------------------

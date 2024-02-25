@@ -28,8 +28,6 @@ export OCNRES=99999
 
 export COMIN=$HOMEreg/input_data_noahmp
 
-export GSI_SOI_FILE=$COMIN/sfcincr_gsi
-
 export JCAP=1534
 export LONB=3072
 export LATB=1536
@@ -42,6 +40,7 @@ export use_ufo=.true.
 
 export DO_SFCCYCLE=".FALSE." 
 export DO_LNDINC=".TRUE." 
+export DO_SOI_INC_GSI=".true."
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,

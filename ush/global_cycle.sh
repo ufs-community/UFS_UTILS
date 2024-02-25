@@ -273,6 +273,7 @@ use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
 DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
 DO_LNDINC=${DO_LNDINC:-.false.}
+DO_SOI_INC_GSI=${DO_SOI_INC_GSI:-.false.}
 DO_SNO_INC_JEDI=${DO_SNO_INC_JEDI:-.false.}
 DO_SOI_INC_JEDI=${DO_SOI_INC_JEDI:-.false.}
 zsea1=${zsea1:-0}
@@ -300,7 +301,6 @@ FNVMXC=${FNVMXC:-${FIX_SFC}/${CASE}.mx${OCNRES}.vegetation_greenness.tileX.nc}
 FNSLPC=${FNSLPC:-${FIX_SFC}/${CASE}.mx${OCNRES}.slope_type.tileX.nc}
 FNMSKH=${FNMSKH:-${FIXam}/global_slmask.t1534.3072.1536.grb}
 NST_FILE=${NST_FILE:-"NULL"}
-GSI_SOI_FILE=${GSI_SOI_FILE:-"NULL"}
 FNTSFA=${FNTSFA:-${COMIN}/${PREINP}sstgrb${SUFINP}}
 FNACNA=${FNACNA:-${COMIN}/${PREINP}engicegrb${SUFINP}}
 FNSNOA=${FNSNOA:-${COMIN}/${PREINP}snogrb${SUFINP}}
@@ -395,7 +395,7 @@ EOF
 cat << EOF > fort.37
  &NAMSFCD
   NST_FILE="$NST_FILE",
-  GSI_SOI_FILE="$GSI_SOI_FILE",
+  DO_SOI_INC_GSI=$DO_SOI_INC_GSI,
   DO_SNO_INC_JEDI=$DO_SNO_INC_JEDI,
   DO_SOI_INC_JEDI=$DO_SOI_INC_JEDI
  /

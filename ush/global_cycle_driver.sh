@@ -54,7 +54,7 @@ fi
 
 export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
 export DO_LNDINC=${DO_LNDINC:-".false."}
-export GSI_SOI_FILE=${GSI_SOI_FILE:-"NULL"}
+export DO_SOI_INC_GSI=${DO_SOI_INC_GSI:-".false."}
 export DO_SNO_INC_JEDI=${DO_SNO_INC_JEDI:-".false."}
 export DO_SOI_INC_JEDI=${DO_SOI_INC_JEDI:-".false."}
 export FRAC_GRID=${FRAC_GRID:-".false."}
@@ -102,6 +102,10 @@ for n in $(seq 1 $ntiles); do
 
   if [[ "$DO_SOI_INC_JEDI" == ".true." ]] ; then
         ln -fs $COMIN/soil_xainc.00$n $DATA/.
+  fi
+
+  if [[ "$DO_SOI_INC_GSI" == ".true." ]] ; then
+        ln -fs $COMIN/sfcincr_gsi.00$n $DATA/.
   fi
 done
 
