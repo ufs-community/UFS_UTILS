@@ -78,6 +78,7 @@
 !!  -DO_SOI_INC_JEDI    Do land increments to soil states on cubed-sphere tiles.
 !!  -DO_SNO_INC_JEDI    Do land increments to snow states on cubed-sphere tiles
 !!                      (Noah land model only).
+!!  -LSOIL_INCR    Number of soil layers (from top) to apply soil increments to.
 !!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
 !!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
 !!  - ZSEA1/2_MM   When running with NSST model, this is the lower/
@@ -385,19 +386,21 @@
 
  LOGICAL :: FILE_EXISTS, DO_SOI_INC_GSI, DO_SOI_INC_JEDI, DO_SNO_INC_JEDI
  CHARACTER(LEN=3)       :: RANKCH
+ INTEGER :: lsoil_incr
 
 !--------------------------------------------------------------------------------
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
 ! increments.
 !--------------------------------------------------------------------------------
  
- NAMELIST/NAMSFCD/ NST_FILE, DO_SNO_INC_JEDI, DO_SOI_INC_JEDI, DO_SOI_INC_GSI
+ NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNO_INC_JEDI, DO_SOI_INC_JEDI, DO_SOI_INC_GSI
 
  DATA NST_FILE/'NULL'/
 
  DO_SNO_INC_JEDI = .FALSE.
  DO_SOI_INC_GSI = .FALSE.
  DO_SOI_INC_JEDI = .FALSE.
+ lsoil_incr = 3 !default
  
  SIG1T = 0.0            ! Not a dead start!
 
@@ -680,7 +683,7 @@ ENDIF
  ENDIF
 
 !--------------------------------------------------------------------------------
-! READ IN AND APPLY LAND INCREMENTS FROM THE GSI
+! READ IN AND APPLY LAND INCREMENTS FROM THE GSI/JEDI
 !--------------------------------------------------------------------------------
 
  IF (DO_LNDINC) THEN
@@ -727,21 +730,19 @@ ENDIF
        CALL APPLY_LAND_DA_ADJUSTMENTS_SND(LSM, LENSFC, LANDINC_MASK, SWE_BCK, SND_BCK, &
                         SNDFCS, SWEFCS)
 
+    ENDIF ! jedi snow increments
+
+
+    !re-calculate soilsnow mask if snow has been updated.
+    LANDINC_MASK_FG = LANDINC_MASK
+
+    IF (DO_SFCCYCLE .OR. DO_SNO_INC_JEDI)  THEN
+        CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, LENSFC, &
+                                    VEG_TYPE_LANDICE, LANDINC_MASK)
     ENDIF
 
     ! SOIL INCREMENTS
     IF (DO_SOI_INC_GSI) THEN
-
-       !--------------------------------------------------------------------------------
-       ! re-calculate soilsnow mask if snow has been updated.
-       !--------------------------------------------------------------------------------
-
-        LANDINC_MASK_FG = LANDINC_MASK
-
-        IF (DO_SFCCYCLE .OR. DO_SNO_INC_JEDI)  THEN
-            CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, LENSFC, &
-                                                        VEG_TYPE_LANDICE, LANDINC_MASK )
-        ENDIF
 
        ! make sure incr. files exist
        WRITE(RANKCH, '(I3.3)') (MYRANK+1)
@@ -774,7 +775,7 @@ ENDIF
         SLC_BCK = SLCFCS
 
         ! below updates [STC/SMC/STC]FCS to hold the analysis
-        CALL ADD_GSI_INCREMENT_SOIL(RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
+        CALL ADD_GSI_INCREMENT_SOIL(LSOIL_INCR,RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
                 STC_INC_TMP,SLC_INC_TMP,LANDINC_MASK,LANDINC_MASK_FG,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
 
         ! when read in GSI-based increments, save interpolated fields onto cubed
@@ -786,24 +787,13 @@ ENDIF
         ! make any necessary adjustments to dependent variables
         !--------------------------------------------------------------------------------
 
-        CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL(LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
+        CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL(LSOIL_INCR, LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
                 SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS, STC_UPDATED, &
                 SLC_UPDATED,ZSOIL)
 
    ENDIF ! gsi soil increments
 
    IF (DO_SOI_INC_JEDI) THEN
-
-       !--------------------------------------------------------------------------------
-       ! re-calculate soilsnow mask if snow has been updated.
-       !--------------------------------------------------------------------------------
-
-        LANDINC_MASK_FG = LANDINC_MASK
-
-        IF (DO_SFCCYCLE .OR. DO_SNO_INC_JEDI)  THEN
-            CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, LENSFC, &
-                                        VEG_TYPE_LANDICE, LANDINC_MASK )
-        ENDIF
 
        !--------------------------------------------------------------------------------
        ! read increments in
@@ -833,14 +823,14 @@ ENDIF
         STC_BCK = STCFCS
 
         ! below updates [STC/SMC/STC]FCS to hold the analysis
-        CALL ADD_JEDI_INCREMENT_SOIL(STCINC,SLCINC,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, &
+        CALL ADD_JEDI_INCREMENT_SOIL(LSOIL_INCR,STCINC,SLCINC,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, &
              SLC_UPDATED,LANDINC_MASK,LANDINC_MASK_FG,LENSFC,LSOIL,LSM,MYRANK)
 
         !--------------------------------------------------------------------------------
         ! make any necessary adjustments to dependent variables
         !--------------------------------------------------------------------------------
 
-        CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL(LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
+        CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL(LSOIL_INCR, LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
                 SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS, STC_UPDATED, &
                 SLC_UPDATED,ZSOIL)
 

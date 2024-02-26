@@ -20,19 +20,6 @@ module land_increments
 
     ! control state for soil analysis:
 
-    ! Originally lsoil_incr=3.
-    ! Yuan Xue (11/2023): suggest ONLY updating top 2 layers because analysis show that
-    ! Pan-Arctic permafrost is too sensitive to slc adjustment due to soil
-    ! temperature ingest in 3rd layer especially when soil temperature 
-    ! approaches freezing point during a synthetic twin DA experiment.
-    ! This is indeed a generic issue due to opt_frz=1 (Niu and Yang, 2006 jhm)
-    ! A +/-0.05K difference in soil temp (slightly below tfreez) can lead to
-    ! 0.05-0.06m3/m3 difference in liquid soil moisture, which is also seen in
-    ! the surface layer.
-    ! Clara Draper (01/23/2024) also mentioned that a preliminary check shows 
-    ! that soil increments in layer#3 seems to be quite noisy.
-    integer, parameter       :: lsoil_incr=2 !< number of layers to add incrments to
-
     real, parameter          :: tfreez=273.16 !< con_t0c  in physcons
 contains
 
@@ -58,6 +45,7 @@ contains
  !! @param[in] SOILSNOW_FG_TILE First guess land mask for increments on the cubed-sphere tile
  !! @param[in] LENSFC Number of land points on a tile
  !! @param[in] LSOIL Number of soil layers
+ !! @param[in] LSOIL_INCR Number of soil layers (from top) to apply soil increments to
  !! @param[in] IDIM 'I' dimension of a tile
  !! @param[in] JDIM 'J' dimension of a tile
  !! @param[in] lsm Integer flag indicating which land model is used (1-Noah, 2-Noah-MP)
@@ -67,7 +55,7 @@ contains
  !!
  !! @author Clara Draper. @date March 2021
 
-subroutine add_gsi_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_updated, slc_updated, &
+subroutine add_gsi_increment_soil(lsoil_incr,rla,rlo,stc_state,smc_state,slc_state,stc_updated, slc_updated, &
                         stc_inc_tmp,slc_inc_tmp,soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,idim,jdim,lsm, myrank)
 
     use utils
@@ -78,7 +66,7 @@ subroutine add_gsi_increment_soil(rla,rlo,stc_state,smc_state,slc_state,stc_upda
 
     implicit none
 
-    integer, intent(in)      :: lensfc, lsoil, idim, jdim, myrank, lsm
+    integer, intent(in)      :: lsoil_incr, lensfc, lsoil, idim, jdim, myrank, lsm
 
     integer, intent(in)      :: soilsnow_tile(lensfc), soilsnow_fg_tile(lensfc)
     real, intent(inout)      :: rla(lensfc), rlo(lensfc)
@@ -398,19 +386,20 @@ end subroutine add_gsi_increment_soil
  !!             cubed-sphere tile
  !! @param[in] LENSFC Number of land points on a tile
  !! @param[in] LSOIL Number of soil layers
+ !! @param[in] LSOIL_INCR Number of soil layers (from top) to apply soil increments to
  !! @param[in] lsm Integer flag indicating which land model is used 
  !! @param[in] MYRANK MPI rank number
  !!
  !! @author Yuan Xue. 11/2023
 
-subroutine add_jedi_increment_soil(stcinc,slcinc,stc_state,smc_state,slc_state,stc_updated,&
+subroutine add_jedi_increment_soil(lsoil_incr,stcinc,slcinc,stc_state,smc_state,slc_state,stc_updated,&
               slc_updated,soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,lsm,myrank)
 
     use mpi
 
     implicit none
 
-    integer, intent(in)      :: lensfc, lsoil, myrank, lsm
+    integer, intent(in)      :: lsoil_incr, lensfc, lsoil, myrank, lsm
 
     integer, intent(in)      :: soilsnow_tile(lensfc), soilsnow_fg_tile(lensfc)
     real, intent(inout)      :: stc_state(lensfc, lsoil)
@@ -628,6 +617,7 @@ end subroutine calculate_landinc_mask
 !! @param[in] ivegsrc Integer code for the vegetation type data set
 !! @param[in] lensfc Number of land points for this tile
 !! @param[in] lsoil Number of soil layers
+!! @param[in] lsoil_incr Number of soil layers (from top) to apply soil increments to
 !! @param[in] rsoiltype Array of input soil types
 !! @param[in] mask Mask indicating surface type
 !! @param[in] stc_bck Background soil temperature states
@@ -639,7 +629,7 @@ end subroutine calculate_landinc_mask
 !! @param[in] zsoil Depth of bottom of each soil layer
 !! @author Clara Draper @date April 2021
 
-subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
+subroutine apply_land_da_adjustments_soil(lsoil_incr, lsm, isot, ivegsrc,lensfc, &
                  lsoil, rsoiltype, mask, stc_bck, stc_adj, smc_adj, slc_adj, &
                  stc_updated, slc_updated, zsoil)
 
@@ -649,7 +639,7 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
 
     implicit none
  
-    integer, intent(in)           :: lsm, lensfc, lsoil, isot, ivegsrc
+    integer, intent(in)           :: lsoil_incr, lsm, lensfc, lsoil, isot, ivegsrc
     real, intent(in)              :: rsoiltype(lensfc) ! soil types, as real
     integer, intent(in)           :: mask(lensfc)
     real, intent(in)              :: stc_bck(lensfc, lsoil)
@@ -736,7 +726,6 @@ subroutine apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
                call mpi_abort(mpi_comm_world, 10, ierr)
           endif
 
-          print *, 'Adjusting noah-mp soil moisture to be consistent with soil temperature update' 
           n_stc = 0
           n_slc = 0
 

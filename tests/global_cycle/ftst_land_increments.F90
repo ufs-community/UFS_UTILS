@@ -14,7 +14,7 @@ program ftst_land_increments
  implicit none
 
  integer :: my_rank, ierr, lsm, isot, ivegsrc
- integer :: lensfc, lsoil, l
+ integer :: lensfc, lsoil, l, lsoil_incr
 
  real, parameter :: EPSILON=0.001
 
@@ -35,6 +35,7 @@ program ftst_land_increments
  isot = 1          ! STATSGO soil type.
  ivegsrc = 1       ! IGBP vegetation type.
  lsoil = 4         ! Number of soil layers.
+ lsoil_incr = 3    ! Number os soil layers (from top) to apply increments to.
  
  lensfc= 4  ! Number of test points.
  
@@ -66,7 +67,7 @@ program ftst_land_increments
 
  smc_anl(1,:) = .25
  slc_anl(1,:) = .25
- stc_anl(1,1:2) =  281.0 ! DA only updates 2 layers
+ stc_anl(1,1:lsoil_incr) =  281.0
 
 ! Point 2 is below freezing before the adjustment
 ! and above freezing after the adjustment. Therefore,
@@ -79,7 +80,7 @@ program ftst_land_increments
 
  smc_anl(2,:) = .25
  slc_anl(2,:) = .20
- stc_anl(2,1:2) =  275.0
+ stc_anl(2,1:lsoil_incr) =  275.0
 
 ! Point 3 freezes before and after the adjustment. Therefore,
 ! SLC will be recomputed, SMC remained unchanged
@@ -91,7 +92,7 @@ program ftst_land_increments
 
  smc_anl(3,:) = .25
  slc_anl(3,:) = .20
- stc_anl(3,1:2) =  271.0
+ stc_anl(3,1:lsoil_incr) =  271.0
 
 ! Point 4 is above freezing before and below freezing after the adjustment
 ! Therfore, SLC will be recomputed, SMC remained unchanged
@@ -103,31 +104,31 @@ program ftst_land_increments
 
  smc_anl(4,:) = .25
  slc_anl(4,:) = .25
- stc_anl(4,1:2) =  271.0
+ stc_anl(4,1:lsoil_incr) =  271.0
 
- call apply_land_da_adjustments_soil(lsm, isot, ivegsrc,lensfc, &
+ call apply_land_da_adjustments_soil(lsoil_incr, lsm, isot, ivegsrc,lensfc, &
            lsoil, rsoiltype, mask, stc_bck, stc_anl, smc_anl, slc_anl, &
            stc_updated, slc_updated,zsoil)
 
- do l = 1,2
+ do l = 1,lsoil_incr
   if (abs(smc_anl(1,l) - 0.25) > EPSILON) stop 2
   if (abs(slc_anl(1,l) - 0.25) > EPSILON) stop 3
   if (abs(stc_anl(1,l) - 281.) > EPSILON) stop 4
  enddo
 
- do l = 1,2
+ do l = 1,lsoil_incr
   if (abs(smc_anl(2,l) - 0.25) > EPSILON) stop 5
   if (abs(slc_anl(2,l) - 0.25) > EPSILON) stop 6
   if (abs(stc_anl(2,l) - 275.) > EPSILON) stop 7
  enddo
 
- do l = 1,2
+ do l = 1,lsoil_incr
   if (abs(smc_anl(3,l) - 0.25) > EPSILON) stop 8
   if (abs(slc_anl(3,l) - 0.112) > EPSILON) stop 9
   if (abs(stc_anl(3,l) - 271.) > EPSILON) stop 10
  enddo
 
- do l = 1,2
+ do l = 1,lsoil_incr
   if (abs(smc_anl(4,l) - 0.25) > EPSILON) stop 11
   if (abs(slc_anl(4,l) - 0.112) > EPSILON) stop 12
   if (abs(stc_anl(4,l) - 271.) > EPSILON) stop 13
