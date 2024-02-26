@@ -1557,9 +1557,9 @@
      kgds(7)=nint(float(igdstmpl(20))/float(iscale)*1000.)       ! octs 18-20,
                                                                  ! Lat of cent of rotation
      kgds(8)=nint(float(igdstmpl(21))/float(iscale)*1000.)       ! octs 21-23,
-     print*, "INPUT LAT, LON CENTER ", kgds(7), kgds(8) 
                                                                  ! Lon of cent of rotation
      kgds(7) = kgds(7) + 90000.0
+     print*, "INPUT LAT, LON CENTER ", kgds(7), kgds(8)
 
      DPR = 180.0/3.1415926
      CLATR=COS((float(kgds(4))/1000.0)/DPR)

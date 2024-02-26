@@ -3020,7 +3020,7 @@ else ! is native coordinate (hybrid).
 
    elseif (gfld%igdtnum == 1) then ! grid definition template number - non-E stagger rotated lat/lon grid
 
-     latin1 = real(float(gfld%igdtmpl(20))/1.0E6, kind=esmf_kind_r4)
+     latin1 = real(float(gfld%igdtmpl(20))/1.0E6, kind=esmf_kind_r4) + 90.0_esmf_kind_r4
      lov = real(float(gfld%igdtmpl(21))/1.0E6, kind=esmf_kind_r4)
 
      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
