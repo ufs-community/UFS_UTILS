@@ -101,11 +101,11 @@ for n in $(seq 1 $ntiles); do
   fi
 
   if [[ "$DO_SOI_INC_JEDI" == ".true." ]] ; then
-        ln -fs $COMIN/soil_xainc.00$n $DATA/.
+        ln -fs $COMIN/soil_xainc.00$n $DATA/soil_xainc.00$n
   fi
 
   if [[ "$DO_SOI_INC_GSI" == ".true." ]] ; then
-        ln -fs $COMIN/sfcincr_gsi.00$n $DATA/.
+        ln -fs $COMIN/sfcincr_gsi.00$n $DATA/sfcincr_gsi.00$n
   fi
 done
 
