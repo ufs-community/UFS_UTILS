@@ -454,10 +454,6 @@
  ENDIF
 
 IF (DO_LNDINC) THEN
-   IF (FRAC_GRID) THEN
-     print *, 'FATAL ERROR: land increment update does not work with fractional grids.'
-     call MPI_ABORT(MPI_COMM_WORLD, 17, IERR)
-   ENDIF
    ! identify variables to be updated, and allocate arrays.
    IF  (TRIM(LND_SOI_FILE) .NE. "NULL") THEN
        DO_SOI_INC = .TRUE.
@@ -503,11 +499,6 @@ ENDIF
  IF (FRAC_GRID .AND. .NOT. IS_NOAHMP) THEN
    print *, 'FATAL ERROR: NOAH lsm update does not work with fractional grids.'
    call MPI_ABORT(MPI_COMM_WORLD, 18, IERR)
- ENDIF
-
- IF (FRAC_GRID .AND. DO_SNO_INC) THEN
-   print *, 'FATAL ERROR: Snow increment update does not work with fractional grids.'
-   call MPI_ABORT(MPI_COMM_WORLD, 19, IERR)
  ENDIF
 
  IF (IS_NOAHMP .AND. DO_SNO_INC) THEN
