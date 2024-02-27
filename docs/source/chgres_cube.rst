@@ -369,7 +369,7 @@ Namelist variables with “input” in their name refer to data input to chgres_
               * Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
       * halo_blend - Integer number of row/columns to apply halo blending into the domain, where model and lateral boundary tendencies are applied.
       * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral boundary conditions are applied.
-      * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
+      * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR', 'RRFS'. (Default: 'GFS')
 
 **Optional Entries**
 

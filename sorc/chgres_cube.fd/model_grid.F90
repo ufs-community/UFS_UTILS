@@ -679,7 +679,7 @@
  elseif (gfld%igdtnum == 30) then
    print*,"- INPUT DATA ON LAMBERT CONFORMAL GRID."
    input_grid_type = 'lambert'
- elseif (gfld%igdtnum == 32769) then
+ elseif (gfld%igdtnum == 32769 .or. gfld%igdtnum == 1) then
    print*,"- INPUT DATA ON ROTATED LAT/LON GRID."
    input_grid_type = 'rotated_latlon'
  else
@@ -1451,9 +1451,13 @@
 
  integer, intent(in   )  :: igdtnum, igdtlen, igdstmpl(igdtlen)
  integer, intent(  out)  :: kgds(200), ni, nj
- integer                 :: iscale
+ integer                 :: iscale, i
 
  real,    intent(  out)  :: res
+
+ real                    :: clatr, slatr, clonr, dpr, slat
+ real                    :: slat0, clat0, clat, clon, rlat
+ real                    :: rlon0, rlon, hs
 
  kgds=0
 
@@ -1501,6 +1505,110 @@
 
      res = ((float(kgds(9)) / 1000.0) + (float(kgds(10)) / 1000.0)) &
              * 0.5 * 111.0
+
+   elseif (igdtnum.eq.1) then        ! rot lat/lon b grid using standard wmo
+                                    ! template.
+
+     iscale=igdstmpl(10)*igdstmpl(11)
+     if (iscale == 0) iscale = 1e6
+     kgds(1)=205                    ! oct 6,     rotated lat/lon for Non-E
+                                    !            Stagger grid
+     kgds(2)=igdstmpl(8)            ! octs 7-8,  Ni
+     ni = kgds(2)
+     kgds(3)=igdstmpl(9)            ! octs 9-10, Nj
+     nj = kgds(3)
+
+     kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of
+                                                            ! 1st grid point
+     kgds(5)=nint(float(igdstmpl(13))/float(iscale)*1000.)  ! octs 14-16, Lon of
+                                                            ! 1st grid point
+
+     kgds(6)=0                      ! oct 17, resolution and component flags
+     if (igdstmpl(1)==2 ) kgds(6)=64
+     if ( btest(igdstmpl(14),4).OR.btest(igdstmpl(14),5) )  kgds(6)=kgds(6)+128
+     if ( btest(igdstmpl(14),3) ) kgds(6)=kgds(6)+8
+
+     kgds(7)=nint(float(igdstmpl(20))/float(iscale)*1000.)       ! octs 18-20,
+                                                                 ! Lat of cent of rotation
+     kgds(8)=nint(float(igdstmpl(21))/float(iscale)*1000.)       ! octs 21-23,
+                                                                 ! Lon of cent of rotation
+     kgds(7) = kgds(7) + 90000.0
+     print*, "INPUT LAT, LON CENTER ", kgds(7), kgds(8)
+
+     DPR = 180.0/3.1415926
+     CLATR=COS((float(kgds(4))/1000.0)/DPR)
+     SLATR=SIN((float(kgds(4))/1000.0)/DPR)
+     CLONR=COS((float(kgds(5))/1000.0)/DPR)
+     SLAT0=SIN((float(kgds(7))/1000.0)/DPR)
+     CLAT0=COS((float(kgds(7))/1000.0)/DPR)
+
+     SLAT=CLAT0*SLATR+SLAT0*CLATR*CLONR
+     CLAT=SQRT(1-SLAT**2)
+     CLON=(CLAT0*CLATR*CLONR-SLAT0*SLATR)/CLAT
+     CLON=MIN(MAX(CLON,-1.0),1.0)
+
+     RLAT=DPR*ASIN(SLAT)
+
+     RLON0=float(kgds(8))/1000.0
+
+     if ((kgds(5)-kgds(8)) > 0) then
+       HS = -1.0
+     else
+       HS = 1.0
+     endif
+
+     RLON = MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360.0)
+
+     kgds(4)=nint(rlat*1000.)  ! octs 11-13, Lat of first grid point
+     kgds(5)=nint(rlon*1000.)  ! octs 14-16, Lon of first grid point
+
+     kgds(12)=nint(float(igdstmpl(15))/float(iscale)*1000.) ! octs 29-31, Lat of
+                                                            ! last grid point
+     kgds(13)=nint(float(igdstmpl(16))/float(iscale)*1000.) ! octs 32-34, Lon of
+                                                            ! last grid point
+
+     CLATR=COS((float(kgds(12))/1000.0)/DPR)
+     SLATR=SIN((float(kgds(12))/1000.0)/DPR)
+     CLONR=COS((float(kgds(13))/1000.0)/DPR)
+
+     SLAT=CLAT0*SLATR+SLAT0*CLATR*CLONR
+     RLAT=DPR*ASIN(SLAT)
+
+     CLAT=SQRT(1-SLAT**2)
+     CLON=(CLAT0*CLATR*CLONR-SLAT0*SLATR)/CLAT
+     CLON=MIN(MAX(CLON,-1.0),1.0)
+
+     if ((kgds(13)-kgds(8)) > 0) then
+       HS = -1.0
+     else
+       HS = 1.0
+     endif
+
+     RLON = MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360.0)
+
+     print*,'got here last point ',kgds(12), kgds(13)
+     print*,'got here last point rotated ', rlat, rlon
+
+     kgds(12)=nint(rlat*1000.)  ! octs 11-13, Lat of
+     kgds(13)=nint(rlon*1000.)  ! octs 14-16, Lon of
+
+     kgds(9)=igdstmpl(17)
+     kgds(10)=igdstmpl(18)
+
+     kgds(11) = 0                   ! oct 28, scan mode
+     if (btest(igdstmpl(19),7)) kgds(11) = 128
+     if (btest(igdstmpl(19),6)) kgds(11) = kgds(11) +  64
+     if (btest(igdstmpl(19),5)) kgds(11) = kgds(11) +  32
+
+     kgds(19)=0    ! oct 4, # vert coordinate parameters
+     kgds(20)=255  ! oct 5, used for thinned grids, set to 255
+
+     res = ((float(kgds(9)) / 1.e6) + (float(kgds(10)) / 1.e6)) &
+             * 0.5 * 111.0
+
+     do i = 1, 25
+       print*,'final kgds ',i,kgds(i)
+     enddo
 
    elseif(igdtnum==30) then
 
