@@ -24,6 +24,7 @@ option(FRENCTOOLS "Enable building fre-nctools.fd" ON)
 option(GRIDTOOLS "Enable building grid_tools.fd" ON)
 option(CHGRES "Enable building chgres_cube.fd" ON)
 option(OROG_MASK_TOOLS "Enable building orog_mask_tools.fd" ON)
+# OROG_MASK_TOOLS must ON for OROG_NETCDF to build.
 option(OROG_NETCDF "Enable building orog_netcdf.fd" OFF)
 option(SFC_CLIMO_GEN "Enable building sfc_climo_gen.fd" ON)
 option(VCOORD_GEN "Enable building vcoord_gen.fd" ON)
