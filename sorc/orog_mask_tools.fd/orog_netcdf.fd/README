@@ -1,0 +1,8 @@
+These utilities were used to convert input data to the
+orography code from binrary to netcdf.
+
+ramp.fd - Convert Antarctic RAMP terrain data.
+
+orog.fd - Convert the GMTED2010 terrain data.
+
+mask.fd - Convert the UMD land mask data.
