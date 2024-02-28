@@ -4319,7 +4319,6 @@ C  PHYSICAL TO FOURIER TRANSFORM.
 !> Read input global 30-arc second orography data.
 !!
 !! @param[out] glob The orography data.
-!! @param[in] itopo Not used.
 !! @author Jordan Alpert NOAA/EMC
       subroutine read_g(glob)
       implicit none
