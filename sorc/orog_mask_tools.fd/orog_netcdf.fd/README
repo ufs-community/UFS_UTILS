@@ -1,5 +1,5 @@
 These utilities were used to convert input data to the
-orography code from binrary to netcdf.
+orography code from binary to netcdf.
 
 ramp.fd - Convert Antarctic RAMP terrain data.
 
