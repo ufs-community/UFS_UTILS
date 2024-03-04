@@ -49,9 +49,9 @@ C>  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
 C>                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),
 C>                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).
 C>                  RESPECTIVELY READ IN FREE FORMAT.
-C>  -   UNIT235    - GTOPO 30" AVR for ZAVG elevation (NetCDF)
+C>  -   NCID       - GMTED2010 USGS orography (NetCDF)
 C>  -   NCID       - 30" UMD land cover mask. (NetCDF)
-C>  -   UNIT15     - GICE Grumbine 30" RAMP Antarctica orog IMNx3601. (NetCDF)
+C>  -   NCID       - GICE Grumbine 30" RAMP Antarctica orog IMNx3601. (NetCDF)
 C>  -   UNIT25     - Ocean land-sea mask on gaussian grid         
 C>
 C>   OUTPUT FILES:
@@ -293,8 +293,8 @@ C
 
       print *,' Attempt to open/read UMD 30sec slmsk.'
 
-      error=NF__OPEN("landcover30.fixed.nc",NF_NOWRITE,fsize,ncid)
-      call netcdf_err(error, 'Open file landcover30.fixed.nc' )
+      error=NF__OPEN("./landcover.umd.30s.nc",NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
       error=nf_inq_varid(ncid, 'land_mask', id_var)
       call netcdf_err(error, 'Inquire varid of land_mask')
       error=nf_get_var_int1(ncid, id_var, UMD)
@@ -461,8 +461,9 @@ C
 ! to North, and from Greenwich to Greenwich.
 
       iosg = 0
-      error=NF__OPEN("./fort.15",NF_NOWRITE,fsize,ncid)
-      call netcdf_err(error, 'Opening RAMP file fort.15' )
+      error=NF__OPEN("./topography.antarctica.ramp.30s.nc",
+     &               NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Opening RAMP topo file' )
       error=nf_inq_varid(ncid, 'topo', id_var)
       call netcdf_err(error, 'Inquire varid of RAMP topo')
       error=nf_get_var_real(ncid, id_var, GICE)
@@ -4331,8 +4332,9 @@ C  PHYSICAL TO FOURIER TRANSFORM.
 
       fsize=65536
 
-      error=NF__OPEN("fort.235",NF_NOWRITE,fsize,ncid)
-      call netcdf_err(error, 'Open file fort.235' )
+      error=NF__OPEN("./topography.gmted2010.30s.nc",
+     &               NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file topography.gmted2010.30s.nc' )
       error=nf_inq_varid(ncid, 'topo', id_var)
       call netcdf_err(error, 'Inquire varid of topo')
       error=nf_get_var_int2(ncid, id_var, glob)

@@ -65,7 +65,7 @@
 
  print*,'topo ', maxval(topo),minval(topo)
 
- filenetcdf="./topography.gmted2010.30sec.nc"
+ filenetcdf="./topography.gmted2010.30s.nc"
 
  print*,"- CREATE FILE: ", trim(filenetcdf)
  status=nf90_create(filenetcdf, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid)
