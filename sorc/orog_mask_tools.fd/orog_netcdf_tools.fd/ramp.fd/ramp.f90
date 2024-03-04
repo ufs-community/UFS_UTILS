@@ -72,7 +72,7 @@
  print*,'point 1/1 ',topo(1,1)
  print*,'point idim/jdim ',topo(idim,jdim)
 
- filenetcdf="./thirty.second.antarctic.new.nc"
+ filenetcdf="./topography.antarctica.ramp.30s.nc"
 
  print*,"- CREATE FILE: ", trim(filenetcdf)
  status=nf90_create(filenetcdf, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid)

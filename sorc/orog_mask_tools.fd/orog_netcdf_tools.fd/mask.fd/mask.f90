@@ -66,7 +66,7 @@
  print*,'mask ', maxval(mask),minval(mask)
  where(mask > 0) mask = 1
 
- filenetcdf="./landcover30.fixed.nc"
+ filenetcdf="./landcover.umd.30s.nc"
 
  print*,"- CREATE FILE: ", trim(filenetcdf)
  status=nf90_create(filenetcdf, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid)
