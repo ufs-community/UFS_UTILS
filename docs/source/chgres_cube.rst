@@ -55,7 +55,7 @@ Program inputs and outputs for global applications
 
 **Inputs**
 
-Users may create their own global grids, or use the pre-defined files are located `here <https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_fv3_gmted2010/>`_.
+Users may create their own global grids, or use the pre-defined files located `here <https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_fv3_gmted2010/>`_.
 
       * FV3 mosaic file - (NetCDF format)
 	      * CRES_mosaic.nc
