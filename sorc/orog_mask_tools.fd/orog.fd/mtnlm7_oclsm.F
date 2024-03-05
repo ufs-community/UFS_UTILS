@@ -459,6 +459,7 @@ C
 ! Read 30-sec Antarctica RAMP data. Points scan from South
 ! to North, and from Greenwich to Greenwich.
 
+! The error handling here needs to be cleaned up.
       iosg = 0
       error=NF__OPEN("./topography.antarctica.ramp.30s.nc",
      &               NF_NOWRITE,fsize,ncid)
