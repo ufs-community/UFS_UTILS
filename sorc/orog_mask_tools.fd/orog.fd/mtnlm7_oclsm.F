@@ -2,8 +2,8 @@ C> @file
 C> Terrain maker for global spectral model.
 C> @author Mark Iredell @date 92-04-16
   
-C> This program creates 7 terrain-related files computed from the navy
-C> 10-minute terrain dataset. The model physics grid parameters and
+C> This program creates 7 terrain-related files computed from the
+C> GMTED2010 terrain dataset. The model physics grid parameters and
 C> spectral truncation and filter parameters are read by this program as
 C> input.
 C>      
@@ -199,7 +199,7 @@ C
       real, PARAMETER :: PI=3.1415926535897931
       integer, PARAMETER :: NMT=14
 
-      integer :: efac,blat,zsave1,zsave2,itopo
+      integer :: efac,blat,zsave1,zsave2
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
@@ -275,14 +275,13 @@ C
       SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
       FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 & NF0
       REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
-      ITOPO  = 1             ! topo 30" read, otherwise tiles (opt offline)
       MSKOCN = 1             ! Ocean land sea mask =1, =0 if not present
       NOTOCN = 1             ! =1 Ocean lsm input reverse: Ocean=1, land=0 
 ! --- The LSM Gaussian file from the ocean model sometimes arrives with 
 ! --- 0=Ocean and 1=Land or it arrives with 1=Ocean and 0=land without 
 ! --- metadata to distinguish its disposition.  The AI below mitigates this.
 
-      print *,' In TERSUB, ITOPO=',itopo
+      print *,' In TERSUB'
                       if (mskocn .eq. 1)then
       print *,' Ocean Model LSM Present and '
       print *, ' Overrides OCEAN POINTS in LSM: mskocn=',mskocn
@@ -305,8 +304,8 @@ C
 C
 C- READ_G for global 30" terrain 
 C
-       print *,' About to call read_g, ITOPO=',ITOPO
-       if ( ITOPO .ne. 0 ) call read_g(glob)
+       print *,' Call read_g to read global topography'
+       call read_g(glob)
 ! --- transpose even though glob 30" is from S to N and NCEP std is N to S
        do j=1,jmn/2
        do I=1,imn
