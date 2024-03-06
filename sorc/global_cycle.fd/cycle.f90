@@ -79,6 +79,11 @@
 !!  -DO_SNO_INC_JEDI    Do land increments to snow states on cubed-sphere tiles
 !!                      (Noah land model only).
 !!  -LSOIL_INCR    Number of soil layers (from top) to apply soil increments to.
+!!                 LSOIL_INCR is currently set to 3 by default.
+!!                 Extra cautions are needed on layer#3 across permafrost regions due to
+!!                 over sensitivity of moisture change when temperature approaches tfreez.
+!!                 Please feel free to contact Yuan Xue (yuan.xue@noaa.gov) for further 
+!!                 concerns regarding this issue.
 !!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
 !!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
 !!  - ZSEA1/2_MM   When running with NSST model, this is the lower/
@@ -401,6 +406,7 @@
  DO_SOI_INC_GSI = .FALSE.
  DO_SOI_INC_JEDI = .FALSE.
  lsoil_incr = 3 !default
+
  
  SIG1T = 0.0            ! Not a dead start!
 
