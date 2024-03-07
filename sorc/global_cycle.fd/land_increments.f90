@@ -6,8 +6,8 @@ module land_increments
 
     private
 
-    public add_gsi_increment_soil
-    public add_jedi_increment_soil
+    public gaussian_to_fv3_interp
+    public add_increment_soil
     public add_jedi_increment_snow
     public calculate_landinc_mask
     public apply_land_da_adjustments_soil
@@ -24,25 +24,12 @@ module land_increments
 contains
 
  !> Read in gsi file with soil state  increments (on the gaussian
- !! grid), interpolate increments to the cubed-sphere tile, and
- !! add to the soil states. Adapted from adjust_nsst.
- !! Currently only coded for soil temperature. Soil moisture will
- !! need the model soil moisture paramaters for regridding.
- !!
- !!  Does not make a temperature update if snow differ
- !!  between fg and anal (allow correction of snow to
- !!  address temperature error first), or if snow is present 
- !!  (will eventually updating of snow temperature in this case)
+ !! grid), interpolate increments to the cubed-sphere tile
+ !! Adapted from adjust_nsst.
  !!
  !! @param[inout] RLA Latitude on the cubed-sphere tile
  !! @param[inout] RLO Longitude on the cubed-sphere tile
- !! @param[inout] STC_STATE Soil temperature state vector
- !! @param[inout] SMC_STATE Soil moisture (liquid plus solid) state vector
- !! @param[inout] SLC_STATE Liquid soil moisture state vector
- !! @param[out] stc_updated Integer to record whether STC in each grid cell was updated
- !! @param[out] slc_updated Integer to record whether SMC in each grid cell was updated
  !! @param[in] SOILSNOW_TILE Land mask for increments on the cubed-sphere tile
- !! @param[in] SOILSNOW_FG_TILE First guess land mask for increments on the cubed-sphere tile
  !! @param[in] LENSFC Number of land points on a tile
  !! @param[in] LSOIL Number of soil layers
  !! @param[in] LSOIL_INCR Number of soil layers (from top) to apply soil increments to
@@ -50,13 +37,14 @@ contains
  !! @param[in] JDIM 'J' dimension of a tile
  !! @param[in] lsm Integer flag indicating which land model is used (1-Noah, 2-Noah-MP)
  !! @param[in] MYRANK MPI rank number
- !! @param[out] stc_inc_tmp Soil temperature increments on the cubed-sphere tile
- !! @param[out] slc_inc_tmp Liquid soil moisture increments on the cubed-sphere tile
+ !! @param[out] stcinc Soil temperature increments on the cubed-sphere tile
+ !! @param[out] slcinc Liquid soil moisture increments on the cubed-sphere tile
  !!
  !! @author Clara Draper. @date March 2021
+ !! @author Yuan Xue. @date Mar 2024
 
-subroutine add_gsi_increment_soil(lsoil_incr,rla,rlo,stc_state,smc_state,slc_state,stc_updated, slc_updated, &
-                        stc_inc_tmp,slc_inc_tmp,soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,idim,jdim,lsm, myrank)
+subroutine gaussian_to_fv3_interp(lsoil_incr,rla,rlo, &
+                        stcinc,slcinc,soilsnow_tile,lensfc,lsoil,idim,jdim,lsm, myrank)
 
     use utils
     use gdswzd_mod
@@ -68,19 +56,15 @@ subroutine add_gsi_increment_soil(lsoil_incr,rla,rlo,stc_state,smc_state,slc_sta
 
     integer, intent(in)      :: lsoil_incr, lensfc, lsoil, idim, jdim, myrank, lsm
 
-    integer, intent(in)      :: soilsnow_tile(lensfc), soilsnow_fg_tile(lensfc)
+    integer, intent(in)      :: soilsnow_tile(lensfc)
     real, intent(inout)      :: rla(lensfc), rlo(lensfc)
-    real, intent(inout)      :: stc_state(lensfc, lsoil)
-    real, intent(inout)      :: slc_state(lensfc, lsoil)
-    real, intent(inout)      :: smc_state(lensfc, lsoil)
-    integer, intent(out)     :: stc_updated(lensfc), slc_updated(lensfc)
 
-    real, intent(out)        :: stc_inc_tmp(lensfc, lsoil)
-    real, intent(out)        :: slc_inc_tmp(lensfc, lsoil)
+    real, intent(out)        :: stcinc(lensfc,lsoil)
+    real, intent(out)        :: slcinc(lensfc,lsoil)
 
     integer                  :: iopt, nret, kgds_gaus(200)
     integer                  :: igaus, jgaus, ij
-    integer                  :: mask_tile, mask_fg_tile
+    integer                  :: mask_tile
     integer                  :: itile, jtile
     integer                  :: j, ierr
     integer                  :: igausp1, jgausp1
@@ -96,12 +80,9 @@ subroutine add_gsi_increment_soil(lsoil_incr,rla,rlo,stc_state,smc_state,slc_sta
     real, allocatable        :: dum2d(:,:), lats_rad(:), lons_rad(:)
     real, allocatable        :: agrid(:,:,:), s2c(:,:,:)
 
-    integer                  :: k, nother, nsnowupd, nnosoilnear
-    integer                  :: nstcupd, nslcupd,  nfrozen, nfrozen_upd
-    logical                  :: gaus_has_soil, soil_freeze, soil_ice
+    integer                  :: k
+    logical                  :: gaus_has_soil 
 
-    stc_updated=0
-    slc_updated=0                                            
     ! this produces the same lat/lon as can be read in from the file
 
     kgds_gaus     = 0
@@ -128,12 +109,8 @@ subroutine add_gsi_increment_soil(lsoil_incr,rla,rlo,stc_state,smc_state,slc_sta
         upd_slc=.true.
     endif
 
-    print*
-    print*,'adjust soil using gsi increments on gaussian grid'
-    print*,'updating soil temps', upd_stc
-    print*,'updating soil moisture', upd_slc
-    print*,'adjusting first ', lsoil_incr, ' surface layers only'
-
+    print*,' Start interpolating first ', lsoil_incr, ' surface layers only'
+    
     !----------------------------------------------------------------------
     ! call gdswzd to compute the lat/lon of each gsi gaussian grid point.
     !----------------------------------------------------------------------
@@ -195,50 +172,20 @@ subroutine add_gsi_increment_soil(lsoil_incr,rla,rlo,stc_state,smc_state,slc_sta
                   lons_rad, lats_rad, id1, id2, jdc, s2c, agrid )
 
     deallocate(lons_rad, lats_rad, agrid)
-    !
-    ! initialize variables for counts statitics to be zeros
-    nother = 0 ! grid cells not land
-    nsnowupd = 0  ! grid cells with snow (temperature not yet updated)
-    nnosoilnear = 0 ! grid cells where model has soil, but 4 closest gaus grids don't
-                 ! (no update made here)
-    nslcupd = 0 ! grid cells that are updated
-    nstcupd = 0 ! grid cells that are updated
-    nfrozen = 0 ! not update as frozen soil
-    nfrozen_upd = 0 ! not update as frozen soil
 
     ! initialize matrix
-    stc_inc_tmp = 0.0
-    slc_inc_tmp = 0.0
+    stcinc = 0.0
+    slcinc = 0.0
 
     ij_loop : do ij = 1, lensfc
 
         mask_tile    = soilsnow_tile(ij)
-        mask_fg_tile = soilsnow_fg_tile(ij)
-
-        !----------------------------------------------------------------------
-        ! mask: 1  - soil, 2 - snow, 0 - land-ice, -1 - not land
-        !----------------------------------------------------------------------
-
-        if (mask_tile <= 0) then ! skip if neither soil nor snow
-         nother = nother + 1
-         cycle ij_loop
-        endif
-
 
         !  get i,j index on array of (idim,jdim) from known ij
 
         jtile = (ij-1) / idim + 1
         itile = mod(ij,idim)
         if (itile==0) itile = idim
-
-        !----------------------------------------------------------------------
-        ! if snow is present before or after snow update, skip soil analysis
-        !----------------------------------------------------------------------
-
-        if (mask_fg_tile == 2 .or. mask_tile == 2) then
-         nsnowupd = nsnowupd + 1
-         cycle ij_loop
-        endif
 
         !----------------------------------------------------------------------
         !  do update to soil temperature grid cells, using bilinear interp
@@ -259,7 +206,6 @@ subroutine add_gsi_increment_soil(lsoil_incr,rla,rlo,stc_state,smc_state,slc_sta
                soilsnow_gaus(igaus,jgausp1)   == 1)  gaus_has_soil = .true.
            
            if (.not. gaus_has_soil) then
-             nnosoilnear = nnosoilnear + 1
              cycle ij_loop
            endif
 
@@ -310,69 +256,23 @@ subroutine add_gsi_increment_soil(lsoil_incr,rla,rlo,stc_state,smc_state,slc_sta
            ! normalize increments
            do k = 1, lsoil_incr
              stc_inc(k) = stc_inc(k) / wsum
-             stc_inc_tmp(ij,k) = stc_inc(k)
+             stcinc(ij,k) = stc_inc(k)
              slc_inc(k) = slc_inc(k) / wsum
-             slc_inc_tmp(ij,k) = slc_inc(k)
-           enddo
-           !----------------------------------------------------------------------
-           !  add the interpolated increment to the background
-           !----------------------------------------------------------------------
-
-           soil_freeze=.false.
-           soil_ice=.false.
-           do k = 1, lsoil_incr
-
-             if ( stc_state(ij,k) < tfreez)  soil_freeze=.true.
-             if ( smc_state(ij,k) - slc_state(ij,k) > 0.001 )  soil_ice=.true.
-
-             if (upd_stc) then
-                stc_state(ij,k) = stc_state(ij,k) + stc_inc(k)
-                if (k==1) then 
-                    stc_updated(ij) = 1
-                    nstcupd = nstcupd + 1
-                endif
-             endif
-
-             if ( (stc_state(ij,k) < tfreez) .and. (.not. soil_freeze) .and. (k==1) ) & 
-                   nfrozen_upd = nfrozen_upd + 1 
-
-             ! do not do updates if this layer or any above is frozen
-             if ( (.not. soil_freeze ) .and. (.not. soil_ice ) ) then 
-                if (upd_slc) then  
-                if (k==1) then 
-                    nslcupd = nslcupd + 1
-                    slc_updated(ij) = 1
-                endif
-                   ! apply zero limit here (higher, model-specific limits are later)
-                   slc_state(ij,k) = max(slc_state(ij,k) + slc_inc(k), 0.0)
-                   smc_state(ij,k) = max(smc_state(ij,k) + slc_inc(k), 0.0) 
-                endif
-             else
-                if (k==1) nfrozen = nfrozen+1
-             endif
-
+             slcinc(ij,k) = slc_inc(k)
            enddo
 
-        endif ! if soil/snow point
+      endif ! if soil/snow point
 
     enddo ij_loop
 
-    write(*,'(a,i2)') 'statistics of grids number processed for rank : ', myrank
-    write(*,'(a,i8)') ' soil grid total', lensfc
-    write(*,'(a,i8)') ' soil grid cells slc updated = ',nslcupd
-    write(*,'(a,i8)') ' soil grid cells stc updated = ',nstcupd
-    write(*,'(a,i8)') ' soil grid cells not updated, frozen = ',nfrozen
-    write(*,'(a,i8)') ' soil grid cells update, became frozen = ',nfrozen_upd
-    write(*,'(a,i8)') ' (not updated) soil grid cells, no soil nearby on gsi grid = ',nnosoilnear
-    write(*,'(a,i8)') ' (not updated yet) snow grid cells = ', nsnowupd
-    write(*,'(a,i8)') ' grid cells, without soil or snow = ', nother
+    write(*,'(a,i2)') ' Finish soil increments interpolation for rank : ', myrank
 
     deallocate(id1, id2, jdc, s2c)
 
-end subroutine add_gsi_increment_soil
+end subroutine gaussian_to_fv3_interp
 
- !> Read in fv3-jedi file with soil state increments (on the cubed-sphere 
- !! grid),and to the soil states. Adapted from add_gsi_increment_soil.
+ !> Read in soil state increments (on the cubed-sphere 
+ !! grid),and add to the soil states. Adapted from original add_gsi_increment_soil routine.
  !!
  !! @param[in] SLCINC Liquid soil moisture increments on the cubed-sphere tile
  !! @param[in] STCINC Soil temperature increments on the cubed-sphere tile
@@ -392,7 +292,7 @@ end subroutine add_gsi_increment_soil
  !!
  !! @author Yuan Xue. 11/2023
 
-subroutine add_jedi_increment_soil(lsoil_incr,stcinc,slcinc,stc_state,smc_state,slc_state,stc_updated,&
+subroutine add_increment_soil(lsoil_incr,stcinc,slcinc,stc_state,smc_state,slc_state,stc_updated,&
               slc_updated,soilsnow_tile,soilsnow_fg_tile,lensfc,lsoil,lsm,myrank)
 
     use mpi
@@ -407,6 +307,7 @@ subroutine add_jedi_increment_soil(lsoil_incr,stcinc,slcinc,stc_state,smc_state,
     real, intent(inout)      :: smc_state(lensfc, lsoil)
     integer, intent(out)     :: stc_updated(lensfc), slc_updated(lensfc)
 
+    
     integer                  :: ij
     integer                  :: mask_tile, mask_fg_tile
     logical                  :: upd_slc, upd_stc
@@ -430,7 +331,7 @@ subroutine add_jedi_increment_soil(lsoil_incr,stcinc,slcinc,stc_state,smc_state,
     endif
 
     print*
-    print*,'adjust soil using jedi increments on cubed-sphere tiles'
+    print*,'adjust soil using increments on cubed-sphere tiles'
     print*,'updating soil temps', upd_stc
     print*,'updating soil moisture', upd_slc
     print*,'adjusting first ', lsoil_incr, ' surface layers only'
@@ -516,7 +417,7 @@ subroutine add_jedi_increment_soil(lsoil_incr,stcinc,slcinc,stc_state,smc_state,
 
    enddo ij_loop
 
-   write(*,'(a,i2)') 'statistics of grids number processed for rank : ', myrank
+   write(*,'(a,i2)') ' statistics of grids number processed for rank : ', myrank
    write(*,'(a,i8)') ' soil grid total', lensfc
    write(*,'(a,i8)') ' soil grid cells slc updated = ',nslcupd
    write(*,'(a,i8)') ' soil grid cells stc updated = ',nstcupd
@@ -525,7 +426,7 @@ subroutine add_jedi_increment_soil(lsoil_incr,stcinc,slcinc,stc_state,smc_state,
    write(*,'(a,i8)') ' (not updated yet) snow grid cells = ', nsnowupd
    write(*,'(a,i8)') ' grid cells, without soil or snow = ', nother
 
-end subroutine add_jedi_increment_soil
+end subroutine add_increment_soil
 
 
  !> Add snow depth increment to model snow depth state,

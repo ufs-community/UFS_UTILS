@@ -35,7 +35,7 @@ program ftst_land_increments
  isot = 1          ! STATSGO soil type.
  ivegsrc = 1       ! IGBP vegetation type.
  lsoil = 4         ! Number of soil layers.
- lsoil_incr = 3    ! Number os soil layers (from top) to apply increments to.
+ lsoil_incr = 3    ! Number of soil layers (from top) to apply increments to.
  
  lensfc= 4  ! Number of test points.
  

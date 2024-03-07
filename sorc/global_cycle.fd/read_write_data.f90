@@ -115,8 +115,8 @@ MODULE READ_WRITE_DATA
    !! @param[in] slcfcs Liquid portion of volumetric soil moisture.
    !! @param[in] smcfcs Total volumetric soil moisture.
    !! @param[in] stcfcs Soil temperature.
-   !! @param[in] stc_inc_tmp Soil temperature increments on the cubed-sphere tiles
-   !! @param[in] slc_inc_tmp Liquid soil moisture increments on the cubed-sphere tiles
+   !! @param[in] stcinc Soil temperature increments on the cubed-sphere tiles
+   !! @param[in] slcinc Liquid soil moisture increments on the cubed-sphere tiles
    !!
    !! @author George Gayno NOAA/EMC
 
@@ -128,7 +128,7 @@ MODULE READ_WRITE_DATA
                        sihfcs,sitfcs,tprcp,srflag,  &
                        swdfcs,vmnfcs,vmxfcs,slpfcs, &
                        absfcs,slcfcs,smcfcs,stcfcs, &
-                       stc_inc_tmp, slc_inc_tmp)
+                       stcinc, slcinc)
 
  use mpi
 
@@ -155,8 +155,8 @@ MODULE READ_WRITE_DATA
  real, intent(in), optional       :: vmxfcs(lensfc), slpfcs(lensfc)
  real, intent(in), optional       :: absfcs(lensfc), slcfcs(lensfc,lsoil)
  real, intent(in), optional       :: smcfcs(lensfc,lsoil), stcfcs(lensfc,lsoil)
- real, intent(in), optional       :: stc_inc_tmp(lensfc,lsoil)
- real, intent(in), optional       :: slc_inc_tmp(lensfc,lsoil)
+ real, intent(in), optional       :: stcinc(lensfc,lsoil)
+ real, intent(in), optional       :: slcinc(lensfc,lsoil)
 
  type(nsst_data), intent(in)      :: nsst
 
@@ -513,11 +513,11 @@ MODULE READ_WRITE_DATA
    error = nf90_enddef(ncid)
 
    ! Put variables in the file.
-   dum3d = reshape(stc_inc_tmp, (/idim,jdim,lsoil/))
+   dum3d = reshape(stcinc, (/idim,jdim,lsoil/))
    error = nf90_put_var( ncid, varid_stc, dum3d)
    call netcdf_err(error, 'writing stc_inc record' )
 
-   dum3d = reshape(slc_inc_tmp, (/idim,jdim,lsoil/))
+   dum3d = reshape(slcinc, (/idim,jdim,lsoil/))
    error = nf90_put_var( ncid, varid_slc, dum3d)
    call netcdf_err(error, 'writing slc_inc record' )
 

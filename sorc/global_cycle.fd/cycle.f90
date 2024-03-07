@@ -314,8 +314,8 @@
  USE READ_WRITE_DATA
  use machine
  USE MPI
- USE LAND_INCREMENTS, ONLY: ADD_GSI_INCREMENT_SOIL,     &
-                            ADD_JEDI_INCREMENT_SOIL,    &
+ USE LAND_INCREMENTS, ONLY: GAUSSIAN_TO_FV3_INTERP,     &
+                            ADD_INCREMENT_SOIL,    &
                             ADD_JEDI_INCREMENT_SNOW,     &
                             CALCULATE_LANDINC_MASK, &
                             APPLY_LAND_DA_ADJUSTMENTS_SOIL, &
@@ -386,7 +386,6 @@
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
  INTEGER             :: veg_type_landice
  INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
- REAL, DIMENSION(LENSFC,LSOIL) :: STC_INC_TMP, SLC_INC_TMP
  REAL, DIMENSION(LENSFC,LSOIL) :: STCINC, SLCINC
 
  LOGICAL :: FILE_EXISTS, DO_SOI_INC_GSI, DO_SOI_INC_JEDI, DO_SNO_INC_JEDI
@@ -482,7 +481,7 @@ IF (DO_LNDINC) THEN
    ENDIF
    IF  (DO_SOI_INC_GSI .or. DO_SOI_INC_JEDI) THEN
        PRINT*
-       PRINT*," APPLYING SOIL INCREMENTS"
+       PRINT*," APPLYING SOIL INCREMENTS FROM GSI OR JEDI"
        ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
        ALLOCATE(LANDINC_MASK_FG(LENSFC))
    ENDIF
@@ -738,7 +737,6 @@ ENDIF
 
     ENDIF ! jedi snow increments
 
-
     !re-calculate soilsnow mask if snow has been updated.
     LANDINC_MASK_FG = LANDINC_MASK
 
@@ -747,9 +745,17 @@ ENDIF
                                     VEG_TYPE_LANDICE, LANDINC_MASK)
     ENDIF
 
+    ! store background states
+    STC_BCK = STCFCS
+    SMC_BCK = SMCFCS
+    SLC_BCK = SLCFCS
+
     ! SOIL INCREMENTS
     IF (DO_SOI_INC_GSI) THEN
 
+       !--------------------------------------------------------------------------------
+       ! read increments in
+       !--------------------------------------------------------------------------------
        ! make sure incr. files exist
        WRITE(RANKCH, '(I3.3)') (MYRANK+1)
        GSI_SOI_FILE = "sfcincr_gsi." //  RANKCH
@@ -761,53 +767,30 @@ ENDIF
           call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
        ENDIF
 
-       !--------------------------------------------------------------------------------
-       ! read increments in
-       !--------------------------------------------------------------------------------
-
         CALL READ_GSI_DATA(GSI_SOI_FILE, 'LND', LSOIL=LSOIL)
 
         !--------------------------------------------------------------------------------
-        ! add increments to state vars
+        ! interpolate increments to cubed sphere tiles
         !--------------------------------------------------------------------------------
-        ! when applying increments, will often need to adjust other land states in response
-        ! to the changes made. Need to store bacground, apply the increments, then make
-        ! secondart adjustments. When updating more than one state, be careful about the
-        ! order if increments and secondary adjustments.
 
-        ! store background states
-        STC_BCK = STCFCS
-        SMC_BCK = SMCFCS
-        SLC_BCK = SLCFCS
+        CALL GAUSSIAN_TO_FV3_INTERP(LSOIL_INCR,RLA,RLO,&
+                STCINC,SLCINC,LANDINC_MASK,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
 
-        ! below updates [STC/SMC/STC]FCS to hold the analysis
-        CALL ADD_GSI_INCREMENT_SOIL(LSOIL_INCR,RLA,RLO,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, SLC_UPDATED, &
-                STC_INC_TMP,SLC_INC_TMP,LANDINC_MASK,LANDINC_MASK_FG,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
-
-        ! when read in GSI-based increments, save interpolated fields onto cubed
-        ! sphere tiles
+        !--------------------------------------------------------------------------------
+        ! save interpolated increments
+        !-------------------------------------------------------------------------------- 
         CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
-                   STC_INC_TMP=STC_INC_TMP,SLC_INC_TMP=SLC_INC_TMP)
+                        STCINC=STCINC,SLCINC=SLCINC)
 
-        !--------------------------------------------------------------------------------
-        ! make any necessary adjustments to dependent variables
-        !--------------------------------------------------------------------------------
-
-        CALL APPLY_LAND_DA_ADJUSTMENTS_SOIL(LSOIL_INCR, LSM, ISOT, IVEGSRC,LENSFC, LSOIL, &
-                SOTFCS, LANDINC_MASK_FG, STC_BCK, STCFCS, SMCFCS, SLCFCS, STC_UPDATED, &
-                SLC_UPDATED,ZSOIL)
-
-   ENDIF ! gsi soil increments
+   ENDIF ! end reading and interpolating gsi soil increments
 
    IF (DO_SOI_INC_JEDI) THEN
 
        !--------------------------------------------------------------------------------
        ! read increments in
        !--------------------------------------------------------------------------------
-
+       ! make sure incr. files exist
         WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-
-        ! make sure incr. files exist
         JEDI_SOI_FILE = "soil_xainc." //  RANKCH
 
         INQUIRE(FILE=trim(JEDI_SOI_FILE), EXIST=file_exists)
@@ -821,15 +804,16 @@ ENDIF
                       .true.,IS_NOAHMP=IS_NOAHMP,           &
                       STCINC=STCINC,SLCINC=SLCINC)
 
+    ENDIF ! end reading jedi soil increments
+
+    IF (DO_SOI_INC_GSI .or. DO_SOI_INC_JEDI) THEN
+
         !--------------------------------------------------------------------------------
         ! add increments to state vars
         !--------------------------------------------------------------------------------
 
-        ! store background states
-        STC_BCK = STCFCS
-
         ! below updates [STC/SMC/STC]FCS to hold the analysis
-        CALL ADD_JEDI_INCREMENT_SOIL(LSOIL_INCR,STCINC,SLCINC,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, &
+        CALL ADD_INCREMENT_SOIL(LSOIL_INCR,STCINC,SLCINC,STCFCS,SMCFCS,SLCFCS,STC_UPDATED, &
              SLC_UPDATED,LANDINC_MASK,LANDINC_MASK_FG,LENSFC,LSOIL,LSM,MYRANK)
 
         !--------------------------------------------------------------------------------
@@ -841,7 +825,7 @@ ENDIF
                 SLC_UPDATED,ZSOIL)
 
 
-   ENDIF ! jedi soil increments
+    ENDIF ! end applying soil increments and making adjustments
 
 !--------------------------------------------------------------------------------
 ! clean up
