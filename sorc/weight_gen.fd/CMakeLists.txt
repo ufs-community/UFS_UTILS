@@ -12,8 +12,13 @@ set(exe_name weight_gen)
 add_executable(${exe_name} ${fortran_src})
 target_link_libraries(
   ${exe_name}
-  sp::sp_d
   NetCDF::NetCDF_Fortran)
+
+if(sp_FOUND)
+  target_link_libraries(${exe_name} sp::sp_d)
+else()
+  target_link_libraries(${exe_name} ip::ip_d)
+endif()
 
 install(TARGETS ${exe_name})
 
