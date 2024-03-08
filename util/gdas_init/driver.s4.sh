@@ -22,6 +22,8 @@ QUEUE=s4
 
 source config
 
+export machine=s4
+
 if [ $EXTRACT_DATA == yes ]; then
 
   echo "HPSS is not accessible from S4!  If you wish to run just the chgres portion, set EXTRACT_DATA=NO in the config file and try again."
