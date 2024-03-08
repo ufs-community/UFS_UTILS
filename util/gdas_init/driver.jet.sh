@@ -20,8 +20,10 @@ PROJECT_CODE=hfv3gfs
 QUEUE=batch
 PARTITION=xjet
 
+export machine=jet
+
 # Needed for NDATE utility
-module load prod_util/1.2.2
+module load prod_util/2.1.1
 
 source config
 
