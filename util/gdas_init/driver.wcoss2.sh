@@ -21,6 +21,8 @@ PROJECT_CODE=GFS-DEV
 
 source config
 
+export machine=wcoss2
+
 this_dir=$PWD
 
 if [ $EXTRACT_DATA == yes ]; then
