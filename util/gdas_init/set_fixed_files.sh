@@ -22,3 +22,11 @@ fi
 
 ORO_DIR="${CTAR}"
 ORO_NAME="${CTAR}.mx${OCNRES}_oro_data"
+
+if [ "$machine" = 'hera' ] ; then
+  FIX_ORO_INPUT=/scratch1/NCEPDEV/global/glopara/fix/orog/20230615
+else
+  set +x
+  echo ERROR machine $machine not supported.
+  exit 3
+fi
