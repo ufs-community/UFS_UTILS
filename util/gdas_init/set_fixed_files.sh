@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #---------------------------------------------------------------------------
-# Set directory names and file names for orog data.
+# Set directory names and file names for the target grid orog data.
 #---------------------------------------------------------------------------
 
 if [ ${CTAR} == 'C48' ] ; then
@@ -22,6 +22,13 @@ fi
 
 ORO_DIR="${CTAR}"
 ORO_NAME="${CTAR}.mx${OCNRES}_oro_data"
+
+#---------------------------------------------------------------------------
+# When using the v15/v16 tiled warm restart data as input to the chgres
+# step, the input grid orography is needed (there is no orography record
+# in the restart files). Since the restart data was created before the
+# latest orog version (20231027), need to use a previous version.
+#---------------------------------------------------------------------------
 
 if [ "$machine" = 'hera' ] ; then
   FIX_ORO_INPUT=/scratch1/NCEPDEV/global/glopara/fix/orog/20230615
