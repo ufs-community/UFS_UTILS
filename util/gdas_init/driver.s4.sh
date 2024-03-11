@@ -15,7 +15,7 @@ module load build.$target.$compiler
 module list
 
 # Needed for NDATE utility
-module load prod_util/1.2.2
+module load prod_util/2.1.1
 
 PROJECT_CODE=star
 QUEUE=s4
