@@ -1775,11 +1775,11 @@ C
                endif
             enddo 
             if(ist<1 .OR. ist>IMN) then
-               print*, "ist<1 .or. ist>IMN"
+               print*, "FATAL ERROR: ist<1 .or. ist>IMN"
                call ABORT()
             endif
            if(ien<1 .OR. ien>IMN) then
-               print*, "iend<1 .or. iend>IMN"
+               print*, "FATAL ERROR: iend<1 .or. iend>IMN"
                call ABORT()
             endif
 
@@ -1888,7 +1888,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
             XNSUM_ALL = XNSUM_ALL + 1.
             nsum_all = nsum_all+1
             if(nsum_all > MAXSUM) then
-              print*, "nsum_all is greater than MAXSUM, increase MAXSUM"
+              print*, "FATAL ERROR: nsum_all is greater than MAXSUM,"  
+              print*, "increase MAXSUM."
               call ABORT()
             endif
 
@@ -1900,7 +1901,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                XNSUM = XNSUM + 1.
                nsum = nsum+1
                if(nsum > MAXSUM) then
-                 print*, "nsum is greater than MAXSUM, increase MAXSUM"
+                 print*, "FATAL ERROR: nsum is greater than MAXSUM,"
+                 print*, "increase MAXSUM."
                  call ABORT()
                endif
             endif
@@ -1917,7 +1919,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                land_frac(i,j) = XLAND_ALL/XNSUM _ALL 
                SLM(I,J) = FLOAT(NINT(XLAND_ALL/XNSUM_ALL))
          ELSE
-               print*, "no source points in MAKE_MASK"
+               print*, "FATAL ERROR: no source points in MAKE_MASK."
                call ABORT()
          ENDIF
        ENDDO
@@ -2045,7 +2047,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
             HEIGHT_ALL = FLOAT(ZAVG(ii,jj)) 
             nsum_all = nsum_all+1
             if(nsum_all > MAXSUM) then
-              print*, "nsum_all is greater than MAXSUM, increase MAXSUM"
+              print*, "FATAL ERROR: nsum_all is greater than MAXSUM,"
+              print*, "increase MAXSUM."
               call ABORT()
             endif
             hgt_1d_all(nsum_all) = HEIGHT_ALL
@@ -2064,7 +2067,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                HEIGHT = FLOAT(ZAVG(ii,jj)) 
                nsum = nsum+1
                if(nsum > MAXSUM) then
-                 print*, "nsum is greater than MAXSUM, increase MAXSUM"
+                 print*, "FATAL ERROR: nsum is greater than MAXSUM,"
+                 print*, "increase MAXSUM."
                  call ABORT()
                endif
                hgt_1d(nsum) = HEIGHT
@@ -2133,7 +2137,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                   VAR4(I,J) = MIN(XW4_ALL/XNSUM_ALL/VAR(I,J) **4,10.)
                ENDIF
          ELSE
-               print*, "no source points in MAKEMT2"
+               print*, "FATAL ERROR: no source points in MAKEMT2."
                call ABORT()
          ENDIF
    
