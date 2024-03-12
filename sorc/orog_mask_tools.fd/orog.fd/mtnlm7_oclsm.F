@@ -2,8 +2,8 @@ C> @file
 C> Terrain maker for global spectral model.
 C> @author Mark Iredell @date 92-04-16
   
-C> This program creates 7 terrain-related files computed from the navy
-C> 10-minute terrain dataset. The model physics grid parameters and
+C> This program creates 7 terrain-related files computed from the
+C> GMTED2010 terrain dataset. The model physics grid parameters and
 C> spectral truncation and filter parameters are read by this program as
 C> input.
 C>      
@@ -49,13 +49,9 @@ C>  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
 C>                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),
 C>                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).
 C>                  RESPECTIVELY READ IN FREE FORMAT.
-C>  -   UNIT235    - GTOPO 30" AVR for ZAVG elevation
-C>  -   UNIT10     - 30" UMD land (lake) cover mask  see MSKSRC switch
-C>  -  XUNIT11     - GTOPO AVR
-C>  -  XUNIT12     - GTOPO STD DEV
-C>  -  XUNIT13     - GTOPO MAX
-C>  -   UNIT14     - GTOPO SLM (10' NAVY if switched to get lakes 
-C>  -   UNIT15     - GICE Grumbine 30" RAMP Antarctica orog IMNx3616
+C>  -   NCID       - GMTED2010 USGS orography (NetCDF)
+C>  -   NCID       - 30" UMD land cover mask. (NetCDF)
+C>  -   NCID       - GICE Grumbine 30" RAMP Antarctica orog IMNx3601. (NetCDF)
 C>  -   UNIT25     - Ocean land-sea mask on gaussian grid         
 C>
 C>   OUTPUT FILES:
@@ -203,9 +199,9 @@ C
       real, PARAMETER :: PI=3.1415926535897931
       integer, PARAMETER :: NMT=14
 
-      integer :: efac,blat,zsave1,zsave2,itopo,kount
-      integer :: kount2,islmx,jslmx,oldslm,msksrc,mskocn,notocn
-      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,i1,error,id_dim
+      integer :: efac,blat,zsave1,zsave2
+      integer :: mskocn,notocn
+      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
       integer :: M,N,IMT,IRET,ios,iosg,latg2,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
@@ -278,17 +274,14 @@ C
       DEGRAD = 180./PI
       SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
       FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 & NF0
-!     MSKSRC = 0             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
-      MSKSRC = 1             ! MSKSRC=0 navy 10 lake msk, 1 UMD 30, -1 no lakes
       REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
-      ITOPO  = 1             ! topo 30" read, otherwise tiles (opt offline)
       MSKOCN = 1             ! Ocean land sea mask =1, =0 if not present
       NOTOCN = 1             ! =1 Ocean lsm input reverse: Ocean=1, land=0 
 ! --- The LSM Gaussian file from the ocean model sometimes arrives with 
 ! --- 0=Ocean and 1=Land or it arrives with 1=Ocean and 0=land without 
 ! --- metadata to distinguish its disposition.  The AI below mitigates this.
 
-      print *,' In TERSUB, ITOPO=',itopo
+      print *,' In TERSUB'
                       if (mskocn .eq. 1)then
       print *,' Ocean Model LSM Present and '
       print *, ' Overrides OCEAN POINTS in LSM: mskocn=',mskocn
@@ -296,71 +289,23 @@ C
       print *,' Ocean LSM Reversed:  NOTOCN=',notocn
                     endif
                       endif
-C
-C --- old S-Y. files
-C- OPEN(UNIT=11,FORM='FORMATTED',ERR=900) ! average
-C- OPEN(UNIT=12,FORM='FORMATTED',ERR=900) ! Std Dev
-C- OPEN(UNIT=13,FORM='FORMATTED',ERR=900) ! maximum
-C- OPEN(UNIT=14,FORM='FORMATTED',ERR=900) ! sea-land-lake-mask
-C
-! ---      READ(11,11) ZAVG
-! ---      READ(12,11) ZVAR
-! ---      READ(13,11) ZMAX
-! --- 11    FORMAT(20I4)
-!
-! ---  MSKSRC 0 navy 10' lake mask, =1 for 30" UMD lake mask, 
-! ---  MSKSRC internally set if above fails at -1 for no lakes
-! ---
-           IF (MSKSRC .eq. 0 ) then 
-              READ(14,12,iostat=ios) ZSLMX
-   12    FORMAT(80I1)
-      if (ios.ne.0) then 
-            MSKSRC=-1
-          print *,' navy10 lake mask rd fail -- ios,MSKSRC:',ios,MSKSRC
-      endif
-           ELSE
-      print *,' Attempt to open/read UMD 30" slmsk MSKSRC=',MSKSRC
-! --- not 0 so MSKSRC=1 and attempt to open/read UMD 30" slmsk
-!     open(10,file=
-!    &"/scratch2/portfolios/NCEPDEV/global/noscrub/Jordan.Alpert/wx23ja
-!    &/terrain30/landcover30.fixed", 
-!    & recl=43200*21600, access='direct',iostat=istat)
-       open(10,file="landcover30.fixed",
-     & recl=43200*21600, access='direct',iostat=istat)
 
-                  IF (istat.ne.0) then
-                   MSKSRC=-1
-      print *,' UMD lake mask open failed -- ios,MSKSRC:',istat,MSKSRC
-                  ELSE 
-!
-              read(10, rec=1,iostat=istat) UMD
-      print *,' UMD lake mask opened OK   -- ios,MSKSRC:',istat,MSKSRC
-!
-                  ENDIF
-! --------------
-              IF (istat.ne.0) then
-! --- When UMD read fails attempt to read navy 10'
-      print *,' UMD lake mask rd err -- trying navy 10',istat
-                MSKSRC=0
-          print *,' ***** MSKSRC set to 0 MSKSRC=',MSKSRC
-               if (MSKSRC .eq. 0 ) then 
-                   READ(14,12,iostat=ios) ZSLMX
-                  if (ios.ne.0)  then
-                   MSKSRC=-1
-           print *,' navy10 lake mask rd fail - ios,MSKSRC:',ios,MSKSRC
-                  endif
-               endif
-              ELSE
-           print *,' UMD lake, UMD(50,50)=',UMD(50,50),MSKSRC
-              ENDIF
-! --------------
-! ---      good UMD land cover read and MSKSRC=1
-           ENDIF        
+      print *,' Attempt to open/read UMD 30sec slmsk.'
+
+      error=NF__OPEN("./landcover.umd.30s.nc",NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
+      error=nf_inq_varid(ncid, 'land_mask', id_var)
+      call netcdf_err(error, 'Inquire varid of land_mask')
+      error=nf_get_var_int1(ncid, id_var, UMD)
+      call netcdf_err(error, 'Inquire data of land_mask')
+      error = nf_close(ncid)
+
+      print *,' UMD lake, UMD(50,50)=',UMD(50,50)
 C
 C- READ_G for global 30" terrain 
 C
-       print *,' About to call read_g, ITOPO=',ITOPO
-          if ( ITOPO .ne. 0 ) call read_g(glob,ITOPO)
+       print *,' Call read_g to read global topography'
+       call read_g(glob)
 ! --- transpose even though glob 30" is from S to N and NCEP std is N to S
        do j=1,jmn/2
        do I=1,imn
@@ -400,82 +345,30 @@ C
 ! --- ZAVG initialize from glob
       ZAVG=glob
 
-           SELECTCASE(MSKSRC)
-C----  30" sea land mask. 0 are water (lake or ocean)
-              CASE(1)
-! --- transpose even though glob 30" is from S to N and NCEP std is N to S
-       do j=1,jmn/2
-       do I=1,imn
+! --- transpose mask even though glob 30" is from N to S and NCEP std is S to N
+      do j=1,jmn/2
+      do I=1,imn
         jt=jmn - j + 1
         i3save = UMD(I,j)
         UMD(I,j)=UMD(I,jt)
         UMD(I,jt) = i3save
-       enddo
-       enddo 
+      enddo
+      enddo 
 ! --- transpose UMD as USGS 30" is from dateline and NCEP std is 0
-       do j=1,jmn
-       do i=1,imn/2
+      do j=1,jmn
+      do i=1,imn/2
         it=imn/2 + i 
         i3save = UMD(i,J)
         UMD(i,J)=UMD(it,J)
         UMD(it,J) = i3save
-       enddo
-       enddo
-! ---   UMD slmsk with 30" lakes
-          do j=1,jmn
-          do i=1,imn
-           if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
-          enddo
-          enddo
-! --- Global land in slm plus lakes on 30" grid and elev set over globe
-! ---
-! ---   When navy 10' mask is set MSKSRC=0
-              CASE(0)
-! ---  MSKSRC 0 navy 10' lake mask, =1 for 30" UMD lake mask, -1 no lakes
-       print *,' NAVY 10 (8) slmsk for lakes, MSKSRC=',MSKSRC 
-         kount = 0
-         kount2 = 0
-       do j=1,jmn
-          oldslm = ZSLM(IMN,j)
-        do i=1,imn
-          i1 = i + 1
-! ---    slmsk with 10' lakes
-            if ( glob(i,j) .eq. -9999 ) then 
-               ZSLM(i,j) = 0
-               kount = kount + 1
-            endif
-           islmx=(i-1)/16 + 1
-           jslmx=(j-1)/16 + 1
-          if ( ZSLMX(islmx,jslmx) .eq. 0 ) then
-       if ( j .gt. 8 .and. j .lt. JMN-8 ) then
-              if (i1 .gt. IMN ) i1 = i1 - IMN
-! -----
-      if(ZSLM(i,j).eq.1 .and. oldslm .eq. 1 .and. ZSLM(i1,j).eq.1)then  
-       if (i .ne. 1) oldslm = ZSLM(i,j)
-       ZSLM(i,j) = 0
-       kount2 = kount2 + 1
-      endif 
-! -----
-       endif
-          endif
-        enddo
-       enddo
-! ---
-              CASE(-1)
-      print *,' ***** set slm from 30" glob, MSKSRC=',MSKSRC
-         kount = 0
-         kount2 = 0
-       do j=1,jmn
-        do i=1,imn
-          i1 = i + 1
-! ---   UMD slmsk with 10' lakes  and set ZAVG from 30" glob
-            if ( glob(i,j) .eq. -9999 ) then 
-               ZSLM(i,j) = 0
-               kount = kount + 1
-            endif
-        enddo
-       enddo
-           END SELECT
+      enddo
+      enddo
+! ---  Non-land is 0.
+      do j=1,jmn
+      do i=1,imn
+         if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
+      enddo
+      enddo
 
       deallocate (ZSLMX,UMD,glob)
 ! ---
@@ -562,16 +455,27 @@ C
      & ' Before GICE ZAVG(1,52)=',ZAVG(1,52),ZSLM(1,52)
       print *,
      & ' Before GICE ZAVG(1,112)=',ZAVG(1,JMN-112),ZSLM(1,112)
-! GICE: Grumbine 30" Antarctica orog IMNx3616 from S to N & wraped E-W.
-! NB: Zfields are S to N and W-E!
-       iosg = 0
-       READ(15,iostat=iosg) GICE
-       if(iosg .ne. 0 ) then
+
+! Read 30-sec Antarctica RAMP data. Points scan from South
+! to North, and from Greenwich to Greenwich.
+
+! The error handling here needs to be cleaned up.
+      iosg = 0
+      error=NF__OPEN("./topography.antarctica.ramp.30s.nc",
+     &               NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Opening RAMP topo file' )
+      error=nf_inq_varid(ncid, 'topo', id_var)
+      call netcdf_err(error, 'Inquire varid of RAMP topo')
+      error=nf_get_var_real(ncid, id_var, GICE)
+      iosg=error
+      call netcdf_err(error, 'Inquire data of RAMP topo')
+      error = nf_close(ncid)
+      
+      if(iosg .ne. 0 ) then
         print *,' *** Err on reading GICE record, iosg=',iosg
         print *,' exec continues but NO GICE correction done '
-!       stop
-       else
-        print *,' GICE 30" Antarctica RAMP orog 43200x3616 read OK'
+      else
+        print *,' GICE 30" Antarctica RAMP orog 43201x3601 read OK'
         print *,' Processing! '
         print *,' Processing! '
         print *,' Processing! '
@@ -591,7 +495,7 @@ C
      &' orig:',i5,i4,' Lat=',f7.3,f8.2,'E',' GICE=',f8.1)
          enddo
          enddo
-       endif
+      endif
 
       deallocate (GICE)
 
@@ -1666,14 +1570,11 @@ C
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
       DIMENSION ORO(IM,JM),SLM(IM,JM),VAR(IM,JM),VAR4(IM,JM)
       DIMENSION IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM),numi(jm)
-      INTEGER mskocn,isave
       LOGICAL FLAG, DEBUG
 C==== DATA DEBUG/.TRUE./
       DATA DEBUG/.FALSE./
 C
 ! ---- OCLSM holds the ocean (im,jm) grid
-! ---  mskocn=1 Use ocean model sea land mask, OK and present,
-! ---  mskocn=0 dont use Ocean model sea land mask, not OK, not present
       print *,' _____ SUBROUTINE MAKEMT '
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
@@ -2578,7 +2479,7 @@ C
       integer i,j,i1,j1,i2,jst,jen,numx,i0,ip1,ijax
       integer ilist(IMN)
       logical inside_a_polygon
-      LOGICAL FLAG, DEBUG
+      LOGICAL DEBUG
 C===  DATA DEBUG/.TRUE./
       DATA DEBUG/.FALSE./
 C
@@ -3238,22 +3139,20 @@ C
       real    XNSUM(IM,JM),XNSUM1(IM,JM),XNSUM2(IM,JM)
       real    XNSUM3(IM,JM),XNSUM4(IM,JM)
       real    VAR(IM,JM),OL(IM,JM,4)
-      LOGICAL FLAG
       integer i,j,ilist(IMN),numx,i1,j1,ii1
-      integer KWD,II,npts
+      integer KWD
       real    LONO(4),LATO(4),LONI,LATI
       real    DELXN,HC,HEIGHT,XNPU,XNPD,T
       integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
       logical inside_a_polygon
       real    lon,lat,dlon,dlat,dlat_old
       real    lon1,lat1,lon2,lat2
-      real    xnsum11,xnsum12,xnsum21,xnsum22,xnsumx
+      real    xnsum11,xnsum12,xnsum21,xnsum22
       real    HC_11, HC_12, HC_21, HC_22
       real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
       real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
       real    get_lon_angle, get_lat_angle, get_xnsum
-      integer ist, ien, jst, jen
-      real    xland,xwatr,xl1,xs1,oroavg,slm
+      integer jst, jen
 C   
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
@@ -4421,51 +4320,32 @@ C  PHYSICAL TO FOURIER TRANSFORM.
 !> Read input global 30-arc second orography data.
 !!
 !! @param[out] glob The orography data.
-!! @param[in] itopo Not used.
 !! @author Jordan Alpert NOAA/EMC
-      subroutine read_g(glob,ITOPO)
+      subroutine read_g(glob)
       implicit none
-cc
-      integer*2    glob(360*120,180*120)
-cc
-      integer      ix,jx
-      integer      ia,ja
-cc
-      parameter   (ix=40*120,jx=50*120)
-      parameter   (ia=60*120,ja=30*120)
-cc
-      integer*2    idat(ix,jx)
-      integer      itopo
-cc
-      integer      i,j,inttyp
-cc
-      real(kind=8) dloin,dlain,rlon,rlat
-cc
-      open(235, file="./fort.235", access='direct', recl=43200*21600*2)
-      read(235,rec=1)glob
-      close(235)
-cc
+
+      include 'netcdf.inc'
+
+      integer*2, intent(out) :: glob(360*120,180*120)
+
+      integer :: ncid, error, id_var, fsize
+
+      fsize=65536
+
+      error=NF__OPEN("./topography.gmted2010.30s.nc",
+     &               NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file topography.gmted2010.30s.nc' )
+      error=nf_inq_varid(ncid, 'topo', id_var)
+      call netcdf_err(error, 'Inquire varid of topo')
+      error=nf_get_var_int2(ncid, id_var, glob)
+      call netcdf_err(error, 'Read topo')
+      error = nf_close(ncid)
+
       print*,' '
       call maxmin     (glob,360*120*180*120,'global0')
-cc
-cc
-      dloin=1.d0/120.d0
-      dlain=1.d0/120.d0
-cc
-      rlon= -179.995833333333333333333333d0
-      rlat=   89.995833333333333333333333d0
-cc
-      inttyp=-1  !  average rectangular subset
-ccmr  inttyp= 1  !  take closest grid point value
-ccmr  inttyp= 0  !  interpolate from four closest grid point values
-cc
-!     call la2ga_gtopo30(glob,360*120,180*120,
-!    &           dloin,dlain,rlon,rlat,inttyp,
-!    &           .true.,glob,
-!    &           0,lonf,latg)
-cc
+
       return
-      end
+      end subroutine read_g
 
 !> Print the maximum, mininum, mean and
 !! standard deviation of an array.
@@ -5036,7 +4916,6 @@ c
       data inaq4/x'FFFFFFFF'/
 c
       real(kind=8)a(l),rtc,t1,t2
-      character*24 cn
       character*(*) c
 c     t1=rtc()
 cgwv        print *, ' nanc call ',c
