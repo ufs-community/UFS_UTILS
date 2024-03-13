@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">orog_mask_tools
-   &#160;<span id="projectnumber">1.12.0</span>
+   &#160;<span id="projectnumber">1.13.0</span>
    </div>
   </td>
  </tr>
@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('mtnlm7__oclsm_8F.html','');});
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions/Subroutines</h2></td></tr>
 <tr class="memitem:a76595711843c5e5f3c2c92826e759838"><td class="memItemLeft" align="right" valign="top">program&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8F.html#a76595711843c5e5f3c2c92826e759838">__mtnlm7_oclsm.f__</a></td></tr>
-<tr class="memdesc:a76595711843c5e5f3c2c92826e759838"><td class="mdescLeft">&#160;</td><td class="mdescRight">This program creates 7 terrain-related files computed from the navy 10-minute terrain dataset.  <a href="#a76595711843c5e5f3c2c92826e759838">More...</a><br/></td></tr>
+<tr class="memdesc:a76595711843c5e5f3c2c92826e759838"><td class="mdescLeft">&#160;</td><td class="mdescRight">This program creates 7 terrain-related files computed from the GMTED2010 terrain dataset.  <a href="#a76595711843c5e5f3c2c92826e759838">More...</a><br/></td></tr>
 <tr class="separator:a76595711843c5e5f3c2c92826e759838"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a769428525e5b18b568caee947d3b82a9"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8F.html#a769428525e5b18b568caee947d3b82a9">get_index</a> (IMN, JMN, npts, lonO, latO, DELXN, jst, jen, ilist, numx)</td></tr>
 <tr class="memdesc:a769428525e5b18b568caee947d3b82a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the location of a cubed-sphere point within the high-resolution orography data.  <a href="#a769428525e5b18b568caee947d3b82a9">More...</a><br/></td></tr>
@@ -191,9 +191,9 @@ Functions/Subroutines</h2></td></tr>
 <tr class="memitem:ae8df58dcb775885e68d83118c2f449af"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8F.html#ae8df58dcb775885e68d83118c2f449af">nanc</a> (a, l, c)</td></tr>
 <tr class="memdesc:ae8df58dcb775885e68d83118c2f449af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Report NaNS and NaNQ within an address range for 8-byte real words.  <a href="#ae8df58dcb775885e68d83118c2f449af">More...</a><br/></td></tr>
 <tr class="separator:ae8df58dcb775885e68d83118c2f449af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c6879e7eac4e636da7a9ca4f45cbadf"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8F.html#a5c6879e7eac4e636da7a9ca4f45cbadf">read_g</a> (glob, ITOPO)</td></tr>
-<tr class="memdesc:a5c6879e7eac4e636da7a9ca4f45cbadf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read input global 30-arc second orography data.  <a href="#a5c6879e7eac4e636da7a9ca4f45cbadf">More...</a><br/></td></tr>
-<tr class="separator:a5c6879e7eac4e636da7a9ca4f45cbadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7198602abfbb7e104451b506546c02a6"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8F.html#a7198602abfbb7e104451b506546c02a6">read_g</a> (glob)</td></tr>
+<tr class="memdesc:a7198602abfbb7e104451b506546c02a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read input global 30-arc second orography data.  <a href="#a7198602abfbb7e104451b506546c02a6">More...</a><br/></td></tr>
+<tr class="separator:a7198602abfbb7e104451b506546c02a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03310f2d7922aab7f39b22448fc8ec2f"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mtnlm7__oclsm_8F.html#a03310f2d7922aab7f39b22448fc8ec2f">revers</a> (IM, JM, numi, F, WRK)</td></tr>
 <tr class="memdesc:a03310f2d7922aab7f39b22448fc8ec2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse the east-west and north-south axes in a two-dimensional array.  <a href="#a03310f2d7922aab7f39b22448fc8ec2f">More...</a><br/></td></tr>
 <tr class="separator:a03310f2d7922aab7f39b22448fc8ec2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -236,7 +236,7 @@ Functions/Subroutines</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>This program creates 7 terrain-related files computed from the navy 10-minute terrain dataset. </p>
+<p>This program creates 7 terrain-related files computed from the GMTED2010 terrain dataset. </p>
 <p>The model physics grid parameters and spectral truncation and filter parameters are read by this program as input.</p>
 <p>The 7 files produced are:</p>
 <ol type="1">
@@ -270,13 +270,9 @@ Functions/Subroutines</h2></td></tr>
 <p class="startli">INPUT FILES:</p>
 </li>
 <li>UNIT5 - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM), SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR), AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1). RESPECTIVELY READ IN FREE FORMAT.</li>
-<li>UNIT235 - GTOPO 30" AVR for ZAVG elevation
-  -   UNIT10     - 30" UMD land (lake) cover mask see MSKSRC switch</li>
-<li>XUNIT11 - GTOPO AVR</li>
-<li>XUNIT12 - GTOPO STD DEV</li>
-<li>XUNIT13 - GTOPO MAX</li>
-<li>UNIT14 - GTOPO SLM (10' NAVY if switched to get lakes</li>
-<li>UNIT15 - GICE Grumbine 30" RAMP Antarctica orog IMNx3616</li>
+<li>NCID - GMTED2010 USGS orography (NetCDF)</li>
+<li>NCID - 30" UMD land cover mask. (NetCDF)
+  -   NCID       - GICE Grumbine 30" RAMP Antarctica orog IMNx3601. (NetCDF)</li>
 <li><p class="startli">UNIT25 - Ocean land-sea mask on gaussian grid</p>
 <p class="startli">OUTPUT FILES:</p>
 </li>
@@ -298,9 +294,9 @@ Functions/Subroutines</h2></td></tr>
 </ul>
 <dl class="section return"><dt>Returns</dt><dd>0 for success, error code otherwise. </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l00078">78</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l00074">74</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="netcdf__io_8F90_source.html#l00218">netcdf_err()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>References <a class="el" href="netcdf__io_8F90_source.html#l00218">netcdf_err()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -395,9 +391,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l01828">1828</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l01729">1729</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l01917">make_mask()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02050">makemt2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">makeoa2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03788">makeoa3()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l02558">makepc2()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l01818">make_mask()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l01951">makemt2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">makeoa2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03687">makeoa3()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l02459">makepc2()</a>.</p>
 
 </div>
 </div>
@@ -436,9 +432,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>get_lat_angle Corresponding distance in latitude. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03173">3173</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03074">3074</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">makeoa2()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">makeoa2()</a>.</p>
 
 </div>
 </div>
@@ -484,9 +480,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>get_lon_angle Corresponding distance in longitude. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03154">3154</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03055">3055</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">makeoa2()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">makeoa2()</a>.</p>
 
 </div>
 </div>
@@ -580,11 +576,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL progammer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03650">3650</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03549">3549</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l03615">spherical_distance()</a>.</p>
+<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l03514">spherical_distance()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03788">makeoa3()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03687">makeoa3()</a>.</p>
 
 </div>
 </div>
@@ -679,9 +675,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>get_xnsum The number of high-res points above the mean orography. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL Programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04754">4754</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04634">4634</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">makeoa2()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">makeoa2()</a>.</p>
 
 </div>
 </div>
@@ -790,9 +786,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL Programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04860">4860</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04740">4740</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">makeoa2()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">makeoa2()</a>.</p>
 
 </div>
 </div>
@@ -901,9 +897,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL Programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04955">4955</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04835">4835</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">makeoa2()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">makeoa2()</a>.</p>
 
 </div>
 </div>
@@ -955,7 +951,7 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04253">4253</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04152">4152</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
 </div>
 </div>
@@ -1015,11 +1011,11 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>inside_a_polygon When true, point is within the polygon. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04659">4659</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04539">4539</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l04587">latlon2xyz()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l04609">spherical_angle()</a>.</p>
+<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l04467">latlon2xyz()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l04489">spherical_angle()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l01917">make_mask()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02050">makemt2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">makeoa2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03788">makeoa3()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l02558">makepc2()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l01818">make_mask()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l01951">makemt2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">makeoa2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03687">makeoa3()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l02459">makepc2()</a>.</p>
 
 </div>
 </div>
@@ -1092,9 +1088,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03731">3731</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03630">3630</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03788">makeoa3()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03687">makeoa3()</a>.</p>
 
 </div>
 </div>
@@ -1160,9 +1156,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04587">4587</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04467">4467</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l04659">inside_a_polygon()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l04539">inside_a_polygon()</a>.</p>
 
 </div>
 </div>
@@ -1257,11 +1253,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL Programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l01917">1917</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l01818">1818</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01828">get_index()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l04659">inside_a_polygon()</a>.</p>
+<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01729">get_index()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l04539">inside_a_polygon()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -1405,9 +1401,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l01662">1662</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l01566">1566</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -1537,11 +1533,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL Programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l02050">2050</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l01951">1951</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01828">get_index()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04659">inside_a_polygon()</a>, and <a class="el" href="lakefrac_8F90_source.html#l00021">lake_frac()</a>.</p>
+<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01729">get_index()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04539">inside_a_polygon()</a>, and <a class="el" href="lakefrac_8F90_source.html#l00021">lake_frac()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -1734,9 +1730,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l02826">2826</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l02727">2727</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -1950,11 +1946,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL Programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">3220</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">3121</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01828">get_index()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03173">get_lat_angle()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03154">get_lon_angle()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04754">get_xnsum()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04860">get_xnsum2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04955">get_xnsum3()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l04659">inside_a_polygon()</a>.</p>
+<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01729">get_index()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03074">get_lat_angle()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03055">get_lon_angle()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04634">get_xnsum()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04740">get_xnsum2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04835">get_xnsum3()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l04539">inside_a_polygon()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2210,11 +2206,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03788">3788</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03687">3687</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01828">get_index()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03650">get_mismatch_index()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04659">inside_a_polygon()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l03731">interpolate_mismatch()</a>.</p>
+<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01729">get_index()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03549">get_mismatch_index()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04539">inside_a_polygon()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l03630">interpolate_mismatch()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2351,9 +2347,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l02283">2283</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l02184">2184</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2469,11 +2465,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL Programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l02558">2558</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l02459">2459</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01828">get_index()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l04659">inside_a_polygon()</a>.</p>
+<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l01729">get_index()</a>, and <a class="el" href="mtnlm7__oclsm_8F_source.html#l04539">inside_a_polygon()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2518,9 +2514,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04477">4477</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04357">4357</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l04426">read_g()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l04324">read_g()</a>.</p>
 
 </div>
 </div>
@@ -2573,7 +2569,7 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04535">4535</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04415">4415</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
 </div>
 </div>
@@ -2625,9 +2621,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04279">4279</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04178">4178</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2694,9 +2690,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04314">4314</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04213">4213</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2742,30 +2738,20 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l05019">5019</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04899">4899</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a5c6879e7eac4e636da7a9ca4f45cbadf"></a>
+<a class="anchor" id="a7198602abfbb7e104451b506546c02a6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">subroutine read_g </td>
           <td>(</td>
-          <td class="paramtype">integer*2, dimension(360*120,180*120)&#160;</td>
-          <td class="paramname"><em>glob</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">integer*2, dimension(360*120,180*120), intent(out)&#160;</td>
+          <td class="paramname"><em>glob</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">integer&#160;</td>
-          <td class="paramname"><em>ITOPO</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2774,17 +2760,16 @@ Functions/Subroutines</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">glob</td><td>The orography data. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">itopo</td><td>Not used. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04426">4426</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04324">4324</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l04477">maxmin()</a>.</p>
+<p>References <a class="el" href="mtnlm7__oclsm_8F_source.html#l04357">maxmin()</a>, and <a class="el" href="netcdf__io_8F90_source.html#l00218">netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2843,9 +2828,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04190">4190</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04089">4089</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2897,9 +2882,9 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04227">4227</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04126">4126</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -2983,9 +2968,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Mark Iredell ORG: W/NMC23 </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>96-02-20 </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04376">4376</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04275">4275</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>
@@ -3031,9 +3016,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>spherical_angle Spherical Angle. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04609">4609</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04489">4489</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l04659">inside_a_polygon()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l04539">inside_a_polygon()</a>.</p>
 
 </div>
 </div>
@@ -3086,9 +3071,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>spherical_distance Great circle distance. </dd></dl>
 <dl class="section author"><dt>Author</dt><dd>GFDL programmer </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03615">3615</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l03514">3514</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03650">get_mismatch_index()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l03549">get_mismatch_index()</a>.</p>
 
 </div>
 </div>
@@ -3217,11 +3202,11 @@ Functions/Subroutines</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>Jordan Alpert NOAA/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">190</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">186</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>References <a class="el" href="lakefrac_8F90_source.html#l00021">lake_frac()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l01917">make_mask()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l01662">makemt()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02050">makemt2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02826">makeoa()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03220">makeoa2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03788">makeoa3()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02283">makepc()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02558">makepc2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04279">minmxj()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04314">mnmxja()</a>, <a class="el" href="netcdf__io_8F90_source.html#l00218">netcdf_err()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04426">read_g()</a>, <a class="el" href="netcdf__io_8F90_source.html#l00334">read_mask()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04190">revers()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04227">rg2gg()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04376">spfft1()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l05068">timef()</a>, <a class="el" href="netcdf__io_8F90_source.html#l00243">write_mask_netcdf()</a>, and <a class="el" href="netcdf__io_8F90_source.html#l00021">write_netcdf()</a>.</p>
+<p>References <a class="el" href="lakefrac_8F90_source.html#l00021">lake_frac()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l01818">make_mask()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l01566">makemt()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l01951">makemt2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02727">makeoa()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03121">makeoa2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l03687">makeoa3()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02184">makepc()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l02459">makepc2()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04178">minmxj()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04213">mnmxja()</a>, <a class="el" href="netcdf__io_8F90_source.html#l00218">netcdf_err()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04324">read_g()</a>, <a class="el" href="netcdf__io_8F90_source.html#l00334">read_mask()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04089">revers()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04126">rg2gg()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04275">spfft1()</a>, <a class="el" href="mtnlm7__oclsm_8F_source.html#l04947">timef()</a>, <a class="el" href="netcdf__io_8F90_source.html#l00243">write_mask_netcdf()</a>, and <a class="el" href="netcdf__io_8F90_source.html#l00021">write_netcdf()</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00078">__mtnlm7_oclsm.f__()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00074">__mtnlm7_oclsm.f__()</a>.</p>
 
 </div>
 </div>
@@ -3242,9 +3227,9 @@ Functions/Subroutines</h2></td></tr>
 <dl class="section author"><dt>Author</dt><dd>Mark Iredell </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>timef </dd></dl>
 
-<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l05068">5068</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
+<p>Definition at line <a class="el" href="mtnlm7__oclsm_8F_source.html#l04947">4947</a> of file <a class="el" href="mtnlm7__oclsm_8F_source.html">mtnlm7_oclsm.F</a>.</p>
 
-<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00190">tersub()</a>.</p>
+<p>Referenced by <a class="el" href="mtnlm7__oclsm_8F_source.html#l00186">tersub()</a>.</p>
 
 </div>
 </div>

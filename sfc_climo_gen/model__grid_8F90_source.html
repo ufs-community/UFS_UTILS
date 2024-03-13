@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">sfc_climo_gen
-   &#160;<span id="projectnumber">1.12.0</span>
+   &#160;<span id="projectnumber">1.13.0</span>
    </div>
   </td>
  </tr>
@@ -438,16 +438,16 @@ $(document).ready(function(){initNavTree('model__grid_8F90_source.html','');});
 <div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="comment">! surface data will not be mapped to it.</span></div>
 <div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;<span class="comment">!-----------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160; error=nf90_inq_varid(ncid, <span class="stringliteral">&#39;lake_frac&#39;</span>, id_var)</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; <span class="keywordflow">if</span> (error /= 0) <span class="keywordflow">then</span></div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;   print*,<span class="stringliteral">&quot;- READ LAND MASK (SLMSK)&quot;</span></div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;   error=nf90_inq_varid(ncid, <span class="stringliteral">&#39;slmsk&#39;</span>, id_var)</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;   call <a class="code" href="classutils.html#a15465c8a57dddaff7150d8ae2cde62f4">netcdf_err</a>(error, <span class="stringliteral">&quot;READING SLMSK ID&quot;</span>)</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;   error=nf90_get_var(ncid, id_var, dummy)</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;   call <a class="code" href="classutils.html#a15465c8a57dddaff7150d8ae2cde62f4">netcdf_err</a>(error, <span class="stringliteral">&quot;READING SLMSK&quot;</span>)</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;   mask = nint(dummy)</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;   land_frac = -999.</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160; <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="comment">!error=nf90_inq_varid(ncid, &#39;lake_frac&#39;, id_var)</span></div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="comment">!if (error /= 0) then</span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="comment">!  print*,&quot;- READ LAND MASK (SLMSK)&quot;</span></div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="comment">!  error=nf90_inq_varid(ncid, &#39;slmsk&#39;, id_var)</span></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;<span class="comment">!  call netcdf_err(error, &quot;READING SLMSK ID&quot;)</span></div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="comment">!  error=nf90_get_var(ncid, id_var, dummy)</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="comment">!  call netcdf_err(error, &quot;READING SLMSK&quot;)</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="comment">!  mask = nint(dummy)</span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="comment">!  land_frac = -999.</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="comment">!else</span></div>
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;   print*,<span class="stringliteral">&quot;- READ LAND FRACTION&quot;</span></div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;   error=nf90_inq_varid(ncid, <span class="stringliteral">&#39;land_frac&#39;</span>, id_var)</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;   call <a class="code" href="classutils.html#a15465c8a57dddaff7150d8ae2cde62f4">netcdf_err</a>(error, <span class="stringliteral">&quot;READING LAND_FRAC ID&quot;</span>)</div>
@@ -461,7 +461,7 @@ $(document).ready(function(){initNavTree('model__grid_8F90_source.html','');});
 <div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;     <span class="keywordflow">endif</span></div>
 <div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;   <span class="keywordflow">enddo</span></div>
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;   <span class="keywordflow">enddo</span></div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; <span class="keywordflow">endif</span></div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;<span class="comment">!endif</span></div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160; print*,<span class="stringliteral">&quot;- READ LATITUDE&quot;</span></div>
 <div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; error=nf90_inq_varid(ncid, <span class="stringliteral">&#39;geolat&#39;</span>, id_var)</div>

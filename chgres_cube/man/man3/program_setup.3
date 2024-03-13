@@ -1,4 +1,4 @@
-.TH "program_setup" 3 "Thu Feb 15 2024" "Version 1.12.0" "chgres_cube" \" -*- nroff -*-
+.TH "program_setup" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -390,7 +390,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 676 of file program_setup\&.F90\&.
+Definition at line 677 of file program_setup\&.F90\&.
 .PP
 Referenced by calc_soil_params_driver()\&.
 .SS "subroutine, public program_setup::calc_soil_params_driver (integer, intent(in)localpet)"
@@ -422,7 +422,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 516 of file program_setup\&.F90\&.
+Definition at line 517 of file program_setup\&.F90\&.
 .PP
 References calc_soil_params()\&.
 .PP
@@ -454,7 +454,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 445 of file program_setup\&.F90\&.
+Definition at line 446 of file program_setup\&.F90\&.
 .PP
 Referenced by sfc_input_data::read_grib_soil(), atm_input_data::read_input_atm_grib2_file(), sfc_input_data::read_input_sfc_grib2_file(), and atm_input_data::read_winds()\&.
 .SS "subroutine, public program_setup::read_setup_namelist (character(len=*), intent(in), optionalfilename)"
@@ -474,7 +474,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 153 of file program_setup\&.F90\&.
+Definition at line 155 of file program_setup\&.F90\&.
 .PP
 References utilities::error_handler(), and utilities::to_lower()\&.
 .PP
@@ -519,7 +519,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 375 of file program_setup\&.F90\&.
+Definition at line 376 of file program_setup\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -555,7 +555,7 @@ Definition at line 42 of file program_setup\&.F90\&.
 .PP
 Soil 'b' parameter, target grid\&. 
 .PP
-Definition at line 136 of file program_setup\&.F90\&.
+Definition at line 138 of file program_setup\&.F90\&.
 .SS "character(len=20), dimension(:), allocatable, public program_setup::chgres_var_names"
 
 .PP
@@ -567,19 +567,19 @@ Definition at line 79 of file program_setup\&.F90\&.
 .PP
 Convert atmospheric data when true\&. 
 .PP
-Definition at line 95 of file program_setup\&.F90\&.
+Definition at line 97 of file program_setup\&.F90\&.
 .SS "logical, public program_setup::convert_nst = \&.false\&."
 
 .PP
 Convert nst data when true\&. 
 .PP
-Definition at line 96 of file program_setup\&.F90\&.
+Definition at line 98 of file program_setup\&.F90\&.
 .SS "logical, public program_setup::convert_sfc = \&.false\&."
 
 .PP
 Convert sfc data when true\&. 
 .PP
-Definition at line 97 of file program_setup\&.F90\&.
+Definition at line 99 of file program_setup\&.F90\&.
 .SS "character(len=15), public program_setup::cres_target_grid = 'NULL'"
 
 .PP
@@ -621,17 +621,17 @@ Definition at line 25 of file program_setup\&.F90\&.
 .PP
 Air dry soil moisture content input grid\&. 
 .PP
-Definition at line 128 of file program_setup\&.F90\&.
+Definition at line 130 of file program_setup\&.F90\&.
 .SS "real, dimension(:), allocatable, public program_setup::drysmc_target"
 
 .PP
 Air dry soil moisture content target grid\&. 
 .PP
-Definition at line 129 of file program_setup\&.F90\&.
+Definition at line 131 of file program_setup\&.F90\&.
 .SS "character(len=20), public program_setup::external_model ='GFS'"
 
 .PP
-The model that the input data is derived from\&. Current supported options are: 'GFS', 'HRRR', 'NAM', 'RAP'\&. Default: 'GFS' 
+The model that the input data is derived from\&. Current supported options are: 'GFS', 'HRRR', 'NAM', 'RAP', 'RRFS'\&. Default: 'GFS' 
 .PP
 Definition at line 57 of file program_setup\&.F90\&.
 .SS "character(len=20), dimension(:), allocatable, public program_setup::field_var_names"
@@ -697,7 +697,7 @@ Definition at line 43 of file program_setup\&.F90\&.
 .PP
 If false, interpolate leaf area index from the input data to the target grid instead of using data from static data\&. Default: True\&. 
 .PP
-Definition at line 120 of file program_setup\&.F90\&.
+Definition at line 122 of file program_setup\&.F90\&.
 .SS "integer, parameter, public program_setup::max_tracers =100"
 
 .PP
@@ -709,19 +709,19 @@ Definition at line 59 of file program_setup\&.F90\&.
 .PP
 Maximum soil moisture content input grid\&. 
 .PP
-Definition at line 130 of file program_setup\&.F90\&.
+Definition at line 132 of file program_setup\&.F90\&.
 .SS "real, dimension(:), allocatable, public program_setup::maxsmc_target"
 
 .PP
 Maximum soil moisture content target grid\&. 
 .PP
-Definition at line 131 of file program_setup\&.F90\&.
+Definition at line 133 of file program_setup\&.F90\&.
 .SS "logical, public program_setup::minmax_vgfrc_from_climo = \&.true\&."
 
 .PP
 If false, interpolate min/max vegetation fraction from the input data to the target grid instead of using data from static data\&. Use with caution as vegetation categories can vary\&. Default: True\&. 
 .PP
-Definition at line 116 of file program_setup\&.F90\&.
+Definition at line 118 of file program_setup\&.F90\&.
 .SS "character(len=20), dimension(:), allocatable, public program_setup::missing_var_methods"
 
 .PP
@@ -733,7 +733,7 @@ Definition at line 77 of file program_setup\&.F90\&.
 .PP
 If input GRIB2 record is missing, the variable is set to this value\&. 
 .PP
-Definition at line 138 of file program_setup\&.F90\&.
+Definition at line 140 of file program_setup\&.F90\&.
 .SS "character(len=500), public program_setup::mosaic_file_input_grid = 'NULL'"
 
 .PP
@@ -751,7 +751,7 @@ Definition at line 28 of file program_setup\&.F90\&.
 .PP
 Number of soil levels desired in the output data\&. chgres_cube can interpolate from 9 input to 4 output levels\&. DEFAULT: 4\&. 
 .PP
-Definition at line 93 of file program_setup\&.F90\&.
+Definition at line 94 of file program_setup\&.F90\&.
 .SS "character(len=500), public program_setup::nst_files_input_grid = 'NULL'"
 
 .PP
@@ -805,13 +805,13 @@ Definition at line 63 of file program_setup\&.F90\&.
 .PP
 Reference soil moisture content input grid (onset of soil moisture stress)\&. 
 .PP
-Definition at line 132 of file program_setup\&.F90\&.
+Definition at line 134 of file program_setup\&.F90\&.
 .SS "real, dimension(:), allocatable, public program_setup::refsmc_target"
 
 .PP
 Reference soil moisture content target grid (onset of soil moisture stress)\&. 
 .PP
-Definition at line 133 of file program_setup\&.F90\&.
+Definition at line 135 of file program_setup\&.F90\&.
 .SS "integer, public program_setup::regional = 0"
 
 .PP
@@ -823,7 +823,7 @@ Definition at line 89 of file program_setup\&.F90\&.
 .PP
 Saturated soil potential, target grid\&. 
 .PP
-Definition at line 137 of file program_setup\&.F90\&.
+Definition at line 139 of file program_setup\&.F90\&.
 .SS "character(len=500), dimension(6), public program_setup::sfc_files_input_grid = 'NULL'"
 
 .PP
@@ -835,13 +835,13 @@ Definition at line 38 of file program_setup\&.F90\&.
 .PP
 If false, interpolate soil type from the input data to the target grid instead of using data from static data\&. Use with caution as the code assumes input soil type use STATSGO soil categories\&. Default: True\&. 
 .PP
-Definition at line 106 of file program_setup\&.F90\&.
+Definition at line 108 of file program_setup\&.F90\&.
 .SS "logical, public program_setup::tg3_from_soil = \&.false\&."
 
 .PP
 If false, use lowest level soil temperature for the base soil temperature instead of using data from static data\&. Default: False\&. 
 .PP
-Definition at line 123 of file program_setup\&.F90\&.
+Definition at line 125 of file program_setup\&.F90\&.
 .SS "character(len=500), public program_setup::thomp_mp_climo_file = 'NULL'"
 
 .PP
@@ -865,7 +865,7 @@ Definition at line 72 of file program_setup\&.F90\&.
 .PP
 When true, read and process Thompson MP climatological tracers\&. False, when 'thomp_mp_climo_file' is NULL\&. 
 .PP
-Definition at line 126 of file program_setup\&.F90\&.
+Definition at line 128 of file program_setup\&.F90\&.
 .SS "character(len=500), public program_setup::varmap_file = 'NULL'"
 
 .PP
@@ -883,19 +883,19 @@ Definition at line 39 of file program_setup\&.F90\&.
 .PP
 If false, interpolate vegetation fraction from the input data to the target grid instead of using data from static data\&. Use with caution as vegetation categories can vary\&. Default: True\&. 
 .PP
-Definition at line 111 of file program_setup\&.F90\&.
+Definition at line 113 of file program_setup\&.F90\&.
 .SS "logical, public program_setup::vgtyp_from_climo = \&.true\&."
 
 .PP
 If false, interpolate vegetation type from the input data to the target grid instead of using data from static data\&. Use with caution as vegetation categories can vary\&. Default: True\&. 
 .PP
-Definition at line 102 of file program_setup\&.F90\&.
+Definition at line 104 of file program_setup\&.F90\&.
 .SS "logical, public program_setup::wam_cold_start = \&.false\&."
 
 .PP
 When true, cold start for whole atmosphere model\&. 
 .PP
-Definition at line 98 of file program_setup\&.F90\&.
+Definition at line 100 of file program_setup\&.F90\&.
 .SS "character(len=500), public program_setup::wam_parm_file ='msis21\&.parm'"
 
 .PP
@@ -907,13 +907,13 @@ Definition at line 83 of file program_setup\&.F90\&.
 .PP
 Plant wilting point soil moisture content input grid\&. 
 .PP
-Definition at line 134 of file program_setup\&.F90\&.
+Definition at line 136 of file program_setup\&.F90\&.
 .SS "real, dimension(:), allocatable, public program_setup::wltsmc_target"
 
 .PP
 Plant wilting point soil moisture content target grid\&. 
 .PP
-Definition at line 135 of file program_setup\&.F90\&.
+Definition at line 137 of file program_setup\&.F90\&.
 
 .SH "Author"
 .PP 

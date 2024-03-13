@@ -25,7 +25,7 @@ var mtnlm7__oclsm_8F =
     [ "minmxj", "mtnlm7__oclsm_8F.html#aba287a6bf35bffc12e6abc31c13c3874", null ],
     [ "mnmxja", "mtnlm7__oclsm_8F.html#aa54e80b7136f9cc0d224515945c960f0", null ],
     [ "nanc", "mtnlm7__oclsm_8F.html#ae8df58dcb775885e68d83118c2f449af", null ],
-    [ "read_g", "mtnlm7__oclsm_8F.html#a5c6879e7eac4e636da7a9ca4f45cbadf", null ],
+    [ "read_g", "mtnlm7__oclsm_8F.html#a7198602abfbb7e104451b506546c02a6", null ],
     [ "revers", "mtnlm7__oclsm_8F.html#a03310f2d7922aab7f39b22448fc8ec2f", null ],
     [ "rg2gg", "mtnlm7__oclsm_8F.html#a77b3e5e25f53c7c59daa7639c0b2dc2b", null ],
     [ "spfft1", "mtnlm7__oclsm_8F.html#ac63643472eda83948c0b249b611346d6", null ],

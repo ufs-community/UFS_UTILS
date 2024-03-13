@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">orog_mask_tools
-   &#160;<span id="projectnumber">1.12.0</span>
+   &#160;<span id="projectnumber">1.13.0</span>
    </div>
   </td>
  </tr>
@@ -115,7 +115,7 @@ $(document).ready(function(){initNavTree('netcdf__io_8F90_source.html','');});
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">real</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(im,jm)</span>  :: slm, oro, orf, geolon, geolat, land_frac</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">real</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(im,jm,14)</span>:: hprime</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">character(len=128)</span> :: outfile</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordtype">integer</span>            :: error, ncid, i</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keywordtype">integer</span>            :: error, ncid</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keywordtype">integer</span>            :: header_buffer_val = 16384      </div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">integer</span>            :: fsize=65536, inital = 0  </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordtype">integer</span>            :: dim1, dim2</div>
@@ -319,7 +319,7 @@ $(document).ready(function(){initNavTree('netcdf__io_8F90_source.html','');});
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="keywordtype">integer</span>, <span class="keywordtype">intent(in)</span>:: im, jm, ntiles, tile</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="keywordtype">real</span>, <span class="keywordtype">intent(in)</span>, <span class="keywordtype">dimension(im,jm)</span>  :: slm, geolon, geolat, land_frac</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="keywordtype">character(len=128)</span> :: outfile</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordtype">integer</span>            :: error, ncid, i</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordtype">integer</span>            :: error, ncid</div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordtype">integer</span>            :: header_buffer_val = 16384      </div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="keywordtype">integer</span>            :: fsize=65536, inital = 0  </div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keywordtype">integer</span>            :: dim1, dim2</div>

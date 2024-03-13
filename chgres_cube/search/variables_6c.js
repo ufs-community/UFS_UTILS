@@ -3,6 +3,7 @@ var searchData=
   ['lai_5ffrom_5fclimo',['lai_from_climo',['../classprogram__setup.html#a85264610be92f55f65062b22df35a04b',1,'program_setup']]],
   ['lai_5finput_5fgrid',['lai_input_grid',['../classsfc__input__data.html#a41eba5f4cde1c339df6a3007ecbf69a7',1,'sfc_input_data']]],
   ['lai_5ftarget_5fgrid',['lai_target_grid',['../classsurface__target__data.html#a668e84f353bfed4dfa817315b7737b32',1,'surface_target_data']]],
+  ['land_5ffrac_5ftarget_5fgrid',['land_frac_target_grid',['../classmodel__grid.html#a3d06db6ef1ce9830536cb2a32ae6f0dc',1,'model_grid']]],
   ['landmask_5ftarget_5fgrid',['landmask_target_grid',['../classmodel__grid.html#a6afab6cbbba792a2ea872922f95d6feb',1,'model_grid']]],
   ['landsea_5fmask_5finput_5fgrid',['landsea_mask_input_grid',['../classsfc__input__data.html#afad2ac86ec055e02accad016e4f3e27f',1,'sfc_input_data']]],
   ['latitude_5finput_5fgrid',['latitude_input_grid',['../classmodel__grid.html#a0f1a11da8a184d13bd08017cc004d5ae',1,'model_grid']]],

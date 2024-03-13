@@ -1,4 +1,4 @@
-.TH "model_grid" 3 "Thu Feb 15 2024" "Version 1.12.0" "chgres_cube" \" -*- nroff -*-
+.TH "model_grid" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -41,7 +41,7 @@ Sets up the ESMF grid objects for the input data grid and target FV3 grid\&.
 .br
 .RI "\fIRead model lat/lons for a single tile from the 'grid' specificaton file\&. \fP"
 .ti -1c
-.RI "subroutine \fBget_model_mask_terrain\fP (orog_file, idim, jdim, mask, terrain)"
+.RI "subroutine \fBget_model_mask_terrain\fP (orog_file, idim, jdim, mask, terrain, land_frac)"
 .br
 .RI "\fIRead the model land mask and terrain for a single tile from the orography file\&. \fP"
 .in -1c
@@ -89,9 +89,13 @@ Sets up the ESMF grid objects for the input data grid and target FV3 grid\&.
 .br
 .RI "\fIjp1_target plus 1 \fP"
 .ti -1c
+.RI "type(esmf_field), public \fBland_frac_target_grid\fP"
+.br
+.RI "\fIland fraction, target grid \fP"
+.ti -1c
 .RI "type(esmf_field), public \fBlandmask_target_grid\fP"
 .br
-.RI "\fIland mask target grid - '1' land; '0' non-land \fP"
+.RI "\fIland mask target grid - '1' some or all land; '0' all non-land \fP"
 .ti -1c
 .RI "type(esmf_field), public \fBlatitude_input_grid\fP"
 .br
@@ -155,7 +159,7 @@ Sets up the ESMF grid objects for the input data grid and target FV3 grid\&.
 .ti -1c
 .RI "type(esmf_field), public \fBseamask_target_grid\fP"
 .br
-.RI "\fIsea mask target grid - '1' non-land; '0' land \fP"
+.RI "\fIsea mask target grid - '1' some or all non-land; '0' all land \fP"
 .ti -1c
 .RI "type(esmf_grid), public \fBtarget_grid\fP"
 .br
@@ -207,7 +211,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1393 of file model_grid\&.F90\&.
+Definition at line 1418 of file model_grid\&.F90\&.
 .PP
 Referenced by chgres()\&.
 .SS "subroutine, public model_grid::define_input_grid (integer, intent(in)localpet, integer, intent(in)npets)"
@@ -229,7 +233,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 116 of file model_grid\&.F90\&.
+Definition at line 117 of file model_grid\&.F90\&.
 .PP
 References define_input_grid_gaussian(), define_input_grid_grib2(), and define_input_grid_mosaic()\&.
 .PP
@@ -260,7 +264,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 147 of file model_grid\&.F90\&.
+Definition at line 148 of file model_grid\&.F90\&.
 .PP
 References utilities::error_handler(), and utilities::netcdf_err()\&.
 .PP
@@ -286,7 +290,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 614 of file model_grid\&.F90\&.
+Definition at line 610 of file model_grid\&.F90\&.
 .PP
 References utilities::error_handler(), and gdt_to_gds()\&.
 .PP
@@ -310,7 +314,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 401 of file model_grid\&.F90\&.
+Definition at line 402 of file model_grid\&.F90\&.
 .PP
 References utilities::error_handler(), get_model_latlons(), and utilities::netcdf_err()\&.
 .PP
@@ -334,7 +338,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 887 of file model_grid\&.F90\&.
+Definition at line 883 of file model_grid\&.F90\&.
 .PP
 References utilities::error_handler(), get_model_latlons(), get_model_mask_terrain(), and utilities::netcdf_err()\&.
 .PP
@@ -368,7 +372,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1448 of file model_grid\&.F90\&.
+Definition at line 1474 of file model_grid\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -416,12 +420,12 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1175 of file model_grid\&.F90\&.
+Definition at line 1191 of file model_grid\&.F90\&.
 .PP
 References utilities::error_handler(), and utilities::netcdf_err()\&.
 .PP
 Referenced by define_input_grid_mosaic(), and define_target_grid()\&.
-.SS "subroutine model_grid::get_model_mask_terrain (character(len=*), intent(in)orog_file, integer, intent(in)idim, integer, intent(in)jdim, integer(esmf_kind_i8), dimension(idim,jdim), intent(out)mask, real(esmf_kind_i8), dimension(idim,jdim), intent(out)terrain)"
+.SS "subroutine model_grid::get_model_mask_terrain (character(len=*), intent(in)orog_file, integer, intent(in)idim, integer, intent(in)jdim, integer(esmf_kind_i8), dimension(idim,jdim), intent(out)mask, real(esmf_kind_i8), dimension(idim,jdim), intent(out)terrain, real(esmf_kind_i8), dimension(idim,jdim), intent(out)land_frac)"
 
 .PP
 Read the model land mask and terrain for a single tile from the orography file\&. 
@@ -437,6 +441,8 @@ Read the model land mask and terrain for a single tile from the orography file\&
 \fImask\fP land mask of tile 
 .br
 \fIterrain\fP terrain height of tile 
+.br
+\fIland_frac\fP The fraction of the grid point that is land\&. 
 .RE
 .PP
 \fBAuthor:\fP
@@ -446,7 +452,7 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1326 of file model_grid\&.F90\&.
+Definition at line 1343 of file model_grid\&.F90\&.
 .PP
 References utilities::error_handler(), and utilities::netcdf_err()\&.
 .PP
@@ -513,12 +519,18 @@ Definition at line 35 of file model_grid\&.F90\&.
 jp1_target plus 1 
 .PP
 Definition at line 45 of file model_grid\&.F90\&.
+.SS "type(esmf_field), public model_grid::land_frac_target_grid"
+
+.PP
+land fraction, target grid 
+.PP
+Definition at line 76 of file model_grid\&.F90\&.
 .SS "type(esmf_field), public model_grid::landmask_target_grid"
 
 .PP
-land mask target grid - '1' land; '0' non-land 
+land mask target grid - '1' some or all land; '0' all non-land 
 .PP
-Definition at line 74 of file model_grid\&.F90\&.
+Definition at line 73 of file model_grid\&.F90\&.
 .SS "type(esmf_field), public model_grid::latitude_input_grid"
 
 .PP
@@ -536,13 +548,13 @@ Definition at line 61 of file model_grid\&.F90\&.
 .PP
 latitude of 'south' edge of grid box, target grid 
 .PP
-Definition at line 79 of file model_grid\&.F90\&.
+Definition at line 80 of file model_grid\&.F90\&.
 .SS "type(esmf_field), public model_grid::latitude_target_grid"
 
 .PP
 latitude of grid center, target grid 
 .PP
-Definition at line 77 of file model_grid\&.F90\&.
+Definition at line 78 of file model_grid\&.F90\&.
 .SS "type(esmf_field), public model_grid::latitude_w_input_grid"
 
 .PP
@@ -554,7 +566,7 @@ Definition at line 67 of file model_grid\&.F90\&.
 .PP
 latitude of 'west' edge of grid box, target grid 
 .PP
-Definition at line 82 of file model_grid\&.F90\&.
+Definition at line 83 of file model_grid\&.F90\&.
 .SS "type(esmf_field), public model_grid::longitude_input_grid"
 
 .PP
@@ -572,13 +584,13 @@ Definition at line 64 of file model_grid\&.F90\&.
 .PP
 longitude of 'south' edge of grid box, target grid 
 .PP
-Definition at line 87 of file model_grid\&.F90\&.
+Definition at line 88 of file model_grid\&.F90\&.
 .SS "type(esmf_field), public model_grid::longitude_target_grid"
 
 .PP
 longitude of grid center, target grid 
 .PP
-Definition at line 85 of file model_grid\&.F90\&.
+Definition at line 86 of file model_grid\&.F90\&.
 .SS "type(esmf_field), public model_grid::longitude_w_input_grid"
 
 .PP
@@ -590,7 +602,7 @@ Definition at line 70 of file model_grid\&.F90\&.
 .PP
 longitude of 'west' edge of grid box, target grid 
 .PP
-Definition at line 90 of file model_grid\&.F90\&.
+Definition at line 91 of file model_grid\&.F90\&.
 .SS "integer, public model_grid::lsoil_target = 4"
 
 .PP
@@ -612,9 +624,9 @@ Definition at line 49 of file model_grid\&.F90\&.
 .SS "type(esmf_field), public model_grid::seamask_target_grid"
 
 .PP
-sea mask target grid - '1' non-land; '0' land 
+sea mask target grid - '1' some or all non-land; '0' all land 
 .PP
-Definition at line 93 of file model_grid\&.F90\&.
+Definition at line 94 of file model_grid\&.F90\&.
 .SS "type(esmf_grid), public model_grid::target_grid"
 
 .PP
@@ -626,7 +638,7 @@ Definition at line 54 of file model_grid\&.F90\&.
 .PP
 terrain height target grid 
 .PP
-Definition at line 96 of file model_grid\&.F90\&.
+Definition at line 97 of file model_grid\&.F90\&.
 .SS "character(len=5), dimension(:), allocatable, public model_grid::tiles_target_grid"
 
 .PP

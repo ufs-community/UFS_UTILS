@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">chgres_cube
-   &#160;<span id="projectnumber">1.12.0</span>
+   &#160;<span id="projectnumber">1.13.0</span>
    </div>
   </td>
  </tr>
@@ -136,9 +136,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0556c652763c8b6310abfee5bb48032"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#aa0556c652763c8b6310abfee5bb48032">get_model_latlons</a> (mosaic_file, orog_dir, num_tiles, tile, i_tile, j_tile, ip1_tile, jp1_tile, latitude, latitude_s, latitude_w, longitude, longitude_s, longitude_w)</td></tr>
 <tr class="memdesc:aa0556c652763c8b6310abfee5bb48032"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read model lat/lons for a single tile from the "grid" specificaton file.  <a href="#aa0556c652763c8b6310abfee5bb48032">More...</a><br/></td></tr>
 <tr class="separator:aa0556c652763c8b6310abfee5bb48032"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4860abf33f2f55ecd58fb5728df2c455"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#a4860abf33f2f55ecd58fb5728df2c455">get_model_mask_terrain</a> (orog_file, idim, jdim, mask, terrain)</td></tr>
-<tr class="memdesc:a4860abf33f2f55ecd58fb5728df2c455"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the model land mask and terrain for a single tile from the orography file.  <a href="#a4860abf33f2f55ecd58fb5728df2c455">More...</a><br/></td></tr>
-<tr class="separator:a4860abf33f2f55ecd58fb5728df2c455"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c77442d4b5f6137b342328bab858fe8"><td class="memItemLeft" align="right" valign="top">subroutine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#a8c77442d4b5f6137b342328bab858fe8">get_model_mask_terrain</a> (orog_file, idim, jdim, mask, terrain, land_frac)</td></tr>
+<tr class="memdesc:a8c77442d4b5f6137b342328bab858fe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the model land mask and terrain for a single tile from the orography file.  <a href="#a8c77442d4b5f6137b342328bab858fe8">More...</a><br/></td></tr>
+<tr class="separator:a8c77442d4b5f6137b342328bab858fe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
@@ -172,8 +172,11 @@ Data Fields</h2></td></tr>
 <tr class="memitem:ae8dcbca4234f1074860ebde7012b5c85"><td class="memItemLeft" align="right" valign="top">integer, public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#ae8dcbca4234f1074860ebde7012b5c85">jp1_target</a></td></tr>
 <tr class="memdesc:ae8dcbca4234f1074860ebde7012b5c85"><td class="mdescLeft">&#160;</td><td class="mdescRight">jp1_target plus 1  <a href="#ae8dcbca4234f1074860ebde7012b5c85">More...</a><br/></td></tr>
 <tr class="separator:ae8dcbca4234f1074860ebde7012b5c85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d06db6ef1ce9830536cb2a32ae6f0dc"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#a3d06db6ef1ce9830536cb2a32ae6f0dc">land_frac_target_grid</a></td></tr>
+<tr class="memdesc:a3d06db6ef1ce9830536cb2a32ae6f0dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">land fraction, target grid  <a href="#a3d06db6ef1ce9830536cb2a32ae6f0dc">More...</a><br/></td></tr>
+<tr class="separator:a3d06db6ef1ce9830536cb2a32ae6f0dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6afab6cbbba792a2ea872922f95d6feb"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#a6afab6cbbba792a2ea872922f95d6feb">landmask_target_grid</a></td></tr>
-<tr class="memdesc:a6afab6cbbba792a2ea872922f95d6feb"><td class="mdescLeft">&#160;</td><td class="mdescRight">land mask target grid - '1' land; '0' non-land  <a href="#a6afab6cbbba792a2ea872922f95d6feb">More...</a><br/></td></tr>
+<tr class="memdesc:a6afab6cbbba792a2ea872922f95d6feb"><td class="mdescLeft">&#160;</td><td class="mdescRight">land mask target grid - '1' some or all land; '0' all non-land  <a href="#a6afab6cbbba792a2ea872922f95d6feb">More...</a><br/></td></tr>
 <tr class="separator:a6afab6cbbba792a2ea872922f95d6feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f1a11da8a184d13bd08017cc004d5ae"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#a0f1a11da8a184d13bd08017cc004d5ae">latitude_input_grid</a></td></tr>
 <tr class="memdesc:a0f1a11da8a184d13bd08017cc004d5ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">latitude of grid center, input grid  <a href="#a0f1a11da8a184d13bd08017cc004d5ae">More...</a><br/></td></tr>
@@ -221,7 +224,7 @@ Data Fields</h2></td></tr>
 <tr class="memdesc:a3ef9fce75c3c775bfbc0f3758adc9ab5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of tiles, target grid.  <a href="#a3ef9fce75c3c775bfbc0f3758adc9ab5">More...</a><br/></td></tr>
 <tr class="separator:a3ef9fce75c3c775bfbc0f3758adc9ab5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac603676e21495133afd160bf36c70068"><td class="memItemLeft" align="right" valign="top">type(esmf_field), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#ac603676e21495133afd160bf36c70068">seamask_target_grid</a></td></tr>
-<tr class="memdesc:ac603676e21495133afd160bf36c70068"><td class="mdescLeft">&#160;</td><td class="mdescRight">sea mask target grid - '1' non-land; '0' land  <a href="#ac603676e21495133afd160bf36c70068">More...</a><br/></td></tr>
+<tr class="memdesc:ac603676e21495133afd160bf36c70068"><td class="mdescLeft">&#160;</td><td class="mdescRight">sea mask target grid - '1' some or all non-land; '0' all land  <a href="#ac603676e21495133afd160bf36c70068">More...</a><br/></td></tr>
 <tr class="separator:ac603676e21495133afd160bf36c70068"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85499183cbbb666cbabd138c77374fd9"><td class="memItemLeft" align="right" valign="top">type(esmf_grid), public&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodel__grid.html#a85499183cbbb666cbabd138c77374fd9">target_grid</a></td></tr>
 <tr class="memdesc:a85499183cbbb666cbabd138c77374fd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">target grid esmf grid object.  <a href="#a85499183cbbb666cbabd138c77374fd9">More...</a><br/></td></tr>
@@ -262,7 +265,7 @@ Private Member Functions</h2></td></tr>
 <p>Deallocate all esmf grid objects. </p>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l01393">1393</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l01418">1418</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 <p>Referenced by <a class="el" href="chgres_8F90_source.html#l00024">chgres()</a>.</p>
 
@@ -303,9 +306,9 @@ Private Member Functions</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00116">116</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00117">117</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
-<p>References <a class="el" href="model__grid_8F90_source.html#l00147">define_input_grid_gaussian()</a>, <a class="el" href="model__grid_8F90_source.html#l00614">define_input_grid_grib2()</a>, and <a class="el" href="model__grid_8F90_source.html#l00401">define_input_grid_mosaic()</a>.</p>
+<p>References <a class="el" href="model__grid_8F90_source.html#l00148">define_input_grid_gaussian()</a>, <a class="el" href="model__grid_8F90_source.html#l00610">define_input_grid_grib2()</a>, and <a class="el" href="model__grid_8F90_source.html#l00402">define_input_grid_mosaic()</a>.</p>
 
 <p>Referenced by <a class="el" href="chgres_8F90_source.html#l00024">chgres()</a>.</p>
 
@@ -341,11 +344,11 @@ Private Member Functions</h2></td></tr>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00147">147</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00148">148</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, and <a class="el" href="utils_8F90_source.html#l00034">utilities::netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00116">define_input_grid()</a>.</p>
+<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00117">define_input_grid()</a>.</p>
 
 </div>
 </div>
@@ -376,11 +379,11 @@ Jeff Beck </dd>
 <dd>
 George Gayno </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00614">614</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00610">610</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, and <a class="el" href="model__grid_8F90_source.html#l01448">gdt_to_gds()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, and <a class="el" href="model__grid_8F90_source.html#l01474">gdt_to_gds()</a>.</p>
 
-<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00116">define_input_grid()</a>.</p>
+<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00117">define_input_grid()</a>.</p>
 
 </div>
 </div>
@@ -418,11 +421,11 @@ George Gayno </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00401">401</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00402">402</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, <a class="el" href="model__grid_8F90_source.html#l01175">get_model_latlons()</a>, and <a class="el" href="utils_8F90_source.html#l00034">utilities::netcdf_err()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, <a class="el" href="model__grid_8F90_source.html#l01191">get_model_latlons()</a>, and <a class="el" href="utils_8F90_source.html#l00034">utilities::netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00116">define_input_grid()</a>.</p>
+<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00117">define_input_grid()</a>.</p>
 
 </div>
 </div>
@@ -460,9 +463,9 @@ George Gayno </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00887">887</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00883">883</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
-<p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, <a class="el" href="model__grid_8F90_source.html#l01175">get_model_latlons()</a>, <a class="el" href="model__grid_8F90_source.html#l01326">get_model_mask_terrain()</a>, and <a class="el" href="utils_8F90_source.html#l00034">utilities::netcdf_err()</a>.</p>
+<p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, <a class="el" href="model__grid_8F90_source.html#l01191">get_model_latlons()</a>, <a class="el" href="model__grid_8F90_source.html#l01343">get_model_mask_terrain()</a>, and <a class="el" href="utils_8F90_source.html#l00034">utilities::netcdf_err()</a>.</p>
 
 <p>Referenced by <a class="el" href="chgres_8F90_source.html#l00024">chgres()</a>.</p>
 
@@ -545,11 +548,11 @@ George Gayno </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l01448">1448</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l01474">1474</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>.</p>
 
-<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00614">define_input_grid_grib2()</a>.</p>
+<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00610">define_input_grid_grib2()</a>.</p>
 
 </div>
 </div>
@@ -671,15 +674,15 @@ George Gayno </dd></dl>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l01175">1175</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l01191">1191</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, and <a class="el" href="utils_8F90_source.html#l00034">utilities::netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00401">define_input_grid_mosaic()</a>, and <a class="el" href="model__grid_8F90_source.html#l00887">define_target_grid()</a>.</p>
+<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00402">define_input_grid_mosaic()</a>, and <a class="el" href="model__grid_8F90_source.html#l00883">define_target_grid()</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a4860abf33f2f55ecd58fb5728df2c455"></a>
+<a class="anchor" id="a8c77442d4b5f6137b342328bab858fe8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -711,7 +714,13 @@ George Gayno </dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">real(esmf_kind_i8), dimension(idim,jdim), intent(out)&#160;</td>
-          <td class="paramname"><em>terrain</em>&#160;</td>
+          <td class="paramname"><em>terrain</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real(esmf_kind_i8), dimension(idim,jdim), intent(out)&#160;</td>
+          <td class="paramname"><em>land_frac</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -729,16 +738,17 @@ George Gayno </dd></dl>
     <tr><td class="paramdir">[in]</td><td class="paramname">jdim</td><td>"j" dimension of tile </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">mask</td><td>land mask of tile </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">terrain</td><td>terrain height of tile </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">land_frac</td><td>The fraction of the grid point that is land. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section author"><dt>Author</dt><dd>George Gayno NCEP/EMC </dd></dl>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l01326">1326</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l01343">1343</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 <p>References <a class="el" href="utils_8F90_source.html#l00012">utilities::error_handler()</a>, and <a class="el" href="utils_8F90_source.html#l00034">utilities::netcdf_err()</a>.</p>
 
-<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00887">define_target_grid()</a>.</p>
+<p>Referenced by <a class="el" href="model__grid_8F90_source.html#l00883">define_target_grid()</a>.</p>
 
 </div>
 </div>
@@ -903,6 +913,22 @@ George Gayno </dd></dl>
 
 </div>
 </div>
+<a class="anchor" id="a3d06db6ef1ce9830536cb2a32ae6f0dc"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">type(esmf_field), public model_grid::land_frac_target_grid</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>land fraction, target grid </p>
+
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00076">76</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a6afab6cbbba792a2ea872922f95d6feb"></a>
 <div class="memitem">
 <div class="memproto">
@@ -913,9 +939,9 @@ George Gayno </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>land mask target grid - '1' land; '0' non-land </p>
+<p>land mask target grid - '1' some or all land; '0' all non-land </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00074">74</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00073">73</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>
@@ -963,7 +989,7 @@ George Gayno </dd></dl>
 
 <p>latitude of 'south' edge of grid box, target grid </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00079">79</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00080">80</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>
@@ -979,7 +1005,7 @@ George Gayno </dd></dl>
 
 <p>latitude of grid center, target grid </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00077">77</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00078">78</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>
@@ -1011,7 +1037,7 @@ George Gayno </dd></dl>
 
 <p>latitude of 'west' edge of grid box, target grid </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00082">82</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00083">83</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>
@@ -1059,7 +1085,7 @@ George Gayno </dd></dl>
 
 <p>longitude of 'south' edge of grid box, target grid </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00087">87</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00088">88</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>
@@ -1075,7 +1101,7 @@ George Gayno </dd></dl>
 
 <p>longitude of grid center, target grid </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00085">85</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00086">86</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>
@@ -1107,7 +1133,7 @@ George Gayno </dd></dl>
 
 <p>longitude of 'west' edge of grid box, target grid </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00090">90</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00091">91</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>
@@ -1169,9 +1195,9 @@ George Gayno </dd></dl>
       </table>
 </div><div class="memdoc">
 
-<p>sea mask target grid - '1' non-land; '0' land </p>
+<p>sea mask target grid - '1' some or all non-land; '0' all land </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00093">93</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00094">94</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>
@@ -1203,7 +1229,7 @@ George Gayno </dd></dl>
 
 <p>terrain height target grid </p>
 
-<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00096">96</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
+<p>Definition at line <a class="el" href="model__grid_8F90_source.html#l00097">97</a> of file <a class="el" href="model__grid_8F90_source.html">model_grid.F90</a>.</p>
 
 </div>
 </div>

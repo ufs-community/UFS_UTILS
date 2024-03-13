@@ -1,4 +1,4 @@
-.TH "surface" 3 "Thu Feb 15 2024" "Version 1.12.0" "chgres_cube" \" -*- nroff -*-
+.TH "surface" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -65,7 +65,7 @@ Process surface and nst fields\&.
 .ti -1c
 .RI "subroutine \fBqc_check\fP"
 .br
-.RI "\fIPerform some quality control checks before output\&. \fP"
+.RI "\fIPerform some quality control checks and set flag values at non-active points\&. \fP"
 .ti -1c
 .RI "subroutine, public \fBregrid_many\fP (bundle_pre, bundle_post, num_field, route, dozero, unmapped_ptr, resetifd)"
 .br
@@ -77,7 +77,7 @@ Process surface and nst fields\&.
 .ti -1c
 .RI "subroutine \fBroughness\fP"
 .br
-.RI "\fISet roughness length at land and sea ice\&. \fP"
+.RI "\fISet roughness length at points with some sea ice to 1 cm\&. \fP"
 .ti -1c
 .RI "subroutine, public \fBsearch_many\fP (num_field, bundle_target, tile, search_nums, localpet, latitude, terrain_land, soilt_climo, mask)"
 .br
@@ -86,6 +86,10 @@ Process surface and nst fields\&.
 .RI "subroutine, public \fBsurface_driver\fP (localpet)"
 .br
 .RI "\fIDriver routine to process surface/nst data\&. \fP"
+.ti -1c
+.RI "subroutine \fBupdate_landmask\fP"
+.br
+.RI "\fIUpdate landmask for sea ice\&. \fP"
 .in -1c
 .SS "Private Attributes"
 
@@ -110,6 +114,12 @@ Process surface and nst fields\&.
 .RI "real, parameter, private \fBhlice\fP = 3\&.335E5"
 .br
 .RI "\fIlatent heat of fusion \fP"
+.ti -1c
+.RI "real(esmf_kind_r8), parameter, 
+.br
+private \fBmissing\fP = -1\&.e20_esmf_kind_r8"
+.br
+.RI "\fIflag for non-active points\&. \fP"
 .ti -1c
 .RI "type(esmf_field) \fBsoil_type_from_input_grid\fP"
 .br
@@ -166,7 +176,7 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 2027 of file surface\&.F90\&.
+Definition at line 2046 of file surface\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -183,7 +193,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1951 of file surface\&.F90\&.
+Definition at line 1970 of file surface\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -200,7 +210,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1501 of file surface\&.F90\&.
+Definition at line 1520 of file surface\&.F90\&.
 .PP
 References utilities::error_handler(), and frh2o()\&.
 .PP
@@ -217,7 +227,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3428 of file surface\&.F90\&.
+Definition at line 3713 of file surface\&.F90\&.
 .PP
 References surface_target_data::cleanup_target_sfc_data()\&.
 .PP
@@ -234,7 +244,7 @@ George Gayno
 .PP
 
 .PP
-Definition at line 2973 of file surface\&.F90\&.
+Definition at line 3199 of file surface\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -251,7 +261,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2615 of file surface\&.F90\&.
+Definition at line 2759 of file surface\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -295,7 +305,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1645 of file surface\&.F90\&.
+Definition at line 1664 of file surface\&.F90\&.
 .PP
 Referenced by calc_liq_soil_moisture()\&.
 .SS "subroutine surface::ij_to_i_j (integer(esmf_kind_i4), intent(in)ij, integer, intent(in)itile, integer, intent(in)jtile, integer, intent(out)i, integer, intent(out)j)"
@@ -323,7 +333,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 3135 of file surface\&.F90\&.
+Definition at line 3420 of file surface\&.F90\&.
 .PP
 Referenced by interp(), and regrid_many()\&.
 .SS "subroutine, public surface::interp (integer, intent(in)localpet)"
@@ -343,7 +353,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 248 of file surface\&.F90\&.
+Definition at line 261 of file surface\&.F90\&.
 .PP
 References utilities::error_handler(), ij_to_i_j(), regrid_many(), search_util::search(), and search_many()\&.
 .PP
@@ -360,7 +370,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2532 of file surface\&.F90\&.
+Definition at line 2666 of file surface\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -368,7 +378,7 @@ Referenced by surface_driver()\&.
 .SS "subroutine surface::qc_check ()"
 
 .PP
-Perform some quality control checks before output\&. 
+Perform some quality control checks and set flag values at non-active points\&. 
 .PP
 \fBAuthor:\fP
 .RS 4
@@ -377,7 +387,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2197 of file surface\&.F90\&.
+Definition at line 2239 of file surface\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -411,7 +421,7 @@ Larissa Reames, OU CIMMS/NOAA/NSSL
 .PP
 
 .PP
-Definition at line 3170 of file surface\&.F90\&.
+Definition at line 3455 of file surface\&.F90\&.
 .PP
 References utilities::error_handler(), and ij_to_i_j()\&.
 .PP
@@ -428,7 +438,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 1783 of file surface\&.F90\&.
+Definition at line 1802 of file surface\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -436,7 +446,7 @@ Referenced by surface_driver()\&.
 .SS "subroutine surface::roughness ()"
 
 .PP
-Set roughness length at land and sea ice\&. At land, roughness is set from a lookup table based on the vegetation type\&. At sea ice, roughness is set to 1 cm\&.
+Set roughness length at points with some sea ice to 1 cm\&. Set flag value at points with some or all open water\&.
 .PP
 \fBAuthor:\fP
 .RS 4
@@ -445,7 +455,7 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 2143 of file surface\&.F90\&.
+Definition at line 2161 of file surface\&.F90\&.
 .PP
 References utilities::error_handler()\&.
 .PP
@@ -478,7 +488,7 @@ Execute the search function for multple fields\&.
 .PP
 
 .PP
-Definition at line 3315 of file surface\&.F90\&.
+Definition at line 3600 of file surface\&.F90\&.
 .PP
 References utilities::error_handler(), and search_util::search()\&.
 .PP
@@ -500,11 +510,28 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 107 of file surface\&.F90\&.
+Definition at line 114 of file surface\&.F90\&.
 .PP
-References adjust_soil_levels(), adjust_soilt_for_terrain(), calc_liq_soil_moisture(), program_setup::calc_soil_params_driver(), cleanup_all_target_sfc_data(), nst_input_data::cleanup_input_nst_data(), sfc_input_data::cleanup_input_sfc_data(), static_data::cleanup_static_fields(), surface_target_data::cleanup_target_nst_data(), create_nst_esmf_fields(), create_surface_esmf_fields(), utilities::error_handler(), static_data::get_static_fields(), interp(), nst_land_fill(), qc_check(), nst_input_data::read_input_nst_data(), sfc_input_data::read_input_sfc_data(), rescale_soil_moisture(), roughness(), and write_data::write_fv3_sfc_data_netcdf()\&.
+References adjust_soil_levels(), adjust_soilt_for_terrain(), calc_liq_soil_moisture(), program_setup::calc_soil_params_driver(), cleanup_all_target_sfc_data(), nst_input_data::cleanup_input_nst_data(), sfc_input_data::cleanup_input_sfc_data(), static_data::cleanup_static_fields(), surface_target_data::cleanup_target_nst_data(), create_nst_esmf_fields(), create_surface_esmf_fields(), utilities::error_handler(), static_data::get_static_fields(), interp(), nst_land_fill(), qc_check(), nst_input_data::read_input_nst_data(), sfc_input_data::read_input_sfc_data(), rescale_soil_moisture(), roughness(), update_landmask(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .PP
 Referenced by chgres()\&.
+.SS "subroutine surface::update_landmask ()"
+
+.PP
+Update landmask for sea ice\&. The model requires the landmask record be present\&. However, the data is recomputed in FV3ATM routine fv3atm_sfc_io\&.F90 after it is read in\&. Here, compute it using the same algorithm as the model and output it as a diagnostic\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+
+.PP
+Definition at line 3361 of file surface\&.F90\&.
+.PP
+References utilities::error_handler()\&.
+.PP
+Referenced by surface_driver()\&.
 .SH "Field Documentation"
 .PP 
 .SS "real, parameter, private surface::blim = 5\&.5\fC [private]\fP"
@@ -512,55 +539,61 @@ Referenced by chgres()\&.
 .PP
 soil 'b' parameter limit 
 .PP
-Definition at line 69 of file surface\&.F90\&.
+Definition at line 73 of file surface\&.F90\&.
 .SS "real, parameter, private surface::frz_h2o = 273\&.15\fC [private]\fP"
 
 .PP
 melting pt water 
 .PP
-Definition at line 71 of file surface\&.F90\&.
+Definition at line 75 of file surface\&.F90\&.
 .SS "real, parameter, private surface::frz_ice = 271\&.21\fC [private]\fP"
 
 .PP
 melting pt sea ice 
 .PP
-Definition at line 73 of file surface\&.F90\&.
+Definition at line 77 of file surface\&.F90\&.
 .SS "real, parameter, private surface::grav = 9\&.81\fC [private]\fP"
 
 .PP
 gravity 
 .PP
-Definition at line 75 of file surface\&.F90\&.
+Definition at line 79 of file surface\&.F90\&.
 .SS "real, parameter, private surface::hlice = 3\&.335E5\fC [private]\fP"
 
 .PP
 latent heat of fusion 
 .PP
-Definition at line 77 of file surface\&.F90\&.
+Definition at line 81 of file surface\&.F90\&.
+.SS "real(esmf_kind_r8), parameter, private surface::missing = -1\&.e20_esmf_kind_r8\fC [private]\fP"
+
+.PP
+flag for non-active points\&. 
+.PP
+Definition at line 84 of file surface\&.F90\&.
 .SS "type(esmf_field) surface::soil_type_from_input_grid\fC [private]\fP"
 
 .PP
 soil type interpolated from input grid 
 .PP
-Definition at line 59 of file surface\&.F90\&.
+Definition at line 63 of file surface\&.F90\&.
 .SS "type(esmf_field) surface::terrain_from_input_grid\fC [private]\fP"
 
 .PP
 terrain height interpolated from input grid 
 .PP
-Definition at line 62 of file surface\&.F90\&.
+Definition at line 66 of file surface\&.F90\&.
 .SS "type(esmf_field) surface::terrain_from_input_grid_land\fC [private]\fP"
 
 .PP
 terrain height interpolated from input grid at all land points 
 .PP
-Definition at line 65 of file surface\&.F90\&.
+Definition at line 69 of file surface\&.F90\&.
 .SS "integer, parameter surface::veg_type_landice_target = 15\fC [private]\fP"
 
 .PP
 Vegetation type category that defines permanent land ice points\&. The Noah LSM land ice physics are applied at these points\&. 
 .PP
-Definition at line 53 of file surface\&.F90\&.
+Definition at line 57 of file surface\&.F90\&.
 
 .SH "Author"
 .PP 

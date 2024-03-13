@@ -13,8 +13,10 @@ var searchData=
   ['skin_5ftemp_5ftarget_5fgrid',['skin_temp_target_grid',['../classsurface__target__data.html#a07844c6c9c70781989b6e643623bcb04',1,'surface_target_data']]],
   ['slevs',['slevs',['../classatm__input__data.html#ae4e241c9343c9c48bff785779aaa579e',1,'atm_input_data']]],
   ['slope_5ftype_5ftarget_5fgrid',['slope_type_target_grid',['../classstatic__data.html#a5ed8a6491553f66888bccd0c1e0b91bb',1,'static_data']]],
+  ['snow_5fdepth_5fat_5fice_5ftarget_5fgrid',['snow_depth_at_ice_target_grid',['../classsurface__target__data.html#acf3f43cdc5b4a9eb9ce6cb1e66a0ebcf',1,'surface_target_data']]],
   ['snow_5fdepth_5finput_5fgrid',['snow_depth_input_grid',['../classsfc__input__data.html#aa50bd77b69a20bc2a23f7b4714f7f169',1,'sfc_input_data']]],
   ['snow_5fdepth_5ftarget_5fgrid',['snow_depth_target_grid',['../classsurface__target__data.html#a18d3f0577eca62f1d145e194ec36c56d',1,'surface_target_data']]],
+  ['snow_5fliq_5fequiv_5fat_5fice_5ftarget_5fgrid',['snow_liq_equiv_at_ice_target_grid',['../classsurface__target__data.html#ab12ac5faf2481ff94125dee437aabd2f',1,'surface_target_data']]],
   ['snow_5fliq_5fequiv_5finput_5fgrid',['snow_liq_equiv_input_grid',['../classsfc__input__data.html#a5f5ee0e7cc3c48412ec6fefb24af7b09',1,'sfc_input_data']]],
   ['snow_5fliq_5fequiv_5ftarget_5fgrid',['snow_liq_equiv_target_grid',['../classsurface__target__data.html#abb85698100b0a90e0460f35cbe26d641',1,'surface_target_data']]],
   ['soil_5ftemp_5finput_5fgrid',['soil_temp_input_grid',['../classsfc__input__data.html#a0d70ca0aef86729f21896705948eb242',1,'sfc_input_data']]],
@@ -29,5 +31,6 @@ var searchData=
   ['sotyp_5ffrom_5fclimo',['sotyp_from_climo',['../classprogram__setup.html#ad6b23f6d8cacb48240a2afd72ff1d5ef',1,'program_setup']]],
   ['srflag_5finput_5fgrid',['srflag_input_grid',['../classsfc__input__data.html#a08c0a47498901872edbdec10a8569c48',1,'sfc_input_data']]],
   ['srflag_5ftarget_5fgrid',['srflag_target_grid',['../classsurface__target__data.html#ae1176ee763ee9dcec7878f8549bbf87b',1,'surface_target_data']]],
+  ['sst_5ftarget_5fgrid',['sst_target_grid',['../classsurface__target__data.html#ab58c3408cf0bebdff32a7e769c17416b',1,'surface_target_data']]],
   ['substrate_5ftemp_5ftarget_5fgrid',['substrate_temp_target_grid',['../classstatic__data.html#a4dfed22f54d51ff598ae12a208cb197c',1,'static_data']]]
 ];

@@ -1,4 +1,4 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/cycle.f90" 3 "Thu Feb 15 2024" "Version 1.12.0" "global_cycle" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/cycle.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -141,7 +141,7 @@ Xu Li, George Gayno
 .PP
 
 .PP
-Definition at line 868 of file cycle\&.f90\&.
+Definition at line 859 of file cycle\&.f90\&.
 .PP
 References dtzm_point(), nsst_water_reset(), utils::remap_coef(), tf_thaw_set(), and tfreez()\&.
 .PP
@@ -171,7 +171,7 @@ Xu Li, George Gayno
 .PP
 
 .PP
-Definition at line 1296 of file cycle\&.f90\&.
+Definition at line 1287 of file cycle\&.f90\&.
 .SS "subroutine dtzm_point (real, intent(in)XT, real, intent(in)XZ, real, intent(in)DT_COOL, real, intent(in)ZC, real, intent(in)Z1, real, intent(in)Z2, real, intent(out)DTZM)"
 
 .PP
@@ -206,7 +206,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1449 of file cycle\&.f90\&.
+Definition at line 1440 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "subroutine get_sal_clm (real, dimension(nx*ny), intent(in)xlats_ij, real, dimension(nx*ny), intent(in)xlons_ij, integer, intent(in)ny, integer, intent(in)nx, integer, intent(in)iy, integer, intent(in)im, integer, intent(in)id, integer, intent(in)ih, real, dimension(nx,ny), intent(out)sal_clm)"
@@ -242,7 +242,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1775 of file cycle\&.f90\&.
+Definition at line 1766 of file cycle\&.f90\&.
 .PP
 References read_write_data::get_dim_nc(), get_sal_clm_ta(), get_tim_wei(), and intp_tile()\&.
 .PP
@@ -285,7 +285,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1835 of file cycle\&.f90\&.
+Definition at line 1826 of file cycle\&.f90\&.
 .PP
 References read_write_data::read_salclm_gfs_nc()\&.
 .PP
@@ -325,7 +325,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1658 of file cycle\&.f90\&.
+Definition at line 1649 of file cycle\&.f90\&.
 .PP
 References read_write_data::get_tf_clm_dim(), get_tf_clm_ta(), get_tim_wei(), and intp_tile()\&.
 .PP
@@ -370,7 +370,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1727 of file cycle\&.f90\&.
+Definition at line 1718 of file cycle\&.f90\&.
 .PP
 References read_write_data::read_tf_clim_grb()\&.
 .PP
@@ -411,7 +411,7 @@ March 2019
 .PP
 
 .PP
-Definition at line 1969 of file cycle\&.f90\&.
+Definition at line 1960 of file cycle\&.f90\&.
 .PP
 Referenced by get_sal_clm(), and get_tf_clm()\&.
 .SS "subroutine intp_tile (real, dimension(idim_lalo,jdim_lalo), intent(in)tf_lalo, real, dimension(jdim_lalo), intent(in)dlats_lalo, real, dimension(idim_lalo), intent(in)dlons_lalo, integer, intent(in)jdim_lalo, integer, intent(in)idim_lalo, real, dimension(jdim_tile*idim_tile), intent(out)tf_tile, real, dimension(jdim_tile*idim_tile), intent(in)xlats_tile, real, dimension(jdim_tile*idim_tile), intent(in)xlons_tile, integer, intent(in)jdim_tile, integer, intent(in)idim_tile)"
@@ -449,7 +449,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1880 of file cycle\&.f90\&.
+Definition at line 1871 of file cycle\&.f90\&.
 .PP
 References utils::remap_coef()\&.
 .PP
@@ -475,7 +475,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1612 of file cycle\&.f90\&.
+Definition at line 1603 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "program sfc_drv ()"
@@ -744,7 +744,7 @@ Xu Li
 .PP
 
 .PP
-Definition at line 1521 of file cycle\&.f90\&.
+Definition at line 1512 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SS "real function tfreez (realsalinity)"
@@ -774,7 +774,7 @@ tfreez The freezing point of water\&.
 .PP
 
 .PP
-Definition at line 2036 of file cycle\&.f90\&.
+Definition at line 2027 of file cycle\&.f90\&.
 .PP
 Referenced by adjust_nsst()\&.
 .SH "Author"
