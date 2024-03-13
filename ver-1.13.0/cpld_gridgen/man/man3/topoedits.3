@@ -1,0 +1,71 @@
+.TH "topoedits" 3 "Wed Mar 13 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+topoedits \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBadd_topoedits\fP (fsrc, fdst)"
+.br
+.RI "\fIRead the existing topoedits file, append required topoedits and write a new topoedits file\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBapply_topoedits\fP (fsrc)"
+.br
+.RI "\fIRead the topoedits file and adjust the bathymetry\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 9 of file topoedits\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public topoedits::add_topoedits (character(len=*), intent(in)fsrc, character(len=*), intent(in)fdst)"
+
+.PP
+Read the existing topoedits file, append required topoedits and write a new topoedits file\&. Use the new topoedits to adjust the land mask used in subsequent steps to match the land mask which will be created at run time
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfsrc\fP the existing topoedits file name 
+.br
+\fIfdst\fP the modified topoedits file name
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 32 of file topoedits\&.F90\&.
+.PP
+Referenced by gen_fixgrid()\&.
+.SS "subroutine, public topoedits::apply_topoedits (character(len=*), intent(in)fsrc)"
+
+.PP
+Read the topoedits file and adjust the bathymetry\&. Apply limits to bathymetry\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfsrc\fP the topoedits file name
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 165 of file topoedits\&.F90\&.
+.PP
+Referenced by gen_fixgrid()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for cpld_gridgen from the source code\&.

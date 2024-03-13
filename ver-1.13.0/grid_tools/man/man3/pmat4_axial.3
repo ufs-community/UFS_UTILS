@@ -1,0 +1,129 @@
+.TH "pmat4::axial" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::axial \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function, dimension(3) \fBaxial33_d\fP (b)"
+.br
+.RI "\fIReturn the 3-vector corresponding to the given antisymmetric 'axial vector' matrix, assuming a right-handed correspondence\&. \fP"
+.ti -1c
+.RI "real(sp) function, dimension(3) \fBaxial33_s\fP (b)"
+.br
+.RI "\fIReturn the 3-vector corresponding to the given antisymmetric 'axial vector' matrix, assuming a right-handed correspondence\&. \fP"
+.ti -1c
+.RI "real(dp) function, dimension(3, 3) \fBaxial3_d\fP (a)"
+.br
+.RI "\fIReturn the axial 'vector', as an antisymmetric matrix, corresponding to the given 3-vector assuming a right-handed correspondence\&. \fP"
+.ti -1c
+.RI "real(sp) function, dimension(3, 3) \fBaxial3_s\fP (a)"
+.br
+.RI "\fIReturn the axial 'vector', as an antisymmetric matrix, corresponding to the given 3-vector assuming a right-handed correspondence\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 73 of file pmat4\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function, dimension(3) pmat4::axial::axial33_d (real(dp), dimension(3,3), intent(in)b)\fC [private]\fP"
+
+.PP
+Return the 3-vector corresponding to the given antisymmetric 'axial vector' matrix, assuming a right-handed correspondence\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP real type input antisymmetric matrix 'axial vector' B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a result, 3-vector corresponding to B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 461 of file pmat4\&.f90\&.
+.SS "real(sp) function, dimension(3) pmat4::axial::axial33_s (real(sp), dimension(3,3), intent(in)b)\fC [private]\fP"
+
+.PP
+Return the 3-vector corresponding to the given antisymmetric 'axial vector' matrix, assuming a right-handed correspondence\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP real type input antisymmetric matrix 'axial vector' B 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a result, 3-vector corresponding to B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 447 of file pmat4\&.f90\&.
+.SS "real(dp) function, dimension(3,3) pmat4::axial::axial3_d (real(dp), dimension(3), intent(in)a)\fC [private]\fP"
+
+.PP
+Return the axial 'vector', as an antisymmetric matrix, corresponding to the given 3-vector assuming a right-handed correspondence\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input 3-vector A 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+b result, antisymmetrix 'axial vector' matrix corresponding to A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 433 of file pmat4\&.f90\&.
+.SS "real(sp) function, dimension(3,3) pmat4::axial::axial3_s (real(sp), dimension(3), intent(in)a)\fC [private]\fP"
+
+.PP
+Return the axial 'vector', as an antisymmetric matrix, corresponding to the given 3-vector assuming a right-handed correspondence\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP real type input 3-vector A 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+b result, antisymmetrix 'axial vector' matrix corresponding to A 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 419 of file pmat4\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

@@ -1,0 +1,85 @@
+.TH "pmat2::ldltb" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::ldltb \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBldltb\fP (m, mah1, a)"
+.br
+.RI "\fI[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. \fP"
+.ti -1c
+.RI "subroutine \fBdldltb\fP (m, mah1, a)"
+.br
+.RI "\fI[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 65 of file pmat2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat2::ldltb::ldltb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(inout)a)\fC [private]\fP"
+
+.PP
+[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP size of symmetric matrix A 
+.br
+\fImah1\fP semi-bandwidth of matrix A 
+.br
+\fIa\fP input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 608 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat2::ldltb::dldltb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(inout)a)\fC [private]\fP"
+
+.PP
+[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP size of symmetric matrix A 
+.br
+\fImah1\fP semi-bandwidth of matrix A 
+.br
+\fIa\fP input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 644 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

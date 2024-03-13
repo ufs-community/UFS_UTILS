@@ -1,0 +1,330 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/grib_utils.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/grib_utils.F90 \- 
+.PP
+Determine whether file is grib or not\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgdt_to_gds\fP (igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)"
+.br
+.RI "\fIConvert from the grib2 grid description template array used by the ncep grib2 library, to the grib1 grid description section array used by ncep ipolates library\&. \fP"
+.ti -1c
+.RI "subroutine \fBgrib2_check\fP (kgds, igdstmplen)"
+.br
+.RI "\fIDetermine length of grib2 gds template array, which is a function of the map projection\&. \fP"
+.ti -1c
+.RI "subroutine \fBgrib2_free\fP (gfld)"
+.br
+.RI "\fIDeallocate the grib2 gribfield pointers\&. \fP"
+.ti -1c
+.RI "subroutine \fBgrib2_null\fP (gfld)"
+.br
+.RI "\fINullify the grib2 gribfield pointers\&. \fP"
+.ti -1c
+.RI "subroutine \fBgrib_check\fP (file_name, isgrib)"
+.br
+.RI "\fIDetermine whether file is grib or not\&. \fP"
+.ti -1c
+.RI "subroutine \fBinit_grib2\fP (century, year, month, day, hour, kgds, lat11, latlast, lon11, lonlast, listsec0, listsec1, igds, ipdstmpl, ipdsnum, igdstmpl, igdstmplen, idefnum, ideflist, ngrdpts)"
+.br
+.RI "\fIInitialize grib2 arrays required by the ncep g2 library according to grib1 gds information\&. \fP"
+.ti -1c
+.RI "subroutine \fBskgb2\fP (LUGB, ISEEK, MSEEK, LSKIP, LGRIB, I1)"
+.br
+.RI "\fIDetermine whether file is grib or not\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Determine whether file is grib or not\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2007-nov-28 
+.RE
+.PP
+
+.PP
+Definition in file \fBgrib_utils\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine gdt_to_gds (integer, intent(in)igdtnum, integer, dimension(igdtlen), intent(in)igdstmpl, integer, intent(in)igdtlen, integer, dimension(200), intent(out)kgds, integer, intent(out)ni, integer, intent(out)nj, real, intent(out)res)"
+
+.PP
+Convert from the grib2 grid description template array used by the ncep grib2 library, to the grib1 grid description section array used by ncep ipolates library\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIigdtnum\fP grib2 grid desc template number 
+.br
+\fIigdstmpl\fP grib2 grid desc template array 
+.br
+\fIigdtlen\fP grib2 grid desc template array size 
+.br
+\fIkgds\fP grib1 grid description section array used by ncep ipolates library\&. 
+.br
+\fIni\fP i grid dimensions 
+.br
+\fInj\fP j grid dimensions 
+.br
+\fIres\fP grid resolution in km
+.RE
+.PP
+condition codes: 50 - unrecognized model grid type; fatal
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014-Sep-26 
+.RE
+.PP
+
+.PP
+Definition at line 139 of file grib_utils\&.F90\&.
+.PP
+Referenced by model_grid::read_mdl_grid_info(), snowdat::readafwa(), snowdat::readautosnow(), and snowdat::readnesdis()\&.
+.SS "subroutine grib2_check (integer, dimension(200), intent(in)kgds, integer, intent(out)igdstmplen)"
+
+.PP
+Determine length of grib2 gds template array, which is a function of the map projection\&. 
+.PP
+\fBNote:\fP
+.RS 4
+call this routine before init_grib2\&.
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIkgds\fP grib1 gds array 
+.br
+\fIigdstmplen\fP length of gds template array\&.
+.RE
+.PP
+condition codes: 47 - unrecognized grid type; fatal
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014-Sep-28 
+.RE
+.PP
+
+.PP
+Definition at line 350 of file grib_utils\&.F90\&.
+.PP
+Referenced by snow2mdl::write_grib2()\&.
+.SS "subroutine grib2_free (type(gribfield), intent(inout)gfld)"
+
+.PP
+Deallocate the grib2 gribfield pointers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIgfld\fP a gribfield data structure
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014-Sep-28 
+.RE
+.PP
+
+.PP
+Definition at line 635 of file grib_utils\&.F90\&.
+.PP
+Referenced by snowdat::nh_climo_check(), model_grid::read_mdl_grid_info(), snowdat::readautosnow(), and snowdat::readnesdis()\&.
+.SS "subroutine grib2_null (type(gribfield), intent(inout)gfld)"
+
+.PP
+Nullify the grib2 gribfield pointers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIgfld\fP a gribfield data structure
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014-Sep-28 
+.RE
+.PP
+
+.PP
+Definition at line 610 of file grib_utils\&.F90\&.
+.PP
+Referenced by snowdat::nh_climo_check(), model_grid::read_mdl_grid_info(), snowdat::readafwa(), snowdat::readautosnow(), and snowdat::readnesdis()\&.
+.SS "subroutine grib_check (character*(*), intent(in)file_name, integer, intent(out)isgrib)"
+
+.PP
+Determine whether file is grib or not\&. program history log:
+.IP "\(bu" 2
+2007-nov-28 gayno - initial version
+.IP "\(bu" 2
+2011-apr-26 gayno - replace my simple-minded logic with call to w3lib routin skgb\&.
+.IP "\(bu" 2
+2014-feb-07 gayno - determine whether file is grib1 or grib2\&.
+.PP
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfile_name\fP - file to be checked 
+.br
+\fIisgrib\fP - '1' or '2' if grib1/2 file '0' if not grib
+.RE
+.PP
+input files:
+.IP "\(bu" 2
+file to be checked, fort\&.11
+.PP
+.PP
+condition codes: all fatal
+.IP "\(bu" 2
+bad file open, fort\&.11 
+.PP
+
+.PP
+Definition at line 23 of file grib_utils\&.F90\&.
+.PP
+References skgb2()\&.
+.PP
+Referenced by model_grid::read_mdl_grid_info(), snowdat::readafwa(), and snowdat::readnesdis()\&.
+.SS "subroutine init_grib2 (integer, intent(in)century, integer, intent(in)year, integer, intent(in)month, integer, intent(in)day, integer, intent(in)hour, integer, dimension(200), intent(in)kgds, real, intent(in)lat11, real, intent(in)latlast, real, intent(in)lon11, real, intent(in)lonlast, integer, dimension(2), intent(out)listsec0, integer, dimension(13), intent(out)listsec1, integer, dimension(5), intent(out)igds, integer, dimension(15), intent(out)ipdstmpl, integer, intent(out)ipdsnum, integer, dimension(igdstmplen), intent(out)igdstmpl, integer, intent(in)igdstmplen, integer, intent(out)idefnum, integer, intent(out)ideflist, integer, intent(out)ngrdpts)"
+
+.PP
+Initialize grib2 arrays required by the ncep g2 library according to grib1 gds information\&. The grib1 gds is held in the kgds array, which is used by the ncep ipolates and w3nco (grib 1) libraries\&.
+.PP
+Call routine grib2_check first to determine igdstmplen\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcentury\fP current date/time info 
+.br
+\fIyear\fP current date/time info 
+.br
+\fImonth\fP current date/time info 
+.br
+\fIday\fP current date/time info 
+.br
+\fIhour\fP current date/time info 
+.br
+\fIkgds\fP grib1 gds information 
+.br
+\fIigdstmplen\fP length of grib2 gdt template\&. 
+.br
+\fIlat11\fP lat of first grid point 
+.br
+\fIlon11\fP lon of first grid point 
+.br
+\fIlatlast\fP lat of last grid point 
+.br
+\fIlonlast\fP lon of last grid point 
+.br
+\fIigds\fP grib2 section 3 information\&. 
+.br
+\fIlistsec0\fP grib2 section 0 information\&. 
+.br
+\fIlistsec1\fP grib2 section 1 information\&. 
+.br
+\fIipdsnum\fP grib2 pds template number 
+.br
+\fIipdstmpl\fP grib2 pds template array 
+.br
+\fIigdstmpl\fP grib2 gds template array 
+.br
+\fIidefnum\fP information for non-reg grid, grid points in each row\&. 
+.br
+\fIideflist\fP information for non-reg grid, grid points in each row\&. 
+.br
+\fIngrdpts\fP number of model grid points\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014-Sep-28 
+.RE
+.PP
+
+.PP
+Definition at line 397 of file grib_utils\&.F90\&.
+.PP
+Referenced by snow2mdl::write_grib2()\&.
+.SS "subroutine skgb2 (integer, intent(in)LUGB, integer, intent(in)ISEEK, integer, intent(in)MSEEK, integer, intent(out)LSKIP, integer, intent(out)LGRIB, integer, intent(out)I1)"
+
+.PP
+Determine whether file is grib or not\&. Based on w3nco library routine skgb\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlugb\fP file unit number 
+.br
+\fIiseek\fP number of bits to skip before search\&. 
+.br
+\fImseek\fP max number of bytes to search\&. 
+.br
+\fIlskip\fP number of bytes to skip before message 
+.br
+\fIlgrib\fP number of bytes in message\&. '0' if not grib\&. 
+.br
+\fIi1\fP '1' or '2' if grib1/2 file\&. '0' if not grib\&.
+.RE
+.PP
+input file:
+.IP "\(bu" 2
+file to be checked, unit=lugb
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014-Feb-07 
+.RE
+.PP
+
+.PP
+Definition at line 75 of file grib_utils\&.F90\&.
+.PP
+Referenced by grib_check()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for emcsfc_snow2mdl from the source code\&.

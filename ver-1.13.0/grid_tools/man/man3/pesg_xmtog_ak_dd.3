@@ -1,0 +1,101 @@
+.TH "pesg::xmtog_ak_dd" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::xmtog_ak_dd \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBxmtog_ak_dd_g\fP (A, K, pdlat, pdlon, pdazi, delx, dely, xm, dlat, dlon, ff)"
+.br
+.RI "\fILike xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. \fP"
+.ti -1c
+.RI "subroutine \fBxmtog_ak_dd_m\fP (A, K, pdlat, pdlon, pdazi, xm, dlat, dlon, ff)"
+.br
+.RI "\fILike xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 55 of file pesg\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pesg::xmtog_ak_dd::xmtog_ak_dd_g (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)pdlat, real(dp), intent(in)pdlon, real(dp), intent(in)pdazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(2), intent(in)xm, real(dp), intent(out)dlat, real(dp), intent(out)dlon, logical, intent(out)ff)\fC [private]\fP"
+
+.PP
+Like xmtog_ak_rr_g, except lat, lon, azimuth, are expressed in degrees\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameters of an ESG mapping 
+.br
+\fIk\fP parameters of an ESG mapping 
+.br
+\fIpdlat\fP degrees latitude of projection center of the mapping 
+.br
+\fIpdlon\fP degrees longitude of projection center of the mapping 
+.br
+\fIpdazi\fP Azimuth of the mapping orientation about its center 
+.br
+\fIdelx\fP central x-spacing of the grid in radians 
+.br
+\fIdely\fP central y-spacing of the grid in radians 
+.br
+\fIxm\fP map coordinates, in grid units, of a point to be mapped 
+.br
+\fIdlat\fP degrees latitude of the point 
+.br
+\fIdlon\fP degrees longitude of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2116 of file pesg\&.f90\&.
+.SS "subroutine pesg::xmtog_ak_dd::xmtog_ak_dd_m (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)pdlat, real(dp), intent(in)pdlon, real(dp), intent(in)pdazi, real(dp), dimension(2), intent(in)xm, real(dp), intent(out)dlat, real(dp), intent(out)dlon, logical, intent(out)ff)\fC [private]\fP"
+
+.PP
+Like xmtog_ak_rr_m, except lat, lon, azimuth, are expressed in degrees\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP parameters of the ESG mapping 
+.br
+\fIk\fP parameters of the ESG mapping 
+.br
+\fIpdlat\fP degrees latitude of the projection center of the mapping 
+.br
+\fIpdlon\fP degrees longitude of the projection center of the mapping 
+.br
+\fIpdazi\fP Azimuth of the orientation of the mapping at its center 
+.br
+\fIxm\fP map space 2-vector coordinates of a point 
+.br
+\fIdlat\fP degrees latitude of the point 
+.br
+\fIdlon\fP degrees longitude of the point 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 2086 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

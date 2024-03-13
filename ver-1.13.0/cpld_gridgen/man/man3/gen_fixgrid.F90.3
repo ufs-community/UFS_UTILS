@@ -1,0 +1,60 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/gen_fixgrid.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/gen_fixgrid.F90 \- 
+.PP
+Generate fixed grid files required for coupled model\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "program \fBgen_fixgrid\fP"
+.br
+.RI "\fIGenerate fixed grid files required for coupled model using the MOM6 super grid file and ocean mask file\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Generate fixed grid files required for coupled model\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBgen_fixgrid\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "program gen_fixgrid ()"
+
+.PP
+Generate fixed grid files required for coupled model using the MOM6 super grid file and ocean mask file\&. It creates a main grid file which is then used to create subsequent files which are required to create the fix and IC files required for the S2S or S2SW application\&.
+.PP
+This executable created with this source code runs within the shell scrip cpld_gridgen\&.sh in \&.\&./\&.\&./ush, which utilizes both NCO (netCDF Operators) and ESMF command line functions\&. The shell script creates a run-time grid\&.nml from grid\&.nml\&.IN
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 16 of file gen_fixgrid\&.F90\&.
+.PP
+References topoedits::add_topoedits(), grdvars::allocate_all(), topoedits::apply_topoedits(), debugprint::checkpoint(), debugprint::checkseam(), debugprint::checkxlatlon(), vertices::fill_bottom(), vertices::fill_top(), vertices::fill_vertices(), angles::find_ang(), angles::find_angq(), mapped_mask::make_frac_land(), postwgts::make_postwgts(), inputnml::read_inputnml(), cicegrid::write_cicegrid(), scripgrid::write_scripgrid(), and tripolegrid::write_tripolegrid()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for cpld_gridgen from the source code\&.

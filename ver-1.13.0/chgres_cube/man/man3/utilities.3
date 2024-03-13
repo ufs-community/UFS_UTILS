@@ -1,0 +1,301 @@
+.TH "utilities" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utilities \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcheck_cnwat\fP (cnwat, i_input, j_input)"
+.br
+.RI "\fIWhen using GEFS data, some points on the target grid have unreasonable canpy moisture content, so zero out any locations with unrealistic canopy moisture values (>0\&.5)\&. \fP"
+.ti -1c
+.RI "subroutine \fBcheck_soilt\fP (soilt, landmask, skint, ICET_DEFAULT, i_input, j_input, lsoil_input)"
+.br
+.RI "\fICheck for and replace certain values in soil temperature\&. \fP"
+.ti -1c
+.RI "subroutine \fBdint2p\fP (PPIN, XXIN, NPIN, PPOUT, XXOUT, NPOUT, LINLOG, XMSG, IER)"
+.br
+.RI "\fIPressure to presure vertical interpolation for tracers with linear or lnP interpolation\&. \fP"
+.ti -1c
+.RI "subroutine \fBerror_handler\fP (string, rc)"
+.br
+.RI "\fIGeneral error handler\&. \fP"
+.ti -1c
+.RI "subroutine \fBhandle_grib_error\fP (vname, lev, method, value, varnum, read_from_input, iret, var, var8, var3d)"
+.br
+.RI "\fIHandle GRIB2 read error based on the user selected method in the varmap file\&. \fP"
+.ti -1c
+.RI "subroutine \fBnetcdf_err\fP (err, string)"
+.br
+.RI "\fIError handler for netcdf\&. \fP"
+.ti -1c
+.RI "recursive subroutine \fBquicksort\fP (a, first, last)"
+.br
+.RI "\fISort an array of values\&. \fP"
+.ti -1c
+.RI "subroutine \fBto_lower\fP (strIn)"
+.br
+.RI "\fIConvert from upper to lowercase\&. \fP"
+.ti -1c
+.RI "character(len=len(strin)) function \fBto_upper\fP (strIn)"
+.br
+.RI "\fIConvert string from lower to uppercase\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 1 of file utils\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utilities::check_cnwat (real(esmf_kind_r8), dimension(i_input,j_input), intent(inout)cnwat, integer, intent(in)i_input, integer, intent(in)j_input)"
+
+.PP
+When using GEFS data, some points on the target grid have unreasonable canpy moisture content, so zero out any locations with unrealistic canopy moisture values (>0\&.5)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcnwat\fP [input] 2-dimensional canopy moisture content 
+.br
+\fIi_input\fP [in] i-dimension of input grid 
+.br
+\fIj_input\fP [in] j-dimension of input grid 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Larissa Reames CIMMS/NSSL 
+.RE
+.PP
+
+.PP
+Definition at line 264 of file utils\&.F90\&.
+.PP
+Referenced by sfc_input_data::read_input_sfc_grib2_file()\&.
+.SS "subroutine utilities::check_soilt (real(esmf_kind_r8), dimension(i_input,j_input,lsoil_input), intent(inout)soilt, integer(esmf_kind_i4), dimension(i_input,j_input), intent(in)landmask, real(esmf_kind_r8), dimension(i_input,j_input), intent(in)skint, real, intent(in)ICET_DEFAULT, integer, intent(in)i_input, integer, intent(in)j_input, integer, intent(in)lsoil_input)"
+
+.PP
+Check for and replace certain values in soil temperature\&. At open water points (landmask=0) use skin temperature as a filler value\&. At land points (landmask=1) with excessive soil temperature, replace soil temperature with skin temperature\&. In GEFSv12\&.0 data there are some erroneous missing values at land points which this corrects\&. At sea ice points (landmask=2), store a default ice column temperature because grib2 files do not have ice column temperature which FV3 expects at these points\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsoilt\fP [inout] 3-dimensional soil temperature arrray 
+.br
+\fIlandmask\fP [in] landmask of the input grid 
+.br
+\fIskint\fP [in] 2-dimensional skin temperature array 
+.br
+\fIICET_DEFAULT\fP [in] Default temperature to apply at ice points 
+.br
+\fIi_input\fP [in] i-dimension of input grid 
+.br
+\fIj_input\fP [in] j-dimension of input grid 
+.br
+\fIlsoil_input\fP [in] soil layers dimension of input grid 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Larissa Reames CIMMS/NSSL 
+.RE
+.PP
+
+.PP
+Definition at line 229 of file utils\&.F90\&.
+.PP
+Referenced by sfc_input_data::read_input_sfc_grib2_file()\&.
+.SS "subroutine utilities::dint2p (real*8, dimension(npin)PPIN, real*8, dimension(npin)XXIN, integerNPIN, real*8, dimension(npout)PPOUT, real*8, dimension(npout)XXOUT, integerNPOUT, integerLINLOG, real*8XMSG, integerIER)"
+
+.PP
+Pressure to presure vertical interpolation for tracers with linear or lnP interpolation\&. Input tracers on pres levels are interpolated to the target output pressure levels\&. The matching levels of input and output will keep the same\&. Extrapolation is also allowed but needs caution\&. The routine is mostly for GFSV16 combined grib2 input when spfh has missing levels in low and mid troposphere from U/T/HGT/DZDT\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIppin\fP 1d input pres levs 
+.br
+\fIxxin\fP 1d input tracer 
+.br
+\fInpin\fP number of input levs 
+.br
+\fIppout\fP 1d target pres levs 
+.br
+\fIxxout\fP 1d interpolated tracer 
+.br
+\fInpout\fP number of target levs 
+.br
+\fIlinlog\fP interp method\&.1:linear;not 1:log;neg:extrp allowed 
+.br
+\fIxmsg\fP fill values of missing levels (-999\&.0) 
+.br
+\fIier\fP error status\&. non 0: failed interpolation 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Jili Dong NCEP/EMC 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2021/07/30 
+.RE
+.PP
+
+.PP
+Definition at line 299 of file utils\&.F90\&.
+.PP
+Referenced by atm_input_data::read_input_atm_grib2_file()\&.
+.SS "subroutine utilities::error_handler (character(len=*), intent(in)string, integer, intent(in)rc)"
+
+.PP
+General error handler\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstring\fP error message 
+.br
+\fIrc\fP error status code 
+.RE
+.PP
+
+.PP
+Definition at line 12 of file utils\&.F90\&.
+.PP
+Referenced by surface::adjust_soil_levels(), surface::adjust_soilt_for_terrain(), atmosphere::atmosphere_driver(), surface::calc_liq_soil_moisture(), chgres(), atmosphere::compute_zh(), atmosphere::convert_winds_to_uv(), atm_input_data::convert_winds_to_xyz(), atmosphere::create_atm_b4adj_esmf_fields(), atmosphere::create_atm_esmf_fields(), surface::create_nst_esmf_fields(), static_data::create_static_fields(), surface::create_surface_esmf_fields(), model_grid::define_input_grid_gaussian(), model_grid::define_input_grid_grib2(), model_grid::define_input_grid_mosaic(), model_grid::define_target_grid(), model_grid::gdt_to_gds(), model_grid::get_model_latlons(), model_grid::get_model_mask_terrain(), static_data::get_static_fields(), handle_grib_error(), atmosphere::horiz_interp_thomp_mp_climo(), atm_input_data::init_atm_esmf_fields(), sfc_input_data::init_sfc_esmf_fields(), surface::interp(), atmosphere::newpr1(), atmosphere::newps(), surface::nst_land_fill(), surface::qc_check(), sfc_input_data::read_grib_soil(), atm_input_data::read_input_atm_gaussian_nemsio_file(), atm_input_data::read_input_atm_gaussian_netcdf_file(), atm_input_data::read_input_atm_gfs_gaussian_nemsio_file(), atm_input_data::read_input_atm_gfs_sigio_file(), atm_input_data::read_input_atm_grib2_file(), atm_input_data::read_input_atm_restart_file(), atm_input_data::read_input_atm_tiled_history_file(), nst_input_data::read_input_nst_data(), nst_input_data::read_input_nst_nemsio_file(), nst_input_data::read_input_nst_netcdf_file(), sfc_input_data::read_input_sfc_gaussian_nemsio_file(), sfc_input_data::read_input_sfc_gfs_gaussian_nemsio_file(), sfc_input_data::read_input_sfc_gfs_sfcio_file(), sfc_input_data::read_input_sfc_grib2_file(), sfc_input_data::read_input_sfc_netcdf_file(), sfc_input_data::read_input_sfc_restart_file(), program_setup::read_setup_namelist(), thompson_mp_climo_data::read_thomp_mp_climo_data(), program_setup::read_varmap(), atmosphere::read_vcoord_info(), atm_input_data::read_winds(), surface::regrid_many(), surface::rescale_soil_moisture(), surface::roughness(), surface::search_many(), surface::surface_driver(), surface::update_landmask(), atmosphere::vintg(), atmosphere::vintg_thomp_mp_climo(), atmosphere::vintg_wam(), write_data::write_fv3_atm_bndy_data_netcdf(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "subroutine utilities::handle_grib_error (character(len=20), intent(in)vname, character(len=20), intent(in)lev, character(len=20), intent(in)method, real(esmf_kind_r4), intent(in)value, integer, intent(in)varnum, logical, dimension(:), intent(inout)read_from_input, integer, intent(inout)iret, real(esmf_kind_r4), dimension(:,:), intent(inout), optionalvar, real(esmf_kind_r8), dimension(:,:), intent(inout), optionalvar8, real(esmf_kind_r8), dimension(:,:,:), intent(inout), optionalvar3d)"
+
+.PP
+Handle GRIB2 read error based on the user selected method in the varmap file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIvname\fP grib2 variable name 
+.br
+\fIlev\fP grib2 variable level 
+.br
+\fImethod\fP how missing data is handled 
+.br
+\fIvalue\fP fill value for missing data 
+.br
+\fIvarnum\fP grib2 variable number 
+.br
+\fIiret\fP return status code 
+.br
+\fIvar\fP 4-byte array of corrected data 
+.br
+\fIvar8\fP 8-byte array of corrected data 
+.br
+\fIvar3d\fP 3-d array of corrected data 
+.br
+\fIread_from_input\fP logical array indicating if variable was read in 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Larissa Reames 
+.RE
+.PP
+
+.PP
+Definition at line 120 of file utils\&.F90\&.
+.PP
+References error_handler()\&.
+.PP
+Referenced by sfc_input_data::read_grib_soil(), atm_input_data::read_input_atm_grib2_file(), sfc_input_data::read_input_sfc_grib2_file(), and atm_input_data::read_winds()\&.
+.SS "subroutine utilities::netcdf_err (integer, intent(in)err, character(len=*), intent(in)string)"
+
+.PP
+Error handler for netcdf\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIerr\fP error status code 
+.br
+\fIstring\fP error message 
+.RE
+.PP
+
+.PP
+Definition at line 34 of file utils\&.F90\&.
+.PP
+Referenced by model_grid::define_input_grid_gaussian(), model_grid::define_input_grid_mosaic(), model_grid::define_target_grid(), model_grid::get_model_latlons(), model_grid::get_model_mask_terrain(), sfc_input_data::read_fv3_grid_data_netcdf(), atm_input_data::read_input_atm_gaussian_netcdf_file(), atm_input_data::read_input_atm_restart_file(), atm_input_data::read_input_atm_tiled_history_file(), sfc_input_data::read_input_sfc_grib2_file(), sfc_input_data::read_input_sfc_netcdf_file(), sfc_input_data::read_input_sfc_restart_file(), static_data::read_static_file(), thompson_mp_climo_data::read_thomp_mp_climo_data(), write_data::write_fv3_atm_bndy_data_netcdf(), write_data::write_fv3_atm_data_netcdf(), write_data::write_fv3_atm_header_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
+.SS "recursive subroutine utilities::quicksort (real*8, dimension(*)a, integerfirst, integerlast)"
+
+.PP
+Sort an array of values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP the sorted array 
+.br
+\fIfirst\fP the first value of sorted array 
+.br
+\fIlast\fP the last value of sorted array 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Jili Dong NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 186 of file utils\&.F90\&.
+.PP
+Referenced by atm_input_data::read_input_atm_grib2_file()\&.
+.SS "subroutine utilities::to_lower (character(len=*), intent(inout)strIn)"
+
+.PP
+Convert from upper to lowercase\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Clive Page
+.RE
+.PP
+Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstrIn\fP string to convert 
+.RE
+.PP
+
+.PP
+Definition at line 87 of file utils\&.F90\&.
+.PP
+Referenced by program_setup::read_setup_namelist()\&.
+.SS "character(len=len(strin)) function utilities::to_upper (character(len=*), intent(in)strIn)"
+
+.PP
+Convert string from lower to uppercase\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Clive Page
+.RE
+.PP
+Adapted from http://www.star.le.ac.uk/~cgp/fortran.html (25 May 2012)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstrIn\fP string to convert 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+strOut string in uppercase 
+.RE
+.PP
+
+.PP
+Definition at line 62 of file utils\&.F90\&.
+.PP
+Referenced by sfc_input_data::read_input_sfc_grib2_file()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

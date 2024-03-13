@@ -1,0 +1,58 @@
+.TH "pmat2::udlby" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2::udlby \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBudlby\fP (my, mah1, mah2, mx, a, v)"
+.br
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 72 of file pmat2\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat2::udlby::udlby (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(my,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)\fC [private]\fP"
+
+.PP
+Back-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImy\fP the number of rows assumed for A and length of Y-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImx\fP number of parallel Y-vectors inverted 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB or, if N=NA, by LDUB 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 1039 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

@@ -1,0 +1,1706 @@
+.TH "pmat2" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat2 \- 
+.PP
+Routines dealing with the operations of banded matrices\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBavco\fP"
+.br
+.ti -1c
+.RI "interface \fBcad1b\fP"
+.br
+.ti -1c
+.RI "interface \fBcad2b\fP"
+.br
+.ti -1c
+.RI "interface \fBclipb\fP"
+.br
+.ti -1c
+.RI "interface \fBcsb1b\fP"
+.br
+.ti -1c
+.RI "interface \fBcsb2b\fP"
+.br
+.ti -1c
+.RI "interface \fBdfco\fP"
+.br
+.ti -1c
+.RI "interface \fBdfco2\fP"
+.br
+.ti -1c
+.RI "interface \fBl1ubb\fP"
+.br
+.ti -1c
+.RI "interface \fBl1ueb\fP"
+.br
+.ti -1c
+.RI "interface \fBldltb\fP"
+.br
+.ti -1c
+.RI "interface \fBldub\fP"
+.br
+.ti -1c
+.RI "interface \fBlinbv\fP"
+.br
+.ti -1c
+.RI "interface \fBltdlbv\fP"
+.br
+.ti -1c
+.RI "interface \fBu1lbv\fP"
+.br
+.ti -1c
+.RI "interface \fBu1lbx\fP"
+.br
+.ti -1c
+.RI "interface \fBu1lby\fP"
+.br
+.ti -1c
+.RI "interface \fBu1lvb\fP"
+.br
+.ti -1c
+.RI "interface \fBu1lxb\fP"
+.br
+.ti -1c
+.RI "interface \fBu1lyb\fP"
+.br
+.ti -1c
+.RI "interface \fBudlb\fP"
+.br
+.ti -1c
+.RI "interface \fBudlbv\fP"
+.br
+.ti -1c
+.RI "interface \fBudlbx\fP"
+.br
+.ti -1c
+.RI "interface \fBudlby\fP"
+.br
+.ti -1c
+.RI "interface \fBudlvb\fP"
+.br
+.ti -1c
+.RI "interface \fBudlxb\fP"
+.br
+.ti -1c
+.RI "interface \fBudlyb\fP"
+.br
+.ti -1c
+.RI "interface \fBwrtb\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBavco\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "\fICompute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBcad1b\fP (m1, mah1, mah2, mirror2, a)"
+.br
+.RI "\fIIncorporate operand symmetry and clip near end-1 of a band matrix operator\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBcad2b\fP (m1, m2, mah1, mah2, mirror2, a)"
+.br
+.RI "\fIIncorporate symmetry and clip near end-2 of a band matrix\&. \fP"
+.ti -1c
+.RI "pure subroutine \fBclib_c\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "\fIClip (set to zero) the unused values in a banded matrix representation\&. \fP"
+.ti -1c
+.RI "pure subroutine \fBclib_d\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "\fIClip (set to zero) the unused values in a banded matrix representation\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBcsb1b\fP (m1, mah1, mah2, mirror2, a)"
+.br
+.RI "\fILike \fBcad1b\fP, but for antisymmetric operand\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBcsb2b\fP (m1, m2, mah1, mah2, mirror2, a)"
+.br
+.RI "\fIIncorporate operand antisymmetry and clip near end-2 of a band matrix\&. \fP"
+.ti -1c
+.RI "subroutine \fBdavco\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "\fIDouble precision version of subroutine avco for midpoint interpolation\&. \fP"
+.ti -1c
+.RI "subroutine \fBddfco\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "\fIDouble precision version of dfco for compact differentiation coefficients\&. \fP"
+.ti -1c
+.RI "subroutine \fBddfco2\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "\fIDouble precision version of DFCO2 to get 2nd-derivative coefficients\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBdfco\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "\fICompute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBdfco2\fP (na, nb, za, zb, z0, a, b)"
+.br
+.RI "\fICompute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. \fP"
+.ti -1c
+.RI "subroutine \fBdl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "\fIDouble precision version of L1UBB\&. \fP"
+.ti -1c
+.RI "subroutine \fBdl1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "\fIDouble precision version of L1UEB\&. \fP"
+.ti -1c
+.RI "subroutine \fBdldltb\fP (m, mah1, a)"
+.br
+.RI "\fI[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. \fP"
+.ti -1c
+.RI "subroutine \fBdldub\fP (m, mah1, mah2, a)"
+.br
+.RI "\fI[L]*[D]*[U] factoring of double precision band-matrix\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBl1ubb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "\fI[L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBl1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
+.br
+.RI "\fIForm the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBldltb\fP (m, mah1, a)"
+.br
+.RI "\fI[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBldub\fP (m, mah1, mah2, a)"
+.br
+.RI "\fI[L]*[D]*[U] factoring of single precision band-matrix\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBlinbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "\fISolve LINear system with square Banded-matrix and vector V\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBltdlbv\fP (m, mah1, a, v)"
+.br
+.RI "\fILike udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) \fP"
+.ti -1c
+.RI "subroutine \fBtavco\fP (xa, xb, a, b)"
+.br
+.RI "\fISimplified computation of compact midpoint interpolation coefficients\&. \fP"
+.ti -1c
+.RI "subroutine \fBtdfco\fP (xa, xb, a, b)"
+.br
+.RI "\fISimplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. \fP"
+.ti -1c
+.RI "subroutine \fBtdfco2\fP (xa, xb, a, b)"
+.br
+.RI "\fISimplified computation of compact 2nd-derivative coefficients\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBu1lbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "\fIBack-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBu1lbx\fP (mx, mah1, mah2, my, a, v)"
+.br
+.RI "\fISpecial back-substitution step of parallel linear inversion involving Banded matrix and X-right-Vectors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBu1lby\fP (my, mah1, mah2, mx, a, v)"
+.br
+.RI "\fISpecial Back-substitution step of parallel linear inversion involving Banded matrix and Y-right-Vectors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBu1lvb\fP (m, mah1, mah2, v, a)"
+.br
+.RI "\fISpecial Back-substitution step of linear inversion involving left-Vector and Banded matrix\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBu1lxb\fP (mx, mah1, mah2, my, v, a)"
+.br
+.RI "\fISpecial Back-substitution step of parallel linear inversion involving Banded matrix and X-left-Vectors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBu1lyb\fP (my, mah1, mah2, mx, v, a)"
+.br
+.RI "\fISpecial Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBudlb\fP (m, mah1, mah2, a)"
+.br
+.RI "\fI[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal \fP"
+.ti -1c
+.RI "subroutine, public \fBudlbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "\fIBack-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBudlbx\fP (mx, mah1, mah2, my, a, v)"
+.br
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBudlby\fP (my, mah1, mah2, mx, a, v)"
+.br
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBudlvb\fP (m, mah1, mah2, v, a)"
+.br
+.RI "\fIBack-substitution step of linear inversion involving row-Vector and Banded matrix\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBudlxb\fP (mx, mah1, mah2, my, v, a)"
+.br
+.RI "\fIBack-substitution step of parallel linear inversion involving Banded matrix and row-X-Vectors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBudlyb\fP (my, mah1, mah2, mx, v, a)"
+.br
+.RI "\fIBACk-substitution step of parallel linear inversion involving Banded matrix and row-Y-Vectors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBwrtb\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "\fIConvenient routine for interactively writing out the real contents of a band matrix\&. \fP"
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "pure subroutine \fBclib\fP (m1, m2, mah1, mah2, a)"
+.br
+.RI "\fIClip (set to zero) the unused values in a banded matrix representation\&. \fP"
+.ti -1c
+.RI "subroutine \fBdltdlbv\fP (m, mah1, a, v)"
+.br
+.RI "\fILike udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) \fP"
+.ti -1c
+.RI "subroutine \fBdudlb\fP (m, mah1, mah2, a)"
+.br
+.RI "\fI[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal \fP"
+.ti -1c
+.RI "subroutine \fBdudlbv\fP (m, mah1, mah2, a, v)"
+.br
+.RI "\fIBack-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. \fP"
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "real(dp), parameter \fBzero\fP =0"
+.br
+.RI "\fIDouble precision real zero\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Routines dealing with the operations of banded matrices\&. 
+
+The three special routines allow the construction of compact or conventional interpolation and differencing stencils to a general order of accuracy\&. These are:
+.IP "\(bu" 2
+\fBavco()\fP Averaging, or interpolating;
+.IP "\(bu" 2
+\fBdfco()\fP Differentiating (once);
+.IP "\(bu" 2
+\fBdfco2()\fP Differentiating (twice)\&.
+.PP
+.PP
+Other routines provide the tools for applying compact schemes, and for the construction and application of recursive filters\&.
+.PP
+Last modified (Purser): January 6th 2005 added nonredundant ldltb and ltdlbv routines for symmetric matrices, and remove obsolescent routines\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994/1999 
+.RE
+.PP
+
+.PP
+Definition at line 21 of file pmat2\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public \fBpmat2::avco\fP (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)"
+
+.PP
+Compute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIna\fP number of t-points operated on by this row of the A of (*) 
+.br
+\fInb\fP number of s-points operated on by this row of the B of (*) 
+.br
+\fIza\fP coordinates of t-points used in this row of (*) 
+.br
+\fIzb\fP coordinates of s-points used in this row of (*) 
+.br
+\fIz0\fP nominal point of application of this row of (*) 
+.br
+\fIa\fP the NA coefficients A for this scheme 
+.br
+\fIb\fP the NB coefficients B for this scheme 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 99 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::cad1b\fP (integer(spi), intent(in)m1, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(0:m1-1,-mah1:mah2), intent(inout)a)"
+
+.PP
+Incorporate operand symmetry and clip near end-1 of a band matrix operator\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP Size of implied full matrix 
+.br
+\fImah1\fP Left semi-bandwidths (subdiagonals) of A\&. 
+.br
+\fImah2\fP Right semi-bandwidths (superdiagonals) of A\&. 
+.br
+\fImirror2\fP 2*location of symmetry axis relative to end-1 operand element\&. 
+.br
+\fIa\fP Input operator, output as symmetrized and clipped at end-1 Note: although m2 is not used here, it IS used in companion routines \fBcad2b\fP and \fBcsb2b\fP; it is retained in the interests of uniformity\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 425 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::cad2b\fP (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(1-m1:0,m1-m2-mah1:m1-m2+mah2), intent(inout)a)"
+
+.PP
+Incorporate symmetry and clip near end-2 of a band matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP Number of rows of full matrix A 
+.br
+\fIm2\fP Number of columns of implied full matrix A 
+.br
+\fImah1\fP Left semi-bandwidths (subdiagonals) of A\&. 
+.br
+\fImah2\fP Right semi-bandwidths (superdiagonals) of A\&. 
+.br
+\fImirror2\fP 2*location of symmetry axis relative to end-2 operand element\&. 
+.br
+\fIa\fP Input operator, output as symmetrized and clipped at end-2\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 476 of file pmat2\&.f90\&.
+.SS "pure subroutine pmat2::clib (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m1,-mah1:mah2), intent(inout)a)\fC [private]\fP"
+
+.PP
+Clip (set to zero) the unused values in a banded matrix representation\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP number of matrix rows 
+.br
+\fIm2\fP number of matrix columns 
+.br
+\fImah1\fP number of subdiagonals 
+.br
+\fImah2\fP number of superdiagonals 
+.br
+\fIa\fP single precision matrix elements, stored compactly as rows 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 369 of file pmat2\&.f90\&.
+.SS "pure subroutine pmat2::clib_c (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, complex(dpc), dimension(m1,-mah1:mah2), intent(inout)a)"
+
+.PP
+Clip (set to zero) the unused values in a banded matrix representation\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP number of matrix rows 
+.br
+\fIm2\fP number of matrix columns 
+.br
+\fImah1\fP number of subdiagonals 
+.br
+\fImah2\fP number of superdiagonals 
+.br
+\fIa\fP complex matrix elements, stored compactly as rows 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 405 of file pmat2\&.f90\&.
+.SS "pure subroutine pmat2::clib_d (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m1,-mah1:mah2), intent(inout)a)"
+
+.PP
+Clip (set to zero) the unused values in a banded matrix representation\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP number of matrix rows 
+.br
+\fIm2\fP number of matrix columns 
+.br
+\fImah1\fP number of subdiagonals 
+.br
+\fImah2\fP number of superdiagonals 
+.br
+\fIa\fP double precision matrix elements, stored compactly as rows 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 387 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::csb1b\fP (integer(spi), intent(in)m1, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(0:m1-1,-mah1:mah2), intent(inout)a)"
+
+.PP
+Like \fBcad1b\fP, but for antisymmetric operand\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP Size of implied full matrix 
+.br
+\fImah1\fP Left semi-bandwidths (subdiagonals) of A\&. 
+.br
+\fImah2\fP Right semi-bandwidths (superdiagonals) of A\&. 
+.br
+\fImirror2\fP 2*location of symmetry axis relative to end-1 operand element\&. 
+.br
+\fIa\fP Input operator, output as clipped antisymmetric at end-1\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 450 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::csb2b\fP (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mirror2, real(sp), dimension(1-m1:0,m1-m2-mah1:m1-m2+mah2), intent(inout)a)"
+
+.PP
+Incorporate operand antisymmetry and clip near end-2 of a band matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP Number of rows of matrix A 
+.br
+\fIm2\fP Number of columns of matrix A 
+.br
+\fImah1\fP Left semi-bandwidths (subdiagonals) of A\&. 
+.br
+\fImah2\fP Right semi-bandwidths (superdiagonals) of A\&. 
+.br
+\fImirror2\fP 2*location of symmetry axis relative to end-2 operand element\&. 
+.br
+\fIa\fP Input operator, output as antisymmetrized and clipped at end-2\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 503 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::davco (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)"
+
+.PP
+Double precision version of subroutine avco for midpoint interpolation\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIna\fP number of target points involved in formula 
+.br
+\fInb\fP number of source points involved in formula 
+.br
+\fIza\fP coordinates of target points 
+.br
+\fIzb\fP coordinates of source points 
+.br
+\fIz0\fP nominal point of application of compact interpolation formula 
+.br
+\fIa\fP the coefficients A for this scheme 
+.br
+\fIb\fP the coefficients B for this scheme 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 133 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::ddfco (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)"
+
+.PP
+Double precision version of dfco for compact differentiation coefficients\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIna\fP number of A coefficients multiplying derivatives 
+.br
+\fInb\fP number of B coefficients multiplying cumulatives 
+.br
+\fIza\fP coordinates of the density (d) points 
+.br
+\fIzb\fP coordinates of the cumulative (c) points 
+.br
+\fIz0\fP nominal point of application of the compact formula 
+.br
+\fIa\fP the A-coefficients for this scheme 
+.br
+\fIb\fP the B-coefficients for this scheme 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 224 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::ddfco2 (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)"
+
+.PP
+Double precision version of DFCO2 to get 2nd-derivative coefficients\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIna\fP number of 2nd-derivative (d) points in compact formula 
+.br
+\fInb\fP number of source points (c) 
+.br
+\fIza\fP coordinates of 2nd-derivative points 
+.br
+\fIzb\fP coordinates of source points 
+.br
+\fIz0\fP nominal coordinate of application 
+.br
+\fIa\fP coefficients A for derivative points 
+.br
+\fIb\fP coefficients B for source points 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 317 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::dfco\fP (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)"
+
+.PP
+Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIna\fP number of d-points operated on by this row of the A of (*) 
+.br
+\fInb\fP number of c-points operated on by this row of the B of (*) 
+.br
+\fIza\fP coordinates of d-points used in this row of (*) 
+.br
+\fIzb\fP coordinates of c-points used in this row of (*) 
+.br
+\fIz0\fP nominal point of application of this row of (*) 
+.br
+\fIA\fP the A-coefficients for this scheme 
+.br
+\fIB\fP the B-coefficients for this scheme 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 189 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::dfco2\fP (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)"
+
+.PP
+Compute one row of the coefficients for either the compact second- differencing scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) Where d is the second-derivative of c\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIna\fP number of d-points operated on by this row of the A of (*) 
+.br
+\fInb\fP number of c-points operated on by this row of the B of (*) 
+.br
+\fIza\fP coordinates of d-points used in this row of (*) 
+.br
+\fIzb\fP coordinates of c-points used in this row of (*) 
+.br
+\fIz0\fP nominal point of application of this row of (*) 
+.br
+\fIa\fP the NA coefficients A for this scheme 
+.br
+\fIb\fP the NB coefficients B for this scheme 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 282 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dl1ubb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(dp), dimension(m,-mah1:mah2), intent(inout)a, real(dp), dimension(m,-mbh1:mbh2), intent(inout)b)"
+
+.PP
+Double precision version of L1UBB\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP Number of rows of A and B 
+.br
+\fImah1\fP left half-width of fortran array A 
+.br
+\fImah2\fP right half-width of fortran array A 
+.br
+\fImbh1\fP left half-width of fortran array B 
+.br
+\fImbh2\fP left half-width of fortran array B 
+.br
+\fIa\fP Input double precision band matrix A; output factors encoded as [D**-1 * L * D]+[U-I] 
+.br
+\fIb\fP Input double precision band matrix B; output [D**-1 B] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 770 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dl1ueb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(dp), dimension(0:,-mah1:), intent(inout)a, real(dp), dimension(:,-mbh1:), intent(inout)b)"
+
+.PP
+Double precision version of L1UEB\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of rows of band matrices A and B 
+.br
+\fImah1\fP number of subdiagonals of A 
+.br
+\fImah2\fP number of superdiagonals of A 
+.br
+\fImbh1\fP number of subdiagonals of B 
+.br
+\fImbh2\fP number of superdiagonals of B 
+.br
+\fIa\fP Input matrix A; output encoded L, D, U, factors 
+.br
+\fIb\fP Input matrix B; output D**-1 * B 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 854 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dldltb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(inout)a)"
+
+.PP
+[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP size of symmetric matrix A 
+.br
+\fImah1\fP semi-bandwidth of matrix A 
+.br
+\fIa\fP input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 644 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dldub (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(inout)a)"
+
+.PP
+[L]*[D]*[U] factoring of double precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP The number of rows of array A 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIa\fP input as the asymmetric band matrix, [A]\&. On output, it contains the factors in the encoding, [L-I]+[D**-1]+[U-I], I=identity\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 570 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dltdlbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(in)a, real(dp), dimension(m), intent(inout)v)\fC [private]\fP"
+
+.PP
+Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB 
+.br
+\fIv\fP input as right-hand-side vector, output as solution vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 979 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dudlb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(inout)a)\fC [private]\fP"
+
+.PP
+[U]*[D]*[L] factoring of double precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of rows of A 
+.br
+\fImah1\fP number of subdiagonals of A 
+.br
+\fImah2\fP number of superdiagonals of A 
+.br
+\fIa\fP Input double precision band matrix A; output its factors encoded as [U-I]+[D**-1]+[L-I] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 703 of file pmat2\&.f90\&.
+.PP
+References pmat2::ldub::dldub()\&.
+.SS "subroutine pmat2::dudlbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(in)a, real(dp), dimension(m), intent(inout)v)\fC [private]\fP"
+
+.PP
+Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. Output vector is [U**-1]*[D**-1]*[L**-1]*v
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIa\fP encodes the L*D*U factorization of the linear-system matrix, as supplied by subroutine LDUB, in double precision 
+.br
+\fIv\fP input as right-hand-side vector, output as solution vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 920 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::l1ubb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(sp), dimension(m,-mah1:mah2), intent(inout)a, real(sp), dimension(m,-mbh1:mbh2), intent(inout)b)"
+
+.PP
+[L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP Number of rows of A and B 
+.br
+\fImah1\fP number of subdiagonals of A 
+.br
+\fImah2\fP number of superdiagonals of A 
+.br
+\fImbh1\fP number of subdiagonals of B 
+.br
+\fImbh2\fP number of superdiagonals of B 
+.br
+\fIa\fP input as band matrix, output as lower and upper triangulars with 1s implicitly assumed to lie on the main diagonal\&. The product of these triangular matrices is [D**-1]*[A], where [D] is a diagonal matrix\&. 
+.br
+\fIb\fP Input single precision band matrix B; output [D**-1 B] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition at line 732 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::l1ueb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(sp), dimension(0:m,-mah1:mah2), intent(inout)a, real(sp), dimension(m,-mbh1:mbh2), intent(inout)b)"
+
+.PP
+Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. This is a special adaptation of L1UBB used to process quadrature weights for QEDBV etc in which the initial quadrature value is provided as input instead of being implicitly assumed zero (which is the case for QZDBV etc)\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of rows of B, one less than the rows of A (which has 'row 0') 
+.br
+\fImah1\fP left half-width of fortran array A 
+.br
+\fImah2\fP right half-width of fortran array A 
+.br
+\fImbh1\fP left half-width of fortran array B 
+.br
+\fImbh2\fP right half-width of fortran array B 
+.br
+\fIa\fP input as band matrix, output as lower and upper triangulars with 1s implicitly assumed to lie on the main diagonal\&. The product of these triangular matrices is [D**-1]*[A], where [D] is a diagonal matrix\&. 
+.br
+\fIb\fP in as band matrix, out as same but premultiplied by diagonal [D**-1] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1998 
+.RE
+.PP
+
+.PP
+Definition at line 817 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::ldltb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(inout)a)"
+
+.PP
+[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP size of symmetric matrix A 
+.br
+\fImah1\fP semi-bandwidth of matrix A 
+.br
+\fIa\fP input lower (left) part of symmetric A; output its factors encoded as [L-I]+[D**-1] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 608 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::ldub\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a)"
+
+.PP
+[L]*[D]*[U] factoring of single precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP The number of rows of array A 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIa\fP input as the asymmetric band matrix, [A]\&. On output, it contains the factors in the encoding, [L-I]+[D**-1]+[U-I], I=identity\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 531 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::linbv\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a, real(sp), dimension(m), intent(inout)v)"
+
+.PP
+Solve LINear system with square Banded-matrix and vector V\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP order of matrix A 
+.br
+\fImah1\fP left half-bandwidth of A 
+.br
+\fImah2\fP right half-bandwidth of A 
+.br
+\fIa\fP system matrix on input, its [L]*[D**-1]*[U] factorization on exit 
+.br
+\fIv\fP vector of right-hand-sides on input, solution vector on exit 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 1322 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::ltdlbv\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(in)a, real(sp), dimension(m), intent(inout)v)"
+
+.PP
+Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fIa\fP encodes the L*D*L^T factorization of the linear-system matrix, as supplied by subroutine LDLTB 
+.br
+\fIv\fP input as right-hand-side vector, output as solution vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 949 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::tavco (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)"
+
+.PP
+Simplified computation of compact midpoint interpolation coefficients\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxa\fP coordinates of target points relative to point of application 
+.br
+\fIxb\fP coordinates of source points relative to point of application 
+.br
+\fIa\fP the coefficients A for this scheme 
+.br
+\fIb\fP the coefficients B for this scheme 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 164 of file pmat2\&.f90\&.
+.PP
+References pmat2::avco::davco()\&.
+.SS "subroutine pmat2::tdfco (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)"
+
+.PP
+Simplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxa\fP coordinates, relative to point of application, of d values 
+.br
+\fIxb\fP coordinates, relatuve to point of application, of c values 
+.br
+\fIa\fP the coefficients, A, for this scheme 
+.br
+\fIb\fP the coefficients, B, for this scheme 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 257 of file pmat2\&.f90\&.
+.PP
+References pmat2::dfco::ddfco()\&.
+.SS "subroutine pmat2::tdfco2 (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)"
+
+.PP
+Simplified computation of compact 2nd-derivative coefficients\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxa\fP Relative coordinates of derivatives 
+.br
+\fIxb\fP Relative coordinates of source points 
+.br
+\fIa\fP coefficients A for the derivatives in compact scheme 
+.br
+\fIb\fP coefficients B for source values in the compact scheme 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 349 of file pmat2\&.f90\&.
+.PP
+References pmat2::dfco2::ddfco2()\&.
+.SS "subroutine, public \fBpmat2::u1lbv\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(in)a, real(sp), dimension(m), intent(inout)v)"
+
+.PP
+Back-substitution step ((U**-1)*(L**-1)) of linear inversion involving special Banded matrix and right-Vector\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIa\fP encodes the [L]*[U] factorization of the linear-system matrix, as supplied by subroutine L1UBB 
+.br
+\fIv\fP input as right-hand-side vector, output as solution vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition at line 1154 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lbx\fP (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)"
+
+.PP
+Special back-substitution step of parallel linear inversion involving Banded matrix and X-right-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImx\fP the number of rows assumed for A and length of X-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImy\fP number of parallel X-vectors inverted 
+.br
+\fIa\fP encodes the [L]*[U] factorization of the linear-system matrix, as supplied by subroutine L1UBB 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition at line 1185 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lby\fP (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(my,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)"
+
+.PP
+Special Back-substitution step of parallel linear inversion involving Banded matrix and Y-right-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImy\fP the number of rows assumed for A and length of Y-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImx\fP number of parallel Y-vectors inverted 
+.br
+\fIa\fP encodes the [L]*[U] factorization of the linear-system matrix, as supplied by subroutine L1UBB 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition at line 1213 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lvb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m), intent(inout)v, real(sp), dimension(m,-mah1:mah2), intent(in)a)"
+
+.PP
+Special Back-substitution step of linear inversion involving left-Vector and Banded matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and columns for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIv\fP input as right-hand-side row-vector, output as solution vector 
+.br
+\fIa\fP encodes the special [L]*[U] factorization of the linear-system matrix, as supplied by subroutine L1UBB 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition at line 1239 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lxb\fP (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(mx,-mah1:mah2), intent(in)a)"
+
+.PP
+Special Back-substitution step of parallel linear inversion involving Banded matrix and X-left-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImx\fP the number of rows assumed for A and length of X-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImy\fP number of parallel X-vectors inverted 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.br
+\fIa\fP encodes the special [L]*[U] factorization of the linear-system matrix, as supplied by subroutine L1UBB 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition at line 1270 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::u1lyb\fP (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(my,-mah1:mah2), intent(in)a)"
+
+.PP
+Special Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImy\fP the number of rows assumed for A and length of Y-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImx\fP number of parallel Y-vectors inverted 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.br
+\fIa\fP encodes the [L]*[U] factorization of the linear-system matrix, as supplied by subroutine L1UBB 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition at line 1298 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a)"
+
+.PP
+[U]*[D]*[L] factoring of single precision band matrix A [U] is upper triangular with unit main diagonal [D] is a diagonal matrix [L] is lower triangular with unit main diagonal 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP number of rows of A 
+.br
+\fImah1\fP number of subdiagonals of A 
+.br
+\fImah2\fP number of superdiagonals of A 
+.br
+\fIa\fP Input single precision band matrix A; output its factors encoded as [U-I]+[D**-1]+[L-I] 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 682 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlbv\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(in)a, real(sp), dimension(m), intent(inout)v)"
+
+.PP
+Back-substitution step of linear inversion involving banded LDU factored matrix and input vector, v\&. Output vector is [U**-1]*[D**-1]*[L**-1]*v
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIa\fP encodes the L*D*U factorization of the linear-system matrix, as supplied by subroutine LDUB, in single precision 
+.br
+\fIv\fP input as right-hand-side vector, output as solution vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 891 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlbx\fP (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)"
+
+.PP
+Back-substitution step of parallel linear inversion involving Banded matrix and X-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImx\fP the number of rows assumed for A and length of X-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImy\fP number of parallel X-vectors inverted 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB or, if N=NA, by LDUB 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 1010 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlby\fP (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(my,-mah1:mah2), intent(in)a, real(sp), dimension(mx,my), intent(inout)v)"
+
+.PP
+Back-substitution step of parallel linear inversion involving Banded matrix and Y-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImy\fP the number of rows assumed for A and length of Y-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImx\fP number of parallel Y-vectors inverted 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB or, if N=NA, by LDUB 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 1039 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlvb\fP (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m), intent(inout)v, real(sp), dimension(m,-mah1:mah2), intent(in)a)"
+
+.PP
+Back-substitution step of linear inversion involving row-Vector and Banded matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP the number of rows assumed for A and columns for V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fIv\fP input as right-hand-side row-vector, output as solution vector 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 1066 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlxb\fP (integer(spi), intent(in)mx, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)my, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(mx,-mah1:mah2), intent(in)a)"
+
+.PP
+Back-substitution step of parallel linear inversion involving Banded matrix and row-X-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImx\fP the number of rows assumed for A and length of X-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImy\fP number of parallel X-vectors inverted 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 1098 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::udlyb\fP (integer(spi), intent(in)my, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mx, real(sp), dimension(mx,my), intent(inout)v, real(sp), dimension(my,-mah1:mah2), intent(in)a)"
+
+.PP
+BACk-substitution step of parallel linear inversion involving Banded matrix and row-Y-Vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImy\fP the number of rows assumed for A and length of Y-vectors stored in V 
+.br
+\fImah1\fP the left half-bandwidth of fortran array A 
+.br
+\fImah2\fP the right half-bandwidth of fortran array A 
+.br
+\fImx\fP number of parallel Y-vectors inverted 
+.br
+\fIv\fP input as right-hand-side vectors, output as solution vectors 
+.br
+\fIa\fP encodes the (L)*(D**-1)*(U) factorization of the linear-system matrix, as supplied by subroutine LDUB 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1994 
+.RE
+.PP
+
+.PP
+Definition at line 1127 of file pmat2\&.f90\&.
+.SS "subroutine, public \fBpmat2::wrtb\fP (integer(spi), intent(in)m1, integer(spi), intent(in)m2, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m1,-mah1:mah2), intent(in)a)"
+
+.PP
+Convenient routine for interactively writing out the real contents of a band matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm1\fP number of rows of full matrix 
+.br
+\fIm2\fP number of columns of full matrix 
+.br
+\fImah1\fP number of sub-diagonals 
+.br
+\fImah2\fP number of super-diagonals 
+.br
+\fIa\fP contents of single precision real band matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser, Tsukasa Fujita (JMA) 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1999 
+.RE
+.PP
+
+.PP
+Definition at line 1340 of file pmat2\&.f90\&.
+.SH "Field Documentation"
+.PP 
+.SS "real(dp), parameter pmat2::zero =0\fC [private]\fP"
+
+.PP
+Double precision real zero\&. 
+.PP
+Definition at line 54 of file pmat2\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

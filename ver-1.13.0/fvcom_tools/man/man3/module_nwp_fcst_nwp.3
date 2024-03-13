@@ -1,0 +1,526 @@
+.TH "module_nwp::fcst_nwp" 3 "Wed Mar 13 2024" "Version 1.13.0" "fvcom_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_nwp::fcst_nwp \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "procedure \fBfinish\fP => \fBfinish_nwp\fP"
+.br
+.RI "\fIFinish and deallocate\&. \fP"
+.ti -1c
+.RI "procedure \fBget_time_ind\fP => \fBget_time_ind_nwp\fP"
+.br
+.RI "\fIGet time ind\&. \fP"
+.ti -1c
+.RI "procedure \fBinitial\fP => \fBinitial_nwp\fP"
+.br
+.RI "\fIDefines vars and names\&. \fP"
+.ti -1c
+.RI "procedure \fBlist_initial\fP => \fBlist_initial_nwp\fP"
+.br
+.RI "\fIList the setup\&. \fP"
+.ti -1c
+.RI "procedure \fBread_n\fP => \fBread_nwp\fP"
+.br
+.RI "\fIInitialize arrays, get data\&. \fP"
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "character(len=6) \fBdatatype\fP"
+.br
+.RI "\fIData type\&. \fP"
+.ti -1c
+.RI "integer \fBdatelen\fP"
+.br
+.RI "\fILength of date string\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBdimnamedate\fP"
+.br
+.RI "\fIString dimension name\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBdimnameew\fP"
+.br
+.RI "\fIEast/West dimension name\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBdimnamens\fP"
+.br
+.RI "\fINorth/South dimension name\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBdimnametime\fP"
+.br
+.RI "\fITime dimension name\&. \fP"
+.ti -1c
+.RI "integer \fBi_hice\fP"
+.br
+.RI "\fIIndex of ice thickness\&. \fP"
+.ti -1c
+.RI "integer \fBi_ice\fP"
+.br
+.RI "\fIIndex of ice var\&. \fP"
+.ti -1c
+.RI "integer \fBi_icet\fP"
+.br
+.RI "\fIIndex of ice temp var\&. \fP"
+.ti -1c
+.RI "integer \fBi_mask\fP"
+.br
+.RI "\fIIs var visible (always 1)\&. \fP"
+.ti -1c
+.RI "integer \fBi_sfct\fP"
+.br
+.RI "\fIIndex of sst temp var\&. \fP"
+.ti -1c
+.RI "integer \fBi_sfctl\fP"
+.br
+.RI "\fIIndex of sfcTl\&. \fP"
+.ti -1c
+.RI "integer \fBi_sst\fP"
+.br
+.RI "\fIIndex of sst var\&. \fP"
+.ti -1c
+.RI "integer \fBi_zorl\fP"
+.br
+.RI "\fIIndex of surface roughness\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBlatname\fP"
+.br
+.RI "\fILatitude name\&. \fP"
+.ti -1c
+.RI "character(len=20), allocatable \fBlonname\fP"
+.br
+.RI "\fILongitude name\&. \fP"
+.ti -1c
+.RI "integer \fBnumvar\fP"
+.br
+.RI "\fINumber of variabls\&. \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:,:), 
+.br
+allocatable \fBnwp_hice_c\fP"
+.br
+.RI "\fIcold start ice thickness \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_hice_w\fP"
+.br
+.RI "\fIwarm start ice thickness \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:,:), 
+.br
+allocatable \fBnwp_ice_c\fP"
+.br
+.RI "\fIcold start over water ice concentration 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_ice_w\fP"
+.br
+.RI "\fIwarm start over water ice concentration 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:,:), 
+.br
+allocatable \fBnwp_icet_c\fP"
+.br
+.RI "\fIcold start ice skin temperature 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_icet_w\fP"
+.br
+.RI "\fIwarm start ice skin temperature 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_mask_c\fP"
+.br
+.RI "\fIcold start land/water mask 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_mask_w\fP"
+.br
+.RI "\fIwarm start land/water mask 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:,:), 
+.br
+allocatable \fBnwp_sfct_c\fP"
+.br
+.RI "\fIcold start skin temperature 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_sfct_w\fP"
+.br
+.RI "\fIwarm start skin temperature 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_sfctl_w\fP"
+.br
+.RI "\fIwarm start skin temperature 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:,:), 
+.br
+allocatable \fBnwp_sst_c\fP"
+.br
+.RI "\fIcold start sst 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_sst_w\fP"
+.br
+.RI "\fIwarm start sst 3d array \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:,:), 
+.br
+allocatable \fBnwp_zorl_c\fP"
+.br
+.RI "\fIcold start surface roughness \fP"
+.ti -1c
+.RI "real(r_single), dimension(:,:), 
+.br
+allocatable \fBnwp_zorl_w\fP"
+.br
+.RI "\fIwarm start surface roughness \fP"
+.ti -1c
+.RI "character(len=1), dimension(:,:), 
+.br
+allocatable \fBtimes\fP"
+.br
+.RI "\fIArray of times in FVCOM\&. \fP"
+.ti -1c
+.RI "character(len=20), dimension(:), 
+.br
+allocatable \fBvarnames\fP"
+.br
+.RI "\fIVariable names\&. \fP"
+.ti -1c
+.RI "integer \fBxlat\fP"
+.br
+.RI "\fINumber of latitudes\&. \fP"
+.ti -1c
+.RI "integer \fBxlon\fP"
+.br
+.RI "\fINumber of longitudes\&. \fP"
+.ti -1c
+.RI "integer \fBxtime\fP"
+.br
+.RI "\fINumber of times\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 26 of file module_nwp\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "procedure module_nwp::fcst_nwp::finish ()\fC [private]\fP"
+
+.PP
+Finish and deallocate\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 72 of file module_nwp\&.f90\&.
+.PP
+References module_nwp::finish_nwp()\&.
+.SS "procedure module_nwp::fcst_nwp::get_time_ind ()\fC [private]\fP"
+
+.PP
+Get time ind\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 71 of file module_nwp\&.f90\&.
+.PP
+References module_nwp::get_time_ind_nwp()\&.
+.SS "procedure module_nwp::fcst_nwp::initial ()\fC [private]\fP"
+
+.PP
+Defines vars and names\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 68 of file module_nwp\&.f90\&.
+.PP
+References module_nwp::initial_nwp()\&.
+.SS "procedure module_nwp::fcst_nwp::list_initial ()\fC [private]\fP"
+
+.PP
+List the setup\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 69 of file module_nwp\&.f90\&.
+.PP
+References module_nwp::list_initial_nwp()\&.
+.SS "procedure module_nwp::fcst_nwp::read_n ()\fC [private]\fP"
+
+.PP
+Initialize arrays, get data\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+
+.RE
+.PP
+
+.PP
+Definition at line 70 of file module_nwp\&.f90\&.
+.PP
+References module_nwp::read_nwp()\&.
+.SH "Field Documentation"
+.PP 
+.SS "character(len=6) module_nwp::fcst_nwp::datatype\fC [private]\fP"
+
+.PP
+Data type\&. 
+.PP
+Definition at line 27 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::datelen\fC [private]\fP"
+
+.PP
+Length of date string\&. 
+.PP
+Definition at line 32 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::fcst_nwp::dimnamedate\fC [private]\fP"
+
+.PP
+String dimension name\&. 
+.PP
+Definition at line 47 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::fcst_nwp::dimnameew\fC [private]\fP"
+
+.PP
+East/West dimension name\&. 
+.PP
+Definition at line 44 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::fcst_nwp::dimnamens\fC [private]\fP"
+
+.PP
+North/South dimension name\&. 
+.PP
+Definition at line 45 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::fcst_nwp::dimnametime\fC [private]\fP"
+
+.PP
+Time dimension name\&. 
+.PP
+Definition at line 46 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::i_hice\fC [private]\fP"
+
+.PP
+Index of ice thickness\&. 
+.PP
+Definition at line 40 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::i_ice\fC [private]\fP"
+
+.PP
+Index of ice var\&. 
+.PP
+Definition at line 35 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::i_icet\fC [private]\fP"
+
+.PP
+Index of ice temp var\&. 
+.PP
+Definition at line 37 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::i_mask\fC [private]\fP"
+
+.PP
+Is var visible (always 1)\&. 
+.PP
+Definition at line 33 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::i_sfct\fC [private]\fP"
+
+.PP
+Index of sst temp var\&. 
+.PP
+Definition at line 36 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::i_sfctl\fC [private]\fP"
+
+.PP
+Index of sfcTl\&. 
+.PP
+Definition at line 38 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::i_sst\fC [private]\fP"
+
+.PP
+Index of sst var\&. 
+.PP
+Definition at line 34 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::i_zorl\fC [private]\fP"
+
+.PP
+Index of surface roughness\&. 
+.PP
+Definition at line 39 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::fcst_nwp::latname\fC [private]\fP"
+
+.PP
+Latitude name\&. 
+.PP
+Definition at line 42 of file module_nwp\&.f90\&.
+.SS "character(len=20), allocatable module_nwp::fcst_nwp::lonname\fC [private]\fP"
+
+.PP
+Longitude name\&. 
+.PP
+Definition at line 43 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::numvar\fC [private]\fP"
+
+.PP
+Number of variabls\&. 
+.PP
+Definition at line 28 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_hice_c\fC [private]\fP"
+
+.PP
+cold start ice thickness 
+.PP
+Definition at line 56 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_hice_w\fC [private]\fP"
+
+.PP
+warm start ice thickness 
+.PP
+Definition at line 65 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_ice_c\fC [private]\fP"
+
+.PP
+cold start over water ice concentration 3d array 
+.PP
+Definition at line 52 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_ice_w\fC [private]\fP"
+
+.PP
+warm start over water ice concentration 3d array 
+.PP
+Definition at line 60 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_icet_c\fC [private]\fP"
+
+.PP
+cold start ice skin temperature 3d array 
+.PP
+Definition at line 54 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_icet_w\fC [private]\fP"
+
+.PP
+warm start ice skin temperature 3d array 
+.PP
+Definition at line 62 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_mask_c\fC [private]\fP"
+
+.PP
+cold start land/water mask 3d array 
+.PP
+Definition at line 50 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_mask_w\fC [private]\fP"
+
+.PP
+warm start land/water mask 3d array 
+.PP
+Definition at line 58 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_sfct_c\fC [private]\fP"
+
+.PP
+cold start skin temperature 3d array 
+.PP
+Definition at line 53 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sfct_w\fC [private]\fP"
+
+.PP
+warm start skin temperature 3d array 
+.PP
+Definition at line 61 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sfctl_w\fC [private]\fP"
+
+.PP
+warm start skin temperature 3d array 
+.PP
+Definition at line 63 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_sst_c\fC [private]\fP"
+
+.PP
+cold start sst 3d array 
+.PP
+Definition at line 51 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_sst_w\fC [private]\fP"
+
+.PP
+warm start sst 3d array 
+.PP
+Definition at line 59 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:,:), allocatable module_nwp::fcst_nwp::nwp_zorl_c\fC [private]\fP"
+
+.PP
+cold start surface roughness 
+.PP
+Definition at line 55 of file module_nwp\&.f90\&.
+.SS "real(r_single), dimension(:,:), allocatable module_nwp::fcst_nwp::nwp_zorl_w\fC [private]\fP"
+
+.PP
+warm start surface roughness 
+.PP
+Definition at line 64 of file module_nwp\&.f90\&.
+.SS "character(len=1), dimension(:,:), allocatable module_nwp::fcst_nwp::times\fC [private]\fP"
+
+.PP
+Array of times in FVCOM\&. 
+.PP
+Definition at line 48 of file module_nwp\&.f90\&.
+.SS "character(len=20), dimension(:), allocatable module_nwp::fcst_nwp::varnames\fC [private]\fP"
+
+.PP
+Variable names\&. 
+.PP
+Definition at line 41 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::xlat\fC [private]\fP"
+
+.PP
+Number of latitudes\&. 
+.PP
+Definition at line 29 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::xlon\fC [private]\fP"
+
+.PP
+Number of longitudes\&. 
+.PP
+Definition at line 30 of file module_nwp\&.f90\&.
+.SS "integer module_nwp::fcst_nwp::xtime\fC [private]\fP"
+
+.PP
+Number of times\&. 
+.PP
+Definition at line 31 of file module_nwp\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for fvcom_tools from the source code\&.

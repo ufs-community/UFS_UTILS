@@ -1,0 +1,224 @@
+.TH "atmosphere_target_data" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+atmosphere_target_data \- 
+.PP
+Module to hold variables and ESMF fields associated with the target grid atmospheric data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBcleanup_atmosphere_target_data\fP"
+.br
+.RI "\fIFree up memory for fields and variables in this module\&. \fP"
+.in -1c
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBdelp_target_grid\fP"
+.br
+.RI "\fIPressure thickness\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBdzdt_target_grid\fP"
+.br
+.RI "\fIVertical velocity\&. \fP"
+.ti -1c
+.RI "integer, public \fBlev_target\fP"
+.br
+.RI "\fINumber of vertical levels\&. \fP"
+.ti -1c
+.RI "integer, public \fBlevp1_target\fP"
+.br
+.RI "\fINumber of vertical levels plus 1\&. \fP"
+.ti -1c
+.RI "integer, public \fBnvcoord_target\fP"
+.br
+.RI "\fINumber of vertical coordinate variables\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBps_target_grid\fP"
+.br
+.RI "\fISurface pressure\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBqnifa_climo_target_grid\fP"
+.br
+.RI "\fINumber concentration of ice friendly aerosols\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBqnwfa_climo_target_grid\fP"
+.br
+.RI "\fINumber concentration of water friendly aerosols\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBtemp_target_grid\fP"
+.br
+.RI "\fITemperautre\&. \fP"
+.ti -1c
+.RI "type(esmf_field), dimension(:), 
+.br
+allocatable, public \fBtracers_target_grid\fP"
+.br
+.RI "\fITracers\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBu_s_target_grid\fP"
+.br
+.RI "\fIU-wind, 'south' edge of grid cell\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBu_w_target_grid\fP"
+.br
+.RI "\fIU-wind, 'west' edge of grid cell\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBv_s_target_grid\fP"
+.br
+.RI "\fIV-wind, 'south' edge of grid cell\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBv_w_target_grid\fP"
+.br
+.RI "\fIV-wind, 'west' edge of grid cell\&. \fP"
+.ti -1c
+.RI "real(esmf_kind_r8), dimension(:,:), 
+.br
+allocatable, public \fBvcoord_target\fP"
+.br
+.RI "\fIVertical coordinate\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBzh_target_grid\fP"
+.br
+.RI "\fI3-d height\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Module to hold variables and ESMF fields associated with the target grid atmospheric data\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 9 of file atmosphere_target_data\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public atmosphere_target_data::cleanup_atmosphere_target_data ()"
+
+.PP
+Free up memory for fields and variables in this module\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George\&.Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 45 of file atmosphere_target_data\&.F90\&.
+.PP
+Referenced by atmosphere::cleanup_all_target_atm_data()\&.
+.SH "Field Documentation"
+.PP 
+.SS "type(esmf_field), public atmosphere_target_data::delp_target_grid"
+
+.PP
+Pressure thickness\&. 
+.PP
+Definition at line 23 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::dzdt_target_grid"
+
+.PP
+Vertical velocity\&. 
+.PP
+Definition at line 24 of file atmosphere_target_data\&.F90\&.
+.SS "integer, public atmosphere_target_data::lev_target"
+
+.PP
+Number of vertical levels\&. 
+.PP
+Definition at line 17 of file atmosphere_target_data\&.F90\&.
+.SS "integer, public atmosphere_target_data::levp1_target"
+
+.PP
+Number of vertical levels plus 1\&. 
+.PP
+Definition at line 18 of file atmosphere_target_data\&.F90\&.
+.SS "integer, public atmosphere_target_data::nvcoord_target"
+
+.PP
+Number of vertical coordinate variables\&. 
+.PP
+Definition at line 19 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::ps_target_grid"
+
+.PP
+Surface pressure\&. 
+.PP
+Definition at line 25 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::qnifa_climo_target_grid"
+
+.PP
+Number concentration of ice friendly aerosols\&. 
+.PP
+Definition at line 33 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::qnwfa_climo_target_grid"
+
+.PP
+Number concentration of water friendly aerosols\&. 
+.PP
+Definition at line 35 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::temp_target_grid"
+
+.PP
+Temperautre\&. 
+.PP
+Definition at line 26 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), dimension(:), allocatable, public atmosphere_target_data::tracers_target_grid"
+
+.PP
+Tracers\&. 
+.PP
+Definition at line 27 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::u_s_target_grid"
+
+.PP
+U-wind, 'south' edge of grid cell\&. 
+.PP
+Definition at line 28 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::u_w_target_grid"
+
+.PP
+U-wind, 'west' edge of grid cell\&. 
+.PP
+Definition at line 30 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::v_s_target_grid"
+
+.PP
+V-wind, 'south' edge of grid cell\&. 
+.PP
+Definition at line 29 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::v_w_target_grid"
+
+.PP
+V-wind, 'west' edge of grid cell\&. 
+.PP
+Definition at line 31 of file atmosphere_target_data\&.F90\&.
+.SS "real(esmf_kind_r8), dimension(:,:), allocatable, public atmosphere_target_data::vcoord_target"
+
+.PP
+Vertical coordinate\&. 
+.PP
+Definition at line 21 of file atmosphere_target_data\&.F90\&.
+.SS "type(esmf_field), public atmosphere_target_data::zh_target_grid"
+
+.PP
+3-d height\&. 
+.PP
+Definition at line 32 of file atmosphere_target_data\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

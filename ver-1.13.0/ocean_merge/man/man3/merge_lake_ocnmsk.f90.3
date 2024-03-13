@@ -1,0 +1,127 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocean_merge.fd/merge_lake_ocnmsk.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "ocean_merge" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocean_merge.fd/merge_lake_ocnmsk.f90 \- 
+Determines the water mask by merging the lake mask with the mapped ocean mask from MOM6\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBhandle_err\fP (ret)"
+.br
+.RI "\fIHandle netCDF errors\&. \fP"
+.ti -1c
+.RI "program \fBmerge_lake_ocnmsk\fP"
+.br
+.RI "\fIDetermine the water mask by merging the lake mask with the mapped ocean mask from MOM6, both are on the FV3 grid\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_nml\fP (ocean_mask_dir, lake_mask_dir, atmres, ocnres, out_dir, binary_lake)"
+.br
+.RI "\fIRead program namelist\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Determines the water mask by merging the lake mask with the mapped ocean mask from MOM6\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Shan Sun 
+.PP
+Rahul Mahajan 
+.PP
+Sanath Kumar 
+.RE
+.PP
+
+.PP
+Definition in file \fBmerge_lake_ocnmsk\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine handle_err (integer, intent(in)ret)"
+
+.PP
+Handle netCDF errors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIret\fP NetCDF return code\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shan Sun 
+.RE
+.PP
+
+.PP
+Definition at line 146 of file merge_lake_ocnmsk\&.f90\&.
+.PP
+Referenced by merge_lake_ocnmsk(), and read_nml()\&.
+.SS "program merge_lake_ocnmsk ()"
+
+.PP
+Determine the water mask by merging the lake mask with the mapped ocean mask from MOM6, both are on the FV3 grid\&. During merge, the ocean mask dominates the lake mask if there is a conflict\&. After the merge, the remaining non-water fraction is the land fraction\&.
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Shan Sun 
+.PP
+Rahul Mahajan 
+.PP
+Sanath Kumar 
+.RE
+.PP
+
+.PP
+Definition at line 17 of file merge_lake_ocnmsk\&.f90\&.
+.PP
+References handle_err(), and read_nml()\&.
+.SS "subroutine read_nml (character(len=120), intent(out)ocean_mask_dir, character(len=120), intent(out)lake_mask_dir, character(len=10), intent(out)atmres, character(len=10), intent(out)ocnres, character(len=120), intent(out)out_dir, integer, intent(out)binary_lake)"
+
+.PP
+Read program namelist\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIocean_mask_dir\fP Directory containing MOM6 ocean mask file\&. 
+.br
+\fIlake_mask_dir\fP Directory containing the lake mask file\&. 
+.br
+\fIout_dir\fP Directory where output file will be written\&. 
+.br
+\fIatmres\fP Atmosphere grid resolution\&. 
+.br
+\fIocnres\fP Ocean grid resolution\&. 
+.br
+\fIbinary_lake\fP or fractional lake 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Rahul Mahajan 
+.PP
+Sanath Kumar 
+.RE
+.PP
+
+.PP
+Definition at line 166 of file merge_lake_ocnmsk\&.f90\&.
+.PP
+References handle_err()\&.
+.PP
+Referenced by merge_lake_ocnmsk()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocean_merge from the source code\&.

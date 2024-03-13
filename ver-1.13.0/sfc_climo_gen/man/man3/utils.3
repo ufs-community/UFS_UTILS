@@ -1,0 +1,102 @@
+.TH "utils" 3 "Wed Mar 13 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils \- 
+.PP
+Utilities\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBerror_handler\fP (string, rc)"
+.br
+.RI "\fIHandle errors\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBnetcdf_err\fP (err, string)"
+.br
+.RI "\fIHandle netCDF error codes\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utilities\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition at line 8 of file utils\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public utils::error_handler (character(len=*), intent(in)string, integer, intent(in), optionalrc)"
+
+.PP
+Handle errors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstring\fP Error message\&. 
+.br
+\fIrc\fP Error code\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition at line 48 of file utils\&.f90\&.
+.PP
+Referenced by model_grid::define_model_grid(), source_grid::define_source_grid(), driver(), model_grid::get_model_info(), interp(), and interp_frac_cats()\&.
+.SS "subroutine, public utils::netcdf_err (integer, intent(in)err, character(len=*), intent(in)string)"
+
+.PP
+Handle netCDF error codes\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIerr\fP NetCDF return code\&. 
+.br
+\fIstring\fP Error message\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2018 
+.RE
+.PP
+
+.PP
+Definition at line 22 of file utils\&.f90\&.
+.PP
+Referenced by model_grid::define_model_grid(), source_grid::define_source_grid(), model_grid::get_model_info(), interp(), interp_frac_cats(), output(), and output_frac_cats::writeit()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

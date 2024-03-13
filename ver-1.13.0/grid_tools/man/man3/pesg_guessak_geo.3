@@ -1,0 +1,47 @@
+.TH "pesg::guessak_geo" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pesg::guessak_geo \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBguessak_geo\fP (asp, arc, ak)"
+.br
+.RI "\fIGiven an aspect ratio, asp<=1, and major semi-axis, arc, in geographical (degree) units measured along the rectangle's median, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 41 of file pesg\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pesg::guessak_geo::guessak_geo (real(dp), intent(in)asp, real(dp), intent(in)arc, real(dp), dimension(2), intent(out)ak)\fC [private]\fP"
+
+.PP
+Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical (degree) units measured along the rectangle's median, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIasp\fP aspect ratio of intended domain 
+.br
+\fIarc\fP major semi-axis angle in degrees for intended domain 
+.br
+\fIak\fP first guess of the parameter vector 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 808 of file pesg\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

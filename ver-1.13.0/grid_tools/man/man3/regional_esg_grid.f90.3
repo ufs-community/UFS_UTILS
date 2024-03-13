@@ -1,0 +1,96 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/regional_esg_grid.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/regional_esg_grid.f90 \- 
+.PP
+Compute geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcheck\fP (status)"
+.br
+.RI "\fICheck results of netCDF call\&. \fP"
+.ti -1c
+.RI "program \fBregional_grid\fP"
+.br
+.RI "\fIDriver routine to compute geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Compute geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition in file \fBregional_esg_grid\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine check (integer, intent(in)status)"
+
+.PP
+Check results of netCDF call\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstatus\fP return code to check 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 190 of file regional_esg_grid\&.f90\&.
+.SS "program regional_grid ()"
+
+.PP
+Driver routine to compute geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid\&. The parameters are:
+.IP "\(bu" 2
+Geographic longitude (degrees)
+.IP "\(bu" 2
+Geographic latitude (degrees)
+.IP "\(bu" 2
+Grid edge 'x' distance (meters)
+.IP "\(bu" 2
+Grid edge 'y' distance (meters)
+.IP "\(bu" 2
+Area (meters squared)
+.IP "\(bu" 2
+Grid vertex 'x' angle with respect to geographic east (degrees)
+.IP "\(bu" 2
+Grid vertex 'y' angle with respect to geographic north (degrees) 
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+0 for success, error code otherwise\&. 
+.RE
+.PP
+
+.PP
+
+.PP
+Definition at line 18 of file regional_esg_grid\&.f90\&.
+.PP
+References check()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

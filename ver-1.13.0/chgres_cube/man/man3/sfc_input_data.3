@@ -1,0 +1,611 @@
+.TH "sfc_input_data" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+sfc_input_data \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBcleanup_input_sfc_data\fP"
+.br
+.RI "\fIFree up memory associated with sfc data\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBinit_sfc_esmf_fields\fP"
+.br
+.RI "\fICreate surface input grid esmf fields\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_fv3_grid_data_netcdf\fP (FIELD, TILE_NUM, IMO, JMO, LMO, SFCDATA, SFCDATA_3D)"
+.br
+.RI "\fIRead a record from a netcdf file\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_grib_soil\fP (vname, vname_file, lugb, pdt_num, dummy3d)"
+.br
+.RI "\fIRead soil temperature and soil moisture fields from a GRIB2 file\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBread_input_sfc_data\fP (localpet)"
+.br
+.RI "\fIDriver to read input grid surface data\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_input_sfc_gaussian_nemsio_file\fP (localpet)"
+.br
+.RI "\fIRead input grid surface data from an fv3 gaussian nemsio file\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_input_sfc_gfs_gaussian_nemsio_file\fP (localpet)"
+.br
+.RI "\fIRead input grid surface data from a spectral gfs gaussian nemsio file\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_input_sfc_gfs_sfcio_file\fP (localpet)"
+.br
+.RI "\fIRead input grid surface data from a spectral gfs gaussian sfcio file\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_input_sfc_grib2_file\fP (localpet)"
+.br
+.RI "\fIRead input grid surface data from a grib2 file\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_input_sfc_netcdf_file\fP (localpet)"
+.br
+.RI "\fIRead input grid surface data from tiled 'history' files (netcdf) or gaussian netcdf files\&. \fP"
+.ti -1c
+.RI "subroutine \fBread_input_sfc_restart_file\fP (localpet)"
+.br
+.RI "\fIRead input grid surface data from fv3 tiled warm 'restart' files\&. \fP"
+.in -1c
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBcanopy_mc_input_grid\fP"
+.br
+.RI "\fIcanopy moist content \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBf10m_input_grid\fP"
+.br
+.RI "\fIlog((z0+10)*1/z0) \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBffmm_input_grid\fP"
+.br
+.RI "\fIlog((z0+z1)*1/z0) See sfc_diff\&.f for details\&. \fP"
+.ti -1c
+.RI "real \fBicet_default\fP = 265\&.0"
+.br
+.RI "\fIDefault value of soil and skin temperature (K) over ice\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBlai_input_grid\fP"
+.br
+.RI "\fIleaf area index \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBlandsea_mask_input_grid\fP"
+.br
+.RI "\fIland sea mask; 0-water, 1-land, 2-ice \fP"
+.ti -1c
+.RI "integer, public \fBlsoil_input\fP =4"
+.br
+.RI "\fInumber of soil layers, no longer hardwired to allow for 7 layers of soil for the RUC LSM \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBmax_veg_greenness_input_grid\fP"
+.br
+.RI "\fIshdmax \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBmin_veg_greenness_input_grid\fP"
+.br
+.RI "\fIshdmin \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBq2m_input_grid\fP"
+.br
+.RI "\fI2-m spec hum \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_depth_input_grid\fP"
+.br
+.RI "\fIsea ice depth \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_fract_input_grid\fP"
+.br
+.RI "\fIsea ice fraction \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBseaice_skin_temp_input_grid\fP"
+.br
+.RI "\fIsea ice skin temp \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBskin_temp_input_grid\fP"
+.br
+.RI "\fIskin temp/sst \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsnow_depth_input_grid\fP"
+.br
+.RI "\fIsnow dpeth \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsnow_liq_equiv_input_grid\fP"
+.br
+.RI "\fIsnow liq equiv depth \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsoil_temp_input_grid\fP"
+.br
+.RI "\fI3-d soil temp \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsoil_type_input_grid\fP"
+.br
+.RI "\fIsoil type \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsoilm_liq_input_grid\fP"
+.br
+.RI "\fI3-d liquid soil moisture \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsoilm_tot_input_grid\fP"
+.br
+.RI "\fI3-d total soil moisture \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBsrflag_input_grid\fP"
+.br
+.RI "\fIsnow/rain flag \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBt2m_input_grid\fP"
+.br
+.RI "\fI2-m temperature \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBtprcp_input_grid\fP"
+.br
+.RI "\fIprecip \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBustar_input_grid\fP"
+.br
+.RI "\fIfric velocity \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBveg_greenness_input_grid\fP"
+.br
+.RI "\fIvegetation fraction \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBveg_type_input_grid\fP"
+.br
+.RI "\fIvegetation type \fP"
+.ti -1c
+.RI "integer, public \fBveg_type_landice_input\fP = 15"
+.br
+.RI "\fINOAH land ice option defined at this veg type\&. \fP"
+.ti -1c
+.RI "type(esmf_field), public \fBz0_input_grid\fP"
+.br
+.RI "\fIroughness length \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 1 of file sfc_input_data\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public sfc_input_data::cleanup_input_sfc_data ()"
+
+.PP
+Free up memory associated with sfc data\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 3306 of file sfc_input_data\&.F90\&.
+.PP
+Referenced by surface::surface_driver()\&.
+.SS "subroutine, public sfc_input_data::init_sfc_esmf_fields ()"
+
+.PP
+Create surface input grid esmf fields\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 2946 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::error_handler()\&.
+.PP
+Referenced by read_input_sfc_data()\&.
+.SS "subroutine sfc_input_data::read_fv3_grid_data_netcdf (character(len=*), intent(in)FIELD, integer, intent(in)TILE_NUM, integer, intent(in)IMO, integer, intent(in)JMO, integer, intent(in)LMO, real(esmf_kind_r8), dimension(imo,jmo), intent(out), optionalSFCDATA, real(esmf_kind_r8), dimension(imo,jmo,lmo), intent(out), optionalSFCDATA_3D)"
+
+.PP
+Read a record from a netcdf file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfield\fP name of field to be read 
+.br
+\fItile_num\fP grid tile number 
+.br
+\fIimo\fP i-dimension of field 
+.br
+\fIjmo\fP j-dimension of field 
+.br
+\fIlmo\fP number of vertical levels of field 
+.br
+\fIsfcdata\fP 1-d array containing field data 
+.br
+\fIsfcdata_3d\fP 3-d array containing field data 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 3159 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::netcdf_err()\&.
+.PP
+Referenced by nst_input_data::read_input_nst_netcdf_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
+.SS "subroutine sfc_input_data::read_grib_soil (character(len=20), intent(in)vname, character(len=20), intent(in)vname_file, integer, intent(in)lugb, integer, intent(in)pdt_num, real(esmf_kind_r8), dimension(:,:,:), intent(inout)dummy3d)"
+
+.PP
+Read soil temperature and soil moisture fields from a GRIB2 file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIvname\fP variable name in varmap table 
+.br
+\fIvname_file\fP variable name in grib2 file 
+.br
+\fIlugb\fP logical unit number for surface grib2 file 
+.br
+\fIpdt_num\fP product definition template number\&. 
+.br
+\fIdummy3d\fP array of soil data 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 3205 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::error_handler(), program_setup::get_var_cond(), and utilities::handle_grib_error()\&.
+.PP
+Referenced by read_input_sfc_grib2_file()\&.
+.SS "subroutine, public sfc_input_data::read_input_sfc_data (integer, intent(in)localpet)"
+
+.PP
+Driver to read input grid surface data\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 95 of file sfc_input_data\&.F90\&.
+.PP
+References init_sfc_esmf_fields(), read_input_sfc_gaussian_nemsio_file(), read_input_sfc_gfs_gaussian_nemsio_file(), read_input_sfc_gfs_sfcio_file(), read_input_sfc_grib2_file(), read_input_sfc_netcdf_file(), and read_input_sfc_restart_file()\&.
+.PP
+Referenced by surface::surface_driver()\&.
+.SS "subroutine sfc_input_data::read_input_sfc_gaussian_nemsio_file (integer, intent(in)localpet)"
+
+.PP
+Read input grid surface data from an fv3 gaussian nemsio file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 736 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::error_handler()\&.
+.PP
+Referenced by read_input_sfc_data()\&.
+.SS "subroutine sfc_input_data::read_input_sfc_gfs_gaussian_nemsio_file (integer, intent(in)localpet)"
+
+.PP
+Read input grid surface data from a spectral gfs gaussian nemsio file\&. 
+.PP
+\fBNote:\fP
+.RS 4
+Format used by gfs starting July 19, 2017\&.
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 387 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::error_handler()\&.
+.PP
+Referenced by read_input_sfc_data()\&.
+.SS "subroutine sfc_input_data::read_input_sfc_gfs_sfcio_file (integer, intent(in)localpet)"
+
+.PP
+Read input grid surface data from a spectral gfs gaussian sfcio file\&. 
+.PP
+\fBNote:\fP
+.RS 4
+Prior to July 19, 2017\&.
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 163 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::error_handler()\&.
+.PP
+Referenced by read_input_sfc_data()\&.
+.SS "subroutine sfc_input_data::read_input_sfc_grib2_file (integer, intent(in)localpet)"
+
+.PP
+Read input grid surface data from a grib2 file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Larissa Reames 
+.RE
+.PP
+
+.PP
+Definition at line 1763 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::check_cnwat(), utilities::check_soilt(), utilities::error_handler(), program_setup::get_var_cond(), utilities::handle_grib_error(), utilities::netcdf_err(), read_grib_soil(), search_util::search(), and utilities::to_upper()\&.
+.PP
+Referenced by read_input_sfc_data()\&.
+.SS "subroutine sfc_input_data::read_input_sfc_netcdf_file (integer, intent(in)localpet)"
+
+.PP
+Read input grid surface data from tiled 'history' files (netcdf) or gaussian netcdf files\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 1402 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::error_handler(), utilities::netcdf_err(), and read_fv3_grid_data_netcdf()\&.
+.PP
+Referenced by read_input_sfc_data()\&.
+.SS "subroutine sfc_input_data::read_input_sfc_restart_file (integer, intent(in)localpet)"
+
+.PP
+Read input grid surface data from fv3 tiled warm 'restart' files\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlocalpet\fP ESMF local persistent execution thread 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 1085 of file sfc_input_data\&.F90\&.
+.PP
+References utilities::error_handler(), utilities::netcdf_err(), and read_fv3_grid_data_netcdf()\&.
+.PP
+Referenced by read_input_sfc_data()\&.
+.SH "Field Documentation"
+.PP 
+.SS "type(esmf_field), public sfc_input_data::canopy_mc_input_grid"
+
+.PP
+canopy moist content 
+.PP
+Definition at line 54 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::f10m_input_grid"
+
+.PP
+log((z0+10)*1/z0) 
+.PP
+Definition at line 55 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::ffmm_input_grid"
+
+.PP
+log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. 
+.PP
+Definition at line 56 of file sfc_input_data\&.F90\&.
+.SS "real sfc_input_data::icet_default = 265\&.0"
+
+.PP
+Default value of soil and skin temperature (K) over ice\&. 
+.PP
+Definition at line 52 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::lai_input_grid"
+
+.PP
+leaf area index 
+.PP
+Definition at line 78 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::landsea_mask_input_grid"
+
+.PP
+land sea mask; 0-water, 1-land, 2-ice 
+.PP
+Definition at line 58 of file sfc_input_data\&.F90\&.
+.SS "integer, public sfc_input_data::lsoil_input =4"
+
+.PP
+number of soil layers, no longer hardwired to allow for 7 layers of soil for the RUC LSM 
+.PP
+Definition at line 82 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::max_veg_greenness_input_grid"
+
+.PP
+shdmax 
+.PP
+Definition at line 79 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::min_veg_greenness_input_grid"
+
+.PP
+shdmin 
+.PP
+Definition at line 80 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::q2m_input_grid"
+
+.PP
+2-m spec hum 
+.PP
+Definition at line 60 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::seaice_depth_input_grid"
+
+.PP
+sea ice depth 
+.PP
+Definition at line 61 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::seaice_fract_input_grid"
+
+.PP
+sea ice fraction 
+.PP
+Definition at line 62 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::seaice_skin_temp_input_grid"
+
+.PP
+sea ice skin temp 
+.PP
+Definition at line 63 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::skin_temp_input_grid"
+
+.PP
+skin temp/sst 
+.PP
+Definition at line 64 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::snow_depth_input_grid"
+
+.PP
+snow dpeth 
+.PP
+Definition at line 65 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::snow_liq_equiv_input_grid"
+
+.PP
+snow liq equiv depth 
+.PP
+Definition at line 66 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::soil_temp_input_grid"
+
+.PP
+3-d soil temp 
+.PP
+Definition at line 67 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::soil_type_input_grid"
+
+.PP
+soil type 
+.PP
+Definition at line 68 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::soilm_liq_input_grid"
+
+.PP
+3-d liquid soil moisture 
+.PP
+Definition at line 69 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::soilm_tot_input_grid"
+
+.PP
+3-d total soil moisture 
+.PP
+Definition at line 70 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::srflag_input_grid"
+
+.PP
+snow/rain flag 
+.PP
+Definition at line 71 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::t2m_input_grid"
+
+.PP
+2-m temperature 
+.PP
+Definition at line 72 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::tprcp_input_grid"
+
+.PP
+precip 
+.PP
+Definition at line 73 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::ustar_input_grid"
+
+.PP
+fric velocity 
+.PP
+Definition at line 74 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::veg_greenness_input_grid"
+
+.PP
+vegetation fraction 
+.PP
+Definition at line 77 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::veg_type_input_grid"
+
+.PP
+vegetation type 
+.PP
+Definition at line 75 of file sfc_input_data\&.F90\&.
+.SS "integer, public sfc_input_data::veg_type_landice_input = 15"
+
+.PP
+NOAH land ice option defined at this veg type\&. Default is igbp\&. 
+.PP
+Definition at line 49 of file sfc_input_data\&.F90\&.
+.SS "type(esmf_field), public sfc_input_data::z0_input_grid"
+
+.PP
+roughness length 
+.PP
+Definition at line 76 of file sfc_input_data\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

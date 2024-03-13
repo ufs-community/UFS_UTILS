@@ -1,0 +1,80 @@
+.TH "pfun::havh" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pfun::havh \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBhavh_d\fP (t)"
+.br
+.RI "\fIHyperbolic-haversine for double precision real (for pseudosphere geometry)\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBhavh_s\fP (t)"
+.br
+.RI "\fIHyperbolic-haversine for single precision real (for pseudosphere geometry)\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 22 of file pfun\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function pfun::havh::havh_d (real(dp), intent(in)t)\fC [private]\fP"
+
+.PP
+Hyperbolic-haversine for double precision real (for pseudosphere geometry)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a hyperbolic-haversine function of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 130 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::havh::havh_s (real(sp), intent(in)t)\fC [private]\fP"
+
+.PP
+Hyperbolic-haversine for single precision real (for pseudosphere geometry)\&. 
+.PP
+\fBNote:\fP
+.RS 4
+The minus sign in the hyperbolic-haversine definition\&.
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a hyperbolic-haversine function of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 117 of file pfun\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

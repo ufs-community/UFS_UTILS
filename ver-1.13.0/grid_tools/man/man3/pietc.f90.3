@@ -1,0 +1,700 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pietc.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pietc.f90 \- 
+.PP
+Double-precision constants\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "module \fBpietc\fP"
+.br
+.RI "\fISome of the commonly used constants (pi etc) mainly for double-precision subroutines\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Double-precision constants\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014 
+.RE
+.PP
+
+.PP
+Definition in file \fBpietc\&.f90\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "module pietc"
+.PP 
+Some of the commonly used constants (pi etc) mainly for double-precision subroutines\&. 
+
+ms10 etc are needed to satisfy the some (eg\&., gnu fortran) compilers' more rigorous standards regarding the way 'data' statements are initialized\&. Zero and the first few units are u0,u1,u2, etc\&., their reciprocals being, o2,o3 etc and their square roots, r2,r3\&. Reciprocal roots are or2,or3 etc\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014 
+.RE
+.PP
+
+.PP
+Definition at line 14 of file pietc\&.f90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+complex(dpc), parameter \fIc0\fP complex zero 
+.br
+.PP
+complex(dpc), parameter \fIc1\fP complex one 
+.br
+.PP
+complex(dpc), parameter \fIci\fP complex i=sqrt(-1) 
+.br
+.PP
+complex(dpc), parameter \fIcipi\fP complex i*pi 
+.br
+.PP
+real(dp), parameter \fIdtor\fP Degrees to radians\&. 
+.br
+.PP
+real(dp), parameter \fIeuler\fP Euler-Mascheroni constant\&. 
+.br
+.PP
+logical, parameter \fIf\fP for pain-relief in logical ops 
+.br
+.PP
+complex(dpc), parameter \fImc1\fP complex minus-one 
+.br
+.PP
+complex(dpc), parameter \fImci\fP complex minus-i 
+.br
+.PP
+real(dp), parameter \fImo2\fP minus-half 
+.br
+.PP
+real(dp), parameter \fImo3\fP minus-third 
+.br
+.PP
+real(dp), parameter \fImo4\fP minus-fourth 
+.br
+.PP
+real(dp), parameter \fImo5\fP minus-fifth 
+.br
+.PP
+real(dp), parameter \fImo6\fP minus-sixth 
+.br
+.PP
+real(dp), parameter \fIms10\fP minus-sine(10 deg) 
+.br
+.PP
+real(dp), parameter \fIms11\fP minus-sine(90/8 deg) 
+.br
+.PP
+real(dp), parameter \fIms13\fP minus-sine(90/7 deg) 
+.br
+.PP
+real(dp), parameter \fIms15\fP minus-sine(15 deg) 
+.br
+.PP
+real(dp), parameter \fIms18\fP minus-sine(18 deg) 
+.br
+.PP
+real(dp), parameter \fIms20\fP minus-sine(20 deg) 
+.br
+.PP
+real(dp), parameter \fIms22\fP minus-sine(22\&.5 deg) 
+.br
+.PP
+real(dp), parameter \fIms26\fP minus-sine(90*2/7 deg) 
+.br
+.PP
+real(dp), parameter \fIms30\fP minus-sine(30 deg) 
+.br
+.PP
+real(dp), parameter \fIms34\fP minus-sine(90*3/8 deg) 
+.br
+.PP
+real(dp), parameter \fIms36\fP minus-sine(36 deg) 
+.br
+.PP
+real(dp), parameter \fIms39\fP minus-sine(90*3/7 deg) 
+.br
+.PP
+real(dp), parameter \fIms40\fP minus-sine(40 deg) 
+.br
+.PP
+real(dp), parameter \fIms45\fP minus-sine(45 deg) 
+.br
+.PP
+real(dp), parameter \fIms50\fP minus-sine(50 deg) 
+.br
+.PP
+real(dp), parameter \fIms51\fP minus-sine(90*4/7 deg) 
+.br
+.PP
+real(dp), parameter \fIms54\fP minus-sine(54 deg) 
+.br
+.PP
+real(dp), parameter \fIms56\fP minus-sine(90*5/8 deg) 
+.br
+.PP
+real(dp), parameter \fIms60\fP minus-sine(60 deg) 
+.br
+.PP
+real(dp), parameter \fIms64\fP minus-sine(90*5/7 deg) 
+.br
+.PP
+real(dp), parameter \fIms68\fP minus-sine(67\&.5 deg) 
+.br
+.PP
+real(dp), parameter \fIms70\fP minus-sine(70 deg) 
+.br
+.PP
+real(dp), parameter \fIms72\fP minus-sine(72 deg) 
+.br
+.PP
+real(dp), parameter \fIms75\fP minus-sine(75 deg) 
+.br
+.PP
+real(dp), parameter \fIms77\fP minus-sine(90*6/7 deg) 
+.br
+.PP
+real(dp), parameter \fIms79\fP minus-sine(90*7/8 deg) 
+.br
+.PP
+real(dp), parameter \fIms80\fP minus-sine(80 deg) 
+.br
+.PP
+real(dp), parameter \fImu1\fP minus-one 
+.br
+.PP
+real(dp), parameter \fImu2\fP minus-two 
+.br
+.PP
+real(dp), parameter \fImu3\fP minus-three 
+.br
+.PP
+real(dp), parameter \fImu4\fP minus-four 
+.br
+.PP
+real(dp), parameter \fImu5\fP minus-five 
+.br
+.PP
+real(dp), parameter \fImu6\fP minus-six 
+.br
+.PP
+real(dp), parameter \fIo2\fP half 
+.br
+.PP
+real(dp), parameter \fIo3\fP third 
+.br
+.PP
+real(dp), parameter \fIo4\fP fourth 
+.br
+.PP
+real(dp), parameter \fIo5\fP fifth 
+.br
+.PP
+real(dp), parameter \fIo6\fP sixth 
+.br
+.PP
+real(dp), parameter \fIor2\fP 1\&. /root of two 
+.br
+.PP
+real(dp), parameter \fIor3\fP 1\&. /root of three 
+.br
+.PP
+real(dp), parameter \fIor5\fP 1\&. /root of five 
+.br
+.PP
+real(dp), parameter \fIphi\fP Golden number\&. 
+.br
+.PP
+real(dp), parameter \fIpi\fP Pi\&. 
+.br
+.PP
+real(dp), parameter \fIpi2\fP Pi*2\&. 
+.br
+.PP
+real(dp), parameter \fIpih\fP pi*half 
+.br
+.PP
+real(dp), parameter \fIr2\fP Square root of 2\&. 
+.br
+.PP
+real(dp), parameter \fIr3\fP Square root of 3\&. 
+.br
+.PP
+real(dp), parameter \fIr5\fP Square root of 5\&. 
+.br
+.PP
+real(dp), parameter \fIrpi\fP square root of pi 
+.br
+.PP
+real(dp), parameter \fIrtod\fP radians to degrees 
+.br
+.PP
+real(dp), parameter \fIs10\fP sine(10 deg) 
+.br
+.PP
+real(dp), parameter \fIs11\fP sine(90/8 deg) 
+.br
+.PP
+real(dp), parameter \fIs13\fP sine(90/7 deg) 
+.br
+.PP
+real(dp), parameter \fIs15\fP sine(15 deg) 
+.br
+.PP
+real(dp), parameter \fIs18\fP sine(18 deg) 
+.br
+.PP
+real(dp), parameter \fIs20\fP sine(20 deg) 
+.br
+.PP
+real(dp), parameter \fIs22\fP sine(22\&.5 deg) 
+.br
+.PP
+real(dp), parameter \fIs26\fP sine(90*2/7 deg) 
+.br
+.PP
+real(dp), parameter \fIs30\fP sine(30 deg) 
+.br
+.PP
+real(dp), parameter \fIs34\fP sine(90*3/8 deg) 
+.br
+.PP
+real(dp), parameter \fIs36\fP sine(36 deg) 
+.br
+.PP
+real(dp), parameter \fIs39\fP sine(90*3/7 deg) 
+.br
+.PP
+real(dp), parameter \fIs40\fP sine(40 deg) 
+.br
+.PP
+real(dp), parameter \fIs45\fP sine(45 deg) 
+.br
+.PP
+real(dp), parameter \fIs50\fP sine(50 deg) 
+.br
+.PP
+real(dp), parameter \fIs51\fP sine(90*4/7 deg) 
+.br
+.PP
+real(dp), parameter \fIs54\fP sine(54 deg) 
+.br
+.PP
+real(dp), parameter \fIs56\fP sine(90*5/8 deg) 
+.br
+.PP
+real(dp), parameter \fIs60\fP sine(60 deg) 
+.br
+.PP
+real(dp), parameter \fIs64\fP sine(90*5/7 deg) 
+.br
+.PP
+real(dp), parameter \fIs68\fP sine(67\&.5 deg) 
+.br
+.PP
+real(dp), parameter \fIs70\fP sine(70 deg) 
+.br
+.PP
+real(dp), parameter \fIs72\fP sine(72 deg) 
+.br
+.PP
+real(dp), parameter \fIs75\fP sine(75 deg) 
+.br
+.PP
+real(dp), parameter \fIs77\fP sine(90*6/7 deg) 
+.br
+.PP
+real(dp), parameter \fIs79\fP sine(90*7/8 deg) 
+.br
+.PP
+real(dp), parameter \fIs80\fP sine(80 deg) 
+.br
+.PP
+logical, parameter \fIt\fP for pain-relief in logical ops 
+.br
+.PP
+real(dp), parameter \fIu0\fP zero 
+.br
+.PP
+real(dp), parameter \fIu1\fP one 
+.br
+.PP
+real(dp), parameter \fIu2\fP two 
+.br
+.PP
+real(dp), parameter \fIu3\fP three 
+.br
+.PP
+real(dp), parameter \fIu4\fP four 
+.br
+.PP
+real(dp), parameter \fIu5\fP five 
+.br
+.PP
+real(dp), parameter \fIu6\fP six 
+.br
+.PP
+complex(dpc), parameter \fIz000\fP exp(2*pi*i*0) 
+.br
+.PP
+complex(dpc), parameter \fIz010\fP exp(2*pi*i/36) 
+.br
+.PP
+complex(dpc), parameter \fIz011\fP exp(2*pi*i/32) 
+.br
+.PP
+complex(dpc), parameter \fIz013\fP exp(2*pi*i/28) 
+.br
+.PP
+complex(dpc), parameter \fIz015\fP exp(2*pi*i/24) 
+.br
+.PP
+complex(dpc), parameter \fIz018\fP exp(2*pi*i/20) 
+.br
+.PP
+complex(dpc), parameter \fIz020\fP exp(2*pi*i/18) 
+.br
+.PP
+complex(dpc), parameter \fIz022\fP exp(2*pi*i/16) 
+.br
+.PP
+complex(dpc), parameter \fIz026\fP exp(2*pi*i/14) 
+.br
+.PP
+complex(dpc), parameter \fIz030\fP exp(2*pi*i/12) 
+.br
+.PP
+complex(dpc), parameter \fIz034\fP exp(2*pi*i*3/32) 
+.br
+.PP
+complex(dpc), parameter \fIz036\fP exp(2*pi*i/10) 
+.br
+.PP
+complex(dpc), parameter \fIz039\fP exp(2*pi*i*3/28) 
+.br
+.PP
+complex(dpc), parameter \fIz040\fP exp(2*pi*i/9) 
+.br
+.PP
+complex(dpc), parameter \fIz045\fP exp(2*pi*i/8) 
+.br
+.PP
+complex(dpc), parameter \fIz050\fP exp(2*pi*i*5/36) 
+.br
+.PP
+complex(dpc), parameter \fIz051\fP exp(2*pi*i/7) 
+.br
+.PP
+complex(dpc), parameter \fIz054\fP exp(2*pi*i*3/20) 
+.br
+.PP
+complex(dpc), parameter \fIz056\fP exp(2*pi*i*5/32) 
+.br
+.PP
+complex(dpc), parameter \fIz060\fP exp(2*pi*i/6) 
+.br
+.PP
+complex(dpc), parameter \fIz064\fP exp(2*pi*i*5/28) 
+.br
+.PP
+complex(dpc), parameter \fIz068\fP exp(2*pi*i*3/16) 
+.br
+.PP
+complex(dpc), parameter \fIz070\fP exp(2*pi*i*7/36) 
+.br
+.PP
+complex(dpc), parameter \fIz072\fP exp(2*pi*i/5) 
+.br
+.PP
+complex(dpc), parameter \fIz075\fP exp(2*pi*i*5/24) 
+.br
+.PP
+complex(dpc), parameter \fIz077\fP exp(2*pi*i*3/14) 
+.br
+.PP
+complex(dpc), parameter \fIz079\fP exp(2*pi*i*7/32) 
+.br
+.PP
+complex(dpc), parameter \fIz080\fP exp(2*pi*i*2/9) 
+.br
+.PP
+complex(dpc), parameter \fIz090\fP exp(2*pi*i/4) 
+.br
+.PP
+complex(dpc), parameter \fIz100\fP exp(2*pi*i*5/18) 
+.br
+.PP
+complex(dpc), parameter \fIz101\fP exp(2*pi*i*9/32) 
+.br
+.PP
+complex(dpc), parameter \fIz103\fP exp(2*pi*i*2/7) 
+.br
+.PP
+complex(dpc), parameter \fIz105\fP exp(2*pi*i*7/24) 
+.br
+.PP
+complex(dpc), parameter \fIz108\fP exp(2*pi*i*3/10) 
+.br
+.PP
+complex(dpc), parameter \fIz110\fP exp(2*pi*i*11/36) 
+.br
+.PP
+complex(dpc), parameter \fIz112\fP exp(2*pi*i*5/16) 
+.br
+.PP
+complex(dpc), parameter \fIz116\fP exp(2*pi*i*9/28) 
+.br
+.PP
+complex(dpc), parameter \fIz120\fP exp(2*pi*i/3) 
+.br
+.PP
+complex(dpc), parameter \fIz124\fP exp(2*pi*i*11/32) 
+.br
+.PP
+complex(dpc), parameter \fIz126\fP exp(2*pi*i*7/20) 
+.br
+.PP
+complex(dpc), parameter \fIz129\fP exp(2*pi*i*5/14) 
+.br
+.PP
+complex(dpc), parameter \fIz130\fP exp(2*pi*i*13/36) 
+.br
+.PP
+complex(dpc), parameter \fIz135\fP exp(2*pi*i*3/8) 
+.br
+.PP
+complex(dpc), parameter \fIz140\fP exp(2*pi*i*7/18) 
+.br
+.PP
+complex(dpc), parameter \fIz141\fP exp(2*pi*i*11/28) 
+.br
+.PP
+complex(dpc), parameter \fIz144\fP exp(2*pi*i*2/5) 
+.br
+.PP
+complex(dpc), parameter \fIz146\fP exp(2*pi*i*13/32) 
+.br
+.PP
+complex(dpc), parameter \fIz150\fP exp(2*pi*i*5/12) 
+.br
+.PP
+complex(dpc), parameter \fIz154\fP exp(2*pi*i*3/7) 
+.br
+.PP
+complex(dpc), parameter \fIz158\fP exp(2*pi*i*7/16) 
+.br
+.PP
+complex(dpc), parameter \fIz160\fP exp(2*pi*i*4/9) 
+.br
+.PP
+complex(dpc), parameter \fIz162\fP exp(2*pi*i*9/20) 
+.br
+.PP
+complex(dpc), parameter \fIz165\fP exp(2*pi*i*11/24) 
+.br
+.PP
+complex(dpc), parameter \fIz167\fP exp(2*pi*i*13/28) 
+.br
+.PP
+complex(dpc), parameter \fIz169\fP exp(2*pi*i*15/32) 
+.br
+.PP
+complex(dpc), parameter \fIz170\fP exp(2*pi*i*17/36) 
+.br
+.PP
+complex(dpc), parameter \fIz180\fP exp(2*pi*i/2) 
+.br
+.PP
+complex(dpc), parameter \fIz190\fP exp(2*pi*i*19/36) 
+.br
+.PP
+complex(dpc), parameter \fIz191\fP exp(2*pi*i*17/32) 
+.br
+.PP
+complex(dpc), parameter \fIz193\fP exp(2*pi*i*15/28) 
+.br
+.PP
+complex(dpc), parameter \fIz195\fP exp(2*pi*i*13/24) 
+.br
+.PP
+complex(dpc), parameter \fIz198\fP exp(2*pi*i*11/20) 
+.br
+.PP
+complex(dpc), parameter \fIz200\fP exp(2*pi*i*5/9) 
+.br
+.PP
+complex(dpc), parameter \fIz202\fP exp(2*pi*i*9/16) 
+.br
+.PP
+complex(dpc), parameter \fIz206\fP exp(2*pi*i*4/7) 
+.br
+.PP
+complex(dpc), parameter \fIz210\fP exp(2*pi*i*7/12) 
+.br
+.PP
+complex(dpc), parameter \fIz214\fP exp(2*pi*i*19/32) 
+.br
+.PP
+complex(dpc), parameter \fIz216\fP exp(2*pi*i*3/5) 
+.br
+.PP
+complex(dpc), parameter \fIz219\fP exp(2*pi*i*17/28) 
+.br
+.PP
+complex(dpc), parameter \fIz220\fP exp(2*pi*i*11/18) 
+.br
+.PP
+complex(dpc), parameter \fIz225\fP exp(2*pi*i*5/8) 
+.br
+.PP
+complex(dpc), parameter \fIz230\fP exp(2*pi*i*23/36) 
+.br
+.PP
+complex(dpc), parameter \fIz231\fP exp(2*pi*i*9/14) 
+.br
+.PP
+complex(dpc), parameter \fIz234\fP exp(2*pi*i*13/20) 
+.br
+.PP
+complex(dpc), parameter \fIz236\fP exp(2*pi*i*21/32) 
+.br
+.PP
+complex(dpc), parameter \fIz240\fP exp(2*pi*i*2/3) 
+.br
+.PP
+complex(dpc), parameter \fIz244\fP exp(2*pi*i*19/28) 
+.br
+.PP
+complex(dpc), parameter \fIz248\fP exp(2*pi*i*11/16) 
+.br
+.PP
+complex(dpc), parameter \fIz250\fP exp(2*pi*i*25/36) 
+.br
+.PP
+complex(dpc), parameter \fIz252\fP exp(2*pi*i*7/10) 
+.br
+.PP
+complex(dpc), parameter \fIz255\fP exp(2*pi*i*17/24) 
+.br
+.PP
+complex(dpc), parameter \fIz257\fP exp(2*pi*i*5/7) 
+.br
+.PP
+complex(dpc), parameter \fIz259\fP exp(2*pi*i*23/32) 
+.br
+.PP
+complex(dpc), parameter \fIz260\fP exp(2*pi*i*13/18) 
+.br
+.PP
+complex(dpc), parameter \fIz270\fP exp(2*pi*i*3/4) 
+.br
+.PP
+complex(dpc), parameter \fIz280\fP exp(2*pi*i*7/9) 
+.br
+.PP
+complex(dpc), parameter \fIz281\fP exp(2*pi*i*25/32) 
+.br
+.PP
+complex(dpc), parameter \fIz283\fP exp(2*pi*i*11/14) 
+.br
+.PP
+complex(dpc), parameter \fIz285\fP exp(2*pi*i*19/24) 
+.br
+.PP
+complex(dpc), parameter \fIz288\fP exp(2*pi*i*4/5) 
+.br
+.PP
+complex(dpc), parameter \fIz290\fP exp(2*pi*i*29/36) 
+.br
+.PP
+complex(dpc), parameter \fIz292\fP exp(2*pi*i*13/16) 
+.br
+.PP
+complex(dpc), parameter \fIz296\fP exp(2*pi*i*23/28) 
+.br
+.PP
+complex(dpc), parameter \fIz300\fP exp(2*pi*i*5/6) 
+.br
+.PP
+complex(dpc), parameter \fIz304\fP exp(2*pi*i*27/32) 
+.br
+.PP
+complex(dpc), parameter \fIz306\fP exp(2*pi*i*17/20) 
+.br
+.PP
+complex(dpc), parameter \fIz309\fP exp(2*pi*i*6/7) 
+.br
+.PP
+complex(dpc), parameter \fIz310\fP exp(2*pi*i*31/36) 
+.br
+.PP
+complex(dpc), parameter \fIz315\fP exp(2*pi*i*7/8) 
+.br
+.PP
+complex(dpc), parameter \fIz320\fP exp(2*pi*i*8/9) 
+.br
+.PP
+complex(dpc), parameter \fIz321\fP exp(2*pi*i*25/28) 
+.br
+.PP
+complex(dpc), parameter \fIz324\fP exp(2*pi*i*9/10) 
+.br
+.PP
+complex(dpc), parameter \fIz326\fP exp(2*pi*i*29/32) 
+.br
+.PP
+complex(dpc), parameter \fIz330\fP exp(2*pi*i*11/12) 
+.br
+.PP
+complex(dpc), parameter \fIz334\fP exp(2*pi*i*13/14) 
+.br
+.PP
+complex(dpc), parameter \fIz338\fP exp(2*pi*i*15/16) 
+.br
+.PP
+complex(dpc), parameter \fIz340\fP exp(2*pi*i*17/18) 
+.br
+.PP
+complex(dpc), parameter \fIz342\fP exp(2*pi*i*19/20) 
+.br
+.PP
+complex(dpc), parameter \fIz345\fP exp(2*pi*i*23/24) 
+.br
+.PP
+complex(dpc), parameter \fIz347\fP exp(2*pi*i*27/28) 
+.br
+.PP
+complex(dpc), parameter \fIz349\fP exp(2*pi*i*31/32) 
+.br
+.PP
+complex(dpc), parameter \fIz350\fP exp(2*pi*i*35/36) 
+.br
+.PP
+.RE
+.PP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

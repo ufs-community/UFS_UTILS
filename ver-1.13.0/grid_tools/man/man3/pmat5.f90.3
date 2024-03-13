@@ -1,0 +1,146 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat5.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat5.f90 \- 
+.PP
+Handy geographical transformations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "module \fBcstgeo\fP"
+.br
+.RI "\fIConstants for orientation and stretching of map\&. \fP"
+.ti -1c
+.RI "interface \fBpmat5::ctoc_schm\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::ctog\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::ctogr\fP"
+.br
+.ti -1c
+.RI "module \fBdcstgeo\fP"
+.br
+.RI "\fIConstants for orientation and stretching of map\&. \fP"
+.ti -1c
+.RI "interface \fBpmat5::frametwist\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::grtoc\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::gtoc\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::gtoframe\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::ininmap\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::inivmap\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::paraframe\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::plctoc\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::plrot\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat5::plroti\fP"
+.br
+.ti -1c
+.RI "module \fBpmat5\fP"
+.br
+.RI "\fIUtility routines for orienting the globe and basic geographical mappings\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Handy geographical transformations\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+1996 
+.RE
+.PP
+
+.PP
+Definition in file \fBpmat5\&.f90\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "module cstgeo"
+.PP 
+Constants for orientation and stretching of map\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 7 of file pmat5\&.f90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+real(sp), dimension(3, 3) \fIrotm\fP Orthogonal rotation matrix\&. 
+.br
+.PP
+real(sp) \fIsc\fP Schmidt stretching factor\&. 
+.br
+.PP
+real(sp) \fIsci\fP Schmidt inverse stretching factor\&. 
+.br
+.PP
+.RE
+.PP
+.SH "module dcstgeo"
+.PP 
+Constants for orientation and stretching of map\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 17 of file pmat5\&.f90\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+real(dp), dimension(3, 3) \fIrotm\fP Orthogonal rotation matrix\&. 
+.br
+.PP
+real(dp) \fIsc\fP Schmidt stretching factor\&. 
+.br
+.PP
+real(dp) \fIsci\fP Schmidt inverse stretching factor\&. 
+.br
+.PP
+.RE
+.PP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

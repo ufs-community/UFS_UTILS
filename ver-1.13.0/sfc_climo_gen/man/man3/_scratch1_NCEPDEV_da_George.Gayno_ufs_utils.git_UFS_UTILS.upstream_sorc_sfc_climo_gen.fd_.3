@@ -1,0 +1,56 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd Directory Reference" 3 "Wed Mar 13 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd Directory Reference \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBdriver\&.F90\fP"
+.br
+.RI "\fIInterpolates static surface data from lat/lon grid, to FV3 model grid\&. \fP"
+.ti -1c
+.RI "file \fBinterp\&.F90\fP"
+.br
+.RI "\fIRead the input source data and interpolate it to the model grid\&. \fP"
+.ti -1c
+.RI "file \fBinterp_frac_cats\&.F90\fP"
+.br
+.RI "\fIRead the input cateogorical source data and interpolate percent of each category to the model grid\&. \fP"
+.ti -1c
+.RI "file \fBmodel_grid\&.F90\fP"
+.br
+.RI "\fIDefines the model grid\&. \fP"
+.ti -1c
+.RI "file \fBoutput\&.f90\fP"
+.br
+.RI "\fIOutput model data for a single tile and a single record\&. \fP"
+.ti -1c
+.RI "file \fBoutput_frac_cats\&.F90\fP"
+.br
+.RI "\fIWrite model categorical data for a single tile\&. \fP"
+.ti -1c
+.RI "file \fBprogram_setup\&.f90\fP"
+.br
+.RI "\fIProgram setup\&. \fP"
+.ti -1c
+.RI "file \fBsearch\&.f90\fP"
+.br
+.RI "\fIReplace undefined values on the model grid with a valid value at a nearby neighbor\&. \fP"
+.ti -1c
+.RI "file \fBsearch_frac_cats\&.f90\fP"
+.br
+.RI "\fIReplace undefined values on the model grid\&. \fP"
+.ti -1c
+.RI "file \fBsource_grid\&.F90\fP"
+.br
+.RI "\fIRead grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&. \fP"
+.ti -1c
+.RI "file \fButils\&.f90\fP"
+.br
+.RI "\fIUtilities\&. \fP"
+.in -1c

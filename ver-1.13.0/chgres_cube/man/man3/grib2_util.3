@@ -1,0 +1,165 @@
+.TH "grib2_util" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+grib2_util \- 
+.PP
+Utilities for use when reading grib2 data\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBconvert_omega\fP (omega, p, t, q, clb, cub)"
+.br
+.RI "\fIConvert omega to vertical velocity\&. \fP"
+.ti -1c
+.RI "elemental real function, public \fBfpvsnew\fP (t)"
+.br
+.RI "\fICompute saturation vapor pressure\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBrh2spfh\fP (rh_sphum, p, t)"
+.br
+.RI "\fIConvert relative humidity to specific humidity\&. \fP"
+.ti -1c
+.RI "subroutine, public \fBrh2spfh_gfs\fP (rh_sphum, p, t)"
+.br
+.RI "\fIConvert relative humidity to specific humidity (GFS formula) Calculation of saturation water vapor pressure is based on GFS function fvpsnew (Phillips 1982)\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utilities for use when reading grib2 data\&. 
+
+This module contains routines to:
+.IP "\(bu" 2
+convert from RH to specific humidity
+.IP "\(bu" 2
+convert from omega to dzdt\&.
+.PP
+.PP
+George Gayno NCEP/EMC 
+.PP
+Definition at line 12 of file grib2_util\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public grib2_util::convert_omega (real(esmf_kind_r8), dimension(:,:,:), pointeromega, real(esmf_kind_r8), dimension(:,:,:), pointerp, real(esmf_kind_r8), dimension(:,:,:), pointert, real(esmf_kind_r8), dimension(:,:,:), pointerq, integer, dimension(3)clb, integer, dimension(3)cub)"
+
+.PP
+Convert omega to vertical velocity\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIomega\fP on input, vertical velocity on output 
+.br
+\fIp\fP pressure 
+.br
+\fIt\fP temperature 
+.br
+\fIq\fP specific humidity 
+.br
+\fIclb\fP lower bounds of indices processed by this mpi task 
+.br
+\fIcub\fP upper bounds of indices processed by this mpi task 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Larissa Reames 
+.PP
+Jeff Beck 
+.RE
+.PP
+
+.PP
+Definition at line 217 of file grib2_util\&.F90\&.
+.PP
+Referenced by atm_input_data::read_input_atm_grib2_file()\&.
+.SS "elemental real function, public grib2_util::fpvsnew (real(esmf_kind_r8), intent(in)t)"
+
+.PP
+Compute saturation vapor pressure\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP temperature in Kelvin 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+fpvsnew Saturation vapor pressure 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+N Phillips w/NMC2X2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+30 dec 82 
+.RE
+.PP
+
+.PP
+Definition at line 135 of file grib2_util\&.F90\&.
+.PP
+Referenced by rh2spfh_gfs()\&.
+.SS "subroutine, public grib2_util::rh2spfh (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout)rh_sphum, real(esmf_kind_r8), intent(in)p, real(esmf_kind_r8), dimension(i_input,j_input), intent(in)t)"
+
+.PP
+Convert relative humidity to specific humidity\&. Calculation of saturation water vapor pressure is based on Brock and Richardson 2001 (Meterological Measurement Systems, p\&. 86, equation 5\&.1)
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrh_sphum\fP rel humidity (%) on input\&. spec hum (kg/kg) on output\&. 
+.br
+\fIp\fP pressure in Pa 
+.br
+\fIt\fP temperature 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Larissa Reames 
+.PP
+Jeff Beck 
+.RE
+.PP
+
+.PP
+Definition at line 37 of file grib2_util\&.F90\&.
+.PP
+Referenced by atm_input_data::read_input_atm_grib2_file()\&.
+.SS "subroutine, public grib2_util::rh2spfh_gfs (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout)rh_sphum, real(esmf_kind_r8), intent(in)p, real(esmf_kind_r8), dimension(i_input,j_input), intent(in)t)"
+
+.PP
+Convert relative humidity to specific humidity (GFS formula) Calculation of saturation water vapor pressure is based on GFS function fvpsnew (Phillips 1982)\&. The model does account for the variation of the latent heat of condensation with temperature\&. A linear interpolation is done between values in a calculated lookup table\&. Ice and water are considered separately\&. This option provides a consistent conversion for GFS grib2 data to be ingested\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrh_sphum\fP rel humidity on input\&. spec hum on output\&. 
+.br
+\fIp\fP pressure in Pa 
+.br
+\fIt\fP temperature 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Jili Dong NCEP/EMC 
+.RE
+.PP
+
+.PP
+Definition at line 80 of file grib2_util\&.F90\&.
+.PP
+References fpvsnew()\&.
+.PP
+Referenced by atm_input_data::read_input_atm_grib2_file()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for chgres_cube from the source code\&.

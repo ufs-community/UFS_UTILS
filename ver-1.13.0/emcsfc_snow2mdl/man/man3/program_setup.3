@@ -1,0 +1,326 @@
+.TH "program_setup" 3 "Wed Mar 13 2024" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+program_setup \- 
+.PP
+This module reads in data from the program's configuration namelist\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBread_config_nml\fP"
+.br
+.RI "\fIRead namelist control\&. \fP"
+.in -1c
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "character *200, public \fBafwa_lsmask_nh_file\fP"
+.br
+.RI "\fIpath/name afwa n hemis land/sea mask \fP"
+.ti -1c
+.RI "character *200, public \fBafwa_lsmask_sh_file\fP"
+.br
+.RI "\fIpath/name afwa s hemis land/sea mask \fP"
+.ti -1c
+.RI "character *200, public \fBafwa_snow_global_file\fP"
+.br
+.RI "\fIglobal afwa snow file\&. \fP"
+.ti -1c
+.RI "character *200, public \fBafwa_snow_nh_file\fP"
+.br
+.RI "\fIpath/name afwa n hemis snow depth \fP"
+.ti -1c
+.RI "character *200, public \fBafwa_snow_sh_file\fP"
+.br
+.RI "\fIpath/name afwa s hemis snow depth \fP"
+.ti -1c
+.RI "character *200, public \fBautosnow_file\fP"
+.br
+.RI "\fIpath/name s hemis autosnow file \fP"
+.ti -1c
+.RI "character *200, public \fBclimo_qc_file\fP"
+.br
+.RI "\fIClimatological snow cover file\&. \fP"
+.ti -1c
+.RI "character *200, public \fBgfs_lpl_file\fP"
+.br
+.RI "\fIGFS gaussian thinned (reduced) grid definition file\&. \fP"
+.ti -1c
+.RI "integer, public \fBgrib_century\fP"
+.br
+.RI "\fIdate of the final merged snow product that will be placed in grib header\&. \fP"
+.ti -1c
+.RI "integer, public \fBgrib_day\fP"
+.br
+.RI "\fIdate of the final merged snow product that will be placed in grib header\&. \fP"
+.ti -1c
+.RI "integer, public \fBgrib_hour\fP"
+.br
+.RI "\fIdate of the final merged snow product that will be placed in grib header\&. \fP"
+.ti -1c
+.RI "integer, public \fBgrib_month\fP"
+.br
+.RI "\fIdate of the final merged snow product that will be placed in grib header\&. \fP"
+.ti -1c
+.RI "integer, public \fBgrib_year\fP"
+.br
+.RI "\fIdate of the final merged snow product that will be placed in grib header\&. \fP"
+.ti -1c
+.RI "real, public \fBlat_threshold\fP"
+.br
+.RI "\fIequatorward of this latitude, model points with undefined cover or depth (because the interpolation routines could not find valid snow data) are set to a default value of zero\&. \fP"
+.ti -1c
+.RI "real, public \fBmin_snow_depth\fP"
+.br
+.RI "\fIminimum snow depth in meters at model points with coverage exceeding threshold\&. \fP"
+.ti -1c
+.RI "character *200, public \fBmodel_lat_file\fP"
+.br
+.RI "\fIpath/name lats on the model grid \fP"
+.ti -1c
+.RI "character *200, public \fBmodel_lon_file\fP"
+.br
+.RI "\fIpath/name lons on the model grid \fP"
+.ti -1c
+.RI "character *200, public \fBmodel_lsmask_file\fP"
+.br
+.RI "\fIpath/name nesdis/ims land mask \fP"
+.ti -1c
+.RI "character *200, public \fBmodel_snow_file\fP"
+.br
+.RI "\fIpath/name nesdis/ims snow cover \fP"
+.ti -1c
+.RI "character *200, public \fBnesdis_lsmask_file\fP"
+.br
+.RI "\fInesdis/ims land mask file \fP"
+.ti -1c
+.RI "character *200, public \fBnesdis_snow_file\fP"
+.br
+.RI "\fInesdis/ims snow file \fP"
+.ti -1c
+.RI "logical, public \fBoutput_grib2\fP"
+.br
+.RI "\fIwhen true, output model snow analysis is grib 2\&. \fP"
+.ti -1c
+.RI "real, public \fBsnow_cvr_threshold\fP"
+.br
+.RI "\fIif percent coverage according to nesdis/ims or autosnow exceeds this value, then non-zero snow depth is assigned\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+This module reads in data from the program's configuration namelist\&. 
+
+program history log:
+.IP "\(bu" 2
+2005-DEC-16 gayno - initial version
+.IP "\(bu" 2
+2008-Feb-01 gayno - added autosnow data
+.IP "\(bu" 2
+2014-Sep-30 gayno - added 'output_grib2' flag
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2005-DEC-16 
+.RE
+.PP
+
+.PP
+Definition at line 15 of file program_setup\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public program_setup::read_config_nml ()"
+
+.PP
+Read namelist control\&. 
+.PP
+\fBNote:\fP
+.RS 4
+This subroutine reads the program's configuration namelist that contains the the paths/filenames for input and output, and other program control flags\&.
+.RE
+.PP
+program history log: 2005-dec-16 gayno - initial version 2008-feb-01 gayno - added read of autosnow path/file 2014-sep-30 gayno - added read of 'output_grib2' flag\&.
+.PP
+files: input:
+.IP "\(bu" 2
+program configuration namelist, fort\&.41
+.PP
+.PP
+condition codes: all fatal
+.IP "\(bu" 2
+77 - bad open on configuration namelist
+.IP "\(bu" 2
+78 - bad read on configuration namelist
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno org: w/np2 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2005-Dec-16 
+.RE
+.PP
+
+.PP
+Definition at line 80 of file program_setup\&.F90\&.
+.PP
+Referenced by driver()\&.
+.SH "Field Documentation"
+.PP 
+.SS "character*200, public program_setup::afwa_lsmask_nh_file"
+
+.PP
+path/name afwa n hemis land/sea mask 
+.PP
+Definition at line 24 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::afwa_lsmask_sh_file"
+
+.PP
+path/name afwa s hemis land/sea mask 
+.PP
+Definition at line 25 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::afwa_snow_global_file"
+
+.PP
+global afwa snow file\&. 
+.PP
+Definition at line 21 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::afwa_snow_nh_file"
+
+.PP
+path/name afwa n hemis snow depth 
+.PP
+Definition at line 22 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::afwa_snow_sh_file"
+
+.PP
+path/name afwa s hemis snow depth 
+.PP
+Definition at line 23 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::autosnow_file"
+
+.PP
+path/name s hemis autosnow file 
+.PP
+Definition at line 26 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::climo_qc_file"
+
+.PP
+Climatological snow cover file\&. Used to quality control snow data\&. 
+.PP
+Definition at line 27 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::gfs_lpl_file"
+
+.PP
+GFS gaussian thinned (reduced) grid definition file\&. Contains the number of longitudes (i-points) for each latitude (row)\&. 
+.PP
+Definition at line 29 of file program_setup\&.F90\&.
+.SS "integer, public program_setup::grib_century"
+
+.PP
+date of the final merged snow product that will be placed in grib header\&. 
+.PP
+Definition at line 39 of file program_setup\&.F90\&.
+.SS "integer, public program_setup::grib_day"
+
+.PP
+date of the final merged snow product that will be placed in grib header\&. 
+.PP
+Definition at line 41 of file program_setup\&.F90\&.
+.SS "integer, public program_setup::grib_hour"
+
+.PP
+date of the final merged snow product that will be placed in grib header\&. 
+.PP
+Definition at line 42 of file program_setup\&.F90\&.
+.SS "integer, public program_setup::grib_month"
+
+.PP
+date of the final merged snow product that will be placed in grib header\&. 
+.PP
+Definition at line 43 of file program_setup\&.F90\&.
+.SS "integer, public program_setup::grib_year"
+
+.PP
+date of the final merged snow product that will be placed in grib header\&. 
+.PP
+Definition at line 44 of file program_setup\&.F90\&.
+.SS "real, public program_setup::lat_threshold"
+
+.PP
+equatorward of this latitude, model points with undefined cover or depth (because the interpolation routines could not find valid snow data) are set to a default value of zero\&. poleward, undefined points are set according to logic in module \fBsnow2mdl\fP\&. 
+.PP
+Definition at line 48 of file program_setup\&.F90\&.
+.SS "real, public program_setup::min_snow_depth"
+
+.PP
+minimum snow depth in meters at model points with coverage exceeding threshold\&. 
+.PP
+Definition at line 52 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::model_lat_file"
+
+.PP
+path/name lats on the model grid 
+.PP
+Definition at line 32 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::model_lon_file"
+
+.PP
+path/name lons on the model grid 
+.PP
+Definition at line 33 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::model_lsmask_file"
+
+.PP
+path/name nesdis/ims land mask 
+.PP
+Definition at line 34 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::model_snow_file"
+
+.PP
+path/name nesdis/ims snow cover 
+.PP
+Definition at line 35 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::nesdis_lsmask_file"
+
+.PP
+nesdis/ims land mask file 
+.PP
+Definition at line 36 of file program_setup\&.F90\&.
+.SS "character*200, public program_setup::nesdis_snow_file"
+
+.PP
+nesdis/ims snow file 
+.PP
+Definition at line 37 of file program_setup\&.F90\&.
+.SS "logical, public program_setup::output_grib2"
+
+.PP
+when true, output model snow analysis is grib 2\&. when false, grib 1\&. 
+.PP
+Definition at line 46 of file program_setup\&.F90\&.
+.SS "real, public program_setup::snow_cvr_threshold"
+
+.PP
+if percent coverage according to nesdis/ims or autosnow exceeds this value, then non-zero snow depth is assigned\&. below this threshold, depth is set to zero\&. 
+.PP
+Definition at line 53 of file program_setup\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for emcsfc_snow2mdl from the source code\&.

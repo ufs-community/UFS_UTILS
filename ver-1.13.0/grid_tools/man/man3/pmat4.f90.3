@@ -1,0 +1,224 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90 \- 
+.PP
+Euclidean geometry, geometric (stereographic) projections, related transformations (Mobius)\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBpmat4::absv\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::axial\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::axtoq\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::axtorot\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::corral\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::cross_product\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::ctoz\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::det\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::diag\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::dlltoxy\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::expmat\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::gram\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::hav\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::huarea\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::identity\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::mobius\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::mobiusi\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::mulqq\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::normalize\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::normalized\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::orthogonalized\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::outer_product\fP"
+.br
+.ti -1c
+.RI "module \fBpmat4\fP"
+.br
+.RI "\fIModule for handy vector and matrix operations in Euclidean geometry\&. \fP"
+.ti -1c
+.RI "interface \fBpmat4::qtoax\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::qtorot\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::qtospin\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::rottoax\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::rottoq\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::rowops\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::sarea\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::setem\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::setmobius\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::spintoq\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::trace\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::triple_product\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::znfun\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::zntay\fP"
+.br
+.ti -1c
+.RI "interface \fBpmat4::ztoc\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcyclic\fP (u1, u2, u3, d1, d2, d3)"
+.br
+.RI "\fICyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. \fP"
+.ti -1c
+.RI "subroutine \fBcyclic\fP (u1, u2, u3, d1, d2, d3)"
+.br
+.RI "\fICyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Euclidean geometry, geometric (stereographic) projections, related transformations (Mobius)\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+Oct 2005 
+.RE
+.PP
+
+.PP
+Definition in file \fBpmat4\&.f90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine sarea_s::cyclic (real(sp), dimension(3), intent(inout)u1, real(sp), dimension(3), intent(inout)u2, real(sp), dimension(3), intent(inout)u3, real(sp), intent(inout)d1, real(sp), intent(inout)d2, real(sp), intent(inout)d3)"
+
+.PP
+Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIu1\fP real vector to be shifted 
+.br
+\fIu2\fP real vector to be shifted 
+.br
+\fIu3\fP real vector to be shifted 
+.br
+\fId1\fP real variable to be shifted 
+.br
+\fId2\fP real variable to be shifted 
+.br
+\fId3\fP real variable to be shifted 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 704 of file pmat4\&.f90\&.
+.PP
+Referenced by pmat4::sarea_d(), and pmat4::sarea_s()\&.
+.SS "subroutine sarea_d::cyclic (real(dp), dimension(3), intent(inout)u1, real(dp), dimension(3), intent(inout)u2, real(dp), dimension(3), intent(inout)u3, real(dp), intent(inout)d1, real(dp), intent(inout)d2, real(dp), intent(inout)d3)"
+
+.PP
+Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIu1\fP real vector to be shifted 
+.br
+\fIu2\fP real vector to be shifted 
+.br
+\fIu3\fP real vector to be shifted 
+.br
+\fId1\fP real variable to be shifted 
+.br
+\fId2\fP real variable to be shifted 
+.br
+\fId3\fP real variable to be shifted 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 759 of file pmat4\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

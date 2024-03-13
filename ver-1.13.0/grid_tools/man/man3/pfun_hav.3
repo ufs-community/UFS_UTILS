@@ -1,0 +1,75 @@
+.TH "pfun::hav" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pfun::hav \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "real(dp) function \fBhav_d\fP (t)"
+.br
+.RI "\fIHaversine function for double precision real (for geometry on the sphere)\&. \fP"
+.ti -1c
+.RI "real(sp) function \fBhav_s\fP (t)"
+.br
+.RI "\fIHaversine function for single precision real (for geometry on the sphere)\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 21 of file pfun\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "real(dp) function pfun::hav::hav_d (real(dp), intent(in)t)\fC [private]\fP"
+
+.PP
+Haversine function for double precision real (for geometry on the sphere)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP double precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a haversine function of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 102 of file pfun\&.f90\&.
+.SS "real(sp) function pfun::hav::hav_s (real(sp), intent(in)t)\fC [private]\fP"
+
+.PP
+Haversine function for single precision real (for geometry on the sphere)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIt\fP single precision real argument 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a haversine function of t 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 89 of file pfun\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

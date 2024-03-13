@@ -1,0 +1,320 @@
+.TH "gsl_oro_data_sm_scale" 3 "Wed Mar 13 2024" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+gsl_oro_data_sm_scale \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBcalc_gsl_oro_data_sm_scale\fP (tile_num, res_indx, halo, duplicate_oro_data_file)"
+.br
+.RI "\fISubroutine to compute orographic statistics needed for small-scale orograhic drag (gravity wave and form drag) schemes\&. \fP"
+.ti -1c
+.RI "real(kind=\fBreal_kind\fP) function \fBinterp_1d\fP (x, x1, x2, y1, y2)"
+.br
+.RI "\fIInterpolates (or extrapolates) linear function y = y(x) \fP"
+.ti -1c
+.RI "integer function \fBnearest_i_east\fP (lon_in)"
+.br
+.RI "\fIFinds nearest fine-grid i index to the east of a given longitude\&. \fP"
+.ti -1c
+.RI "integer function \fBnearest_i_west\fP (lon_in)"
+.br
+.RI "\fIFinds nearest fine-grid i index to the west of a given longitude\&. \fP"
+.ti -1c
+.RI "integer function \fBnearest_j_north\fP (lat_in)"
+.br
+.RI "\fICalculates nearest fine-grid j index to the north of a given latitude\&. \fP"
+.ti -1c
+.RI "integer function \fBnearest_j_south\fP (lat_in)"
+.br
+.RI "\fICalculates nearest fine-grid j index to the south of a given latitude\&. \fP"
+.ti -1c
+.RI "subroutine \fBnetcdf_err\fP (err, string)"
+.br
+.RI "\fIReturns netCDF error given input err code\&. \fP"
+.in -1c
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "integer, parameter \fBdbl_kind\fP = selected_real_kind(13)"
+.br
+.RI "\fIdouble precision \fP"
+.ti -1c
+.RI "integer \fBdimx_fine\fP"
+.br
+.RI "\fIx-dimension of fine grid \fP"
+.ti -1c
+.RI "integer \fBdimy_fine\fP"
+.br
+.RI "\fIy-dimension of fine grid \fP"
+.ti -1c
+.RI "real(kind=\fBreal_kind\fP), 
+.br
+dimension(:), allocatable \fBlat1d_fine\fP"
+.br
+.RI "\fIlatitude of fine grid pts \fP"
+.ti -1c
+.RI "real(kind=\fBreal_kind\fP), 
+.br
+dimension(:), allocatable \fBlon1d_fine\fP"
+.br
+.RI "\fIlongitude of fine grid pts \fP"
+.ti -1c
+.RI "real(kind=\fBreal_kind\fP), parameter \fBp5\fP = 0\&.5_real_kind"
+.br
+.RI "\fIone half \fP"
+.ti -1c
+.RI "real, parameter \fBpi\fP = 3\&.1415926535897_real_kind"
+.br
+.RI "\fIpi \fP"
+.ti -1c
+.RI "integer, parameter \fBreal_kind\fP = selected_real_kind(6)"
+.br
+.RI "\fIsingle precision \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 23 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine gsl_oro_data_sm_scale::calc_gsl_oro_data_sm_scale (character(len=2), intent(in)tile_num, character(len=7), intent(in)res_indx, character(len=4), intent(in)halo, logical, intent(out)duplicate_oro_data_file)"
+
+.PP
+Subroutine to compute orographic statistics needed for small-scale orograhic drag (gravity wave and form drag) schemes\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fItile_num\fP (tile number) 
+.br
+\fIres_indx\fP (resolution) 
+.br
+\fIhalo\fP (halo number) 
+.br
+\fIduplicate_oro_data_file\fP (equals \&.true\&. if min grid size <= 7\&.5km) 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Michael Toy, NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition at line 49 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.PP
+References gsl_oro_data_lg_scale::nearest_i_east(), gsl_oro_data_lg_scale::nearest_i_west(), gsl_oro_data_lg_scale::nearest_j_north(), gsl_oro_data_lg_scale::nearest_j_south(), and netcdf_err()\&.
+.PP
+Referenced by gsl_oro_data()\&.
+.SS "real (kind=\fBreal_kind\fP) function gsl_oro_data_sm_scale::interp_1d (real (kind=\fBreal_kind\fP), intent(in)x, real (kind=\fBreal_kind\fP), intent(in)x1, real (kind=\fBreal_kind\fP), intent(in)x2, real (kind=\fBreal_kind\fP), intent(in)y1, real (kind=\fBreal_kind\fP), intent(in)y2)"
+
+.PP
+Interpolates (or extrapolates) linear function y = y(x) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP Input 'x' value 
+.br
+\fIx1\fP Known point 1 
+.br
+\fIx2\fP Known point 2 
+.br
+\fIy1\fP Known y(x1) 
+.br
+\fIy2\fP Known y(x2) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+interp_1d Interpolated y value at x 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Michael Toy, NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition at line 1246 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.PP
+References gsl_oro_data_lg_scale::interp_1d()\&.
+.SS "integer function gsl_oro_data_sm_scale::nearest_i_east (real (kind=\fBreal_kind\fP), intent(in)lon_in)"
+
+.PP
+Finds nearest fine-grid i index to the east of a given longitude\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlon_in\fP longitude (radians) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+nearest_i_east Nearest grid point i-index east of selected point 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Michael Toy, NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition at line 1116 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.PP
+References gsl_oro_data_lg_scale::nearest_i_east()\&.
+.SS "integer function gsl_oro_data_sm_scale::nearest_i_west (real (kind=\fBreal_kind\fP), intent(in)lon_in)"
+
+.PP
+Finds nearest fine-grid i index to the west of a given longitude\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlon_in\fP longitude (radians) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+nearest_i_west Nearest grid point i-index west of selected point 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Michael Toy, NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition at line 1149 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.PP
+References gsl_oro_data_lg_scale::nearest_i_west()\&.
+.SS "integer function gsl_oro_data_sm_scale::nearest_j_north (real (kind=\fBreal_kind\fP), intent(in)lat_in)"
+
+.PP
+Calculates nearest fine-grid j index to the north of a given latitude\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlat_in\fP Latitude (radians) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+nearest_j_north Nearest fine-grid j index to the north of a given latitude 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Michael Toy, NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition at line 1182 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.PP
+References gsl_oro_data_lg_scale::nearest_j_north()\&.
+.SS "integer function gsl_oro_data_sm_scale::nearest_j_south (real (kind=\fBreal_kind\fP), intent(in)lat_in)"
+
+.PP
+Calculates nearest fine-grid j index to the south of a given latitude\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIlat_in\fP Latitude (radians) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+nearest_j_south Nearest fine-grid j index to the south of a given latitude 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Michael Toy, NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition at line 1211 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.PP
+References gsl_oro_data_lg_scale::nearest_j_south()\&.
+.SS "subroutine gsl_oro_data_sm_scale::netcdf_err (integer, intent(in)err, character(len=*), intent(in)string)"
+
+.PP
+Returns netCDF error given input err code\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIerr\fP Error code from netCDF routine 
+.br
+\fIstring\fP Portion of error message 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Michael Toy, NOAA/GSL 
+.RE
+.PP
+
+.PP
+Definition at line 1266 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SH "Field Documentation"
+.PP 
+.SS "integer, parameter gsl_oro_data_sm_scale::dbl_kind = selected_real_kind(13)"
+
+.PP
+double precision 
+.PP
+Definition at line 28 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SS "integer gsl_oro_data_sm_scale::dimx_fine"
+
+.PP
+x-dimension of fine grid 
+.PP
+Definition at line 31 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SS "integer gsl_oro_data_sm_scale::dimy_fine"
+
+.PP
+y-dimension of fine grid 
+.PP
+Definition at line 32 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SS "real (kind = \fBreal_kind\fP), dimension(:), allocatable gsl_oro_data_sm_scale::lat1d_fine"
+
+.PP
+latitude of fine grid pts 
+.PP
+Definition at line 34 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SS "real (kind = \fBreal_kind\fP), dimension(:), allocatable gsl_oro_data_sm_scale::lon1d_fine"
+
+.PP
+longitude of fine grid pts 
+.PP
+Definition at line 35 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SS "real (kind = \fBreal_kind\fP), parameter gsl_oro_data_sm_scale::p5 = 0\&.5_real_kind"
+
+.PP
+one half 
+.PP
+Definition at line 37 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SS "real, parameter gsl_oro_data_sm_scale::pi = 3\&.1415926535897_real_kind"
+
+.PP
+pi 
+.PP
+Definition at line 30 of file module_gsl_oro_data_sm_scale\&.f90\&.
+.SS "integer, parameter gsl_oro_data_sm_scale::real_kind = selected_real_kind(6)"
+
+.PP
+single precision 
+.PP
+Definition at line 27 of file module_gsl_oro_data_sm_scale\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.
