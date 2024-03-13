@@ -204,7 +204,7 @@ C
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
-      integer :: M,N,IMT,IRET,ios,iosg,latg2,istat,itest,jtest
+      integer :: M,N,IMT,IRET,ios,latg2,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
@@ -460,43 +460,35 @@ C
 ! Read 30-sec Antarctica RAMP data. Points scan from South
 ! to North, and from Greenwich to Greenwich.
 
-! The error handling here needs to be cleaned up.
-      iosg = 0
       error=NF__OPEN("./topography.antarctica.ramp.30s.nc",
      &               NF_NOWRITE,fsize,ncid)
       call netcdf_err(error, 'Opening RAMP topo file' )
       error=nf_inq_varid(ncid, 'topo', id_var)
       call netcdf_err(error, 'Inquire varid of RAMP topo')
       error=nf_get_var_real(ncid, id_var, GICE)
-      iosg=error
       call netcdf_err(error, 'Inquire data of RAMP topo')
       error = nf_close(ncid)
       
-      if(iosg .ne. 0 ) then
-        print *,' *** Err on reading GICE record, iosg=',iosg
-        print *,' exec continues but NO GICE correction done '
-      else
-        print *,' GICE 30" Antarctica RAMP orog 43201x3601 read OK'
-        print *,' Processing! '
-        print *,' Processing! '
-        print *,' Processing! '
-         do j = 1, 3601 
-         do i = 1, IMN
-           zsave1 = ZAVG(i,j)
-           zsave2 = ZSLM(i,j)
-         if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
-           if ( GICE(i,j) .gt. 0.) then 
-                ZAVG(i,j) = int( GICE(i,j) + 0.5 )
+      print *,' GICE 30" Antarctica RAMP orog 43201x3601 read OK'
+      print *,' Processing! '
+      print *,' Processing! '
+      print *,' Processing! '
+      do j = 1, 3601 
+      do i = 1, IMN
+         zsave1 = ZAVG(i,j)
+         zsave2 = ZSLM(i,j)
+       if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
+         if ( GICE(i,j) .gt. 0.) then 
+              ZAVG(i,j) = int( GICE(i,j) + 0.5 )
 !! --- for GICE values less than or equal to 0 (0, -1, or -99) then
 !! --- radar-sat (RAMP) values are not valid and revert back to old orog 
                 ZSLM(i,j) = 1
-           endif
          endif
+       endif
   152 format(1x,' ZAVG(i=',i4,' j=',i4,')=',i5,i3,
      &' orig:',i5,i4,' Lat=',f7.3,f8.2,'E',' GICE=',f8.1)
-         enddo
-         enddo
-      endif
+      enddo
+      enddo
 
       deallocate (GICE)
 
