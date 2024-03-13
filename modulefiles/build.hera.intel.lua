@@ -5,7 +5,7 @@ Load environment to compile UFS_UTILS on Hera using Intel
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
-prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/spack-stack/spack-stack-1.5.1/envs/unified-env-rocky8/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2021.5.0"
 load(pathJoin("stack-intel", stack_intel_ver))
@@ -49,7 +49,7 @@ load(pathJoin("libpng", png_ver))
 netcdf_c_ver=os.getenv("netcdf_c_ver") or "4.9.2"
 load(pathJoin("netcdf-c", netcdf_c_ver))
 
-netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.1"
+netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.0"
 load(pathJoin("netcdf-fortran", netcdf_fortran_ver))
 
 nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
