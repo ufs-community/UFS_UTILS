@@ -116,7 +116,8 @@ C> @return 0 for success, error code otherwise.
       if( trim(OUTGRID) .NE. "none" ) then
          inquire(file=trim(OUTGRID), exist=fexist)
          if(.not. fexist) then
-            print*, "file "//trim(OUTGRID)//" does not exist"
+            print*, "FATAL ERROR: file "//trim(OUTGRID)
+            print*, " does not exist."
             CALL ERREXIT(4)
          endif
          do ncid = 103, 512
@@ -581,7 +582,8 @@ C
          grid_from_file = .true.
          inquire(file=trim(OUTGRID), exist=fexist)
          if(.not. fexist) then
-            print*, "file "//trim(OUTGRID)//" does not exist"
+            print*, "FATAL ERROR: file "//trim(OUTGRID)
+            print*, "does not exist."
             CALL ERREXIT(4)
          endif
          do ncid = 103, 512
@@ -597,25 +599,6 @@ C
      &                   trim(OUTGRID) )
          nx = 2*IM
          ny = 2*JM
-!         error=nf_inq_dimlen(ncid,id_dim,nx)
-!         print*, "nx = ", nx, id_dim
-!         call netcdf_err(error, 'inquire dimension nx length '//
-!     &       'from file '//trim(OUTGRID) )
-!         error=nf_inq_dimid(ncid, 'ny', id_dim)
-!         call netcdf_err(error, 'inquire dimension ny from file '//
-!     &                   trim(OUTGRID) )
-!         error=nf_inq_dimlen(ncid,id_dim,ny)
-!         call netcdf_err(error, 'inquire dimension ny length '//
-!     &       'from file '//trim(OUTGRID) )
-!        IM should equal nx/2 and JM should equal ny/2
-!         if(IM .ne. nx/2) then
-!            print*, "IM=",IM, " /= grid file nx/2=",nx/2
-!            CALL ERREXIT(4)
-!         endif
-!         if(JM .ne. ny/2) then
-!            print*, "JM=",JM, " /= grid file ny/2=",ny/2
-!            CALL ERREXIT(4)
-!         endif
          print*, "Read the grid from file "//trim(OUTGRID)
 
          allocate(tmpvar(nx+1,ny+1))
@@ -770,12 +753,12 @@ C
      &      IM,JM,IMN,JMN,geolon_c,geolat_c)
             lake_frac=9999.9
          ELSE
-           print*,'got here - read in external mask ',merge_file
+           print*,'Read in external mask ',merge_file
            CALL READ_MASK(MERGE_FILE,SLM,land_frac,lake_frac,im,jm)
          ENDIF
 
          IF (MASK_ONLY) THEN
-           print*,'got here computing mask only.'
+           print*,'Computing mask only.'
            CALL WRITE_MASK_NETCDF(IM,JM,SLM,land_frac,
      1                  1,1,GEOLON,GEOLAT)
 
@@ -3282,7 +3265,7 @@ C
           !--- adjust dlat if the points are close to pole.
           if( lat-dlat*0.5<-90.) then
              print*, "at i,j =", i,j, lat, dlat, lat-dlat*0.5
-             print*, "ERROR: lat-dlat*0.5<-90."
+             print*, "FATAL ERROR: lat-dlat*0.5<-90."
              call ERREXIT(4)
           endif
           if( lat+dlat*2 > 90.) then
@@ -3611,7 +3594,8 @@ C
         if(iindx(n) ==0) then
           print*, "lon,lat=", lon,lat
           print*, "jstart, jend=", jstart, jend, dist
-          print*, "ERROR in get mismatch_index: not find nearest points"
+          print*, "FATAL ERROR in get mismatch_index: "
+          print*, "did not find nearest points."
           call ERREXIT(4)
         endif
       enddo   
@@ -3915,7 +3899,7 @@ C
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
         if (iret /= 0) then
-          print*,'- ERROR IN IPOLATES ',iret
+          print*,'- FATAL ERROR IN IPOLATES ',iret
           call ERREXIT(4)
         endif
 
@@ -3987,7 +3971,7 @@ C
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
         if (iret /= 0) then
-          print*,'- ERROR IN IPOLATES ',iret
+          print*,'- FATAL ERROR IN IPOLATES ',iret
           call ERREXIT(4)
         endif
 
