@@ -672,3 +672,29 @@ UFS_UTILS utilities
 
 gdas_init
 =========
+
+Introduction
+------------
+
+The gdas_init utility is used to create coldstart initial conditions for global cycled experiments using the chgres_cube program.  It has two components, one that pulls the input data required by chgres_cube from HPSS, and one that runs chgres_cube. The utility is only supported on machines with access to HPSS:
+
+     * Hera
+     * Jet
+     * WCOSS2
+     * S4 (Only the chgres step is supported, not the data pull step.)
+
+Location
+--------
+
+Find it here: ./util/gdas_init
+
+Build UFS_UTILS and set 'fixed' directories
+-------------------------------------------
+
+     * Invoke the build script from the root directory: ./build_all.sh
+     * Set the 'fixed' directories using the script in the 'fix' subdirectory: ./link_fixdirs.sh emc $MACHINE (where MACHINE is 'hera', 'jet', 'wcoss2', or 's4')
+
+Configure for your experiment
+-----------------------------
+
+Edit the 'config' file in ./util/gdas_init
