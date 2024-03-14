@@ -665,3 +665,10 @@ Run script
 ----------
 
 To run, use the machine-dependent script under ./util/weight_gen
+
+***************************************************
+UFS_UTILS utilities
+***************************************************
+
+gdas_init
+=========
