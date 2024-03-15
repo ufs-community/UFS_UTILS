@@ -717,7 +717,13 @@ Note: This utility selects the ocean resolution in the set_fixed_files.sh script
 Kick off the utility
 --------------------
 
-Submit the script for your machine: ``./driver.$MACHINE.sh`` where MACHINE IS 'hera', 'jet', 'wcoss2', or 's4'.
+Submit the script for your machine: 
+
+::
+
+  ./driver.$MACHINE.sh 
+
+where MACHINE IS 'hera', 'jet', 'wcoss2', or 's4'.
 
 The standard output will be placed in log files in the current directory. 
 
