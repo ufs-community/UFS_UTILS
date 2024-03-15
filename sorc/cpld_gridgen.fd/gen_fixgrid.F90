@@ -20,7 +20,7 @@ program gen_fixgrid
   use grdvars
   use inputnml
   use gengrid_kinds,     only: CL, CS, dbl_kind, real_kind, int_kind
-  use angles,            only: find_angq, find_ang
+  use angles,            only: find_ang
   use vertices,          only: fill_vertices, fill_bottom, fill_top
   use mapped_mask,       only: make_frac_land
   use postwgts,          only: make_postwgts
@@ -40,6 +40,9 @@ program gen_fixgrid
 
   real(kind=dbl_kind), parameter :: pi = 3.14159265358979323846_dbl_kind
   real(kind=dbl_kind), parameter :: deg2rad = pi/180.0_dbl_kind
+  ! for angchk
+  real(kind=dbl_kind) :: angle_0, angle_w, angle_s, angle_sw
+  real(kind=dbl_kind) :: p25 = 0.25
 
   real(real_kind),   allocatable, dimension(:,:) :: ww3dpth
   integer(int_kind), allocatable, dimension(:,:) :: ww3mask
@@ -237,14 +240,9 @@ program gen_fixgrid
 
   rc = nf90_close(ncid)
   !print *,'super grid size ',size(y,1),size(y,2)
-  !print *,'max lat in super grid ',maxval(y)
   sg_maxlat = maxval(y)
-
-  !---------------------------------------------------------------------
-  ! find the angle on corners---this requires the supergrid
-  !---------------------------------------------------------------------
-
-  call find_angq
+  write(logmsg,'(a,f12.2)')'max lat in super grid ',maxval(y)
+  print '(a)',trim(logmsg)
 
   !---------------------------------------------------------------------
   ! fill grid variables
@@ -256,8 +254,6 @@ program gen_fixgrid
         !deg->rad
         ulon(i,j) =     x(i2,j2)*deg2rad
         ulat(i,j) =     y(i2,j2)*deg2rad
-        !in rad already
-        angle(i,j) = -angq(i2,j2)
         !m->cm
         htn(i,j) = (dx(i2-1,j2) + dx(i2,j2))*100._dbl_kind
         hte(i,j) = (dy(i2,j2-1) + dy(i2,j2))*100._dbl_kind
@@ -280,12 +276,98 @@ program gen_fixgrid
   enddo
 
   !---------------------------------------------------------------------
-  ! find the angle on centers---this does not requires the supergrid
+  ! locate the ith index of the two poles on j=nj
+  ! the corner points must lie on the pole
+  !---------------------------------------------------------------------
+
+  ipole = -1
+  j = nj
+  do i = 1,ni/2
+     if(latBu(i,j) .eq. sg_maxlat)ipole(1) = i
+  enddo
+  do i = ni/2+1,ni
+     if(latBu(i,j) .eq. sg_maxlat)ipole(2) = i
+  enddo
+  write(logmsg,'(a,2i6,2f12.2)')'poles found at i = ',ipole, &
+       latBu(ipole(1),nj), latBu(ipole(2),nj)
+  print '(a)',trim(logmsg)
+
+  !---------------------------------------------------------------------
+  ! find the angle on centers using the same procedure as MOM6
   !---------------------------------------------------------------------
 
   call find_ang
   print *,'ANGLET ',minval(anglet),maxval(anglet)
-  print *,'ANGLE  ',minval(angle),maxval(angle)
+  print *,'anglet(1,nj),anglet(ni,nj) ',anglet(1,nj),anglet(ni,nj)
+
+  !---------------------------------------------------------------------
+  ! find the angle on corners using the same relationship CICE uses
+  ! internally to calculate angles on Ct using angles on Bu
+  !
+  !           w-----------------0 Ct(i+1,j+1)
+  !           |                 |
+  !        ----------Bu(i,j)---------- Bu lies on seam at j=nj
+  !           |                 |
+  !   Ct(i,j) sw----------------s
+  !
+  !---------------------------------------------------------------------
+
+  do i = 1,ni
+     i2 = ipole(2)+(ipole(1)-i)+1
+     xangCt(i) = -angleT(i2,nj)       ! angle changes sign across seam
+  end do
+
+  angle = 0.0
+  do j = 2,nj
+     do i = 1,ni-1
+        if (j .lt. nj) then
+           angle_0  = anglet(i+1,j+1)
+           angle_w  = anglet(i,  j+1)
+           angle_s  = anglet(i+1,j  )
+           angle_sw = anglet(i  ,j  )
+        else
+           angle_0  = xangCt(i+1  )
+           angle_w  = xangCt(i    )
+           angle_s  = anglet(i+1,j)
+           angle_sw = anglet(i,  j)
+        end if
+        angle(i,j) = atan2(p25*(sin(angle_0) + sin(angle_w) + sin(angle_s) + sin(angle_sw)), &
+                           p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
+
+        if (abs(angle(i,j)) .le. 1.0e-10)angle(i,j) = 0.0
+     enddo
+  enddo
+  angle(ni,:) = -angle(1,:)
+
+  ! reverse angle for CICE
+  angle = -angle
+  print *,'ANGLE ',minval(angle), maxval(angle)
+
+  !---------------------------------------------------------------------
+  ! check: calculate anglet from angle on corners as CICE does internally.
+  ! since angle changes sign between CICE and MOM6, (-1)*angchk ~ anglet
+  !
+  !               w-----------------0 Bu(i,j)
+  !               |                 |
+  !               |     Ct(i,j)     |
+  !               |                 |
+  !   Bu(i-1,j-1) sw----------------s
+  !
+  !---------------------------------------------------------------------
+
+  angchk = 0.0
+  do j = 2,nj
+     do i = 2,ni
+        angle_0  = angle(i  ,j  )
+        angle_w  = angle(i-1,j  )
+        angle_s  = angle(i,  j-1)
+        angle_sw = angle(i-1,j-1)
+        angchk(i,j) = atan2(p25*(sin(angle_0) + sin(angle_w) + sin(angle_s) + sin(angle_sw)), &
+                            p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
+     enddo
+  enddo
+  angchk(1,:) = -angchk(ni,:)
+  print *,'ANGCHK ',minval(angchk), maxval(angchk)
 
   !---------------------------------------------------------------------
   ! For the 1/4deg grid, hte at j=720 and j = 1440 is identically=0.0 for
@@ -304,36 +386,12 @@ program gen_fixgrid
      ii = ni
      if(hte(ii,j) .le. 1.0)hte(ii,j) = 0.5*(hte(ii-1,j) + hte(   1,j))
   enddo
-  write(logmsg,'(a,2e12.5)')'min vals of hte at folds ', &
-       minval(hte(ni/2,:)),minval(hte(ni,:))
+  write(logmsg,'(a,2e12.5)')'min vals of hte at folds ', minval(hte(ni/2,:)),minval(hte(ni,:))
   print '(a)',trim(logmsg)
 
   !---------------------------------------------------------------------
-  !
+  ! find required extended values for setting all vertices
   !---------------------------------------------------------------------
-
-  where(lonCt .lt. 0.0)lonCt = lonCt + 360._dbl_kind
-  where(lonCu .lt. 0.0)lonCu = lonCu + 360._dbl_kind
-  where(lonCv .lt. 0.0)lonCv = lonCv + 360._dbl_kind
-  where(lonBu .lt. 0.0)lonBu = lonBu + 360._dbl_kind
-
-  !---------------------------------------------------------------------
-  ! some basic error checking
-  ! find the i-th index of the poles at j= nj
-  ! the corner points must lie on the pole
-  !---------------------------------------------------------------------
-
-  ipole = -1
-  j = nj
-  do i = 1,ni/2
-     if(latBu(i,j) .eq. sg_maxlat)ipole(1) = i
-  enddo
-  do i = ni/2+1,ni
-     if(latBu(i,j) .eq. sg_maxlat)ipole(2) = i
-  enddo
-  write(logmsg,'(a,2i6,2f12.2)')'poles found at i = ',ipole,latBu(ipole(1),nj), &
-       latBu(ipole(2),nj)
-  print '(a)',trim(logmsg)
 
   if(debug)call checkseam
 
@@ -510,12 +568,50 @@ program gen_fixgrid
              ignoreDegenerate=.true., unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
         if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
              line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
+
+        method=ESMF_REGRIDMETHOD_BILINEAR
+        fdst = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
+        fwgt = trim(dirout)//'/'//'tripole.mx025.Ct.to.mx'//trim(res)//'.Ct.bilinear.nc'
+        logmsg = 'creating weight file '//trim(fwgt)
+        print '(a)',trim(logmsg)
+
+        call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
+             weightFile=trim(fwgt), regridmethod=method,                 &
+             ignoreDegenerate=.true., unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
+        if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+             line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
      else
         logmsg = 'ERROR: '//trim(fsrc)//' is required to generate tripole:triple weights'
         print '(a)',trim(logmsg)
         stop
      end if
   end if
+
+  ! tripole Bu->tripole Ct for CICE
+  fsrc = trim(dirout)//'/'//'Bu.mx'//trim(res)//'_SCRIP.nc'
+  fdst = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
+  fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.Bu.to.mx'//trim(res)//'.Ct.bilinear.nc'
+  logmsg = 'creating weight file '//trim(fwgt)
+  print '(a)',trim(logmsg)
+
+  call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
+       weightFile=trim(fwgt), regridmethod=method,                 &
+       ignoreDegenerate=.true., unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
+  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+       line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
+
+  ! tripole Ct->tripole Bu for CICE
+  fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
+  fdst = trim(dirout)//'/'//'Bu.mx'//trim(res)//'_SCRIP.nc'
+  fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.Ct.to.mx'//trim(res)//'.Bu.bilinear.nc'
+  logmsg = 'creating weight file '//trim(fwgt)
+  print '(a)',trim(logmsg)
+
+  call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
+       weightFile=trim(fwgt), regridmethod=method,                 &
+       ignoreDegenerate=.true., unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
+  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+       line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
 
   !---------------------------------------------------------------------
   !

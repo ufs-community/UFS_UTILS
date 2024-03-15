@@ -103,6 +103,8 @@ module grdvars
   real(dbl_kind), allocatable, dimension(:,:) :: anglet            !< The rotation angle on Ct points (opposite sense
                                                                    !! from angle)
   real(dbl_kind), allocatable, dimension(:,:) :: angle             !< The rotation angle on Bu points
+  real(dbl_kind), allocatable, dimension(:,:) :: angchk            !< The rotation angle on Ct points, as calculated by
+                                                                   !! CICE internally using angle on Bu
 
   real(dbl_kind), allocatable, dimension(:,:,:) :: latCt_vert      !< The latitudes of the 4 vertices of each Ct grid
                                                                    !! point
@@ -129,6 +131,9 @@ module grdvars
                                                                    !! opposite side of the tripole seam
   real(dbl_kind), allocatable, dimension(:) :: xlatCt              !< The latitude of the Ct grid points on the
                                                                    !! opposite side of the tripole seam
+  real(dbl_kind), allocatable, dimension(:) :: xangCt              !< The rotation angle on the Ct grid points on the
+                                                                   !! opposite side of the tripole seam
+
   real(dbl_kind), allocatable, dimension(:) :: xlonCu              !< The longitude of the Cu grid points on the
                                                                    !! opposite side of the tripole seam
   real(dbl_kind), allocatable, dimension(:) :: xlatCu              !< The latitude of the Cu grid points on the
@@ -182,14 +187,14 @@ contains
     allocate( latCu(ni,nj), lonCu(ni,nj) )
     allocate( latBu(ni,nj), lonBu(ni,nj) )
 
-    allocate( areaCt(ni,nj), anglet(ni,nj), angle(ni,nj) )
+    allocate( areaCt(ni,nj), anglet(ni,nj), angle(ni,nj), angchk(ni,nj))
 
     allocate( latCt_vert(ni,nj,nv), lonCt_vert(ni,nj,nv) )
     allocate( latCv_vert(ni,nj,nv), lonCv_vert(ni,nj,nv) )
     allocate( latCu_vert(ni,nj,nv), lonCu_vert(ni,nj,nv) )
     allocate( latBu_vert(ni,nj,nv), lonBu_vert(ni,nj,nv) )
 
-    allocate( xlonCt(ni), xlatCt(ni) )
+    allocate( xlonCt(ni), xlatCt(ni), xangCt(ni) )
     allocate( xlonCu(ni), xlatCu(ni) )
     allocate( dlatBu(ni), dlatCv(ni) )
 

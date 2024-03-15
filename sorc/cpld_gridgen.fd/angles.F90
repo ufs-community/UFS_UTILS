@@ -13,117 +13,12 @@ module angles
   use grdvars,       only : ni,nj,nx,ny
   use grdvars,       only : x,y,xsgp1,ysgp1,sg_maxlat
   use grdvars,       only : latBu,lonBu,lonCt
-  use grdvars,       only : angq,anglet
+  use grdvars,       only : anglet
   use grdvars,       only : debug
 
   implicit none
 
 contains
-  !> Find the rotation angle on corner grid (Bu) points using the full MOM6 supergrid
-  !!
-  !! @author Denise.Worthen@noaa.gov
-  subroutine find_angq
-
-    ! local variables
-    integer :: i,j,i1,i2,m,n
-
-    ! pole locations on SG
-    integer(int_kind) :: ipolesg(2)
-
-    ! from geolonB fix in MOM6
-    real(dbl_kind) :: len_lon ! The periodic range of longitudes, usually 360 degrees.
-    real(dbl_kind) :: pi_720deg ! One quarter the conversion factor from degrees to radians.
-    real(dbl_kind) :: lonB(2,2)  ! The longitude of a point, shifted to have about the same value.
-    real(dbl_kind) :: lon_scale = 0.0
-
-    !---------------------------------------------------------------------
-    ! to find angleq on seam, replicate supergrid values across seam
-    !---------------------------------------------------------------------
-
-    angq = 0.0
-    xsgp1 = 0.0; ysgp1 = 0.0
-    !pole on supergrid
-    ipolesg = -1
-    j = ny
-    do i = 1,nx/2
-       if(y(i,j) .eq. sg_maxlat)ipolesg(1) = i
-    enddo
-    do i = nx/2+1,nx
-       if(y(i,j) .eq. sg_maxlat)ipolesg(2) = i
-    enddo
-    if(debug)print *,'poles found at ',ipolesg
-
-    xsgp1(:,0:ny) = x(:,0:ny)
-    ysgp1(:,0:ny) = y(:,0:ny)
-
-    !check
-    do i = ipolesg(1)-5,ipolesg(1)+5
-       i2 = ipolesg(2)+(ipolesg(1)-i)+1
-       if(debug)print *,i,i2
-    enddo
-    print *
-    do i = ipolesg(2)-5,ipolesg(2)+5
-       i2 = ipolesg(2)+(ipolesg(1)-i)+1
-       if(debug)print *,i,i2
-    enddo
-
-    !replicate supergrid across pole
-    do i = 1,nx
-       i2 = ipolesg(2)+(ipolesg(1)-i)
-       xsgp1(i,ny+1) = xsgp1(i2,ny)
-       ysgp1(i,ny+1) = ysgp1(i2,ny)
-    enddo
-
-    !check
-    j = ny+1
-    i1 = ipolesg(1); i2 = ipolesg(2)-(ipolesg(1)-i1)
-    print *,'replicate X across seam on SG'
-    print *,xsgp1(i1-2,j),xsgp1(i2+2,j)
-    print *,xsgp1(i1-1,j),xsgp1(i2+1,j)
-    print *,xsgp1(i1,  j),xsgp1(i2,  j)
-    print *,xsgp1(i1+1,j),xsgp1(i2-1,j)
-    print *,xsgp1(i1+2,j),xsgp1(i2-2,j)
-
-    print *,'replicate Y across seam on SG'
-    print *,ysgp1(i1-2,j),ysgp1(i2+2,j)
-    print *,ysgp1(i1-1,j),ysgp1(i2+1,j)
-    print *,ysgp1(i1,  j),ysgp1(i2,  j)
-    print *,ysgp1(i1+1,j),ysgp1(i2-1,j)
-    print *,ysgp1(i1+2,j),ysgp1(i2-2,j)
-
-    !---------------------------------------------------------------------
-    ! rotation angle on supergrid vertices
-    ! lonB: x(i-1,j-1) has same relationship to x(i,j) on SG as
-    !       geolonT(i,j) has to geolonBu(i,j) on the reduced grid
-    !---------------------------------------------------------------------
-
-    ! constants as defined in MOM
-    pi_720deg = atan(1.0) / 180.0
-    len_lon = 360.0
-    do j=1,ny ; do i=1,nx-1
-       do n=1,2 ; do m=1,2
-          lonB(m,n) = modulo_around_point(xsgp1(I+m-2,J+n-2), xsgp1(i-1,j-1), len_lon)
-       enddo; enddo
-       lon_scale    = cos(pi_720deg*(ysgp1(i-1,j-1) + ysgp1(i+1,j-1) + &
-            ysgp1(i-1,j+1) + ysgp1(i+1,j+1)) )
-       angq(i,j)    = atan2(lon_scale*((lonB(1,2) - lonB(2,1)) + (lonB(2,2) - lonB(1,1))), &
-            ysgp1(i-1,j+1) + ysgp1(i+1,j+1) - &
-            ysgp1(i-1,j-1) - ysgp1(i+1,j-1) )
-    enddo; enddo
-
-    !check
-    if(debug) then
-       j = ny
-       i1 = ipolesg(1); i2 = ipolesg(2)-(ipolesg(1)-i1)
-       print *,'angq along seam on SG'
-       print *,angq(i1-2,j),angq(i2+2,j)
-       print *,angq(i1-1,j),angq(i2+1,j)
-       print *,angq(i1,  j),angq(i2,  j)
-       print *,angq(i1+1,j),angq(i2-1,j)
-       print *,angq(i1+2,j),angq(i2-2,j)
-    end if
-
-  end subroutine find_angq
 
   !> Find the rotation angle on center (Ct) grid points
   !!
