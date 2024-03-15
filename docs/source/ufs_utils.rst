@@ -694,6 +694,7 @@ Build UFS_UTILS and set 'fixed' directories
      * Invoke the build script from the root directory: 
 
 ::
+
 ./build_all.sh
 
      * Set the 'fixed' directories using the script in the 'fix' subdirectory: ``./link_fixdirs.sh emc $MACHINE`` (where MACHINE is 'hera', 'jet', 'wcoss2', or 's4')
