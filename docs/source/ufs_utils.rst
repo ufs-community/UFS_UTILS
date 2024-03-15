@@ -697,4 +697,31 @@ Build UFS_UTILS and set 'fixed' directories
 Configure for your experiment
 -----------------------------
 
-Edit the 'config' file in ./util/gdas_init
+Edit the variables in the 'config' file (located in ./util/gdas_init) for your experiment:
+
+     * EXTRACT_DIR  - Directory where data extracted from HPSS is stored.
+     * EXTRACT_DATA - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'.
+# RUN_CHGRES   - To run chgres, set to 'yes'.  To extract
+#                data only, set to 'no'.
+# yy/mm/dd/hh  - The year/month/day/hour of your desired
+#                experiment.  Currently, does not support
+#                pre-ENKF GFS data, prior to
+#                2012 May 21 00z.  Use two digits.
+# LEVS         - Number of hybrid levels plus 1.  To
+#                run with 64 levels, set LEVS to 65.
+# CRES_HIRES   - Resolution of the hires component of
+#                your experiment.
+# CRES_ENKF    - Resolution of the enkf component of the
+#                your experiment.
+# UFS_DIR      - Location of your checked out UFS_UTILS
+#                repo.
+# OUTDIR       - Directory where the coldstart data output
+#                from chgres is stored.
+# CDUMP        - When 'gdas', will process gdas and enkf
+#                members. When 'gfs', will process gfs
+#                member for running free forecast only.
+# use_v16retro - When 'yes', use v16 retro parallel data.
+#                The retro parallel tarballs can be missing
+#                or incomplete. So this option may not
+#                always work. Contact george.gayno@noaa.gov
+#                if you encounter problems.
