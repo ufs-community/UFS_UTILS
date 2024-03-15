@@ -288,6 +288,7 @@ implicit none
 !! @param[in] i_target  the "i" dimension of the target model tile
 !! @param[in] j_target  the "j" dimension of the target model tile
 !! @param[in] tile      the tile number of be processed
+!! @param[in] land_frac landcover fraction on the target model tile
 !! @param[out] data_one_tile  the processed surface data on the tile
 !! @param[out] max_data_one_tile  for fields with multiple time periods, the max
 !! yearly value on the tile  
@@ -299,7 +300,7 @@ implicit none
                              min_data_one_tile)
  
  use netcdf
- use model_grid, only               : tiles_target_grid, land_frac_target_grid
+ use model_grid, only               : tiles_target_grid
  use program_setup, only            : fix_dir_target_grid, cres_target_grid, &
                                       cycle_mon, cycle_day, cycle_hour
 
@@ -326,8 +327,6 @@ implicit none
  real(esmf_kind_r8)                 :: num_days, num_days_rec1, rinc(5)
  real(esmf_kind_r8)                 :: weight_rec1, weight_rec2
 
- real(esmf_kind_r8), allocatable    :: land_frac_target_tile(:,:)
- 
  if (trim(field) == 'facsf') filename = "/" // trim(cres_target_grid) // ".facsf." // trim(tiles_target_grid(tile)) // ".nc"
  if (trim(field) == 'maximum_snow_albedo') filename = "/" // trim(cres_target_grid) // ".maximum_snow_albedo." // trim(tiles_target_grid(tile)) // ".nc"
  if (trim(field) == 'slope_type') filename = "/" // trim(cres_target_grid) // ".slope_type." // trim(tiles_target_grid(tile)) // ".nc"
