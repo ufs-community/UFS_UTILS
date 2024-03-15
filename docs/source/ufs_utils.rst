@@ -691,7 +691,11 @@ Find it here: ./util/gdas_init
 Build UFS_UTILS and set 'fixed' directories
 -------------------------------------------
 
-     * Invoke the build script from the root directory: ``./build_all.sh``
+     * Invoke the build script from the root directory: 
+
+::
+./build_all.sh
+
      * Set the 'fixed' directories using the script in the 'fix' subdirectory: ``./link_fixdirs.sh emc $MACHINE`` (where MACHINE is 'hera', 'jet', 'wcoss2', or 's4')
 
 Configure for your experiment
@@ -717,13 +721,11 @@ Note: This utility selects the ocean resolution in the set_fixed_files.sh script
 Kick off the utility
 --------------------
 
-Submit the script for your machine: 
+Submit the driver script (where $MACHINE is 'hera', 'jet', 'wcoss2', or 's4')
 
 ::
 
   ./driver.$MACHINE.sh 
-
-where MACHINE IS 'hera', 'jet', 'wcoss2', or 's4'.
 
 The standard output will be placed in log files in the current directory. 
 
