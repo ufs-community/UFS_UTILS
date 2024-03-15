@@ -700,7 +700,7 @@ Configure for your experiment
 Edit the variables in the 'config' file (located in ``./util/gdas_init``) for your experiment:
 
      * **EXTRACT_DIR**  - Directory where data extracted from HPSS is stored.
-     * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'.
+     * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'. On 's4' this step can't be run. Instead, the data must be pulled from another machine.
      * **RUN_CHGRES**   - To run chgres, set to 'yes'.  To extract data only, set to 'no'.
      * **yy/mm/dd/hh**  - The year/month/day/hour of your desired experiment.  Currently, does not support pre-ENKF GFS data, prior to 2012 May 21 00z.  Use two digits.
      * **LEVS**         - Number of hybrid levels plus 1.  To run with 64 levels, set LEVS to 65.
@@ -710,3 +710,12 @@ Edit the variables in the 'config' file (located in ``./util/gdas_init``) for yo
      * **OUTDIR**       - Directory where the coldstart data output from chgres is stored.
      * **CDUMP**        - When 'gdas', will process gdas and enkf members. When 'gfs', will process gfs member for running free forecast only.
      * **use_v16retro** - When 'yes', use v16 retrospective parallel data. The retro parallel tarballs can be missing or incomplete. So this option may not always work. Contact a UFS_UTILS repository manager if you encounter problems.
+
+Kick off the utility
+--------------------
+
+Submit the script for your machine: ``./driver.$MACHINE.sh`` where MACHINE IS 'hera', 'jet', 'wcoss2', or 's4'.
+
+The standard output will be placed in log files in the current directory. 
+
+The converted output will be found in $OUTDIR, including the needed abias and radstat initial condition files (if CDUMP=gdas). The files will be in the needed directory structure for the global-workflow system, therefore a user can move the contents of their $OUTDIR directly into their $ROTDIR.
