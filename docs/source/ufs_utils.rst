@@ -676,17 +676,17 @@ gdas_init
 Introduction
 ------------
 
-The gdas_init utility is used to create coldstart initial conditions for global cycled experiments using the chgres_cube program.  It has two components, one that pulls the input data required by chgres_cube from HPSS, and one that runs chgres_cube. The utility is only supported on machines with access to HPSS:
+The gdas_init utility is used to create coldstart initial conditions for global cycled experiments using the chgres_cube program.  It has two components: one that pulls the input data required by chgres_cube from HPSS, and one that runs chgres_cube. The utility is only supported on machines with access to HPSS:
 
      * Hera
      * Jet
      * WCOSS2
-     * S4 (Only the chgres step is supported, not the data pull step.)
+     * S4 (Only the chgres_cube step is supported, not the data pull step.)
 
 Location
 --------
 
-Find it here: ``./util/gdas_init``
+Find it here: ./util/gdas_init
 
 Build UFS_UTILS and set 'fixed' directories
 -------------------------------------------
@@ -697,7 +697,7 @@ Build UFS_UTILS and set 'fixed' directories
 Configure for your experiment
 -----------------------------
 
-Edit the variables in the 'config' file (located in ``./util/gdas_init``) for your experiment:
+Edit the variables in the 'config' file for your experiment:
 
      * **EXTRACT_DIR**  - Directory where data extracted from HPSS is stored.
      * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'. On 's4' this step can't be run. Instead, the data must be pulled from another machine.
