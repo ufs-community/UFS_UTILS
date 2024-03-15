@@ -711,6 +711,9 @@ Edit the variables in the 'config' file for your experiment:
      * **CDUMP**        - When 'gdas', will process gdas and enkf members. When 'gfs', will process gfs member for running free forecast only.
      * **use_v16retro** - When 'yes', use v16 retrospective parallel data. The retro parallel tarballs can be missing or incomplete. So this option may not always work. Contact a UFS_UTILS repository manager if you encounter problems.
 
+Note: This utility selects the ocean resolution in the set_fixed_files.sh script using a default based on the user-selected CRES value. For example, for a cycled experiment with a CRES_HIRES/CRES_ENKF of C384/C192, the ocean resolution defaults to 0.25/0.50-degree. To choose another ocean resolution, the user will need to manually modify the set_fixed_files.sh script.
+
+
 Kick off the utility
 --------------------
 
