@@ -686,12 +686,12 @@ The gdas_init utility is used to create coldstart initial conditions for global 
 Location
 --------
 
-Find it here: ./util/gdas_init
+Find it here: ``./util/gdas_init``
 
 Build UFS_UTILS and set 'fixed' directories
 -------------------------------------------
 
-     * Invoke the build script from the root directory: ./build_all.sh
+     * Invoke the build script from the root directory: ``./build_all.sh``
      * Set the 'fixed' directories using the script in the 'fix' subdirectory: ./link_fixdirs.sh emc $MACHINE (where MACHINE is 'hera', 'jet', 'wcoss2', or 's4')
 
 Configure for your experiment
@@ -700,7 +700,7 @@ Configure for your experiment
 Edit the variables in the 'config' file (located in ./util/gdas_init) for your experiment:
 
      * EXTRACT_DIR  - Directory where data extracted from HPSS is stored.
-     * EXTRACT_DATA - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'.
+     * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'.
      * RUN_CHGRES   - To run chgres, set to 'yes'.  To extract data only, set to 'no'.
      * yy/mm/dd/hh  - The year/month/day/hour of your desired experiment.  Currently, does not support pre-ENKF GFS data, prior to 2012 May 21 00z.  Use two digits.
      * LEVS         - Number of hybrid levels plus 1.  To run with 64 levels, set LEVS to 65.
