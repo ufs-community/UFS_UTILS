@@ -2,6 +2,7 @@
 
 #---------------------------------------------------------------------------
 # Set directory names and file names for the target grid orog data.
+# A default ocean resolution (OCNRES) based on CTAR is used.
 #---------------------------------------------------------------------------
 
 if [ ${CTAR} == 'C48' ] ; then
