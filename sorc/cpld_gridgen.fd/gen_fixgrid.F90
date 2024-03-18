@@ -150,9 +150,6 @@ program gen_fixgrid
 
   if(xtype.eq. 6)wet4 = real(wet8,4)
 
-  !print *,minval(wet8),maxval(wet8)
-  !print *,minval(wet4),maxval(wet4)
-
   !---------------------------------------------------------------------
   ! read the MOM6 depth file
   !---------------------------------------------------------------------
@@ -239,7 +236,6 @@ program gen_fixgrid
   rc = nf90_get_var(ncid,     id, dy)
 
   rc = nf90_close(ncid)
-  !print *,'super grid size ',size(y,1),size(y,2)
   sg_maxlat = maxval(y)
   write(logmsg,'(a,f12.2)')'max lat in super grid ',maxval(y)
   print '(a)',trim(logmsg)
@@ -288,8 +284,8 @@ program gen_fixgrid
   do i = ni/2+1,ni
      if(latBu(i,j) .eq. sg_maxlat)ipole(2) = i
   enddo
-  write(logmsg,'(a,2i6,2f12.2)')'poles found at i = ',ipole, &
-       latBu(ipole(1),nj), latBu(ipole(2),nj)
+  write(logmsg,'(a,2i6,2f12.2)')'poles found at i = ',ipole, latBu(ipole(1),nj), &
+       latBu(ipole(2),nj)
   print '(a)',trim(logmsg)
 
   !---------------------------------------------------------------------
@@ -297,8 +293,10 @@ program gen_fixgrid
   !---------------------------------------------------------------------
 
   call find_ang
-  print *,'ANGLET ',minval(anglet),maxval(anglet)
-  print *,'anglet(1,nj),anglet(ni,nj) ',anglet(1,nj),anglet(ni,nj)
+  write(logmsg,'(a,2f12.2)')'ANGLET min,max: ',minval(anglet),maxval(anglet)
+  print '(a)',trim(logmsg)
+  write(logmsg,'(a,2f12.2)')'ANGLET edges i=1,i=ni: ',anglet(1,nj),anglet(ni,nj)
+  print '(a)',trim(logmsg)
 
   !---------------------------------------------------------------------
   ! find the angle on corners using the same relationship CICE uses
@@ -341,7 +339,10 @@ program gen_fixgrid
 
   ! reverse angle for CICE
   angle = -angle
-  print *,'ANGLE ',minval(angle), maxval(angle)
+  write(logmsg,'(a,2f12.2)')'ANGLE min,max: ',minval(angle),maxval(angle)
+  print '(a)',trim(logmsg)
+  write(logmsg,'(a,2f12.2)')'ANGLE edges i=1,i=ni: ',angle(1,nj),angle(ni,nj)
+  print '(a)',trim(logmsg)
 
   !---------------------------------------------------------------------
   ! check: calculate anglet from angle on corners as CICE does internally.
@@ -366,8 +367,12 @@ program gen_fixgrid
                             p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
      enddo
   enddo
+  ! reverse angle for MOM6
   angchk(1,:) = -angchk(ni,:)
-  print *,'ANGCHK ',minval(angchk), maxval(angchk)
+  write(logmsg,'(a,2f12.2)')'ANGCHK min,max: ',minval(angchk),maxval(angchk)
+  print '(a)',trim(logmsg)
+  write(logmsg,'(a,2f12.2)')'ANGCHK edges i=1,i=ni: ',angchk(1,nj),angchk(ni,nj)
+  print '(a)',trim(logmsg)
 
   !---------------------------------------------------------------------
   ! For the 1/4deg grid, hte at j=720 and j = 1440 is identically=0.0 for
@@ -377,8 +382,7 @@ program gen_fixgrid
   ! hte < 1.0
   !---------------------------------------------------------------------
 
-  write(logmsg,'(a,2e12.5)')'min vals of hte at folds ', &
-       minval(hte(ni/2,:)),minval(hte(ni,:))
+  write(logmsg,'(a,2e12.5)')'min vals of hte at folds ', minval(hte(ni/2,:)),minval(hte(ni,:))
   print '(a)',trim(logmsg)
   do j = 1,nj
      ii = ni/2
@@ -562,7 +566,6 @@ program gen_fixgrid
         fwgt = trim(dirout)//'/'//'tripole.mx025.Ct.to.mx'//trim(res)//'.Ct.neareststod.nc'
         logmsg = 'creating weight file '//trim(fwgt)
         print '(a)',trim(logmsg)
-
         call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
              weightFile=trim(fwgt), regridmethod=method,                 &
              ignoreDegenerate=.true., unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
@@ -574,7 +577,6 @@ program gen_fixgrid
         fwgt = trim(dirout)//'/'//'tripole.mx025.Ct.to.mx'//trim(res)//'.Ct.bilinear.nc'
         logmsg = 'creating weight file '//trim(fwgt)
         print '(a)',trim(logmsg)
-
         call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
              weightFile=trim(fwgt), regridmethod=method,                 &
              ignoreDegenerate=.true., unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
@@ -587,23 +589,10 @@ program gen_fixgrid
      end if
   end if
 
-  ! tripole Bu->tripole Ct for CICE
-  fsrc = trim(dirout)//'/'//'Bu.mx'//trim(res)//'_SCRIP.nc'
-  fdst = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
-  fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.Bu.to.mx'//trim(res)//'.Ct.bilinear.nc'
-  logmsg = 'creating weight file '//trim(fwgt)
-  print '(a)',trim(logmsg)
-
-  call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
-       weightFile=trim(fwgt), regridmethod=method,                 &
-       ignoreDegenerate=.true., unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
-  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-       line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
-
-  ! tripole Ct->tripole Bu for CICE
+  ! tripole Ct->tripole Bu for CICE are only for CICE IC creation
   fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
   fdst = trim(dirout)//'/'//'Bu.mx'//trim(res)//'_SCRIP.nc'
-  fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.Ct.to.mx'//trim(res)//'.Bu.bilinear.nc'
+  fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.Ct.to.Bu.bilinear.nc'
   logmsg = 'creating weight file '//trim(fwgt)
   print '(a)',trim(logmsg)
 
