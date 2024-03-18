@@ -7,6 +7,11 @@ add_subdirectory(orog.fd)
 add_subdirectory(orog_gsl.fd)
 add_subdirectory(lake.fd)
 add_subdirectory(inland.fd)
+if(OROG_NETCDF_TOOLS)
+ add_subdirectory(orog_netcdf_tools.fd/mask.fd)
+ add_subdirectory(orog_netcdf_tools.fd/topo.fd)
+ add_subdirectory(orog_netcdf_tools.fd/ramp.fd)
+endif()
 
 # If doxygen documentation we enabled, build it.
 if(ENABLE_DOCS)

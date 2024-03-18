@@ -49,12 +49,15 @@ target_link_libraries(
   sigio::sigio
   bacio::bacio_4
   ip::ip_d
-  sp::sp_d
   w3emc::w3emc_d
   esmf
   msis2
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
+
+if(sp_FOUND)
+  target_link_libraries(chgres_cube_lib PUBLIC sp::sp_d)
+endif()
 
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(${exe_name} PUBLIC OpenMP::OpenMP_Fortran)

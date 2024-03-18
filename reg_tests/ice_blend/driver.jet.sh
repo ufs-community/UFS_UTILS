@@ -53,9 +53,9 @@ fi
 
 export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
 export WGRIB2=${WGRIB2_ROOT}/bin/wgrib2
-export COPYGB=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/grib_util/NCEPLIBS-grib_util/exec/bin/copygb
-export COPYGB2=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/grib_util/NCEPLIBS-grib_util/exec/bin/copygb2
-export CNVGRIB=/apps/cnvgrib/1.4.0/bin/cnvgrib
+export COPYGB=/lfs4/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/copygb
+export COPYGB2=/lfs4/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/copygb2
+export CNVGRIB=/mnt/lfs4/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/cnvgrib
 
 export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ice_blend
 
