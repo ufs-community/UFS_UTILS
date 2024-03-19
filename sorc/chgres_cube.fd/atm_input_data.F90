@@ -2557,7 +2557,7 @@ implicit none
                   ". SET MISSING VARIABLE CONDITION TO 'INTRP' TO AVOID THIS ERROR.", 1)
             endif 
           ! If entire array is empty and method is set to intrp, switch method to fill
- i         if (trim(method) .eq. 'intrp' .and. all_empty) method='set_to_fill' 
+          if (trim(method) .eq. 'intrp' .and. all_empty) method='set_to_fill' 
 
           call handle_grib_error(vname, slevs(vlev),method,value,varnum,read_from_input,iret,var=dummy2d)
           if (iret==1) then ! missing_var_method == skip or no entry
@@ -2642,7 +2642,7 @@ implicit none
  enddo
  
  deallocate(dummy3d_col_in, dummy3d_col_out)
- if allocated(dummy3d_pres) deallocate(dummy3d_pres)
+ if (allocated(dummy3d_pres)) deallocate(dummy3d_pres)
  
  call read_winds(u_tmp_3d,v_tmp_3d,localpet,octet_23,rlevs,lugb,pdt_num)
 
