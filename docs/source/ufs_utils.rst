@@ -665,3 +665,73 @@ Run script
 ----------
 
 To run, use the machine-dependent script under ./util/weight_gen
+
+***************************************************
+UFS_UTILS utilities
+***************************************************
+
+gdas_init
+=========
+
+Introduction
+------------
+
+The gdas_init utility is used to create coldstart initial conditions for global cycled and forecast-only experiments using the chgres_cube program.  It has two components: one that pulls the input data required by chgres_cube from HPSS, and one that runs chgres_cube. The utility is only supported on machines with access to HPSS:
+
+     * Hera
+     * Jet
+     * WCOSS2
+     * S4 (Only the chgres_cube step is supported, not the data pull step.)
+
+Location
+--------
+
+Find it here: ./util/gdas_init
+
+Build UFS_UTILS and set 'fixed' directories
+-------------------------------------------
+
+Invoke the build script from the root directory: 
+
+::
+
+  ./build_all.sh
+
+Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is 'hera', 'jet', 'wcoss2', or 's4'):
+
+::
+
+  ./link_fixdirs.sh emc $MACHINE
+
+Configure for your experiment
+-----------------------------
+
+Edit the variables in the 'config' file for your experiment:
+
+     * **EXTRACT_DIR**  - Directory where data extracted from HPSS is stored.
+     * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'. On 's4' this step can't be run. Instead, the data must be pulled from another machine.
+     * **RUN_CHGRES**   - To run chgres, set to 'yes'.  To extract data only, set to 'no'.
+     * **yy/mm/dd/hh**  - The year/month/day/hour of your desired experiment.  Currently, does not support pre-ENKF GFS data, prior to 2012 May 21 00z.  Use two digits.
+     * **LEVS**         - Number of hybrid levels plus 1.  To run with 127 levels, set LEVS to 128.
+     * **CRES_HIRES**   - Resolution of the hires component of your experiment. Example: C768.
+     * **CRES_ENKF**    - Resolution of the enkf component of the experiments.
+     * **UFS_DIR**      - Location of your cloned UFS_UTILS repository.
+     * **OUTDIR**       - Directory where the coldstart data output from chgres is stored.
+     * **CDUMP**        - When 'gdas', will process gdas and enkf members. When 'gfs', will process gfs member for running free forecast only.
+     * **use_v16retro** - When 'yes', use v16 retrospective parallel data. The retrospective parallel tarballs can be missing or incomplete. So this option may not always work. Contact a UFS_UTILS repository manager if you encounter problems.
+
+Note: This utility selects the ocean resolution in the set_fixed_files.sh script using a default based on the user-selected CRES value. For example, for a cycled experiment with a CRES_HIRES/CRES_ENKF of C384/C192, the ocean resolution defaults to 0.25/0.50-degree. To choose another ocean resolution, the user will need to manually modify the set_fixed_files.sh script.
+
+
+Kick off the utility
+--------------------
+
+Submit the driver script (where $MACHINE is 'hera', 'jet', 'wcoss2', or 's4')
+
+::
+
+  ./driver.$MACHINE.sh 
+
+The standard output will be placed in log files in the current directory. 
+
+The converted output will be found in $OUTDIR, including the needed abias and radstat initial condition files (if CDUMP=gdas). The files will be in the needed directory structure for the global-workflow system, therefore a user can move the contents of their $OUTDIR directly into their $ROTDIR.

@@ -21,6 +21,8 @@ module load prod_util/1.1.0
 PROJECT_CODE=fv3-cpu
 QUEUE=batch
 
+export machine=hera
+
 source config
 
 if [ $EXTRACT_DATA == yes ]; then
