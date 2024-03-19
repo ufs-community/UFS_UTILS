@@ -1978,7 +1978,7 @@ implicit none
 
  integer, intent(in)                   :: localpet
  
- integer, parameter                    :: ntrac_max=14
+ integer, parameter                    :: ntrac_max=15
  integer, parameter                    :: max_levs=1000
 
  character(len=300)                    :: the_file
@@ -2015,7 +2015,8 @@ implicit none
  real(esmf_kind_r8), allocatable       :: rlevs(:)
  real(esmf_kind_r4), allocatable       :: dummy2d(:,:)
  real(esmf_kind_r8), allocatable       :: dummy3d(:,:,:), dummy2d_8(:,:),&
-                                          u_tmp_3d(:,:,:), v_tmp_3d(:,:,:)
+                                          u_tmp_3d(:,:,:), v_tmp_3d(:,:,:),&
+                                          dummy3d_pres(:,:,:)
  real(esmf_kind_r8), pointer           :: presptr(:,:,:), psptr(:,:),tptr(:,:,:), &
                                           qptr(:,:,:), wptr(:,:,:),  &
                                           uptr(:,:,:), vptr(:,:,:)
@@ -2030,18 +2031,19 @@ implicit none
  
  tracers(:) = "NULL"
  
- trac_names_oct10 = (/1,  1,  14,  1,  1,  1,  1, 6,  6,   1,  6,  13,  13, 2 /)
- trac_names_oct11 = (/0, 22, 192, 23, 24, 25, 32, 1, 29, 100, 28, 193, 192, 2 /)
+ trac_names_oct10 = (/1,  1,  14,  1,  1,  1,  1, 6,  6,   1,  6,  13,  13, 2, 20 /)
+ trac_names_oct11 = (/0, 22, 192, 23, 24, 25, 32, 1, 29, 100, 28, 193, 192, 2,  0 /)
+
 
  trac_names_vmap = (/"sphum   ", "liq_wat ", "o3mr    ", "ice_wat ", &
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
                      "rain_nc ", "water_nc", "liq_aero", "ice_aero", &
-                     "sgs_tke "/)
+                     "sgs_tke ", "massden"/)
 
  tracers_default = (/"sphum   ", "liq_wat ", "o3mr    ", "ice_wat ", &
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
                      "rain_nc ", "water_nc", "liq_aero", "ice_aero", &
-                     "sgs_tke "/)
+                     "sgs_tke ", "smoke   "/)
 
  the_file = trim(data_dir_input_grid) // "/" // trim(grib2_file_input_grid)
 
@@ -2393,11 +2395,19 @@ implicit none
    allocate(dummy2d(i_input,j_input))
    allocate(dummy2d_8(i_input,j_input))
    allocate(dummy3d(i_input,j_input,lev_input))
+   if (trim(external_model) .eq. 'RAP' .or. &  ! for smoke conversion
+       trim(external_model) .eq. 'HRRR' ) then
+      allocate(dummy3d_pres(i_input,j_input,lev_input))
+    endif
    allocate(dum2d_1(i_input,j_input))
  else
    allocate(dummy2d(0,0))
    allocate(dummy2d_8(0,0))
    allocate(dummy3d(0,0,0))
+   if (trim(external_model) .eq. 'RAP' .or. &  ! for smoke conversion
+       trim(external_model) .eq. 'HRRR' ) then
+      allocate(dummy3d_pres(0,0,0))
+   endif
    allocate(dum2d_1(0,0))
  endif
 
@@ -2457,11 +2467,25 @@ implicit none
    call get_var_cond(vname,this_miss_var_method=method, this_miss_var_value=value, &
                        this_field_var_name=tmpstr,loc=varnum)
 
-   if (n==1 .and. .not. hasspfh) then 
+   if (n==1 .and. .not. hasspfh .or. &
+     ( (trim(external_model) .eq. 'RAP' .or. &  ! for smoke conversion
+       trim(external_model) .eq. 'HRRR' ) .and. &
+       (tracers_input_vmap(n) == trac_names_vmap(15)))) then 
      print*,"- CALL FieldGather TEMPERATURE." 
      call ESMF_FieldGather(temp_input_grid,dummy3d,rootPet=0, tile=1, rc=rc)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
      call error_handler("IN FieldGet", rc) 
+   endif
+
+   if ( (trim(external_model) .eq. 'RAP' .or. &  ! for smoke conversion
+       trim(external_model) .eq. 'HRRR' ) .and. &
+       tracers_input_vmap(n) == trac_names_vmap(15)) then
+     print*,"- CALL FieldGather 3D Pressure."
+     call ESMF_FieldGather(pres_input_grid,dummy3d_pres,rootPet=0, tile=1, rc=rc)
+     if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN FieldGet", rc)
+   else
+     continue ! massden/smoke only in RAP/HRRR
    endif
    
    if (localpet == 0) then
@@ -2555,6 +2579,18 @@ implicit none
           print *,'- CALL CALRH non-GFS'
           call rh2spfh(dummy2d,rlevs(vlev),dummy3d(:,:,vlev))
         end if
+      endif
+
+      ! Convert smoke from mass density (RAP/HRRR = kg/m^3) to mixing ratio (ug/kg)
+      if ( (trim(external_model) .eq. 'RAP' .or. & 
+       trim(external_model) .eq. 'HRRR' ) .and. &
+        tracers_input_vmap(n) == trac_names_vmap(15)) then
+         do i = 1, i_input
+            do j = 1, j_input
+               dummy2d(i,j) = dummy2d(i,j) * 1.0d9 * &
+                              (287.05 * dummy3d(i,j,vlev) / dummy3d_pres(i,j,vlev))
+            enddo
+         enddo
       endif
 
        dummy3d(:,:,vlev) = real(dummy2d,esmf_kind_r8)
