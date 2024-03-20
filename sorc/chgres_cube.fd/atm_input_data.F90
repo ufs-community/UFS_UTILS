@@ -2038,7 +2038,7 @@ implicit none
  trac_names_vmap = (/"sphum   ", "liq_wat ", "o3mr    ", "ice_wat ", &
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
                      "rain_nc ", "water_nc", "liq_aero", "ice_aero", &
-                     "sgs_tke ", "massden"/)
+                     "sgs_tke ", "massden "/)
 
  tracers_default = (/"sphum   ", "liq_wat ", "o3mr    ", "ice_wat ", &
                      "rainwat ", "snowwat ", "graupel ", "cld_amt ", "ice_nc  ", &
