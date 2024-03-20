@@ -2480,6 +2480,7 @@ implicit none
    if ( (trim(external_model) .eq. 'RAP' .or. &  ! for smoke conversion
        trim(external_model) .eq. 'HRRR' ) .and. &
        tracers_input_vmap(n) == trac_names_vmap(15)) then
+
     if (localpet == 0) then
 
     print*,"- READ PRESSURE FOR SMOKE CONVERSION."
@@ -2512,6 +2513,7 @@ implicit none
     enddo
 
     endif  ! localpet == 0
+
    endif   ! read pressure for smoke conversion
 
    if (tracers_input_vmap(n) == trac_names_vmap(15) .and. &
