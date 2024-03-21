@@ -49,7 +49,7 @@ load(pathJoin("libpng", png_ver))
 netcdf_c_ver=os.getenv("netcdf_c_ver") or "4.9.2"
 load(pathJoin("netcdf-c", netcdf_c_ver))
 
-netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.0"
+netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.1"
 load(pathJoin("netcdf-fortran", netcdf_fortran_ver))
 
 nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
