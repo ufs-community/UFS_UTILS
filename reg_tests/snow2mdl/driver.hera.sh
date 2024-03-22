@@ -25,7 +25,16 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+module load grib-util
+module load wgrib2/2.0.8
 module list
+
+# Because of a bug in the grib-util module, need to construct this
+# variable.
+WGRIB=${grib_util_ROOT}/bin/wgrib
+
+export WGRIB
+export WGRIB2
 
 DATA_ROOT="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
 DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
@@ -48,8 +57,6 @@ fi
 
 export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
-export WGRIB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib
-export WGRIB2=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib2
 
 # The first test mimics GFS OPS.
 

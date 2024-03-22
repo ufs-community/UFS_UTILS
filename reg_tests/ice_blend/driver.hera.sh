@@ -34,6 +34,10 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+module load grib-util
+# Because of a bug in the grib-util module, the wgrib2 module
+# must be loaded last.
+module load wgrib2/2.0.8
 module list
 
 export DATA="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
@@ -49,12 +53,6 @@ export UPDATE_BASELINE="FALSE"
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
-
-export WGRIB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib
-export WGRIB2=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/wgrib2
-export COPYGB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/copygb
-export COPYGB2=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/copygb2
-export CNVGRIB=/scratch2/NCEPDEV/nwprod/NCEPLIBS/utils/grib_util.v1.1.1/exec/cnvgrib
 
 export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
