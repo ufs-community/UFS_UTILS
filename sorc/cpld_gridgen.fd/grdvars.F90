@@ -68,17 +68,10 @@ module grdvars
   ! Super-grid source grid variables
   real(dbl_kind), allocatable, dimension(:,:)   :: x               !< The longitudes of the MOM6 supergrid
   real(dbl_kind), allocatable, dimension(:,:)   :: y               !< The latitudes of the MOM6 supergrid
-  real(dbl_kind), allocatable, dimension(:,:)   :: angq            !< The grid rotation angle at the Bu (or corner)
-                                                                   !! grid points of the super grid
-
   real(dbl_kind), allocatable, dimension(:,:)   :: dx              !< The grid cell width in meters of the supergrid
                                                                    !! in the x-direction (i-dimension)
   real(dbl_kind), allocatable, dimension(:,:)   :: dy              !< The grid cell width in meters of the supergrid
                                                                    !! in the y-direction (j-dimension)
-  real(dbl_kind), allocatable, dimension(:,:) :: xsgp1             !< The longitudes of the super-grid replicated
-                                                                   !! across the tripole seam
-  real(dbl_kind), allocatable, dimension(:,:) :: ysgp1             !< The latitudes of the super-grid replicated
-                                                                   !! across the tripole seam
 
   ! Output grid variables
   real(dbl_kind), allocatable, dimension(:,:) :: latCt             !< The latitude of the center (tracer) grid points
@@ -177,10 +170,8 @@ contains
 
   subroutine allocate_all
 
-    allocate( x(0:nx,0:ny),  y(0:nx,0:ny), angq(0:nx,0:ny) )
+    allocate( x(0:nx,0:ny),  y(0:nx,0:ny) )
     allocate(  dx(nx,0:ny), dy(0:nx,ny) )
-
-    allocate( xsgp1(0:nx,0:ny+1), ysgp1(0:nx,0:ny+1) )
 
     allocate( latCt(ni,nj), lonCt(ni,nj) )
     allocate( latCv(ni,nj), lonCv(ni,nj) )

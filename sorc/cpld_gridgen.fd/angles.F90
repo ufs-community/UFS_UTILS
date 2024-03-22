@@ -10,20 +10,133 @@
 module angles
 
   use gengrid_kinds, only : dbl_kind, int_kind
-  use grdvars,       only : ni,nj,nx,ny
-  use grdvars,       only : x,y,xsgp1,ysgp1,sg_maxlat
-  use grdvars,       only : latBu,lonBu,lonCt
-  use grdvars,       only : anglet
   use grdvars,       only : debug
 
   implicit none
 
 contains
+  !> Find the rotation angle on center (Bu) grid points
+  !!
+  !! @param[in]  ni           the i-dimension of the grid
+  !! @param[in]  nj           the j-dimension of the grid
+  !! @param[in]  xangCt       the angle across the tripole seam
+  !! @param[in]  anglet       the rotation angle on Ct points
+  !! @param[out] angle        the rotation angle on Bu points
+  !! @author Denise.Worthen@noaa.gov
+
+  subroutine find_angq(ni,nj,xangCt,anglet,angle)
+
+    integer       , intent(in)  :: ni,nj
+    real(dbl_kind), intent(in)  :: xangCt(:)
+    real(dbl_kind), intent(in)  :: anglet(:,:)
+    real(dbl_kind), intent(out) :: angle(:,:)
+
+    ! local variables
+    integer :: i,j,i2
+
+    real(dbl_kind) :: angle_0, angle_w, angle_s, angle_sw
+    real(dbl_kind) :: p25 = 0.25
+
+    !---------------------------------------------------------------------
+    ! find the angle on corners using the same relationship CICE uses
+    ! internally to calculate angles on Ct using angles on Bu
+    !
+    !           w-----------------0 Ct(i+1,j+1)
+    !           |                 |
+    !        ----------Bu(i,j)---------- Bu lies on seam at j=nj
+    !           |                 |
+    !   Ct(i,j) sw----------------s
+    !
+    !---------------------------------------------------------------------
+
+
+    angle = 0.0
+    do j = 2,nj
+       do i = 1,ni-1
+          if (j .lt. nj) then
+             angle_0  = anglet(i+1,j+1)
+             angle_w  = anglet(i,  j+1)
+             angle_s  = anglet(i+1,j  )
+             angle_sw = anglet(i  ,j  )
+          else
+             angle_0  = xangCt(i+1  )
+             angle_w  = xangCt(i    )
+             angle_s  = anglet(i+1,j)
+             angle_sw = anglet(i,  j)
+          end if
+          angle(i,j) = atan2(p25*(sin(angle_0) + sin(angle_w) + sin(angle_s) + sin(angle_sw)), &
+               p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
+
+          if (abs(angle(i,j)) .le. 1.0e-10)angle(i,j) = 0.0
+       enddo
+    enddo
+    angle(ni,:) = -angle(1,:)
+
+  end subroutine find_angq
+
+  !> Verify the rotation angle on center (Ct) grid points using angle on corner
+  !! (Bu) grid points
+  !!
+  !! @param[in]  ni         the i-dimension of the grid
+  !! @param[in]  nj         the j-dimension of the grid
+  !! @param[in]  angle      the rotation angle on Bu points
+  !! @param[out] angchk     the rotation angle on Ct points
+  !! @author Denise.Worthen@noaa.gov
+  subroutine find_angchk(ni,nj,angle,angchk)
+
+    integer       , intent(in)  :: ni,nj
+    real(dbl_kind), intent(in)  :: angle(:,:)
+    real(dbl_kind), intent(out) :: angchk(:,:)
+
+    ! local variables
+    integer :: i,j
+    real(dbl_kind) :: angle_0, angle_w, angle_s, angle_sw
+    real(dbl_kind) :: p25 = 0.25
+
+    !---------------------------------------------------------------------
+    ! check: calculate anglet from angle on corners as CICE does internally.
+    ! since angle changes sign between CICE and MOM6, (-1)*angchk ~ anglet
+    !
+    !               w-----------------0 Bu(i,j)
+    !               |                 |
+    !               |     Ct(i,j)     |
+    !               |                 |
+    !   Bu(i-1,j-1) sw----------------s
+    !
+    !---------------------------------------------------------------------
+
+    angchk = 0.0
+    do j = 2,nj
+       do i = 2,ni
+          angle_0  = angle(i  ,j  )
+          angle_w  = angle(i-1,j  )
+          angle_s  = angle(i,  j-1)
+          angle_sw = angle(i-1,j-1)
+          angchk(i,j) = atan2(p25*(sin(angle_0) + sin(angle_w) + sin(angle_s) + sin(angle_sw)), &
+               p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
+       enddo
+    enddo
+    angchk(1,:) = -angchk(ni,:)
+
+  end subroutine find_angchk
 
   !> Find the rotation angle on center (Ct) grid points
   !!
+  !! @param[in]  ni            the i-dimension of the grid
+  !! @param[in]  nj            the j-dimension of the grid
+  !! @param[in]  lonBu         the longitudes of the corner grid points
+  !! @param[in]  latBu         the latitudes of the corner grid points
+  !! @param[in]  lonCt         the longitudes of the center grid points
+  !! @param[out] anglet        the rotation angle on Ct points
   !! @author Denise.Worthen@noaa.gov
-  subroutine find_ang
+
+  subroutine find_ang(ni,nj,lonBu,latBu,lonCt,anglet)
+
+    integer       , intent(in)  :: ni,nj
+    real(dbl_kind), intent(in)  :: lonBu(:,:)
+    real(dbl_kind), intent(in)  :: latBu(:,:)
+    real(dbl_kind), intent(in)  :: lonCt(:,:)
+    real(dbl_kind), intent(out) :: anglet(:,:)
 
     ! local variables
     integer :: i,j,m,n

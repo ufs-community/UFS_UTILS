@@ -20,7 +20,7 @@ program gen_fixgrid
   use grdvars
   use inputnml
   use gengrid_kinds,     only: CL, CS, dbl_kind, real_kind, int_kind
-  use angles,            only: find_ang
+  use angles,            only: find_ang, find_angq, find_angchk
   use vertices,          only: fill_vertices, fill_bottom, fill_top
   use mapped_mask,       only: make_frac_land
   use postwgts,          only: make_postwgts
@@ -40,9 +40,6 @@ program gen_fixgrid
 
   real(kind=dbl_kind), parameter :: pi = 3.14159265358979323846_dbl_kind
   real(kind=dbl_kind), parameter :: deg2rad = pi/180.0_dbl_kind
-  ! for angchk
-  real(kind=dbl_kind) :: angle_0, angle_w, angle_s, angle_sw
-  real(kind=dbl_kind) :: p25 = 0.25
 
   real(real_kind),   allocatable, dimension(:,:) :: ww3dpth
   integer(int_kind), allocatable, dimension(:,:) :: ww3mask
@@ -292,51 +289,22 @@ program gen_fixgrid
   ! find the angle on centers using the same procedure as MOM6
   !---------------------------------------------------------------------
 
-  call find_ang
+  call find_ang(ni,nj,lonBu,latBu,lonCt,anglet)
   write(logmsg,'(a,2f12.2)')'ANGLET min,max: ',minval(anglet),maxval(anglet)
   print '(a)',trim(logmsg)
   write(logmsg,'(a,2f12.2)')'ANGLET edges i=1,i=ni: ',anglet(1,nj),anglet(ni,nj)
   print '(a)',trim(logmsg)
 
-  !---------------------------------------------------------------------
-  ! find the angle on corners using the same relationship CICE uses
-  ! internally to calculate angles on Ct using angles on Bu
-  !
-  !           w-----------------0 Ct(i+1,j+1)
-  !           |                 |
-  !        ----------Bu(i,j)---------- Bu lies on seam at j=nj
-  !           |                 |
-  !   Ct(i,j) sw----------------s
-  !
-  !---------------------------------------------------------------------
-
+  xangCt(:) = 0.0
   do i = 1,ni
      i2 = ipole(2)+(ipole(1)-i)+1
-     xangCt(i) = -angleT(i2,nj)       ! angle changes sign across seam
+     xangCt(i) = -anglet(i2,nj)       ! angle changes sign across seam
   end do
+  !---------------------------------------------------------------------
+  ! find the angle on corners using the same procedure as CICE6
+  !---------------------------------------------------------------------
 
-  angle = 0.0
-  do j = 2,nj
-     do i = 1,ni-1
-        if (j .lt. nj) then
-           angle_0  = anglet(i+1,j+1)
-           angle_w  = anglet(i,  j+1)
-           angle_s  = anglet(i+1,j  )
-           angle_sw = anglet(i  ,j  )
-        else
-           angle_0  = xangCt(i+1  )
-           angle_w  = xangCt(i    )
-           angle_s  = anglet(i+1,j)
-           angle_sw = anglet(i,  j)
-        end if
-        angle(i,j) = atan2(p25*(sin(angle_0) + sin(angle_w) + sin(angle_s) + sin(angle_sw)), &
-                           p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
-
-        if (abs(angle(i,j)) .le. 1.0e-10)angle(i,j) = 0.0
-     enddo
-  enddo
-  angle(ni,:) = -angle(1,:)
-
+  call find_angq(ni,nj,xangCt,anglet,angle)
   ! reverse angle for CICE
   angle = -angle
   write(logmsg,'(a,2f12.2)')'ANGLE min,max: ',minval(angle),maxval(angle)
@@ -345,30 +313,10 @@ program gen_fixgrid
   print '(a)',trim(logmsg)
 
   !---------------------------------------------------------------------
-  ! check: calculate anglet from angle on corners as CICE does internally.
-  ! since angle changes sign between CICE and MOM6, (-1)*angchk ~ anglet
-  !
-  !               w-----------------0 Bu(i,j)
-  !               |                 |
-  !               |     Ct(i,j)     |
-  !               |                 |
-  !   Bu(i-1,j-1) sw----------------s
-  !
+  ! check the Bu angle
   !---------------------------------------------------------------------
 
-  angchk = 0.0
-  do j = 2,nj
-     do i = 2,ni
-        angle_0  = angle(i  ,j  )
-        angle_w  = angle(i-1,j  )
-        angle_s  = angle(i,  j-1)
-        angle_sw = angle(i-1,j-1)
-        angchk(i,j) = atan2(p25*(sin(angle_0) + sin(angle_w) + sin(angle_s) + sin(angle_sw)), &
-                            p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
-     enddo
-  enddo
-  ! reverse angle for MOM6
-  angchk(1,:) = -angchk(ni,:)
+  call find_angchk(ni,nj,angle,angchk)
   write(logmsg,'(a,2f12.2)')'ANGCHK min,max: ',minval(angchk),maxval(angchk)
   print '(a)',trim(logmsg)
   write(logmsg,'(a,2f12.2)')'ANGCHK edges i=1,i=ni: ',angchk(1,nj),angchk(ni,nj)
@@ -612,8 +560,8 @@ program gen_fixgrid
   ! clean up
   !---------------------------------------------------------------------
 
-  deallocate(x,y, angq, dx, dy, xsgp1, ysgp1)
-  deallocate(areaCt, anglet, angle)
+  deallocate(x, y, dx, dy)
+  deallocate(areaCt, anglet, angle, angchk)
   deallocate(latCt, lonCt)
   deallocate(latCv, lonCv)
   deallocate(latCu, lonCu)
