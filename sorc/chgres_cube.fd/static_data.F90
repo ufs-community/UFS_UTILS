@@ -15,8 +15,8 @@
  use esmf
 
  use utilities, only              : error_handler, netcdf_err
-
- implicit none
+ 
+implicit none
 
  private
 
@@ -49,6 +49,7 @@
  subroutine get_static_fields(localpet)
 
  use model_grid, only               : num_tiles_target_grid, &
+                                      land_frac_target_grid, &
                                       i_target, j_target
 
  implicit none
@@ -60,11 +61,13 @@
  real(esmf_kind_r8), allocatable    :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable    :: max_data_one_tile(:,:)
  real(esmf_kind_r8), allocatable    :: min_data_one_tile(:,:)
-
+ real(esmf_kind_r8), allocatable    :: land_frac_target_tile(:,:)
  if (localpet==0) then
    allocate(data_one_tile(i_target,j_target))
+   allocate(land_frac_target_tile(i_target,j_target))
  else
    allocate(data_one_tile(0,0))
+   allocate(land_frac_target_tile(0,0))
  endif
 
  call create_static_fields
@@ -74,8 +77,11 @@
 !------------------------------------------------------------------------------
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('slope_type', i_target, j_target, tile, data_one_tile)
+     call read_static_file('slope_type', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID SLOPE TYPE."
    call ESMF_FieldScatter(slope_type_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -88,8 +94,11 @@
 !------------------------------------------------------------------------------
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('maximum_snow_albedo', i_target, j_target, tile, data_one_tile)
+     call read_static_file('maximum_snow_albedo', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID MAXIMUM SNOW ALBEDO."
    call ESMF_FieldScatter(mxsno_albedo_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -102,8 +111,11 @@
 !------------------------------------------------------------------------------
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('soil_type', i_target, j_target, tile, data_one_tile)
+     call read_static_file('soil_type', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID SOIL TYPE."
    call ESMF_FieldScatter(soil_type_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -116,8 +128,11 @@
 !------------------------------------------------------------------------------
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('vegetation_type', i_target, j_target, tile, data_one_tile)
+     call read_static_file('vegetation_type', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID VEGETATION TYPE."
    call ESMF_FieldScatter(veg_type_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -138,9 +153,12 @@
  endif
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
      call read_static_file('vegetation_greenness', i_target, j_target, tile, data_one_tile, &
-                            max_data_one_tile, min_data_one_tile)
+                            land_frac_target_tile, max_data_one_tile, min_data_one_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID VEGETATION GREENNESS."
    call ESMF_FieldScatter(veg_greenness_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -163,8 +181,11 @@
 !------------------------------------------------------------------------------
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('substrate_temperature', i_target, j_target, tile, data_one_tile)
+     call read_static_file('substrate_temperature', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID SUBSTRATE TEMPERATURE."
    call ESMF_FieldScatter(substrate_temp_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -177,8 +198,11 @@
 !------------------------------------------------------------------------------
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('visible_black_sky_albedo', i_target, j_target, tile, data_one_tile)
+     call read_static_file('visible_black_sky_albedo', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID ALVSF."
    call ESMF_FieldScatter(alvsf_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -187,8 +211,11 @@
  enddo
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('visible_white_sky_albedo', i_target, j_target, tile, data_one_tile)
+     call read_static_file('visible_white_sky_albedo', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID ALVWF."
    call ESMF_FieldScatter(alvwf_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -197,8 +224,11 @@
  enddo
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('near_IR_black_sky_albedo', i_target, j_target, tile, data_one_tile)
+     call read_static_file('near_IR_black_sky_albedo', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID ALNSF."
    call ESMF_FieldScatter(alnsf_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -207,8 +237,11 @@
  enddo
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('near_IR_white_sky_albedo', i_target, j_target, tile, data_one_tile)
+     call read_static_file('near_IR_white_sky_albedo', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID ALNWF."
    call ESMF_FieldScatter(alnwf_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -221,8 +254,11 @@
 !------------------------------------------------------------------------------
 
  do tile = 1, num_tiles_target_grid
+   call ESMF_FieldGather(land_frac_target_grid, land_frac_target_tile, rootPet=0,tile=tile, rc=error)
+    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+      call error_handler("IN FieldGather", error)
    if (localpet == 0) then
-     call read_static_file('facsf', i_target, j_target, tile, data_one_tile)
+     call read_static_file('facsf', i_target, j_target, tile, data_one_tile, land_frac_target_tile)
    endif
    print*,"- CALL FieldScatter FOR TARGET GRID FACSF."
    call ESMF_FieldScatter(facsf_target_grid, data_one_tile, rootpet=0, tile=tile, rc=error)
@@ -252,6 +288,7 @@
 !! @param[in] i_target  the "i" dimension of the target model tile
 !! @param[in] j_target  the "j" dimension of the target model tile
 !! @param[in] tile      the tile number of be processed
+!! @param[in] land_frac landcover fraction on the target model tile
 !! @param[out] data_one_tile  the processed surface data on the tile
 !! @param[out] max_data_one_tile  for fields with multiple time periods, the max
 !! yearly value on the tile  
@@ -259,7 +296,7 @@
 !! yearly value on the tile
 !! @author George Gayno NCEP/EMC   
  subroutine read_static_file(field, i_target, j_target, tile, &
-                             data_one_tile, max_data_one_tile, &
+                             data_one_tile, land_frac, max_data_one_tile, &
                              min_data_one_tile)
  
  use netcdf
@@ -271,10 +308,11 @@
 
  character(len=*), intent(in)       :: field
  character(len=100)                 :: filename
- character(len=500)                 :: the_file
+ character(len=500)                 :: the_file, err_msg
 
  integer, intent(in)                :: i_target, j_target, tile
 
+ real(esmf_kind_r8), intent(in)     :: land_frac(i_target,j_target)
  real(esmf_kind_r8), intent(out)    :: data_one_tile(i_target,j_target)
  real(esmf_kind_r8), intent(out), optional    :: max_data_one_tile(i_target,j_target)
  real(esmf_kind_r8), intent(out), optional    :: min_data_one_tile(i_target,j_target)
@@ -370,9 +408,16 @@
    deallocate(days_since)
 
  else ! file contains only one time record
-
-   data_one_tile = dummy(:,:,1)
-
+ 
+   do j = 1, j_target
+   do i = 1, i_target
+     if(land_frac(i,j) > 0.0 .and. dummy(i,j,1) == -999) then
+       err_msg = "Detected missing data point in " // trim(filename) // ". Static data may be outdated. Please use static data created with the latest UFS_UTILS release that supports fractional land coverage" 
+       call error_handler(err_msg,-1)
+     endif 
+     data_one_tile(i,j) = dummy(i,j,1)
+   enddo
+   enddo
  endif
 
  if (trim(field) == 'vegetation_greenness') then
