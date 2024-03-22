@@ -116,7 +116,8 @@ C> @return 0 for success, error code otherwise.
       if( trim(OUTGRID) .NE. "none" ) then
          inquire(file=trim(OUTGRID), exist=fexist)
          if(.not. fexist) then
-            print*, "file "//trim(OUTGRID)//" does not exist"
+            print*, "FATAL ERROR: file "//trim(OUTGRID)
+            print*, " does not exist."
             CALL ERREXIT(4)
          endif
          do ncid = 103, 512
@@ -203,7 +204,7 @@ C
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
-      integer :: M,N,IMT,IRET,ios,iosg,latg2,istat,itest,jtest
+      integer :: M,N,IMT,IRET,ios,latg2,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
@@ -459,43 +460,35 @@ C
 ! Read 30-sec Antarctica RAMP data. Points scan from South
 ! to North, and from Greenwich to Greenwich.
 
-! The error handling here needs to be cleaned up.
-      iosg = 0
       error=NF__OPEN("./topography.antarctica.ramp.30s.nc",
      &               NF_NOWRITE,fsize,ncid)
       call netcdf_err(error, 'Opening RAMP topo file' )
       error=nf_inq_varid(ncid, 'topo', id_var)
       call netcdf_err(error, 'Inquire varid of RAMP topo')
       error=nf_get_var_real(ncid, id_var, GICE)
-      iosg=error
       call netcdf_err(error, 'Inquire data of RAMP topo')
       error = nf_close(ncid)
       
-      if(iosg .ne. 0 ) then
-        print *,' *** Err on reading GICE record, iosg=',iosg
-        print *,' exec continues but NO GICE correction done '
-      else
-        print *,' GICE 30" Antarctica RAMP orog 43201x3601 read OK'
-        print *,' Processing! '
-        print *,' Processing! '
-        print *,' Processing! '
-         do j = 1, 3601 
-         do i = 1, IMN
-           zsave1 = ZAVG(i,j)
-           zsave2 = ZSLM(i,j)
-         if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
-           if ( GICE(i,j) .gt. 0.) then 
-                ZAVG(i,j) = int( GICE(i,j) + 0.5 )
+      print *,' GICE 30" Antarctica RAMP orog 43201x3601 read OK'
+      print *,' Processing! '
+      print *,' Processing! '
+      print *,' Processing! '
+      do j = 1, 3601 
+      do i = 1, IMN
+         zsave1 = ZAVG(i,j)
+         zsave2 = ZSLM(i,j)
+       if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
+         if ( GICE(i,j) .gt. 0.) then 
+              ZAVG(i,j) = int( GICE(i,j) + 0.5 )
 !! --- for GICE values less than or equal to 0 (0, -1, or -99) then
 !! --- radar-sat (RAMP) values are not valid and revert back to old orog 
                 ZSLM(i,j) = 1
-           endif
          endif
+       endif
   152 format(1x,' ZAVG(i=',i4,' j=',i4,')=',i5,i3,
      &' orig:',i5,i4,' Lat=',f7.3,f8.2,'E',' GICE=',f8.1)
-         enddo
-         enddo
-      endif
+      enddo
+      enddo
 
       deallocate (GICE)
 
@@ -581,7 +574,8 @@ C
          grid_from_file = .true.
          inquire(file=trim(OUTGRID), exist=fexist)
          if(.not. fexist) then
-            print*, "file "//trim(OUTGRID)//" does not exist"
+            print*, "FATAL ERROR: file "//trim(OUTGRID)
+            print*, "does not exist."
             CALL ERREXIT(4)
          endif
          do ncid = 103, 512
@@ -597,25 +591,6 @@ C
      &                   trim(OUTGRID) )
          nx = 2*IM
          ny = 2*JM
-!         error=nf_inq_dimlen(ncid,id_dim,nx)
-!         print*, "nx = ", nx, id_dim
-!         call netcdf_err(error, 'inquire dimension nx length '//
-!     &       'from file '//trim(OUTGRID) )
-!         error=nf_inq_dimid(ncid, 'ny', id_dim)
-!         call netcdf_err(error, 'inquire dimension ny from file '//
-!     &                   trim(OUTGRID) )
-!         error=nf_inq_dimlen(ncid,id_dim,ny)
-!         call netcdf_err(error, 'inquire dimension ny length '//
-!     &       'from file '//trim(OUTGRID) )
-!        IM should equal nx/2 and JM should equal ny/2
-!         if(IM .ne. nx/2) then
-!            print*, "IM=",IM, " /= grid file nx/2=",nx/2
-!            CALL ERREXIT(4)
-!         endif
-!         if(JM .ne. ny/2) then
-!            print*, "JM=",JM, " /= grid file ny/2=",ny/2
-!            CALL ERREXIT(4)
-!         endif
          print*, "Read the grid from file "//trim(OUTGRID)
 
          allocate(tmpvar(nx+1,ny+1))
@@ -770,12 +745,12 @@ C
      &      IM,JM,IMN,JMN,geolon_c,geolat_c)
             lake_frac=9999.9
          ELSE
-           print*,'got here - read in external mask ',merge_file
+           print*,'Read in external mask ',merge_file
            CALL READ_MASK(MERGE_FILE,SLM,land_frac,lake_frac,im,jm)
          ENDIF
 
          IF (MASK_ONLY) THEN
-           print*,'got here computing mask only.'
+           print*,'Computing mask only.'
            CALL WRITE_MASK_NETCDF(IM,JM,SLM,land_frac,
      1                  1,1,GEOLON,GEOLAT)
 
@@ -1775,11 +1750,11 @@ C
                endif
             enddo 
             if(ist<1 .OR. ist>IMN) then
-               print*, "ist<1 .or. ist>IMN"
+               print*, "FATAL ERROR: ist<1 .or. ist>IMN"
                call ABORT()
             endif
            if(ien<1 .OR. ien>IMN) then
-               print*, "iend<1 .or. iend>IMN"
+               print*, "FATAL ERROR: iend<1 .or. iend>IMN"
                call ABORT()
             endif
 
@@ -1888,7 +1863,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
             XNSUM_ALL = XNSUM_ALL + 1.
             nsum_all = nsum_all+1
             if(nsum_all > MAXSUM) then
-              print*, "nsum_all is greater than MAXSUM, increase MAXSUM"
+              print*, "FATAL ERROR: nsum_all is greater than MAXSUM,"  
+              print*, "increase MAXSUM."
               call ABORT()
             endif
 
@@ -1900,7 +1876,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                XNSUM = XNSUM + 1.
                nsum = nsum+1
                if(nsum > MAXSUM) then
-                 print*, "nsum is greater than MAXSUM, increase MAXSUM"
+                 print*, "FATAL ERROR: nsum is greater than MAXSUM,"
+                 print*, "increase MAXSUM."
                  call ABORT()
                endif
             endif
@@ -1917,7 +1894,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                land_frac(i,j) = XLAND_ALL/XNSUM _ALL 
                SLM(I,J) = FLOAT(NINT(XLAND_ALL/XNSUM_ALL))
          ELSE
-               print*, "no source points in MAKE_MASK"
+               print*, "FATAL ERROR: no source points in MAKE_MASK."
                call ABORT()
          ENDIF
        ENDDO
@@ -2045,7 +2022,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
             HEIGHT_ALL = FLOAT(ZAVG(ii,jj)) 
             nsum_all = nsum_all+1
             if(nsum_all > MAXSUM) then
-              print*, "nsum_all is greater than MAXSUM, increase MAXSUM"
+              print*, "FATAL ERROR: nsum_all is greater than MAXSUM,"
+              print*, "increase MAXSUM."
               call ABORT()
             endif
             hgt_1d_all(nsum_all) = HEIGHT_ALL
@@ -2064,7 +2042,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                HEIGHT = FLOAT(ZAVG(ii,jj)) 
                nsum = nsum+1
                if(nsum > MAXSUM) then
-                 print*, "nsum is greater than MAXSUM, increase MAXSUM"
+                 print*, "FATAL ERROR: nsum is greater than MAXSUM,"
+                 print*, "increase MAXSUM."
                  call ABORT()
                endif
                hgt_1d(nsum) = HEIGHT
@@ -2133,7 +2112,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                   VAR4(I,J) = MIN(XW4_ALL/XNSUM_ALL/VAR(I,J) **4,10.)
                ENDIF
          ELSE
-               print*, "no source points in MAKEMT2"
+               print*, "FATAL ERROR: no source points in MAKEMT2."
                call ABORT()
          ENDIF
    
@@ -3278,7 +3257,7 @@ C
           !--- adjust dlat if the points are close to pole.
           if( lat-dlat*0.5<-90.) then
              print*, "at i,j =", i,j, lat, dlat, lat-dlat*0.5
-             print*, "ERROR: lat-dlat*0.5<-90."
+             print*, "FATAL ERROR: lat-dlat*0.5<-90."
              call ERREXIT(4)
           endif
           if( lat+dlat*2 > 90.) then
@@ -3607,7 +3586,8 @@ C
         if(iindx(n) ==0) then
           print*, "lon,lat=", lon,lat
           print*, "jstart, jend=", jstart, jend, dist
-          print*, "ERROR in get mismatch_index: not find nearest points"
+          print*, "FATAL ERROR in get mismatch_index: "
+          print*, "did not find nearest points."
           call ERREXIT(4)
         endif
       enddo   
@@ -3911,7 +3891,7 @@ C
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
         if (iret /= 0) then
-          print*,'- ERROR IN IPOLATES ',iret
+          print*,'- FATAL ERROR IN IPOLATES ',iret
           call ERREXIT(4)
         endif
 
@@ -3983,7 +3963,7 @@ C
      &          lons_land_output, ibo,  
      &          bitmap_output, output_data_land, iret)
         if (iret /= 0) then
-          print*,'- ERROR IN IPOLATES ',iret
+          print*,'- FATAL ERROR IN IPOLATES ',iret
           call ERREXIT(4)
         endif
 

@@ -223,7 +223,8 @@
 
       if( err.EQ.NF_NOERR )return
       errmsg = NF_STRERROR(err)
-      print*, trim(string), ': ', trim(errmsg)
+      print*, 'FATAL ERROR: ', trim(string), ': ', trim(errmsg)
+      call abort
 
       return
     end subroutine netcdf_err
