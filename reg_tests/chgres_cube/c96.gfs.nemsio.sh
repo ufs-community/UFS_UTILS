@@ -12,8 +12,10 @@ set -x
 export DATA=$OUTDIR/c96_gfs_nemsio
 rm -fr $DATA
 
-export FIXfv3=${HOMEreg}/fix/C96
-export FIXsfc=${FIXfv3}/fix_sfc
+export CRES=96
+export ocn=100
+export FIXfv3=${HOMEreg}/fix/C${CRES}
+
 export COMIN=${HOMEreg}/input_data/gfs.nemsio
 export ATM_FILES_INPUT=gfnanl.gdas.2017071700
 export SFC_FILES_INPUT=sfnanl.gdas.2017071700

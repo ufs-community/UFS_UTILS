@@ -15,9 +15,10 @@ NCCMP=${NCCMP:-$(which nccmp)}
 export MAX_TASKS_CY=6
 
 export HOMEgfs=$NWPROD
-export BASE_GSM=$NWPROD
 
-export CYCLEXEC=$BASE_GSM/exec/global_cycle
+export FIXgfs=$HOMEreg/fix
+
+export CYCLEXEC=$HOMEgfs/exec/global_cycle
 
 export CDATE=2019073000
 export FHOUR=00
@@ -32,9 +33,6 @@ export JCAP=1534
 export LONB=3072
 export LATB=1536
 
-export OROFIX=$HOMEreg/fix/$CASE
-export FIXgsm=$BASE_GSM/fix/am
-
 export DONST="NO"
 export use_ufo=.true.
 
@@ -45,7 +43,7 @@ export DO_SOI_INC_GSI=".true."
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
 
-$BASE_GSM/ush/global_cycle_driver.sh
+$HOMEgfs/ush/global_cycle_driver.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
@@ -76,7 +74,7 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< C192 GSI based LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
   echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $BASE_GSM/reg_tests/update_baseline.sh $HOMEreg "c192.gsi_lndincsoilnoahmp" $commit_num
+    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c192.lndincsoilnoahmp" $commit_num
   fi
 else
   echo

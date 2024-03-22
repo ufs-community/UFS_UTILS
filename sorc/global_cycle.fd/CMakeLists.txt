@@ -39,10 +39,13 @@ target_link_libraries(
   w3emc::w3emc_d
   bacio::bacio_4
   ip::ip_d
-  sp::sp_d
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran
   noah_lsm_routines)
+
+if(sp_FOUND)
+  target_link_libraries(global_cycle_lib PUBLIC sp::sp_d)
+endif()
 
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(global_cycle_lib PUBLIC OpenMP::OpenMP_Fortran)

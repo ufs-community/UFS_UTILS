@@ -55,7 +55,7 @@ Program inputs and outputs for global applications
 
 **Inputs**
 
-Users may create their own global grids, or use the pre-defined files are located `here <https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/>`_.
+Users may create their own global grids, or use the pre-defined files located `here <https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_fv3_gmted2010/>`_.
 
       * FV3 mosaic file - (NetCDF format)
 	      * CRES_mosaic.nc
@@ -76,7 +76,7 @@ Users may create their own global grids, or use the pre-defined files are locate
 	      * CRES_oro_data.tile5.nc
 	      * CRES_oro_data.tile6.nc
 
-      * FV3 surface climatological files - Located under the `./fix_sfc <https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/C48/fix_sfc>`_ sub-directory.  One file for each tile.  NetCDF format.
+      * FV3 surface climatological files - Located under the `./fix_sfc <https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_fv3_gmted2010/C48/fix_sfc>`_ sub-directory.  One file for each tile.  NetCDF format.
 	      * CRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
 	      * CRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
 	      * CRES.slope_type.tileX.nc (slope type)
@@ -369,7 +369,7 @@ Namelist variables with “input” in their name refer to data input to chgres_
               * Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
       * halo_blend - Integer number of row/columns to apply halo blending into the domain, where model and lateral boundary tendencies are applied.
       * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral boundary conditions are applied.
-      * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
+      * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR', 'RRFS'. (Default: 'GFS')
 
 **Optional Entries**
 

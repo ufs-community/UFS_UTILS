@@ -54,7 +54,7 @@
 !!                                    gaussian nemsio files
 !!                                 - "gfs_sigio" for spectral gfs
 !!                                    gfs sigio/sfcio files.
- character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current supported options are: "GFS", "HRRR", "NAM", "RAP". Default: "GFS"
+ character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current supported options are: "GFS", "HRRR", "NAM", "RAP", "RRFS". Default: "GFS"
  
  integer, parameter, public      :: max_tracers=100 !< Maximum number of atmospheric tracers processed.
  integer, public                 :: num_tracers !< Number of atmospheric tracers to be processed.
@@ -89,8 +89,10 @@
  integer, public                 :: regional = 0 !<  For regional target grids.  When '1' remove boundary halo region from atmospheric/surface data and
                                                  !! output atmospheric boundary file. When '2' output boundary file only. Default is '0' (global grids).
  integer, public                 :: halo_bndy = 0 !< Number of row/cols of lateral halo, where pure lateral bndy conditions are applied (regional target grids).
- integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model tendencies and lateral boundary tendencies are applied. Regional target grids only.
- integer, public                 :: nsoill_out = 4 !<  Number of soil levels desired in the output data. chgres_cube can interpolate from 9 input to 4 output levels. DEFAULT: 4.
+ integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model 
+                                                   !! tendencies and lateral boundary tendencies are applied. Regional target grids only.
+ integer, public                 :: nsoill_out = 4 !< Number of soil levels desired in the output data. 
+                                                   !! chgres_cube can interpolate from 9 input to 4 output levels. DEFAULT: 4.
 
  logical, public                 :: convert_atm = .false. !< Convert atmospheric data when true.
  logical, public                 :: convert_nst = .false. !< Convert nst data when true.
@@ -158,7 +160,6 @@
 
  integer                     :: is, ie, ierr
 
-
  namelist /config/ varmap_file, &
                    mosaic_file_target_grid, &
                    fix_dir_target_grid,     &
@@ -224,7 +225,7 @@
  if (ie == 0) then
    call error_handler("CANT DETERMINE CRES FROM OROG FILE.", 1)
  endif
-   
+
  cres_target_grid = orog_files_target_grid(1)(is:ie)
 
  if (.not. convert_sfc .and. .not. convert_atm) then
@@ -317,8 +318,8 @@
 !-------------------------------------------------------------------------
 
  if (trim(input_type) == "grib2") then
-   if (.not. any((/character(4)::"GFS","NAM","RAP","HRRR"/)==trim(external_model))) then
-     call error_handler( "KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, AND HRRR. " // &
+   if (.not. any((/character(4)::"GFS","NAM","RAP","HRRR","RRFS"/)==trim(external_model))) then
+     call error_handler( "KNOWN SUPPORTED external_model INPUTS ARE GFS, NAM, RAP, HRRR, AND RRFS. " // &
     "IF YOU WISH TO PROCESS GRIB2 DATA FROM ANOTHER MODEL, YOU MAY ATTEMPT TO DO SO AT YOUR OWN RISK. " // &
     "ONE WAY TO DO THIS IS PROVIDE NAM FOR external_model AS IT IS A RELATIVELY STRAIGHT-" // &
     "FORWARD REGIONAL GRIB2 FILE. YOU MAY ALSO COMMENT OUT THIS ERROR MESSAGE IN " // &

@@ -23,6 +23,8 @@
  type(esmf_field), public   :: ffmm_target_grid
                                        !< log((z0+z1)*1/z0)
                                        !< See sfc_diff.f for details.
+ type(esmf_field), public   :: ice_temp_target_grid
+                                       !< 3-d sea ice column temperature
  type(esmf_field), public   :: q2m_target_grid
                                        !< 2-m specific humidity.
  type(esmf_field), public   :: seaice_depth_target_grid
@@ -33,12 +35,19 @@
                                        !< Sea ice skin temperature.
  type(esmf_field), public   :: skin_temp_target_grid
                                        !< Skin temperature/sst.
+ type(esmf_field), public   :: sst_target_grid
+                                       !< SST at open water.
  type(esmf_field), public   :: srflag_target_grid
                                        !< Snow/rain flag.
  type(esmf_field), public   :: snow_liq_equiv_target_grid
-                                       !< Liquid equivalent snow depth.
+                                       !< Liquid equivalent snow depth at land.
+ type(esmf_field), public   :: snow_liq_equiv_at_ice_target_grid
+                                       !< Liquid equivalent snow depth at sea
+                                       !< ice.
  type(esmf_field), public   :: snow_depth_target_grid
-                                       !< Physical snow depth.
+                                       !< Physical snow depth at land.
+ type(esmf_field), public   :: snow_depth_at_ice_target_grid
+                                       !< physical snow depth at sea ice.
  type(esmf_field), public   :: soil_temp_target_grid
                                        !< 3-d soil temperature.
  type(esmf_field), public   :: soilm_liq_target_grid
@@ -51,8 +60,10 @@
                                        !< Precipitation.
  type(esmf_field), public   :: ustar_target_grid
                                        !< Friction velocity.
- type(esmf_field), public   :: z0_target_grid
-                                       !< Roughness length.
+ type(esmf_field), public   :: z0_ice_target_grid
+                                       !< roughness length at sea ice
+ type(esmf_field), public   :: z0_water_target_grid
+                                       !< roughness length at open water
  type(esmf_field), public   :: lai_target_grid
                                        !< Leaf area index.
 
@@ -120,17 +131,22 @@
  call ESMF_FieldDestroy(tprcp_target_grid, rc=rc)
  call ESMF_FieldDestroy(f10m_target_grid, rc=rc)
  call ESMF_FieldDestroy(ffmm_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(ice_temp_target_grid)) call ESMF_FieldDestroy(ice_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(ustar_target_grid, rc=rc)
  call ESMF_FieldDestroy(snow_liq_equiv_target_grid, rc=rc)
  call ESMF_FieldDestroy(snow_depth_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(snow_liq_equiv_at_ice_target_grid)) call ESMF_FieldDestroy(snow_liq_equiv_at_ice_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(snow_depth_at_ice_target_grid)) call ESMF_FieldDestroy(snow_depth_at_ice_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_fract_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_depth_target_grid, rc=rc)
  call ESMF_FieldDestroy(seaice_skin_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(srflag_target_grid, rc=rc)
  call ESMF_FieldDestroy(skin_temp_target_grid, rc=rc)
+ if (ESMF_FieldIsCreated(sst_target_grid)) call ESMF_FieldDestroy(sst_target_grid, rc=rc)
  call ESMF_FieldDestroy(canopy_mc_target_grid, rc=rc)
  call ESMF_FieldDestroy(lai_target_grid,rc=rc)
- call ESMF_FieldDestroy(z0_target_grid, rc=rc)
+ call ESMF_FieldDestroy(z0_ice_target_grid, rc=rc)
+ call ESMF_FieldDestroy(z0_water_target_grid, rc=rc)
  call ESMF_FieldDestroy(soil_temp_target_grid, rc=rc)
  call ESMF_FieldDestroy(soilm_tot_target_grid, rc=rc)
  call ESMF_FieldDestroy(soilm_liq_target_grid, rc=rc)

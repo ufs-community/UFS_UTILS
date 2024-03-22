@@ -370,16 +370,16 @@
 ! surface data will not be mapped to it.
 !-----------------------------------------------------------------------
 
- error=nf90_inq_varid(ncid, 'lake_frac', id_var)
- if (error /= 0) then
-   print*,"- READ LAND MASK (SLMSK)"
-   error=nf90_inq_varid(ncid, 'slmsk', id_var)
-   call netcdf_err(error, "READING SLMSK ID")
-   error=nf90_get_var(ncid, id_var, dummy)
-   call netcdf_err(error, "READING SLMSK")
-   mask = nint(dummy)
-   land_frac = -999.
- else
+!error=nf90_inq_varid(ncid, 'lake_frac', id_var)
+!if (error /= 0) then
+!  print*,"- READ LAND MASK (SLMSK)"
+!  error=nf90_inq_varid(ncid, 'slmsk', id_var)
+!  call netcdf_err(error, "READING SLMSK ID")
+!  error=nf90_get_var(ncid, id_var, dummy)
+!  call netcdf_err(error, "READING SLMSK")
+!  mask = nint(dummy)
+!  land_frac = -999.
+!else
    print*,"- READ LAND FRACTION"
    error=nf90_inq_varid(ncid, 'land_frac', id_var)
    call netcdf_err(error, "READING LAND_FRAC ID")
@@ -393,7 +393,7 @@
      endif
    enddo
    enddo
- endif
+!endif
 
  print*,"- READ LATITUDE"
  error=nf90_inq_varid(ncid, 'geolat', id_var)

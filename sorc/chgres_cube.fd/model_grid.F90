@@ -70,10 +70,11 @@
  type(esmf_field),  public              :: longitude_w_input_grid
                                            !< longitude of 'west' edge of grid
                                            !! box, input grid
-
  type(esmf_field),  public              :: landmask_target_grid
-                                           !< land mask target grid - '1' land;
-                                           !! '0' non-land
+                                           !< land mask target grid - '1' some or all land;
+                                           !! '0' all non-land
+ type(esmf_field),  public              :: land_frac_target_grid
+                                           !< land fraction, target grid
  type(esmf_field),  public              :: latitude_target_grid
                                            !< latitude of grid center, target grid
  type(esmf_field),  public              :: latitude_s_target_grid
@@ -91,8 +92,8 @@
                                            !< longitude of 'west' edge of grid
                                            !! box, target grid
  type(esmf_field),  public              :: seamask_target_grid
-                                           !< sea mask target grid - '1' non-land;
-                                           !! '0' land
+                                           !< sea mask target grid - '1' some or all non-land;
+                                           !! '0' all land
  type(esmf_field),  public              :: terrain_target_grid
                                            !< terrain height target grid
 
@@ -415,8 +416,6 @@
  integer                      :: extra, error, ncid
  integer, allocatable         :: decomptile(:,:)
 
- integer(esmf_kind_i8), allocatable    :: landmask_one_tile(:,:)
-
  real(esmf_kind_r8), allocatable       :: latitude_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_s_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_w_one_tile(:,:)
@@ -551,7 +550,6 @@
    allocate(latitude_one_tile(i_input,j_input))
    allocate(latitude_s_one_tile(i_input,jp1_input))
    allocate(latitude_w_one_tile(ip1_input,j_input))
-   allocate(landmask_one_tile(i_input,j_input))
  else
    allocate(longitude_one_tile(0,0))
    allocate(longitude_s_one_tile(0,0))
@@ -559,7 +557,6 @@
    allocate(latitude_one_tile(0,0))
    allocate(latitude_s_one_tile(0,0))
    allocate(latitude_w_one_tile(0,0))
-   allocate(landmask_one_tile(0,0))
  endif
 
  do tile = 1, num_tiles_input_grid
@@ -601,7 +598,6 @@
  deallocate(latitude_one_tile)
  deallocate(latitude_s_one_tile)
  deallocate(latitude_w_one_tile)
- deallocate(landmask_one_tile)
 
  end subroutine define_input_grid_mosaic
 
@@ -679,7 +675,7 @@
  elseif (gfld%igdtnum == 30) then
    print*,"- INPUT DATA ON LAMBERT CONFORMAL GRID."
    input_grid_type = 'lambert'
- elseif (gfld%igdtnum == 32769) then
+ elseif (gfld%igdtnum == 32769 .or. gfld%igdtnum == 1) then
    print*,"- INPUT DATA ON ROTATED LAT/LON GRID."
    input_grid_type = 'rotated_latlon'
  else
@@ -906,6 +902,7 @@
  integer(esmf_kind_i8), allocatable    :: landmask_one_tile(:,:)
  integer(esmf_kind_i8), allocatable    :: seamask_one_tile(:,:)
  
+ real(esmf_kind_r8), allocatable       :: land_frac_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_s_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: latitude_w_one_tile(:,:)
@@ -993,6 +990,14 @@
 ! seamask (1 - non-land, 0 -land).  Read lat/lon on target grid.
 !-----------------------------------------------------------------------
 
+ print*,"- CALL FieldCreate FOR TARGET GRID LAND FRACTION."
+ land_frac_target_grid = ESMF_FieldCreate(target_grid, &
+                                   typekind=ESMF_TYPEKIND_R8, &
+                                   staggerloc=ESMF_STAGGERLOC_CENTER, &
+                                   name="target_grid_landmask", rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldCreate", error)
+
  print*,"- CALL FieldCreate FOR TARGET GRID LANDMASK."
  landmask_target_grid = ESMF_FieldCreate(target_grid, &
                                    typekind=ESMF_TYPEKIND_I8, &
@@ -1071,6 +1076,7 @@
     call error_handler("IN FieldCreate", error)
 
  if (localpet == 0) then
+   allocate(land_frac_one_tile(i_target,j_target))
    allocate(landmask_one_tile(i_target,j_target))
    allocate(seamask_one_tile(i_target,j_target))
    allocate(latitude_one_tile(i_target,j_target))
@@ -1081,6 +1087,7 @@
    allocate(longitude_w_one_tile(ip1_target,j_target))
    allocate(terrain_one_tile(i_target,j_target))
  else
+   allocate(land_frac_one_tile(0,0))
    allocate(landmask_one_tile(0,0))
    allocate(seamask_one_tile(0,0))
    allocate(longitude_one_tile(0,0))
@@ -1096,14 +1103,22 @@
    if (localpet == 0) then
      the_file = trim(orog_dir_target_grid) // trim(orog_files_target_grid(tile))
      call get_model_mask_terrain(trim(the_file), i_target, j_target, landmask_one_tile, &
-                                 terrain_one_tile)
-     seamask_one_tile = 0
-     where(landmask_one_tile == 0) seamask_one_tile = 1
+                                 terrain_one_tile, land_frac_one_tile)
+     
+     seamask_one_tile = 0  ! all land
+     where(floor(land_frac_one_tile) == 0) seamask_one_tile = 1  ! at least some non-land.
+     landmask_one_tile = 0 ! all non-land
+     where(ceiling(land_frac_one_tile) == 1) landmask_one_tile = 1  ! at least some land
+
      call get_model_latlons(mosaic_file_target_grid, orog_dir_target_grid, num_tiles_target_grid, tile, &
                             i_target, j_target, ip1_target, jp1_target, latitude_one_tile, &
                             latitude_s_one_tile, latitude_w_one_tile, longitude_one_tile, &
                             longitude_s_one_tile, longitude_w_one_tile)
    endif
+   print*,"- CALL FieldScatter FOR TARGET GRID LAND FRACTION. TILE IS: ", tile
+   call ESMF_FieldScatter(land_frac_target_grid, land_frac_one_tile, rootpet=0, tile=tile, rc=error)
+   if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+      call error_handler("IN FieldScatter", error)
    print*,"- CALL FieldScatter FOR TARGET GRID LANDMASK. TILE IS: ", tile
    call ESMF_FieldScatter(landmask_target_grid, landmask_one_tile, rootpet=0, tile=tile, rc=error)
    if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -1142,6 +1157,7 @@
       call error_handler("IN FieldScatter", error)
  enddo
 
+ deallocate(land_frac_one_tile)
  deallocate(landmask_one_tile)
  deallocate(seamask_one_tile)
  deallocate(longitude_one_tile)
@@ -1322,8 +1338,9 @@
 !! @param [in] jdim  "j" dimension of tile
 !! @param [out] mask  land mask of tile
 !! @param [out] terrain  terrain height of tile
+!! @param [out] land_frac  The fraction of the grid point that is land.
 !! @author George Gayno NCEP/EMC   
- subroutine get_model_mask_terrain(orog_file, idim, jdim, mask, terrain)
+ subroutine get_model_mask_terrain(orog_file, idim, jdim, mask, terrain, land_frac)
 
  use netcdf
 
@@ -1335,6 +1352,7 @@
  integer(esmf_kind_i8), intent(out) :: mask(idim,jdim)
 
  real(esmf_kind_i8), intent(out)    :: terrain(idim,jdim)
+ real(esmf_kind_i8), intent(out)    :: land_frac(idim,jdim)
 
  integer                            :: error, lat, lon
  integer                            :: ncid, id_dim, id_var
@@ -1381,6 +1399,13 @@
  call netcdf_err(error, 'reading orog_raw')
  terrain = dummy
 
+ print*,"- READ LAND FRACTION."
+ error=nf90_inq_varid(ncid, 'land_frac', id_var)
+ call netcdf_err(error, 'reading land_frac id')
+ error=nf90_get_var(ncid, id_var, dummy)
+ call netcdf_err(error, 'reading orog_raw')
+ land_frac = dummy
+
  error = nf90_close(ncid)
 
  deallocate (dummy)
@@ -1412,6 +1437,7 @@
  if (ESMF_FieldIsCreated(longitude_w_input_grid)) then
    call ESMF_FieldDestroy(longitude_w_input_grid, rc=rc)
  endif
+ call ESMF_FieldDestroy(land_frac_target_grid, rc=rc)
  call ESMF_FieldDestroy(landmask_target_grid, rc=rc)
  call ESMF_FieldDestroy(latitude_target_grid, rc=rc)
  if (ESMF_FieldIsCreated(latitude_s_target_grid)) then
@@ -1451,9 +1477,13 @@
 
  integer, intent(in   )  :: igdtnum, igdtlen, igdstmpl(igdtlen)
  integer, intent(  out)  :: kgds(200), ni, nj
- integer                 :: iscale
+ integer                 :: iscale, i
 
  real,    intent(  out)  :: res
+
+ real                    :: clatr, slatr, clonr, dpr, slat
+ real                    :: slat0, clat0, clat, clon, rlat
+ real                    :: rlon0, rlon, hs
 
  kgds=0
 
@@ -1501,6 +1531,112 @@
 
      res = ((float(kgds(9)) / 1000.0) + (float(kgds(10)) / 1000.0)) &
              * 0.5 * 111.0
+
+   elseif (igdtnum.eq.1) then        ! rot lat/lon b grid using standard wmo
+                                    ! template.
+
+     iscale=igdstmpl(10)*igdstmpl(11)
+     if (iscale == 0) iscale = 1e6
+     kgds(1)=205                    ! oct 6,     rotated lat/lon for Non-E
+                                    !            Stagger grid
+     kgds(2)=igdstmpl(8)            ! octs 7-8,  Ni
+     ni = kgds(2)
+     kgds(3)=igdstmpl(9)            ! octs 9-10, Nj
+     nj = kgds(3)
+
+     kgds(4)=nint(float(igdstmpl(12))/float(iscale)*1000.)  ! octs 11-13, Lat of
+                                                            ! 1st grid point
+     kgds(5)=nint(float(igdstmpl(13))/float(iscale)*1000.)  ! octs 14-16, Lon of
+                                                            ! 1st grid point
+
+     kgds(6)=0                      ! oct 17, resolution and component flags
+     if (igdstmpl(1)==2 ) kgds(6)=64
+     if ( btest(igdstmpl(14),4).OR.btest(igdstmpl(14),5) )  kgds(6)=kgds(6)+128
+     if ( btest(igdstmpl(14),3) ) kgds(6)=kgds(6)+8
+
+     kgds(7)=nint(float(igdstmpl(20))/float(iscale)*1000.)       ! octs 18-20,
+                                                                 ! Lat of cent of rotation
+     kgds(8)=nint(float(igdstmpl(21))/float(iscale)*1000.)       ! octs 21-23,
+                                                                 ! Lon of cent of rotation
+     kgds(7) = kgds(7) + 90000.0
+     print*, "INPUT LAT, LON CENTER ", kgds(7), kgds(8)
+
+     DPR = 180.0/3.1415926
+     CLATR=COS((float(kgds(4))/1000.0)/DPR)
+     SLATR=SIN((float(kgds(4))/1000.0)/DPR)
+     CLONR=COS((float(kgds(5))/1000.0)/DPR)
+     SLAT0=SIN((float(kgds(7))/1000.0)/DPR)
+     CLAT0=COS((float(kgds(7))/1000.0)/DPR)
+
+     SLAT=CLAT0*SLATR+SLAT0*CLATR*CLONR
+     CLAT=SQRT(1-SLAT**2)
+     CLON=(CLAT0*CLATR*CLONR-SLAT0*SLATR)/CLAT
+     CLON=MIN(MAX(CLON,-1.0),1.0)
+
+     RLAT=DPR*ASIN(SLAT)
+ 
+     RLON0=float(kgds(8))/1000.0
+
+     if ((kgds(5)-kgds(8)) > 0) then
+       HS = -1.0
+     else
+       HS = 1.0
+     endif
+
+     RLON = MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360.0)
+
+     kgds(4)=nint(rlat*1000.)  ! octs 11-13, Lat of
+     kgds(5)=nint(rlon*1000.)  ! octs 14-16, Lon of
+
+     kgds(12)=nint(float(igdstmpl(15))/float(iscale)*1000.) ! octs 29-31, Lat of
+                                                            ! last grid point
+     kgds(13)=nint(float(igdstmpl(16))/float(iscale)*1000.) ! octs 32-34, Lon of
+                                                            ! last grid point
+
+     CLATR=COS((float(kgds(12))/1000.0)/DPR)
+     SLATR=SIN((float(kgds(12))/1000.0)/DPR)
+     CLONR=COS((float(kgds(13))/1000.0)/DPR)
+
+     SLAT=CLAT0*SLATR+SLAT0*CLATR*CLONR
+     RLAT=DPR*ASIN(SLAT)
+
+     CLAT=SQRT(1-SLAT**2)
+     CLON=(CLAT0*CLATR*CLONR-SLAT0*SLATR)/CLAT
+     CLON=MIN(MAX(CLON,-1.0),1.0)
+
+     if ((kgds(13)-kgds(8)) > 0) then
+       HS = -1.0
+     else
+       HS = 1.0
+     endif
+
+     RLON = MOD(RLON0+HS*DPR*ACOS(CLON)+3600,360.0)
+
+     print*,'got here last point ',kgds(12), kgds(13)
+     print*,'got here last point rotated ', rlat, rlon
+
+     kgds(12)=nint(rlat*1000.)  ! octs 11-13, Lat of
+     kgds(13)=nint(rlon*1000.)  ! octs 14-16, Lon of
+
+     kgds(9)=igdstmpl(17)
+     kgds(10)=igdstmpl(18)
+
+     kgds(11) = 0                   ! oct 28, scan mode
+     if (btest(igdstmpl(19),7)) kgds(11) = 128
+     if (btest(igdstmpl(19),6)) kgds(11) = kgds(11) +  64
+     if (btest(igdstmpl(19),5)) kgds(11) = kgds(11) +  32
+
+     kgds(19)=0    ! oct 4, # vert coordinate parameters
+     kgds(20)=255  ! oct 5, used for thinned grids, set to 255
+
+     res = ((float(kgds(9)) / 1.e6) + (float(kgds(10)) / 1.e6)) &
+             * 0.5 * 111.0
+
+
+     do i = 1, 25
+       print*,'final kgds ',i,kgds(i)
+     enddo
+  
 
    elseif(igdtnum==30) then
 
