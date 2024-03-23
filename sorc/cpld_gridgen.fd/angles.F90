@@ -49,7 +49,6 @@ contains
     !
     !---------------------------------------------------------------------
 
-
     angle = 0.0
     do j = 2,nj
        do i = 1,ni-1
@@ -65,7 +64,7 @@ contains
              angle_sw = anglet(i,  j)
           end if
           angle(i,j) = atan2(p25*(sin(angle_0) + sin(angle_w) + sin(angle_s) + sin(angle_sw)), &
-               p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
+                             p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
 
           if (abs(angle(i,j)) .le. 1.0e-10)angle(i,j) = 0.0
        enddo
@@ -113,7 +112,7 @@ contains
           angle_s  = angle(i,  j-1)
           angle_sw = angle(i-1,j-1)
           angchk(i,j) = atan2(p25*(sin(angle_0) + sin(angle_w) + sin(angle_s) + sin(angle_sw)), &
-               p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
+                              p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
        enddo
     enddo
     angchk(1,:) = -angchk(ni,:)

@@ -300,6 +300,7 @@ program gen_fixgrid
      i2 = ipole(2)+(ipole(1)-i)+1
      xangCt(i) = -anglet(i2,nj)       ! angle changes sign across seam
   end do
+
   !---------------------------------------------------------------------
   ! find the angle on corners using the same procedure as CICE6
   !---------------------------------------------------------------------
