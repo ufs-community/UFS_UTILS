@@ -198,17 +198,17 @@ program gen_fixgrid
   ! this modified topoedits file
   !---------------------------------------------------------------------
 
-     fsrc = trim(dirsrc)//'/'//trim(editsfile)
-     if(editmask)fsrc = trim(dirout)//'/'//'ufs.'//trim(editsfile)
+  fsrc = trim(dirsrc)//'/'//trim(editsfile)
+  if(editmask)fsrc = trim(dirout)//'/'//'ufs.'//trim(editsfile)
 
-     if (trim(editsfile) /= 'none') then
-        inquire(file=trim(fsrc),exist=fexist)
-        if (.not. fexist) then
-           print '(a)', 'Required topoedits file '//trim(fsrc)//' is missing '
-           call abort()
-        end if
+  if (trim(editsfile) /= 'none') then
+     inquire(file=trim(fsrc),exist=fexist)
+     if (.not. fexist) then
+        print '(a)', 'Required topoedits file '//trim(fsrc)//' is missing '
+        call abort()
      end if
-     call apply_topoedits(fsrc)
+  end if
+  call apply_topoedits(fsrc)
 
   !---------------------------------------------------------------------
   ! read MOM6 supergrid file
@@ -289,7 +289,7 @@ program gen_fixgrid
   ! find the angle on centers using the same procedure as MOM6
   !---------------------------------------------------------------------
 
-  call find_ang(ni,nj,lonBu,latBu,lonCt,anglet)
+  call find_ang((/1,ni/),(/1,nj/),lonBu,latBu,lonCt,anglet)
   write(logmsg,'(a,2f12.2)')'ANGLET min,max: ',minval(anglet),maxval(anglet)
   print '(a)',trim(logmsg)
   write(logmsg,'(a,2f12.2)')'ANGLET edges i=1,i=ni: ',anglet(1,nj),anglet(ni,nj)
@@ -305,7 +305,8 @@ program gen_fixgrid
   ! find the angle on corners using the same procedure as CICE6
   !---------------------------------------------------------------------
 
-  call find_angq(ni,nj,xangCt,anglet,angle)
+  call find_angq((/1,ni/),(/1,nj/),xangCt,anglet,angle)
+  angle(ni,:) = -angle(1,:)
   ! reverse angle for CICE
   angle = -angle
   write(logmsg,'(a,2f12.2)')'ANGLE min,max: ',minval(angle),maxval(angle)
@@ -317,7 +318,10 @@ program gen_fixgrid
   ! check the Bu angle
   !---------------------------------------------------------------------
 
-  call find_angchk(ni,nj,angle,angchk)
+  call find_angchk((/1,ni/),(/1,nj/),angle,angchk)
+  angchk(1,:) = -angchk(ni,:)
+  ! reverse angle for MOM6
+  angchk = -angchk
   write(logmsg,'(a,2f12.2)')'ANGCHK min,max: ',minval(angchk),maxval(angchk)
   print '(a)',trim(logmsg)
   write(logmsg,'(a,2f12.2)')'ANGCHK edges i=1,i=ni: ',angchk(1,nj),angchk(ni,nj)

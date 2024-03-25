@@ -17,22 +17,22 @@ module angles
 contains
   !> Find the rotation angle on center (Bu) grid points
   !!
-  !! @param[in]  ni           the i-dimension of the grid
-  !! @param[in]  nj           the j-dimension of the grid
+  !! @param[in]  iind         the start/end index in the i-dimension of the grid
+  !! @param[in]  jind         the start/end index in the j-dimension of the grid
   !! @param[in]  xangCt       the angle across the tripole seam
   !! @param[in]  anglet       the rotation angle on Ct points
   !! @param[out] angle        the rotation angle on Bu points
   !! @author Denise.Worthen@noaa.gov
 
-  subroutine find_angq(ni,nj,xangCt,anglet,angle)
+  subroutine find_angq(iind,jind,xangCt,anglet,angle)
 
-    integer       , intent(in)  :: ni,nj
+    integer       , intent(in)  :: iind(2),jind(2)
     real(dbl_kind), intent(in)  :: xangCt(:)
     real(dbl_kind), intent(in)  :: anglet(:,:)
     real(dbl_kind), intent(out) :: angle(:,:)
 
     ! local variables
-    integer :: i,j,i2
+    integer :: i,j
 
     real(dbl_kind) :: angle_0, angle_w, angle_s, angle_sw
     real(dbl_kind) :: p25 = 0.25
@@ -50,9 +50,9 @@ contains
     !---------------------------------------------------------------------
 
     angle = 0.0
-    do j = 2,nj
-       do i = 1,ni-1
-          if (j .lt. nj) then
+    do j = jind(1)+1,jind(2)
+       do i = iind(1),iind(2)-1
+          if (j .lt. jind(2)) then
              angle_0  = anglet(i+1,j+1)
              angle_w  = anglet(i,  j+1)
              angle_s  = anglet(i+1,j  )
@@ -69,21 +69,20 @@ contains
           if (abs(angle(i,j)) .le. 1.0e-10)angle(i,j) = 0.0
        enddo
     enddo
-    angle(ni,:) = -angle(1,:)
 
   end subroutine find_angq
 
   !> Verify the rotation angle on center (Ct) grid points using angle on corner
   !! (Bu) grid points
   !!
-  !! @param[in]  ni         the i-dimension of the grid
-  !! @param[in]  nj         the j-dimension of the grid
+  !! @param[in]  iind       the start/end index in the i-dimension of the grid
+  !! @param[in]  jind       the start/end index in the j-dimension of the grid
   !! @param[in]  angle      the rotation angle on Bu points
   !! @param[out] angchk     the rotation angle on Ct points
   !! @author Denise.Worthen@noaa.gov
-  subroutine find_angchk(ni,nj,angle,angchk)
+  subroutine find_angchk(iind,jind,angle,angchk)
 
-    integer       , intent(in)  :: ni,nj
+    integer       , intent(in)  :: iind(2),jind(2)
     real(dbl_kind), intent(in)  :: angle(:,:)
     real(dbl_kind), intent(out) :: angchk(:,:)
 
@@ -105,8 +104,8 @@ contains
     !---------------------------------------------------------------------
 
     angchk = 0.0
-    do j = 2,nj
-       do i = 2,ni
+    do j = jind(1)+1,jind(2)
+       do i = iind(1)+1,iind(2)
           angle_0  = angle(i  ,j  )
           angle_w  = angle(i-1,j  )
           angle_s  = angle(i,  j-1)
@@ -115,23 +114,22 @@ contains
                               p25*(cos(angle_0) + cos(angle_w) + cos(angle_s) + cos(angle_sw)))
        enddo
     enddo
-    angchk(1,:) = -angchk(ni,:)
 
   end subroutine find_angchk
 
   !> Find the rotation angle on center (Ct) grid points
   !!
-  !! @param[in]  ni            the i-dimension of the grid
-  !! @param[in]  nj            the j-dimension of the grid
+  !! @param[in]  iind          the start/end index in the i-dimension of the grid
+  !! @param[in]  jind          the start/end index in the j-dimension of the grid
   !! @param[in]  lonBu         the longitudes of the corner grid points
   !! @param[in]  latBu         the latitudes of the corner grid points
   !! @param[in]  lonCt         the longitudes of the center grid points
   !! @param[out] anglet        the rotation angle on Ct points
   !! @author Denise.Worthen@noaa.gov
 
-  subroutine find_ang(ni,nj,lonBu,latBu,lonCt,anglet)
+  subroutine find_ang(iind,jind,lonBu,latBu,lonCt,anglet)
 
-    integer       , intent(in)  :: ni,nj
+    integer       , intent(in)  :: iind(2),jind(2)
     real(dbl_kind), intent(in)  :: lonBu(:,:)
     real(dbl_kind), intent(in)  :: latBu(:,:)
     real(dbl_kind), intent(in)  :: lonCt(:,:)
@@ -158,17 +156,17 @@ contains
     anglet = 0.0
     pi_720deg = atan(1.0) / 180.0
     len_lon = 360.0
-    do j=1,nj; do i = 1,ni
+    do j=jind(1),jind(2); do i = iind(1),iind(2)
        do n=1,2 ; do m=1,2
           jj = J+n-2; ii = I+m-2
           if(jj .eq. 0)jj = 1
-          if(ii .eq. 0)ii = ni
+          if(ii .eq. 0)ii = iind(2)
           lonB(m,n) = modulo_around_point(LonBu(ii,jj), LonCt(i,j), len_lon)
           !  lonB(m,n) = modulo_around_point(LonBu(I+m-2,J+n-2), LonCt(i,j), len_lon)
        enddo; enddo
        jj = j-1; ii = i-1
        if(jj .eq. 0)jj = 1
-       if(ii .eq. 0)ii = ni
+       if(ii .eq. 0)ii = iind(2)
        lon_scale = cos(pi_720deg*((LatBu(ii,jj) + LatBu(I,J)) + &
             (LatBu(I,jj) + LatBu(ii,J)) ) )
        anglet(i,j) = atan2(lon_scale*((lonB(1,2) - lonB(2,1)) + (lonB(2,2) - lonB(1,1))), &
