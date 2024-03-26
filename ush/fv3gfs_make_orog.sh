@@ -81,12 +81,9 @@ echo "indir = $indir"
 
 cd $workdir
 
-cp ${indir}/thirty.second.antarctic.new.bin fort.15
-cp ${indir}/landcover30.fixed .
-#  uncomment next line to use the old gtopo30 data.
-#   cp ${indir}/gtopo30_gg.fine.nh  fort.235
-#  use gmted2020 data.
-cp ${indir}/gmted2010.30sec.int  fort.235
+cp ${indir}/topography.antarctica.ramp.30s.nc .
+cp ${indir}/landcover.umd.30s.nc .
+cp ${indir}/topography.gmted2010.30s.nc .
 if [ $inorogexist -eq 1 ]; then
    cp $inputorog .
 fi   
