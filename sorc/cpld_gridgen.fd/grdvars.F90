@@ -68,17 +68,10 @@ module grdvars
   ! Super-grid source grid variables
   real(dbl_kind), allocatable, dimension(:,:)   :: x               !< The longitudes of the MOM6 supergrid
   real(dbl_kind), allocatable, dimension(:,:)   :: y               !< The latitudes of the MOM6 supergrid
-  real(dbl_kind), allocatable, dimension(:,:)   :: angq            !< The grid rotation angle at the Bu (or corner)
-                                                                   !! grid points of the super grid
-
   real(dbl_kind), allocatable, dimension(:,:)   :: dx              !< The grid cell width in meters of the supergrid
                                                                    !! in the x-direction (i-dimension)
   real(dbl_kind), allocatable, dimension(:,:)   :: dy              !< The grid cell width in meters of the supergrid
                                                                    !! in the y-direction (j-dimension)
-  real(dbl_kind), allocatable, dimension(:,:) :: xsgp1             !< The longitudes of the super-grid replicated
-                                                                   !! across the tripole seam
-  real(dbl_kind), allocatable, dimension(:,:) :: ysgp1             !< The latitudes of the super-grid replicated
-                                                                   !! across the tripole seam
 
   ! Output grid variables
   real(dbl_kind), allocatable, dimension(:,:) :: latCt             !< The latitude of the center (tracer) grid points
@@ -103,6 +96,8 @@ module grdvars
   real(dbl_kind), allocatable, dimension(:,:) :: anglet            !< The rotation angle on Ct points (opposite sense
                                                                    !! from angle)
   real(dbl_kind), allocatable, dimension(:,:) :: angle             !< The rotation angle on Bu points
+  real(dbl_kind), allocatable, dimension(:,:) :: angchk            !< The rotation angle on Ct points, as calculated by
+                                                                   !! CICE internally using angle on Bu
 
   real(dbl_kind), allocatable, dimension(:,:,:) :: latCt_vert      !< The latitudes of the 4 vertices of each Ct grid
                                                                    !! point
@@ -129,6 +124,9 @@ module grdvars
                                                                    !! opposite side of the tripole seam
   real(dbl_kind), allocatable, dimension(:) :: xlatCt              !< The latitude of the Ct grid points on the
                                                                    !! opposite side of the tripole seam
+  real(dbl_kind), allocatable, dimension(:) :: xangCt              !< The rotation angle on the Ct grid points on the
+                                                                   !! opposite side of the tripole seam
+
   real(dbl_kind), allocatable, dimension(:) :: xlonCu              !< The longitude of the Cu grid points on the
                                                                    !! opposite side of the tripole seam
   real(dbl_kind), allocatable, dimension(:) :: xlatCu              !< The latitude of the Cu grid points on the
@@ -172,24 +170,22 @@ contains
 
   subroutine allocate_all
 
-    allocate( x(0:nx,0:ny),  y(0:nx,0:ny), angq(0:nx,0:ny) )
+    allocate( x(0:nx,0:ny),  y(0:nx,0:ny) )
     allocate(  dx(nx,0:ny), dy(0:nx,ny) )
-
-    allocate( xsgp1(0:nx,0:ny+1), ysgp1(0:nx,0:ny+1) )
 
     allocate( latCt(ni,nj), lonCt(ni,nj) )
     allocate( latCv(ni,nj), lonCv(ni,nj) )
     allocate( latCu(ni,nj), lonCu(ni,nj) )
     allocate( latBu(ni,nj), lonBu(ni,nj) )
 
-    allocate( areaCt(ni,nj), anglet(ni,nj), angle(ni,nj) )
+    allocate( areaCt(ni,nj), anglet(ni,nj), angle(ni,nj), angchk(ni,nj))
 
     allocate( latCt_vert(ni,nj,nv), lonCt_vert(ni,nj,nv) )
     allocate( latCv_vert(ni,nj,nv), lonCv_vert(ni,nj,nv) )
     allocate( latCu_vert(ni,nj,nv), lonCu_vert(ni,nj,nv) )
     allocate( latBu_vert(ni,nj,nv), lonBu_vert(ni,nj,nv) )
 
-    allocate( xlonCt(ni), xlatCt(ni) )
+    allocate( xlonCt(ni), xlatCt(ni), xangCt(ni) )
     allocate( xlonCu(ni), xlatCu(ni) )
     allocate( dlatBu(ni), dlatCv(ni) )
 

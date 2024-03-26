@@ -13,7 +13,7 @@ module tripolegrid
   use grdvars,       only: lonCu,latCu,lonCu_vert,latCu_vert
   use grdvars,       only: lonCv,latCv,lonCv_vert,latCv_vert
   use grdvars,       only: lonBu,latBu,lonBu_vert,latBu_vert
-  use grdvars,       only: wet4,areaCt,angleT,dp4
+  use grdvars,       only: wet4,areaCt,angleT,dp4,angle,angchk
   use charstrings,   only: logmsg,history
   use vartypedefs,   only: maxvars, fixvars, fixvars_typedefine
   use netcdf
@@ -67,6 +67,12 @@ contains
     !angleT
     rc = nf90_def_var(ncid, 'anglet', nf90_double, dim2, id)
     rc = nf90_put_att(ncid, id,     'units',      'radians')
+    !angle (angBu)
+    rc = nf90_def_var(ncid,  'angle', nf90_double, dim2, id)
+    rc = nf90_put_att(ncid, id,     'units',      'radians')
+    !angchk
+    rc = nf90_def_var(ncid, 'angchk', nf90_double, dim2, id)
+    rc = nf90_put_att(ncid, id,     'units',      'radians')
     !bathymetry
     rc = nf90_def_var(ncid,  'depth', nf90_float,  dim2, id)
     rc = nf90_put_att(ncid, id,     'units',            'm')
@@ -101,6 +107,12 @@ contains
 
     rc = nf90_inq_varid(ncid,'anglet',      id)
     rc = nf90_put_var(ncid,        id,  anglet)
+
+    rc = nf90_inq_varid(ncid, 'angle',      id)
+    rc = nf90_put_var(ncid,        id,   angle)
+
+    rc = nf90_inq_varid(ncid,'angchk',      id)
+    rc = nf90_put_var(ncid,        id,  angchk)
 
     rc = nf90_inq_varid(ncid, 'depth',      id)
     rc = nf90_put_var(ncid,        id,     dp4)
