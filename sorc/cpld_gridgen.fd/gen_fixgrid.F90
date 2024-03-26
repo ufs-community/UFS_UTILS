@@ -49,7 +49,7 @@ program gen_fixgrid
 
   integer :: rc,ncid,id,xtype
   integer :: i,j,k,i2,j2
-  integer :: ii,jj
+  integer :: ii
   integer :: localPet, nPet
   logical :: fexist = .false.
 
