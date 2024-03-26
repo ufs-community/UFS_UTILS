@@ -3,7 +3,7 @@
 Introduction
 ------------
 
-The chgres_cube program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Finite-Volume Sphere (FV3) Global Forecast System (GFS), North American Mesoscale Forecast System (NAM), Rapid Refresh (RAP), or High Resolution Rapid Refresh (HRRR) gridded binary version 2 (GRIB2) data.
+The chgres_cube program creates initial condition files to coldstart the forecast model.  The initial conditions are created from either Finite-Volume Sphere (FV3) Global Forecast System (GFS), North American Mesoscale Forecast System (NAM), Rapid Refresh (RAP), or High Resolution Rapid Refresh (HRRR) gridded binary version 2 (GRIB2) data.
 
 Code structure
 --------------
@@ -55,7 +55,7 @@ Program inputs and outputs for global applications
 
 **Inputs**
 
-Users may create their own global grids, or use the pre-defined files located `here <https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_fv3_gmted2010/>`_.
+Users may create their own global grids, or use the pre-defined files located in the `./CXX directories <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_.
 
       * FV3 mosaic file - (NetCDF format)
 	      * CRES_mosaic.nc
