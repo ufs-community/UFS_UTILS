@@ -330,6 +330,6 @@
        print '(a,2f12.8)','SUCCESS! '//trim(msg)//'  ',dmax,tolerance
     else
        print '(a,2f12.8)','FAIL! '//trim(msg)//'  ',dmax,tolerance
-       !stop 1
+       stop 1
     endif
   end subroutine passfail
