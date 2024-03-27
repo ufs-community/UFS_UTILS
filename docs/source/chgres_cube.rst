@@ -76,7 +76,7 @@ Users may create their own global grids, or use the pre-defined files located in
 	      * CRES.mxRES_oro_data.tile5.nc
 	      * CRES.mxRES_oro_data.tile6.nc
 
-      * FV3 surface climatological files - Located under the ./CRES/sfc. One file for each tile.  NetCDF format.
+      * FV3 surface climatological files - Located under the `./CRES/sfc <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_ subdirectories. One file for each tile.  NetCDF format.
 	      * CRES.mxRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
 	      * CRES.mxRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
 	      * CRES.mxRES.slope_type.tileX.nc (slope type)
@@ -257,17 +257,17 @@ The following four sets of files/directories should all be located in the same d
 	      * CRES.vegetation_greenness.tile7.halo4.nc (vegetation greenness)
 	      * CRES.vegetation_type.tile7.halo4.nc (vegetation type)
 
-      * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
+      * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/am/20220805/>`_.
 	      * global_hyblev.l$LEVS.txt
 
       * Input data files. GRIB2 only.  See the next section for how to find this data.
 
 **Outputs**
 
-      * Atmospheric “coldstart” file.  NetCDF.
+      * Atmospheric coldstart file.  NetCDF.
         * out.atm.tile7.nc
 
-      * Surface “coldstart” file.  NetCDF.
+      * Surface coldstart file.  NetCDF.
         * out.sfc.tile7.nc
 
 Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
