@@ -31,6 +31,10 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")
 endif()
 
+if(CHGRES_ALL)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DCHGRES_ALL")
+endif()
+
 set(exe_name chgres_cube)
 
 add_library(chgres_cube_lib STATIC ${lib_src})
@@ -40,11 +44,14 @@ set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
 set_target_properties(chgres_cube_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
 target_include_directories(chgres_cube_lib INTERFACE ${mod_dir})
 
+if(CHGRES_ALL)
+  target_link_libraries(chgres_cube_lib PUBLIC nemsio::nemsio)
+endif()
+
 target_link_libraries(
   chgres_cube_lib
   PUBLIC
   g2::g2_d
-  nemsio::nemsio
   sfcio::sfcio
   sigio::sigio
   bacio::bacio_4

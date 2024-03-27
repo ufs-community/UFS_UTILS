@@ -147,7 +147,9 @@
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_gaussian(npets)
 
+#ifdef CHGRES_ALL
  use nemsio_module
+#endif
 
  use program_setup, only       : data_dir_input_grid, &
                                  atm_files_input_grid, &
@@ -178,7 +180,9 @@
  real(esmf_kind_r8)               :: deltalon
  real(esmf_kind_r8), allocatable  :: slat(:), wlat(:)
 
+#ifdef CHGRES_ALL
  type(nemsio_gfile)               :: gfile
+#endif
  type(esmf_polekind_flag)         :: polekindflag(2)
  type(sfcio_head)                 :: sfchead
  type(sigio_head)                 :: sighead
@@ -236,6 +240,7 @@
 
    rc = nf90_close(ncid)
 
+#ifdef CHGRES_ALL
  else ! nemsio format
 
    call nemsio_init(iret=rc)
@@ -248,6 +253,8 @@
    if (rc /= 0) call error_handler("READING FILE", rc)
 
    call nemsio_close(gfile)
+
+#endif
  
  endif
 

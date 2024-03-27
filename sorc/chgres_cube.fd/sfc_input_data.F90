@@ -14,7 +14,9 @@ module sfc_input_data
 !! @author George Gayno NCEP/EMC
  use esmf
  use netcdf
+#ifdef CHGRES_ALL
  use nemsio_module
+#endif
 
  use program_setup, only          : data_dir_input_grid, &
                                     sfc_files_input_grid, &
@@ -121,6 +123,7 @@ module sfc_input_data
 ! Read the gaussian history files in nemsio format.
 !-------------------------------------------------------------------------------
 
+#ifdef CHGRES_ALL
  elseif (trim(input_type) == "gaussian_nemsio") then
 
    call read_input_sfc_gaussian_nemsio_file(localpet)
@@ -133,6 +136,7 @@ module sfc_input_data
 
    call read_input_sfc_gfs_gaussian_nemsio_file(localpet)
 
+#endif
 !-------------------------------------------------------------------------------
 ! Read the spectral gfs gaussian history files in sfcio format.
 !-------------------------------------------------------------------------------
@@ -377,6 +381,7 @@ module sfc_input_data
 
  end subroutine read_input_sfc_gfs_sfcio_file
 
+#ifdef CHGRES_ALL
 !> Read input grid surface data from a spectral gfs gaussian nemsio
 !! file.
 !!
@@ -728,7 +733,9 @@ module sfc_input_data
  if (localpet == 0) call nemsio_close(gfile)
 
  end subroutine read_input_sfc_gfs_gaussian_nemsio_file
+#endif
 
+#ifdef CHGRES_ALL
 !> Read input grid surface data from an fv3 gaussian nemsio file.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread 
@@ -1077,6 +1084,7 @@ module sfc_input_data
  if (localpet == 0) call nemsio_close(gfile)
 
  end subroutine read_input_sfc_gaussian_nemsio_file
+#endif
 
 !> Read input grid surface data from fv3 tiled warm 'restart' files.
 !!
