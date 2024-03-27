@@ -55,7 +55,7 @@ Program inputs and outputs for global applications
 
 **Inputs**
 
-Users may create their own global grids, or use the pre-defined files located in the `./CXX directories <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_.
+Users may create their own global grids, or use the pre-defined files located in the `./CRES directories <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_. (where CRES is the atmospheric resolution and mxRES is the ocean resolution).
 
       * FV3 mosaic file - (NetCDF format)
 	      * CRES_mosaic.nc
@@ -69,31 +69,31 @@ Users may create their own global grids, or use the pre-defined files located in
 	      * CRES_grid.tile6.nc
 
       * FV3 orography files - (NetCDF format)
-	      * CRES_oro_data.tile1.nc
-	      * CRES_oro_data.tile2.nc
-	      * CRES_oro_data.tile3.nc
-	      * CRES_oro_data.tile4.nc
-	      * CRES_oro_data.tile5.nc
-	      * CRES_oro_data.tile6.nc
+	      * CRES.mxRES_oro_data.tile1.nc
+	      * CRES.mxRES_oro_data.tile2.nc
+	      * CRES.mxRES_oro_data.tile3.nc
+	      * CRES.mxRES_oro_data.tile4.nc
+	      * CRES.mxRES_oro_data.tile5.nc
+	      * CRES.mxRES_oro_data.tile6.nc
 
-      * FV3 surface climatological files - Located under the `./fix_sfc <https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/GFS/fix/fix_fv3_gmted2010/C48/fix_sfc>`_ sub-directory.  One file for each tile.  NetCDF format.
-	      * CRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
-	      * CRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
-	      * CRES.slope_type.tileX.nc (slope type)
-	      * CRES.snowfree_albedo.tileX.nc (snow-free albedo)
-	      * CRES.soil_type.tileX.nc (soil type)
-	      * CRES.subtrate_temperature.tileX.nc (soil substrate temperature)
-	      * CRES.vegetation_greenness.tileX.nc (vegetation greenness)
-	      * CRES.vegetation_type.tileX.nc (vegetation type)
+      * FV3 surface climatological files - Located under the ./CRES/sfc. One file for each tile.  NetCDF format.
+	      * CRES.mxRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
+	      * CRES.mxRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
+	      * CRES.mxRES.slope_type.tileX.nc (slope type)
+	      * CRES.mxRES.snowfree_albedo.tileX.nc (snow-free albedo)
+	      * CRES.mxRES.soil_type.tileX.nc (soil type)
+	      * CRES.mxRES.subtrate_temperature.tileX.nc (soil substrate temperature)
+	      * CRES.mxRES.vegetation_greenness.tileX.nc (vegetation greenness)
+	      * CRES.mxRES.vegetation_type.tileX.nc (vegetation type)
 
-      * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
+      * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/am/20220805/>`_.
 	      * global_hyblev.l$LEVS.txt
 
       * Input data files.  GRIB2, NEMSIO or NetCDF.  See the next section for how to find this data.
 
 **Outputs**
 
-      * Atmospheric “coldstart” files.  NetCDF.
+      * Atmospheric coldstart files.  NetCDF.
 	      * out.atm.tile1.nc
 	      * out.atm.tile2.nc
 	      * out.atm.tile3.nc
@@ -101,7 +101,7 @@ Users may create their own global grids, or use the pre-defined files located in
 	      * out.atm.tile5.nc
 	      * out.atm.tile6.nc
 
-      * Surface/Near Sea Surface Temperature (NSST) “coldstart” files.  NetCDF
+      * Surface/Near Sea Surface Temperature (NSST) coldstart files.  NetCDF
 	      * out.sfc.tile1.nc
 	      * out.sfc.tile1.nc
 	      * out.sfc.tile1.nc
@@ -115,7 +115,7 @@ Where to find GFS GRIB2 and NetCDF data for global applications
 
 **GRIB2**
 
-      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
+      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.weather.gov/pub/data/nccf/com/gfs/prod>`_.
 
       * 0.5-degree data - Use the **gfs_4_YYYYMMDD_HHHH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: `NCEI - Global Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>`_.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
@@ -123,7 +123,7 @@ Where to find GFS GRIB2 and NetCDF data for global applications
 
 **NetCDF**
 
-      * T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nc** (atmospheric fields) and **gfs.tHHz.sfcanl.nc** (surface fields) files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
+      * T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nc** (atmospheric fields) and **gfs.tHHz.sfcanl.nc** (surface fields) files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.weather.gov/pub/data/nccf/com/gfs/prod>`_.
 
 Initializing global domains with GRIB2 data - some caveats
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -275,7 +275,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **FV3GFS**
 
-      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
+      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.weather.gov/pub/data/nccf/com/gfs/prod>`_.
 
       * 0.5-degree data - Use the **gfs_4_YYYYMMDD_HHHH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: `NCEI - Global Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>`_.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
@@ -283,7 +283,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **NAM**
 
-     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfHH.tmHH.grib2** files in subdirectory nam.YYYYMMDD on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`_.
+     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfHH.tmHH.grib2** files in subdirectory nam.YYYYMMDD on `NOMADS <https://nomads.weather.gov/pub/data/nccf/com/nam/prod/>`_.
 
      * 12-km data starting 2020 - Use the **nam_218_YYYYMMDD_HHHH_000.grb2 file**, under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCEI - North American Mesoscale Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/north-american-mesoscale>`_.
 
@@ -291,7 +291,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **HRRR**
  
-      * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfHH.grib2** files in the subdirectory ./hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`_.
+      * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfHH.grib2** files in the subdirectory ./hrrr.YYYYMMDD/conus `here <https://nomads.weather.gov/pub/data/nccf/com/hrrr/prod/>`_.
 
       * 3-km operational data from 2015 to present (AWS S3): Go `here <https://registry.opendata.aws/noaa-hrrr-pds/>`__ and click “Browse Bucket.” Type "YYYYMMDD" in to the Search bar. Use the **hrrr.t00z.wrfnatf00.grib2** files in the directory hrrr.YYYYMMDD/conus/.
 
@@ -301,7 +301,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **RAP**
 
-      * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfHH.grib2** files in the subdirectory ./rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`_.
+      * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfHH.grib2** files in the subdirectory ./rap.YYYYMMDD `here <https://nomads.weather.gov/pub/data/nccf/com/rap/prod/>`_.
 
       * 13-km isobaric level data from previous 6 months : Use the **rap_130_YYYYMMDD_HHHH_0FF.grb2** files from **RAP Forecasts - RAP 130 (13km) - Domain** at NCEI `here <https://www.ncei.noaa.gov/products/weather-climate-models/rapid-refresh-update>`_.
 
