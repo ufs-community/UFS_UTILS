@@ -289,10 +289,12 @@
      print*,'- INPUT DATA FROM FV3 TILED RESTART FILES.'
    case ("history")
      print*,'- INPUT DATA FROM FV3 TILED HISTORY FILES.'
+#ifdef CHGRES_ALL
    case ("gaussian_nemsio")
      print*,'- INPUT DATA FROM FV3 GAUSSIAN NEMSIO FILE.'
    case ("gfs_gaussian_nemsio")
      print*,'- INPUT DATA FROM SPECTRAL GFS GAUSSIAN NEMSIO FILE.'
+#endif()
    case ("gfs_sigio")
      print*,'- INPUT DATA FROM SPECTRAL GFS SIGIO/SFCIO FILE.'
    case ("gaussian_netcdf")
