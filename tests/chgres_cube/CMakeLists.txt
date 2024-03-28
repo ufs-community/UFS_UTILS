@@ -23,6 +23,9 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")
 endif()
+if(CHGRES_ALL)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DCHGRES_ALL")
+endif()
 
 include_directories(${PROJECT_SOURCE_DIR})
 
@@ -32,8 +35,10 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_fv3_tiled_warm_restart.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_fv3_tiled_warm_restart.nml)
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gaussian_nemsio.nml)
+if(CHGRES_ALL)
+  execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gaussian_nemsio.nml)
+endif()
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gfs_grib2.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy

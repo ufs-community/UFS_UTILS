@@ -137,6 +137,7 @@ program ftst_program_setup
   enddo
   print*, "OK"
 
+#ifdef CHGRES_ALL
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gaussian_nemsio..."
   call read_setup_namelist("data/config_gaussian_nemsio.nml")
   if (cycle_mon .ne. 7 .or. cycle_day .ne. 4 .or. cycle_hour .ne. 12) stop 74
@@ -170,6 +171,7 @@ program ftst_program_setup
      tracers_input(is) = "NULL"
   enddo
   if (my_rank .eq. 0) print*, "OK"
+#endif
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_spectral_sigio..."
   call read_setup_namelist("data/config_spectral_sigio.nml")
