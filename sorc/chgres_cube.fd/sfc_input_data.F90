@@ -136,7 +136,6 @@ module sfc_input_data
 
    call read_input_sfc_gfs_gaussian_nemsio_file(localpet)
 
-#endif
 !-------------------------------------------------------------------------------
 ! Read the spectral gfs gaussian history files in sfcio format.
 !-------------------------------------------------------------------------------
@@ -145,6 +144,7 @@ module sfc_input_data
 
    call read_input_sfc_gfs_sfcio_file(localpet)
 
+#endif
 !-------------------------------------------------------------------------------
 ! Read fv3gfs surface data in grib2 format.
 !-------------------------------------------------------------------------------
@@ -157,6 +157,7 @@ module sfc_input_data
 
  end subroutine read_input_sfc_data
  
+#ifdef CHGRES_ALL
  !> Read input grid surface data from a spectral gfs gaussian sfcio
 !! file.
 !!
@@ -380,6 +381,7 @@ module sfc_input_data
  call sfcio_sclose(23, iret)
 
  end subroutine read_input_sfc_gfs_sfcio_file
+#endif
 
 #ifdef CHGRES_ALL
 !> Read input grid surface data from a spectral gfs gaussian nemsio

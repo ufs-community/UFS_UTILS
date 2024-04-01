@@ -100,19 +100,20 @@ if(OPENMP)
   find_package(OpenMP REQUIRED COMPONENTS Fortran)
 endif()
 
-find_package(sfcio 1.4.0 REQUIRED)
+if(CHGRES_ALL)
+  find_package(sfcio 1.4.0 REQUIRED)
+endif()
 find_package(w3emc 2.9.0 REQUIRED)
 find_package(bacio 2.4.0 REQUIRED)
 if(CHGRES_ALL OR GBLEVENTS)
   find_package(nemsio 2.5.0 REQUIRED)
+  find_package(sigio 2.3.0 REQUIRED)
 endif()
-find_package(sigio 2.3.0 REQUIRED)
 find_package(ip 3.3.3 REQUIRED)
 if(ip_VERSION LESS 5.0)
   find_package(sp 2.3.3 REQUIRED)
 endif()
 find_package(g2 3.4.3 REQUIRED)
-find_package(sigio 2.3.0 REQUIRED)
 
 # If doxygen documentation we enabled, build it. This must come before
 # adding the source code directories; the main documentation build

@@ -123,7 +123,6 @@ implicit none
                                                          ! nemsio.
    call read_input_atm_gfs_gaussian_nemsio_file(localpet)
 
-#endif
 !-------------------------------------------------------------------------------
 ! Read the spectral gfs gaussian history files in sigio format.
 !-------------------------------------------------------------------------------
@@ -132,6 +131,7 @@ implicit none
  
    call read_input_atm_gfs_sigio_file(localpet)
 
+#endif
 !-------------------------------------------------------------------------------
 ! Read fv3gfs data in grib2 format.
 !-------------------------------------------------------------------------------
@@ -257,6 +257,7 @@ implicit none
  
  end subroutine init_atm_esmf_fields
 
+#ifdef CHGRES_ALL
 !> Read input atmospheric data from spectral gfs (old sigio format).
 !! 
 !! @note Format used prior to July 19, 2017.
@@ -495,6 +496,7 @@ implicit none
  endif
 
  end subroutine read_input_atm_gfs_sigio_file
+#endif
 
 #ifdef CHGRES_ALL
 
@@ -754,6 +756,7 @@ implicit none
 #endif
 
 #ifdef CHGRES_ALL
+
 !> Read input grid atmospheric fv3 gaussian nemsio files.
 !!
 !! @param[in] localpet  ESMF local persistent execution thread 

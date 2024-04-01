@@ -171,7 +171,6 @@ program ftst_program_setup
      tracers_input(is) = "NULL"
   enddo
   if (my_rank .eq. 0) print*, "OK"
-#endif
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_spectral_sigio..."
   call read_setup_namelist("data/config_spectral_sigio.nml")
@@ -202,6 +201,7 @@ program ftst_program_setup
      tracers_input(is) = "NULL"
   enddo
   if (my_rank .eq. 0) print*, "OK"
+#endif
 
   if (my_rank .eq. 0) print*, "testing read_setup_namelist with config_gfs_grib2..."
   call read_setup_namelist("data/config_gfs_grib2.nml")
@@ -214,7 +214,6 @@ program ftst_program_setup
   if (trim(vcoord_file_target_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../fix/fix_am/global_hyblev.l65.txt") stop 100
   if (trim(data_dir_input_grid) .ne. "/scratch1/NCEPDEV/da/George.Gayno/noscrub/reg_tests/chgres_cube/input_data/gfs.grib2") stop 101
   if (trim(grib2_file_input_grid) .ne. 'gfs.t00z.pgrb2.0p50.f000') stop 102
-  if (trim(sfc_files_input_grid(1)) .ne. 'gdas.t00z.sfcanl') stop 103
   if (varmap_file .ne. "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS/reg_tests/chgres_cube/../../parm/varmap_tables/GFSphys_var_map.txt") stop 1010
   if (thomp_mp_climo_file .ne. "NULL") stop 106
   if (trim(cres_target_grid) .ne. "C192") stop 107

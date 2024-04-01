@@ -40,13 +40,13 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 if(CHGRES_ALL)
   execute_process( COMMAND ${CMAKE_COMMAND} -E copy
       ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gaussian_nemsio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gaussian_nemsio.nml)
+  execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+      ${CMAKE_CURRENT_SOURCE_DIR}/data/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_spectral_sigio.nml)
 endif()
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/config_gfs_grib2.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_gfs_grib2.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/global_hyblev.l28.txt ${CMAKE_CURRENT_BINARY_DIR}/data/global_hyblev.l28.txt)
-execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-    ${CMAKE_CURRENT_SOURCE_DIR}/data/config_spectral_sigio.nml ${CMAKE_CURRENT_BINARY_DIR}/data/config_spectral_sigio.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/GFSphys_varmap.txt ${CMAKE_CURRENT_BINARY_DIR}/data/GFSphys_varmap.txt)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy

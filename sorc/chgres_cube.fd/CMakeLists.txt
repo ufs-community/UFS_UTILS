@@ -45,15 +45,18 @@ set_target_properties(chgres_cube_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_
 target_include_directories(chgres_cube_lib INTERFACE ${mod_dir})
 
 if(CHGRES_ALL)
-  target_link_libraries(chgres_cube_lib PUBLIC nemsio::nemsio)
+  target_link_libraries(
+    chgres_cube_lib 
+    PUBLIC
+    nemsio::nemsio
+    sfcio::sfcio
+    sigio::sigio)
 endif()
 
 target_link_libraries(
   chgres_cube_lib
   PUBLIC
   g2::g2_d
-  sfcio::sfcio
-  sigio::sigio
   bacio::bacio_4
   ip::ip_d
   w3emc::w3emc_d
