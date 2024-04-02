@@ -450,7 +450,7 @@ program gen_fixgrid
   write(form1,'(a)')'('//trim(cnx)//'f14.8)'
   write(form2,'(a)')'('//trim(cnx)//'i2)'
 
-  allocate(ww3mask(1:ni,1:nj)); ww3mask = wet4
+  allocate(ww3mask(1:ni,1:nj)); ww3mask = int(wet4)
   allocate(ww3dpth(1:ni,1:nj)); ww3dpth = dp4
 
   where(latCt .ge. maximum_lat)ww3mask = 3
