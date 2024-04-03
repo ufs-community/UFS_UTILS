@@ -99,7 +99,8 @@ for n in $(seq 1 $ntiles); do
   fi
 
   if [[ "$DO_SOI_INC_JEDI" == ".true." ]] ; then
-        ln -fs $COMIN/soil_xainc.00$n $DATA/soil_xainc.00$n
+#        ln -fs $COMIN/soil_sfcincr_jedi.00$n $DATA/soil_xainc.00$n
+         ln -fs /scratch2/NCEPDEV/stmp1/Yuan.Xue/pull_request/soil_sfcincr_jedi.00$n $DATA/soil_xainc.00$n
   fi
 
   if [[ "$DO_SOI_INC_GSI" == ".true." ]] ; then

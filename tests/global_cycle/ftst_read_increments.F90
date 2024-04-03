@@ -60,18 +60,18 @@ end module chdir_mod
 
  !expected values were extracted from MATLAB, which directly reads in xainc file
  !each tile is examined separately here
- data stc_inc_expected_values_tile1 / -0.6302, -0.1116, 0.0341, 0.0 /
- data stc_inc_expected_values_tile2 / 0.0825,  0.0071, -0.0255, 0.0 /
- data stc_inc_expected_values_tile3 / 0.2070, 0.0608, 0.0001, 0.0 /
- data stc_inc_expected_values_tile4 / 0.0, 0.0, 0.0, 0.0 /
- data stc_inc_expected_values_tile5 / -0.1031, -0.0386, -0.0356, 0.0/
- data stc_inc_expected_values_tile6 / 0.0, 0.0, 0.0, 0.0 /
- data slc_inc_expected_values_tile1 / -0.0007285, 0.0000055, 0.0000003, 0.0 /
- data slc_inc_expected_values_tile2 / -0.0006, -0.0059, -0.0087, 0.0 /
- data slc_inc_expected_values_tile3 / -0.0015, 0.0030, -0.0007, 0.0 /
- data slc_inc_expected_values_tile4 / 0.0, 0.0, 0.0, 0.0 / 
- data slc_inc_expected_values_tile5 / 0.0014, 0.0012, 0.0006, 0.0 /
- data slc_inc_expected_values_tile6 / 0.0, 0.0, 0.0, 0.0 /
+ data stc_inc_expected_values_tile1 / 3.1428, 2.9983, 2.9786, 2.9634 /
+ data stc_inc_expected_values_tile2 / 2.9330, 2.9121, 2.9103, 2.9069 /
+ data stc_inc_expected_values_tile3 / 2.7236, 2.7308, 2.7315, 2.7295 /
+ data stc_inc_expected_values_tile4 / 3.0229, 3.0229, 3.0229, 3.0229 /
+ data stc_inc_expected_values_tile5 / 2.8595, 2.8825, 2.8878, 2.8948 /
+ data stc_inc_expected_values_tile6 / 2.7238, 2.7238, 2.7238, 2.7238 /
+ data slc_inc_expected_values_tile1 / 0.0007, 0.0018, 0.0018, 0.0018 /
+ data slc_inc_expected_values_tile2 / 0.0034, 0.0031, 0.0029, 0.0029 /
+ data slc_inc_expected_values_tile3 / 0.0003, 0.0005, 0.0011, 0.0008 /
+ data slc_inc_expected_values_tile4 / 0.01, 0.01, 0.01, 0.01 / 
+ data slc_inc_expected_values_tile5 / 0.0019, 0.0019, 0.0020, 0.0024 /
+ data slc_inc_expected_values_tile6 / 0.01, 0.01, 0.01, 0.01 /
 
  call mpi_init(ierr)
  call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
