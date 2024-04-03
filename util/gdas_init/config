@@ -23,9 +23,12 @@
 # RUN_CHGRES   - To run chgres, set to 'yes'.  To extract
 #                data only, set to 'no'.
 # yy/mm/dd/hh  - The year/month/day/hour of your desired
-#                experiment.  Currently, does not support
-#                pre-ENKF GFS data, prior to
-#                2012 May 21 00z.  Use two digits.
+#                experiment. Use two digits. NOTE: The 
+#                standard build of chgres_cube does NOT
+#                support pre-v14 or v15 input data (when
+#                CDUMP is 'gfs'). To use this data, 
+#                contact a repository manager for 
+#                assistance.
 # LEVS         - Number of hybrid levels plus 1.  To
 #                run with 64 levels, set LEVS to 65.
 # CRES_HIRES   - Resolution of the hires component of
@@ -91,13 +94,31 @@ else
     echo FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA
     exit 2
   elif [ $yy$mm$dd$hh -lt 2016051000 ]; then
-    gfs_ver=v12
+#   gfs_ver=v12
+    set +x
+    echo FATAL ERROR: V12 DATA NOT SUPPORTED.
+    echo CONTACT A REPOSITORY MANAGER FOR ASSISTANCE.
+    exit 2
   elif [ $yy$mm$dd$hh -lt 2017072000 ]; then
-    gfs_ver=v13
+#   gfs_ver=v13
+    set +x
+    echo FATAL ERROR: V13 DATA NOT SUPPORTED.
+    echo CONTACT A REPOSITORY MANAGER FOR ASSISTANCE.
+    exit 2
   elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
-    gfs_ver=v14
+#   gfs_ver=v14
+    set +x
+    echo FATAL ERROR: V14 DATA NOT SUPPORTED.
+    echo CONTACT A REPOSITORY MANAGER FOR ASSISTANCE.
+    exit 2
   elif [ $yy$mm$dd$hh -lt 2021032100 ]; then
     gfs_ver=v15
+    if [ "$CDUMP" = 'gfs' ];then
+    set +x
+      echo FATAL ERROR: V15 DATA NOT SUPPORTED.
+      echo CONTACT A REPOSITORY MANAGER FOR ASSISTANCE.
+      exit 2
+    fi
 # The way the v16 switch over was done, there is no complete
 # set of v16 or v15 data for 2021032100.  And although
 # v16 was officially implemented 2021032212, the v16 prod 
