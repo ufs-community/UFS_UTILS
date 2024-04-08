@@ -25,11 +25,11 @@
 # yy/mm/dd/hh  - The year/month/day/hour of your desired
 #                experiment. Use two digits. NOTE: The 
 #                standard build of chgres_cube does NOT
-#                support pre-v14 input data. V15 input
-#                data is only supported when CDUMP is
-#                'gdas'. To use use pre-v14 data or
-#                v15 data when CDUMP is 'gfs', contact 
-#                a repository manager for assistance.
+#                support experiments prior to June 12,
+#                2019, or if CDUMP is 'gfs', experiments
+#                prior to March 21, 2021. To coldstart
+#                an experiment prior to these dates,
+#                contact a repository manager for assistance.
 # LEVS         - Number of hybrid levels plus 1.  To
 #                run with 64 levels, set LEVS to 65.
 # CRES_HIRES   - Resolution of the hires component of
