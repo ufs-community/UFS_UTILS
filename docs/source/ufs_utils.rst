@@ -711,7 +711,7 @@ Edit the variables in the 'config' file for your experiment:
      * **EXTRACT_DIR**  - Directory where data extracted from HPSS is stored.
      * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'. On 's4' this step can't be run. Instead, the data must be pulled from another machine.
      * **RUN_CHGRES**   - To run chgres, set to 'yes'.  To extract data only, set to 'no'.
-     * **yy/mm/dd/hh**  - The year/month/day/hour of your desired experiment. Use two digits. *NOTE: The standard build of chgres_cube does NOT support pre-v14 data. V15 input data is only supported if CDUMP is 'gdas'. To use pre-v14 data or v15 data when CDUMP is 'gfs', contact a repository manager for assistance.*
+     * **yy/mm/dd/hh**  - The year/month/day/hour of your desired experiment. Use two digits. **NOTE:** *The standard build of chgres_cube does NOT support pre-v14 data. V15 input data is only supported if CDUMP is 'gdas'. To use pre-v14 data or v15 data when CDUMP is 'gfs', contact a repository manager for assistance.*
      * **LEVS**         - Number of hybrid levels plus 1.  To run with 127 levels, set LEVS to 128.
      * **CRES_HIRES**   - Resolution of the hires component of your experiment. Example: C768.
      * **CRES_ENKF**    - Resolution of the enkf component of the experiments.
