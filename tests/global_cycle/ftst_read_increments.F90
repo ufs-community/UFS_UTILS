@@ -87,6 +87,13 @@ end module chdir_mod
  if (my_rank .eq. 0) print*,"Call routine read_data"
 
  call chdir("./data")
+ call rename("soil_sfcincr_jedi.001", "soil_xainc.001")
+ call rename("soil_sfcincr_jedi.002", "soil_xainc.002")
+ call rename("soil_sfcincr_jedi.003", "soil_xainc.003")
+ call rename("soil_sfcincr_jedi.004", "soil_xainc.004")
+ call rename("soil_sfcincr_jedi.005", "soil_xainc.005")
+ call rename("soil_sfcincr_jedi.006", "soil_xainc.006")
+
  call read_data(lsoil,lensfc,.false.,.false.,.true.,.true.,STCINC=STCINC,SLCINC=SLCINC)
 
  if (my_rank .eq. 0) then

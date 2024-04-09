@@ -5,12 +5,12 @@
 
 set(CYCLE_URL "https://ftp.emc.ncep.noaa.gov/static_files/public/UFS/ufs_utils/unit_tests/global_cycle")
 
-set(FILE1 "soil_xainc.001")
-set(FILE2 "soil_xainc.002")
-set(FILE3 "soil_xainc.003")
-set(FILE4 "soil_xainc.004")
-set(FILE5 "soil_xainc.005")
-set(FILE6 "soil_xainc.006")
+set(FILE1 "soil_sfcincr_jedi.001")
+set(FILE2 "soil_sfcincr_jedi.002")
+set(FILE3 "soil_sfcincr_jedi.003")
+set(FILE4 "soil_sfcincr_jedi.004")
+set(FILE5 "soil_sfcincr_jedi.005")
+set(FILE6 "soil_sfcincr_jedi.006")
 
 foreach(THE_FILE IN LISTS FILE1 FILE2 FILE3 FILE4 FILE5 FILE6)
   PULL_DATA(${CYCLE_URL} ${THE_FILE})
