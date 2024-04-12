@@ -26,7 +26,8 @@ contains
     character(len=*),   intent(in) :: fname
 
     ! local variables
-    integer :: stderr, iounit, rc
+    integer :: iounit, rc
+    character(len=200) :: tmpstr
 
     namelist /grid_nml/ ni, nj, dirsrc, dirout, fv3dir,  topofile, editsfile, &
          res, atmres, npx, editmask, debug, &
@@ -34,24 +35,25 @@ contains
 
     ! Check whether file exists.
     inquire (file=trim(fname), iostat=rc)
-
     if (rc /= 0) then
-       write (stderr, '(3a)') 'Error: input file "', trim(fname), '" does not exist.'
-       return
+       write (0, '(3a)') 'Error: input file "', trim(fname), '" does not exist.'
+       stop 1
     end if
 
     ! Open and read Namelist file.
     open (action='read', file=trim(fname), iostat=rc, newunit=iounit)
     read (nml=grid_nml, iostat=rc, unit=iounit)
+    if (rc /= 0) then
+       backspace(iounit)
+       read(iounit,'(a)')tmpstr
+       write (6, '(a)') 'Error: invalid Namelist format '//trim(tmpstr)
+       stop 1
+    end if
+    close(iounit)
 
     ! set supergrid dimensions
     nx = ni*2
     ny = nj*2
 
-    if (rc /= 0) then
-       write (stderr, '(a)') 'Error: invalid Namelist format.'
-    end if
-
-    close (iounit)
   end subroutine read_inputnml
 end module inputnml

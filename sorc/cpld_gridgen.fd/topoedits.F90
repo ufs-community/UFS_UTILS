@@ -52,8 +52,8 @@ contains
 
     ! return the existing values
     allocate(ieds1(cnt1)); ieds1 = 0
-    allocate(jeds1(cnt1)); jeds2 = 0
-    allocate(zeds1(cnt1)); zeds2 = 0.0
+    allocate(jeds1(cnt1)); jeds1 = 0
+    allocate(zeds1(cnt1)); zeds1 = 0.0
 
     rc = nf90_open(fsrc, nf90_nowrite, ncid)
     rc = nf90_inq_varid(ncid, 'iEdit', id)
