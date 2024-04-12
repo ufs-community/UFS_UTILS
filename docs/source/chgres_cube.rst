@@ -115,7 +115,7 @@ Where to find GFS GRIB2 and NetCDF data for global applications
 
 **GRIB2**
 
-      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.weather.gov/pub/data/nccf/com/gfs/prod>`_.
+      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
       * 0.5-degree data - Use the **gfs_4_YYYYMMDD_HHHH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: `NCEI - Global Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>`_.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
@@ -123,7 +123,7 @@ Where to find GFS GRIB2 and NetCDF data for global applications
 
 **NetCDF**
 
-      * T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nc** (atmospheric fields) and **gfs.tHHz.sfcanl.nc** (surface fields) files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.weather.gov/pub/data/nccf/com/gfs/prod>`_.
+      * T1534 gaussian (last 10 days only) - Use the **gfs.tHHz.atmanl.nc** (atmospheric fields) and **gfs.tHHz.sfcanl.nc** (surface fields) files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
 Initializing global domains with GRIB2 data - some caveats
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -275,7 +275,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **FV3GFS**
 
-      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.weather.gov/pub/data/nccf/com/gfs/prod>`_.
+      * 0.25-degree data (last 10 days only) - Use the **gfs.tHHz.pgrb2.0p25.f000** files in subdirectory ./gfs.YYYYMMDD/HH/atmos on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/gfs/prod>`_.
 
       * 0.5-degree data - Use the **gfs_4_YYYYMMDD_HHHH_000.grb2** file, under **GFS Forecasts 004 (0.5-deg)** here: `NCEI - Global Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast>`_.  Note: *Tests were not done with the AVN, MRF or analysis data*.
 
@@ -283,7 +283,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **NAM**
 
-     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfHH.tmHH.grib2** files in subdirectory nam.YYYYMMDD on `NOMADS <https://nomads.weather.gov/pub/data/nccf/com/nam/prod/>`_.
+     * 12-km data from last few days (NOMADS) - Use the **nam.tHHz.conusnest.hiresfHH.tmHH.grib2** files in subdirectory nam.YYYYMMDD on `NOMADS <https://nomads.ncep.noaa.gov/pub/data/nccf/com/nam/prod/>`_.
 
      * 12-km data starting 2020 - Use the **nam_218_YYYYMMDD_HHHH_000.grb2 file**, under **NAM Forecasts NAM-NMM 218 (12km) Domain** here: `NCEI - North American Mesoscale Forecast System <https://www.ncei.noaa.gov/products/weather-climate-models/north-american-mesoscale>`_.
 
@@ -291,7 +291,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **HRRR**
  
-      * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfHH.grib2** files in the subdirectory ./hrrr.YYYYMMDD/conus `here <https://nomads.weather.gov/pub/data/nccf/com/hrrr/prod/>`_.
+      * 3-km operational data from previous few days (NOMADS) - Use the **hrrr.tHHz.wrfnatfHH.grib2** files in the subdirectory ./hrrr.YYYYMMDD/conus `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/hrrr/prod/>`_.
 
       * 3-km operational data from 2015 to present (AWS S3): Go `here <https://registry.opendata.aws/noaa-hrrr-pds/>`__ and click “Browse Bucket.” Type "YYYYMMDD" in to the Search bar. Use the **hrrr.t00z.wrfnatf00.grib2** files in the directory hrrr.YYYYMMDD/conus/.
 
@@ -301,7 +301,7 @@ Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
 
 **RAP**
 
-      * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfHH.grib2** files in the subdirectory ./rap.YYYYMMDD `here <https://nomads.weather.gov/pub/data/nccf/com/rap/prod/>`_.
+      * 13-km operational data for the previous few days (NOMADS): Use the **rap.tHHz.wrfnatfHH.grib2** files in the subdirectory ./rap.YYYYMMDD `here <https://nomads.ncep.noaa.gov/pub/data/nccf/com/rap/prod/>`_.
 
       * 13-km isobaric level data from previous 6 months : Use the **rap_130_YYYYMMDD_HHHH_0FF.grb2** files from **RAP Forecasts - RAP 130 (13km) - Domain** at NCEI `here <https://www.ncei.noaa.gov/products/weather-climate-models/rapid-refresh-update>`_.
 
