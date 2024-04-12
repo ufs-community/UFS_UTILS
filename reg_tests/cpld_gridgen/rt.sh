@@ -108,9 +108,9 @@ TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=20
+WLCLK_dflt=35
 export WLCLK=$WLCLK_dflt
-MEM_dflt="--mem=12g"
+MEM_dflt="--mem=16g"
 export MEM=$MEM_dflt
 
 cd $PATHRT
@@ -170,7 +170,6 @@ elif [[ $target = jet ]]; then
     NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
-    WLCLK=25
     SBATCH_COMMAND="./cpld_gridgen.sh"
 fi
 NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
