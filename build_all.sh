@@ -15,6 +15,8 @@ else
   readonly DIR_ROOT=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
 fi
 
+source "${DIR_ROOT}/sorc/machine-setup.sh"
+
 # User Options
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
@@ -27,17 +29,16 @@ if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
   set -x
 else
   set +x
-  source "${DIR_ROOT}/sorc/machine-setup.sh"
   if [[ "${target}" == "noaacloud" ]]; then
-    #TODO: This will need to be revisited once the EPIC supported-stacks come online.
-    #TODO: This is a hack due to how the spack-stack module files are generated; there may be a better way to do this.
-    source /contrib/global-workflow/spack-stack/envs/spack_2021.0.3.env
+    module use /contrib/spack-stack/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core
+    module load stack-intel/2021.3.0  stack-intel-oneapi-mpi/2021.3.0
+    module use "${DIR_ROOT}/modulefiles"
   else
     module use "${DIR_ROOT}/modulefiles"
   fi
   module load "build.$target.$compiler" > /dev/null
   module list
- set -x
+  set -x
 fi
 
 # Ensure the submodules have been initialized.
