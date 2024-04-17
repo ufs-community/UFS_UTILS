@@ -1,8 +1,8 @@
-Fri Dec 15 11:10:53 CST 2023
+Mon Apr  8 18:04:38 CDT 2024
 Start Regression test
 
-Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_408740/025
-Baseline dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/BASELINE/025
+Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_325586/025
+Baseline dir = /work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data/025
 
 Checking test 025 results ....
 Comparing Bu.mx025_SCRIP.nc........OK
@@ -25,6 +25,7 @@ Comparing rect.0p50_SCRIP.nc........OK
 Comparing rect.1p00_SCRIP.nc........OK
 Comparing rect.5p00_SCRIP.nc........OK
 Comparing tripole.mx025.Bu.to.Ct.bilinear.nc........OK
+Comparing tripole.mx025.Ct.to.Bu.bilinear.nc........OK
 Comparing tripole.mx025.Ct.to.rect.0p25.bilinear.nc........OK
 Comparing tripole.mx025.Ct.to.rect.0p25.conserve.nc........OK
 Comparing tripole.mx025.Ct.to.rect.0p50.bilinear.nc........OK
@@ -38,8 +39,8 @@ Comparing tripole.mx025.Cv.to.Ct.bilinear.nc........OK
 Comparing tripole.mx025.nc........OK
 
 
-Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_408740/050
-Baseline dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/BASELINE/050
+Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_325586/050
+Baseline dir = /work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data/050
 
 Checking test 050 results ....
 Comparing Bu.mx050_SCRIP.nc........OK
@@ -61,8 +62,10 @@ Comparing mesh.mx050.nc........OK
 Comparing rect.0p50_SCRIP.nc........OK
 Comparing rect.1p00_SCRIP.nc........OK
 Comparing rect.5p00_SCRIP.nc........OK
+Comparing tripole.mx025.Ct.to.mx050.Ct.bilinear.nc........OK
 Comparing tripole.mx025.Ct.to.mx050.Ct.neareststod.nc........OK
 Comparing tripole.mx050.Bu.to.Ct.bilinear.nc........OK
+Comparing tripole.mx050.Ct.to.Bu.bilinear.nc........OK
 Comparing tripole.mx050.Ct.to.rect.0p50.bilinear.nc........OK
 Comparing tripole.mx050.Ct.to.rect.0p50.conserve.nc........OK
 Comparing tripole.mx050.Ct.to.rect.1p00.bilinear.nc........OK
@@ -74,8 +77,8 @@ Comparing tripole.mx050.Cv.to.Ct.bilinear.nc........OK
 Comparing tripole.mx050.nc........OK
 
 
-Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_408740/100
-Baseline dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/BASELINE/100
+Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_325586/100
+Baseline dir = /work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data/100
 
 Checking test 100 results ....
 Comparing Bu.mx100_SCRIP.nc........OK
@@ -96,8 +99,10 @@ Comparing kmtu_cice_NEMS_mx100.nc........OK
 Comparing mesh.mx100.nc........OK
 Comparing rect.1p00_SCRIP.nc........OK
 Comparing rect.5p00_SCRIP.nc........OK
+Comparing tripole.mx025.Ct.to.mx100.Ct.bilinear.nc........OK
 Comparing tripole.mx025.Ct.to.mx100.Ct.neareststod.nc........OK
 Comparing tripole.mx100.Bu.to.Ct.bilinear.nc........OK
+Comparing tripole.mx100.Ct.to.Bu.bilinear.nc........OK
 Comparing tripole.mx100.Ct.to.rect.1p00.bilinear.nc........OK
 Comparing tripole.mx100.Ct.to.rect.1p00.conserve.nc........OK
 Comparing tripole.mx100.Ct.to.rect.5p00.bilinear.nc........OK
@@ -108,8 +113,8 @@ Comparing tripole.mx100.nc........OK
 Comparing ufs.topo_edits_011818.nc........OK
 
 
-Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_408740/500
-Baseline dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/BASELINE/500
+Working dir = /work/noaa/stmp/dworthen/CPLD_GRIDGEN/rt_325586/500
+Baseline dir = /work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data/500
 
 Checking test 500 results ....
 Comparing Bu.mx500_SCRIP.nc........OK
@@ -129,8 +134,10 @@ Comparing grid_cice_NEMS_mx500.nc........OK
 Comparing kmtu_cice_NEMS_mx500.nc........OK
 Comparing mesh.mx500.nc........OK
 Comparing rect.5p00_SCRIP.nc........OK
+Comparing tripole.mx025.Ct.to.mx500.Ct.bilinear.nc........OK
 Comparing tripole.mx025.Ct.to.mx500.Ct.neareststod.nc........OK
 Comparing tripole.mx500.Bu.to.Ct.bilinear.nc........OK
+Comparing tripole.mx500.Ct.to.Bu.bilinear.nc........OK
 Comparing tripole.mx500.Ct.to.rect.5p00.bilinear.nc........OK
 Comparing tripole.mx500.Ct.to.rect.5p00.conserve.nc........OK
 Comparing tripole.mx500.Cu.to.Ct.bilinear.nc........OK
@@ -139,5 +146,5 @@ Comparing tripole.mx500.nc........OK
 
 
 REGRESSION TEST WAS SUCCESSFUL
-Fri Dec 15 11:33:32 CST 2023
-Elapsed time: 00h:22m:41s. Have a nice day!
+Mon Apr  8 18:29:13 CDT 2024
+Elapsed time: 00h:26m:29s. Have a nice day!
