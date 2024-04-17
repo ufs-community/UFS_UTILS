@@ -139,9 +139,10 @@
 #                   between the filtered and unfiltered terrain.  Default is true.
 #     DONST         Process NST records when using NST model.  Default is 'no'.
 #     DO_SFCCYCLE   Call sfcsub routine 
-#     DO_LNDINC     Call routine to update soil states with increment files
-#     DO_SNO_INC_JEDI   Call routine to update snow states with increment files
-#     DO_SOI_INC_JEDI   Call routine to update soil states with increment files
+#     DO_LNDINC     Call routine to update snow/soil states with increment files
+#     DO_SOI_INC_GSI    Call routine to update soil states with gsi(gaussian) increment files
+#     DO_SNO_INC_JEDI   Call routine to update snow states with jedi increment files
+#     DO_SOI_INC_JEDI   Call routine to update soil states with jedi increment files
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
 #                   of depth of sea temperature.  In whole mm.
 #     MAX_TASKS_CY  Normally, program should be run with a number of mpi tasks
