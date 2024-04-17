@@ -21,6 +21,10 @@
 # determined by the "nccmp" utility.  The baseline files are stored in
 # HOMEreg.
 #
+# The nemsio and sigio/sfcio tests are not run by default because
+# the standard build of chgres does not support these data types.
+# To run the full set of tests, set $XTRA_TESTS to 'TRUE'.
+# 
 #-----------------------------------------------------------------------------
 
 set -x
@@ -39,7 +43,7 @@ PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-batch}"
 
 # When TRUE, run the nemsio and sigio tests.
-XTRA_TESTS="${XTRA_TESTS:-TRUE}"
+XTRA_TESTS="${XTRA_TESTS:-FALSE}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
@@ -192,9 +196,12 @@ sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $
       --open-mode=append -q $QUEUE -d\
      afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13 << EOF
 #!/bin/bash
-grep -a '<<<' $LOG_FILE*  > summary.log
+grep -a '<<<' ${LOG_FILE}??  > summary.log
 EOF
 
+#-----------------------------------------------------------------------------
+# These extra tests may be run using the full build of chgres_cube.
+#-----------------------------------------------------------------------------
 
 if [ "$XTRA_TESTS" = "TRUE" ]; then
 
@@ -202,7 +209,7 @@ if [ "$XTRA_TESTS" = "TRUE" ]; then
 # Initialize C96 using FV3 gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
-  LOG_FILE=consistency.log01x
+  LOG_FILE=consistency.xtra.log01
   export OMP_NUM_THREADS=1   # should match cpus-per-task
   TEST1X=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.nemsio \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.nemsio.sh)
@@ -211,7 +218,7 @@ if [ "$XTRA_TESTS" = "TRUE" ]; then
 # Initialize C96 using spectral GFS sigio/sfcio files.
 #-----------------------------------------------------------------------------
 
-  LOG_FILE=consistency.log02x
+  LOG_FILE=consistency.xtra.log02
   export OMP_NUM_THREADS=6   # should match cpus-per-task
   TEST2X=$(sbatch --parsable --ntasks-per-node=3 --cpus-per-task=6 --nodes=2 -t 0:25:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.sigio \
       -o $LOG_FILE -e $LOG_FILE ./c96.gfs.sigio.sh)
@@ -220,7 +227,7 @@ if [ "$XTRA_TESTS" = "TRUE" ]; then
 # Initialize C96 using spectral GFS gaussian nemsio files.
 #-----------------------------------------------------------------------------
 
-  LOG_FILE=consistency.log03x
+  LOG_FILE=consistency.xtra.log03
   export OMP_NUM_THREADS=1   # should match cpus-per-task
   TEST3X=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.gfs.nemsio \
       -o $LOG_FILE -e $LOG_FILE ./c96.gfs.nemsio.sh)
@@ -229,12 +236,12 @@ if [ "$XTRA_TESTS" = "TRUE" ]; then
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-  LOG_FILE=consistency.logx
+  LOG_FILE=consistency.xtra.log
   sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summaryx -o $LOG_FILE -e $LOG_FILE \
       --open-mode=append -q $QUEUE -d\
      afterok:$TEST1X:$TEST2X:$TEST3X << EOF
 #!/bin/bash
-grep -a '<<<' $LOG_FILE*  > summary.xtra.log
+grep -a '<<<' ${LOG_FILE}??  > summary.xtra.log
 EOF
 
 fi
