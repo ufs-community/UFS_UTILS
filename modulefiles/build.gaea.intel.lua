@@ -1,5 +1,5 @@
 help([[
-  This module loads libraries required for building and running UPP
+  This module loads libraries required for building and running UFS-UTILS
   on the NOAA RDHPC machine Gaea C5 using Intel-2023.1.0.
 ]])
 
