@@ -23,9 +23,13 @@
 # RUN_CHGRES   - To run chgres, set to 'yes'.  To extract
 #                data only, set to 'no'.
 # yy/mm/dd/hh  - The year/month/day/hour of your desired
-#                experiment.  Currently, does not support
-#                pre-ENKF GFS data, prior to
-#                2012 May 21 00z.  Use two digits.
+#                experiment. Use a four digit year and
+#                two digits for mon/day/hour. NOTE: The 
+#                standard build of chgres_cube does NOT
+#                support experiments prior to June 12,
+#                2019. To coldstart an experiment
+#                prior to these dates, contact a repository
+#                manager for assistance.
 # LEVS         - Number of hybrid levels plus 1.  To
 #                run with 64 levels, set LEVS to 65.
 # CRES_HIRES   - Resolution of the hires component of
@@ -48,20 +52,20 @@
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
-EXTRACT_DATA=no
+EXTRACT_DATA=yes
 
 RUN_CHGRES=yes
 
-yy=2022
-mm=05
-dd=06
+yy=2020
+mm=01
+dd=01
 hh=06
 
 use_v16retro=no
 
 LEVS=65
 
-CDUMP=gdas
+CDUMP=gfs
 
 CRES_HIRES=C192
 CRES_ENKF=C96
@@ -88,14 +92,26 @@ else
 # No ENKF data prior to 2012/05/21/00z
   if [ $yy$mm$dd$hh -lt 2012052100 ]; then
     set +x
-    echo FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA
+    echo "FATAL ERROR: SCRIPTS DO NOT SUPPORT OLD GFS DATA."
     exit 2
   elif [ $yy$mm$dd$hh -lt 2016051000 ]; then
-    gfs_ver=v12
+#   gfs_ver=v12
+    set +x
+    echo "FATAL ERROR: V12 DATA NOT SUPPORTED."
+    echo "CONTACT A REPOSITORY MANAGER FOR ASSISTANCE."
+    exit 2
   elif [ $yy$mm$dd$hh -lt 2017072000 ]; then
-    gfs_ver=v13
+#   gfs_ver=v13
+    set +x
+    echo "FATAL ERROR: V13 DATA NOT SUPPORTED."
+    echo "CONTACT A REPOSITORY MANAGER FOR ASSISTANCE."
+    exit 2
   elif [ $yy$mm$dd$hh -lt 2019061200 ]; then
-    gfs_ver=v14
+#   gfs_ver=v14
+    set +x
+    echo "FATAL ERROR: V14 DATA NOT SUPPORTED."
+    echo "CONTACT A REPOSITORY MANAGER FOR ASSISTANCE."
+    exit 2
   elif [ $yy$mm$dd$hh -lt 2021032100 ]; then
     gfs_ver=v15
 # The way the v16 switch over was done, there is no complete
@@ -104,7 +120,7 @@ else
 # tarballs were archived starting 2021032106.
   elif [ $yy$mm$dd$hh -lt 2021032106 ]; then
     set +x
-    echo FATAL ERROR: NO V15 OR V16 DATA FOR 2021032100
+    echo "FATAL ERROR: NO V15 OR V16 DATA FOR 2021032100."
     exit 1
   fi
 

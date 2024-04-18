@@ -29,8 +29,9 @@ load(pathJoin("sp", sp_ver))
 w3emc_ver=os.getenv("w3emc_ver") or "2.9.2"
 load(pathJoin("w3emc", w3emc_ver))
 
-sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
-load(pathJoin("sfcio", sfcio_ver))
+-- Uncomment when CHGRES_ALL is ON
+--sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
+--load(pathJoin("sfcio", sfcio_ver))
 
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
