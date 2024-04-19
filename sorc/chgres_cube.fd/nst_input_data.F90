@@ -14,7 +14,9 @@ module nst_input_data
 !! @author George Gayno NCEP/EMC
  use esmf
  use netcdf
+#ifdef CHGRES_ALL
  use nemsio_module
+#endif
 
  use program_setup, only          : data_dir_input_grid, &
                                     sfc_files_input_grid, &
@@ -205,6 +207,7 @@ module nst_input_data
 ! spectral GFS nemsio file.
 !--------------------------------------------------------------------------
 
+#ifdef CHGRES_ALL
  if (trim(input_type) == "gaussian_nemsio" .or. trim(input_type) == "gfs_gaussian_nemsio") then
 
    call read_input_nst_nemsio_file(localpet)
@@ -219,6 +222,11 @@ module nst_input_data
    call read_input_nst_netcdf_file(localpet)
 
  endif
+#else
+
+ call read_input_nst_netcdf_file(localpet)
+
+#endif
 
  end subroutine read_input_nst_data
  
@@ -502,6 +510,8 @@ module nst_input_data
 
  end subroutine read_input_nst_netcdf_file
 
+#ifdef CHGRES_ALL
+
 !> Read input grid nst data from fv3 gaussian nemsio history file or
 !! spectral GFS nemsio file.
 !!
@@ -775,6 +785,8 @@ module nst_input_data
  if (localpet == 0) call nemsio_close(gfile)
 
  end subroutine read_input_nst_nemsio_file
+
+#endif
  
  !> Free up memory associated with nst data.
 !!
