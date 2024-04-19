@@ -67,6 +67,18 @@ do
   fi
 done
 
+for files in *gaussian_interp*
+do
+  if [ -f $files ]; then
+    echo CHECK $files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.gsi_lndincsoilnoahmp/$files
+    iret=$?
+    if [ $iret -ne 0 ]; then
+      test_failed=1
+    fi
+  fi
+done
+
 set +x
 if [ $test_failed -ne 0 ]; then
   echo
