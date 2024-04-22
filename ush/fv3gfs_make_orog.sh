@@ -44,7 +44,7 @@ cp ${indir}/topography.gmted2010.30s.nc .
 cp ${griddir}/$OUTGRID .
 cp $executable .
 
-echo $OUTGRID >> INPS
+echo $OUTGRID > INPS
 echo $orogfile >> INPS
 if [ -z ${ocn+x} ]; then
   echo ".false." >> INPS
