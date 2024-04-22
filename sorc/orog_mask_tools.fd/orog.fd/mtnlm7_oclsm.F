@@ -79,22 +79,17 @@ C> @return 0 for success, error code otherwise.
       logical :: mask_only = .false.
       integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT,NW
       fsize=65536
-      READ(5,*) MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
+      READ(5,*) IM,JM
       READ(5,*) OUTGRID
       READ(5,*) INPUTOROG
       READ(5,*) mask_only
       READ(5,*) merge_file
-!      MTNRES=1
-!      IM=48
-!      JM=48
-!      NM=46
-!      NF0=0             
-!      NF1=0              
-!      efac=0
-!      blat=0
-!      NR=0
-!      OUTGRID = "C48_grid.tile1.nc"
-!      INPUTOROG = "oro.288x144.nc"
+      NM=0
+      NF0=0             
+      NF1=0              
+      EFAC=0
+      BLAT=0
+      NR=0
       print*, "INPUTOROG=", trim(INPUTOROG)
       print*, "IM,JM=", IM, JM
       print*, "MASK_ONLY", mask_only
