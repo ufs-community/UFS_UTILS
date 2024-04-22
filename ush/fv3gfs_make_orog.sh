@@ -6,8 +6,6 @@ nargv=$#
 
 if [ $nargv -eq 6 ]; then  # cubed-sphere grid
   res=$1 
-  lonb=$1
-  latb=$1
   tile=$2
   griddir=$3
   outdir=$4
@@ -46,7 +44,6 @@ cp ${indir}/topography.gmted2010.30s.nc .
 cp ${griddir}/$OUTGRID .
 cp $executable .
 
-echo $lonb $latb > INPS
 echo $OUTGRID >> INPS
 echo $orogfile >> INPS
 if [ -z ${ocn+x} ]; then

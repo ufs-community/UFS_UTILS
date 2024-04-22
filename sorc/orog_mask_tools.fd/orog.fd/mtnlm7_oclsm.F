@@ -79,7 +79,6 @@ C> @return 0 for success, error code otherwise.
       logical :: mask_only = .false.
       integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT,NW
       fsize=65536
-      READ(5,*) IM,JM
       READ(5,*) OUTGRID
       READ(5,*) INPUTOROG
       READ(5,*) mask_only
@@ -90,10 +89,9 @@ C> @return 0 for success, error code otherwise.
       EFAC=0
       BLAT=0
       NR=0
-      print*, "INPUTOROG=", trim(INPUTOROG)
-      print*, "IM,JM=", IM, JM
+      print*, "INPUTOROG= ", trim(INPUTOROG)
       print*, "MASK_ONLY", mask_only
-      print*, "MERGE_FILE", trim(merge_file)
+      print*, "MERGE_FILE ", trim(merge_file)
 ! --- MTNRES defines the input (highest) elev resolution
 ! --- =1 is topo30 30" in units of 1/2 minute.
 !     so MTNRES for old values must be *2.
@@ -101,56 +99,45 @@ C> @return 0 for success, error code otherwise.
 ! --- other possibilities are =8 for 4' and =4 for 2' see
 !     HJ for T1000 test. Must set to 1 for now.
       MTNRES=1
-      print*, MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
+      print*, MTNRES,NM,NR,NF0,NF1,EFAC,BLAT
       NW=(NM+1)*((NR+1)*NM+2)
       IMN = 360*120/MTNRES
       JMN = 180*120/MTNRES
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
 
-! --- read the grid resolution if the OUTGRID exists.
-      if( trim(OUTGRID) .NE. "none" ) then
-         inquire(file=trim(OUTGRID), exist=fexist)
-         if(.not. fexist) then
-            print*, "FATAL ERROR: file "//trim(OUTGRID)
-            print*, " does not exist."
-            CALL ERREXIT(4)
-         endif
-         do ncid = 103, 512
-           inquire( ncid,OPENED=opened )
-           if( .NOT.opened )exit
-         end do
+! --- read the grid resolution from OUTGRID.
+      inquire(file=trim(OUTGRID), exist=fexist)
+      if(.not. fexist) then
+        print*, "FATAL ERROR: file "//trim(OUTGRID)
+        print*, " does not exist."
+        CALL ERREXIT(4)
+      endif
+      do ncid = 103, 512
+         inquire( ncid,OPENED=opened )
+         if( .NOT.opened )exit
+      end do
 
-         print*, "outgrid=", trim(outgrid)
-         error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
-         call netcdf_err(error, 'Open file '//trim(OUTGRID) )
-         error=nf_inq_dimid(ncid, 'nx', id_dim)
-         call netcdf_err(error, 'inquire dimension nx from file '//
+      print*, "READ outgrid=", trim(outgrid)
+      error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file '//trim(OUTGRID) )
+      error=nf_inq_dimid(ncid, 'nx', id_dim)
+      call netcdf_err(error, 'inquire dimension nx from file '//
      &                   trim(OUTGRID) )
-         error=nf_inq_dimlen(ncid,id_dim,nx)
-         call netcdf_err(error, 'inquire dimension nx length '//
+      error=nf_inq_dimlen(ncid,id_dim,nx)
+      call netcdf_err(error, 'inquire dimension nx length '//
      &       'from file '//trim(OUTGRID) )
          
-         error=nf_inq_dimid(ncid, 'ny', id_dim)
-         call netcdf_err(error, 'inquire dimension ny from file '//
+      error=nf_inq_dimid(ncid, 'ny', id_dim)
+      call netcdf_err(error, 'inquire dimension ny from file '//
      &                   trim(OUTGRID) )
-         error=nf_inq_dimlen(ncid,id_dim,ny)
-         call netcdf_err(error, 'inquire dimension ny length '//
+      error=nf_inq_dimlen(ncid,id_dim,ny)
+      call netcdf_err(error, 'inquire dimension ny length '//
      &       'from file '//trim(OUTGRID) )
-         print*, "nx = ", nx
-         if(IM .ne. nx/2) then
-            print*, "IM=",IM, " /= grid file nx/2=",nx/2
-            print*, "Set IM = ", nx/2
-            IM = nx/2
-         endif
-         if(JM .ne. ny/2) then
-            print*, "JM=",JM, " /= grid file ny/2=",ny/2
-            print*, "Set JM = ", ny/2
-            JM = ny/2
-         endif
-         error=nf_close(ncid)
-         call netcdf_err(error, 'close file '//trim(OUTGRID) )
-         
-      endif         
+      IM = nx/2
+      JM = ny/2
+      print*, "nx, ny, im, jm = ", nx, ny, im, jm
+      error=nf_close(ncid)
+      call netcdf_err(error, 'close file '//trim(OUTGRID) )
          
       CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
