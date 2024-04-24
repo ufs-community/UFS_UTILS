@@ -357,7 +357,7 @@
  REAL                :: VMNFCS(LENSFC), T2M(LENSFC)
  REAL                :: Q2M(LENSFC), SLPFCS(LENSFC)
  REAL                :: ABSFCS(LENSFC), OROG_UF(LENSFC)
- REAL                :: USTAR(LENSFC)
+ REAL                :: USTAR(LENSFC), SOCFCS(LENSFC)
  REAL                :: FMM(LENSFC), FHH(LENSFC)
  REAL                :: RLA(LENSFC), RLO(LENSFC)
  REAL(KIND=4)        :: ZSOIL(LSOIL)
@@ -597,6 +597,8 @@ ENDIF
      endif
    ENDDO
 
+   SOCFCS=0 ! Soil color. Not used yet.
+
    num_threads = num_parthds()
    PRINT*
    PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
@@ -607,7 +609,7 @@ ENDIF
                VMNFCS,VMXFCS,SLPFCS,ABSFCS,              &
                TSFFCS,SWEFCS,ZORFCS,ALBFCS,TG3FCS,       &
                CNPFCS,SMCFCS,STCFCS,SLIFCS,AISFCS,       &
-               VEGFCS,VETFCS,SOTFCS,ALFFCS,              &
+               VEGFCS,VETFCS,SOTFCS,SOCFCS,ALFFCS,       &
                CVFCS,CVBFCS,CVTFCS,MYRANK,num_threads, NLUNIT,        &
                SZ_NML, INPUT_NML_FILE,                   &
                min_ice, &

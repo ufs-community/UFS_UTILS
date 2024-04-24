@@ -6,7 +6,7 @@
 set(lib_src
     machine.f90
     num_parthds.f90
-    ../../ccpp-physics/physics/sfcsub.F
+    ../../ccpp-physics/physics/Interstitials/UFS_SCM_NEPTUNE/sfcsub.F
     read_write_data.f90
     utils.F90
     land_increments.f90)
