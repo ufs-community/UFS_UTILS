@@ -9,7 +9,7 @@ set -ex
 #               'nco' (copies data).
 #
 #  $machine - is the machine. Choices are:
-#             'wcoss2', 'hera', 'jet', 'orion', 'hercules', 's4'
+#             'wcoss2', 'hera', 'jet', 'orion', 'hercules', 's4', 'gaea'
 
 RUN_ENVIR=${1}
 machine=${2}
@@ -28,7 +28,7 @@ if [ $RUN_ENVIR != emc -a $RUN_ENVIR != nco ]; then
     exit 1
 fi
 
-if [ $machine != wcoss2 -a $machine != hera -a $machine != jet -a $machine != orion -a $machine != s4 -a $machine != hercules ]; then
+if [ $machine != wcoss2 -a $machine != hera -a $machine != jet -a $machine != orion -a $machine != s4 -a $machine != hercules $machine != gaea ]; then
     set +x
     echo '***ERROR*** unsupported machine'
     echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | hera | jet | orion | hercules | s4 )'
@@ -54,6 +54,8 @@ elif [ $machine = "wcoss2" ]; then
     FIX_DIR="/lfs/h2/emc/global/noscrub/emc.global/FIX/fix"
 elif [ $machine = "s4" ]; then
     FIX_DIR="/data/prod/glopara/fix"
+elif [ $machine = "gaea" ]; then
+    FIX_DIR="/gpfs/f5/epic/proj-shared/global/glopara/data/fix"
 fi
 
 am_ver=${am_ver:-20220805}
