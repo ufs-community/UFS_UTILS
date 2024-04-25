@@ -1,9 +1,6 @@
 help([[
-  This module loads libraries required for building and running UFS-UTILS
-  on the NOAA RDHPC machine Gaea C5 using Intel-2023.1.0.
+Load environment to compile UFS_UTILS on Hera using Intel
 ]])
-
-whatis([===[Loads libraries needed for building the UFS Weather Model on Gaea ]===])
 
 prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
 
@@ -12,9 +9,6 @@ load(pathJoin("stack-intel", stack_intel_ver))
 
 stack_cray_mpich_ver=os.getenv("stack_cray_mpich_ver") or "8.1.25"
 load(pathJoin("stack-cray-mpich", stack_cray_mpich_ver))
-
-stack_python_ver=os.getenv("stack_python_ver") or "3.10.13"
-load(pathJoin("stack-python", stack_python_ver))
 
 cmake_ver=os.getenv("cmake_ver") or "3.23.1"
 load(pathJoin("cmake", cmake_ver))
@@ -37,8 +31,9 @@ load(pathJoin("sp", sp_ver))
 w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
 load(pathJoin("w3emc", w3emc_ver))
 
-sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
-load(pathJoin("sfcio", sfcio_ver))
+-- Uncomment when CHGRES_ALL is ON
+--sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
+--load(pathJoin("sfcio", sfcio_ver))
 
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
@@ -58,21 +53,14 @@ load(pathJoin("netcdf-fortran", netcdf_fortran_ver))
 nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
 load(pathJoin("nccmp", nccmp_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8.5.0"
+esmf_ver=os.getenv("esmf_ver") or "8.6.0"
 load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.0.6"
 load(pathJoin("nco", nco_ver))
 
-load("nccmp/1.9.0.1")
-
-prepend_path("MODULEPATH","/sw/rdtn/modulefiles")
+prepend_path("MODULEPATH", "/sw/rdtn/modulefiles")
 load("hsi")
 
-unload("darshan-runtime")
-unload("cray-libsci")
+whatis("Description: UFS_UTILS build environment")
 
-setenv("CC","cc")
-setenv("CXX","CC")
-setenv("FC","ftn")
-setenv("CMAKE_Platform","gaea.intel")
