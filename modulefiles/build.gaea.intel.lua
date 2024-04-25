@@ -66,6 +66,9 @@ load(pathJoin("nco", nco_ver))
 
 load("nccmp/1.9.0.1")
 
+prepend_path("MODULEPATH","/sw/rdtn/modulefiles")
+load("hsi")
+
 unload("darshan-runtime")
 unload("cray-libsci")
 
