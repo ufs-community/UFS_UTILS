@@ -154,8 +154,8 @@ fi
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
-export TEMP_DIR=/work/noaa/stmp/$LOGNAME/fv3_grid.$gtype
-export out_dir=/work/noaa/stmp/$LOGNAME/my_grids
+export TEMP_DIR=/work2/noaa/stmp/$LOGNAME/fv3_grid.$gtype
+export out_dir=/work2/noaa/stmp/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
