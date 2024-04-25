@@ -147,7 +147,9 @@
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_gaussian(npets)
 
+#ifdef CHGRES_ALL
  use nemsio_module
+#endif
 
  use program_setup, only       : data_dir_input_grid, &
                                  atm_files_input_grid, &
@@ -155,8 +157,10 @@
                                  input_type, &
                                  convert_atm, convert_sfc
 
+#ifdef CHGRES_ALL
  use sfcio_module
  use sigio_module
+#endif
  use netcdf
 
  implicit none
@@ -166,8 +170,10 @@
  character(len=250)               :: the_file
 
  integer                          :: i, j, rc, clb(2), cub(2), ncid, id_grid
+#ifdef CHGRES_ALL
  integer(sfcio_intkind)           :: rc2
  integer(sigio_intkind)           :: rc3
+#endif
 
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
@@ -178,10 +184,14 @@
  real(esmf_kind_r8)               :: deltalon
  real(esmf_kind_r8), allocatable  :: slat(:), wlat(:)
 
+#ifdef CHGRES_ALL
  type(nemsio_gfile)               :: gfile
+#endif
  type(esmf_polekind_flag)         :: polekindflag(2)
+#ifdef CHGRES_ALL
  type(sfcio_head)                 :: sfchead
  type(sigio_head)                 :: sighead
+#endif
 
  print*,"- DEFINE INPUT GRID OBJECT FOR GAUSSIAN DATA."
 
@@ -193,8 +203,28 @@
    the_file=trim(data_dir_input_grid) // "/" // trim(atm_files_input_grid(1))
  endif
 
- if (trim(input_type) == "gfs_sigio") then  ! sigio/sfcio format, used by
-                                               ! spectral gfs prior to 7/19/2017.
+ if (trim(input_type) == "gaussian_netcdf") then
+
+   print*,'- OPEN AND READ: ',trim(the_file)
+   rc=nf90_open(trim(the_file),nf90_nowrite,ncid)
+   call netcdf_err(rc, 'opening file')
+
+   print*,"- READ grid_xt"
+   rc=nf90_inq_dimid(ncid, 'grid_xt', id_grid)
+   call netcdf_err(rc, 'reading grid_xt id')
+   rc=nf90_inquire_dimension(ncid,id_grid,len=i_input)
+   call netcdf_err(rc, 'reading grid_xt')
+
+   print*,"- READ grid_yt"
+   rc=nf90_inq_dimid(ncid, 'grid_yt', id_grid)
+   call netcdf_err(rc, 'reading grid_yt id')
+   rc=nf90_inquire_dimension(ncid,id_grid,len=j_input)
+   call netcdf_err(rc, 'reading grid_yt')
+
+   rc = nf90_close(ncid)
+
+#ifdef CHGRES_ALL
+ elseif (trim(input_type) == "gfs_sigio") then  ! sigio/sfcio format, used by
 
    if (convert_sfc) then   ! sfcio format
      print*,"- OPEN AND READ ", trim(the_file)
@@ -216,26 +246,6 @@
      j_input = sighead%latb
    endif
 
- elseif (trim(input_type) == "gaussian_netcdf") then
-
-   print*,'- OPEN AND READ: ',trim(the_file)
-   rc=nf90_open(trim(the_file),nf90_nowrite,ncid)
-   call netcdf_err(rc, 'opening file')
-
-   print*,"- READ grid_xt"
-   rc=nf90_inq_dimid(ncid, 'grid_xt', id_grid)
-   call netcdf_err(rc, 'reading grid_xt id')
-   rc=nf90_inquire_dimension(ncid,id_grid,len=i_input)
-   call netcdf_err(rc, 'reading grid_xt')
-
-   print*,"- READ grid_yt"
-   rc=nf90_inq_dimid(ncid, 'grid_yt', id_grid)
-   call netcdf_err(rc, 'reading grid_yt id')
-   rc=nf90_inquire_dimension(ncid,id_grid,len=j_input)
-   call netcdf_err(rc, 'reading grid_yt')
-
-   rc = nf90_close(ncid)
-
  else ! nemsio format
 
    call nemsio_init(iret=rc)
@@ -248,6 +258,8 @@
    if (rc /= 0) call error_handler("READING FILE", rc)
 
    call nemsio_close(gfile)
+
+#endif
  
  endif
 
