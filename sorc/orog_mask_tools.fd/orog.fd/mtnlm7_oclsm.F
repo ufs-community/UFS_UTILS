@@ -80,7 +80,6 @@ C> @return 0 for success, error code otherwise.
       integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,NW
       fsize=65536
       READ(5,*) OUTGRID
-      READ(5,*) INPUTOROG
       READ(5,*) mask_only
       READ(5,*) merge_file
       NM=0

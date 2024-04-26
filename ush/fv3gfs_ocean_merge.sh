@@ -45,9 +45,8 @@ EOF
     for tnum in '1' '2' '3' '4' '5' '6'
     do
     cd ${TEMP_DIR}/C${res}/orog/tile$tnum
-    echo C${res}_grid.tile${tnum}.nc > INPS
 
-    echo none >> INPS
+    echo C${res}_grid.tile${tnum}.nc > INPS
     echo ".false." >> INPS
     echo '"'${TEMP_DIR}/ocean_merged/C${res}.mx${ocn}/C${res}.mx${ocn}.tile${tnum}.nc'"' >> INPS
 

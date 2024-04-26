@@ -1,21 +1,57 @@
 #!/bin/bash
 
+#-------------------------------------------------------------------
+# Program Name: fv3gfs_make_orog
+#
+# Run the orography ('orog') program to create mask, terrain and
+# GWD files on the model tile.
+#
+# Author: GFDL Programmer
+#
+# History Log:
+#   01/2018: Initial version.
+#   04/2024: Some clean up.
+#
+# Usage:
+#  Arguments:
+#    res     - "C" Resolution of model grid - 48, 96, 768, etc.
+#    tile    - Tile number.
+#    griddir - location of model 'grid' file.
+#    outdir  - location of the model orography file output by
+#              the 'orog' program.
+#    indir   - location of input land mask and terrain data.
+#
+#  Input Files:
+#    $OUTGRID - the model 'grid' file containing georeference info.
+#    topography.antarctica.ramp.30s.nc - RAMP terrain data.
+#    landcover.umd.30s.nc - Global land mask data.
+#    topography.gmted2010.30s.nc - Global USGS GMTED 2010 terrain
+#                                  data.
+#
+#  Output Files:
+#    out.oro.nc - The model orography file (single tile).
+#
+# Condition codes:
+#    0 - Normal termination.
+#    1 - Incorrect number of script arguments.
+#    2 - Program executable does not exits.
+#    3 - Error running program.
+#-------------------------------------------------------------------
+
 set -eux
 
 nargv=$#
 
-if [ $nargv -eq 6 ]; then  # cubed-sphere grid
+if [ $nargv -eq 5 ]; then
   res=$1 
   tile=$2
   griddir=$3
   outdir=$4
-  script_dir=$5
-  orogfile="none"
-  indir=$6
+  indir=$5
 else
   set +x
-  echo "FATAL ERROR: Number of arguments must be 6 for cubic sphere grid."
-  echo "Usage for cubic sphere grid: $0 resolution tile griddir outdir script_dir indir."
+  echo "FATAL ERROR: Number of arguments must be 5 for cubic sphere grid."
+  echo "Usage for cubic sphere grid: $0 resolution tile griddir outdir indir."
   set -x
   exit 1
 fi
@@ -51,8 +87,22 @@ ln -fs ${indir}/topography.gmted2010.30s.nc .
 ln -fs ${griddir}/$OUTGRID .
 ln -fs $executable .
 
+#-------------------------------------------------------------------
+# Set up program namelist. The entries are:
+#
+#  1 - OUTGRID - model 'grid' file.
+#  2 - Logical to output land mask only. When creating a grid
+#      for the coupled model ("ocn" resolution is specified) 
+#      this is true. The mask is then tweaked during the
+#      ocean merge step before the 'orog' program is run again
+#      (in fv3gfs_ocean_merge.sh) to create the full 'orog'
+#      file. When false, the 'orog' program outputs the
+#      full orography file.
+#  3 - The input file from the ocean merge step. Defaults
+#      to 'none' for this script.
+#-------------------------------------------------------------------
+
 echo $OUTGRID > INPS
-echo $orogfile >> INPS
 if [ -z ${ocn+x} ]; then
   echo ".false." >> INPS
 else
