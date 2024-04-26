@@ -77,7 +77,7 @@ C> @return 0 for success, error code otherwise.
       character(len=256) :: INPUTOROG = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
-      integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT,NW
+      integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,NW
       fsize=65536
       READ(5,*) OUTGRID
       READ(5,*) INPUTOROG
@@ -87,7 +87,6 @@ C> @return 0 for success, error code otherwise.
       NF0=0             
       NF1=0              
       EFAC=0
-      BLAT=0
       NR=0
       print*, "INPUTOROG= ", trim(INPUTOROG)
       print*, "MASK_ONLY", mask_only
@@ -99,7 +98,7 @@ C> @return 0 for success, error code otherwise.
 ! --- other possibilities are =8 for 4' and =4 for 2' see
 !     HJ for T1000 test. Must set to 1 for now.
       MTNRES=1
-      print*, MTNRES,NM,NR,NF0,NF1,EFAC,BLAT
+      print*, MTNRES,NM,NR,NF0,NF1,EFAC
       NW=(NM+1)*((NR+1)*NM+2)
       IMN = 360*120/MTNRES
       JMN = 180*120/MTNRES
@@ -139,7 +138,7 @@ C> @return 0 for success, error code otherwise.
       error=nf_close(ncid)
       call netcdf_err(error, 'close file '//trim(OUTGRID) )
          
-      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
+      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       STOP
       END
@@ -156,8 +155,6 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] NF1 Second order spectral filter parameters.
 !! @param[in] NW Number of waves.
 !! @param[in] EFAC Factor to adjust orography by its variance.
-!! @param[in] BLAT When less than zero, reverse latitude/
-!! longitude for output.
 !! @param[in] OUTGRID The 'grid' file for the model tile.
 !! @param[in] INPUTOROG Input orography/GWD file on gaussian
 !! grid. When specified, will be interpolated to model tile.
@@ -166,7 +163,7 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] MASK_ONLY Flag to generate the Land Mask only
 !! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
+      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,
      &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
@@ -182,7 +179,7 @@ C
       real, PARAMETER :: PI=3.1415926535897931
       integer, PARAMETER :: NMT=14
 
-      integer :: efac,blat,zsave1,zsave2
+      integer :: efac,zsave1,zsave2
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
@@ -228,7 +225,7 @@ C
       complex :: ffj(im/2+1)
 
       logical :: grid_from_file,output_binary,fexist,opened
-      logical :: SPECTR, REVLAT, FILTER
+      logical :: SPECTR, FILTER
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
       logical :: LB(IM*JM)
@@ -257,7 +254,6 @@ C
       DEGRAD = 180./PI
       SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
       FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 & NF0
-      REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
       MSKOCN = 1             ! Ocean land sea mask =1, =0 if not present
       NOTOCN = 1             ! =1 Ocean lsm input reverse: Ocean=1, land=0 
 ! --- The LSM Gaussian file from the ocean model sometimes arrives with 
@@ -311,8 +307,8 @@ C
 !
 
 !  --- IMN,JMN
-      print*, ' IM, JM, NM, NR, NF0, NF1, EFAC, BLAT'
-      print*, IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
+      print*, ' IM, JM, NM, NR, NF0, NF1, EFAC'
+      print*, IM,JM,NM,NR,NF0,NF1,EFAC
        print *,'  imn,jmn,glob(imn,jmn)=',imn,jmn,glob(imn,jmn)
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
@@ -391,7 +387,7 @@ C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
 !    This code assumes that lat runs from north to south for gg!
 !
 
-      print *,' SPECTR=',SPECTR,' REVLAT=',REVLAT,' ** with GICE-07 **'
+      print *,' SPECTR=',SPECTR,' ** with GICE-07 **'
       IF (SPECTR) THEN
         CALL SPLAT(4,JM,COSCLT,WGTCLT)
         DO J=1,JM/2
@@ -1272,13 +1268,6 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
         enddo
 
       ELSE
-        IF (REVLAT) THEN
-          CALL REVERS(IM, JM, numi, SLM, WORK1)
-          CALL REVERS(IM, JM, numi, ORO, WORK1)
-          DO IMT=1,NMT
-            CALL REVERS(IM, JM, numi, HPRIME(1,1,IMT), WORK1)
-          ENDDO
-        ENDIF
         ORS=0.
         ORF=ORO
       ENDIF
@@ -1489,7 +1478,7 @@ C
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
-      END
+      END SUBROUTINE TERSUB
 
 !> Create the orography, land-mask, standard deviation of
 !! orography and the convexity on a model gaussian grid.
@@ -4037,45 +4026,6 @@ C
 C
       RETURN
       END SUBROUTINE MAKEOA3
-      
-!> Reverse the east-west and north-south axes
-!! in a two-dimensional array.
-!!
-!! @param [in] im 'i' dimension of the 2-d array.
-!! @param [in] jm 'j' dimension of the 2-d array.
-!! @param [in] numi Not used.
-!! @param [inout] f The two-dimensional array to
-!! be processed.
-!! @param [out] wrk Two-dimensional work array.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE REVERS(IM, JM, numi, F, WRK)
-!
-      REAL F(IM,JM), WRK(IM,JM)
-      integer numi(jm)
-      imb2 = im / 2
-      do i=1,im*jm
-         WRK(i,1) = F(i,1)
-      enddo
-      do j=1,jm
-         jr = jm - j + 1
-         do i=1,im
-            ir = i + imb2
-            if (ir .gt. im) ir = ir - im
-            f(ir,jr) = WRK(i,j)
-         enddo
-      enddo
-!
-      tem = 0.0
-      do i=1,im
-        tem= tem + F(I,1)
-      enddo
-      tem = tem / im
-      do i=1,im
-         F(I,1) = tem
-      enddo
-!
-      RETURN
-      END
 
 !> Convert from a reduced grid to a full grid.
 !!
