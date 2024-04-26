@@ -29,13 +29,7 @@ if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
   set -x
 else
   set +x
-  if [[ "${target}" == "noaacloud" ]]; then
-    module use /contrib/spack-stack/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core
-    module load stack-intel/2021.3.0  stack-intel-oneapi-mpi/2021.3.0
-    module use "${DIR_ROOT}/modulefiles"
-  else
-    module use "${DIR_ROOT}/modulefiles"
-  fi
+  module use "${DIR_ROOT}/modulefiles"
   module load "build.$target.$compiler" > /dev/null
   module list
   set -x
