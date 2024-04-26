@@ -20,7 +20,6 @@ source "${DIR_ROOT}/sorc/machine-setup.sh"
 # User Options
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
-PW_CSP=${PW_CSP:-} # TODO: This is an implementation from EPIC and consistent with the UFS WM build system.
 
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
   unset -f module
