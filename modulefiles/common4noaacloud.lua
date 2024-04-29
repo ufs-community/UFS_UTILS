@@ -1,17 +1,15 @@
-help([[
-Load environment to compile UFS_UTILS on Hercules using Intel
+help([[ 
+Load environment to compile UFS_UTILS on NOAA CSPs using Intel
 ]])
 
-prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
-
-stack_intel_ver=os.getenv("stack_intel_ver") or "2021.9.0"
-load(pathJoin("stack-intel", stack_intel_ver))
-
-stack_impi_ver=os.getenv("stack_impi_ver") or "2021.9.0"
-load(pathJoin("stack-intel-oneapi-mpi", stack_impi_ver))
-
-cmake_ver=os.getenv("cmake_ver") or "3.23.1"
+cmake_ver=os.getenv("cmake_ver") or "3.16.1"
 load(pathJoin("cmake", cmake_ver))
+
+hpc_intel_ver=os.getenv("hpc_intel_ver") or "2021.3.0"
+load(pathJoin("intel", hpc_intel_ver))
+
+impi_ver=os.getenv("impi_ver") or "2021.3.0"
+load(pathJoin("impi", impi_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
@@ -44,11 +42,11 @@ load(pathJoin("zlib", zlib_ver))
 png_ver=os.getenv("png_ver") or "1.6.37"
 load(pathJoin("libpng", png_ver))
 
-netcdf_c_ver=os.getenv("netcdf_c_ver") or "4.9.2"
-load(pathJoin("netcdf-c", netcdf_c_ver))
+hdf5_ver=os.getenv("hdf5_ver") or "1.10.6"
+load(pathJoin("hdf5", hdf5_ver))
 
-netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.1"
-load(pathJoin("netcdf-fortran", netcdf_fortran_ver))
+netcdf_ver=os.getenv("netcdf_ver") or "4.6.1"
+load(pathJoin("netcdf", netcdf_ver))
 
 nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
 load(pathJoin("nccmp", nccmp_ver))
@@ -56,7 +54,7 @@ load(pathJoin("nccmp", nccmp_ver))
 esmf_ver=os.getenv("esmf_ver") or "8.6.0"
 load(pathJoin("esmf", esmf_ver))
 
-nco_ver=os.getenv("nco_ver") or "5.0.6"
+nco_ver=os.getenv("nco_ver") or "4.9.1"
 load(pathJoin("nco", nco_ver))
 
 whatis("Description: UFS_UTILS build environment")

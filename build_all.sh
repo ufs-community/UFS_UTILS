@@ -15,10 +15,11 @@ else
   readonly DIR_ROOT=$(cd "$(dirname "$(readlink -f -n "${BASH_SOURCE[0]}" )" )" && pwd -P)
 fi
 
+source "${DIR_ROOT}/sorc/machine-setup.sh"
+
 # User Options
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
-PW_CSP=${PW_CSP:-} # TODO: This is an implementation from EPIC and consistent with the UFS WM build system.
 
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
   unset -f module
@@ -27,17 +28,10 @@ if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
   set -x
 else
   set +x
-  source "${DIR_ROOT}/sorc/machine-setup.sh"
-  if [[ "${target}" == "noaacloud" ]]; then
-    #TODO: This will need to be revisited once the EPIC supported-stacks come online.
-    #TODO: This is a hack due to how the spack-stack module files are generated; there may be a better way to do this.
-    source /contrib/global-workflow/spack-stack/envs/spack_2021.0.3.env
-  else
-    module use "${DIR_ROOT}/modulefiles"
-  fi
+  module use "${DIR_ROOT}/modulefiles"
   module load "build.$target.$compiler" > /dev/null
   module list
- set -x
+  set -x
 fi
 
 # Ensure the submodules have been initialized.
