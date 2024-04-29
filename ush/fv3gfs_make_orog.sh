@@ -4,7 +4,7 @@
 # Program Name: fv3gfs_make_orog
 #
 # Run the orography ('orog') program to create mask, terrain and
-# GWD files on the model tile.
+# GWD fields on the model tile.
 #
 # Author: GFDL Programmer
 #
@@ -16,17 +16,18 @@
 #  Arguments:
 #    res     - "C" Resolution of model grid - 48, 96, 768, etc.
 #    tile    - Tile number.
-#    griddir - location of model 'grid' file.
-#    outdir  - location of the model orography file output by
+#    griddir - Location of model 'grid' file.
+#    outdir  - Location of the model orography file output by
 #              the 'orog' program.
-#    indir   - location of input land mask and terrain data.
+#    indir   - Location of input land mask and terrain data.
 #
 #  Input Files:
-#    $OUTGRID - the model 'grid' file containing georeference info.
+#    $GRIDFILE                         - The model 'grid' file 
+#                                        containing georeference info.
 #    topography.antarctica.ramp.30s.nc - RAMP terrain data.
-#    landcover.umd.30s.nc - Global land mask data.
-#    topography.gmted2010.30s.nc - Global USGS GMTED 2010 terrain
-#                                  data.
+#    landcover.umd.30s.nc              - Global land mask data.
+#    topography.gmted2010.30s.nc       - Global USGS GMTED 2010
+#                                        terrain data.
 #
 #  Output Files:
 #    out.oro.nc - The model orography file (single tile).
@@ -50,8 +51,8 @@ if [ $nargv -eq 5 ]; then
   indir=$5
 else
   set +x
-  echo "FATAL ERROR: Number of arguments must be 5 for cubic sphere grid."
-  echo "Usage for cubic sphere grid: $0 resolution tile griddir outdir indir."
+  echo "FATAL ERROR: Number of arguments must be 5."
+  echo "Usage: $0 resolution tile griddir outdir indir."
   set -x
   exit 1
 fi
@@ -61,7 +62,7 @@ if [ ! -s $executable ]; then
   set +x
   echo "FATAL ERROR, ${executable} does not exist."
   set -x
-  exit 1 
+  exit 2 
 fi
 
 workdir=$TEMP_DIR/C${res}/orog/tile$tile
@@ -69,11 +70,11 @@ workdir=$TEMP_DIR/C${res}/orog/tile$tile
 if [ ! -s $workdir ]; then mkdir -p $workdir ;fi
 if [ ! -s $outdir ]; then mkdir -p $outdir ;fi
 
-OUTGRID="C${res}_grid.tile${tile}.nc"
+GRIDFILE="C${res}_grid.tile${tile}.nc"
 
 # Make Orograraphy
 set +x
-echo "OUTGRID = $OUTGRID"
+echo "GRIDFILE = $GRIDFILE"
 echo "workdir = $workdir"
 echo "outdir = $outdir"
 echo "indir = $indir"
@@ -84,13 +85,13 @@ cd $workdir
 ln -fs ${indir}/topography.antarctica.ramp.30s.nc .
 ln -fs ${indir}/landcover.umd.30s.nc .
 ln -fs ${indir}/topography.gmted2010.30s.nc .
-ln -fs ${griddir}/$OUTGRID .
+ln -fs ${griddir}/$GRIDFILE .
 ln -fs $executable .
 
 #-------------------------------------------------------------------
 # Set up program namelist. The entries are:
 #
-#  1 - OUTGRID - model 'grid' file.
+#  1 - GRIDFILE - model 'grid' file.
 #  2 - Logical to output land mask only. When creating a grid
 #      for the coupled model ("ocn" resolution is specified) 
 #      this is true. The mask is then tweaked during the
@@ -102,7 +103,7 @@ ln -fs $executable .
 #      to 'none' for this script.
 #-------------------------------------------------------------------
 
-echo $OUTGRID > INPS
+echo $GRIDFILE > INPS
 if [ -z ${ocn+x} ]; then
   echo ".false." >> INPS
 else
@@ -118,7 +119,7 @@ if [ $rc -ne 0 ]; then
   set +x
   echo "FATAL ERROR running $executable."
   set -x
-  exit 1
+  exit 3
 else
   outfile=oro.C${res}.tile${tile}.nc
   mv ./out.oro.nc $outdir/$outfile
@@ -128,5 +129,3 @@ else
   set -x
   exit 0
 fi
-
-exit
