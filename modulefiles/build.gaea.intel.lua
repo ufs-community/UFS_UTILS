@@ -2,6 +2,9 @@ help([[
 Load environment to compile UFS_UTILS on Gaea using Intel
 ]])
 
+prepend_path("MODULEPATH", "/sw/rdtn/modulefiles")
+load("hsi")
+
 prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2023.1.0"
@@ -58,9 +61,6 @@ load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.0.6"
 load(pathJoin("nco", nco_ver))
-
-prepend_path("MODULEPATH", "/sw/rdtn/modulefiles")
-load("hsi")
 
 whatis("Description: UFS_UTILS build environment")
 

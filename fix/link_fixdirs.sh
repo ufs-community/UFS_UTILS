@@ -17,7 +17,7 @@ machine=${2}
 if [ $# -lt 2 ]; then
     set +x
     echo '***ERROR*** must specify two arguements: (1) RUN_ENVIR, (2) machine'
-    echo ' Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 |  hera  | jet | orion | hercules | s4 )'
+    echo ' Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 |  hera  | jet | orion | hercules | s4 | gaea )'
     exit 1
 fi
 
@@ -31,7 +31,7 @@ fi
 if [ $machine != wcoss2 -a $machine != hera -a $machine != jet -a $machine != orion -a $machine != s4 -a $machine != hercules $machine != gaea ]; then
     set +x
     echo '***ERROR*** unsupported machine'
-    echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | hera | jet | orion | hercules | s4 )'
+    echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | hera | jet | orion | hercules | s4 | gaea )'
     exit 1
 fi
 
