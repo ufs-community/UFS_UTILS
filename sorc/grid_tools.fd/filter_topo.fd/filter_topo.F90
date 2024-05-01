@@ -9,6 +9,7 @@
 !! @author Zhi Liang (GFDL) who packaged it into a standalone application.
 program filter_topo
 
+  use omp_lib
   use utils
 
   implicit none
@@ -34,7 +35,7 @@ program filter_topo
   real:: peak_fac   ! overshoot factor for the mountain peak
   real:: max_slope  ! max allowable terrain slope: 1 --> 45 deg
 
-  integer :: n_del2_weak
+  integer :: n_del2_weak, tid, nthreads
 
   integer :: ntiles = 0
 
@@ -53,6 +54,15 @@ program filter_topo
   integer           :: is,ie,js,je,isd,ied,jsd,jed
   integer,parameter :: ng = 3
   integer           :: nx, ny, npx, npy, nx_nest, ny_nest, npx_nest, npy_nest, is_nest, ie_nest, js_nest, je_nest, isd_nest, ied_nest, jsd_nest, jed_nest
+
+!$OMP PARALLEL PRIVATE(TID)
+  tid = omp_get_thread_num()
+  if (tid == 0) then
+    nthreads = omp_get_num_threads()
+    print*,'Number of threads = ',nthreads
+  endif
+!$OMP END PARALLEL
+
   !--- read namelist
   tbeg=timef()
   call read_namelist()
