@@ -47,29 +47,66 @@ program filter_topo
   real, allocatable :: area(:,:,:)
   real, allocatable :: sin_sg(:,:,:,:)
 
+  real :: tbeg,  tbeg1, tbeg2, tbeg3, tbeg4, tbeg5
+  real :: tend,  tend1, tend2, tend3, tend4, tend5
+
   integer           :: is,ie,js,je,isd,ied,jsd,jed
   integer,parameter :: ng = 3
   integer           :: nx, ny, npx, npy, nx_nest, ny_nest, npx_nest, npy_nest, is_nest, ie_nest, js_nest, je_nest, isd_nest, ied_nest, jsd_nest, jed_nest
   !--- read namelist
+  tbeg=timef()
   call read_namelist()
 
   !--- compute filter constants according to grid resolution.
+  tbeg1=timef()
   call compute_filter_constants
+  tend1=timef()
+  print*,'timing compute_filter_constants ',tend1-tbeg1
 
   !--- read the target grid.
+  tbeg2=timef()
   call read_grid_file(regional)
+  tend2=timef()
+  print*,'timing read_grid_file ',tend2-tbeg2
 
   !--- read the topography data
+  tbeg3=timef()
   call read_topo_file(regional)
+  tend3=timef()
+  print*,'timing read_topo_file ',tend3-tbeg3
 
   !--- filter the data
+  tbeg4=timef()
   call FV3_zs_filter(is,ie,js,je,isd,ied,jsd,jed,npx,npy,npx,ntiles,grid_type, &
                      stretch_fac, nested, area, dxa, dya, dx, dy, dxc, dyc, sin_sg, oro, regional )
+  tend4=timef()
+  print*,'timing FV3_zs_filter ',tend4-tbeg4
 
   !--- write out the data
+  tbeg5=timef()
   call write_topo_file(is,ie,js,je,ntiles,oro(is:ie,js:je,:),regional )
+  tend5=timef()
+  print*,'timing write_topo_file ',tend5-tbeg5
+
+  tend=timef()
+  print*,'timing total ',tend-tbeg
 
 contains
+
+   real function timef()
+   character(8) :: date
+   character(10) :: time
+   character(5) :: zone
+   integer,dimension(8) :: values
+   integer :: total
+   real :: elapsed
+   call date_and_time(date,time,zone,values)
+   total=(3600*values(5))+(60*values(6))  &
+            +values(7)
+   elapsed=float(total) + (1.0e-3*float(values(8)))
+   timef=elapsed
+   return
+   end
 
   !> ???
   !!
