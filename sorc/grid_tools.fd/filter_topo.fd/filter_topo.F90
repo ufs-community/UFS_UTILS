@@ -898,6 +898,7 @@ contains
     allocate(dxa(isd:ied,jsd:jed,ntiles))
     allocate(dya(isd:ied,jsd:jed,ntiles))
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2,G3,G4)
        do j=js,je ; do i=is,ie
           g1(1) = geolon_c(i,j,t); g1(2) = geolat_c(i,j,t)
           g2(1) = geolon_c(i,j+1,t); g2(2) = geolat_c(i,j+1,t)
@@ -914,6 +915,7 @@ contains
           call mid_pt_sphere(g1, g2, g4)
           dya(i,j,t) = great_circle_dist( g4, g3, radius )
        enddo; enddo
+!$OMP END PARALLEL DO
     enddo
     tend=timef()
     print*,'timer section 5 ',tend-tbeg
