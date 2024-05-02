@@ -29,7 +29,7 @@ module list
 
 WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
 
-PROJECT_CODE="${PROJECT_CODE:-da-cpu}"
+PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------
