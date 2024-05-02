@@ -815,6 +815,7 @@ contains
 
     tbeg=timef()
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2,G3,G4,G5)
        do j=js,je ; do i=is,ie
           g1(1) = geolon_c(i,j,t);     g1(2) = geolat_c(i,j,t)
           g2(1) = geolon_c(i+1,j,t);   g2(2) = geolat_c(i+1,j,t)
@@ -824,6 +825,7 @@ contains
           geolon_t(i,j,t) = g5(1)
           geolat_t(i,j,t) = g5(2)
        enddo ; enddo
+!$OMP END PARALLEL DO
     enddo
     tend=timef()
     print*,'timer section 3 ',tend-tbeg
