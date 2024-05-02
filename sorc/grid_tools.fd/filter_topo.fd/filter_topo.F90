@@ -672,6 +672,7 @@ contains
     real, allocatable, dimension(:,:,:) :: geolon_c, geolat_c
     real, allocatable, dimension(:,:,:) :: geolon_t, geolat_t, cos_sg, grid3
     integer :: start(4), nread(4)
+    real :: tbeg, tend
 
     print*, "Read the grid from file "//trim(grid_file)
 
@@ -698,6 +699,7 @@ contains
     start(:) = 1
     nread(:) = 1
 
+    tbeg=timef()
     do t = 1, ntiles
        start(2) = t; nread(1) = 255
        status =  nf_inq_varid(ncid, 'gridfiles', id_var)
@@ -779,6 +781,8 @@ contains
        status = nf_close(ncid2)
        call handle_err(status, "close file "//trim(tile_file))      
     enddo
+    tend=timef()
+    print*,'timer section 1 ',tend-tbeg
 
     deallocate(tmpvar)
 
@@ -790,6 +794,7 @@ contains
     isd=is-ng; ied=ie+ng
     jsd=js-ng; jed=je+ng
 
+    tbeg=timef()
     if( .not. regional ) then
       call fill_cubic_grid_halo(geolon_c, geolon_c, ng, 1, 1, 1, 1)
       call fill_cubic_grid_halo(geolat_c, geolat_c, ng, 1, 1, 1, 1)    
@@ -799,6 +804,8 @@ contains
       call fill_regional_halo(geolon_c, ng)
       call fill_regional_halo(geolat_c, ng)
     endif
+    tend=timef()
+    print*,'timer section 2 ',tend-tbeg
 
     !--- compute grid cell center
     allocate(geolon_t(isd:ied,jsd:jed,ntiles), geolat_t(isd:ied,jsd:jed,ntiles))
@@ -806,6 +813,7 @@ contains
     geolon_t(:,:,:) = -1.e25
     geolat_t(:,:,:) = -1.e25
 
+    tbeg=timef()
     do t = 1, ntiles
        do j=js,je ; do i=is,ie
           g1(1) = geolon_c(i,j,t);     g1(2) = geolat_c(i,j,t)
@@ -817,6 +825,8 @@ contains
           geolat_t(i,j,t) = g5(2)
        enddo ; enddo
     enddo
+    tend=timef()
+    print*,'timer section 3 ',tend-tbeg
 
     
     if( .not. regional ) then
@@ -826,6 +836,7 @@ contains
       if (.not. nested) call fill_AGRID_scalar_corners(geolat_t, ng, npx, npy, isd, jsd, YDir)
     endif
 
+    tbeg=timef()
     !--- compute dx, dy
     allocate(dx(isd:ied,jsd:jed+1,ntiles))
     allocate(dy(isd:ied+1,jsd:jed,ntiles))
@@ -849,6 +860,8 @@ contains
           enddo
        enddo
     enddo
+    tend=timef()
+    print*,'timer section 4 ',tend-tbeg
 
     if( .not. regional ) then
       !--- make sure it is consitent between tiles. The following maybe not necessary.
@@ -874,6 +887,7 @@ contains
       if (.not. nested) call fill_dgrid_xy_corners(dx, dy, ng, npx, npy, isd, jsd)
     endif
 
+    tbeg=timef()
     !--- compute dxa and dya -----
     allocate(dxa(isd:ied,jsd:jed,ntiles))
     allocate(dya(isd:ied,jsd:jed,ntiles))
@@ -895,6 +909,8 @@ contains
           dya(i,j,t) = great_circle_dist( g4, g3, radius )
        enddo; enddo
     enddo
+    tend=timef()
+    print*,'timer section 5 ',tend-tbeg
 
     if( .not.regional ) then
       call fill_cubic_grid_halo(dxa, dya, ng, 0, 0, 1, 1)
@@ -903,6 +919,7 @@ contains
       if (.not. nested) call fill_AGRID_xy_corners(dxa, dya, ng, npx, npy, isd, jsd)
     endif
 
+    tbeg=timef()
     !--- compute dxc and dyc
     allocate(dxc(isd:ied+1,jsd:jed,ntiles))
     allocate(dyc(isd:ied,jsd:jed+1,ntiles))
@@ -929,7 +946,10 @@ contains
           dyc(i,jed+1,t) = dyc(i,jed,t)
        end do
     enddo
+    tend=timef()
+    print*,'timer section 6 ',tend-tbeg
 
+    tbeg=timef()
     !--- compute area
     allocate(area(isd:ied,jsd:jed,ntiles))
     do t = 1, ntiles
@@ -945,6 +965,8 @@ contains
           enddo
        enddo
     enddo
+    tend=timef()
+    print*,'timer section 7 ',tend-tbeg
 
     if( .not.regional ) then
       call fill_cubic_grid_halo(area, area, ng, 0, 0, 1, 1)
@@ -952,6 +974,7 @@ contains
 
     da_min = minval(area(is:ie,js:je,:))
 
+    tbeg=timef()
     !--- compute sin_sg
     allocate(sin_sg(4,isd:ied,jsd:jed,ntiles))
     allocate(cos_sg(4,isd:ied,jsd:jed))
@@ -995,6 +1018,8 @@ contains
           enddo
        enddo
     enddo
+    tend=timef()
+    print*,'timer section 8 ',tend-tbeg
 
     if( .not.regional ) then
       do ip=1,4
