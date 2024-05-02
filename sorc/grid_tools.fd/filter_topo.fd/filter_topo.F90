@@ -843,6 +843,7 @@ contains
     allocate(dx(isd:ied,jsd:jed+1,ntiles))
     allocate(dy(isd:ied+1,jsd:jed,ntiles))
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2)
        do j = js, je+1 ; do i = is, ie
           g1(1) = geolon_c(i  ,j,t)
           g1(2) = geolat_c(i  ,j,t)
@@ -850,8 +851,10 @@ contains
           g2(2) = geolat_c(i+1,j,t)
           dx(i,j,t) = great_circle_dist( g2, g1, radius )
        enddo ; enddo
+!$OMP END PARALLEL DO
     enddo
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2)
        do j = js, je
           do i = is, ie+1
              g1(1) = geolon_c(i,j,  t)
@@ -861,6 +864,7 @@ contains
              dy(i,j,t) = great_circle_dist( g2, g1, radius )
           enddo
        enddo
+!$OMP END PARALLEL DO
     enddo
     tend=timef()
     print*,'timer section 4 ',tend-tbeg
