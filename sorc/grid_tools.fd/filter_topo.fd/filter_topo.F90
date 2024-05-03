@@ -970,6 +970,7 @@ contains
     !--- compute area
     allocate(area(isd:ied,jsd:jed,ntiles))
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,p_lL,p_uL,p_lr,p_uR)
        do j=js,je
           do i=is,ie
              p_lL(1) = geolon_c(i  ,j  ,t) ; p_lL(2) = geolat_c(i  ,j  ,t)
@@ -981,6 +982,7 @@ contains
              area(i,j,t) = get_area(p_lL, p_uL, p_lR, p_uR, radius)
           enddo
        enddo
+!$OMP END PARALLEL DO
     enddo
     tend=timef()
     print*,'timer section 7 ',tend-tbeg
