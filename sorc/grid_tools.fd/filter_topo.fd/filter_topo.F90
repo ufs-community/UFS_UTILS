@@ -1007,6 +1007,8 @@ contains
     !     |       |
     !     6---2---7
     do t = 1, ntiles
+
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1)
        do j=js,je+1
           do i = is,ie+1
              g1(1) = geolon_c(i,j,t)
@@ -1014,6 +1016,9 @@ contains
              call latlon2xyz(g1, grid3(:,i,j))
           enddo
        enddo
+!$OMP END PARALLEL DO
+
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,P1,P3)
        do j=js,je
           do i=is,ie
              g1(1) = geolon_t(i,j,t); g1(2) = geolat_t(i,j,t)
@@ -1028,13 +1033,16 @@ contains
              cos_sg(4,i,j) = cos_angle( p1, grid3(1,i,j+1), p3 )
           enddo
        enddo
+!$OMP END PARALLEL DO
 
        do ip=1,4
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J)
           do j=js,je
              do i=is,ie
                 sin_sg(ip,i,j,t) = min(1.0, sqrt( max(0., 1.-cos_sg(ip,i,j)**2) ) )
              enddo
           enddo
+!$OMP END PARALLEL DO
        enddo
     enddo
     tend=timef()
