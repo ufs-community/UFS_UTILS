@@ -18,7 +18,8 @@ module init_mod
      real                 :: var_fillvalue     !< A variable's fillvalue
   end type vardefs
 
-  type(vardefs) :: outvars(maxvars)            !< An empty structure filled by reading a csv file describing the fields
+  type(vardefs) :: outvars(maxvars)            !< An empty structure filled by reading a csv file
+                                               !< describing the fields
 
   character(len=10)  :: ftype      !< The type of tripole grid (ocean or ice)
   character(len=10)  :: fsrc       !< A character string for tripole grid

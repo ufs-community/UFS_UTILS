@@ -43,19 +43,22 @@ contains
     if (allocated(b2d)) then
        do n = 1,nbilin2d
           vname = trim(b2d(n)%var_name)
-          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid/), varid), 'define variable: '// vname)
+          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid/), varid),        &
+               'define variable: '// vname)
        enddo
     end if
-    !if (allocated(c2d)) then
-    !   do n = 1,nconsd2d
-    !      vname = trim(c2d(n)%var_name)
-    !      call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid/), varid), 'define variable: '// vname)
-    !   enddo
-    !end if
+    if (allocated(c2d)) then
+      do n = 1,nconsd2d
+         vname = trim(c2d(n)%var_name)
+         call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid/), varid),         &
+              'define variable: '// vname)
+      enddo
+    end if
     if (allocated(b3d)) then
        do n = 1,nbilin3d
           vname = trim(b3d(n)%var_name)
-          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,kdimid/), varid), 'define variable: '// vname)
+          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,kdimid/), varid), &
+               'define variable: '// vname)
        enddo
     end if
 
@@ -119,7 +122,8 @@ contains
           vname = trim(b2d(n)%var_name)
           vunit = trim(b2d(n)%units)
           vlong = trim(b2d(n)%long_name)
-          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,timid/), varid), 'define variable: '// vname)
+          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,timid/), varid),           &
+               'define variable: '// vname)
           call nf90_err(nf90_put_att(ncid, varid,      'units', vunit), 'put variable attribute: units')
           call nf90_err(nf90_put_att(ncid, varid,  'long_name', vlong), 'put variable attribute: long_name')
        enddo
@@ -129,7 +133,8 @@ contains
           vname = trim(c2d(n)%var_name)
           vunit = trim(c2d(n)%units)
           vlong = trim(c2d(n)%long_name)
-          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,timid/), varid), 'define variable: '// vname)
+          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,timid/), varid),           &
+               'define variable: '// vname)
           call nf90_err(nf90_put_att(ncid, varid,      'units', vunit), 'put variable attribute: units' )
           call nf90_err(nf90_put_att(ncid, varid,  'long_name', vlong), 'put variable attribute: long_name' )
        enddo
@@ -141,9 +146,11 @@ contains
           vunit = trim(b3d(n)%units)
           vlong = trim(b3d(n)%long_name)
           if (vname .eq. 'eta') then
-             call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,edimid,timid/), varid), 'define variable: '// vname)
+             call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,edimid,timid/), varid), &
+                  'define variable: '// vname)
           else
-             call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,kdimid,timid/), varid), 'define variable: '// vname)
+             call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,kdimid,timid/), varid), &
+                  'define variable: '// vname)
           end if
           call nf90_err(nf90_put_att(ncid, varid,      'units', vunit), 'put variable attribute: units' )
           call nf90_err(nf90_put_att(ncid, varid,  'long_name', vlong), 'put variable attribute: long_name' )

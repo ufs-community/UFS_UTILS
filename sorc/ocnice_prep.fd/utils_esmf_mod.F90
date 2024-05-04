@@ -42,7 +42,8 @@ contains
   !----------------------------------------------------------
   subroutine createRH(srcmeshfile,dstmeshfile,rc)
 
-    character(len=*), intent(in)  :: srcmeshfile, dstmeshfile
+    character(len=*), intent(in)  :: srcmeshfile
+    character(len=*), intent(in)  :: dstmeshfile
     integer,          intent(out) :: rc
 
     ! local variables
@@ -98,7 +99,8 @@ contains
     if (chkerr(rc,__LINE__,u_FILE_u)) return
 
     if (debug) then
-       call dumpnc(trim(ftype)//'.'//trim(fdst)//'.dststat.nc', 'dststat', dims=(/nxr,nyr/), field=real(dststatus,8))
+       call dumpnc(trim(ftype)//'.'//trim(fdst)//'.dststat.nc', 'dststat',        &
+            dims=(/nxr,nyr/), field=real(dststatus,8))
     end if
 
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
