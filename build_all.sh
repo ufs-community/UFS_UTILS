@@ -44,6 +44,7 @@ fi
 
 # Collect BUILD Options
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Release}"
+CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
 
 # Install options; destination for built executables, libraries, CMake Package config
 CMAKE_FLAGS+=" -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX:-${DIR_ROOT}} -DCMAKE_INSTALL_BINDIR=${INSTALL_BINDIR:-exec}"

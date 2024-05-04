@@ -16,3 +16,4 @@ fix/sfc_climo
 
 *.swp
 *.o
+*.nc
