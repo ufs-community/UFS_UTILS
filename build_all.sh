@@ -43,7 +43,7 @@ if [[ ! -d "${DIR_ROOT}/ccpp-physics/physics" ]]; then
 fi
 
 # Collect BUILD Options
-CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Release}"
+#CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Release}"
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
 
 # Install options; destination for built executables, libraries, CMake Package config

@@ -471,7 +471,8 @@ contains
     call nf90_err(nf90_def_dim(ncid, 'nx', dims(1), idimid), 'define dimension: nx')
     call nf90_err(nf90_def_dim(ncid, 'ny', dims(2), jdimid), 'define dimension: ny')
     call nf90_err(nf90_def_dim(ncid, 'nf', nflds,   fdimid), 'define dimension: nf')
-    call nf90_err(nf90_def_var(ncid, vname, nf90_float, (/idimid,jdimid,fdimid/), varid), 'define variable: '//vname)
+    call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,fdimid/), varid), &
+         'define variable: '//vname)
     call nf90_err(nf90_enddef(ncid), 'nf90_enddef: '//fname)
 
     do n = 1,nflds
@@ -506,7 +507,8 @@ contains
     call nf90_err(nf90_def_dim(ncid, 'ny', dims(2), jdimid), 'define dimension: ny')
     call nf90_err(nf90_def_dim(ncid, 'nk', dims(3), kdimid), 'define dimension: nk')
     call nf90_err(nf90_def_dim(ncid, 'nf', nflds,   fdimid), 'define dimension: nf')
-    call nf90_err(nf90_def_var(ncid, vname, nf90_float, (/idimid,jdimid,kdimid,fdimid/), varid), 'define variable: '//vname)
+    call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,kdimid,fdimid/), varid), &
+         'define variable: '//vname)
     call nf90_err(nf90_enddef(ncid), 'nf90_enddef: '//fname)
 
     do n = 1,nflds
@@ -541,7 +543,8 @@ contains
     call nf90_err(nf90_def_dim(ncid, 'nx', dims(1), idimid), 'define dimension: nx')
     call nf90_err(nf90_def_dim(ncid, 'ny', dims(2), jdimid), 'define dimension: ny')
     call nf90_err(nf90_def_dim(ncid, 'nk', dims(3), kdimid), 'define dimension: nk')
-    call nf90_err(nf90_def_var(ncid, vname, nf90_float, (/idimid,jdimid,kdimid/), varid), 'define variable: '//vname)
+    call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid,kdimid/), varid), &
+         'define variable: '//vname)
     call nf90_err(nf90_enddef(ncid), 'nf90_enddef: '//fname)
 
     do k = 1,dims(3)
@@ -574,7 +577,8 @@ contains
     call nf90_err(nf90_create(trim(fname), nf90_clobber, ncid), 'nf90_create: '//fname)
     call nf90_err(nf90_def_dim(ncid, 'nx', dims(1), idimid), 'define dimension: nx')
     call nf90_err(nf90_def_dim(ncid, 'ny', dims(2), jdimid), 'define dimension: ny')
-    call nf90_err(nf90_def_var(ncid, vname, nf90_float, (/idimid,jdimid/), varid), 'define variable: '//vname)
+    call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid/), varid), &
+         'define variable: '//vname)
     call nf90_err(nf90_enddef(ncid), 'nf90_enddef: '//fname)
 
     a2d(:,:) =  reshape(field(1:dims(1)*dims(2)), (/dims(1),dims(2)/))

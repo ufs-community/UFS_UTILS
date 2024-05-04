@@ -15,7 +15,6 @@ module init_mod
      character(len=  4)   :: var_grid          !< A variable's input grid location
      character(len= 20)   :: var_pair          !< A variable's pair
      character(len=  4)   :: var_pair_grid     !< A pair variable grid
-     real                 :: var_fillvalue     !< A variable's fillvalue
   end type vardefs
 
   type(vardefs) :: outvars(maxvars)            !< An empty structure filled by reading a csv file
@@ -43,7 +42,6 @@ module init_mod
   logical :: debug      !< If true, print debug messages and intermediate files
   logical :: do_ocnprep !< If true, the source file is ocean, otherwise ice
 
-  real(kind=8), parameter :: hmin = 1.0e-3   !< minimum layer thickness for the ocean
 contains
 
   subroutine readnml

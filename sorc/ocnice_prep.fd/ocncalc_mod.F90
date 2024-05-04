@@ -1,10 +1,10 @@
 module ocncalc_mod
 
   use netcdf
-  use init_mod ,  only : nlevs, nxr, nyr, hmin
+  use init_mod ,  only : nlevs, nxr, nyr
   use init_mod,   only : debug, logunit
 
-  use arrays_mod, only : maskspval, b3d, nbilin3d, rgb3d, eta
+  use arrays_mod, only : hmin, maskspval, b3d, nbilin3d, rgb3d, eta
   use utils_mod,  only : getfield
 
   implicit none

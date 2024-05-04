@@ -4,10 +4,10 @@ program ocniceprep
   use netcdf
   use init_mod   ,     only : nxt, nyt, nlevs, nxr, nyr, outvars, readnml, readcsv
   use init_mod   ,     only : wgtsdir, griddir, ftype, fsrc, fdst, input_file, angvar, maskvar
-  use init_mod   ,     only : hmin, do_ocnprep, debug, logunit
+  use init_mod   ,     only : do_ocnprep, debug, logunit
   use arrays_mod ,     only : b2d, c2d, b3d, rgb2d, rgb3d, rgc2d, setup_packing
   use arrays_mod ,     only : nbilin2d, nbilin3d, nconsd2d, bilin2d, bilin3d, consd2d
-  use arrays_mod ,     only : mask3d, rgmask3d, maskspval, eta
+  use arrays_mod ,     only : mask3d, hmin, maskspval, eta
   use utils_mod  ,     only : getfield, packarrays, remap, dumpnc, nf90_err
   use utils_esmf_mod , only : createRH, remapRH, ChkErr, rotremap
   use restarts_mod ,   only : setup_icerestart, setup_ocnrestart
@@ -105,19 +105,17 @@ program ocniceprep
   ! variable
   ! --------------------------------------------------------
 
-  call nf90_err(nf90_open(trim(input_file), nf90_nowrite, ncid),                     &
+  call nf90_err(nf90_open(trim(input_file), nf90_nowrite, ncid),   &
        'open: '//trim(input_file))
   if (do_ocnprep) then
-     call nf90_err(nf90_inq_dimid(ncid, 'Layer', varid),                             &
+     call nf90_err(nf90_inq_dimid(ncid, 'Layer', varid),           &
           'get dimension Id: Layer'//trim(input_file))
-     call nf90_err(nf90_inquire_dimension(ncid, varid, len=nlevs),                   &
+     call nf90_err(nf90_inquire_dimension(ncid, varid, len=nlevs), &
           'get dimension Id: Layer'//trim(input_file))
-     allocate(mask3d(nlevs,nxt*nyt)); mask3d = 0.0
-     call getfield(trim(input_file), 'h', dims=(/nxt,nyt,nlevs/), field=mask3d)
   else
-     call nf90_err(nf90_inq_dimid(ncid, 'ncat', varid),                              &
+     call nf90_err(nf90_inq_dimid(ncid, 'ncat', varid),            &
           'get dimension Id: ncat'//trim(input_file))
-     call nf90_err(nf90_inquire_dimension(ncid, varid, len=nlevs),                   &
+     call nf90_err(nf90_inquire_dimension(ncid, varid, len=nlevs), &
           'get dimension Id: ncat'//trim(input_file))
   endif
   do n = 1,nvalid
@@ -151,25 +149,26 @@ program ocniceprep
      allocate(eta(nlevs,nxt*nyt)); eta=0.0
      call calc_eta(trim(input_file),(/nxt,nyt,nlevs/),bathysrc)
 
+     allocate(mask3d(nlevs,nxt*nyt)); mask3d = 0.0
+     call getfield(trim(input_file), 'h', dims=(/nxt,nyt,nlevs/), field=mask3d)
+     print *,'X0 ',minval(mask3d)
+     !mask3d = max(mask3d,hmin)
+     !print *,'X1 ',minval(mask3d)
+
      where(mask3d .le. hmin)mask3d = maskspval
      where(mask3d .ne. maskspval)mask3d = 1.0
-     allocate(rgmask3d(nlevs,nxr*nyr)); rgmask3d = 0.0
 
-     do n = 1,nlevs
-        call remapRH(n,src_field=mask3d(n,:),dst_field=rgmask3d(n,:),rc=rc)
+     do k =1,nlevs
+	print *,k,minval(mask3d(k,:)),maxval(mask3d(k,:)),mask3d(k,507854)
      end do
-     where(rgmask3d .gt. 1.0 .or. rgmask3d .eq. 0.0)rgmask3d = maskspval
-
      if (debug) then
         call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.eta.nc', 'eta',           &
              dims=(/nxt,nyt,nlevs/), field=eta)
         call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.mask3d.nc', 'mask3d',     &
              dims=(/nxt,nyt,nlevs/), field=mask3d)
-        call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgmask3d.nc', 'rgmask3d', &
-             dims=(/nxr,nyr,nlevs/), field=rgmask3d)
      end if
   end if
-
+!#ifdef test
   ! --------------------------------------------------------
   ! create packed arrays for mapping and remap packed arrays
   ! to the destination grid
@@ -234,13 +233,16 @@ program ocniceprep
      rgb3d = 0.0
      do k = 1,nlevs
         if (do_ocnprep) then
-           call remapRH(n,src_field=bilin3d(:,k,:), dst_field=rgb3d(:,k,:), hmask=mask3d(k,:),rc=rc)
+           call remapRH(k,src_field=bilin3d(:,k,:), dst_field=rgb3d(:,k,:), hmask=mask3d(k,:),rc=rc)
            if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
         else
            call remapRH(src_field=bilin3d(:,k,:), dst_field=rgb3d(:,k,:),rc=rc)
            if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
         end if
      end do
+     if (do_ocnprep) then
+        call vfill()
+     end if
 
      if (debug) then
         write(logunit,'(a)')'remap 3D fields bilinear with RH'
@@ -257,9 +259,6 @@ program ocniceprep
         call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgbilin3d.nc', 'rgbilin3d',                   &
              dims=(/nxr,nyr,nlevs/), nk=nlevs, nflds=nbilin3d, field=rgb3d)
      end if
-  end if
-  if (do_ocnprep) then
-     call vfill()
   end if
 
   !--------------------------------------------------------
@@ -340,5 +339,5 @@ program ocniceprep
   call nf90_err(nf90_close(ncid), 'close: '// trim(fout))
   write(logunit,'(a)')trim(fout)//' done'
   stop
-
+!#endif
 end program ocniceprep
