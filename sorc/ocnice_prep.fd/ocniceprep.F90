@@ -120,7 +120,7 @@ program ocniceprep
   endif
   do n = 1,nvalid
      if (debug) then
-        write(logunit,'(i4,a12,i4,a10,3(a6),a2)')n,trim(outvars(n)%var_name)//       &
+        write(logunit,'(i4,a12,i4,a10,3(a6),a2)')n,'  '//trim(outvars(n)%var_name)// &
              ', ', outvars(n)%var_dimen,', '//trim(outvars(n)%var_remapmethod),      &
              ', '//trim(outvars(n)%var_grid), ', '//trim(outvars(n)%var_pair),       &
              ', '//trim(outvars(n)%var_pair_grid)
@@ -150,17 +150,12 @@ program ocniceprep
      call calc_eta(trim(input_file),(/nxt,nyt,nlevs/),bathysrc)
 
      allocate(mask3d(nlevs,nxt*nyt)); mask3d = 0.0
-     call getfield(trim(input_file), 'h', dims=(/nxt,nyt,nlevs/), field=mask3d)
-     print *,'X0 ',minval(mask3d)
-     !mask3d = max(mask3d,hmin)
-     !print *,'X1 ',minval(mask3d)
+     call getfield(trim(input_file), trim(maskvar), dims=(/nxt,nyt,nlevs/), field=mask3d)
+     where(mask3d .le. real(hmin,4))mask3d = hmin
 
      where(mask3d .le. hmin)mask3d = maskspval
      where(mask3d .ne. maskspval)mask3d = 1.0
 
-     do k =1,nlevs
-	print *,k,minval(mask3d(k,:)),maxval(mask3d(k,:)),mask3d(k,507854)
-     end do
      if (debug) then
         call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.eta.nc', 'eta',           &
              dims=(/nxt,nyt,nlevs/), field=eta)
@@ -168,7 +163,7 @@ program ocniceprep
              dims=(/nxt,nyt,nlevs/), field=mask3d)
      end if
   end if
-!#ifdef test
+
   ! --------------------------------------------------------
   ! create packed arrays for mapping and remap packed arrays
   ! to the destination grid
@@ -339,5 +334,5 @@ program ocniceprep
   call nf90_err(nf90_close(ncid), 'close: '// trim(fout))
   write(logunit,'(a)')trim(fout)//' done'
   stop
-!#endif
+
 end program ocniceprep
