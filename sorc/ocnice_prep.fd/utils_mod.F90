@@ -1,3 +1,9 @@
+!> @file
+!! @brief Define utility procedures
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module defines a set of utility procedures
+!! @author Denise.Worthen@noaa.gov
 module utils_mod
 
   use netcdf
@@ -43,9 +49,18 @@ module utils_mod
   public nf90_err
 
 contains
-  !----------------------------------------------------------
-  ! pack 2D fields into arrays by mapping type
-  !----------------------------------------------------------
+  !> Pack 2D fields into arrays by mapping type
+  !!
+  !! @param[in]  filesrc  the file containing the fields to retrieve
+  !! @param[in]  wgtsdir  the path to the required ESMF regridding weights
+  !! @param[in]  cosrot   the cosine of the rotation angle
+  !! @param[in]  sinrot   the sine of the rotation angle
+  !! @param[in]  vars     the typedefs for this packed array
+  !! @param[in]  dims     the dimensions of the fields in the packed array
+  !! @param[in]  nflds    the number of fields in the packed array
+  !! @param[out] fields   the packed array
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine packarrays2d(filesrc, wgtsdir, cosrot, sinrot, vars, dims, nflds, fields)
 
     character(len=*), intent(in)  :: filesrc,wgtsdir
@@ -57,12 +72,13 @@ contains
 
     ! local variables
     integer                   :: n, nn
-    real(kind=8), allocatable, dimension(:,:) :: vecpair
+    real(kind=8), allocatable :: vecpair(:,:)
     character(len=20)         :: subname = 'packarrays2d'
-
-    fields=0.0
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
+
+    fields=0.0
     ! obtain vector pairs
     do n = 1,nflds
        if (trim(vars(n)%var_grid) == 'Cu' .or. trim(vars(n)%var_grid) == 'Bu_x') then
@@ -95,9 +111,18 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine packarrays2d
 
-  !----------------------------------------------------------
-  ! pack 3D fields into arrays by mapping type
-  !----------------------------------------------------------
+  !> Pack 3D fields into arrays by mapping type
+  !!
+  !! @param[in]  filesrc  the file containing the fields to retrieve
+  !! @param[in]  wgtsdir  the path to the required ESMF regridding weights
+  !! @param[in]  cosrot   the cosine of the rotation angle
+  !! @param[in]  sinrot   the sine of the rotation angle
+  !! @param[in]  vars     the typedefs for this packed array
+  !! @param[in]  dims     the dimensions of the fields in the packed array
+  !! @param[in]  nflds    the number of fields in the packed array
+  !! @param[out] fields   the packed array
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine packarrays3d(filesrc, wgtsdir, cosrot, sinrot, vars, dims, nflds, fields)
 
     character(len=*), intent(in)  :: filesrc,wgtsdir
@@ -111,10 +136,11 @@ contains
     integer                   :: n, nn
     real(kind=8), allocatable, dimension(:,:,:) :: vecpair
     character(len=20)         :: subname = 'packarrays3d'
-
-    fields=0.0
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
+
+    fields=0.0
     ! obtain vector pairs
     do n = 1,nflds
        if (trim(vars(n)%var_grid) == 'Cu') then
@@ -126,7 +152,6 @@ contains
        end if
     end do
 
-    !nbilin3d,nlevs,nxt*nyt
     ! create packed array
     nn = 0
     do n = 1,nflds
@@ -148,11 +173,21 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine packarrays3d
 
-  !----------------------------------------------------------
-  ! obtain 2D vector pairs mapped to Ct and rotated to EW
-  !----------------------------------------------------------
-  subroutine getvecpair2d(fname, wdir, cosrot, sinrot, vname1, vgrid1, &
-       vname2, vgrid2, dims, vecpair)
+  !> Obtain 2D vector pairs mapped to Ct and rotated to EN
+  !!
+  !! @param[in]  filesrc  the file containing the fields to retrieve
+  !! @param[in]  wgtsdir  the path to the required ESMF regridding weights
+  !! @param[in]  cosrot   the cosine of the rotation angle
+  !! @param[in]  sinrot   the sine of the rotation angle
+  !! @param[in]  vname1   the variable name of the first vector
+  !! @param[in]  vgrid1   the grid location of the first vector
+  !! @param[in]  vname1   the variable name of the second vector
+  !! @param[in]  vgrid1   the grid location of the second vector
+  !! @param[in]  dims     the dimensions of the fields
+  !! @param[out] fields   the vector pair array
+  !!
+  !! @author Denise.Worthen@noaa.gov
+  subroutine getvecpair2d(fname, wdir, cosrot, sinrot, vname1, vgrid1, vname2, vgrid2, dims, vecpair)
 
     character(len=*), intent(in)  :: fname
     character(len=*), intent(in)  :: wdir
@@ -166,6 +201,7 @@ contains
     real(kind=8), dimension(dims(1)*dims(2)) :: urot, vrot
     character(len=240) :: wgtsfile
     character(len=20) :: subname = 'getvecpair2d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
 
@@ -187,11 +223,21 @@ contains
     if (debug) write(logunit,'(a)')'exit '//trim(subname)
   end subroutine getvecpair2d
 
-  !----------------------------------------------------------
-  ! obtain 3D vector pairs, mapped to Ct and rotated to EW
-  !----------------------------------------------------------
-  subroutine getvecpair3d(fname, wdir, cosrot, sinrot, vname1, vgrid1, &
-       vname2, vgrid2, dims, vecpair)
+  !> Obtain 3D vector pairs mapped to Ct and rotated to EN
+  !!
+  !! @param[in]  filesrc  the file containing the fields to retrieve
+  !! @param[in]  wgtsdir  the path to the required ESMF regridding weights
+  !! @param[in]  cosrot   the cosine of the rotation angle
+  !! @param[in]  sinrot   the sine of the rotation angle
+  !! @param[in]  vname1   the variable name of the first vector
+  !! @param[in]  vgrid1   the grid location of the first vector
+  !! @param[in]  vname1   the variable name of the second vector
+  !! @param[in]  vgrid1   the grid location of the second vector
+  !! @param[in]  dims     the dimensions of the fields
+  !! @param[out] fields   the vector pair array
+  !!
+  !! @author Denise.Worthen@noaa.gov
+  subroutine getvecpair3d(fname, wdir, cosrot, sinrot, vname1, vgrid1, vname2, vgrid2, dims, vecpair)
 
     character(len=*), intent(in)  :: fname
     character(len=*), intent(in)  :: wdir
@@ -205,6 +251,7 @@ contains
     real(kind=8), dimension(dims(1)*dims(2)) :: urot, vrot
     character(len=240) :: wgtsfile
     character(len=20)  :: subname = 'getvecpair3d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
 
@@ -212,7 +259,7 @@ contains
     call getfield(fname, vname1, dims=dims, field=vecpair(:,:,1), wgts=trim(wgtsfile))
     wgtsfile = trim(wdir)//'tripole.'//trim(fsrc)//'.'//vgrid2//'.to.Ct.bilinear.nc'
     call getfield(fname, vname2, dims=dims, field=vecpair(:,:,2), wgts=trim(wgtsfile))
-    !nbilin3d,nlevs,nxt*nyt
+
     do k = 1,dims(3)
        urot = 0.0; vrot = 0.0
        do ii = 1,dims(1)*dims(2)
@@ -226,9 +273,15 @@ contains
     if (debug) write(logunit,'(a)')'exit '//trim(subname)
   end subroutine getvecpair3d
 
-  !----------------------------------------------------------
-  ! obtain a 2D field and return a 1-D vector array
-  !----------------------------------------------------------
+  !> Obtain a 2D field and return a 1-D vector array
+  !!
+  !! @param[in]  fname    the file containing the fields to retrieve
+  !! @param[in]  vname    the variable to retrieve
+  !! @param[in]  dims     the dimensions of the fields
+  !! @param[out] field    the field
+  !! @param[in]  wgts     the optional ESMF regridding weights
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine getfield2d(fname, vname, dims, field, wgts)
 
     character(len=*),           intent(in)  :: fname, vname
@@ -241,6 +294,7 @@ contains
     real(kind=8), allocatable :: a2d(:,:)
     real(kind=8), allocatable :: atmp(:)
     character(len=20)         :: subname = 'getfield2d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
 
@@ -262,9 +316,15 @@ contains
     if (debug) write(logunit,'(a)')'exit '//trim(subname)//' variable '//vname
   end subroutine getfield2d
 
-  !----------------------------------------------------------
-  ! obtain a 3D field and return a 2-D vector array
-  !----------------------------------------------------------
+  !> Obtain a 3D field and return a 2-D vector array
+  !!
+  !! @param[in]  fname    the file containing the fields to retrieve
+  !! @param[in]  vname    the variable to retrieve
+  !! @param[in]  dims     the dimensions of the fields
+  !! @param[out] field    the field
+  !! @param[in]  wgts     the optional ESMF regridding weights
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine getfield3d(fname, vname, dims, field, wgts)
 
     character(len=*),           intent(in)  :: fname, vname
@@ -277,6 +337,7 @@ contains
     real(kind=8), allocatable :: a3d(:,:,:)
     real(kind=8), allocatable :: atmp(:,:)
     character(len=20)         :: subname = 'getfield3d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
 
@@ -300,9 +361,13 @@ contains
     if (debug) write(logunit,'(a)')'exit '//trim(subname)//' variable '//vname
   end subroutine getfield3d
 
-  !----------------------------------------------------------
-  ! remap a 1-D vector array
-  !----------------------------------------------------------
+  !> Remap a 1-D vector array from source to destination
+  !!
+  !! @param[in]  fname       the file containing ESMF regridding weights
+  !! @param[in]  src_field   the source field
+  !! @param[out] dst_field   the destination field
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine remap1d(fname, src_field, dst_field)
 
     character(len=*), intent(in)  :: fname
@@ -316,6 +381,7 @@ contains
     integer(kind=4), allocatable, dimension(:) :: col, row
     real(kind=8),    allocatable, dimension(:) :: S
     character(len=20) :: subname = 'remap1d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
 
@@ -349,9 +415,14 @@ contains
     if (debug) write(logunit,'(a)')'exit '//trim(subname)
   end subroutine remap1d
 
-  !----------------------------------------------------------
-  ! remap a packed field of either nflds or nlevs
-  !----------------------------------------------------------
+  !> Remap a 2-D vector array of nflds or nlevs from source to destination
+  !!
+  !! @param[in]  fname       the file containing ESMF regridding weights
+  !! @param[in]  dim2        the number of fields or levels
+  !! @param[in]  src_field   the source field
+  !! @param[out] dst_field   the destination field
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine remap2d(fname, dim2, src_field, dst_field)
 
     character(len=*), intent(in)  :: fname
@@ -366,6 +437,7 @@ contains
     integer(kind=4), allocatable, dimension(:) :: col, row
     real(kind=8),    allocatable, dimension(:) :: S
     character(len=20) :: subname = 'remap2d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' weights = '//trim(fname)
 
@@ -399,9 +471,15 @@ contains
     if (debug) write(logunit,'(a)')'exit '//trim(subname)
   end subroutine remap2d
 
-  !----------------------------------------------------------
-  ! remap a field packed array of nk levels and nflds fields
-  !----------------------------------------------------------
+  !> Remap a field packed array of nk levels and nflds fields
+  !!
+  !! @param[in]  fname       the file containing ESMF regridding weights
+  !! @param[in]  nk          the number of levels
+  !! @param[in]  nflds       the number of fields
+  !! @param[in]  src_field   the source field
+  !! @param[out] dst_field   the destination field
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine remap3d(fname, nk, nflds, src_field, dst_field)
 
     character(len=*), intent(in)  :: fname
@@ -416,6 +494,7 @@ contains
     integer(kind=4), allocatable, dimension(:) :: col, row
     real(kind=8),    allocatable, dimension(:) :: S
     character(len=20) :: subname = 'remap3d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' weights = '//trim(fname)
 
@@ -449,9 +528,15 @@ contains
     if (debug) write(logunit,'(a)')'exit '//trim(subname)
   end subroutine remap3d
 
-  !----------------------------------------------------------
-  ! write a bare netcdf file of a 2D packed field
-  !----------------------------------------------------------
+  !>  Write a bare netcdf file of a 2D packed field
+  !!
+  !! @param[in]  fname       the file containing ESMF regridding weights
+  !! @param[in]  vname       the name of the variable
+  !! @param[in]  dim         the variable spatial dimensions
+  !! @param[in]  nflds       the number of fields
+  !! @param[in]  field       the field to write
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine dumpnc2d(fname, vname, dims, nflds, field)
 
     character(len=*), intent(in) :: fname, vname
@@ -463,6 +548,7 @@ contains
     integer                   :: n, ncid, varid, rc, idimid, jdimid, fdimid
     real(kind=8), allocatable :: a3d(:,:,:)
     character(len=20)         :: subname = 'dumpnc2d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
     allocate(a3d(dims(1),dims(2),nflds)); a3d = 0.0
@@ -484,9 +570,16 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)//' variable '//vname
   end subroutine dumpnc2d
 
-  !----------------------------------------------------------
-  ! write a bare netcdf file of a packed 3D field
-  !----------------------------------------------------------
+  !> Write a bare netcdf file of a packed 3D field
+  !!
+  !! @param[in]  fname       the file containing ESMF regridding weights
+  !! @param[in]  vname       the name of the variable
+  !! @param[in]  dims        the variable spatial dimensions
+  !! @param[in]  nk          the number of levels
+  !! @param[in]  nflds       the number of fields
+  !! @param[in]  field       the field to write
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine dumpnc3d(fname, vname, dims, nk, nflds, field)
 
     character(len=*), intent(in) :: fname, vname
@@ -498,6 +591,7 @@ contains
     integer :: n, k, ncid, varid, rc, idimid, jdimid, kdimid, fdimid
     real(kind=8), allocatable :: a4d(:,:,:,:)
     character(len=20) :: subname = 'dumpnc3d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
     allocate(a4d(dims(1),dims(2),dims(3),nflds)); a4d = 0.0
@@ -522,9 +616,14 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)//' variable '//vname
   end subroutine dumpnc3d
 
-  !----------------------------------------------------------
-  ! write a bare netcdf file of an unpacked 3D field
-  !----------------------------------------------------------
+  !> Write a bare netcdf file of an unpacked 3D field
+  !!
+  !! @param[in]  fname       the file containing ESMF regridding weights
+  !! @param[in]  vname       the name of the variable
+  !! @param[in]  dims        the variable spatial dimensions
+  !! @param[in]  field       the field to write
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine dumpnc3dk(fname, vname, dims, field)
 
     character(len=*), intent(in) :: fname, vname
@@ -535,6 +634,7 @@ contains
     integer                   :: k, ncid, varid, rc, idimid, jdimid, kdimid
     real(kind=8), allocatable :: a3d(:,:,:)
     character(len=20)         :: subname = 'dumpnc3dk'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
     allocate(a3d(dims(1),dims(2),dims(3))); a3d = 0.0
@@ -557,9 +657,14 @@ contains
 
   end subroutine dumpnc3dk
 
-  !----------------------------------------------------------
-  ! write a bare netcdf file of an unpacked 2D field
-  !----------------------------------------------------------
+  !> Write a bare netcdf file of a unpacked 2D field
+  !!
+  !! @param[in]  fname       the file containing ESMF regridding weights
+  !! @param[in]  vname       the name of the variable
+  !! @param[in]  dims        the variable spatial dimensions
+  !! @param[in]  field       the field to write
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine dumpnc1d(fname, vname, dims, field)
 
     character(len=*), intent(in) :: fname, vname
@@ -570,6 +675,7 @@ contains
     integer                   :: ncid, varid, rc, idimid, jdimid
     real(kind=8), allocatable :: a2d(:,:)
     character(len=20)         :: subname = 'dumpnc1d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
     allocate(a2d(dims(1),dims(2))); a2d = 0.0
@@ -589,13 +695,18 @@ contains
 
   end subroutine dumpnc1d
 
-  !----------------------------------------------------------
-  ! handle netcdf errors
-  !----------------------------------------------------------
+  !> Handle netcdf errors
+  !!
+  !! @param[in]  ierr        the error code
+  !! @param[in]  string      the error message
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine nf90_err(ierr, string)
 
     integer ,         intent(in) :: ierr
     character(len=*), intent(in) :: string
+    !----------------------------------------------------------------------------
+
     if (ierr /= nf90_noerr) then
       write(0, '(a)') 'FATAL ERROR: ' // trim(string)// ' : ' // trim(nf90_strerror(ierr))
       ! This fails on WCOSS2 with Intel 19 compiler. See

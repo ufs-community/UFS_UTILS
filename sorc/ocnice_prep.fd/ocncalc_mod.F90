@@ -1,3 +1,9 @@
+!> @file
+!! @brief Perform calculations needed when using an ocean file
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module calculates quantities needed only in the ocean case
+!! @author Denise.Worthen@noaa.gov
 module ocncalc_mod
 
   use netcdf
@@ -15,25 +21,28 @@ module ocncalc_mod
   public vfill
 
 contains
-  !TODO: doc variables
-
-  !----------------------------------------------------------
-  ! calculate interface heights locally
-  !----------------------------------------------------------
+  !> Calculate interface heights locally
+  !!
+  !! @param[in]  fname  the file name containing needed varables
+  !! @param[in]  dims   the dimensions of the source domain
+  !! @param[in]  bathy  the bathymetry on the source domain
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine calc_eta(fname,dims,bathy)
 
     character(len=*), intent(in)  :: fname
     integer,          intent(in)  :: dims(:)
     real(kind=8),     intent(in)  :: bathy(:)
 
+    ! local variables
     integer      :: i,k
     real(kind=8) :: denom
     real(kind=8), allocatable, dimension(:)   :: ssh,dilate
     real(kind=8), allocatable, dimension(:,:) :: h
     real(kind=8), allocatable, dimension(:,:) :: etmp
-
     character(len=10) :: vname
     character(len=20) :: subname = 'calc_eta'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
 
@@ -67,14 +76,16 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine calc_eta
 
-  !----------------------------------------------------------
-  ! fill water column vertically on the destination grid
-  !----------------------------------------------------------
+  !>  Fill water column vertically on the destination grid
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine vfill()
 
+    ! local variables
     integer :: n,i,k
     integer :: idx1, klast
     character(len=20) :: subname = 'vfill'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
 
@@ -101,5 +112,4 @@ contains
 
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine vfill
-
 end module ocncalc_mod

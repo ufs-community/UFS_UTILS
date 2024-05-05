@@ -1,3 +1,12 @@
+!> @file
+!! @brief Generate warmstart files for ocean or ice by mapping a restart file from 1/4deg to
+!! a desired tripole resolution
+!!
+!! @author Denise.Worthen@noaa.gov
+!!
+!> Blah blah
+!! @author Denise.Worthen@noaa.gov
+!! @return 0 for success, error code otherwise.
 program ocniceprep
 
   use ESMF
@@ -15,53 +24,50 @@ program ocniceprep
 
   implicit none
 
-  type(ESMF_VM)      :: vm
-  character(len=160) :: gridfile
-  character(len=160) :: wgtsfile
-  character(len=160) :: fout
+  type(ESMF_VM)      :: vm       !< an ESMF VM object
+  character(len=160) :: gridfile !< a file containing the grid variables for a given resolution
+  character(len=160) :: wgtsfile !< a file containing the ESMF regridding weights
+  character(len=160) :: fout     !< an output file name
 
-  real(kind=8), allocatable, dimension(:) :: angsrc         !< the rotation angle at the Ct points for the src grid
-  real(kind=8), allocatable, dimension(:) :: angdst         !< the rotation angle at the Ct points for the dst grid
+  real(kind=8), allocatable, dimension(:) :: angsrc    !< the rotation angle at the Ct points for the src grid
+  real(kind=8), allocatable, dimension(:) :: angdst    !< the rotation angle at the Ct points for the dst grid
 
-  real(kind=8), allocatable, dimension(:) :: bathysrc       !< the bottom depth at the Ct points for the src grid
-  real(kind=8), allocatable, dimension(:) :: bathydst       !< the bottom depth at the Ct points for the dst grid
+  real(kind=8), allocatable, dimension(:) :: bathysrc  !< the bottom depth at the Ct points for the src grid
+  real(kind=8), allocatable, dimension(:) :: bathydst  !< the bottom depth at the Ct points for the dst grid
 
   ! work arrays for output netcdf
-  real(kind=8), allocatable, dimension(:,:)   :: out2d  !< 2D destination grid output array
-  real(kind=8), allocatable, dimension(:,:,:) :: out3d  !< 3D destination grid output array
+  real(kind=8), allocatable, dimension(:,:)   :: out2d !< 2D destination grid output array
+  real(kind=8), allocatable, dimension(:,:,:) :: out3d !< 3D destination grid output array
 
   character(len=120) :: meshfsrc, meshfdst
-
-  integer           :: nvalid
-  integer           :: k,n,nn,rc,ncid,varid
-  integer           :: idx1,idx2
-  character(len=20) :: vname
+  integer            :: nvalid
+  integer            :: k,n,nn,rc,ncid,varid
+  character(len=20)  :: vname
   ! debug
   integer :: i,j
 
   character(len=*), parameter :: u_FILE_u = &
        __FILE__
 
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
   ! initialize ESMF
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
 
   call ESMF_Initialize(rc=rc)
   if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
   call ESMF_VMGetGlobal(vm, rc=rc)
   if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
 
-  ! --------------------------------------------------------
-  ! read the nml file and a file containing the list of
-  ! variables to be remapped
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
+  ! read the nml file and a file containing the list of variables to be remapped
+  ! -----------------------------------------------------------------------------
 
-  call readnml
+  call readnml('ocniceprep.nml')
   call readcsv(nvalid)
 
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
   ! create a regrid RH from source to destination
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
 
   meshfsrc = trim(griddir)//fsrc(3:5)//'/'//'mesh.'//trim(fsrc)//'.nc'
   meshfdst = trim(griddir)//fdst(3:5)//'/'//'mesh.'//trim(fdst)//'.nc'
@@ -69,17 +75,14 @@ program ocniceprep
   call createRH(trim(meshfsrc),trim(meshfdst),rc=rc)
   if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
 
-  ! --------------------------------------------------------
-  ! read the master grid file and obtain the rotation angle
-  ! on the source and destination grids
-  ! in ocnpost, anglet is retrieved from CICE's own history
-  ! file, here it is retrieved from the tripole grid file, which
-  ! has the opposite sense for anglet (same as MOM6).
-  ! the rotation formulas assume the same sense as MOM6, so
-  ! in ocnpost, this requires for cice that sinrot = -sin(anglet)
-  ! here, we need -sin(-anglet), which is sin(anglet), so no
-  ! sign change is required
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
+  ! read the master grid file and obtain the rotation angle on the source and
+  ! destination grids. In ocnpost, anglet is retrieved from CICE's own history file
+  ! Here it is retrieved from the tripole grid file, which has the opposite sense
+  ! for anglet (same as MOM6). The rotation formulas assume the same sense as MOM6,
+  ! so in ocnpost, this requires for cice that sinrot = -sin(anglet). Here, we need
+  ! -sin(-anglet), which is sin(anglet), so no sign change is required
+  ! -----------------------------------------------------------------------------
 
   allocate(angsrc(nxt*nyt)); angsrc = 0.0
   allocate(angdst(nxr*nyr)); angdst = 0.0
@@ -87,23 +90,22 @@ program ocniceprep
   allocate(bathydst(nxr*nyr)); bathydst = 0.0
 
   gridfile = trim(griddir)//fsrc(3:5)//'/'//'tripole.'//trim(fsrc)//'.nc'
-  call nf90_err(nf90_open(trim(gridfile), nf90_nowrite, ncid),                       &
+  call nf90_err(nf90_open(trim(gridfile), nf90_nowrite, ncid), &
        'open: '//trim(gridfile))
   call getfield(trim(gridfile), 'anglet', dims=(/nxt,nyt/), field=angsrc)
   call getfield(trim(gridfile),  'depth', dims=(/nxt,nyt/), field=bathysrc)
   call nf90_err(nf90_close(ncid), 'close: '//trim(gridfile))
 
   gridfile = trim(griddir)//fdst(3:5)//'/'//'tripole.'//trim(fdst)//'.nc'
-  call nf90_err(nf90_open(trim(gridfile), nf90_nowrite, ncid),                       &
+  call nf90_err(nf90_open(trim(gridfile), nf90_nowrite, ncid), &
        'open: '//trim(gridfile))
   call getfield(trim(gridfile), 'anglet', dims=(/nxr,nyr/), field=angdst)
   call getfield(trim(gridfile),  'depth', dims=(/nxr,nyr/), field=bathydst)
   call nf90_err(nf90_close(ncid), 'close: '//trim(gridfile))
 
-  ! --------------------------------------------------------
-  ! get the 3rd (vertical or ncat) dimension and the masking
-  ! variable
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
+  ! get the 3rd (vertical or ncat) dimension and the masking variable
+  ! -----------------------------------------------------------------------------
 
   call nf90_err(nf90_open(trim(input_file), nf90_nowrite, ncid),   &
        'open: '//trim(input_file))
@@ -141,9 +143,9 @@ program ocniceprep
   end do
   call nf90_err(nf90_close(ncid), 'close: '//trim(input_file))
 
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
   ! get the masking variable for ocean 3-d remapping
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
 
   if (do_ocnprep) then
      allocate(eta(nlevs,nxt*nyt)); eta=0.0
@@ -164,16 +166,15 @@ program ocniceprep
      end if
   end if
 
-  ! --------------------------------------------------------
-  ! create packed arrays for mapping and remap packed arrays
-  ! to the destination grid
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
+  ! create packed arrays for mapping and remap arrays to the destination grid
+  ! -----------------------------------------------------------------------------
 
   call setup_packing(nvalid,outvars)
 
   ! 2D bilin
   if (allocated(bilin2d)) then
-     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                                   &
+     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                             &
           cos(angsrc), sin(angsrc), b2d, dims=(/nxt,nyt/), nflds=nbilin2d, fields=bilin2d)
      rgb2d = 0.0
      call remapRH(src_field=bilin2d, dst_field=rgb2d,rc=rc)
@@ -198,7 +199,7 @@ program ocniceprep
 
   ! 2D conserv
   if (allocated(consd2d)) then
-     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                                   &
+     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                             &
           cos(angsrc), sin(angsrc), c2d, dims=(/nxt,nyt/), nflds=nconsd2d, fields=consd2d)
      rgc2d = 0.0
      call remapRH(src_field=consd2d, dst_field=rgc2d,rc=rc)
@@ -214,16 +215,16 @@ program ocniceprep
                 minval(consd2d(n,:)), maxval(consd2d(n,:)),                                       &
                 minval(rgc2d(n,:)), maxval(rgc2d(n,:))
         end do
-        call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.consd2d.nc', 'consd2d', dims=(/nxt,nyt/),           &
+        call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.consd2d.nc', 'consd2d', dims=(/nxt,nyt/),     &
              nflds=nconsd2d, field=consd2d)
-	call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgconsd2d.nc', 'rgconsd2d', dims=(/nxr,nyr/),       &
+	call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgconsd2d.nc', 'rgconsd2d', dims=(/nxr,nyr/), &
              nflds=nconsd2d, field=rgc2d)
      end if
   end if
 
   ! 3D bilin
   if (allocated(bilin3d))then
-     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                                   &
+     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                             &
           cos(angsrc), sin(angsrc), b3d, dims=(/nxt,nyt,nlevs/), nflds=nbilin3d, fields=bilin3d)
      rgb3d = 0.0
      do k = 1,nlevs
@@ -256,9 +257,9 @@ program ocniceprep
      end if
   end if
 
-  !--------------------------------------------------------
-  ! rotate on Ct from EW->IJ and remap back to native staggers
-  !--------------------------------------------------------
+  !------------------------------------------------------------------------------
+  ! rotate on Ct from EN->IJ and remap back to native staggers
+  !------------------------------------------------------------------------------
 
   if (allocated(bilin2d)) then
      call rotremap(trim(wgtsdir)//fdst(3:5)//'/', b2d, cos(angdst), sin(angdst),   &
@@ -285,9 +286,9 @@ program ocniceprep
      end if
   end if
 
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
   ! write the mapped fields
-  ! --------------------------------------------------------
+  ! -----------------------------------------------------------------------------
 
   allocate(out2d(nxr,nyr)); out2d = 0.0
   allocate(out3d(nxr,nyr,nlevs)); out3d = 0.0

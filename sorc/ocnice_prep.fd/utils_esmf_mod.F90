@@ -1,3 +1,9 @@
+!> @file
+!! @brief Define a set of utilty procedures which use ESMF
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module defines the RouteHandle and mapping procedures
+!! @author Denise.Worthen@noaa.gov
 module utils_esmf_mod
 
   use ESMF
@@ -53,6 +59,7 @@ contains
     integer, pointer             :: dststatus(:)
     real(kind=8) , pointer       :: srcptr(:), dstptr(:)
     character(len=20)            :: subname = 'remapRH1d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
     rc = ESMF_SUCCESS
@@ -118,6 +125,7 @@ contains
 
     real(kind=8), pointer :: srcptr(:), dstptr(:)
     character(len=20)     :: subname = 'remapRH1d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a,i5)')'enter '//trim(subname)//' ',kk
     rc = ESMF_SUCCESS
@@ -161,6 +169,7 @@ contains
 
     real(kind=8), pointer :: srcptr(:,:), dstptr(:,:)
     character(len=20)     :: subname = 'remapRH2d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
     rc = ESMF_SUCCESS
@@ -212,6 +221,7 @@ contains
     integer               :: i,n
     real(kind=8), pointer :: srcptr(:), dstptr(:)
     character(len=20)     :: subname = 'remapRH1ddyn'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a,i5)')'enter '//trim(subname)//' ',kk
     rc = ESMF_SUCCESS
@@ -261,6 +271,7 @@ contains
     integer               :: i,n
     real(kind=8), pointer :: srcptr(:,:), dstptr(:,:)
     character(len=20)     :: subname = 'remapRH2ddyn'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a,i5)')'enter '//trim(subname)//' ',kk
     rc = ESMF_SUCCESS
@@ -320,6 +331,7 @@ contains
     character(len=10)  :: vgrid1, vgrid2
     character(len=240) :: wgtsfile
     character(len=20)  :: subname = 'rotremap2d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
 
@@ -367,6 +379,7 @@ contains
     character(len=10)  :: vgrid1, vgrid2
     character(len=240) :: wgtsfile
     character(len=20)  :: subname = 'rotremap3d'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
 
@@ -413,6 +426,7 @@ contains
     integer  :: i, j
     real(ESMF_KIND_R8) :: renorm
     character(len=20)  :: subname = 'dynLevMaskProc'
+    !----------------------------------------------------------------------------
 
     if (debug)write(logunit,'(a)')'enter '//trim(subname)
     rc = ESMF_SUCCESS
@@ -446,10 +460,13 @@ contains
   ! handle ESMF errors
   !----------------------------------------------------------
   logical function ChkErr(rc, line, file)
+
     integer, intent(in) :: rc            !< return code to check
     integer, intent(in) :: line          !< Integer source line number
     character(len=*), intent(in) :: file !< User-provided source file name
     integer :: lrc
+    !----------------------------------------------------------------------------
+
     ChkErr = .false.
     lrc = rc
     if (ESMF_LogFoundError(rcToCheck=lrc, msg=ESMF_LOGERR_PASSTHRU, line=line, file=file)) then

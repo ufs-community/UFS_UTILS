@@ -1,3 +1,9 @@
+!> @file
+!! @brief Define the input namelist variables
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module contains the namelist variables
+!! @author Denise.Worthen@noaa.gov
 module init_mod
 
   implicit none
@@ -43,24 +49,24 @@ module init_mod
   logical :: do_ocnprep !< If true, the source file is ocean, otherwise ice
 
 contains
-
-  subroutine readnml
+  !>  Read input namelist file
+  !!
+  !! @param[in]  fname  the file name to read
+  !!
+  !! @author Denise.Worthen@noaa.gov
+  subroutine readnml(fname)
 
     ! local variable
-    character(len=40) :: fname
     integer :: ierr, iounit
     integer :: srcdims(2), dstdims(2)
+    !----------------------------------------------------------------------------
 
-    namelist /ocniceprep_nml/ ftype, srcdims, wgtsdir, griddir, dstdims, maskvar, angvar, debug
-
-    ! --------------------------------------------------------
-    ! read the name list
-    ! --------------------------------------------------------
+    namelist /ocniceprep_nml/ ftype, srcdims, wgtsdir, griddir, dstdims, maskvar, &
+         angvar, debug
 
     srcdims = 0; dstdims = 0
     angvar=''
 
-    fname = 'ocniceprep.nml'
     inquire (file=trim(fname), iostat=ierr)
     if (ierr /= 0) then
        write (0, '(3a)') 'FATAL ERROR: input file "', trim(fname), '" does not exist.'
@@ -104,23 +110,24 @@ contains
        write(0,'(a)')'FATAL ERROR: destination grid dimensions unknown'
        stop 3
     end if
-
-    !TODO: test for consistency of source/destination resolution
   end subroutine readnml
 
+  !>  Read the input csv file and fill the vardefs type
+  !!
+  !! @param[out]  nvalid  the number of variables in the csv file
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine readcsv(nvalid)
 
     integer, intent(out) :: nvalid
 
+    ! local variables
     character(len= 40) :: fname
     character(len=100) :: chead
     character(len= 20) :: c1,c3,c4,c5,c6
     integer :: i2
     integer :: nn,n,ierr,iounit
-
-    ! --------------------------------------------------------
-    ! Open and read list of variables
-    ! --------------------------------------------------------
+    !----------------------------------------------------------------------------
 
     fname=trim(ftype)//'.csv'
     open(newunit=iounit, file=trim(fname), status='old', iostat=ierr)
@@ -148,5 +155,4 @@ contains
     nvalid = nn
 
   end subroutine readcsv
-
 end module init_mod

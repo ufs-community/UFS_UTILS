@@ -1,3 +1,9 @@
+!> @file
+!! @brief Define arrays, dimensions and types
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module contains arrays and types
+!! @author Denise.Worthen@noaa.gov
 module arrays_mod
 
   use init_mod , only : nxt, nyt, nlevs, nxr, nyr
@@ -18,6 +24,7 @@ module arrays_mod
   real(kind=8), allocatable, dimension(:,:)   :: consd2d  !< packed 2D source fields for conservative remap
   real(kind=8), allocatable, dimension(:,:,:) :: bilin3d  !< packed 3D source fields for bilinear remap
 
+  ! types
   type(vardefs), allocatable, dimension(:) :: b2d !< variable metadata for 2D source fields bilinear remap
   type(vardefs), allocatable, dimension(:) :: c2d !< variable metadata for 2D source fields conservative remap
   type(vardefs), allocatable, dimension(:) :: b3d !< variable metadata for 3D source fields bilinear remap
@@ -27,16 +34,21 @@ module arrays_mod
   real(kind=8), allocatable, dimension(:,:)   :: rgc2d !< packed 2D fields with conservative remap
   real(kind=8), allocatable, dimension(:,:,:) :: rgb3d !< packed 3D fields with bilinear remap
 
-  ! source and destination masking arrays
+  ! source masking arrays
   real(kind=8), allocatable, dimension(:,:)   :: mask3d !< the 3D mask of the source fields
                                                         !< on Ct grid points
   ! calculated eta on source grid
-  real(kind=8), allocatable, dimension(:,:) :: eta    !< the interface heights (eta) on the source grid
+  real(kind=8), allocatable, dimension(:,:) :: eta      !< the interface heights (eta) on the source grid
 
   public setup_packing
 
 contains
-
+  !> Count numbers of fields to be remapped for each mapping type and allocate the packed arrays
+  !!
+  !! @param[inout]  var     a structure describing the variable metadata
+  !! @param[in]     nvalid  the number of variables provided in the ocean or ice csv file
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine setup_packing(nvalid, vars)
 
     type(vardefs), intent(inout) :: vars(:)
@@ -44,11 +56,10 @@ contains
 
     ! local variables
     integer :: n,i,j,k
+    character(len=20)         :: subname = 'setup packing'
+    !----------------------------------------------------------------------------
 
-    ! --------------------------------------------------------
-    ! count numbers of fields to remapped for each
-    ! mapping type; these can be remapped as packed arrays
-    ! --------------------------------------------------------
+    if (debug)write(logunit,'(a)')'enter '//trim(subname)
 
     nbilin2d = 0; nbilin3d = 0; nconsd2d = 0
     do n = 1,nvalid
@@ -78,10 +89,7 @@ contains
        if (debug) write(logunit,'(a)')'allocate bilin3d fields and types '
     end if
 
-    ! --------------------------------------------------------
     ! create types for each packed array and fill values
-    ! --------------------------------------------------------
-
     i = 0; j = 0; k = 0
     do n = 1,nvalid
        if (trim(vars(n)%var_remapmethod) == 'bilinear') then
@@ -97,10 +105,7 @@ contains
        end if
     end do
 
-    ! --------------------------------------------------------
     ! create arrays for remapped packed fields
-    ! --------------------------------------------------------
-
      if (nbilin2d > 0) then
         allocate(rgb2d(nbilin2d,nxr*nyr)); rgb2d = 0.0
      end if
@@ -110,6 +115,7 @@ contains
      if (nbilin3d > 0) then
         allocate(rgb3d(nbilin3d,nlevs,nxr*nyr)); rgb3d = 0.0
      end if
+     if (debug)write(logunit,'(a)')'exit '//trim(subname)
 
   end subroutine setup_packing
 end module arrays_mod
