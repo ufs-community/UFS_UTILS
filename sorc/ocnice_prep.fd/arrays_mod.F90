@@ -45,7 +45,7 @@ module arrays_mod
 contains
   !> Count numbers of fields to be remapped for each mapping type and allocate the packed arrays
   !!
-  !! @param[inout]  var     a structure describing the variable metadata
+  !! @param[inout]  vars    a structure describing the variable metadata
   !! @param[in]     nvalid  the number of variables provided in the ocean or ice csv file
   !!
   !! @author Denise.Worthen@noaa.gov

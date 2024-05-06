@@ -42,11 +42,11 @@ module utils_mod
      module procedure dumpnc3dk
   end interface dumpnc
 
-  public getfield
-  public packarrays
-  public remap
-  public dumpnc
-  public nf90_err
+  public :: getfield
+  public :: packarrays
+  public :: remap
+  public :: dumpnc
+  public :: nf90_err
 
 contains
   !> Pack 2D fields into arrays by mapping type
@@ -175,16 +175,16 @@ contains
 
   !> Obtain 2D vector pairs mapped to Ct and rotated to EN
   !!
-  !! @param[in]  filesrc  the file containing the fields to retrieve
-  !! @param[in]  wgtsdir  the path to the required ESMF regridding weights
+  !! @param[in]  fname    the file containing the fields to retrieve
+  !! @param[in]  wdir     the path to the required ESMF regridding weights
   !! @param[in]  cosrot   the cosine of the rotation angle
   !! @param[in]  sinrot   the sine of the rotation angle
   !! @param[in]  vname1   the variable name of the first vector
   !! @param[in]  vgrid1   the grid location of the first vector
-  !! @param[in]  vname1   the variable name of the second vector
-  !! @param[in]  vgrid1   the grid location of the second vector
+  !! @param[in]  vname2   the variable name of the second vector
+  !! @param[in]  vgrid2   the grid location of the second vector
   !! @param[in]  dims     the dimensions of the fields
-  !! @param[out] fields   the vector pair array
+  !! @param[out] vecpair  the vector pair array
   !!
   !! @author Denise.Worthen@noaa.gov
   subroutine getvecpair2d(fname, wdir, cosrot, sinrot, vname1, vgrid1, vname2, vgrid2, dims, vecpair)
@@ -225,16 +225,16 @@ contains
 
   !> Obtain 3D vector pairs mapped to Ct and rotated to EN
   !!
-  !! @param[in]  filesrc  the file containing the fields to retrieve
-  !! @param[in]  wgtsdir  the path to the required ESMF regridding weights
+  !! @param[in]  fname    the file containing the fields to retrieve
+  !! @param[in]  wdir     the path to the required ESMF regridding weights
   !! @param[in]  cosrot   the cosine of the rotation angle
   !! @param[in]  sinrot   the sine of the rotation angle
   !! @param[in]  vname1   the variable name of the first vector
   !! @param[in]  vgrid1   the grid location of the first vector
-  !! @param[in]  vname1   the variable name of the second vector
-  !! @param[in]  vgrid1   the grid location of the second vector
+  !! @param[in]  vname2   the variable name of the second vector
+  !! @param[in]  vgrid2   the grid location of the second vector
   !! @param[in]  dims     the dimensions of the fields
-  !! @param[out] fields   the vector pair array
+  !! @param[out] vecpair  the vector pair array
   !!
   !! @author Denise.Worthen@noaa.gov
   subroutine getvecpair3d(fname, wdir, cosrot, sinrot, vname1, vgrid1, vname2, vgrid2, dims, vecpair)
@@ -532,7 +532,7 @@ contains
   !!
   !! @param[in]  fname       the file containing ESMF regridding weights
   !! @param[in]  vname       the name of the variable
-  !! @param[in]  dim         the variable spatial dimensions
+  !! @param[in]  dims        the variable spatial dimensions
   !! @param[in]  nflds       the number of fields
   !! @param[in]  field       the field to write
   !!

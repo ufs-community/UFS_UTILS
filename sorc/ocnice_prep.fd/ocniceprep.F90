@@ -4,7 +4,9 @@
 !!
 !! @author Denise.Worthen@noaa.gov
 !!
+
 !> Blah blah
+!!
 !! @author Denise.Worthen@noaa.gov
 !! @return 0 for success, error code otherwise.
 program ocniceprep
@@ -62,7 +64,7 @@ program ocniceprep
   ! read the nml file and a file containing the list of variables to be remapped
   ! -----------------------------------------------------------------------------
 
-  call readnml('ocniceprep.nml')
+  call readnml
   call readcsv(nvalid)
 
   ! -----------------------------------------------------------------------------
@@ -122,7 +124,7 @@ program ocniceprep
   endif
   do n = 1,nvalid
      if (debug) then
-        write(logunit,'(i4,a12,i4,a10,3(a6),a2)')n,'  '//trim(outvars(n)%var_name)// &
+        write(logunit,'(i4,a14,i4,a10,3(a6),a2)')n,'  '//trim(outvars(n)%var_name)// &
              ', ', outvars(n)%var_dimen,', '//trim(outvars(n)%var_remapmethod),      &
              ', '//trim(outvars(n)%var_grid), ', '//trim(outvars(n)%var_pair),       &
              ', '//trim(outvars(n)%var_pair_grid)
@@ -184,7 +186,7 @@ program ocniceprep
         write(logunit,'(a)')'remap 2D fields bilinear with RH '
         write(logunit,'(a)')'packed min/max values, mapped min/max values'
         do n = 1,nbilin2d
-           write(logunit,'(i4,a10,3(a2,a6),4g14.4)')n,                                            &
+           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                                      &
                 trim(b2d(n)%var_name),'  ',trim(b2d(n)%var_grid),'  ',                            &
                 trim(b2d(n)%var_pair),'  ',trim(b2d(n)%var_pair_grid),                            &
                 minval(bilin2d(n,:)), maxval(bilin2d(n,:)),                                       &
@@ -209,7 +211,7 @@ program ocniceprep
         write(logunit,'(a)')'remap 2D fields conserv with '//trim(wgtsfile)
         write(logunit,'(a)')'packed min/max values, mapped min/max values'
         do n = 1,nconsd2d
-           write(logunit,'(i4,a10,3(a2,a6),4g14.4)')n,                                            &
+           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                                      &
                 trim(c2d(n)%var_name),'  ', trim(c2d(n)%var_grid),'  ',                           &
                 trim(c2d(n)%var_pair),'  ', trim(c2d(n)%var_pair_grid),                           &
                 minval(consd2d(n,:)), maxval(consd2d(n,:)),                                       &
@@ -244,7 +246,7 @@ program ocniceprep
         write(logunit,'(a)')'remap 3D fields bilinear with RH'
         write(logunit,'(a)')'packed min/max values,mapped min/max values'
         do n = 1,nbilin3d
-           write(logunit,'(i4,a10,3(a2,a6),4g14.4)')n,                                            &
+           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                                      &
                 trim(b3d(n)%var_name),'  ', trim(b3d(n)%var_grid),'  ',                           &
                 trim(b3d(n)%var_pair),'  ', trim(b3d(n)%var_pair_grid),                           &
                 minval(bilin3d(n,:,:)), maxval(bilin3d(n,:,:)),                                   &

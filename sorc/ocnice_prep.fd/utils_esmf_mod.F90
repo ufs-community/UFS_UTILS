@@ -16,12 +16,14 @@ module utils_esmf_mod
 
   private
 
-  type(ESMF_RouteHandle) :: rh
-  type(ESMF_DynamicMask) :: dynamicLevMask
-  type(ESMF_Mesh)        :: meshsrc, meshdst
-  type(ESMF_Field)       :: fldsrc, flddst
+  type(ESMF_RouteHandle) :: rh             !< an ESMF RouteHandle
+  type(ESMF_DynamicMask) :: dynamicLevMask !< an ESMF dynamicMask object
+  type(ESMF_Mesh)        :: meshsrc        !< an ESMF mesh for the source grid
+  type(ESMF_Mesh)        :: meshdst        !< an ESMF mesh for destination grids
+  type(ESMF_Field)       :: fldsrc         !< ESMF fields on the source grid
+  type(ESMF_Field)       :: flddst         !< ESMF fields on the destination grids
 
-  integer :: srcTermProcessing = 0
+  integer :: srcTermProcessing = 0         !< The source term processing flag, required for Dynamic Masking
 
   interface remapRH
      module procedure remapRH1d
@@ -35,17 +37,21 @@ module utils_esmf_mod
      module procedure rotremap3d
   end interface rotremap
 
-  public createRH
-  public remapRH
-  public rotremap
-  public ChkErr
+  public :: createRH                          !< A public routine to create an ESMF RouteHandle
+  public :: remapRH                           !< A public interface for remapping a field via an ESMF RH
+  public :: rotremap                          !< A pubicl interface for rotating vectors and remapping them to
+                                              !! their native stagger locations
+  public :: ChkErr                            !< A public routine for logging ESMF errors
 
-  character(len=*), parameter :: u_FILE_u = &
-       __FILE__
+  character(len=*), parameter :: u_FILE_u = __FILE__   !< a character string
 contains
-  !----------------------------------------------------------
-  ! create a RH
-  !----------------------------------------------------------
+  !> Create a RH
+  !!
+  !! @param[in]  srcmeshfile  the file name of the source mesh
+  !! @param[in]  dstmeshfile  the file name of the destination mesh
+  !! @param[out] rc           an error return code
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine createRH(srcmeshfile,dstmeshfile,rc)
 
     character(len=*), intent(in)  :: srcmeshfile
@@ -113,9 +119,14 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine createRH
 
-  !----------------------------------------------------------
-  ! remap a field of nlen via ESMF RH
-  !----------------------------------------------------------
+  !> Remap a field of nlen via ESMF RH
+  !!
+  !! @param[in]  kk           the vertical or category index
+  !! @param[in]  src_field    the field on the source grid
+  !! @param[out] dst_field    the field on the destination grid
+  !! @param[out] rc           an error return code
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine remapRH1d(kk,src_field,dst_field,rc)
 
     integer,      intent(in)  :: kk
@@ -158,9 +169,13 @@ contains
     if (debug)write(logunit,'(a,i5)')'exit '//trim(subname)//' ',kk
   end subroutine remapRH1d
 
-  !----------------------------------------------------------
-  ! remap a packed field of nflds,nlen via ESMF RH
-  !----------------------------------------------------------
+  !> Remap a packed field of nflds,nlen via ESMF RH
+  !!
+  !! @param[in]  src_field    the field on the source grid
+  !! @param[out] dst_field    the field on the destination grid
+  !! @param[out] rc           an error return code
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine remapRH2d(src_field,dst_field,rc)
 
     real(kind=8), intent(in)  :: src_field(:,:)
@@ -206,9 +221,15 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine remapRH2d
 
-  !----------------------------------------------------------
-  ! remap a field of nlen via ESMF RH with dyanmic masking
-  !----------------------------------------------------------
+  !> Remap a field of nlen via ESMF RH with dynamic masking
+  !!
+  !! @param[in]  kk           the vertical or category index
+  !! @param[in]  src_field    the field on the source grid
+  !! @param[in]  hmask        the mask field to use with dynamic masking (optional)
+  !! @param[out] dst_field    the field on the destination grid
+  !! @param[out] rc           an error return code
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine remapRH1ddyn(kk,src_field,dst_field,hmask,rc)
 
     !nflds,nlen
@@ -257,9 +278,15 @@ contains
     if (debug)write(logunit,'(a,i5)')'exit '//trim(subname)//' ',kk
   end subroutine remapRH1ddyn
 
-  !----------------------------------------------------------
-  ! remap a packed field of nflds,nlen via ESMF RH with dyanmic masking
-  !----------------------------------------------------------
+  !> Remap a packed field of nflds,nlen via ESMF RH with dyanmic masking
+  !!
+  !! @param[in]  kk           the vertical or category index
+  !! @param[in]  src_field    the field on the source grid
+  !! @param[in]  hmask        the mask field to use with dynamic masking (optional)
+  !! @param[out] dst_field    the field on the destination grid
+  !! @param[out] rc           an error return code
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine remapRH2ddyn(kk,src_field,dst_field,hmask,rc)
 
     integer,      intent(in)  :: kk
@@ -314,9 +341,17 @@ contains
     if (debug)write(logunit,'(a,i5)')'exit '//trim(subname)//' ',kk
   end subroutine remapRH2ddyn
 
-  !----------------------------------------------------------
-  ! rotate vectors from EW->IJ and map back to native staggers
-  !----------------------------------------------------------
+  !> Rotate 2D vectors from EN->IJ and map back to native staggers
+  !!
+  !! @param[in]  wdir     the path to the required ESMF regridding weights
+  !! @param[in]  cosrot   the cosine of the rotation angle
+  !! @param[in]  sinrot   the sine of the rotation angle
+  !! @param[in]  vars     a structure describing the variable metadata
+  !! @param[in]  dims     the dimensions of the fields
+  !! @param[in]  nflds    the number of fields in the packed array
+  !! @param[out] fields   the rotated and mapped fields
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine rotremap2d(wdir, vars, cosrot, sinrot, dims, nflds, fields)
 
     character(len=*), intent(in)    :: wdir
@@ -362,9 +397,17 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine rotremap2d
 
-  !----------------------------------------------------------
-  ! rotate nlevs vectors from EW->IJ and map back to native staggers
-  !----------------------------------------------------------
+  !> Rotate 3D vectors on nlevs from EN->IJ and map back to native staggers
+  !!
+  !! @param[in]  wdir     the path to the required ESMF regridding weights
+  !! @param[in]  cosrot   the cosine of the rotation angle
+  !! @param[in]  sinrot   the sine of the rotation angle
+  !! @param[in]  vars     a structure describing the variable metadata
+  !! @param[in]  dims     the dimensions of the fields
+  !! @param[in]  nflds    the number of fields in the packed array
+  !! @param[out] fields   the rotated and mapped fields
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine rotremap3d(wdir, vars, cosrot, sinrot, dims, nflds, fields)
 
     character(len=*), intent(in)    :: wdir
@@ -410,10 +453,14 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine rotremap3d
 
-  !----------------------------------------------------------
-  !
-  !----------------------------------------------------------
-
+  !> A dynamic mask procedure for ocean vertical levels
+  !!
+  !! @param[in]  dynamicMaskList      an ESMF Dynamic Mask element list
+  !! @param[in]  dynamicSrcMaskValue  the masking value on the source grid (optional)
+  !! @param[in]  dynamicDstMaskValue  the masking value on the destination grid (optional)
+  !! @param[out] rc                   an error return code
+  !!
+  !! @author Adapted from example in ESMF Reference manual (37.2.6 Dynamic Masking)
   subroutine dynLevMaskProc(dynamicMaskList, dynamicSrcMaskValue, dynamicDstMaskValue, rc)
 
     ! input/output arguments
@@ -456,14 +503,19 @@ contains
 
   end subroutine DynLevMaskProc
 
-  !----------------------------------------------------------
-  ! handle ESMF errors
-  !----------------------------------------------------------
+  !> Handle ESMF errors
+  !!
+  !! @param[in]  rc         return code to check
+  !! @param[in]  line       integer source line number
+  !! @param[in]  file       user-provided source file name
+  !! @return     ChkErr     a logical indicating if an ESMF error was detected
+  !!
+  !! @author Denise.Worthen@noaa.gov
   logical function ChkErr(rc, line, file)
 
-    integer, intent(in) :: rc            !< return code to check
-    integer, intent(in) :: line          !< Integer source line number
-    character(len=*), intent(in) :: file !< User-provided source file name
+    integer, intent(in) :: rc
+    integer, intent(in) :: line
+    character(len=*), intent(in) :: file
     integer :: lrc
     !----------------------------------------------------------------------------
 

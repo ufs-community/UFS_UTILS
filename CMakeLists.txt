@@ -14,7 +14,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # User options.
 option(OPENMP "use OpenMP threading" ON)
-option(ENABLE_DOCS "Enable generation of doxygen-based documentation." OFF)
+option(ENABLE_DOCS "Enable generation of doxygen-based documentation." ON)
 
 # Utilities to be built (Default: ALL)
 option(ICEBLEND "Enable building emcsfc_ice_blend.fd" ON)
@@ -121,11 +121,11 @@ find_package(g2 3.4.3 REQUIRED)
 # If doxygen documentation we enabled, build it. This must come before
 # adding the source code directories; the main documentation build
 # must happen before any of the utility document builds.
-#if(ENABLE_DOCS)
-#  find_package(Doxygen REQUIRED)
-#  set(abs_top_srcdir "${CMAKE_SOURCE_DIR}")
-#  add_subdirectory(docs)
-#endif()
+if(ENABLE_DOCS)
+  find_package(Doxygen REQUIRED)
+  set(abs_top_srcdir "${CMAKE_SOURCE_DIR}")
+  add_subdirectory(docs)
+endif()
 
 add_subdirectory(sorc)
 

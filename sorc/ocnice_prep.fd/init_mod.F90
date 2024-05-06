@@ -51,12 +51,11 @@ module init_mod
 contains
   !>  Read input namelist file
   !!
-  !! @param[in]  fname  the file name to read
-  !!
   !! @author Denise.Worthen@noaa.gov
-  subroutine readnml(fname)
+  subroutine readnml
 
     ! local variable
+    character(len=20) :: fname = 'ocniceprep.nml'
     integer :: ierr, iounit
     integer :: srcdims(2), dstdims(2)
     !----------------------------------------------------------------------------
