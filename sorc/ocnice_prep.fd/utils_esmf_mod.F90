@@ -37,11 +37,10 @@ module utils_esmf_mod
      module procedure rotremap3d
   end interface rotremap
 
-  public :: createRH                          !< A public routine to create an ESMF RouteHandle
-  public :: remapRH                           !< A public interface for remapping a field via an ESMF RH
-  public :: rotremap                          !< A pubicl interface for rotating vectors and remapping them to
-                                              !! their native stagger locations
-  public :: ChkErr                            !< A public routine for logging ESMF errors
+  public :: createRH
+  public :: remapRH
+  public :: rotremap
+  public :: ChkErr
 
   character(len=*), parameter :: u_FILE_u = __FILE__   !< a character string
 contains
