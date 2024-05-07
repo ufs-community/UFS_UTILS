@@ -40,7 +40,6 @@ contains
     real(kind=8), allocatable, dimension(:)   :: ssh,dilate
     real(kind=8), allocatable, dimension(:,:) :: h
     real(kind=8), allocatable, dimension(:,:) :: etmp
-    character(len=10) :: vname
     character(len=20) :: subname = 'calc_eta'
     !----------------------------------------------------------------------------
 

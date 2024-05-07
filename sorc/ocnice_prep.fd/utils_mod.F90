@@ -290,7 +290,7 @@ contains
     character(len=*), optional, intent(in)  :: wgts
 
     ! local variable
-    integer                   :: ncid, varid, rc
+    integer                   :: ncid, varid
     real(kind=8), allocatable :: a2d(:,:)
     real(kind=8), allocatable :: atmp(:)
     character(len=20)         :: subname = 'getfield2d'
@@ -333,7 +333,7 @@ contains
     character(len=*), optional, intent(in)  :: wgts
 
     ! local variable
-    integer                   :: k, ncid, varid, rc
+    integer                   :: k, ncid, varid
     real(kind=8), allocatable :: a3d(:,:,:)
     real(kind=8), allocatable :: atmp(:,:)
     character(len=20)         :: subname = 'getfield3d'
@@ -375,7 +375,7 @@ contains
     real(kind=8),     intent(out) :: dst_field(:)
 
     ! local variables
-    integer :: ncid, rc, id
+    integer :: ncid, id
     integer :: i,ii,jj
     integer :: n_a, n_b, n_s
     integer(kind=4), allocatable, dimension(:) :: col, row
@@ -431,7 +431,7 @@ contains
     real(kind=8),     intent(out) :: dst_field(:,:)
 
     ! local variables
-    integer :: ncid, rc, id
+    integer :: ncid, id
     integer :: i,ii,jj
     integer :: n_a, n_b, n_s
     integer(kind=4), allocatable, dimension(:) :: col, row
@@ -488,7 +488,7 @@ contains
     real(kind=8),     intent(out) :: dst_field(:,:,:)
 
     ! local variables
-    integer :: ncid, rc, id
+    integer :: ncid, id
     integer :: i,ii,jj
     integer :: n_a, n_b, n_s
     integer(kind=4), allocatable, dimension(:) :: col, row
@@ -545,7 +545,7 @@ contains
     real(kind=8),     intent(in) :: field(:,:)
 
     ! local variable
-    integer                   :: n, ncid, varid, rc, idimid, jdimid, fdimid
+    integer                   :: n, ncid, varid, idimid, jdimid, fdimid
     real(kind=8), allocatable :: a3d(:,:,:)
     character(len=20)         :: subname = 'dumpnc2d'
     !----------------------------------------------------------------------------
@@ -588,7 +588,7 @@ contains
     real(kind=8),     intent(in) :: field(:,:,:)
 
     ! local variable
-    integer :: n, k, ncid, varid, rc, idimid, jdimid, kdimid, fdimid
+    integer :: n, k, ncid, varid, idimid, jdimid, kdimid, fdimid
     real(kind=8), allocatable :: a4d(:,:,:,:)
     character(len=20) :: subname = 'dumpnc3d'
     !----------------------------------------------------------------------------
@@ -606,7 +606,7 @@ contains
     call nf90_err(nf90_enddef(ncid), 'nf90_enddef: '//fname)
 
     do n = 1,nflds
-       do k = 1,dims(3)
+       do k = 1,nk
           a4d(:,:,k,n) = reshape(field(n,k,1:dims(1)*dims(2)), (/dims(1),dims(2)/))
        end do
     end do
@@ -631,7 +631,7 @@ contains
     real(kind=8),     intent(in) :: field(:,:)
 
     ! local variable
-    integer                   :: k, ncid, varid, rc, idimid, jdimid, kdimid
+    integer                   :: k, ncid, varid, idimid, jdimid, kdimid
     real(kind=8), allocatable :: a3d(:,:,:)
     character(len=20)         :: subname = 'dumpnc3dk'
     !----------------------------------------------------------------------------
@@ -672,7 +672,7 @@ contains
     real(kind=8),     intent(in) :: field(:)
 
     ! local variable
-    integer                   :: ncid, varid, rc, idimid, jdimid
+    integer                   :: ncid, varid, idimid, jdimid
     real(kind=8), allocatable :: a2d(:,:)
     character(len=20)         :: subname = 'dumpnc1d'
     !----------------------------------------------------------------------------

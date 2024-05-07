@@ -85,7 +85,7 @@ contains
     real(kind=8), allocatable :: Layer(:)
     real(kind=8), allocatable :: out3d(:,:,:)
 
-    integer :: k,n,ncid,varid,dims3(3),dims4(4)
+    integer :: k,n,ncid,varid
     integer :: idimid,jdimid,kdimid,edimid,timid
 
     allocate(out3d(nxr,nyr,nlevs+1)); out3d = 0.0

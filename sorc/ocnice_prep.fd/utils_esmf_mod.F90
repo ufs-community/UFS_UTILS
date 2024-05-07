@@ -62,7 +62,6 @@ contains
     type(ESMF_ExtrapMethod_Flag) :: extrapmethod
     type(ESMF_Field)             :: dststatusfield
     integer, pointer             :: dststatus(:)
-    real(kind=8) , pointer       :: srcptr(:), dstptr(:)
     character(len=20)            :: subname = 'remapRH1d'
     !----------------------------------------------------------------------------
 
@@ -148,9 +147,9 @@ contains
     flddst = ESMF_FieldCreate(meshdst, ESMF_TYPEKIND_R8, meshloc=ESMF_MESHLOC_ELEMENT,rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
-    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.d0, rc=rc)
+    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.d0, rc=rc)
+    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     call ESMF_FieldGet(fldsrc, farrayptr=srcptr, rc=rc)
@@ -203,9 +202,9 @@ contains
          gridToFieldMap=(/2/), rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
-    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.d0, rc=rc)
+    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.d0, rc=rc)
+    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     call ESMF_FieldGet(fldsrc, farrayptr=srcptr, rc=rc)
@@ -247,7 +246,6 @@ contains
     ! local variables
     type(ESMF_Field)      :: fldsrc
     type(ESMF_Field)      :: flddst
-    integer               :: i,n
     real(kind=8), pointer :: srcptr(:), dstptr(:)
     character(len=20)     :: subname = 'remapRH1ddyn'
     !----------------------------------------------------------------------------
@@ -265,9 +263,9 @@ contains
     call ESMF_FieldGet(flddst, farrayptr=dstptr, rc=rc)
     if (chkerr(rc,__LINE__,u_FILE_u)) return
 
-    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.d0, rc=rc)
+    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.d0, rc=rc)
+    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     srcptr = src_field
@@ -328,9 +326,9 @@ contains
     call ESMF_FieldGet(flddst, farrayptr=dstptr, rc=rc)
     if (chkerr(rc,__LINE__,u_FILE_u)) return
 
-    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.d0, rc=rc)
+    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.d0, rc=rc)
+    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     srcptr = src_field
@@ -491,8 +489,8 @@ contains
 
     if (associated(dynamicMaskList)) then
        do i=1, size(dynamicMaskList)
-          dynamicMaskList(i)%dstElement = 0.0d0 ! set to zero
-          renorm = 0.d0 ! reset
+          dynamicMaskList(i)%dstElement = 0.0 ! set to zero
+          renorm = 0.0 ! reset
           do j = 1, size(dynamicMaskList(i)%factor)
              if (dynamicSrcMaskValue /= dynamicMaskList(i)%srcElement(j)) then
                 dynamicMaskList(i)%dstElement = dynamicMaskList(i)%dstElement + &
@@ -500,7 +498,7 @@ contains
                 renorm = renorm + dynamicMaskList(i)%factor(j)
              endif
           enddo
-          if (renorm > 0.d0) then
+          if (renorm > 0.0) then
              dynamicMaskList(i)%dstElement = dynamicMaskList(i)%dstElement / renorm
           else if (present(dynamicSrcMaskValue)) then
              dynamicMaskList(i)%dstElement = dynamicSrcMaskValue
