@@ -79,6 +79,7 @@ MODULE READ_WRITE_DATA
    !! @param[in] lensfc Total number of points on a tile.
    !! @param[in] lsoil Number of soil layers.
    !! @param[in] do_nsst When true, nsst fields were processed.
+   !! @param[in] inc_file When true, write out increments to files
    !! @param[in] nsst Data structure containing nsst fields.
    !! @param[in] slifcs Land-sea mask.
    !! @param[in] tsffcs Skin temperature.
@@ -114,17 +115,20 @@ MODULE READ_WRITE_DATA
    !! @param[in] slcfcs Liquid portion of volumetric soil moisture.
    !! @param[in] smcfcs Total volumetric soil moisture.
    !! @param[in] stcfcs Soil temperature.
+   !! @param[in] stcinc Soil temperature increments on the cubed-sphere tiles
+   !! @param[in] slcinc Liquid soil moisture increments on the cubed-sphere tiles
    !!
    !! @author George Gayno NOAA/EMC
 
  subroutine write_data(lensfc,idim,jdim,lsoil, &
-                       do_nsst,nsst,slifcs,tsffcs,vegfcs,swefcs, &
+                       do_nsst,inc_file,nsst,slifcs,tsffcs,vegfcs,swefcs, &
                        tg3fcs,zorfcs,albfcs,alffcs, &
                        cnpfcs,f10m,t2m,q2m,vetfcs, &
                        sotfcs,ustar,fmm,fhh,sicfcs, &
                        sihfcs,sitfcs,tprcp,srflag,  &
                        swdfcs,vmnfcs,vmxfcs,slpfcs, &
-                       absfcs,slcfcs,smcfcs,stcfcs)
+                       absfcs,slcfcs,smcfcs,stcfcs, &
+                       stcinc, slcinc)
 
  use mpi
 
@@ -134,6 +138,7 @@ MODULE READ_WRITE_DATA
  integer, intent(in)              :: idim, jdim
 
  logical, intent(in)              :: do_nsst
+ logical, intent(in)              :: inc_file
 
  real, intent(in), optional       :: slifcs(lensfc),tsffcs(lensfc)
  real, intent(in), optional       :: swefcs(lensfc),tg3fcs(lensfc)
@@ -150,10 +155,12 @@ MODULE READ_WRITE_DATA
  real, intent(in), optional       :: vmxfcs(lensfc), slpfcs(lensfc)
  real, intent(in), optional       :: absfcs(lensfc), slcfcs(lensfc,lsoil)
  real, intent(in), optional       :: smcfcs(lensfc,lsoil), stcfcs(lensfc,lsoil)
+ real, intent(in), optional       :: stcinc(lensfc,lsoil)
+ real, intent(in), optional       :: slcinc(lensfc,lsoil)
 
  type(nsst_data), intent(in)      :: nsst
 
- integer :: dim_x, dim_y, dim_time, dims_3d(3)
+ integer :: dim_x, dim_y, dim_soil, dim_time, dims_3d(3)
 
  real :: dum2d(idim,jdim), dum3d(idim,jdim,lsoil)
  
@@ -161,10 +168,13 @@ MODULE READ_WRITE_DATA
  character(len=3)  :: rankch
 
  integer           :: myrank, error, ncid, id_var
+ integer           :: varid_stc, varid_slc
 
  call mpi_comm_rank(mpi_comm_world, myrank, error)
 
  write(rankch, '(i3.3)') (myrank+1)
+
+ if (.NOT.(inc_file)) then
 
  fnbgso = "./fnbgso." // rankch
 
@@ -470,6 +480,47 @@ MODULE READ_WRITE_DATA
    error = nf90_put_var( ncid, id_var, dum3d)
    call netcdf_err(error, 'writing stc record' )
    call remove_checksum(ncid, id_var)
+ endif
+
+ else
+
+    fnbgso = "./gaussian_interp." // rankch
+    print*
+    print*,"Write increments onto cubed sphere tiles to: ", trim(fnbgso)
+
+    error=nf90_create(trim(fnbgso),NF90_64BIT_OFFSET,ncid)
+    CALL netcdf_err(error, 'OPENING FILE: '//trim(fnbgso) )
+
+    ! Define dimensions in the file.
+    error = nf90_def_dim(ncid, "xaxis_1", idim, dim_x)
+    call netcdf_err(error, 'defining xaxis_1')
+
+    error = nf90_def_dim(ncid, "yaxis_1", jdim, dim_y)
+    call netcdf_err(error, 'defining yaxis_1')
+
+    error = nf90_def_dim(ncid, "soil_levels",lsoil, dim_soil)
+    call netcdf_err(error, 'defining soil_levels')
+
+   ! Define variables in the file.
+   error=nf90_def_var(ncid, "slc_inc", NF90_DOUBLE, &
+       (/dim_x,dim_y,dim_soil/),varid_slc)
+   call netcdf_err(error, 'defining slc_inc');
+
+   error=nf90_def_var(ncid, "stc_inc", NF90_DOUBLE, &
+       (/dim_x,dim_y,dim_soil/),varid_stc)
+   call netcdf_err(error, 'defining stc_inc');
+
+   error = nf90_enddef(ncid)
+
+   ! Put variables in the file.
+   dum3d = reshape(stcinc, (/idim,jdim,lsoil/))
+   error = nf90_put_var( ncid, varid_stc, dum3d)
+   call netcdf_err(error, 'writing stc_inc record' )
+
+   dum3d = reshape(slcinc, (/idim,jdim,lsoil/))
+   error = nf90_put_var( ncid, varid_slc, dum3d)
+   call netcdf_err(error, 'writing slc_inc record' )
+
  endif
 
  if(do_nsst) then
@@ -984,8 +1035,11 @@ MODULE READ_WRITE_DATA
  !! @param[in] LSOIL Number of soil layers.
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
+ !! @param[in] DO_SNO_INC_JEDI When true, read in snow increment file
+ !! @param[in] DO_SOI_INC_JEDI When true, read in soil increment file
  !! @param[in] INC_FILE When true, read from an increment file.
  !!                     False reads from a restart file.
+ !!                     increments are on the cubed-sphere tiles
  !! @param[out] IS_NOAHMP When true, process for the Noah-MP LSM.
  !! @param[out] TSFFCS Skin Temperature.
  !! @param[out] SMCFCS Total volumetric soil moisture.
@@ -1025,8 +1079,13 @@ MODULE READ_WRITE_DATA
  !! @param[out] SLMASK Land-sea mask without ice flag.
  !! @param[out] ZSOIL Soil layer thickness.
  !! @param[out] NSST Data structure containing nsst fields.
+ !! @param[in] SLCINC Liquid soil moisture increments on the cubed-sphere tiles
+ !! @param[in] STCINC Soil temperature increments on the cubed-sphere tiles
  !! @author George Gayno NOAA/EMC
- SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,INC_FILE,IS_NOAHMP, &
+ !! @author Yuan Xue: add capability to read soil related increments on the
+ !! cubed-sphere tiles directly
+ SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,DO_SNO_INC_JEDI,&
+                      DO_SOI_INC_JEDI,INC_FILE,IS_NOAHMP, &
                       TSFFCS,SMCFCS,SWEFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
                       CVFCS,CVBFCS,CVTFCS,ALBFCS, &
@@ -1036,6 +1095,7 @@ MODULE READ_WRITE_DATA
                       SIHFCS,SICFCS,SITFCS, &
                       TPRCP,SRFLAG,SNDFCS,  &
                       VMNFCS,VMXFCS,SLCFCS, &
+                      STCINC,SLCINC, &
                       SLPFCS,ABSFCS,T2M,Q2M,SLMASK, &
                       ZSOIL,NSST)
  USE MPI
@@ -1044,6 +1104,7 @@ MODULE READ_WRITE_DATA
 
  INTEGER, INTENT(IN)       :: LSOIL, LENSFC
  LOGICAL, INTENT(IN)       :: DO_NSST, INC_FILE
+ LOGICAL, INTENT(IN)       :: DO_SNO_INC_JEDI, DO_SOI_INC_JEDI
 
  LOGICAL, OPTIONAL, INTENT(OUT)      :: IS_NOAHMP
 
@@ -1065,6 +1126,8 @@ MODULE READ_WRITE_DATA
  REAL, OPTIONAL, INTENT(OUT)         :: SLCFCS(LENSFC,LSOIL)
  REAL, OPTIONAL, INTENT(OUT)         :: SMCFCS(LENSFC,LSOIL)
  REAL, OPTIONAL, INTENT(OUT)         :: STCFCS(LENSFC,LSOIL)
+ REAL, OPTIONAL, INTENT(OUT)         :: STCINC(LENSFC,LSOIL)
+ REAL, OPTIONAL, INTENT(OUT)         :: SLCINC(LENSFC,LSOIL)
  REAL(KIND=4), OPTIONAL, INTENT(OUT) :: ZSOIL(LSOIL)
 
  TYPE(NSST_DATA), OPTIONAL           :: NSST ! intent(out) will crash 
@@ -1083,8 +1146,10 @@ MODULE READ_WRITE_DATA
 
  WRITE(RANKCH, '(I3.3)') (MYRANK+1)
  
- IF (INC_FILE) THEN
-        FNBGSI = "./xainc." // RANKCH
+ IF ((INC_FILE) .and. (DO_SNO_INC_JEDI)) THEN
+        FNBGSI = "./snow_xainc." // RANKCH
+ ELSEIF ((INC_FILE) .and. (DO_SOI_INC_JEDI)) THEN
+        FNBGSI = "./soil_xainc." // RANKCH
  ELSE
         FNBGSI = "./fnbgsi." // RANKCH
  ENDIF
@@ -1095,6 +1160,20 @@ MODULE READ_WRITE_DATA
  ERROR=NF90_OPEN(TRIM(FNBGSI),NF90_NOWRITE,NCID)
  CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(FNBGSI) )
 
+ IF ((INC_FILE) .and. (DO_SOI_INC_JEDI)) THEN
+
+ ERROR=NF90_INQ_DIMID(NCID, 'grid_xt', ID_DIM)
+ CALL NETCDF_ERR(ERROR, 'READING grid_xt' )
+ ERROR=NF90_INQUIRE_DIMENSION(NCID,ID_DIM,LEN=IDIM)
+ CALL NETCDF_ERR(ERROR, 'READING grid_xt' )
+
+ ERROR=NF90_INQ_DIMID(NCID, 'grid_yt', ID_DIM)
+ CALL NETCDF_ERR(ERROR, 'READING grid_yt' )
+ ERROR=NF90_INQUIRE_DIMENSION(NCID,ID_DIM,LEN=JDIM)
+ CALL NETCDF_ERR(ERROR, 'READING grid_yt' )
+
+ ELSE
+
  ERROR=NF90_INQ_DIMID(NCID, 'xaxis_1', ID_DIM)
  CALL NETCDF_ERR(ERROR, 'READING xaxis_1' )
  ERROR=NF90_INQUIRE_DIMENSION(NCID,ID_DIM,LEN=IDIM)
@@ -1104,6 +1183,8 @@ MODULE READ_WRITE_DATA
  CALL NETCDF_ERR(ERROR, 'READING yaxis_1' )
  ERROR=NF90_INQUIRE_DIMENSION(NCID,ID_DIM,LEN=JDIM)
  CALL NETCDF_ERR(ERROR, 'READING yaxis_1' )
+
+ ENDIF
 
  IF ((IDIM*JDIM) /= LENSFC) THEN
    PRINT*,'FATAL ERROR: DIMENSIONS WRONG.'
@@ -1510,6 +1591,22 @@ MODULE READ_WRITE_DATA
  ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy3d)
  CALL NETCDF_ERR(ERROR, 'READING stc' )
  STCFCS = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
+ ENDIF
+
+ IF (PRESENT(SLCINC)) THEN
+ ERROR=NF90_INQ_VARID(NCID, "soill", ID_VAR)
+ CALL NETCDF_ERR(ERROR, 'READING soill ID' )
+ ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy3d)
+ CALL NETCDF_ERR(ERROR, 'READING slc increments' )
+ SLCINC = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
+ ENDIF
+
+ IF (PRESENT(STCINC)) THEN
+ ERROR=NF90_INQ_VARID(NCID, "soilt", ID_VAR)
+ CALL NETCDF_ERR(ERROR, 'READING soilt ID' )
+ ERROR=NF90_GET_VAR(NCID, ID_VAR, dummy3d)
+ CALL NETCDF_ERR(ERROR, 'READING stc increments' )
+ STCINC = RESHAPE(DUMMY3D, (/LENSFC,LSOIL/))
  ENDIF
 
  DEALLOCATE(DUMMY3D)

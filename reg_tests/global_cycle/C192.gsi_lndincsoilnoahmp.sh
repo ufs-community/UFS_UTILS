@@ -29,8 +29,6 @@ export OCNRES=99999
 
 export COMIN=$HOMEreg/input_data_noahmp
 
-export LND_SOI_FILE=$COMIN/sfcincr_gsi
-
 export JCAP=1534
 export LONB=3072
 export LATB=1536
@@ -40,6 +38,7 @@ export use_ufo=.true.
 
 export DO_SFCCYCLE=".FALSE." 
 export DO_LNDINC=".TRUE." 
+export DO_SOI_INC_GSI=".true."
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
@@ -49,7 +48,7 @@ $HOMEgfs/ush/global_cycle_driver.sh
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< C192 LANDINC SOIL NOAHMP CYCLE TEST FAILED. >>>"
+  echo "<<< C192 GSI based LANDINC SOIL NOAHMP CYCLE TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -60,7 +59,19 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.lndincsoilnoahmp/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.gsi_lndincsoilnoahmp/$files
+    iret=$?
+    if [ $iret -ne 0 ]; then
+      test_failed=1
+    fi
+  fi
+done
+
+for files in *gaussian_interp*
+do
+  if [ -f $files ]; then
+    echo CHECK $files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.gsi_lndincsoilnoahmp/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -72,7 +83,7 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo
   echo "**********************************************"
-  echo "<<< C192 LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
+  echo "<<< C192 GSI based LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
   echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
     $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c192.lndincsoilnoahmp" $commit_num
@@ -80,7 +91,7 @@ if [ $test_failed -ne 0 ]; then
 else
   echo
   echo "*****************************************"
-  echo "<<< C192 LANDINC SOIL-NOAHMP CYCLE TEST PASSED. >>>"
+  echo "<<< C192 GSI based LANDINC SOIL-NOAHMP CYCLE TEST PASSED. >>>"
   echo "*****************************************"
 fi
 
