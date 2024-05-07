@@ -20,8 +20,6 @@ module utils_esmf_mod
   type(ESMF_DynamicMask) :: dynamicLevMask !< an ESMF dynamicMask object
   type(ESMF_Mesh)        :: meshsrc        !< an ESMF mesh for the source grid
   type(ESMF_Mesh)        :: meshdst        !< an ESMF mesh for destination grids
-  type(ESMF_Field)       :: fldsrc         !< ESMF fields on the source grid
-  type(ESMF_Field)       :: flddst         !< ESMF fields on the destination grids
 
   integer :: srcTermProcessing = 0         !< The source term processing flag, required for Dynamic Masking
 
@@ -58,6 +56,8 @@ contains
     integer,          intent(out) :: rc
 
     ! local variables
+    type(ESMF_Field)             :: fldsrc
+    type(ESMF_Field)             :: flddst
     type(ESMF_RegridMethod_Flag) :: regridmethod
     type(ESMF_ExtrapMethod_Flag) :: extrapmethod
     type(ESMF_Field)             :: dststatusfield
@@ -133,6 +133,9 @@ contains
     real(kind=8), intent(out) :: dst_field(:)
     integer,      intent(out) :: rc
 
+    ! local variables
+    type(ESMF_Field)      :: fldsrc
+    type(ESMF_Field)      :: flddst
     real(kind=8), pointer :: srcptr(:), dstptr(:)
     character(len=20)     :: subname = 'remapRH1d'
     !----------------------------------------------------------------------------
@@ -181,6 +184,9 @@ contains
     real(kind=8), intent(out) :: dst_field(:,:)
     integer,      intent(out) :: rc
 
+    ! local variables
+    type(ESMF_Field)      :: fldsrc
+    type(ESMF_Field)      :: flddst
     real(kind=8), pointer :: srcptr(:,:), dstptr(:,:)
     character(len=20)     :: subname = 'remapRH2d'
     !----------------------------------------------------------------------------
@@ -224,7 +230,7 @@ contains
   !!
   !! @param[in]  kk           the vertical or category index
   !! @param[in]  src_field    the field on the source grid
-  !! @param[in]  hmask        the mask field to use with dynamic masking (optional)
+  !! @param[in]  hmask        the mask field to use with dynamic masking
   !! @param[out] dst_field    the field on the destination grid
   !! @param[out] rc           an error return code
   !!
@@ -238,6 +244,9 @@ contains
     real(kind=8), intent(out) :: dst_field(:)
     integer,      intent(out) :: rc
 
+    ! local variables
+    type(ESMF_Field)      :: fldsrc
+    type(ESMF_Field)      :: flddst
     integer               :: i,n
     real(kind=8), pointer :: srcptr(:), dstptr(:)
     character(len=20)     :: subname = 'remapRH1ddyn'
@@ -281,7 +290,7 @@ contains
   !!
   !! @param[in]  kk           the vertical or category index
   !! @param[in]  src_field    the field on the source grid
-  !! @param[in]  hmask        the mask field to use with dynamic masking (optional)
+  !! @param[in]  hmask        the mask field to use with dynamic masking
   !! @param[out] dst_field    the field on the destination grid
   !! @param[out] rc           an error return code
   !!
@@ -294,6 +303,9 @@ contains
     real(kind=8), intent(out) :: dst_field(:,:)
     integer,      intent(out) :: rc
 
+    ! local variables
+    type(ESMF_Field)      :: fldsrc
+    type(ESMF_Field)      :: flddst
     integer               :: i,n
     real(kind=8), pointer :: srcptr(:,:), dstptr(:,:)
     character(len=20)     :: subname = 'remapRH2ddyn'

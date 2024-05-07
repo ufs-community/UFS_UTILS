@@ -134,7 +134,7 @@ contains
 
     ! local variables
     integer                   :: n, nn
-    real(kind=8), allocatable, dimension(:,:,:) :: vecpair
+    real(kind=8), allocatable :: vecpair(:,:,:)
     character(len=20)         :: subname = 'packarrays3d'
     !----------------------------------------------------------------------------
 

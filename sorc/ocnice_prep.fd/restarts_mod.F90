@@ -82,7 +82,7 @@ contains
     character(len= 40)        :: timeunit
     character(len= 20)        :: vname, vunit
     character(len=120)        :: vlong
-    real(kind=8), allocatable :: Layer(:)          !< the vertical grid center
+    real(kind=8), allocatable :: Layer(:)
     real(kind=8), allocatable :: out3d(:,:,:)
 
     integer :: k,n,ncid,varid,dims3(3),dims4(4)

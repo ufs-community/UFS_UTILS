@@ -73,7 +73,7 @@ program ocniceprep
 
   meshfsrc = trim(griddir)//fsrc(3:5)//'/'//'mesh.'//trim(fsrc)//'.nc'
   meshfdst = trim(griddir)//fdst(3:5)//'/'//'mesh.'//trim(fdst)//'.nc'
-  print '(a)',trim(meshfsrc),trim(meshfdst)
+  write(logunit,'(a)')'mesh src '//trim(meshfsrc),' mesh dst'//trim(meshfdst)
   call createRH(trim(meshfsrc),trim(meshfdst),rc=rc)
   if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
 
@@ -106,7 +106,8 @@ program ocniceprep
   call nf90_err(nf90_close(ncid), 'close: '//trim(gridfile))
 
   ! -----------------------------------------------------------------------------
-  ! get the 3rd (vertical or ncat) dimension and the masking variable
+  ! get the 3rd (vertical or ncat) dimension and variable attributes for the
+  ! ocean file
   ! -----------------------------------------------------------------------------
 
   call nf90_err(nf90_open(trim(input_file), nf90_nowrite, ncid),   &
@@ -123,12 +124,6 @@ program ocniceprep
           'get dimension Id: ncat'//trim(input_file))
   endif
   do n = 1,nvalid
-     if (debug) then
-        write(logunit,'(i4,a14,i4,a10,3(a6),a2)')n,'  '//trim(outvars(n)%var_name)// &
-             ', ', outvars(n)%var_dimen,', '//trim(outvars(n)%var_remapmethod),      &
-             ', '//trim(outvars(n)%var_grid), ', '//trim(outvars(n)%var_pair),       &
-             ', '//trim(outvars(n)%var_pair_grid)
-     end if
      if (do_ocnprep) then
         if (trim(outvars(n)%var_name) .eq. 'eta')then
            outvars(n)%long_name = 'Interface height'
@@ -139,14 +134,23 @@ program ocniceprep
            call nf90_err(nf90_get_att(ncid, varid,  'long_name', outvars(n)%long_name), &
                 'get variable attribute: long_name '//trim(outvars(n)%var_name))
            call nf90_err(nf90_get_att(ncid, varid,      'units', outvars(n)%units),     &
-                'get variable attribute: units '//trim(outvars(n)%var_name)        )
+                'get variable attribute: units '//trim(outvars(n)%var_name) )
         end if
      end if
   end do
   call nf90_err(nf90_close(ncid), 'close: '//trim(input_file))
 
+  if (debug) then
+     do n = 1,nvalid
+        write(logunit,'(i4,a14,i4,a10,3(a6),a2)')n,'  '//trim(outvars(n)%var_name)// &
+             ', ', outvars(n)%var_dimen,', '//trim(outvars(n)%var_remapmethod),      &
+             ', '//trim(outvars(n)%var_grid), ', '//trim(outvars(n)%var_pair),       &
+             ', '//trim(outvars(n)%var_pair_grid)
+     end do
+  end if
+
   ! -----------------------------------------------------------------------------
-  ! get the masking variable for ocean 3-d remapping
+  ! get the masking variable for ocean 3-d remapping and create the mask
   ! -----------------------------------------------------------------------------
 
   if (do_ocnprep) then
@@ -176,7 +180,7 @@ program ocniceprep
 
   ! 2D bilin
   if (allocated(bilin2d)) then
-     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                             &
+     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',           &
           cos(angsrc), sin(angsrc), b2d, dims=(/nxt,nyt/), nflds=nbilin2d, fields=bilin2d)
      rgb2d = 0.0
      call remapRH(src_field=bilin2d, dst_field=rgb2d,rc=rc)
@@ -186,47 +190,47 @@ program ocniceprep
         write(logunit,'(a)')'remap 2D fields bilinear with RH '
         write(logunit,'(a)')'packed min/max values, mapped min/max values'
         do n = 1,nbilin2d
-           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                                      &
-                trim(b2d(n)%var_name),'  ',trim(b2d(n)%var_grid),'  ',                            &
-                trim(b2d(n)%var_pair),'  ',trim(b2d(n)%var_pair_grid),                            &
-                minval(bilin2d(n,:)), maxval(bilin2d(n,:)),                                       &
+           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                    &
+                trim(b2d(n)%var_name),'  ',trim(b2d(n)%var_grid),'  ',          &
+                trim(b2d(n)%var_pair),'  ',trim(b2d(n)%var_pair_grid),          &
+                minval(bilin2d(n,:)), maxval(bilin2d(n,:)),                     &
                 minval(rgb2d(n,:)), maxval(rgb2d(n,:))
         end do
-        call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.bilin2d.nc', 'bilin2d',                       &
+        call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.bilin2d.nc', 'bilin2d',     &
              dims=(/nxt,nyt/), nflds=nbilin2d, field=bilin2d)
-        call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgbilin2d.nc', 'rgbilin2d',                   &
+        call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgbilin2d.nc', 'rgbilin2d', &
              dims=(/nxr,nyr/), nflds=nbilin2d, field=rgb2d)
      end if
   end if
 
   ! 2D conserv
   if (allocated(consd2d)) then
-     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                             &
+     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',           &
           cos(angsrc), sin(angsrc), c2d, dims=(/nxt,nyt/), nflds=nconsd2d, fields=consd2d)
      rgc2d = 0.0
      call remapRH(src_field=consd2d, dst_field=rgc2d,rc=rc)
      if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
 
      if (debug) then
-        write(logunit,'(a)')'remap 2D fields conserv with '//trim(wgtsfile)
+        write(logunit,'(a)')'remap 2D fields conserv with RH '
         write(logunit,'(a)')'packed min/max values, mapped min/max values'
         do n = 1,nconsd2d
-           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                                      &
-                trim(c2d(n)%var_name),'  ', trim(c2d(n)%var_grid),'  ',                           &
-                trim(c2d(n)%var_pair),'  ', trim(c2d(n)%var_pair_grid),                           &
-                minval(consd2d(n,:)), maxval(consd2d(n,:)),                                       &
+           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                    &
+                trim(c2d(n)%var_name),'  ', trim(c2d(n)%var_grid),'  ',         &
+                trim(c2d(n)%var_pair),'  ', trim(c2d(n)%var_pair_grid),         &
+                minval(consd2d(n,:)), maxval(consd2d(n,:)),                     &
                 minval(rgc2d(n,:)), maxval(rgc2d(n,:))
         end do
-        call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.consd2d.nc', 'consd2d', dims=(/nxt,nyt/),     &
-             nflds=nconsd2d, field=consd2d)
-	call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgconsd2d.nc', 'rgconsd2d', dims=(/nxr,nyr/), &
-             nflds=nconsd2d, field=rgc2d)
+        call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.consd2d.nc', 'consd2d',     &
+             dims=(/nxt,nyt/), nflds=nconsd2d, field=consd2d)
+	call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgconsd2d.nc', 'rgconsd2d', &
+             dims=(/nxr,nyr/), nflds=nconsd2d, field=rgc2d)
      end if
   end if
 
   ! 3D bilin
   if (allocated(bilin3d))then
-     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',                             &
+     call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',           &
           cos(angsrc), sin(angsrc), b3d, dims=(/nxt,nyt,nlevs/), nflds=nbilin3d, fields=bilin3d)
      rgb3d = 0.0
      do k = 1,nlevs
@@ -243,18 +247,18 @@ program ocniceprep
      end if
 
      if (debug) then
-        write(logunit,'(a)')'remap 3D fields bilinear with RH'
+        write(logunit,'(a)')'remap 3D fields bilinear with RH '
         write(logunit,'(a)')'packed min/max values,mapped min/max values'
         do n = 1,nbilin3d
-           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                                      &
-                trim(b3d(n)%var_name),'  ', trim(b3d(n)%var_grid),'  ',                           &
-                trim(b3d(n)%var_pair),'  ', trim(b3d(n)%var_pair_grid),                           &
-                minval(bilin3d(n,:,:)), maxval(bilin3d(n,:,:)),                                   &
+           write(logunit,'(i4,a14,3(a2,a6),4g14.4)')n,'  '//                    &
+                trim(b3d(n)%var_name),'  ', trim(b3d(n)%var_grid),'  ',         &
+                trim(b3d(n)%var_pair),'  ', trim(b3d(n)%var_pair_grid),         &
+                minval(bilin3d(n,:,:)), maxval(bilin3d(n,:,:)),                 &
                 minval(rgb3d(n,:,:)), maxval(rgb3d(n,:,:))
         end do
-        call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.bilin3d.nc', 'bilin3d',                       &
+        call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.bilin3d.nc', 'bilin3d',     &
              dims=(/nxt,nyt,nlevs/), nk=nlevs, nflds=nbilin3d, field=bilin3d)
-        call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgbilin3d.nc', 'rgbilin3d',                   &
+        call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgbilin3d.nc', 'rgbilin3d', &
              dims=(/nxr,nyr,nlevs/), nk=nlevs, nflds=nbilin3d, field=rgb3d)
      end if
   end if
@@ -298,7 +302,6 @@ program ocniceprep
   fout = trim(ftype)//'.'//trim(fdst)//'.nc'
   if (debug) write(logunit, '(a)')'output file: '//trim(fout)
 
-  gridfile = trim(griddir)//fdst(3:5)//'/'//'tripole.'//trim(fdst)//'.nc'
   if (do_ocnprep) then
      call setup_ocnrestart(trim(input_file),trim(fout),bathydst)
   else
