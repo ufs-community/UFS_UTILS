@@ -59,7 +59,7 @@ It also uses the following repositories:
 
 ## Installing
 
-On Orion, Hercules, Jet, Hera and WCOSS2 do the following:
+On Orion, Hercules, Jet, Hera, S4, Gaea and WCOSS2 do the following:
 
 1) Set the 'fixed' directories using the `link_fixdirs.sh`
 script in `./fix`. Usage: `./link_fixdirs.sh $RUN_ENVIR $machine`,
