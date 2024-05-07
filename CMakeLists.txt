@@ -14,7 +14,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # User options.
 option(OPENMP "use OpenMP threading" ON)
-option(ENABLE_DOCS "Enable generation of doxygen-based documentation." ON)
+option(ENABLE_DOCS "Enable generation of doxygen-based documentation." OFF)
 
 # Utilities to be built (Default: ALL)
 option(ICEBLEND "Enable building emcsfc_ice_blend.fd" ON)
@@ -130,8 +130,8 @@ endif()
 add_subdirectory(sorc)
 
 # Run unit tests.
-#include(CTest)
-#if(BUILD_TESTING)
-#  message(STATUS "Set BUILD_TESTING to YES and build unit testing package under tests")
-#  add_subdirectory(tests)
-#endif()
+include(CTest)
+if(BUILD_TESTING)
+  message(STATUS "Set BUILD_TESTING to YES and build unit testing package under tests")
+  add_subdirectory(tests)
+endif()

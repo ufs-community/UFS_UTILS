@@ -51,11 +51,19 @@ module init_mod
 contains
   !>  Read input namelist file
   !!
+  !! param[in]   fname     namelist file
+  !! param[out]  errmsg    return error message
+  !! param[out]  rc        return error code
+  !!
   !! @author Denise.Worthen@noaa.gov
-  subroutine readnml
+  subroutine readnml(fname,errmsg,rc)
+
+    character(len=*), intent(in)  :: fname
+    character(len=*), intent(out) :: errmsg
+    integer,          intent(out) :: rc
 
     ! local variable
-    character(len=20) :: fname = 'ocniceprep.nml'
+    logical :: exists
     integer :: ierr, iounit
     integer :: srcdims(2), dstdims(2)
     !----------------------------------------------------------------------------
@@ -64,23 +72,39 @@ contains
          angvar, debug
 
     srcdims = 0; dstdims = 0
-    angvar=''
+    errmsg='' ! for successful return
+    rc = 0    ! for successful retun
+    print *,'X0 ',trim(fname)
 
-    inquire (file=trim(fname), iostat=ierr)
-    if (ierr /= 0) then
-       write (0, '(3a)') 'FATAL ERROR: input file "', trim(fname), '" does not exist.'
-       stop 1
+    inquire(file=trim(fname), exist=exists)
+    print *,exists
+    if (.not. exists) then
+       write (errmsg, '(a)') 'FATAL ERROR: input file '//trim(fname)//' does not exist.'
+       rc = 1
+       return
+    else
+       ! Open and read namelist file.
+       open (action='read', file=trim(fname), iostat=ierr, newunit=iounit)
+       read (nml=ocniceprep_nml, iostat=ierr, unit=iounit)
+       if (ierr /= 0) then
+          rc = 1
+          write (errmsg, '(a)') 'FATAL ERROR: invalid namelist format.'
+          return
+       end if
+       close (iounit)
     end if
-
-    ! Open and read namelist file.
-    open (action='read', file=trim(fname), iostat=ierr, newunit=iounit)
-    read (nml=ocniceprep_nml, iostat=ierr, unit=iounit)
-    if (ierr /= 0) then
-       write (6, '(a)') 'Error: invalid namelist format.'
-    end if
-    close (iounit)
     nxt = srcdims(1); nyt = srcdims(2)
     nxr = dstdims(1); nyr = dstdims(2)
+
+    ! check that model is either ocean or ice
+    if (trim(ftype) /= 'ocean' .and. trim(ftype) /= 'ice') then
+       rc = 1
+       write (errmsg, '(a)') 'FATAL ERROR: ftype must be ocean or ice'
+    end if
+    ! check that the correct angle variable is used
+    if (trim(angvar) /= 'anglet') then
+       rc = 1
+    end if
 
     ! initialize the source file type and variables
     if (trim(ftype) == 'ocean') then
@@ -97,8 +121,9 @@ contains
     fsrc = ''
     if (nxt == 1440 .and. nyt == 1080) fsrc = 'mx025'    ! 1/4deg tripole
     if (len_trim(fsrc) == 0) then
-       write(0,'(a)')'FATAL ERROR: source grid dimensions unknown'
-       stop 2
+       rc = 1
+       write(errmsg,'(a)')'FATAL ERROR: source grid dimensions unknown'
+       return
     end if
 
     fdst = ''
@@ -106,8 +131,9 @@ contains
     if (nxr == 360  .and. nyr == 320) fdst = 'mx100'     ! 1deg tripole
     if (nxr == 72   .and. nyr == 35)  fdst = 'mx500'     ! 5deg tripole
     if (len_trim(fdst) == 0) then
-       write(0,'(a)')'FATAL ERROR: destination grid dimensions unknown'
-       stop 3
+       rc = 1
+       write(errmsg,'(a)')'FATAL ERROR: destination grid dimensions unknown'
+       return
     end if
   end subroutine readnml
 
@@ -152,6 +178,11 @@ contains
     end do
     close(iounit)
     nvalid = nn
+
+    ! check that vector pairs are correctly identified
+    !do n = 1,nvalid
+
+
 
   end subroutine readcsv
 end module init_mod
