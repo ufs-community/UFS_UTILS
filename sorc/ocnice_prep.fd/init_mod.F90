@@ -83,26 +83,21 @@ contains
     else
        ! Open and read namelist file.
        open (action='read', file=trim(fname), iostat=ierr, newunit=iounit)
-       print *,ierr
        read (nml=ocniceprep_nml, iostat=ierr, unit=iounit)
-       print *,ierr,iounit,trim(ftype),trim(wgtsdir),trim(griddir),dstdims,srcdims,debug
-       !if (ierr /= 0) then
-          backspace(iounit)
-          read(iounit,'(a)')tmpstr
-          print *,trim(tmpstr)
-       !   rc = 1
-       !   write (errmsg, '(a)') 'FATAL ERROR: invalid namelist format.'
-       !   return
-       !end if
+       if (ierr /= 0) then
+          rc = 1
+          write (errmsg, '(a)') 'FATAL ERROR: invalid namelist format.'
+          return
+       end if
        close (iounit)
     end if
-    print *,'here'
+
     ! check that model is either ocean or ice
     if (trim(ftype) /= 'ocean' .and. trim(ftype) /= 'ice') then
        rc = 1
        write (errmsg, '(a)') 'FATAL ERROR: ftype must be ocean or ice'
+       return
     end if
-    print *,srcdims,dstdims
 
     ! set grid dimensions and names
     nxt = srcdims(1); nyt = srcdims(2)
@@ -111,7 +106,7 @@ contains
     if (nxt == 1440 .and. nyt == 1080) fsrc = 'mx025'    ! 1/4deg tripole
     if (len_trim(fsrc) == 0) then
        rc = 1
-       write(errmsg,'(a)')'FATAL ERROR: source grid dimensions unknown'
+       write(errmsg,'(a)')'FATAL ERROR: source grid dimensions incorrect'
        return
     end if
 
@@ -120,7 +115,7 @@ contains
     if (nxr == 72   .and. nyr == 35)  fdst = 'mx500'     ! 5deg tripole
     if (len_trim(fdst) == 0) then
        rc = 1
-       write(errmsg,'(a)')'FATAL ERROR: destination grid dimensions unknown'
+       write(errmsg,'(a)')'FATAL ERROR: destination grid dimensions incorrect'
        return
     end if
 
@@ -131,6 +126,12 @@ contains
        do_ocnprep = .false.
     end if
     input_file = trim(ftype)//'.nc'
+    inquire (file=trim(input_file), exist=exists)
+    if (.not. exists) then
+       write (errmsg, '(a)') 'FATAL ERROR: input file '//trim(input_file)//' does not exist.'
+       rc=1
+       return
+    end if
 
     ! log file
     open(newunit=logunit, file=trim(ftype)//'.prep.log',form='formatted')
