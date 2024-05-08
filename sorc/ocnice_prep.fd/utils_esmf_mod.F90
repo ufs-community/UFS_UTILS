@@ -147,11 +147,6 @@ contains
     flddst = ESMF_FieldCreate(meshdst, ESMF_TYPEKIND_R8, meshloc=ESMF_MESHLOC_ELEMENT,rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
-    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.0, rc=rc)
-    if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.0, rc=rc)
-    if (ChkErr(rc,__LINE__,u_FILE_u)) return
-
     call ESMF_FieldGet(fldsrc, farrayptr=srcptr, rc=rc)
     if (chkerr(rc,__LINE__,u_FILE_u)) return
     call ESMF_FieldGet(flddst, farrayptr=dstptr, rc=rc)
@@ -200,11 +195,6 @@ contains
     flddst = ESMF_FieldCreate(meshdst, ESMF_TYPEKIND_R8, meshloc=ESMF_MESHLOC_ELEMENT, &
          ungriddedLbound=(/1/), ungriddedUbound=(/size(dst_field,1)/),                 &
          gridToFieldMap=(/2/), rc=rc)
-    if (ChkErr(rc,__LINE__,u_FILE_u)) return
-
-    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.0, rc=rc)
-    if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.0, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     call ESMF_FieldGet(fldsrc, farrayptr=srcptr, rc=rc)
@@ -263,13 +253,7 @@ contains
     call ESMF_FieldGet(flddst, farrayptr=dstptr, rc=rc)
     if (chkerr(rc,__LINE__,u_FILE_u)) return
 
-    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.0, rc=rc)
-    if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.0, rc=rc)
-    if (ChkErr(rc,__LINE__,u_FILE_u)) return
-
     srcptr = src_field
-    srcptr = 1.0
     where(hmask .eq. maskspval)srcptr = maskspval
 
     if (ESMF_RouteHandleIsCreated(rh,rc=rc)) then
@@ -325,11 +309,6 @@ contains
     if (chkerr(rc,__LINE__,u_FILE_u)) return
     call ESMF_FieldGet(flddst, farrayptr=dstptr, rc=rc)
     if (chkerr(rc,__LINE__,u_FILE_u)) return
-
-    call ESMF_FieldFill(fldsrc, dataFillScheme="const", const1=0.0, rc=rc)
-    if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    call ESMF_FieldFill(flddst, dataFillScheme="const", const1=0.0, rc=rc)
-    if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     srcptr = src_field
     do n = 1,ubound(src_field,2)
@@ -521,13 +500,11 @@ contains
   !!
   !! @author Denise.Worthen@noaa.gov
   logical function ChkErr(rc, line, file)
-
     integer, intent(in) :: rc
     integer, intent(in) :: line
     character(len=*), intent(in) :: file
     integer :: lrc
     !----------------------------------------------------------------------------
-
     ChkErr = .false.
     lrc = rc
     if (ESMF_LogFoundError(rcToCheck=lrc, msg=ESMF_LOGERR_PASSTHRU, line=line, file=file)) then

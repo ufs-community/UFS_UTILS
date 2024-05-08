@@ -86,7 +86,8 @@ program ocniceprep
 
   meshfsrc = trim(griddir)//fsrc(3:5)//'/'//'mesh.'//trim(fsrc)//'.nc'
   meshfdst = trim(griddir)//fdst(3:5)//'/'//'mesh.'//trim(fdst)//'.nc'
-  write(logunit,'(a)')'mesh src '//trim(meshfsrc),' mesh dst'//trim(meshfdst)
+  write(logunit,'(a)')'mesh src: '//trim(meshfsrc)
+  write(logunit,'(a)')'mesh dst: '//trim(meshfdst)
   call createRH(trim(meshfsrc),trim(meshfdst),rc=rc)
   if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
 
