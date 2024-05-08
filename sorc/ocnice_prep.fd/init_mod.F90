@@ -64,6 +64,7 @@ contains
     logical :: exists
     integer :: ierr, iounit
     integer :: srcdims(2), dstdims(2)
+    character(len=100) :: tmpstr
     !----------------------------------------------------------------------------
 
     namelist /ocniceprep_nml/ ftype, srcdims, wgtsdir, griddir, dstdims, debug
@@ -82,20 +83,26 @@ contains
     else
        ! Open and read namelist file.
        open (action='read', file=trim(fname), iostat=ierr, newunit=iounit)
+       print *,ierr
        read (nml=ocniceprep_nml, iostat=ierr, unit=iounit)
-       if (ierr /= 0) then
-          rc = 1
-          write (errmsg, '(a)') 'FATAL ERROR: invalid namelist format.'
-          return
-       end if
+       print *,ierr,iounit,trim(ftype),trim(wgtsdir),trim(griddir),dstdims,srcdims,debug
+       !if (ierr /= 0) then
+          backspace(iounit)
+          read(iounit,'(a)')tmpstr
+          print *,trim(tmpstr)
+       !   rc = 1
+       !   write (errmsg, '(a)') 'FATAL ERROR: invalid namelist format.'
+       !   return
+       !end if
        close (iounit)
     end if
-
+    print *,'here'
     ! check that model is either ocean or ice
     if (trim(ftype) /= 'ocean' .and. trim(ftype) /= 'ice') then
        rc = 1
        write (errmsg, '(a)') 'FATAL ERROR: ftype must be ocean or ice'
     end if
+    print *,srcdims,dstdims
 
     ! set grid dimensions and names
     nxt = srcdims(1); nyt = srcdims(2)
@@ -130,7 +137,7 @@ contains
     if (debug) write(logunit, '(a)')'input file: '//trim(input_file)
 
     ! all checks pass, continue
-    write(errmsg,'(a)')' Namelist successfully read, continue')
+    write(errmsg,'(a)')' Namelist successfully read, continue'
     rc = 0
 
   end subroutine readnml
