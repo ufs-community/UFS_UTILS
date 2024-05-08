@@ -10,21 +10,22 @@ module init_mod
 
   public
 
-  integer, parameter :: maxvars = 60           !< The maximum number of fields expected in a source file
-
+  integer, parameter :: maxvars = 60         !< The maximum number of fields expected in a source file
+  character(len=10)  :: maskvar = 'h'        !< The variable in the ocean source file used to create
+                                             !< the interpolation mask with dynamic masking
   type :: vardefs
-     character(len= 20)   :: var_name          !< A variable's variable name
-     character(len=120)   :: long_name         !< A variable's long name
-     character(len= 20)   :: units             !< A variable's unit
-     character(len= 20)   :: var_remapmethod   !< A variable's mapping method
-     integer              :: var_dimen         !< A variable's dimensionality
-     character(len=  4)   :: var_grid          !< A variable's input grid location
-     character(len= 20)   :: var_pair          !< A variable's pair
-     character(len=  4)   :: var_pair_grid     !< A pair variable grid
+     character(len= 20)   :: var_name        !< A variable's variable name
+     character(len=120)   :: long_name       !< A variable's long name
+     character(len= 20)   :: units           !< A variable's unit
+     character(len= 20)   :: var_remapmethod !< A variable's mapping method
+     integer              :: var_dimen       !< A variable's dimensionality
+     character(len=  4)   :: var_grid        !< A variable's input grid location
+     character(len= 20)   :: var_pair        !< A variable's pair
+     character(len=  4)   :: var_pair_grid   !< A pair variable grid
   end type vardefs
 
-  type(vardefs) :: outvars(maxvars)            !< An empty structure filled by reading a csv file
-                                               !< describing the fields
+  type(vardefs) :: outvars(maxvars)          !< An empty structure filled by reading a csv file
+                                             !< describing the fields
 
   character(len=10)  :: ftype      !< The type of tripole grid (ocean or ice)
   character(len=10)  :: fsrc       !< A character string for tripole grid
@@ -32,10 +33,7 @@ module init_mod
   character(len=120) :: wgtsdir    !< The directory containing the regridding weights
   character(len=120) :: griddir    !< The directory containing the master tripole grid file
   character(len=20)  :: input_file !< The input file name
-  character(len=10)  :: maskvar    !< The variable in the source file used to create the interpolation mask
 
-  ! rotation angles
-  character(len=10)  :: angvar    !< The variable in the master tripole file containing the rotation angle
 
   integer :: nxt        !< The x-dimension of the source tripole grid
   integer :: nyt        !< The y-dimension of the source tripole grid
@@ -68,8 +66,7 @@ contains
     integer :: srcdims(2), dstdims(2)
     !----------------------------------------------------------------------------
 
-    namelist /ocniceprep_nml/ ftype, srcdims, wgtsdir, griddir, dstdims, maskvar, &
-         angvar, debug
+    namelist /ocniceprep_nml/ ftype, srcdims, wgtsdir, griddir, dstdims, debug
 
     srcdims = 0; dstdims = 0
     errmsg='' ! for successful return
@@ -93,32 +90,17 @@ contains
        end if
        close (iounit)
     end if
-    nxt = srcdims(1); nyt = srcdims(2)
-    nxr = dstdims(1); nyr = dstdims(2)
 
     ! check that model is either ocean or ice
     if (trim(ftype) /= 'ocean' .and. trim(ftype) /= 'ice') then
        rc = 1
        write (errmsg, '(a)') 'FATAL ERROR: ftype must be ocean or ice'
     end if
-    ! check that the correct angle variable is used
-    if (trim(angvar) /= 'anglet') then
-       rc = 1
-    end if
 
-    ! initialize the source file type and variables
-    if (trim(ftype) == 'ocean') then
-       do_ocnprep = .true.
-    else
-       do_ocnprep = .false.
-    end if
-    input_file = trim(ftype)//'.nc'
-
-    open(newunit=logunit, file=trim(ftype)//'.prep.log',form='formatted')
-    if (debug) write(logunit, '(a)')'input file: '//trim(input_file)
-
-    ! set grid names
-    fsrc = ''
+    ! set grid dimensions and names
+    nxt = srcdims(1); nyt = srcdims(2)
+    nxr = dstdims(1); nyr = dstdims(2)
+    fsrc = '' ; fdst = ''
     if (nxt == 1440 .and. nyt == 1080) fsrc = 'mx025'    ! 1/4deg tripole
     if (len_trim(fsrc) == 0) then
        rc = 1
@@ -126,7 +108,6 @@ contains
        return
     end if
 
-    fdst = ''
     if (nxr == 720  .and. nyr == 576) fdst = 'mx050'     ! 1/2deg tripole
     if (nxr == 360  .and. nyr == 320) fdst = 'mx100'     ! 1deg tripole
     if (nxr == 72   .and. nyr == 35)  fdst = 'mx500'     ! 5deg tripole
@@ -135,6 +116,23 @@ contains
        write(errmsg,'(a)')'FATAL ERROR: destination grid dimensions unknown'
        return
     end if
+
+    ! initialize the source file types
+    if (trim(ftype) == 'ocean') then
+       do_ocnprep = .true.
+    else
+       do_ocnprep = .false.
+    end if
+    input_file = trim(ftype)//'.nc'
+
+    ! log file
+    open(newunit=logunit, file=trim(ftype)//'.prep.log',form='formatted')
+    if (debug) write(logunit, '(a)')'input file: '//trim(input_file)
+
+    ! all checks pass, continue
+    write(errmsg,'(a)')' Namelist successfully read, continue')
+    rc = 0
+
   end subroutine readnml
 
   !>  Read the input csv file and fill the vardefs type
@@ -179,8 +177,6 @@ contains
     close(iounit)
     nvalid = nn
 
-    ! check that vector pairs are correctly identified
-    !do n = 1,nvalid
 
 
 

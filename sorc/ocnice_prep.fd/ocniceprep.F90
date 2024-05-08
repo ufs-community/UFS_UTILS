@@ -14,7 +14,7 @@ program ocniceprep
   use ESMF
   use netcdf
   use init_mod   ,     only : nxt, nyt, nlevs, nxr, nyr, outvars, readnml, readcsv
-  use init_mod   ,     only : wgtsdir, griddir, ftype, fsrc, fdst, input_file, angvar, maskvar
+  use init_mod   ,     only : wgtsdir, griddir, ftype, fsrc, fdst, input_file, maskvar
   use init_mod   ,     only : do_ocnprep, debug, logunit
   use arrays_mod ,     only : b2d, c2d, b3d, rgb2d, rgb3d, rgc2d, setup_packing
   use arrays_mod ,     only : nbilin2d, nbilin3d, nconsd2d, bilin2d, bilin3d, consd2d
@@ -66,8 +66,8 @@ program ocniceprep
 
   call readnml('ocniceprep.nml',errmsg,rc)
   if (rc /= 0) then
-     write(logunit,'(a)')trim(errmsg)
-     !stop
+     write(0,'(a)')trim(errmsg)
+     stop
   end if
   call readcsv(nvalid)
 
