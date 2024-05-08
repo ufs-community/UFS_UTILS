@@ -1,5 +1,5 @@
 & ocniceprep_nml
-ftype='ocean'
+ftype='atm'
 wgtsdir='/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_1191124/'
 griddir='/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_1191124/'
 srcdims=1440,1080

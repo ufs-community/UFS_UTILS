@@ -14,7 +14,7 @@ program ocniceprep
   use ESMF
   use netcdf
   use init_mod   ,     only : nxt, nyt, nlevs, nxr, nyr, outvars, readnml, readcsv
-  use init_mod   ,     only : wgtsdir, griddir, ftype, fsrc, fdst, input_file, angvar, maskvar
+  use init_mod   ,     only : wgtsdir, griddir, ftype, fsrc, fdst, input_file, maskvar
   use init_mod   ,     only : do_ocnprep, debug, logunit
   use arrays_mod ,     only : b2d, c2d, b3d, rgb2d, rgb3d, rgc2d, setup_packing
   use arrays_mod ,     only : nbilin2d, nbilin3d, nconsd2d, bilin2d, bilin3d, consd2d
@@ -41,6 +41,7 @@ program ocniceprep
   real(kind=8), allocatable, dimension(:,:)   :: out2d !< 2D destination grid output array
   real(kind=8), allocatable, dimension(:,:,:) :: out3d !< 3D destination grid output array
 
+  character(len=120) :: errmsg
   character(len=120) :: meshfsrc, meshfdst
   integer            :: nvalid
   integer            :: k,n,nn,rc,ncid,varid
@@ -48,8 +49,7 @@ program ocniceprep
   ! debug
   integer :: i,j
 
-  character(len=*), parameter :: u_FILE_u = &
-       __FILE__
+  character(len=*), parameter :: u_FILE_u = __FILE__
 
   ! -----------------------------------------------------------------------------
   ! initialize ESMF
@@ -64,7 +64,13 @@ program ocniceprep
   ! read the nml file and a file containing the list of variables to be remapped
   ! -----------------------------------------------------------------------------
 
-  call readnml
+  call readnml('ocniceprep.nml',errmsg,rc)
+  if (rc /= 0) then
+     write(0,'(a)')trim(errmsg)
+     stop
+  else
+     write(logunit,'(a)')trim(errmsg)
+  end if
   call readcsv(nvalid)
 
   ! -----------------------------------------------------------------------------
@@ -223,7 +229,7 @@ program ocniceprep
         end do
         call dumpnc(trim(ftype)//'.'//trim(fsrc)//'.consd2d.nc', 'consd2d',     &
              dims=(/nxt,nyt/), nflds=nconsd2d, field=consd2d)
-	call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgconsd2d.nc', 'rgconsd2d', &
+        call dumpnc(trim(ftype)//'.'//trim(fdst)//'.rgconsd2d.nc', 'rgconsd2d', &
              dims=(/nxr,nyr/), nflds=nconsd2d, field=rgc2d)
      end if
   end if

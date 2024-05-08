@@ -130,8 +130,8 @@ endif()
 add_subdirectory(sorc)
 
 # Run unit tests.
-#include(CTest)
-#if(BUILD_TESTING)
-#  message(STATUS "Set BUILD_TESTING to YES and build unit testing package under tests")
-#  add_subdirectory(tests)
-#endif()
+include(CTest)
+if(BUILD_TESTING)
+  message(STATUS "Set BUILD_TESTING to YES and build unit testing package under tests")
+  add_subdirectory(tests)
+endif()
