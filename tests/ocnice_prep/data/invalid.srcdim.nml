@@ -1,4 +1,4 @@
-& ocniceprep_nml
+&ocniceprep_nml
 ftype='ocean'
 wgtsdir='/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_1191124/'
 griddir='/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_1191124/'

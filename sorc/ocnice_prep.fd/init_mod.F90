@@ -34,7 +34,6 @@ module init_mod
   character(len=120) :: griddir    !< The directory containing the master tripole grid file
   character(len=20)  :: input_file !< The input file name
 
-
   integer :: nxt        !< The x-dimension of the source tripole grid
   integer :: nyt        !< The y-dimension of the source tripole grid
   integer :: nlevs      !< The vertical or category dimension of the source tripole grid
@@ -61,21 +60,19 @@ contains
     integer,          intent(out) :: rc
 
     ! local variable
-    logical :: exists
+    logical :: fexist
     integer :: ierr, iounit
     integer :: srcdims(2), dstdims(2)
-    character(len=100) :: tmpstr
     !----------------------------------------------------------------------------
 
-    namelist /ocniceprep_nml/ ftype, srcdims, wgtsdir, griddir, dstdims, debug
+    namelist /ocniceprep_nml/ ftype, wgtsdir, griddir, srcdims, dstdims, debug
 
     srcdims = 0; dstdims = 0
     errmsg='' ! for successful return
     rc = 0    ! for successful retun
-    print *,'X0 ',trim(fname)
 
-    inquire(file=trim(fname), exist=exists)
-    if (.not. exists) then
+    inquire(file=trim(fname), exist=fexist)
+    if (.not. fexist) then
        write (errmsg, '(a)') 'FATAL ERROR: input file '//trim(fname)//' does not exist.'
        rc = 1
        return
@@ -124,9 +121,10 @@ contains
     else
        do_ocnprep = .false.
     end if
+
     input_file = trim(ftype)//'.nc'
-    inquire (file=trim(input_file), exist=exists)
-    if (.not. exists) then
+    inquire (file=trim(input_file), exist=fexist)
+    if (.not. fexist) then
        write (errmsg, '(a)') 'FATAL ERROR: input file '//trim(input_file)//' does not exist.'
        rc=1
        return
