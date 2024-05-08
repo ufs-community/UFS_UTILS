@@ -24,6 +24,14 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
   ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.srcdim.nml ${CMAKE_CURRENT_BINARY_DIR}/data/invalid.srcdim.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
   ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.dstdim.nml ${CMAKE_CURRENT_BINARY_DIR}/data/invalid.dstdim.nml)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/ice.badvecpairs.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ice.badvecpairs.csv)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/ocean.badvecpairs.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ocean.badvecpairs.csv)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/ice.badvecgrid.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ice.badvecgrid.csv)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/ocean.badvecgrid.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ocean.badvecgrid.csv)
 
 add_executable(ocnice_ftst_program_setup ftst_program_setup.F90)
 add_test(NAME ocnice-ftst_program_setup COMMAND ocnice_ftst_program_setup)

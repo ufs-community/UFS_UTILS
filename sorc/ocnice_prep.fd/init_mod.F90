@@ -48,9 +48,9 @@ module init_mod
 contains
   !>  Read input namelist file
   !!
-  !! param[in]   fname     namelist file
-  !! param[out]  errmsg    return error message
-  !! param[out]  rc        return error code
+  !! @param[in]   fname     namelist file
+  !! @param[out]  errmsg    return error message
+  !! @param[out]  rc        return error code
   !!
   !! @author Denise.Worthen@noaa.gov
   subroutine readnml(fname,errmsg,rc)
@@ -135,33 +135,41 @@ contains
     if (debug) write(logunit, '(a)')'input file: '//trim(input_file)
 
     ! all checks pass, continue
-    write(errmsg,'(a)')' Namelist successfully read, continue'
+    write(errmsg,'(a)') 'Namelist successfully read, continue'
     rc = 0
 
   end subroutine readnml
 
-  !>  Read the input csv file and fill the vardefs type
+  !> Read the input csv file and fill the vardefs type
   !!
-  !! @param[out]  nvalid  the number of variables in the csv file
+  !! @param[in]    fname     input csv file
+  !! @param[out]   errmsg    return error message
+  !! @param[out]   rc        return error code
+  !! @param[out]  nvalid    the number of variables in the csv file
   !!
   !! @author Denise.Worthen@noaa.gov
-  subroutine readcsv(nvalid)
+  subroutine readcsv(fname,errmsg,rc,nvalid)
 
-    integer, intent(out) :: nvalid
+    character(len=*), intent(in)  :: fname
+    character(len=*), intent(out) :: errmsg
+    integer, intent(out)          :: rc
+    integer, intent(out)          :: nvalid
 
     ! local variables
-    character(len= 40) :: fname
     character(len=100) :: chead
     character(len= 20) :: c1,c3,c4,c5,c6
-    integer :: i2
+    integer :: i2, idx1,idx2
     integer :: nn,n,ierr,iounit
     !----------------------------------------------------------------------------
 
-    fname=trim(ftype)//'.csv'
+    errmsg='' ! for successful return
+    rc = 0    ! for successful retun
+
     open(newunit=iounit, file=trim(fname), status='old', iostat=ierr)
     if (ierr /= 0) then
-       write (0, '(3a)') 'FATAL ERROR: input file "', trim(fname), '" does not exist.'
-       stop 4
+       rc = 1
+       write (errmsg, '(a)') 'FATAL ERROR: input file '//trim(fname)//' does not exist.'
+       return
     end if
 
     read(iounit,*)chead
@@ -182,8 +190,45 @@ contains
     close(iounit)
     nvalid = nn
 
+    ! check for u,v pairs, these should be listed in csv file in ordered pairs
+    idx1 = 0; idx2 = 0
+    do n = 1,nvalid
+       if (len_trim(outvars(n)%var_pair) > 0 .and. idx1 .eq. 0) then
+          idx1 = n
+          idx2 = n+1
+       end if
+    end do
 
+    if (trim(outvars(idx1)%var_pair) /= trim(outvars(idx2)%var_name)) then
+       rc = 1
+       write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx1)%var_name)//' is not set correctly'
+       return
+    end if
+    if (trim(outvars(idx2)%var_pair) /= trim(outvars(idx1)%var_name)) then
+       rc = 1
+       write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx2)%var_name)//' is not set correctly'
+       return
+    end if
 
+    ! check for u velocities on u-staggers and v-velocities on v-staggers
+    if (outvars(idx1)%var_name(1:1) == 'u') then
+       if ((outvars(idx1)%var_grid(1:2) /= 'Cu') .and. outvars(idx1)%var_grid(1:2) /= 'Bu') then
+          rc = 1
+          write(errmsg,'(a)')'FATAL ERROR: u-vector has wrong grid '
+          return
+       end if
+    end if
+    if (outvars(idx2)%var_name(1:1) == 'v') then
+       if ((outvars(idx2)%var_grid(1:2) /= 'Cv') .and. outvars(idx2)%var_grid(1:2) /= 'Bu') then
+          rc = 1
+          write(errmsg,'(a)')'FATAL ERROR: v-vector has wrong grid '
+          return
+       end if
+    end if
+
+    ! all checks pass, continue
+    write(errmsg,'(a)')'CSV successfully read, continue'
+    rc = 0
 
   end subroutine readcsv
 end module init_mod

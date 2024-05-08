@@ -71,7 +71,14 @@ program ocniceprep
   else
      write(logunit,'(a)')trim(errmsg)
   end if
-  call readcsv(nvalid)
+
+  call readcsv(trim(ftype)//'.csv',errmsg,rc,nvalid)
+  if (rc /= 0) then
+     write(0,'(a)')trim(errmsg)
+     stop
+  else
+     write(logunit,'(a)')trim(errmsg)
+  end if
 
   ! -----------------------------------------------------------------------------
   ! create a regrid RH from source to destination

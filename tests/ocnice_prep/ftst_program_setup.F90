@@ -17,11 +17,13 @@ program ftst_program_setup
   character(len=120) :: errmsg
   integer :: rc
   integer :: passed, ntests
+  integer :: nvalid
 
-  ntests = 4
+  ntests = 8
   passed = 0
   testpath = 'tests/ocnice_prep/'
 
+  ! test nml files
   call readnml(trim(testpath)//'data/input.nml',errmsg, rc)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
@@ -35,6 +37,23 @@ program ftst_program_setup
   if (rc .eq. 1)passed = passed+1
 
   call readnml(trim(testpath)//'data/invalid.dstdim.nml',errmsg, rc)
+  print *,trim(errmsg),rc
+  if (rc .eq. 1)passed = passed+1
+
+  ! test csv files
+  call readcsv(trim(testpath)//'data/ice.badvecpairs.csv',errmsg,rc,nvalid)
+  print *,trim(errmsg),rc
+  if (rc .eq. 1)passed = passed+1
+
+  call readcsv(trim(testpath)//'data/ocean.badvecpairs.csv',errmsg,rc,nvalid)
+  print *,trim(errmsg),rc
+  if (rc .eq. 1)passed = passed+1
+
+  call readcsv(trim(testpath)//'data/ice.badvecgrid.csv',errmsg,rc,nvalid)
+  print *,trim(errmsg),rc
+  if (rc .eq. 1)passed = passed+1
+
+  call readcsv(trim(testpath)//'data/ocean.badvecgrid.csv',errmsg,rc,nvalid)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
