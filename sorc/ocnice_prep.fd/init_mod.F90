@@ -75,7 +75,6 @@ contains
     print *,'X0 ',trim(fname)
 
     inquire(file=trim(fname), exist=exists)
-    print *,exists
     if (.not. exists) then
        write (errmsg, '(a)') 'FATAL ERROR: input file '//trim(fname)//' does not exist.'
        rc = 1
