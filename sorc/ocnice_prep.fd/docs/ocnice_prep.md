@@ -14,7 +14,7 @@ The ocnice_prep program is part of the
 
 A warmstart file can be created from an existing restart file (at higher resolution) by using ESMF Regridding to map fields
 to a destination grid. For MOM6, the procedure produces a warm-start file (composed of T,S,U,V and Interface Height), where the
-utility creates the interface heights (``eta``) using the sea surface height (``sfc``) from the interface thickness (``h``) in
+utility creates the interface heights (``eta``) using the sea surface height (``sfc``) and the interface thickness (``h``) in
 the MOM6 restart. A full restart file is not generated because MOM6 has resolution dependent parameterizations, so that restart
 files for different resolutions might contain different fields. For CICE6, a file consisting of all the restart fields is produced.
 While in the form of a "true" restart, it is also more appropriately considered to be a warm-start file.
@@ -37,15 +37,9 @@ THICKNESS_FILE = "ocean.mx100.nc" !
 ADJUST_THICKNESS = True         !   [Boolean] default = False
                                 ! If true, all mass below the bottom removed if the topography is shallower than
                                 ! the thickness input file would indicate.
-THICKNESS_TOLERANCE = 0.1       !   [m] default = 0.1
-                                ! A parameter that controls the tolerance when adjusting the thickness to fit
-                                ! the bathymetry. Used when ADJUST_THICKNESS=True.
 INTERFACE_IC_VAR = "eta"        ! default = "eta"
                                 ! The variable name for initial conditions for interface heights relative to
                                 ! mean sea level, positive upward unless otherwise rescaled.
-INTERFACE_IC_RESCALE = 1.0      !   [various] default = 1.0
-                                ! A factor by which to rescale the initial interface heights to convert them to
-                                ! units of m or correct sign conventions to positive upward.
 TS_CONFIG = "file"              !
                                 ! A string that determines how the initial temperatures and salinities are
                                 ! specified for a new run:
@@ -85,7 +79,7 @@ The remapping is done using an ESMF remapping via a RouteHandle, where the both 
 This ensures that only water points are mapped between the grids. Extrapolation is used to map destination points which are unmapped
 because the source grid was not a water point. Since for the ocean, the required mapping varies with depth, the utility makes
 use of dynamic masking if required. This allows the same RouteHandle to be used for all depths, with masking at each depth done
-**on the fly**.
+_on the fly_.
 
 Mapping for MOM6 is done using ``bilinear`` mapping, whereas for CICE6 it is done using ``nearest-source-to-destination`` mapping.
 For CICE6, this ensures that the thermodynamic fields in the CICE6 restart, which are for each vertical layer (typically 7)
@@ -93,7 +87,8 @@ and each thickness category (typically 5), are consistent when mapped.
 
 Fields in the restart files for both MOM6 and CICE6 are defined at locations on the Arakawa C-grid. Similar to the ``cpld_gridgen``
 utility, these are referred to here as the ``Ct``, ``Cu``, ``Cv`` and ``Bu`` locations. Vectors in MOM6 are natively located at
-the north and east faces (``Cv`` and ``Cu``) while CICE vectors are located at ``Bu`` locations.
+the north and east faces (``Cv`` and ``Cu``) while CICE vectors are located at ``Bu`` locations. **NOTE:** The CICE-C grid is
+not currently supported.
 
 The general procedure, for either MOM6 or CICE6 is as follows:
 
