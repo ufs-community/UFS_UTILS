@@ -101,12 +101,19 @@ TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_
       --partition=xjet -o $LOG_FILE5 -e $LOG_FILE5 ./esg.regional.pct.cat.sh)
 
 #-----------------------------------------------------------------------------
-# Regional GSL gravity wave drag.
+# Regional GSL gravity wave drag. Run with varying
+# thread counts.
 #-----------------------------------------------------------------------------
 
+export nthreads=12
 LOG_FILE6=${LOG_FILE}06
-TEST6=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+TEST6=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd.12 \
       --partition=xjet -o $LOG_FILE6 -e $LOG_FILE6 ./regional.gsl.gwd.sh)
+
+export nthreads=24
+LOG_FILE7=${LOG_FILE}07
+TEST7=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd.24 \
+      --partition=xjet -o $LOG_FILE7 -e $LOG_FILE7 ./regional.gsl.gwd.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
