@@ -31,7 +31,8 @@ export FNSNOA=$COMIN/gdas.t00z.snogrb_t1534.3072.1536
 export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
 export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
-export DO_SNO_INC=.true. # must be lower-case.
+export DO_SNO_INC_JEDI=.true. # must be lower-case.
+export DO_SOI_INC_JEDI=.false.
 export JCAP=1534
 export LONB=3072
 export LATB=1536
