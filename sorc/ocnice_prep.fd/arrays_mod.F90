@@ -38,7 +38,7 @@ module arrays_mod
   real(kind=8), allocatable, dimension(:,:)   :: mask3d !< the 3D mask of the source fields
                                                         !< on Ct grid points
   ! calculated eta on source grid
-  real(kind=8), allocatable, dimension(:,:) :: eta      !< the interface heights (eta) on the source grid
+  real(kind=8), allocatable, dimension(:,:)   :: eta    !< the interface heights (eta) on the source grid
 
   public setup_packing
 

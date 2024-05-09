@@ -201,12 +201,14 @@ contains
 
     if (trim(outvars(idx1)%var_pair) /= trim(outvars(idx2)%var_name)) then
        rc = 1
-       write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx1)%var_name)//' is not set correctly'
+       write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx1)%var_name) &
+            //' is not set correctly'
        return
     end if
     if (trim(outvars(idx2)%var_pair) /= trim(outvars(idx1)%var_name)) then
        rc = 1
-       write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx2)%var_name)//' is not set correctly'
+       write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx2)%var_name) &
+            //' is not set correctly'
        return
     end if
 

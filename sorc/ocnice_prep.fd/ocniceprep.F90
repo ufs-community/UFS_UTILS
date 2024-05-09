@@ -4,8 +4,14 @@
 !!
 !! @author Denise.Worthen@noaa.gov
 !!
-
-!> Blah blah
+!> Read either a MOM6 or CICE6 restart file at 1/4deg tripole resolution and remap the required
+!! fields to produce a warmstart file at lower tripole resolution. This code utilizes files generated
+!! by the ``cpld_gridgen`` utility within ``UFS_UTILS``.The list of fields used for MOM6 and CICE6 are
+!! read from a CSV file, either ``ocean.csv`` or ``ice.csv``. Control of the utility is through a
+!! namelist file, ``ocniceprep.nml``.
+!!
+!! This code requires that the required fields for MOM6, which exist natively in two separate files,
+!! have been placed into a single netCDF file through the use of the NCO ``ncks`` utility.
 !!
 !! @author Denise.Worthen@noaa.gov
 !! @return 0 for success, error code otherwise.
@@ -93,11 +99,7 @@ program ocniceprep
 
   ! -----------------------------------------------------------------------------
   ! read the master grid file and obtain the rotation angle on the source and
-  ! destination grids. In ocnpost, anglet is retrieved from CICE's own history file
-  ! Here it is retrieved from the tripole grid file, which has the opposite sense
-  ! for anglet (same as MOM6). The rotation formulas assume the same sense as MOM6,
-  ! so in ocnpost, this requires for cice that sinrot = -sin(anglet). Here, we need
-  ! -sin(-anglet), which is sin(anglet), so no sign change is required
+  ! destination grids
   ! -----------------------------------------------------------------------------
 
   allocate(angsrc(nxt*nyt)); angsrc = 0.0

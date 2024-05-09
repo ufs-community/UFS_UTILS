@@ -302,8 +302,10 @@ contains
     allocate(atmp(dims(1)*dims(2))); atmp = 0.0
 
     call nf90_err(nf90_open(fname, nf90_nowrite, ncid), 'nf90_open: '//fname)
-    call nf90_err(nf90_inq_varid(ncid, vname, varid), 'get variable ID: '//vname)
-    call nf90_err(nf90_get_var(ncid, varid, a2d), 'get variable: '//vname)
+    call nf90_err(nf90_inq_varid(ncid, vname, varid), &
+         'get variable ID: '//vname)
+    call nf90_err(nf90_get_var(ncid, varid, a2d),     &
+         'get variable: '//vname)
     call nf90_err(nf90_close(ncid), 'close: '//fname)
 
     atmp(:) = reshape(a2d, (/dims(1)*dims(2)/))
@@ -345,8 +347,10 @@ contains
     allocate(atmp(dims(3),dims(1)*dims(2))); atmp = 0.0
 
     call nf90_err(nf90_open(fname, nf90_nowrite, ncid), 'nf90_open: '//fname)
-    call nf90_err(nf90_inq_varid(ncid, vname, varid), 'get variable ID: '//vname)
-    call nf90_err(nf90_get_var(ncid, varid, a3d), 'get variable: '//vname)
+    call nf90_err(nf90_inq_varid(ncid, vname, varid), &
+         'get variable ID: '//vname)
+    call nf90_err(nf90_get_var(ncid, varid, a3d),     &
+         'get variable: '//vname)
     call nf90_err(nf90_close(ncid), 'close: '//fname)
 
     do k = 1,dims(3)

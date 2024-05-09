@@ -10,7 +10,7 @@ documentation</a>.
 The ocnice_prep program is part of the
 [UFS_UTILS](https://github.com/ufs-community/UFS_UTILS) project.
 
-## Creating a warm-start file for MOM6 or CICE6 from a restart file at higher resolution
+## Description of MOM6 and CICE6 restarts
 
 A warmstart file can be created from an existing restart file (at higher resolution) by using ESMF Regridding to map fields
 to a destination grid. For MOM6, the procedure produces a warm-start file (composed of T,S,U,V and Interface Height), where the
@@ -18,6 +18,29 @@ utility creates the interface heights (``eta``) using the sea surface height (``
 the MOM6 restart. A full restart file is not generated because MOM6 has resolution dependent parameterizations, so that restart
 files for different resolutions might contain different fields. For CICE6, a file consisting of all the restart fields is produced.
 While in the form of a "true" restart, it is also more appropriately considered to be a warm-start file.
+
+Both MOM6 and CICE6 restarts contain fields which include a dimension in addition to the 2 spatial dimensions. For MOM6, this
+is the vertical dimension (ocean depth) while for CICE6 it is the number of ice thickness categories. In this utility, both are
+referred to as the ``nlevs`` dimension. MOM6 restarts also contain metadata (e.g. ``units``) while CICE6 restarts contain no
+metadata. Metadata, if any, is written to the new warm start files.
+
+Fields in the restart files for both MOM6 and CICE6 are defined at locations on the Arakawa C-grid. Similar to the ``cpld_gridgen``
+utility, these are referred to here as the ``Ct``, ``Cu``, ``Cv`` and ``Bu`` locations. Vectors in MOM6 are natively located at
+the north and east faces (``Cv`` and ``Cu``) while CICE vectors are located at ``Bu`` locations. **NOTE:** The CICE-C grid is
+not currently supported.
+
+## Pre-generation of a single MOM6 restart file
+
+Because the required fields for MOM6 are located in two separate restart files, a single file containing all the necessary fields
+must be generated for the ``ocean`` case. This is done using NetCDF operators (NCO) with the following commands, assuming that the
+two required MOM6 restart files are available locally and are named ``MOM.res.nc`` and ``MOM.res_1.nc``.
+
+```
+ncks -v Temp,Salt,h,u MOM.res.nc ocean.nc
+ncks -v v,sfc -A MOM.res_1.nc ocean.nc
+```
+
+## Utilizing a warm-start file for MOM6 or CICE6
 
 For MOM6, the following MOM_input settings can then be used with the warm-start file (e.g. ``ocean.mx100.nc``):
 
@@ -75,20 +98,15 @@ For CICE6, the warm-start file (e.g. ``ice.mx100.nc``) can be used directly in t
 
 ## Remapping procedure
 
-The remapping is done using an ESMF remapping via a RouteHandle, where the both the source and destination mask values are ``0``.
+Remapping is done using an ESMF remapping via a RouteHandle, where the both the source and destination mask values are ``0``.
 This ensures that only water points are mapped between the grids. Extrapolation is used to map destination points which are unmapped
 because the source grid was not a water point. Since for the ocean, the required mapping varies with depth, the utility makes
 use of dynamic masking if required. This allows the same RouteHandle to be used for all depths, with masking at each depth done
-_on the fly_.
+_on the fly_. This is not required for CICE6, since in that case all ``nlevs`` have the same land mask value.
 
 Mapping for MOM6 is done using ``bilinear`` mapping, whereas for CICE6 it is done using ``nearest-source-to-destination`` mapping.
 For CICE6, this ensures that the thermodynamic fields in the CICE6 restart, which are for each vertical layer (typically 7)
 and each thickness category (typically 5), are consistent when mapped.
-
-Fields in the restart files for both MOM6 and CICE6 are defined at locations on the Arakawa C-grid. Similar to the ``cpld_gridgen``
-utility, these are referred to here as the ``Ct``, ``Cu``, ``Cv`` and ``Bu`` locations. Vectors in MOM6 are natively located at
-the north and east faces (``Cv`` and ``Cu``) while CICE vectors are located at ``Bu`` locations. **NOTE:** The CICE-C grid is
-not currently supported.
 
 The general procedure, for either MOM6 or CICE6 is as follows:
 
@@ -99,6 +117,14 @@ from their orientation along model dimensions (IJ) to eastward-northward (EN) di
 4. Vector fields are re-rotated back to model index direction (EN->IJ) and remapped back to their native stagger locations.
 5. Fields are written into a warm-start file.
 
+## Note on rotation angles
+
+The rotation angle retrieved from the master grid file is ``anglet``, which is defined in the same sense as used MOM6. This
+is the opposite sense to the use in CICE6. The rotation formulas implement rotation in the same sense as MOM6. Since
+``-sin(-angle) == sin(angle)``, no sign change of the angle is required for rotation of the CICE6 vectors. This is in contrast
+to the ``ocnpost`` routine, where the angle used is retrieved from CICE6's own history file and requires a sign change prior to
+use in the rotation formulas.
+
 ## Required files
 
 The following files are required.
@@ -107,14 +133,3 @@ The following files are required.
 - The remapping weights for mapping fields to and from ``Ct`` grid locations on both the souce and destination grids. These are also available as products of the ``cpld_gridgen`` utility.
 - A text file (csv) listing the fields to be remapped for either the ocean or ice restart file.
 - A namelist file defining the type of regridding desired (``ocean`` or ``ice``) and the locations of the needed weights.
-
-## Pre-generation of MOM6 restart file
-
-Because the required fields for MOM6 are located in two separate restart files, a single file containing all the necessary fields
-must be generated for the ``ocean`` case. This is done using NetCDF operators (NCO) with the following commands, assuming that the
-two required MOM6 restart files are available locally and are named ``MOM.res.nc`` and ``MOM.res_1.nc``.
-
-```
-ncks -v Temp,Salt,h,u MOM.res.nc ocean.nc
-ncks -v v,sfc -A MOM.res_1.nc ocean.nc
-```
