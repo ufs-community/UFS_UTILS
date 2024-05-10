@@ -3,7 +3,7 @@
 !! a desired tripole resolution
 !!
 !! @author Denise.Worthen@noaa.gov
-!!
+
 !> Read either a MOM6 or CICE6 restart file at 1/4deg tripole resolution and remap the required
 !! fields to produce a warmstart file at lower tripole resolution. This code utilizes files generated
 !! by the ``cpld_gridgen`` utility within ``UFS_UTILS``.The list of fields used for MOM6 and CICE6 are
