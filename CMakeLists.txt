@@ -42,7 +42,6 @@ option(GFS "Enable building GFS-only utilities" OFF)
 # When building the GFS, the following need not be built
 if(GFS)
   message(STATUS "Building utilities specific to the GFS")
-  set(FRENCTOOLS OFF CACHE BOOL "Disable building fre-nctools.fd" FORCE)
   set(GRIDTOOLS OFF CACHE BOOL "Disable building grid_tools.fd" FORCE)
   set(OROG_MASK_TOOLS OFF CACHE BOOL "Disable building orog_mask_tools.fd" FORCE)
   set(SFC_CLIMO_GEN OFF CACHE BOOL "Disable building sfc_climo_gen.fd" FORCE)
