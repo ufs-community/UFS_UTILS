@@ -77,28 +77,19 @@ C> @return 0 for success, error code otherwise.
       character(len=256) :: INPUTOROG = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
-      integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT,NW
+      integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,NW
       fsize=65536
-      READ(5,*) MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
       READ(5,*) OUTGRID
-      READ(5,*) INPUTOROG
       READ(5,*) mask_only
       READ(5,*) merge_file
-!      MTNRES=1
-!      IM=48
-!      JM=48
-!      NM=46
-!      NF0=0             
-!      NF1=0              
-!      efac=0
-!      blat=0
-!      NR=0
-!      OUTGRID = "C48_grid.tile1.nc"
-!      INPUTOROG = "oro.288x144.nc"
-      print*, "INPUTOROG=", trim(INPUTOROG)
-      print*, "IM,JM=", IM, JM
+      NM=0
+      NF0=0             
+      NF1=0              
+      EFAC=0
+      NR=0
+      print*, "INPUTOROG= ", trim(INPUTOROG)
       print*, "MASK_ONLY", mask_only
-      print*, "MERGE_FILE", trim(merge_file)
+      print*, "MERGE_FILE ", trim(merge_file)
 ! --- MTNRES defines the input (highest) elev resolution
 ! --- =1 is topo30 30" in units of 1/2 minute.
 !     so MTNRES for old values must be *2.
@@ -106,58 +97,47 @@ C> @return 0 for success, error code otherwise.
 ! --- other possibilities are =8 for 4' and =4 for 2' see
 !     HJ for T1000 test. Must set to 1 for now.
       MTNRES=1
-      print*, MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
+      print*, MTNRES,NM,NR,NF0,NF1,EFAC
       NW=(NM+1)*((NR+1)*NM+2)
       IMN = 360*120/MTNRES
       JMN = 180*120/MTNRES
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
 
-! --- read the grid resolution if the OUTGRID exists.
-      if( trim(OUTGRID) .NE. "none" ) then
-         inquire(file=trim(OUTGRID), exist=fexist)
-         if(.not. fexist) then
-            print*, "FATAL ERROR: file "//trim(OUTGRID)
-            print*, " does not exist."
-            CALL ERREXIT(4)
-         endif
-         do ncid = 103, 512
-           inquire( ncid,OPENED=opened )
-           if( .NOT.opened )exit
-         end do
+! --- read the grid resolution from OUTGRID.
+      inquire(file=trim(OUTGRID), exist=fexist)
+      if(.not. fexist) then
+        print*, "FATAL ERROR: file "//trim(OUTGRID)
+        print*, " does not exist."
+        CALL ERREXIT(4)
+      endif
+      do ncid = 103, 512
+         inquire( ncid,OPENED=opened )
+         if( .NOT.opened )exit
+      end do
 
-         print*, "outgrid=", trim(outgrid)
-         error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
-         call netcdf_err(error, 'Open file '//trim(OUTGRID) )
-         error=nf_inq_dimid(ncid, 'nx', id_dim)
-         call netcdf_err(error, 'inquire dimension nx from file '//
+      print*, "READ outgrid=", trim(outgrid)
+      error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file '//trim(OUTGRID) )
+      error=nf_inq_dimid(ncid, 'nx', id_dim)
+      call netcdf_err(error, 'inquire dimension nx from file '//
      &                   trim(OUTGRID) )
-         error=nf_inq_dimlen(ncid,id_dim,nx)
-         call netcdf_err(error, 'inquire dimension nx length '//
+      error=nf_inq_dimlen(ncid,id_dim,nx)
+      call netcdf_err(error, 'inquire dimension nx length '//
      &       'from file '//trim(OUTGRID) )
          
-         error=nf_inq_dimid(ncid, 'ny', id_dim)
-         call netcdf_err(error, 'inquire dimension ny from file '//
+      error=nf_inq_dimid(ncid, 'ny', id_dim)
+      call netcdf_err(error, 'inquire dimension ny from file '//
      &                   trim(OUTGRID) )
-         error=nf_inq_dimlen(ncid,id_dim,ny)
-         call netcdf_err(error, 'inquire dimension ny length '//
+      error=nf_inq_dimlen(ncid,id_dim,ny)
+      call netcdf_err(error, 'inquire dimension ny length '//
      &       'from file '//trim(OUTGRID) )
-         print*, "nx = ", nx
-         if(IM .ne. nx/2) then
-            print*, "IM=",IM, " /= grid file nx/2=",nx/2
-            print*, "Set IM = ", nx/2
-            IM = nx/2
-         endif
-         if(JM .ne. ny/2) then
-            print*, "JM=",JM, " /= grid file ny/2=",ny/2
-            print*, "Set JM = ", ny/2
-            JM = ny/2
-         endif
-         error=nf_close(ncid)
-         call netcdf_err(error, 'close file '//trim(OUTGRID) )
+      IM = nx/2
+      JM = ny/2
+      print*, "nx, ny, im, jm = ", nx, ny, im, jm
+      error=nf_close(ncid)
+      call netcdf_err(error, 'close file '//trim(OUTGRID) )
          
-      endif         
-         
-      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
+      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       STOP
       END
@@ -174,8 +154,6 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] NF1 Second order spectral filter parameters.
 !! @param[in] NW Number of waves.
 !! @param[in] EFAC Factor to adjust orography by its variance.
-!! @param[in] BLAT When less than zero, reverse latitude/
-!! longitude for output.
 !! @param[in] OUTGRID The 'grid' file for the model tile.
 !! @param[in] INPUTOROG Input orography/GWD file on gaussian
 !! grid. When specified, will be interpolated to model tile.
@@ -184,7 +162,7 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] MASK_ONLY Flag to generate the Land Mask only
 !! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,BLAT,
+      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,
      &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
@@ -200,7 +178,7 @@ C
       real, PARAMETER :: PI=3.1415926535897931
       integer, PARAMETER :: NMT=14
 
-      integer :: efac,blat,zsave1,zsave2
+      integer :: efac,zsave1,zsave2
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
@@ -246,7 +224,7 @@ C
       complex :: ffj(im/2+1)
 
       logical :: grid_from_file,output_binary,fexist,opened
-      logical :: SPECTR, REVLAT, FILTER
+      logical :: SPECTR, FILTER
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
       logical :: LB(IM*JM)
@@ -275,7 +253,6 @@ C
       DEGRAD = 180./PI
       SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
       FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 & NF0
-      REVLAT = BLAT .LT. 0   ! Reverse latitude/longitude for output
       MSKOCN = 1             ! Ocean land sea mask =1, =0 if not present
       NOTOCN = 1             ! =1 Ocean lsm input reverse: Ocean=1, land=0 
 ! --- The LSM Gaussian file from the ocean model sometimes arrives with 
@@ -329,8 +306,8 @@ C
 !
 
 !  --- IMN,JMN
-      print*, ' IM, JM, NM, NR, NF0, NF1, EFAC, BLAT'
-      print*, IM,JM,NM,NR,NF0,NF1,EFAC,BLAT
+      print*, ' IM, JM, NM, NR, NF0, NF1, EFAC'
+      print*, IM,JM,NM,NR,NF0,NF1,EFAC
        print *,'  imn,jmn,glob(imn,jmn)=',imn,jmn,glob(imn,jmn)
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
@@ -409,7 +386,7 @@ C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
 !    This code assumes that lat runs from north to south for gg!
 !
 
-      print *,' SPECTR=',SPECTR,' REVLAT=',REVLAT,' ** with GICE-07 **'
+      print *,' SPECTR=',SPECTR,' ** with GICE-07 **'
       IF (SPECTR) THEN
         CALL SPLAT(4,JM,COSCLT,WGTCLT)
         DO J=1,JM/2
@@ -936,10 +913,10 @@ C
      &                   //trim(INPUTOROG) )
            
            print*, "calling MAKEOA3 to compute OA, OL"
-           CALL MAKEOA3(ZAVG,zslm,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,SLM,
+           CALL MAKEOA3(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,SLM,
      1            WORK1,WORK2,WORK3,WORK4,WORK5,WORK6,
      2            IM,JM,IMN,JMN,geolon_c,geolat_c,
-     3            geolon,geolat,is_south_pole,is_north_pole,nx_in,ny_in,
+     3            geolon,geolat,nx_in,ny_in,
      4            oa_in,ol_in,slm_in,lon_in,lat_in)
 
            deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
@@ -1290,13 +1267,6 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
         enddo
 
       ELSE
-        IF (REVLAT) THEN
-          CALL REVERS(IM, JM, numi, SLM, WORK1)
-          CALL REVERS(IM, JM, numi, ORO, WORK1)
-          DO IMT=1,NMT
-            CALL REVERS(IM, JM, numi, HPRIME(1,1,IMT), WORK1)
-          ENDDO
-        ENDIF
         ORS=0.
         ORF=ORO
       ENDIF
@@ -1507,7 +1477,7 @@ C
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
-      END
+      END SUBROUTINE TERSUB
 
 !> Create the orography, land-mask, standard deviation of
 !! orography and the convexity on a model gaussian grid.
@@ -1545,9 +1515,7 @@ C
       INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
       DIMENSION ORO(IM,JM),SLM(IM,JM),VAR(IM,JM),VAR4(IM,JM)
       DIMENSION IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM),numi(jm)
-      LOGICAL FLAG, DEBUG
-C==== DATA DEBUG/.TRUE./
-      DATA DEBUG/.FALSE./
+      LOGICAL FLAG
 C
 ! ---- OCLSM holds the ocean (im,jm) grid
       print *,' _____ SUBROUTINE MAKEMT '
@@ -3627,7 +3595,6 @@ C
 !! is computed from the high-resolution orography data.
 !!
 !! @param[in] zavg High-resolution orography data.
-!! @param[in] zslm High-resolution land-mask data.  Not used.
 !! @param[in] var Standard deviation of orography on the model grid.
 !! @param[out] glat Latitude of each row of input terrain dataset.
 !! @param[out] oa4 Orographic asymmetry on the model grid. Four
@@ -3654,8 +3621,6 @@ C
 !! @param[in] lat_c Corner point latitudes of the model grid points.
 !! @param[in] lon_t Center point longitudes of the model grid points.
 !! @param[in] lat_t Center point latitudes of the model grid points.
-!! @param[in] is_south_pole Not used.
-!! @param[in] is_north_pole Not used.
 !! @param[in] imi 'i' dimension of input gfs orography data.
 !! @param[in] jmi 'j' dimension of input gfs orography data.
 !! @param[in] oa_in Asymmetry on the input gfs orography data.
@@ -3664,10 +3629,10 @@ C
 !! @param[in] lon_in Longitude on the input gfs orography data.
 !! @param[in] lat_in Latitude on the input gfs orography data.
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE MAKEOA3(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
+      SUBROUTINE MAKEOA3(ZAVG,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
      1           ORO,SLM,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,
-     3           is_south_pole,is_north_pole,IMI,JMI,OA_IN,OL_IN,
+     3           IMI,JMI,OA_IN,OL_IN,
      4           slm_in,lon_in,lat_in)
 
 ! Required when using iplib v4.0 or higher.
@@ -3681,7 +3646,7 @@ C
       real, PARAMETER :: R2D=180./3.14159265358979
       integer IM,JM,IMN,JMN,IMI,JMI
       real    GLAT(JMN)
-      INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
+      INTEGER ZAVG(IMN,JMN)
       real    SLM(IM,JM)
       real    ORO(IM,JM),ORO1(IM,JM),ELVMAX(IM,JM),ZMAX(IM,JM)
       real    OA4(IM,JM,4)
@@ -3691,26 +3656,16 @@ C
       real    lon_in(IMI,JMI), lat_in(IMI,JMI)
       real    lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
       real    lon_t(IM,JM), lat_t(IM,JM)
-      logical is_south_pole(IM,JM), is_north_pole(IM,JM)
       real    XNSUM(IM,JM),XNSUM1(IM,JM),XNSUM2(IM,JM)
       real    XNSUM3(IM,JM),XNSUM4(IM,JM)
       real    VAR(IM,JM),OL(IM,JM,4)
-      LOGICAL FLAG
       integer i,j,ilist(IMN),numx,i1,j1,ii1
-      integer KWD,II,npts
+      integer KWD
       real    LONO(4),LATO(4),LONI,LATI
-      real    DELXN,HC,HEIGHT,XNPU,XNPD,T
+      real    DELXN,HC,HEIGHT,T
       integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
       logical inside_a_polygon
-      real    lon,lat,dlon,dlat,dlat_old
-      real    lon1,lat1,lon2,lat2
-      real    xnsum11,xnsum12,xnsum21,xnsum22,xnsumx
-      real    HC_11, HC_12, HC_21, HC_22
-      real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
-      real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
-      real    get_lon_angle, get_lat_angle, get_xnsum
-      integer ist, ien, jst, jen
-      real    xland,xwatr,xl1,xs1,oroavg
+      integer jst, jen
       integer int_opt, ipopt(20), kgds_input(200), kgds_output(200)
       integer count_land_output
       integer ij, ijmdl_output, iret, num_mismatch_land, num
@@ -4055,45 +4010,6 @@ C
 C
       RETURN
       END SUBROUTINE MAKEOA3
-      
-!> Reverse the east-west and north-south axes
-!! in a two-dimensional array.
-!!
-!! @param [in] im 'i' dimension of the 2-d array.
-!! @param [in] jm 'j' dimension of the 2-d array.
-!! @param [in] numi Not used.
-!! @param [inout] f The two-dimensional array to
-!! be processed.
-!! @param [out] wrk Two-dimensional work array.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE REVERS(IM, JM, numi, F, WRK)
-!
-      REAL F(IM,JM), WRK(IM,JM)
-      integer numi(jm)
-      imb2 = im / 2
-      do i=1,im*jm
-         WRK(i,1) = F(i,1)
-      enddo
-      do j=1,jm
-         jr = jm - j + 1
-         do i=1,im
-            ir = i + imb2
-            if (ir .gt. im) ir = ir - im
-            f(ir,jr) = WRK(i,j)
-         enddo
-      enddo
-!
-      tem = 0.0
-      do i=1,im
-        tem= tem + F(I,1)
-      enddo
-      tem = tem / im
-      do i=1,im
-         F(I,1) = tem
-      enddo
-!
-      RETURN
-      END
 
 !> Convert from a reduced grid to a full grid.
 !!
@@ -4340,7 +4256,7 @@ ccmr
 ccmr
       integer*2 ia(len)
       character*7 tile
-      integer iaamax, iaamin, len, j, m, ja, kount
+      integer iaamax, iaamin, len, m, ja, kount
       integer(8) sum2,std,mean,isum
       integer i_count_notset,kount_9
 ! --- missing is -9999
@@ -4723,13 +4639,13 @@ C
 
         real, intent(out) :: xnsum1,xnsum2,HC
         logical verbose
-        real lon1,lat1,lon2,lat2,oro,delxn
+        real lon1,lat1,lon2,lat2,delxn
         integer IMN,JMN
         real    glat(JMN)
         integer zavg(IMN,JMN)
         integer i, j, ist, ien, jst, jen, i1
         real    HEIGHT, var
-        real    XW1,XW2,slm,xnsum
+        real    XW1,XW2,xnsum
         !---figure out ist,ien,jst,jen
         do j = 1, JMN
            if( GLAT(J) .GT. lat1 ) then
@@ -4817,13 +4733,12 @@ C
         implicit none
 
         real, intent(out) :: xnsum1,xnsum2
-        real lon1,lat1,lon2,lat2,oro,delxn
+        real lon1,lat1,lon2,lat2,delxn
         integer IMN,JMN
         real    glat(JMN)
         integer zavg(IMN,JMN)
         integer i, j, ist, ien, jst, jen, i1
         real    HEIGHT, HC
-        real    XW1,XW2,slm,xnsum
         !---figure out ist,ien,jst,jen
         ! if lat1 or lat 2 is 90 degree. set jst = JMN
         jst = JMN
@@ -4895,7 +4810,6 @@ c
       data inaq3/x'FFC00000'/
       data inaq4/x'FFFFFFFF'/
 c
-      real(kind=8)a(l),rtc,t1,t2
       character*(*) c
 c     t1=rtc()
 cgwv        print *, ' nanc call ',c
