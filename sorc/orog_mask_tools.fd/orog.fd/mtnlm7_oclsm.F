@@ -772,11 +772,6 @@ C
        call minmxj(IM,JM,SLM,'     SLM')
        call minmxj(IM,JM,VAR,'     VAR')
        call minmxj(IM,JM,VAR4,'    VAR4')
-C --- check for nands in above
-!      call nanc(ORO,IM*JM,"MAKEMT_ORO")
-!      call nanc(SLM,IM*JM,"MAKEMT_SLM")
-!      call nanc(VAR,IM*JM,"MAKEMT_VAR")
-!      call nanc(VAR4,IM*JM,"MAKEMT_VAR4")
 !
 C   check antarctic pole 
 !     DO J = 1,JM
@@ -808,10 +803,6 @@ C
        call minmxj(IM,JM,GAMMA,'   GAMMA')
        call minmxj(IM,JM,SIGMA,'   SIGMA')
 
-C --- check for nands in above
-!      call nanc(THETA,IM*JM,"MAKEPC_THETA")
-!      call nanc(GAMMA,IM*JM,"MAKEPC_GAMMA")
-!      call nanc(SIGMA,IM*JM,"MAKEPC_SIGMA")
 C
 C     COMPUTE MOUNTAIN DATA : OA OL
 C
@@ -966,16 +957,6 @@ C
        call minmxj(IM,JM,OL,'      OL')
        call minmxj(IM,JM,ELVMAX,'  ELVMAX')
        call minmxj(IM,JM,ORO,'     ORO')
-C --- check for nands in above
-!      call nanc(OA(1,1,1), IM*JM,"MAKEOA_OA(1,1,1)")
-!      call nanc(OA(1,1,2), IM*JM,"MAKEOA_OA(1,1,2)")
-!      call nanc(OA(1,1,3), IM*JM,"MAKEOA_OA(1,1,3)")
-!      call nanc(OA(1,1,4), IM*JM,"MAKEOA_OA(1,1,4)")
-!      call nanc(OL(1,1,1), IM*JM,"MAKEOA_OL(1,1,1)")
-!      call nanc(OL(1,1,2), IM*JM,"MAKEOA_OL(1,1,2)")
-!      call nanc(OL(1,1,3), IM*JM,"MAKEOA_OL(1,1,3)")
-!      call nanc(OL(1,1,4), IM*JM,"MAKEOA_OL(1,1,4)")
-!      call nanc(ELVMAX, IM*JM,"MAKEPC_ELVMAX")
 
         maxc3 = 0
         maxc4 = 0
@@ -4862,64 +4843,6 @@ C
          enddo
          
       end subroutine get_xnsum3
-      
-!> Report NaNS and NaNQ within an address range for
-!! 8-byte real words.
-!!
-!! This routine prints a single line for each call
-!! and prints a message and returns to the caller on 
-!! detection of the FIRST NaN in the range.  If no NaN values
-!! are found it returns silently.
-!!
-!! @param[in] A Real*8 variable or array
-!! @param[in] L Number of words to scan (length of array)
-!! @param[in] C Distinctive message set in caller to indicate where
-!! the routine was called.
-!! @author Jordan Alpert NOAA/EMC
-      subroutine nanc(a,l,c)
-      integer inan1,inan2,inan3,inan4,inaq1,inaq2,inaq3,inaq4
-       real word
-       integer itest
-       equivalence (itest,word)
-c
-c signaling NaN
-      data inan1/x'7F800001'/
-      data inan2/x'7FBFFFFF'/
-      data inan3/x'FF800001'/
-      data inan4/x'FFBFFFFF'/
-c
-c  quiet NaN
-c
-      data inaq1/x'7FC00000'/
-      data inaq2/x'7FFFFFFF'/
-      data inaq3/x'FFC00000'/
-      data inaq4/x'FFFFFFFF'/
-c
-      real(kind=8)a(l),rtc,t1,t2
-      character*(*) c
-c     t1=rtc()
-cgwv        print *, ' nanc call ',c
-      do k=1,l
-      word=a(k)
-       if( (itest  .GE. inan1 .AND. itest .LE. inan2) .OR.
-     *      (itest  .GE. inan3 .AND. itest .LE. inan4) ) then
-       print *,' NaNs detected at  word',k,' ',c
-       return
-         endif
-        if( (itest  .GE. inaq1 .AND. itest .LE. inaq2) .OR.
-     *      (itest  .GE. inaq3 .AND. itest .LE. inaq4) ) then
-       print *,' NaNq detected at  word',k,' ',c
-         return
-           endif
-
- 101  format(e20.10)
-      end do
-c     t2=rtc()
-cgwv      print 102,l,t2-t1,c
- 102  format(' time to check ',i9,' words is ',f10.4,' ',a24)
-      return
-       end
-
 !> Get the date/time for the system clock.
 !!
 !! @author Mark Iredell
