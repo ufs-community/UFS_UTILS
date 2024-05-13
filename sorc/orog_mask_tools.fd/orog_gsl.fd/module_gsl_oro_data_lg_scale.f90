@@ -50,6 +50,7 @@ contains
 subroutine calc_gsl_oro_data_lg_scale(tile_num,res_indx,halo)
 
 use netcdf
+use  gsl_oro_data_sm_scale, only: timef
 
 implicit none
 
@@ -109,6 +110,8 @@ real (kind = real_kind), dimension(3,3) :: HGT_M_coarse
 real (kind = real_kind), allocatable :: HGT_M_coarse_on_fine(:,:)
 integer :: cell_count  ! allows for use of 1D arrays for GWD statistics fields
 integer :: halo_int    ! integer form of halo
+
+real :: tbeg, tend
 
 logical :: fexist
 
@@ -349,10 +352,16 @@ OL4(:) = 0._real_kind
 !    ol1,...,ol4
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-cell_count = 1
+tbeg=timef()
 
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,CELL_COUNT,DLTA_LAT,DLTA_LON) &
+!$OMP PRIVATE(I_BLK,J_BLK,LON_BLK,LAT_BLK,S_II,S_JJ,E_II,E_JJ,II_M,JJ_M) &
+!$OMP PRIVATE(HGT_M_COARSE_ON_FINE,JJ,JJ_LOC,II,II_LOC,ZS,ZS_ACCUM,ZS_MEAN) &
+!$OMP PRIVATE(HGT_M_COARSE,SUM2,SUM4,NFINEPOINTS,VAR,NU,ND,RATIO,NW,NT)
 do j = 1,dimY_FV3
    do i = 1,dimX_FV3
+
+      cell_count = ( (j-1) * dimX_FV3 ) + i
 
       ! Calculate approximate side-lengths of square lat-long "coarse" grid
       ! cell centered on FV3 cell (units = radians)
@@ -552,7 +561,6 @@ do j = 1,dimY_FV3
          OL4(cell_count) = 0._real_kind
          if ( detrend_topography ) deallocate (HGT_M_coarse_on_fine)
          deallocate(zs)
-         cell_count = cell_count + 1
          cycle   ! move on to next (coarse) grid cell 
       end if
 
@@ -784,17 +792,15 @@ do j = 1,dimY_FV3
          OL4(cell_count) = 0._real_kind
       end if
 
-
-
       if ( detrend_topography ) deallocate (HGT_M_coarse_on_fine)
       deallocate (zs)
 
-      cell_count = cell_count + 1
-
    end do   ! j = 1,dimY_FV3
 end do      ! i = 1,dimX_FV3
+!$OMP END PARALLEL DO
 
-
+tend=timef()
+print*,'timing of main loop in calc_gsl_oro_data_lg_scale ',tend-tbeg
 
 !
 ! Output GWD statistics fields to netCDF file

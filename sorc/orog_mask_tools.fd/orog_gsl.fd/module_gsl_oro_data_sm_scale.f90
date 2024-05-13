@@ -119,6 +119,9 @@ integer :: halo_int    ! integer form of halo
 
 logical :: fexist
 
+integer :: ick, jck
+real :: tbeg, tend
+
 
 print *, "Creating oro_data_ss file"
 print *
@@ -365,15 +368,28 @@ min_DX = sqrt(min_area_FV3)/1000._real_kind  ! grid size in km
 !    ol1,...,ol4
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-cell_count = 1
+ick=387
+jck=472
 
+tbeg=timef()
+
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,DLTA_LAT,DLTA_LON) &
+!$OMP PRIVATE(I_BLK,J_BLK,S_II,S_JJ,E_II,E_JJ,LON_BLK,LAT_BLK,II_M,JJ_M) &
+!$OMP PRIVATE(ZS,II,JJ,II_LOC,JJ_LOC,SUM2,NFINEPOINTS,CELL_COUNT,ZS_ACCUM,ZS_MEAN) &
+!$OMP PRIVATE(SUM4,VAR,NU,ND,RATIO,NW,NT)
 do j = 1,dimY_FV3
    do i = 1,dimX_FV3
+
+      cell_count = ( (j-1) * dimX_FV3 ) + i
 
       ! Calculate approximate side-lengths of square lat-long "coarse" grid
       ! cell centered on FV3 cell (units = radians)
       dlta_lat = sqrt(area_FV3(i,j))/ae
       dlta_lon = sqrt(area_FV3(i,j))/(ae*COS(lat_FV3(i,j)))
+
+      if (i == ick .and. j == jck) then
+        print*,'ggg dlta_lat/lon ',dlta_lat,dlta_lon,area_FV3(i,j),lat_FV3(i,j)
+      endif
 
       ! Determine lat/lon of 9 lat-lon block centers
       ! Note:  lat_blk(2)/lon_blk(2) = lat_FV3(i,j)/lon_FV3(i,j)
@@ -385,6 +401,11 @@ do j = 1,dimY_FV3
       do j_blk = 1,3
          lat_blk(j_blk) = lat_FV3(i,j) + (j_blk-2)*dlta_lat
       end do
+
+      if (i == ick .and. j == jck) then
+        print*,'ggg lon_blk ', lon_blk,lon_FV3(i,j)
+        print*,'ggg lat_blk ', lat_blk,lat_FV3(i,j)
+      endif
 
       ! Find starting and ending fine-grid i,j indices for each
       ! of the 9 "coarse-grid" blocks
@@ -499,7 +520,6 @@ do j = 1,dimY_FV3
          OL3(cell_count) = 0._real_kind
          OL4(cell_count) = 0._real_kind
          deallocate(zs)
-         cell_count = cell_count + 1
          cycle   ! move on to next (coarse) grid cell 
       end if
 
@@ -526,6 +546,10 @@ do j = 1,dimY_FV3
          end do
       end do
       std_dev(cell_count) = sqrt( sum2/real(nfinepoints,real_kind) )
+
+      if (i == ick .and. j == jck) then
+        print*,'ggg std_dev ', std_dev(cell_count),sum2,nfinepoints
+      endif
 
 
       !
@@ -731,16 +755,18 @@ do j = 1,dimY_FV3
          OL4(cell_count) = 0._real_kind
       end if
 
-
-
       deallocate (zs)
-
-      cell_count = cell_count + 1
 
    end do   ! j = 1,dimY_FV3
 end do      ! i = 1,dimX_FV3
+!$OMP END PARALLEL DO
 
+tend=timef()
 
+print*,'timing of main loop in calc_gsl_oro_data_sm_scale ',tend-tbeg
+
+      cell_count = ( (jck-1) * dimX_FV3 ) + ick
+    print*,'ggg final ',std_dev(cell_count)
 
 !
 ! Output GWD statistics fields to netCDF file
@@ -1283,6 +1309,20 @@ call exit(4)
 return
 end subroutine netcdf_err
 
+   real function timef()
+   character(8) :: date
+   character(10) :: time
+   character(5) :: zone
+   integer,dimension(8) :: values
+   integer :: total
+   real :: elapsed
+   call date_and_time(date,time,zone,values)
+   total=(3600*values(5))+(60*values(6))  &
+            +values(7)
+   elapsed=float(total) + (1.0e-3*float(values(8)))
+   timef=elapsed
+   return
+   end
 
 
 end module gsl_oro_data_sm_scale
