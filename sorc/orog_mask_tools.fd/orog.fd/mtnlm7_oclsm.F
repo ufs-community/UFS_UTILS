@@ -210,7 +210,7 @@ C
       integer(1) :: i3save
       integer(2) :: i2save
 
-      integer, allocatable :: JST(:),JEN(:),KPDS(:),KGDS(:),numi(:)
+      integer, allocatable :: JST(:),JEN(:),numi(:)
       integer, allocatable :: lonsperlat(:)
 
       integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
@@ -245,18 +245,17 @@ C
 
       complex :: ffj(im/2+1)
 
-      logical :: grid_from_file,output_binary,fexist,opened
+      logical :: grid_from_file,fexist,opened
       logical :: SPECTR, REVLAT, FILTER
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
       logical :: LB(IM*JM)
 
-      output_binary = .false.
       tbeg1=timef()
       tbeg=timef()
       fsize = 65536
 ! integers
-      allocate (JST(JM),JEN(JM),KPDS(200),KGDS(200),numi(jm))
+      allocate (JST(JM),JEN(JM),numi(jm))
       allocate (lonsperlat(jm/2))
       allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
       allocate (glob(IMN,JMN))
@@ -1319,130 +1318,6 @@ C   check antarctic pole
       ENDDO
       tend=timef()
       write(6,*)' Timer 5 time= ',tend-tbeg
-      if (output_binary) then
-      tbeg=timef()
-C       OUTPUT BINARY FIELDS
-        print *,' OUTPUT BINARY FIELDS'
-        WRITE(51) REAL(SLM,4)
-        WRITE(52) REAL(ORF,4)
-        WRITE(53) REAL(HPRIME,4)
-        WRITE(54) REAL(ORS,4)
-        WRITE(55) REAL(ORO,4)
-        WRITE(66) REAL(THETA,4)
-        WRITE(67) REAL(GAMMA,4)
-        WRITE(68) REAL(SIGMA,4)
-! --- OCLSM is real(4) write only if ocean mask is present
-            if ( mskocn .eq. 1 ) then
-        ios=0
-         WRITE(27,iostat=ios) OCLSM
-         print *,' write OCLSM input:',ios
-!      print *,' LSM:',OCLSM(1,1),OCLSM(50,50),OCLSM(75,75),OCLSM(IM,JM)
-            endif
-C
-       call minmxj(IM,JM,ORO,'     ORO')
-      print *,' IM=',IM,' JM=',JM,' SPECTR=',SPECTR
-C---    Test binary file output:
-      WRITE(71) REAL(SLM,4)
-      DO IMT=1,NMT
-        WRITE(71) REAL(HPRIME(:,:,IMT),4)
-        print *,' HPRIME(',itest,jtest,imt,')=',HPRIME(itest,jtest,imt)
-      ENDDO
-      WRITE(71) REAL(ORO,4)
-      IF (SPECTR) THEN
-        WRITE(71) REAL(ORF,4)   ! smoothed spectral orography!
-      ENDIF
-C  OUTPUT GRIB FIELDS
-      KPDS=0
-      KPDS(1)=7
-      KPDS(2)=78
-      KPDS(3)=255
-      KPDS(4)=128
-      KPDS(5)=81
-      KPDS(6)=1
-      kpds(8)=2004
-      KPDS(9)=1
-      KPDS(10)=1
-      KPDS(13)=4
-      KPDS(15)=1
-      KPDS(16)=51
-      KPDS(17)=1
-      KPDS(18)=1
-      KPDS(19)=1
-      KPDS(21)=20
-      KPDS(22)=0
-      KGDS=0
-      KGDS(1)=4
-      KGDS(2)=IM
-      KGDS(3)=JM
-      KGDS(4)=90000-180000/PI*RCLT(1)
-      KGDS(6)=128
-      KGDS(7)=180000/PI*RCLT(1)-90000
-      KGDS(8)=-NINT(360000./IM)
-      KGDS(9)=NINT(360000./IM)
-      KGDS(10)=JM/2
-      KGDS(20)=255
-! --- SLM
-      CALL BAOPEN(56,'fort.56',IRET)
-      if (iret .ne. 0) print *,' BAOPEN ERROR UNIT 56: IRET=',IRET
-      CALL PUTGB(56,IM*JM,KPDS,KGDS,LB,SLM,IRET)
-      print *,' SLM: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-      if (iret .ne. 0) print *,' SLM PUTGB ERROR:  UNIT 56: IRET=',IRET
-      print *,' SLM: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-! --- OCLSM if present
-!           if ( mskocn .eq. 1 ) then
-!     CALL BAOPEN(27,'fort.27',IRET)
-!     if (iret .ne. 0) print *,' OCLSM BAOPEN ERROR UNIT 27:IRET=',IRET
-!     CALL PUTGB(27,IM*JM,KPDS,KGDS,LB,OCLSM,IRET)
-!     if (iret .ne. 0) print *,' OCLSM PUTGB ERROR: UNIT 27:IRET=',IRET
-!     print *,' OCLSM: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-!           endif
-
-      KPDS(5)=8
-      IF (SPECTR) THEN
-        CALL BAOPEN(57,'fort.57',IRET)
-        CALL PUTGB(57,IM*JM,KPDS,KGDS,LB,ORF,IRET)
-      print *,' ORF (ORO): putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-      ENDIF
-C
-C ===  write out theta (angle of land to East) using #101 (wave dir)
-C ===  [radians] and since < 1 scale adjust kpds(22)
-C
-      KPDS(5)=101
-        CALL BAOPEN(58,'fort.58',IRET)
-        CALL PUTGB(58,IM*JM,KPDS,KGDS,LB,THETA,IRET)
-      print *,' THETA: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-C
-C ===  write out (land aspect ratio or anisotropy)  using #102 
-C ===  (as in wind wave hgt)
-C
-      KPDS(22)=2
-      KPDS(5)=102
-        CALL BAOPEN(60,'fort.60',IRET)
-        CALL PUTGB(60,IM*JM,KPDS,KGDS,LB,SIGMA,IRET)
-      print *,' SIGMA: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-C
-C ===  write out (slope parameter sigma)  using #9 
-C ===  (as in std hgt)
-C
-      KPDS(22)=1
-      KPDS(5)=103
-        CALL BAOPEN(59,'fort.59',IRET)
-        CALL PUTGB(59,IM*JM,KPDS,KGDS,LB,GAMMA,IRET)
-      print *,' GAMMA: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-C
-      KPDS(22)=1
-      KPDS(5)=9
-        CALL BAOPEN(61,'fort.61',IRET)
-        CALL PUTGB(61,IM*JM,KPDS,KGDS,LB,HPRIME,IRET)
-      print *,' HPRIME: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-C
-C
-      KPDS(22)=0
-      KPDS(5)=8
-        CALL BAOPEN(62,'fort.62',IRET)
-        CALL PUTGB(62,IM*JM,KPDS,KGDS,LB,ELVMAX,IRET)
-      print *,' ELVMAX: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-      endif ! output_binary
 C
       DELXN = 360./IM
       do i=1,im
@@ -1463,8 +1338,7 @@ C
            xlon(i) = geolon(i,1)
         enddo
       endif
-      tend=timef()
-      write(6,*)' Binary output time= ',tend-tbeg
+
       tbeg=timef()
       CALL WRITE_NETCDF(IM,JM,SLM,land_frac,ORO,ORF,HPRIME,1,1,
      1                  GEOLON(1:IM,1:JM),GEOLAT(1:IM,1:JM), XLON,XLAT)
@@ -1475,7 +1349,7 @@ C
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
 !     Deallocate 1d vars
-      deallocate(JST,JEN,KPDS,KGDS,numi,lonsperlat)
+      deallocate(JST,JEN,numi,lonsperlat)
       deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
