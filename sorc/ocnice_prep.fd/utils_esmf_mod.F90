@@ -375,12 +375,13 @@ contains
     urot(:) = fields(idx1,:)*cosrot(:) - fields(idx2,:)*sinrot(:)
     vrot(:) = fields(idx2,:)*cosrot(:) + fields(idx1,:)*sinrot(:)
 
-    if (debug) write(logunit,'(a)')'restagger from Ct to '//trim(vgrid1)//' and '//trim(vgrid2)
-
     wgtsfile = trim(wdir)//'tripole.'//trim(fdst)//'.Ct.to.'//trim(vgrid1)//'.bilinear.nc'
     call remap(trim(wgtsfile), urot, fields(idx1,:))
+    if (debug) write(logunit,'(a)')'use '//trim(wgtsfile)//' to restagger from Ct to '//trim(vgrid1)
+
     wgtsfile = trim(wdir)//'tripole.'//trim(fdst)//'.Ct.to.'//trim(vgrid2)//'.bilinear.nc'
     call remap(trim(wgtsfile), vrot, fields(idx2,:))
+    if (debug) write(logunit,'(a)')'use '//trim(wgtsfile)//' to restagger from Ct to '//trim(vgrid2)
 
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine rotremap2d
