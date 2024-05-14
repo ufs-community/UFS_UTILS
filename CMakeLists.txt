@@ -14,7 +14,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # User options.
 option(OPENMP "use OpenMP threading" ON)
-option(ENABLE_DOCS "Enable generation of doxygen-based documentation." ON)
+option(ENABLE_DOCS "Enable generation of doxygen-based documentation." OFF)
 
 # Utilities to be built (Default: ALL)
 option(ICEBLEND "Enable building emcsfc_ice_blend.fd" ON)
@@ -70,8 +70,8 @@ endif()
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -g -traceback")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
-  #set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -check all -ftrapuv")
-  set(CMAKE_Fortran_FLAGS_DEBUG "-check bounds -fpe0 -ftrapuv -fPIC -init=snan,arrays -check uninit")
+  set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -check all -ftrapuv")
+  #set(CMAKE_Fortran_FLAGS_DEBUG "-check bounds -fpe0 -ftrapuv -fPIC -init=snan,arrays -check uninit")
   if(APPLE)
     # The linker on macOS does not include `common symbols` by default.
     # Passing the -c flag includes them and fixes an error with undefined symbols.
