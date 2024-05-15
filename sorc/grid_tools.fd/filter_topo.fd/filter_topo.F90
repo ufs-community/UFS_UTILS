@@ -48,9 +48,6 @@ program filter_topo
   real, allocatable :: area(:,:,:)
   real, allocatable :: sin_sg(:,:,:,:)
 
-  real :: tbeg,  tbeg1, tbeg2, tbeg3, tbeg4, tbeg5
-  real :: tend,  tend1, tend2, tend3, tend4, tend5
-
   integer           :: is,ie,js,je,isd,ied,jsd,jed
   integer,parameter :: ng = 3
   integer           :: nx, ny, npx, npy, nx_nest, ny_nest, npx_nest, npy_nest, is_nest, ie_nest, js_nest, je_nest, isd_nest, ied_nest, jsd_nest, jed_nest
@@ -59,64 +56,35 @@ program filter_topo
   tid = omp_get_thread_num()
   if (tid == 0) then
     nthreads = omp_get_num_threads()
-    print*,'Number of threads = ',nthreads
+    print*
+    print*,'- BEGIN EXECUTION WITH NUMBER OF THREADS = ',nthreads
+    print*
   endif
 !$OMP END PARALLEL
 
   !--- read namelist
-  tbeg=timef()
   call read_namelist()
 
   !--- compute filter constants according to grid resolution.
-  tbeg1=timef()
   call compute_filter_constants
-  tend1=timef()
-  print*,'timing compute_filter_constants ',tend1-tbeg1
 
   !--- read the target grid.
-  tbeg2=timef()
   call read_grid_file(regional)
-  tend2=timef()
-  print*,'timing read_grid_file ',tend2-tbeg2
 
   !--- read the topography data
-  tbeg3=timef()
   call read_topo_file(regional)
-  tend3=timef()
-  print*,'timing read_topo_file ',tend3-tbeg3
 
   !--- filter the data
-  tbeg4=timef()
   call FV3_zs_filter(is,ie,js,je,isd,ied,jsd,jed,npx,npy,npx,ntiles,grid_type, &
                      stretch_fac, nested, area, dxa, dya, dx, dy, dxc, dyc, sin_sg, oro, regional )
-  tend4=timef()
-  print*,'timing FV3_zs_filter ',tend4-tbeg4
 
   !--- write out the data
-  tbeg5=timef()
   call write_topo_file(is,ie,js,je,ntiles,oro(is:ie,js:je,:),regional )
-  tend5=timef()
-  print*,'timing write_topo_file ',tend5-tbeg5
 
-  tend=timef()
-  print*,'timing total ',tend-tbeg
+  print*
+  print*,'- NORMAL TERMINATION.'
 
 contains
-
-   real function timef()
-   character(8) :: date
-   character(10) :: time
-   character(5) :: zone
-   integer,dimension(8) :: values
-   integer :: total
-   real :: elapsed
-   call date_and_time(date,time,zone,values)
-   total=(3600*values(5))+(60*values(6))  &
-            +values(7)
-   elapsed=float(total) + (1.0e-3*float(values(8)))
-   timef=elapsed
-   return
-   end
 
   !> ???
   !!
@@ -672,7 +640,6 @@ contains
     real, allocatable, dimension(:,:,:) :: geolon_c, geolat_c
     real, allocatable, dimension(:,:,:) :: geolon_t, geolat_t, cos_sg, grid3
     integer :: start(4), nread(4)
-    real :: tbeg, tend
 
     print*, "Read the grid from file "//trim(grid_file)
 
@@ -699,7 +666,6 @@ contains
     start(:) = 1
     nread(:) = 1
 
-    tbeg=timef()
     do t = 1, ntiles
        start(2) = t; nread(1) = 255
        status =  nf_inq_varid(ncid, 'gridfiles', id_var)
@@ -781,8 +747,6 @@ contains
        status = nf_close(ncid2)
        call handle_err(status, "close file "//trim(tile_file))      
     enddo
-    tend=timef()
-    print*,'timer section 1 ',tend-tbeg
 
     deallocate(tmpvar)
 
@@ -794,7 +758,6 @@ contains
     isd=is-ng; ied=ie+ng
     jsd=js-ng; jed=je+ng
 
-    tbeg=timef()
     if( .not. regional ) then
       call fill_cubic_grid_halo(geolon_c, geolon_c, ng, 1, 1, 1, 1)
       call fill_cubic_grid_halo(geolat_c, geolat_c, ng, 1, 1, 1, 1)    
@@ -804,8 +767,6 @@ contains
       call fill_regional_halo(geolon_c, ng)
       call fill_regional_halo(geolat_c, ng)
     endif
-    tend=timef()
-    print*,'timer section 2 ',tend-tbeg
 
     !--- compute grid cell center
     allocate(geolon_t(isd:ied,jsd:jed,ntiles), geolat_t(isd:ied,jsd:jed,ntiles))
@@ -813,7 +774,6 @@ contains
     geolon_t(:,:,:) = -1.e25
     geolat_t(:,:,:) = -1.e25
 
-    tbeg=timef()
     do t = 1, ntiles
 !$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2,G3,G4,G5)
        do j=js,je ; do i=is,ie
@@ -827,9 +787,6 @@ contains
        enddo ; enddo
 !$OMP END PARALLEL DO
     enddo
-    tend=timef()
-    print*,'timer section 3 ',tend-tbeg
-
     
     if( .not. regional ) then
       call fill_cubic_grid_halo(geolon_t, geolon_t, ng, 0, 0, 1, 1)
@@ -838,7 +795,6 @@ contains
       if (.not. nested) call fill_AGRID_scalar_corners(geolat_t, ng, npx, npy, isd, jsd, YDir)
     endif
 
-    tbeg=timef()
     !--- compute dx, dy
     allocate(dx(isd:ied,jsd:jed+1,ntiles))
     allocate(dy(isd:ied+1,jsd:jed,ntiles))
@@ -866,8 +822,6 @@ contains
        enddo
 !$OMP END PARALLEL DO
     enddo
-    tend=timef()
-    print*,'timer section 4 ',tend-tbeg
 
     if( .not. regional ) then
       !--- make sure it is consitent between tiles. The following maybe not necessary.
@@ -893,7 +847,6 @@ contains
       if (.not. nested) call fill_dgrid_xy_corners(dx, dy, ng, npx, npy, isd, jsd)
     endif
 
-    tbeg=timef()
     !--- compute dxa and dya -----
     allocate(dxa(isd:ied,jsd:jed,ntiles))
     allocate(dya(isd:ied,jsd:jed,ntiles))
@@ -917,8 +870,6 @@ contains
        enddo; enddo
 !$OMP END PARALLEL DO
     enddo
-    tend=timef()
-    print*,'timer section 5 ',tend-tbeg
 
     if( .not.regional ) then
       call fill_cubic_grid_halo(dxa, dya, ng, 0, 0, 1, 1)
@@ -927,7 +878,6 @@ contains
       if (.not. nested) call fill_AGRID_xy_corners(dxa, dya, ng, npx, npy, isd, jsd)
     endif
 
-    tbeg=timef()
     !--- compute dxc and dyc
     allocate(dxc(isd:ied+1,jsd:jed,ntiles))
     allocate(dyc(isd:ied,jsd:jed+1,ntiles))
@@ -963,10 +913,6 @@ contains
 !$OMP END PARALLEL DO
     enddo
 
-    tend=timef()
-    print*,'timer section 6 ',tend-tbeg
-
-    tbeg=timef()
     !--- compute area
     allocate(area(isd:ied,jsd:jed,ntiles))
     do t = 1, ntiles
@@ -984,8 +930,6 @@ contains
        enddo
 !$OMP END PARALLEL DO
     enddo
-    tend=timef()
-    print*,'timer section 7 ',tend-tbeg
 
     if( .not.regional ) then
       call fill_cubic_grid_halo(area, area, ng, 0, 0, 1, 1)
@@ -993,7 +937,6 @@ contains
 
     da_min = minval(area(is:ie,js:je,:))
 
-    tbeg=timef()
     !--- compute sin_sg
     allocate(sin_sg(4,isd:ied,jsd:jed,ntiles))
     allocate(cos_sg(4,isd:ied,jsd:jed))
@@ -1045,8 +988,6 @@ contains
 !$OMP END PARALLEL DO
        enddo
     enddo
-    tend=timef()
-    print*,'timer section 8 ',tend-tbeg
 
     if( .not.regional ) then
       do ip=1,4
