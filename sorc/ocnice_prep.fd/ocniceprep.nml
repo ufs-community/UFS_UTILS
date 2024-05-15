@@ -1,8 +1,8 @@
 &ocniceprep_nml
-ftype='ocean'
+ftype='ice'
 wgtsdir='/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_1191124/'
 griddir='/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_1191124/'
 srcdims=1440,1080
-dstdims=72,35
-debug=.true.
+dstdims=360,320
+debug=.false.
 /
