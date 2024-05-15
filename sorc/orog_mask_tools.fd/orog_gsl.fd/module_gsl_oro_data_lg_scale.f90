@@ -50,7 +50,6 @@ contains
 subroutine calc_gsl_oro_data_lg_scale(tile_num,res_indx,halo)
 
 use netcdf
-use  gsl_oro_data_sm_scale, only: timef
 
 implicit none
 
@@ -110,8 +109,6 @@ real (kind = real_kind), dimension(3,3) :: HGT_M_coarse
 real (kind = real_kind), allocatable :: HGT_M_coarse_on_fine(:,:)
 integer :: cell_count  ! allows for use of 1D arrays for GWD statistics fields
 integer :: halo_int    ! integer form of halo
-
-real :: tbeg, tend
 
 logical :: fexist
 
@@ -351,8 +348,6 @@ OL4(:) = 0._real_kind
 ! 3) Calculate the orographic statistics: stddev,convexity,oa1,...oa4,
 !    ol1,...,ol4
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-tbeg=timef()
 
 !$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,CELL_COUNT,DLTA_LAT,DLTA_LON) &
 !$OMP PRIVATE(I_BLK,J_BLK,LON_BLK,LAT_BLK,S_II,S_JJ,E_II,E_JJ,II_M,JJ_M) &
@@ -798,9 +793,6 @@ do j = 1,dimY_FV3
    end do   ! j = 1,dimY_FV3
 end do      ! i = 1,dimX_FV3
 !$OMP END PARALLEL DO
-
-tend=timef()
-print*,'timing of main loop in calc_gsl_oro_data_lg_scale ',tend-tbeg
 
 !
 ! Output GWD statistics fields to netCDF file

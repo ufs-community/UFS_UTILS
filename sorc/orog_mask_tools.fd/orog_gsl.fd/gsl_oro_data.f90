@@ -37,7 +37,7 @@ program gsl_oro_data
 
 use omp_lib
 
-use gsl_oro_data_sm_scale, only: calc_gsl_oro_data_sm_scale, timef
+use gsl_oro_data_sm_scale, only: calc_gsl_oro_data_sm_scale
 use gsl_oro_data_lg_scale, only: calc_gsl_oro_data_lg_scale
 
 implicit none
@@ -51,8 +51,6 @@ logical :: duplicate_oro_data_file   ! flag for whether oro_data_ls file is a du
                    ! of oro_data_ss due to minimum grid size being less than 7.5km
 
 integer :: tid, nthreads
-
-real :: tbeg, tend
 
 ! Read in FV3GFS grid info
 print *
@@ -78,20 +76,13 @@ print *
   endif
 !$OMP END PARALLEL
 
-tbeg=timef()
 call calc_gsl_oro_data_sm_scale(tile_num,res_indx,halo,duplicate_oro_data_file)
-tend=timef()
-
-print*,'timing of calc_gsl_oro_data_sm_scale              ',tend-tbeg
 
 print *, "duplicate_oro_data_file =", duplicate_oro_data_file
 print *
 
 if ( .not.duplicate_oro_data_file ) then
-   tbeg=timef()
    call calc_gsl_oro_data_lg_scale(tile_num,res_indx,halo)
-   tend=timef()
-   print*,'timing of calc_gsl_oro_data_lg_scale              ',tend-tbeg
 end if
 
 
