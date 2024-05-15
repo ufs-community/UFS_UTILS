@@ -19,7 +19,7 @@ program ftst_program_setup
   integer :: passed, ntests
   integer :: nvalid
 
-  ntests = 8
+  ntests = 9
   passed = 0
   testpath = 'tests/ocnice_prep/'
 
@@ -37,6 +37,10 @@ program ftst_program_setup
   if (rc .eq. 1)passed = passed+1
 
   call readnml(trim(testpath)//'data/invalid.dstdim.nml',errmsg, rc)
+  print *,trim(errmsg),rc
+  if (rc .eq. 1)passed = passed+1
+
+  call readnml(trim(testpath)//'data/invalid.dst5p00.nml',errmsg, rc)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 

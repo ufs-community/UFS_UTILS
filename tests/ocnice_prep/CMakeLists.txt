@@ -25,6 +25,8 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
   ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.dstdim.nml ${CMAKE_CURRENT_BINARY_DIR}/data/invalid.dstdim.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.dst5p00.nml ${CMAKE_CURRENT_BINARY_DIR}/data/invalid.dst5p00.nml)
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
   ${CMAKE_CURRENT_SOURCE_DIR}/data/ice.badvecpairs.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ice.badvecpairs.csv)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
   ${CMAKE_CURRENT_SOURCE_DIR}/data/ocean.badvecpairs.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ocean.badvecpairs.csv)

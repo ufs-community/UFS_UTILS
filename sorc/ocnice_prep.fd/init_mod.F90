@@ -102,7 +102,7 @@ contains
     if (nxt == 1440 .and. nyt == 1080) fsrc = 'mx025'    ! 1/4deg tripole
     if (len_trim(fsrc) == 0) then
        rc = 1
-       write(errmsg,'(a)')'FATAL ERROR: source grid dimensions incorrect'
+       write(errmsg,'(a)')'FATAL ERROR: source grid dimensions invalid'
        return
     end if
 
@@ -111,7 +111,13 @@ contains
     if (nxr == 72   .and. nyr == 35)  fdst = 'mx500'     ! 5deg tripole
     if (len_trim(fdst) == 0) then
        rc = 1
-       write(errmsg,'(a)')'FATAL ERROR: destination grid dimensions incorrect'
+       write(errmsg,'(a)')'FATAL ERROR: destination grid dimensions invalid'
+       return
+    end if
+
+    if (trim(fdst) == 'mx500') then
+       rc = 1
+       write(errmsg,'(a)')'FATAL ERROR: 5deg destination grid is not supported'
        return
     end if
 
