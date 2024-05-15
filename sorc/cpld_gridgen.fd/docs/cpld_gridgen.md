@@ -191,12 +191,10 @@ domain of the ocean and ice for the global models is always the
 tripole grid, which is characterized by three "poles", one in the
 southern hemisphere and two in the north, both over land.
 
-.. _figure_reference:
+\image html murray.png "from Murray (1996)" width=400cm
 
-.. figure:: _static/murray.png
-
-As seen in the figure, in the northern hemisphere, the model index
-directions (i.e., i,j) do not align with true eastward and northward
+As seen in the figure, in the northern hemisphere, the model grid
+lines (i.e. indices i,j) do not align with true eastward and northward
 directions. Therefore, velocities for both MOM6 an CICE6 must be
 "rotated" from the model orientation to true geographic orientation
 before mapping can take place. This rotation requires that both
