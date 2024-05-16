@@ -358,26 +358,12 @@ C
 ! --- The center of pixel (1,1) is 89.9958333N/179.9958333W with dx/dy 
 ! --- spacing of 1/120 degrees. 
 !
-!  READ REDUCED GRID EXTENTS IF GIVEN
+!  Use for the old gaussian reduced grid. FV3 does not use a reduced
+!  grid.
 !
-      read(20,*,iostat=ios) latg2,lonsperlat
-      if(ios.ne.0.or.2*latg2.ne.jm) then
-        do j=1,jm
-          numi(j)=im
-        enddo
-        print *,ios,latg2,'COMPUTE TERRAIN ON A FULL GAUSSIAN GRID'
-      else
-        do j=1,jm/2
-          numi(j)=lonsperlat(j)
-        enddo
-        do j=jm/2+1,jm
-          numi(j)=lonsperlat(jm+1-j)
-        enddo
-        print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID',
-     &          numi
-C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
-      endif
-!       print *,ios,latg2,'TERRAIN ON GAUSSIAN GRID',numi
+       do j=1,jm
+         numi(j)=im
+       enddo
       
 !
 !    This code assumes that lat runs from north to south for gg!
@@ -503,7 +489,7 @@ C
 ! --- remember, that lake mask is in zslm to be assigned in MAKEMT.
           if ( mskocn .eq. 1 ) then
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
             if ( notocn .eq. 0 ) then
             slmi(i,j) = float(NINT(OCLSM(i,j)))
             else
@@ -749,7 +735,7 @@ C
 !
 C   check antarctic pole 
 !     DO J = 1,JM
-!     DO I = 1,numi(j)
+!     DO I = 1,IM
 !        if ( i .le. 100 .and. i .ge. 1 )then
 !           if (j .ge. JM-1 )then
 !      if (height .eq. 0.) print *,'I,J,SLM:',I,J,SLM(I,J)
@@ -939,7 +925,7 @@ C
         maxc7 = 0
         maxc8 = 0
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
          if (ELVMAX(I,J) .gt. 3000.) maxc3 = maxc3 +1
          if (ELVMAX(I,J) .gt. 4000.) maxc4 = maxc4 +1
          if (ELVMAX(I,J) .gt. 5000.) maxc5 = maxc5 +1
@@ -957,7 +943,7 @@ C
        print *,' ===> if ELVMAX<=ORO replace with proxy <=== ' 
        print *,' ===> the sum of mean orog (ORO) and std dev <=== ' 
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
         if (ELVMAX(I,J) .lt. ORO(I,J) ) then
 C---  subtracting off ORO leaves std dev (this should never happen)
        ELVMAX(I,J) = MAX(  3. * VAR(I,J),0.)
@@ -973,7 +959,7 @@ C---  subtracting off ORO leaves std dev (this should never happen)
         maxc7 = 0
         maxc8 = 0
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
          if (ELVMAX(I,J) .gt. 3000.) maxc3 = maxc3 +1
          if (ELVMAX(I,J) .gt. 4000.) maxc4 = maxc4 +1
          if (ELVMAX(I,J) .gt. 5000.) maxc5 = maxc5 +1
@@ -993,7 +979,7 @@ C
       print *,' SLM(itest,jtest)=',slm(itest,jtest),itest,jtest
       print *,' ORO(itest,jtest)=',oro(itest,jtest),itest,jtest
       DO J = 1,JM
-        DO I = 1,numi(j)
+        DO I = 1,IM
           IF(SLM(I,J).EQ.0.) THEN
 C           VAR(I,J) = 0.
             VAR4(I,J) = 0.
@@ -1029,7 +1015,7 @@ C
       MSK_OCN :      if ( mskocn .eq. 1 ) then
 
       DO j = 1,jm
-        DO i = 1,numi(j)
+        DO i = 1,im
               if (abs (oro(i,j)) .lt. 1. ) then 
               slm(i,j) = slmi(i,j)
               else
@@ -1157,7 +1143,6 @@ C  REMOVE ISOLATED POINTS
 C--- print for testing after isolated points removed
       print *,' after isolated points removed'
        call minmxj(IM,JM,ORO,'     ORO')
-C     print *,' JM=',JM,' numi=',numi
       print *,' ORO(itest,jtest)=',oro(itest,jtest)
       print *,' VAR(itest,jtest)=',var(itest,jtest)
       print *,' VAR4(itest,jtest)=',var4(itest,jtest)
@@ -1180,7 +1165,7 @@ C     print *,' JM=',JM,' numi=',numi
 
 C
       DO J=1,JM
-        DO I=1,numi(j)
+        DO I=1,IM
           ORO(I,J) = ORO(I,J) + EFAC*VAR(I,J)
           HPRIME(I,J,1) = VAR(I,J)
           HPRIME(I,J,2) = VAR4(I,J)
@@ -1213,13 +1198,14 @@ C
       print *,' NF1, NF0, FILTER=',NF1,NF0,FILTER
       IF (FILTER) THEN
 C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
-        do j=1,jm
-          if(numi(j).lt.im) then
-            ffj=cmplx(0.,0.)
-            call spfft1(numi(j),im/2+1,numi(j),1,ffj,oro(1,j),-1)
-            call spfft1(im,im/2+1,im,1,ffj,oro(1,j),+1)
-          endif
-        enddo
+!       do j=1,jm
+!     for reduced grid, which is no longer used.
+!         if(numi(j).lt.im) then
+!           ffj=cmplx(0.,0.)
+!           call spfft1(numi(j),im/2+1,numi(j),1,ffj,oro(1,j),-1)
+!           call spfft1(im,im/2+1,im,1,ffj,oro(1,j),+1)
+!         endif
+!       enddo
         CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORO,-1)
 !
       print *,' about to apply spectral filter '
@@ -1237,12 +1223,13 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
         ENDDO
 !
         CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORF,+1)
-        do j=1,jm
-          if(numi(j).lt.im) then
-            call spfft1(im,im/2+1,im,1,ffj,orf(1,j),-1)
-            call spfft1(numi(j),im/2+1,numi(j),1,ffj,orf(1,j),+1)
-          endif
-        enddo
+!    for reduced grid, which is no longer used.
+!       do j=1,jm
+!         if(numi(j).lt.im) then
+!           call spfft1(im,im/2+1,im,1,ffj,orf(1,j),-1)
+!           call spfft1(numi(j),im/2+1,numi(j),1,ffj,orf(1,j),+1)
+!         endif
+!       enddo
 
       ELSE
         ORS=0.
@@ -1257,15 +1244,6 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,ORF,'     ORF')
 C
-C  USE NEAREST NEIGHBOR INTERPOLATION TO FILL FULL GRIDS
-      call rg2gg(im,jm,numi,slm)
-      call rg2gg(im,jm,numi,oro)
-      call rg2gg(im,jm,numi,orf)
-C ---   not apply to new prin coord and ELVMAX (*j*)
-      do imt=1,10 
-        call rg2gg(im,jm,numi,hprime(1,1,imt))
-      enddo
-C 
       print *,' after nearest neighbor interpolation applied '
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,ORF,'     ORF')
@@ -1277,7 +1255,7 @@ C
 
 C   check antarctic pole 
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
          if ( i .le. 21 .and. i .ge. 1 )then
          if (j .eq. JM )write(6,153)i,j,ORO(i,j),ELVMAX(i,j),SLM(i,j)
   153 format(1x,' ORO,ELVMAX(i=',i4,' j=',i4,')=',2E14.5,f5.1)
@@ -3863,58 +3841,6 @@ C
 C
       RETURN
       END SUBROUTINE MAKEOA3
-
-!> Convert from a reduced grid to a full grid.
-!!
-!! @param[in] im 'i' dimension of the full grid.
-!! @param[in] jm 'j' dimension of the full grid.
-!! @param[in] numi Number of 'i' points for each
-!! row of the reduced grid.
-!! @param[inout] a The data to be converted.
-!! @author Jordan Alpert NOAA/EMC
-      subroutine rg2gg(im,jm,numi,a)
-        implicit none
-        integer,intent(in):: im,jm,numi(jm)
-        real,intent(inout):: a(im,jm)
-        integer j,ir,ig
-        real r,t(im)
-        do j=1,jm
-          r=real(numi(j))/real(im)
-          do ig=1,im
-            ir=mod(nint((ig-1)*r),numi(j))+1
-            t(ig)=a(ir,j)
-          enddo
-          do ig=1,im
-            a(ig,j)=t(ig)
-          enddo
-        enddo
-      end subroutine
-
-!> Convert from a full grid to a reduced grid.
-!!
-!! @param[in] im 'i' dimension of the full grid.
-!! @param[in] jm 'j' dimension of the full grid.
-!! @param[in] numi Number of 'i' points for each
-!! row of the reduced grid.
-!! @param[inout] a The data to be converted.
-!! @author Jordan Alpert NOAA/EMC
-      subroutine gg2rg(im,jm,numi,a)
-        implicit none
-        integer,intent(in):: im,jm,numi(jm)
-        real,intent(inout):: a(im,jm)
-        integer j,ir,ig
-        real r,t(im)
-        do j=1,jm
-          r=real(numi(j))/real(im)
-          do ir=1,numi(j)
-            ig=nint((ir-1)/r)+1
-            t(ir)=a(ig,j)
-          enddo
-          do ir=1,numi(j)
-            a(ir,j)=t(ir)
-          enddo
-        enddo
-      end subroutine
 
 !> Print out the maximum and minimum values of
 !! an array.
