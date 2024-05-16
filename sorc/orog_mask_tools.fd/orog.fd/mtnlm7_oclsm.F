@@ -182,7 +182,7 @@ C
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
-      integer :: M,N,IMT,IRET,ios,latg2,istat,itest,jtest
+      integer :: M,N,IMT,ios,latg2,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
@@ -226,7 +226,6 @@ C
       logical :: grid_from_file,fexist,opened
       logical :: SPECTR, FILTER
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
-      logical :: LB(IM*JM)
 
       tbeg1=timef()
       tbeg=timef()
@@ -4386,7 +4385,6 @@ C
         implicit none
 
         real get_xnsum
-        logical verbose
         real, intent(in) :: lon1,lat1,lon2,lat2,delxn
         integer, intent(in) ::  IMN,JMN
         real, intent(in) :: glat(JMN)
@@ -4413,7 +4411,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
         !--- compute average oro
           oro = 0.0
@@ -4456,7 +4453,6 @@ C
                IF ( HEIGHT .gt. ORO ) get_xnsum = get_xnsum + 1
             enddo       
          enddo
-!         if(verbose) print*, "get_xnsum=", get_xnsum, oro
          
       end function get_xnsum  
       
@@ -4492,7 +4488,6 @@ C
         implicit none
 
         real, intent(out) :: xnsum1,xnsum2,HC
-        logical verbose
         real lon1,lat1,lon2,lat2,delxn
         integer IMN,JMN
         real    glat(JMN)
@@ -4519,7 +4514,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
         !--- compute average oro
           xnsum = 0
@@ -4615,7 +4609,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
          xnsum1 = 0
          xnsum2 = 0
