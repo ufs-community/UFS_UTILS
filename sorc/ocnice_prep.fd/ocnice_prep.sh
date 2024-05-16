@@ -13,10 +13,19 @@ function edit_namelist {
 
 APRUN=${APRUN:-"srun --nodes=1 -A nems "}
 
-# the test needs to be once setting the filetype=ocean and once for ice
-# one source 1/4deg grid (1440,1080)
-# two destination grids: 1deg (360,320) and 1/2deg (720,576)
-# only one would need to be tested in an RT
+# Two possible input files: ocean.nc and ice.nc
+# One possible source grid, 1/4 deg (mx025: 1440,1080)
+# Two possible destination grids, 1/2deg and 1deg (mx050: 720,576 and mx100: 360,320)
+# The files produced will be ocean.mx[dest res].nc and ice.mx[des res].nc
+# The program needs to execute twice, once for ocean and once for ice
+
+# For the purposes of the RT, we can have staged input files retrieved from
+# https://noaa-ufs-gefsv13replay-pds.s3.amazonaws.com/2021/03/2021032206/
+# The required single mom file was created using
+# ncks -O -v Temp,Salt,h,u replay-2021032206/MOM.res.nc ocean.nc
+# ncks -v v,sfc -A replay-2021032206/MOM.res_1.nc ocean.nc
+# I am assuming that the g-w will do the filename globbing and retrieval,
+# process the NCO command and rename (timestamp) the output files at the end.
 
 export SRCDIMS="1440,1080"
 export DSTDIMS="360,320"
@@ -29,23 +38,6 @@ export DO_DEBUG=".false."
 export OUTDIR_PATH="./"
 
 cd ${OUTDIR_PATH}
-
-# Stage input
-# Use NCO to merge the first two MOM6 restarts to a single restart
-# These two files will need to be available in the RT.
-
-# The G-W will make these two files are available (having been
-# retrieved from "somewhere") as MOM.res.nc and MOM.res_1.nc.
-# Also assume that the ice restart is retrieved as ice.nc.
-# The files produced will be ocean.mx[resolution].nc and
-# ice.mx[resolution].nc
-# Assume that the g-w will do the filename globbing and retrieval
-# and rename (timestamp) the output files at the end.
-
-#comment out for testing
-#ncks -O -v Temp,Salt,h,u replay-2021032206/MOM.res.nc ocean.nc
-#ncks -v v,sfc -A replay-2021032206/MOM.res_1.nc ocean.nc
-#cp -f replay-2021032206/iced.2021-03-22-10800.nc ice.nc
 
 edit_namelist < ocniceprep.nml.IN > ocniceprep.nml
 
