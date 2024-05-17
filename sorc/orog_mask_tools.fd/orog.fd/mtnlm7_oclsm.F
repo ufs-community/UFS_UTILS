@@ -182,7 +182,7 @@ C
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
-      integer :: M,N,IMT,ios,latg2,istat,itest,jtest
+      integer :: M,N,ios,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
@@ -199,7 +199,7 @@ C
       integer, allocatable :: IWORK(:,:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
-      real :: PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
+      real :: PHI,DELXN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
       real :: sumdif,avedif
 
       real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
@@ -358,13 +358,11 @@ C
 ! --- The center of pixel (1,1) is 89.9958333N/179.9958333W with dx/dy 
 ! --- spacing of 1/120 degrees. 
 !
-!  Use for the old gaussian reduced grid. FV3 does not use a reduced
-!  grid.
-!
+!  When the gaussian grid routines makemt, makepc and makeoa are
+!  removed, numi can be removed.
        do j=1,jm
          numi(j)=im
        enddo
-      
 !
 !    This code assumes that lat runs from north to south for gg!
 !
@@ -1039,9 +1037,7 @@ C  REMOVE ISOLATED POINTS
       iso_loop : DO J=2,JM-1
         JN=J-1
         JS=J+1
-        RN=REAL(NUMI(JN))/REAL(NUMI(J))
-        RS=REAL(NUMI(JS))/REAL(NUMI(J))
-        DO I=1,NUMI(J)
+        DO I=1,IM
           IW=MOD(I+IM-2,IM)+1
           IE=MOD(I,IM)+1
           SLMA=SLM(IW,J)+SLM(IE,J)
@@ -1054,11 +1050,11 @@ C  REMOVE ISOLATED POINTS
             OLA(K)=OL(IW,J,K)+OL(IE,J,K)
           ENDDO
           WGTA=2
-          XN=RN*(I-1)+1
+          XN=(I-1)+1
           IF(ABS(XN-NINT(XN)).LT.1.E-2) THEN
-            IN=MOD(NINT(XN)-1,NUMI(JN))+1
-            INW=MOD(IN+NUMI(JN)-2,NUMI(JN))+1
-            INE=MOD(IN,NUMI(JN))+1
+            IN=MOD(NINT(XN)-1,IM)+1
+            INW=MOD(IN+IM-2,IM)+1
+            INE=MOD(IN,IM)+1
             SLMA=SLMA+SLM(INW,JN)+SLM(IN,JN)+SLM(INE,JN)
             OROA=OROA+ORO(INW,JN)+ORO(IN,JN)+ORO(INE,JN)
             VARA=VARA+VAR(INW,JN)+VAR(IN,JN)+VAR(INE,JN)
@@ -1070,7 +1066,7 @@ C  REMOVE ISOLATED POINTS
             WGTA=WGTA+3
           ELSE
             INW=INT(XN)
-            INE=MOD(INW,NUMI(JN))+1
+            INE=MOD(INW,IM)+1
             SLMA=SLMA+SLM(INW,JN)+SLM(INE,JN)
             OROA=OROA+ORO(INW,JN)+ORO(INE,JN)
             VARA=VARA+VAR(INW,JN)+VAR(INE,JN)
@@ -1081,11 +1077,11 @@ C  REMOVE ISOLATED POINTS
             ENDDO
             WGTA=WGTA+2
           ENDIF
-          XS=RS*(I-1)+1
+          XS=(I-1)+1
           IF(ABS(XS-NINT(XS)).LT.1.E-2) THEN
-            IS=MOD(NINT(XS)-1,NUMI(JS))+1
-            ISW=MOD(IS+NUMI(JS)-2,NUMI(JS))+1
-            ISE=MOD(IS,NUMI(JS))+1
+            IS=MOD(NINT(XS)-1,IM)+1
+            ISW=MOD(IS+IM-2,IM)+1
+            ISE=MOD(IS,IM)+1
             SLMA=SLMA+SLM(ISW,JS)+SLM(IS,JS)+SLM(ISE,JS)
             OROA=OROA+ORO(ISW,JS)+ORO(IS,JS)+ORO(ISE,JS)
             VARA=VARA+VAR(ISW,JS)+VAR(IS,JS)+VAR(ISE,JS)
@@ -1097,7 +1093,7 @@ C  REMOVE ISOLATED POINTS
             WGTA=WGTA+3
           ELSE
             ISW=INT(XS)
-            ISE=MOD(ISW,NUMI(JS))+1
+            ISE=MOD(ISW,IM)+1
             SLMA=SLMA+SLM(ISW,JS)+SLM(ISE,JS)
             OROA=OROA+ORO(ISW,JS)+ORO(ISE,JS)
             VARA=VARA+VAR(ISW,JS)+VAR(ISE,JS)
