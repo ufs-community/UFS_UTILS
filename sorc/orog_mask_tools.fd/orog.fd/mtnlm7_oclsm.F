@@ -189,7 +189,6 @@ C
       integer(2) :: i2save
 
       integer, allocatable :: JST(:),JEN(:),numi(:)
-      integer, allocatable :: lonsperlat(:)
 
       integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
       integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
@@ -232,7 +231,6 @@ C
       fsize = 65536
 ! integers
       allocate (JST(JM),JEN(JM),numi(jm))
-      allocate (lonsperlat(jm/2))
       allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
       allocate (glob(IMN,JMN))
 
@@ -1291,7 +1289,7 @@ C
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
 !     Deallocate 1d vars
-      deallocate(JST,JEN,numi,lonsperlat)
+      deallocate(JST,JEN,numi)
       deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
