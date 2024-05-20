@@ -9,6 +9,7 @@
 !! @author Zhi Liang (GFDL) who packaged it into a standalone application.
 program filter_topo
 
+  use omp_lib
   use utils
 
   implicit none
@@ -34,7 +35,7 @@ program filter_topo
   real:: peak_fac   ! overshoot factor for the mountain peak
   real:: max_slope  ! max allowable terrain slope: 1 --> 45 deg
 
-  integer :: n_del2_weak
+  integer :: n_del2_weak, tid, nthreads
 
   integer :: ntiles = 0
 
@@ -50,6 +51,17 @@ program filter_topo
   integer           :: is,ie,js,je,isd,ied,jsd,jed
   integer,parameter :: ng = 3
   integer           :: nx, ny, npx, npy, nx_nest, ny_nest, npx_nest, npy_nest, is_nest, ie_nest, js_nest, je_nest, isd_nest, ied_nest, jsd_nest, jed_nest
+
+!$OMP PARALLEL PRIVATE(TID)
+  tid = omp_get_thread_num()
+  if (tid == 0) then
+    nthreads = omp_get_num_threads()
+    print*
+    print*,'- BEGIN EXECUTION WITH NUMBER OF THREADS = ',nthreads
+    print*
+  endif
+!$OMP END PARALLEL
+
   !--- read namelist
   call read_namelist()
 
@@ -68,6 +80,9 @@ program filter_topo
 
   !--- write out the data
   call write_topo_file(is,ie,js,je,ntiles,oro(is:ie,js:je,:),regional )
+
+  print*
+  print*,'- NORMAL TERMINATION.'
 
 contains
 
@@ -760,6 +775,7 @@ contains
     geolat_t(:,:,:) = -1.e25
 
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2,G3,G4,G5)
        do j=js,je ; do i=is,ie
           g1(1) = geolon_c(i,j,t);     g1(2) = geolat_c(i,j,t)
           g2(1) = geolon_c(i+1,j,t);   g2(2) = geolat_c(i+1,j,t)
@@ -769,8 +785,8 @@ contains
           geolon_t(i,j,t) = g5(1)
           geolat_t(i,j,t) = g5(2)
        enddo ; enddo
+!$OMP END PARALLEL DO
     enddo
-
     
     if( .not. regional ) then
       call fill_cubic_grid_halo(geolon_t, geolon_t, ng, 0, 0, 1, 1)
@@ -783,6 +799,7 @@ contains
     allocate(dx(isd:ied,jsd:jed+1,ntiles))
     allocate(dy(isd:ied+1,jsd:jed,ntiles))
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2)
        do j = js, je+1 ; do i = is, ie
           g1(1) = geolon_c(i  ,j,t)
           g1(2) = geolat_c(i  ,j,t)
@@ -790,8 +807,10 @@ contains
           g2(2) = geolat_c(i+1,j,t)
           dx(i,j,t) = great_circle_dist( g2, g1, radius )
        enddo ; enddo
+!$OMP END PARALLEL DO
     enddo
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2)
        do j = js, je
           do i = is, ie+1
              g1(1) = geolon_c(i,j,  t)
@@ -801,6 +820,7 @@ contains
              dy(i,j,t) = great_circle_dist( g2, g1, radius )
           enddo
        enddo
+!$OMP END PARALLEL DO
     enddo
 
     if( .not. regional ) then
@@ -831,6 +851,7 @@ contains
     allocate(dxa(isd:ied,jsd:jed,ntiles))
     allocate(dya(isd:ied,jsd:jed,ntiles))
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2,G3,G4)
        do j=js,je ; do i=is,ie
           g1(1) = geolon_c(i,j,t); g1(2) = geolat_c(i,j,t)
           g2(1) = geolon_c(i,j+1,t); g2(2) = geolat_c(i,j+1,t)
@@ -847,6 +868,7 @@ contains
           call mid_pt_sphere(g1, g2, g4)
           dya(i,j,t) = great_circle_dist( g4, g3, radius )
        enddo; enddo
+!$OMP END PARALLEL DO
     enddo
 
     if( .not.regional ) then
@@ -860,6 +882,8 @@ contains
     allocate(dxc(isd:ied+1,jsd:jed,ntiles))
     allocate(dyc(isd:ied,jsd:jed+1,ntiles))
     do t = 1, ntiles
+
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2)
        do j=jsd,jed
           do i=isd+1,ied
              g1(1) = geolon_c(i,j,t); g1(2) = geolat_c(i,j,t)
@@ -869,7 +893,9 @@ contains
           dxc(isd,j,t)   = dxc(isd+1,j,t)
           dxc(ied+1,j,t) = dxc(ied,j,t)
        enddo
+!$OMP END PARALLEL DO
 
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,G2)
        do j=jsd+1,jed
           do i=isd,ied
              g1(1) = geolon_c(i,j,t); g1(2) = geolat_c(i,j,t)
@@ -877,15 +903,20 @@ contains
              dyc(i,j,t) = great_circle_dist(g1, g2, radius)
           enddo
        enddo
+!$OMP END PARALLEL DO
+
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I)
        do i=isd,ied
           dyc(i,jsd,t)   = dyc(i,jsd+1,t)
           dyc(i,jed+1,t) = dyc(i,jed,t)
        end do
+!$OMP END PARALLEL DO
     enddo
 
     !--- compute area
     allocate(area(isd:ied,jsd:jed,ntiles))
     do t = 1, ntiles
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,p_lL,p_uL,p_lr,p_uR)
        do j=js,je
           do i=is,ie
              p_lL(1) = geolon_c(i  ,j  ,t) ; p_lL(2) = geolat_c(i  ,j  ,t)
@@ -897,6 +928,7 @@ contains
              area(i,j,t) = get_area(p_lL, p_uL, p_lR, p_uR, radius)
           enddo
        enddo
+!$OMP END PARALLEL DO
     enddo
 
     if( .not.regional ) then
@@ -918,6 +950,8 @@ contains
     !     |       |
     !     6---2---7
     do t = 1, ntiles
+
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1)
        do j=js,je+1
           do i = is,ie+1
              g1(1) = geolon_c(i,j,t)
@@ -925,6 +959,9 @@ contains
              call latlon2xyz(g1, grid3(:,i,j))
           enddo
        enddo
+!$OMP END PARALLEL DO
+
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J,G1,P1,P3)
        do j=js,je
           do i=is,ie
              g1(1) = geolon_t(i,j,t); g1(2) = geolat_t(i,j,t)
@@ -939,13 +976,16 @@ contains
              cos_sg(4,i,j) = cos_angle( p1, grid3(1,i,j+1), p3 )
           enddo
        enddo
+!$OMP END PARALLEL DO
 
        do ip=1,4
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,J)
           do j=js,je
              do i=is,ie
                 sin_sg(ip,i,j,t) = min(1.0, sqrt( max(0., 1.-cos_sg(ip,i,j)**2) ) )
              enddo
           enddo
+!$OMP END PARALLEL DO
        enddo
     enddo
 

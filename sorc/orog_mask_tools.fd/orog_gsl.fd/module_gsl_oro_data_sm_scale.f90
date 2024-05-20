@@ -119,7 +119,6 @@ integer :: halo_int    ! integer form of halo
 
 logical :: fexist
 
-
 print *, "Creating oro_data_ss file"
 print *
 
@@ -365,10 +364,14 @@ min_DX = sqrt(min_area_FV3)/1000._real_kind  ! grid size in km
 !    ol1,...,ol4
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-cell_count = 1
-
+!$OMP PARALLEL DO DEFAULT(SHARED) PRIVATE(I,DLTA_LAT,DLTA_LON) &
+!$OMP PRIVATE(I_BLK,J_BLK,S_II,S_JJ,E_II,E_JJ,LON_BLK,LAT_BLK,II_M,JJ_M) &
+!$OMP PRIVATE(ZS,II,JJ,II_LOC,JJ_LOC,SUM2,NFINEPOINTS,CELL_COUNT,ZS_ACCUM,ZS_MEAN) &
+!$OMP PRIVATE(SUM4,VAR,NU,ND,RATIO,NW,NT)
 do j = 1,dimY_FV3
    do i = 1,dimX_FV3
+
+      cell_count = ( (j-1) * dimX_FV3 ) + i
 
       ! Calculate approximate side-lengths of square lat-long "coarse" grid
       ! cell centered on FV3 cell (units = radians)
@@ -499,7 +502,6 @@ do j = 1,dimY_FV3
          OL3(cell_count) = 0._real_kind
          OL4(cell_count) = 0._real_kind
          deallocate(zs)
-         cell_count = cell_count + 1
          cycle   ! move on to next (coarse) grid cell 
       end if
 
@@ -526,7 +528,6 @@ do j = 1,dimY_FV3
          end do
       end do
       std_dev(cell_count) = sqrt( sum2/real(nfinepoints,real_kind) )
-
 
       !
       ! Calculate convexity of sub-grid-scale terrain
@@ -731,16 +732,11 @@ do j = 1,dimY_FV3
          OL4(cell_count) = 0._real_kind
       end if
 
-
-
       deallocate (zs)
-
-      cell_count = cell_count + 1
 
    end do   ! j = 1,dimY_FV3
 end do      ! i = 1,dimX_FV3
-
-
+!$OMP END PARALLEL DO
 
 !
 ! Output GWD statistics fields to netCDF file
@@ -1282,7 +1278,5 @@ call exit(4)
 
 return
 end subroutine netcdf_err
-
-
 
 end module gsl_oro_data_sm_scale

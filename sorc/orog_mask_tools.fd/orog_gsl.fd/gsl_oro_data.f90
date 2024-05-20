@@ -35,11 +35,12 @@
 !! @return 0 for success, error code otherwise.
 program gsl_oro_data
 
+use omp_lib
+
 use gsl_oro_data_sm_scale, only: calc_gsl_oro_data_sm_scale
 use gsl_oro_data_lg_scale, only: calc_gsl_oro_data_lg_scale
 
 implicit none
-
 
 character(len=2) :: tile_num   ! tile number entered by user
 character(len=7) :: res_indx   ! grid-resolution index, e.g., 96, 192, 384, 768,
@@ -49,7 +50,7 @@ character(len=4) :: halo       ! halo value entered by user (for input grid data
 logical :: duplicate_oro_data_file   ! flag for whether oro_data_ls file is a duplicate
                    ! of oro_data_ss due to minimum grid size being less than 7.5km
 
-
+integer :: tid, nthreads
 
 ! Read in FV3GFS grid info
 print *
@@ -67,6 +68,13 @@ print *, "Grid resolution = ", res_indx
 print *, "Halo = ", halo
 print *
 
+!$OMP PARALLEL PRIVATE(TID)
+  tid = omp_get_thread_num()
+  if (tid==0) then
+    nthreads = omp_get_num_threads()
+    print*,'Number of threads = ', nthreads
+  endif
+!$OMP END PARALLEL
 
 call calc_gsl_oro_data_sm_scale(tile_num,res_indx,halo,duplicate_oro_data_file)
 
