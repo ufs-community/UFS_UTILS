@@ -219,9 +219,6 @@ C
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
 
-
-      complex :: ffj(im/2+1)
-
       logical :: grid_from_file,fexist,opened
       logical :: SPECTR, FILTER
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
@@ -1192,14 +1189,7 @@ C
       print *,' NF1, NF0, FILTER=',NF1,NF0,FILTER
       IF (FILTER) THEN
 C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
-!       do j=1,jm
-!     for reduced grid, which is no longer used.
-!         if(numi(j).lt.im) then
-!           ffj=cmplx(0.,0.)
-!           call spfft1(numi(j),im/2+1,numi(j),1,ffj,oro(1,j),-1)
-!           call spfft1(im,im/2+1,im,1,ffj,oro(1,j),+1)
-!         endif
-!       enddo
+
         CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORO,-1)
 !
       print *,' about to apply spectral filter '
@@ -1217,13 +1207,6 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
         ENDDO
 !
         CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORF,+1)
-!    for reduced grid, which is no longer used.
-!       do j=1,jm
-!         if(numi(j).lt.im) then
-!           call spfft1(im,im/2+1,im,1,ffj,orf(1,j),-1)
-!           call spfft1(numi(j),im/2+1,numi(j),1,ffj,orf(1,j),+1)
-!         endif
-!       enddo
 
       ELSE
         ORS=0.
@@ -3906,85 +3889,6 @@ csela....................................................
 C
       RETURN
       END
-
-!> Perform multiple fast fourier transforms.
-!!
-!! This subprogram performs multiple fast fourier transforms
-!! between complex amplitudes in fourier space and real values
-!! in cyclic physical space.
-!!
-!! Subprograms called (NCEPLIB SP Library):
-!!  - scrft Complex to real fourier transform
-!!  - dcrft Complex to real fourier transform
-!!  - srcft Real to complex fourier transform
-!!  - drcft Real to complex fourier transform
-!!
-!! Program history log:
-!! 1998-12-18  Mark Iredell
-!!
-!! @param[in] imax Integer number of values in the cyclic physical
-!! space. See limitations on imax in remarks below.
-!! @param[in] incw Integer first dimension of the complex amplitude array.
-!! (incw >= imax/2+1).
-!! @param[in] incg Integer first dimension of the real value array.
-!! (incg >= imax).
-!! @param[in] kmax Integer number of transforms to perform.
-!! @param[in] w Complex amplitudes on input if idir>0, and on output
-!! if idir<0.
-!! @param[in] g Real values on input if idir<0, and on output if idir>0.
-!! @param[in] idir Integer direction flag. idir>0 to transform from
-!! fourier to physical space. idir<0 to transform from physical to
-!! fourier space.
-!!
-!! @note The restrictions on imax are that it must be a multiple
-!! of 1 to 25 factors of two, up to 2 factors of three,
-!! and up to 1 factor of five, seven and eleven.
-!!
-!! @author Mark Iredell ORG: W/NMC23 @date 96-02-20
-      SUBROUTINE SPFFT1(IMAX,INCW,INCG,KMAX,W,G,IDIR)
-        IMPLICIT NONE
-        INTEGER,INTENT(IN):: IMAX,INCW,INCG,KMAX,IDIR
-        COMPLEX,INTENT(INOUT):: W(INCW,KMAX)
-        REAL,INTENT(INOUT):: G(INCG,KMAX)
-        REAL:: AUX1(25000+INT(0.82*IMAX))
-        REAL:: AUX2(20000+INT(0.57*IMAX))
-        INTEGER:: NAUX1,NAUX2
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        NAUX1=25000+INT(0.82*IMAX)
-        NAUX2=20000+INT(0.57*IMAX)
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-C  FOURIER TO PHYSICAL TRANSFORM.
-        SELECT CASE(IDIR)
-        CASE(1:)
-          SELECT CASE(DIGITS(1.))
-          CASE(DIGITS(1._4))
-            CALL SCRFT(1,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL SCRFT(0,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          CASE(DIGITS(1._8))
-            CALL DCRFT(1,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL DCRFT(0,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          END SELECT
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-C  PHYSICAL TO FOURIER TRANSFORM.
-        CASE(:-1)
-          SELECT CASE(DIGITS(1.))
-          CASE(DIGITS(1._4))
-            CALL SRCFT(1,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL SRCFT(0,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          CASE(DIGITS(1._8))
-            CALL DRCFT(1,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL DRCFT(0,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          END SELECT
-        END SELECT
-      END SUBROUTINE
 
 !> Read input global 30-arc second orography data.
 !!
