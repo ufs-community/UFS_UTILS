@@ -182,14 +182,13 @@ C
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
-      integer :: M,N,IMT,IRET,ios,latg2,istat,itest,jtest
+      integer :: M,N,ios,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
       integer(2) :: i2save
 
-      integer, allocatable :: JST(:),JEN(:),KPDS(:),KGDS(:),numi(:)
-      integer, allocatable :: lonsperlat(:)
+      integer, allocatable :: JST(:),JEN(:),numi(:)
 
       integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
       integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
@@ -199,7 +198,7 @@ C
       integer, allocatable :: IWORK(:,:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
-      real :: PHI,DELXN,RS,RN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
+      real :: PHI,DELXN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
       real :: sumdif,avedif
 
       real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
@@ -220,22 +219,15 @@ C
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
 
-
-      complex :: ffj(im/2+1)
-
-      logical :: grid_from_file,output_binary,fexist,opened
+      logical :: grid_from_file,fexist,opened
       logical :: SPECTR, FILTER
-
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
-      logical :: LB(IM*JM)
 
-      output_binary = .false.
       tbeg1=timef()
       tbeg=timef()
       fsize = 65536
 ! integers
-      allocate (JST(JM),JEN(JM),KPDS(200),KGDS(200),numi(jm))
-      allocate (lonsperlat(jm/2))
+      allocate (JST(JM),JEN(JM),numi(jm))
       allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
       allocate (glob(IMN,JMN))
 
@@ -361,27 +353,11 @@ C
 ! --- The center of pixel (1,1) is 89.9958333N/179.9958333W with dx/dy 
 ! --- spacing of 1/120 degrees. 
 !
-!  READ REDUCED GRID EXTENTS IF GIVEN
-!
-      read(20,*,iostat=ios) latg2,lonsperlat
-      if(ios.ne.0.or.2*latg2.ne.jm) then
-        do j=1,jm
-          numi(j)=im
-        enddo
-        print *,ios,latg2,'COMPUTE TERRAIN ON A FULL GAUSSIAN GRID'
-      else
-        do j=1,jm/2
-          numi(j)=lonsperlat(j)
-        enddo
-        do j=jm/2+1,jm
-          numi(j)=lonsperlat(jm+1-j)
-        enddo
-        print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID',
-     &          numi
-C       print *,ios,latg2,'COMPUTE TERRAIN ON A REDUCED GAUSSIAN GRID'
-      endif
-!       print *,ios,latg2,'TERRAIN ON GAUSSIAN GRID',numi
-      
+!  When the gaussian grid routines makemt, makepc and makeoa are
+!  removed, numi can be removed.
+       do j=1,jm
+         numi(j)=im
+       enddo
 !
 !    This code assumes that lat runs from north to south for gg!
 !
@@ -506,7 +482,7 @@ C
 ! --- remember, that lake mask is in zslm to be assigned in MAKEMT.
           if ( mskocn .eq. 1 ) then
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
             if ( notocn .eq. 0 ) then
             slmi(i,j) = float(NINT(OCLSM(i,j)))
             else
@@ -749,15 +725,10 @@ C
        call minmxj(IM,JM,SLM,'     SLM')
        call minmxj(IM,JM,VAR,'     VAR')
        call minmxj(IM,JM,VAR4,'    VAR4')
-C --- check for nands in above
-!      call nanc(ORO,IM*JM,"MAKEMT_ORO")
-!      call nanc(SLM,IM*JM,"MAKEMT_SLM")
-!      call nanc(VAR,IM*JM,"MAKEMT_VAR")
-!      call nanc(VAR4,IM*JM,"MAKEMT_VAR4")
 !
 C   check antarctic pole 
 !     DO J = 1,JM
-!     DO I = 1,numi(j)
+!     DO I = 1,IM
 !        if ( i .le. 100 .and. i .ge. 1 )then
 !           if (j .ge. JM-1 )then
 !      if (height .eq. 0.) print *,'I,J,SLM:',I,J,SLM(I,J)
@@ -785,10 +756,6 @@ C
        call minmxj(IM,JM,GAMMA,'   GAMMA')
        call minmxj(IM,JM,SIGMA,'   SIGMA')
 
-C --- check for nands in above
-!      call nanc(THETA,IM*JM,"MAKEPC_THETA")
-!      call nanc(GAMMA,IM*JM,"MAKEPC_GAMMA")
-!      call nanc(SIGMA,IM*JM,"MAKEPC_SIGMA")
 C
 C     COMPUTE MOUNTAIN DATA : OA OL
 C
@@ -943,16 +910,6 @@ C
        call minmxj(IM,JM,OL,'      OL')
        call minmxj(IM,JM,ELVMAX,'  ELVMAX')
        call minmxj(IM,JM,ORO,'     ORO')
-C --- check for nands in above
-!      call nanc(OA(1,1,1), IM*JM,"MAKEOA_OA(1,1,1)")
-!      call nanc(OA(1,1,2), IM*JM,"MAKEOA_OA(1,1,2)")
-!      call nanc(OA(1,1,3), IM*JM,"MAKEOA_OA(1,1,3)")
-!      call nanc(OA(1,1,4), IM*JM,"MAKEOA_OA(1,1,4)")
-!      call nanc(OL(1,1,1), IM*JM,"MAKEOA_OL(1,1,1)")
-!      call nanc(OL(1,1,2), IM*JM,"MAKEOA_OL(1,1,2)")
-!      call nanc(OL(1,1,3), IM*JM,"MAKEOA_OL(1,1,3)")
-!      call nanc(OL(1,1,4), IM*JM,"MAKEOA_OL(1,1,4)")
-!      call nanc(ELVMAX, IM*JM,"MAKEPC_ELVMAX")
 
         maxc3 = 0
         maxc4 = 0
@@ -961,7 +918,7 @@ C --- check for nands in above
         maxc7 = 0
         maxc8 = 0
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
          if (ELVMAX(I,J) .gt. 3000.) maxc3 = maxc3 +1
          if (ELVMAX(I,J) .gt. 4000.) maxc4 = maxc4 +1
          if (ELVMAX(I,J) .gt. 5000.) maxc5 = maxc5 +1
@@ -979,7 +936,7 @@ C
        print *,' ===> if ELVMAX<=ORO replace with proxy <=== ' 
        print *,' ===> the sum of mean orog (ORO) and std dev <=== ' 
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
         if (ELVMAX(I,J) .lt. ORO(I,J) ) then
 C---  subtracting off ORO leaves std dev (this should never happen)
        ELVMAX(I,J) = MAX(  3. * VAR(I,J),0.)
@@ -995,7 +952,7 @@ C---  subtracting off ORO leaves std dev (this should never happen)
         maxc7 = 0
         maxc8 = 0
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
          if (ELVMAX(I,J) .gt. 3000.) maxc3 = maxc3 +1
          if (ELVMAX(I,J) .gt. 4000.) maxc4 = maxc4 +1
          if (ELVMAX(I,J) .gt. 5000.) maxc5 = maxc5 +1
@@ -1015,7 +972,7 @@ C
       print *,' SLM(itest,jtest)=',slm(itest,jtest),itest,jtest
       print *,' ORO(itest,jtest)=',oro(itest,jtest),itest,jtest
       DO J = 1,JM
-        DO I = 1,numi(j)
+        DO I = 1,IM
           IF(SLM(I,J).EQ.0.) THEN
 C           VAR(I,J) = 0.
             VAR4(I,J) = 0.
@@ -1051,7 +1008,7 @@ C
       MSK_OCN :      if ( mskocn .eq. 1 ) then
 
       DO j = 1,jm
-        DO i = 1,numi(j)
+        DO i = 1,im
               if (abs (oro(i,j)) .lt. 1. ) then 
               slm(i,j) = slmi(i,j)
               else
@@ -1075,9 +1032,7 @@ C  REMOVE ISOLATED POINTS
       iso_loop : DO J=2,JM-1
         JN=J-1
         JS=J+1
-        RN=REAL(NUMI(JN))/REAL(NUMI(J))
-        RS=REAL(NUMI(JS))/REAL(NUMI(J))
-        DO I=1,NUMI(J)
+        DO I=1,IM
           IW=MOD(I+IM-2,IM)+1
           IE=MOD(I,IM)+1
           SLMA=SLM(IW,J)+SLM(IE,J)
@@ -1090,11 +1045,11 @@ C  REMOVE ISOLATED POINTS
             OLA(K)=OL(IW,J,K)+OL(IE,J,K)
           ENDDO
           WGTA=2
-          XN=RN*(I-1)+1
+          XN=(I-1)+1
           IF(ABS(XN-NINT(XN)).LT.1.E-2) THEN
-            IN=MOD(NINT(XN)-1,NUMI(JN))+1
-            INW=MOD(IN+NUMI(JN)-2,NUMI(JN))+1
-            INE=MOD(IN,NUMI(JN))+1
+            IN=MOD(NINT(XN)-1,IM)+1
+            INW=MOD(IN+IM-2,IM)+1
+            INE=MOD(IN,IM)+1
             SLMA=SLMA+SLM(INW,JN)+SLM(IN,JN)+SLM(INE,JN)
             OROA=OROA+ORO(INW,JN)+ORO(IN,JN)+ORO(INE,JN)
             VARA=VARA+VAR(INW,JN)+VAR(IN,JN)+VAR(INE,JN)
@@ -1106,7 +1061,7 @@ C  REMOVE ISOLATED POINTS
             WGTA=WGTA+3
           ELSE
             INW=INT(XN)
-            INE=MOD(INW,NUMI(JN))+1
+            INE=MOD(INW,IM)+1
             SLMA=SLMA+SLM(INW,JN)+SLM(INE,JN)
             OROA=OROA+ORO(INW,JN)+ORO(INE,JN)
             VARA=VARA+VAR(INW,JN)+VAR(INE,JN)
@@ -1117,11 +1072,11 @@ C  REMOVE ISOLATED POINTS
             ENDDO
             WGTA=WGTA+2
           ENDIF
-          XS=RS*(I-1)+1
+          XS=(I-1)+1
           IF(ABS(XS-NINT(XS)).LT.1.E-2) THEN
-            IS=MOD(NINT(XS)-1,NUMI(JS))+1
-            ISW=MOD(IS+NUMI(JS)-2,NUMI(JS))+1
-            ISE=MOD(IS,NUMI(JS))+1
+            IS=MOD(NINT(XS)-1,IM)+1
+            ISW=MOD(IS+IM-2,IM)+1
+            ISE=MOD(IS,IM)+1
             SLMA=SLMA+SLM(ISW,JS)+SLM(IS,JS)+SLM(ISE,JS)
             OROA=OROA+ORO(ISW,JS)+ORO(IS,JS)+ORO(ISE,JS)
             VARA=VARA+VAR(ISW,JS)+VAR(IS,JS)+VAR(ISE,JS)
@@ -1133,7 +1088,7 @@ C  REMOVE ISOLATED POINTS
             WGTA=WGTA+3
           ELSE
             ISW=INT(XS)
-            ISE=MOD(ISW,NUMI(JS))+1
+            ISE=MOD(ISW,IM)+1
             SLMA=SLMA+SLM(ISW,JS)+SLM(ISE,JS)
             OROA=OROA+ORO(ISW,JS)+ORO(ISE,JS)
             VARA=VARA+VAR(ISW,JS)+VAR(ISE,JS)
@@ -1179,7 +1134,6 @@ C  REMOVE ISOLATED POINTS
 C--- print for testing after isolated points removed
       print *,' after isolated points removed'
        call minmxj(IM,JM,ORO,'     ORO')
-C     print *,' JM=',JM,' numi=',numi
       print *,' ORO(itest,jtest)=',oro(itest,jtest)
       print *,' VAR(itest,jtest)=',var(itest,jtest)
       print *,' VAR4(itest,jtest)=',var4(itest,jtest)
@@ -1202,7 +1156,7 @@ C     print *,' JM=',JM,' numi=',numi
 
 C
       DO J=1,JM
-        DO I=1,numi(j)
+        DO I=1,IM
           ORO(I,J) = ORO(I,J) + EFAC*VAR(I,J)
           HPRIME(I,J,1) = VAR(I,J)
           HPRIME(I,J,2) = VAR4(I,J)
@@ -1235,13 +1189,7 @@ C
       print *,' NF1, NF0, FILTER=',NF1,NF0,FILTER
       IF (FILTER) THEN
 C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
-        do j=1,jm
-          if(numi(j).lt.im) then
-            ffj=cmplx(0.,0.)
-            call spfft1(numi(j),im/2+1,numi(j),1,ffj,oro(1,j),-1)
-            call spfft1(im,im/2+1,im,1,ffj,oro(1,j),+1)
-          endif
-        enddo
+
         CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORO,-1)
 !
       print *,' about to apply spectral filter '
@@ -1259,12 +1207,6 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
         ENDDO
 !
         CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORF,+1)
-        do j=1,jm
-          if(numi(j).lt.im) then
-            call spfft1(im,im/2+1,im,1,ffj,orf(1,j),-1)
-            call spfft1(numi(j),im/2+1,numi(j),1,ffj,orf(1,j),+1)
-          endif
-        enddo
 
       ELSE
         ORS=0.
@@ -1279,15 +1221,6 @@ C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,ORF,'     ORF')
 C
-C  USE NEAREST NEIGHBOR INTERPOLATION TO FILL FULL GRIDS
-      call rg2gg(im,jm,numi,slm)
-      call rg2gg(im,jm,numi,oro)
-      call rg2gg(im,jm,numi,orf)
-C ---   not apply to new prin coord and ELVMAX (*j*)
-      do imt=1,10 
-        call rg2gg(im,jm,numi,hprime(1,1,imt))
-      enddo
-C 
       print *,' after nearest neighbor interpolation applied '
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,ORF,'     ORF')
@@ -1299,7 +1232,7 @@ C
 
 C   check antarctic pole 
       DO J = 1,JM
-      DO I = 1,numi(j)
+      DO I = 1,IM
          if ( i .le. 21 .and. i .ge. 1 )then
          if (j .eq. JM )write(6,153)i,j,ORO(i,j),ELVMAX(i,j),SLM(i,j)
   153 format(1x,' ORO,ELVMAX(i=',i4,' j=',i4,')=',2E14.5,f5.1)
@@ -1308,130 +1241,6 @@ C   check antarctic pole
       ENDDO
       tend=timef()
       write(6,*)' Timer 5 time= ',tend-tbeg
-      if (output_binary) then
-      tbeg=timef()
-C       OUTPUT BINARY FIELDS
-        print *,' OUTPUT BINARY FIELDS'
-        WRITE(51) REAL(SLM,4)
-        WRITE(52) REAL(ORF,4)
-        WRITE(53) REAL(HPRIME,4)
-        WRITE(54) REAL(ORS,4)
-        WRITE(55) REAL(ORO,4)
-        WRITE(66) REAL(THETA,4)
-        WRITE(67) REAL(GAMMA,4)
-        WRITE(68) REAL(SIGMA,4)
-! --- OCLSM is real(4) write only if ocean mask is present
-            if ( mskocn .eq. 1 ) then
-        ios=0
-         WRITE(27,iostat=ios) OCLSM
-         print *,' write OCLSM input:',ios
-!      print *,' LSM:',OCLSM(1,1),OCLSM(50,50),OCLSM(75,75),OCLSM(IM,JM)
-            endif
-C
-       call minmxj(IM,JM,ORO,'     ORO')
-      print *,' IM=',IM,' JM=',JM,' SPECTR=',SPECTR
-C---    Test binary file output:
-      WRITE(71) REAL(SLM,4)
-      DO IMT=1,NMT
-        WRITE(71) REAL(HPRIME(:,:,IMT),4)
-        print *,' HPRIME(',itest,jtest,imt,')=',HPRIME(itest,jtest,imt)
-      ENDDO
-      WRITE(71) REAL(ORO,4)
-      IF (SPECTR) THEN
-        WRITE(71) REAL(ORF,4)   ! smoothed spectral orography!
-      ENDIF
-C  OUTPUT GRIB FIELDS
-      KPDS=0
-      KPDS(1)=7
-      KPDS(2)=78
-      KPDS(3)=255
-      KPDS(4)=128
-      KPDS(5)=81
-      KPDS(6)=1
-      kpds(8)=2004
-      KPDS(9)=1
-      KPDS(10)=1
-      KPDS(13)=4
-      KPDS(15)=1
-      KPDS(16)=51
-      KPDS(17)=1
-      KPDS(18)=1
-      KPDS(19)=1
-      KPDS(21)=20
-      KPDS(22)=0
-      KGDS=0
-      KGDS(1)=4
-      KGDS(2)=IM
-      KGDS(3)=JM
-      KGDS(4)=90000-180000/PI*RCLT(1)
-      KGDS(6)=128
-      KGDS(7)=180000/PI*RCLT(1)-90000
-      KGDS(8)=-NINT(360000./IM)
-      KGDS(9)=NINT(360000./IM)
-      KGDS(10)=JM/2
-      KGDS(20)=255
-! --- SLM
-      CALL BAOPEN(56,'fort.56',IRET)
-      if (iret .ne. 0) print *,' BAOPEN ERROR UNIT 56: IRET=',IRET
-      CALL PUTGB(56,IM*JM,KPDS,KGDS,LB,SLM,IRET)
-      print *,' SLM: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-      if (iret .ne. 0) print *,' SLM PUTGB ERROR:  UNIT 56: IRET=',IRET
-      print *,' SLM: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-! --- OCLSM if present
-!           if ( mskocn .eq. 1 ) then
-!     CALL BAOPEN(27,'fort.27',IRET)
-!     if (iret .ne. 0) print *,' OCLSM BAOPEN ERROR UNIT 27:IRET=',IRET
-!     CALL PUTGB(27,IM*JM,KPDS,KGDS,LB,OCLSM,IRET)
-!     if (iret .ne. 0) print *,' OCLSM PUTGB ERROR: UNIT 27:IRET=',IRET
-!     print *,' OCLSM: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-!           endif
-
-      KPDS(5)=8
-      IF (SPECTR) THEN
-        CALL BAOPEN(57,'fort.57',IRET)
-        CALL PUTGB(57,IM*JM,KPDS,KGDS,LB,ORF,IRET)
-      print *,' ORF (ORO): putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-      ENDIF
-C
-C ===  write out theta (angle of land to East) using #101 (wave dir)
-C ===  [radians] and since < 1 scale adjust kpds(22)
-C
-      KPDS(5)=101
-        CALL BAOPEN(58,'fort.58',IRET)
-        CALL PUTGB(58,IM*JM,KPDS,KGDS,LB,THETA,IRET)
-      print *,' THETA: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-C
-C ===  write out (land aspect ratio or anisotropy)  using #102 
-C ===  (as in wind wave hgt)
-C
-      KPDS(22)=2
-      KPDS(5)=102
-        CALL BAOPEN(60,'fort.60',IRET)
-        CALL PUTGB(60,IM*JM,KPDS,KGDS,LB,SIGMA,IRET)
-      print *,' SIGMA: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-C
-C ===  write out (slope parameter sigma)  using #9 
-C ===  (as in std hgt)
-C
-      KPDS(22)=1
-      KPDS(5)=103
-        CALL BAOPEN(59,'fort.59',IRET)
-        CALL PUTGB(59,IM*JM,KPDS,KGDS,LB,GAMMA,IRET)
-      print *,' GAMMA: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-C
-      KPDS(22)=1
-      KPDS(5)=9
-        CALL BAOPEN(61,'fort.61',IRET)
-        CALL PUTGB(61,IM*JM,KPDS,KGDS,LB,HPRIME,IRET)
-      print *,' HPRIME: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-C
-C
-      KPDS(22)=0
-      KPDS(5)=8
-        CALL BAOPEN(62,'fort.62',IRET)
-        CALL PUTGB(62,IM*JM,KPDS,KGDS,LB,ELVMAX,IRET)
-      print *,' ELVMAX: putgb-KPDS(22,5),iret:',KPDS(22),KPDS(5),IRET
-      endif ! output_binary
 C
       DELXN = 360./IM
       do i=1,im
@@ -1452,8 +1261,7 @@ C
            xlon(i) = geolon(i,1)
         enddo
       endif
-      tend=timef()
-      write(6,*)' Binary output time= ',tend-tbeg
+
       tbeg=timef()
       CALL WRITE_NETCDF(IM,JM,SLM,land_frac,ORO,ORF,HPRIME,1,1,
      1                  GEOLON(1:IM,1:JM),GEOLAT(1:IM,1:JM), XLON,XLAT)
@@ -1464,7 +1272,7 @@ C
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
 !     Deallocate 1d vars
-      deallocate(JST,JEN,KPDS,KGDS,numi,lonsperlat)
+      deallocate(JST,JEN,numi)
       deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
@@ -4011,58 +3819,6 @@ C
       RETURN
       END SUBROUTINE MAKEOA3
 
-!> Convert from a reduced grid to a full grid.
-!!
-!! @param[in] im 'i' dimension of the full grid.
-!! @param[in] jm 'j' dimension of the full grid.
-!! @param[in] numi Number of 'i' points for each
-!! row of the reduced grid.
-!! @param[inout] a The data to be converted.
-!! @author Jordan Alpert NOAA/EMC
-      subroutine rg2gg(im,jm,numi,a)
-        implicit none
-        integer,intent(in):: im,jm,numi(jm)
-        real,intent(inout):: a(im,jm)
-        integer j,ir,ig
-        real r,t(im)
-        do j=1,jm
-          r=real(numi(j))/real(im)
-          do ig=1,im
-            ir=mod(nint((ig-1)*r),numi(j))+1
-            t(ig)=a(ir,j)
-          enddo
-          do ig=1,im
-            a(ig,j)=t(ig)
-          enddo
-        enddo
-      end subroutine
-
-!> Convert from a full grid to a reduced grid.
-!!
-!! @param[in] im 'i' dimension of the full grid.
-!! @param[in] jm 'j' dimension of the full grid.
-!! @param[in] numi Number of 'i' points for each
-!! row of the reduced grid.
-!! @param[inout] a The data to be converted.
-!! @author Jordan Alpert NOAA/EMC
-      subroutine gg2rg(im,jm,numi,a)
-        implicit none
-        integer,intent(in):: im,jm,numi(jm)
-        real,intent(inout):: a(im,jm)
-        integer j,ir,ig
-        real r,t(im)
-        do j=1,jm
-          r=real(numi(j))/real(im)
-          do ir=1,numi(j)
-            ig=nint((ir-1)/r)+1
-            t(ir)=a(ig,j)
-          enddo
-          do ir=1,numi(j)
-            a(ir,j)=t(ir)
-          enddo
-        enddo
-      end subroutine
-
 !> Print out the maximum and minimum values of
 !! an array.
 !!
@@ -4133,85 +3889,6 @@ csela....................................................
 C
       RETURN
       END
-
-!> Perform multiple fast fourier transforms.
-!!
-!! This subprogram performs multiple fast fourier transforms
-!! between complex amplitudes in fourier space and real values
-!! in cyclic physical space.
-!!
-!! Subprograms called (NCEPLIB SP Library):
-!!  - scrft Complex to real fourier transform
-!!  - dcrft Complex to real fourier transform
-!!  - srcft Real to complex fourier transform
-!!  - drcft Real to complex fourier transform
-!!
-!! Program history log:
-!! 1998-12-18  Mark Iredell
-!!
-!! @param[in] imax Integer number of values in the cyclic physical
-!! space. See limitations on imax in remarks below.
-!! @param[in] incw Integer first dimension of the complex amplitude array.
-!! (incw >= imax/2+1).
-!! @param[in] incg Integer first dimension of the real value array.
-!! (incg >= imax).
-!! @param[in] kmax Integer number of transforms to perform.
-!! @param[in] w Complex amplitudes on input if idir>0, and on output
-!! if idir<0.
-!! @param[in] g Real values on input if idir<0, and on output if idir>0.
-!! @param[in] idir Integer direction flag. idir>0 to transform from
-!! fourier to physical space. idir<0 to transform from physical to
-!! fourier space.
-!!
-!! @note The restrictions on imax are that it must be a multiple
-!! of 1 to 25 factors of two, up to 2 factors of three,
-!! and up to 1 factor of five, seven and eleven.
-!!
-!! @author Mark Iredell ORG: W/NMC23 @date 96-02-20
-      SUBROUTINE SPFFT1(IMAX,INCW,INCG,KMAX,W,G,IDIR)
-        IMPLICIT NONE
-        INTEGER,INTENT(IN):: IMAX,INCW,INCG,KMAX,IDIR
-        COMPLEX,INTENT(INOUT):: W(INCW,KMAX)
-        REAL,INTENT(INOUT):: G(INCG,KMAX)
-        REAL:: AUX1(25000+INT(0.82*IMAX))
-        REAL:: AUX2(20000+INT(0.57*IMAX))
-        INTEGER:: NAUX1,NAUX2
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        NAUX1=25000+INT(0.82*IMAX)
-        NAUX2=20000+INT(0.57*IMAX)
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-C  FOURIER TO PHYSICAL TRANSFORM.
-        SELECT CASE(IDIR)
-        CASE(1:)
-          SELECT CASE(DIGITS(1.))
-          CASE(DIGITS(1._4))
-            CALL SCRFT(1,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL SCRFT(0,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          CASE(DIGITS(1._8))
-            CALL DCRFT(1,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL DCRFT(0,W,INCW,G,INCG,IMAX,KMAX,-1,1.,
-     &                 AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          END SELECT
-C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-C  PHYSICAL TO FOURIER TRANSFORM.
-        CASE(:-1)
-          SELECT CASE(DIGITS(1.))
-          CASE(DIGITS(1._4))
-            CALL SRCFT(1,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL SRCFT(0,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          CASE(DIGITS(1._8))
-            CALL DRCFT(1,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-            CALL DRCFT(0,G,INCG,W,INCW,IMAX,KMAX,+1,1./IMAX,
-     &               AUX1,NAUX1,AUX2,NAUX2,0.,0)
-          END SELECT
-        END SELECT
-      END SUBROUTINE
 
 !> Read input global 30-arc second orography data.
 !!
@@ -4532,7 +4209,6 @@ C
         implicit none
 
         real get_xnsum
-        logical verbose
         real, intent(in) :: lon1,lat1,lon2,lat2,delxn
         integer, intent(in) ::  IMN,JMN
         real, intent(in) :: glat(JMN)
@@ -4559,7 +4235,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
         !--- compute average oro
           oro = 0.0
@@ -4602,7 +4277,6 @@ C
                IF ( HEIGHT .gt. ORO ) get_xnsum = get_xnsum + 1
             enddo       
          enddo
-!         if(verbose) print*, "get_xnsum=", get_xnsum, oro
          
       end function get_xnsum  
       
@@ -4638,7 +4312,6 @@ C
         implicit none
 
         real, intent(out) :: xnsum1,xnsum2,HC
-        logical verbose
         real lon1,lat1,lon2,lat2,delxn
         integer IMN,JMN
         real    glat(JMN)
@@ -4665,7 +4338,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
         !--- compute average oro
           xnsum = 0
@@ -4761,7 +4433,6 @@ C
         ien = lon2/delxn
         if(ist .le.0) ist = ist + IMN
         if(ien < ist) ien = ien + IMN
-!        if(verbose) print*, "ist,ien=",ist,ien,jst,jen
 
          xnsum1 = 0
          xnsum2 = 0
@@ -4777,63 +4448,6 @@ C
          enddo
          
       end subroutine get_xnsum3
-      
-!> Report NaNS and NaNQ within an address range for
-!! 8-byte real words.
-!!
-!! This routine prints a single line for each call
-!! and prints a message and returns to the caller on 
-!! detection of the FIRST NaN in the range.  If no NaN values
-!! are found it returns silently.
-!!
-!! @param[in] A Real*8 variable or array
-!! @param[in] L Number of words to scan (length of array)
-!! @param[in] C Distinctive message set in caller to indicate where
-!! the routine was called.
-!! @author Jordan Alpert NOAA/EMC
-      subroutine nanc(a,l,c)
-      integer inan1,inan2,inan3,inan4,inaq1,inaq2,inaq3,inaq4
-       real word
-       integer itest
-       equivalence (itest,word)
-c
-c signaling NaN
-      data inan1/x'7F800001'/
-      data inan2/x'7FBFFFFF'/
-      data inan3/x'FF800001'/
-      data inan4/x'FFBFFFFF'/
-c
-c  quiet NaN
-c
-      data inaq1/x'7FC00000'/
-      data inaq2/x'7FFFFFFF'/
-      data inaq3/x'FFC00000'/
-      data inaq4/x'FFFFFFFF'/
-c
-      character*(*) c
-c     t1=rtc()
-cgwv        print *, ' nanc call ',c
-      do k=1,l
-      word=a(k)
-       if( (itest  .GE. inan1 .AND. itest .LE. inan2) .OR.
-     *      (itest  .GE. inan3 .AND. itest .LE. inan4) ) then
-       print *,' NaNs detected at  word',k,' ',c
-       return
-         endif
-        if( (itest  .GE. inaq1 .AND. itest .LE. inaq2) .OR.
-     *      (itest  .GE. inaq3 .AND. itest .LE. inaq4) ) then
-       print *,' NaNq detected at  word',k,' ',c
-         return
-           endif
-
- 101  format(e20.10)
-      end do
-c     t2=rtc()
-cgwv      print 102,l,t2-t1,c
- 102  format(' time to check ',i9,' words is ',f10.4,' ',a24)
-      return
-       end
-
 !> Get the date/time for the system clock.
 !!
 !! @author Mark Iredell
