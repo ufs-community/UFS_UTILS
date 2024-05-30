@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eux
 
+set -eux
+
 function edit_namelist {
 
     sed -e "s/SRCDIMS/$SRCDIMS/g" \
@@ -29,14 +31,22 @@ APRUN=${APRUN:-"srun --nodes=1 -A nems "}
 
 export SRCDIMS="1440,1080"
 #export DSTDIMS="720,576"
-export DSTDIMS="360,320"
+#export DSTDIMS="360,320"
 #export FILETYPE="ocean"
-export FILETYPE="ice"
-export WTSDIR="/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_3313950/"
-export GRDDIR="/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_3313950/"
+export FILETYPE=$FTYPE
+export WTSDIR=$WEIGHTS
+export GRDDIR=$WEIGHTS
 export DO_DEBUG=".false."
 
-export OUTDIR_PATH="./"
+
+if [ $RESNAME = 050 ]; then
+    export DSTDIMS="720,576"
+fi
+if [ $RESNAME = 100 ]; then
+    export DSTDIMS="360,320"
+fi
+
+export OUTDIR_PATH=${OUTDIR_PATH:-/scratch1/NCEPDEV/climate/Denise.Worthen/}
 
 cd ${OUTDIR_PATH}
 
