@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eux
+set -eu
 
 SECONDS=0
 
@@ -137,6 +137,7 @@ elif [[ $target = hera ]]; then
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
     #WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     #INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
+    #TODO: point to official reg_tests repos when ready
     WEIGHTS_ROOT=/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_3313950/
     INPUT_ROOT=/scratch1/NCEPDEV/nems/Denise.Worthen/WORK/addoitest/sorc/ocnice_prep.fd/replay-2021032206
     ACCOUNT=${ACCOUNT:-nems}
@@ -283,7 +284,7 @@ while read -r line || [ "$line" ]; do
     else
 	sbatch --wait --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
 	    --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-	    --wrap "time $SBATCH_COMMAND " && d=$? || d=$?
+	    --wrap "time $SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
 
 	if [[ d -ne 0 ]]; then
 	    error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
