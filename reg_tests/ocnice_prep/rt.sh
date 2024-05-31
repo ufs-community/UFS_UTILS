@@ -77,7 +77,7 @@ check_results() {
 
 	mkdir -p $NEW_BASELINE
 
-	for file in *.nc; do
+	for file in *mx*.nc; do
 	    printf %s "Moving " $file "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
 	    cp $file $NEW_BASELINE/$file && d=$? || d=$?
@@ -107,10 +107,9 @@ export PATHTR
 TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
-# for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=35
+WLCLK_dflt=15
 export WLCLK=$WLCLK_dflt
-MEM_dflt="--mem=16g"
+MEM_dflt="--mem=24g"
 export MEM=$MEM_dflt
 
 cd $PATHRT
@@ -138,7 +137,7 @@ elif [[ $target = hera ]]; then
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
     #WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     #INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
-    WEIGHTS_ROOT=/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_3313950
+    WEIGHTS_ROOT=/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_3313950/
     INPUT_ROOT=/scratch1/NCEPDEV/nems/Denise.Worthen/WORK/addoitest/sorc/ocnice_prep.fd/replay-2021032206
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
