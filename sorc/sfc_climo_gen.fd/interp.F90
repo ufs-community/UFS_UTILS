@@ -31,7 +31,7 @@
  integer                            :: varid, record
  integer                            :: tile_num, pt_loc_this_tile
  integer                            :: isrctermprocessing
-
+ double precision                   :: scale
  integer(esmf_kind_i4), allocatable :: mask_mdl_one_tile(:,:)
  integer(esmf_kind_i4), pointer     :: unmapped_ptr(:)
 
@@ -110,7 +110,16 @@
      status = nf90_inq_varid(ncid, field_names(n), varid)
      call netcdf_err(status, "IN ROUTINE INTERP READING FIELD ID")
      status = nf90_get_var(ncid, varid, data_src_global, start=(/1,1,t/), count=(/i_src,j_src,1/))
+     
      call netcdf_err(status, "IN ROUTINE INTERP READING FIELD")
+     status=nf90_get_att(ncid, varid, 'scale_factor', scale)
+      if (status /= 0) then
+          scale =1.0D0
+       endif
+      print *,"scale=", scale
+      call scale_data(data_src_global,i_src,j_src,scale)
+
+
    endif
 
    print*,"- CALL FieldScatter FOR SOURCE GRID DATA."
@@ -217,6 +226,7 @@
 
      print*,"- CALL FieldGather FOR MODEL GRID DATA."
      call ESMF_FieldGather(data_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
+     !call scale_data (data_mdl_one_tile, i_mdl, j_mdl, scale)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather.", rc)
 
@@ -241,6 +251,7 @@
        if (.not. fract_vegsoil_type) then
          select case (field_names(n))
            case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
+	   !call scale_data (data_mdl_one_tile, i_mdl, j_mdl,scale)
              call adjust_for_landice (data_mdl_one_tile, vegt_mdl_one_tile, i_mdl, j_mdl, field_names(n))
          end select
        endif
@@ -257,6 +268,7 @@
        endif
      endif
 
+    
    enddo OUTPUT_LOOP
 
    if (allocated(vegt_mdl_one_tile)) deallocate(vegt_mdl_one_tile)
@@ -306,6 +318,7 @@
  integer                           :: i, j, ierr
 
  real                              :: landice_value
+ 
 
  select case (field_ch)
    case ('substrate_temperature') ! soil substrate temp
@@ -372,3 +385,51 @@
  end select
 
  end subroutine adjust_for_landice
+ 
+ 
+ 
+ 
+!> use Scale to fix the data to the correct value
+!! 
+!! 
+!!
+!! 
+!! @param[inout] idim i dimension of model tile.
+!! @param[inout] jdim j dimension of model tile.
+!! @param[in] field_ch Field name.
+!! @author George Gayno NCEP/EMC
+!! @author Sanath Kumar NCEP/EMC
+ subroutine scale_data(field,idim,jdim,scale)
+
+ use esmf
+ use mpi
+
+ implicit none
+
+ 
+
+ integer, intent(in)               :: idim, jdim
+
+
+ real(esmf_kind_r4), intent(inout) :: field(idim,jdim)
+
+
+ integer                           :: i, j, ierr
+ double precision                  :: scale
+
+
+ 
+
+     do j = 1, jdim
+     do i = 1, idim
+         field(i,j) = field(i,j)*scale
+      
+     enddo
+     enddo
+
+ end subroutine scale_data
+
+ 
+ 
+ 
+ 
