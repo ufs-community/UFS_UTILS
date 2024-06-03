@@ -135,11 +135,8 @@ if [[ $target = wcoss2 ]]; then
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
-    #WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    #INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
-    #TODO: point to official reg_tests repos when ready
-    WEIGHTS_ROOT=/scratch1/NCEPDEV/stmp4/Denise.Worthen/CPLD_GRIDGEN/rt_3313950/
-    INPUT_ROOT=/scratch1/NCEPDEV/nems/Denise.Worthen/WORK/addoitest/sorc/ocnice_prep.fd/replay-2021032206
+    WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
