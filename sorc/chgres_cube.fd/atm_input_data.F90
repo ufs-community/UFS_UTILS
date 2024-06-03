@@ -15,7 +15,9 @@
 module atm_input_data
  use esmf
  use netcdf
+#ifdef CHGRES_ALL
  use nemsio_module
+#endif
 
  use program_setup, only          : data_dir_input_grid, &
                                     atm_files_input_grid, &
@@ -108,6 +110,7 @@ implicit none
 ! Read the gaussian history files in nemsio format.
 !-------------------------------------------------------------------------------
 
+#ifdef CHGRES_ALL
  elseif (trim(input_type) == "gaussian_nemsio") then  ! fv3gfs gaussian nemsio
 
    call read_input_atm_gaussian_nemsio_file(localpet)
@@ -128,6 +131,7 @@ implicit none
  
    call read_input_atm_gfs_sigio_file(localpet)
 
+#endif
 !-------------------------------------------------------------------------------
 ! Read fv3gfs data in grib2 format.
 !-------------------------------------------------------------------------------
@@ -253,6 +257,7 @@ implicit none
  
  end subroutine init_atm_esmf_fields
 
+#ifdef CHGRES_ALL
 !> Read input atmospheric data from spectral gfs (old sigio format).
 !! 
 !! @note Format used prior to July 19, 2017.
@@ -491,6 +496,9 @@ implicit none
  endif
 
  end subroutine read_input_atm_gfs_sigio_file
+#endif
+
+#ifdef CHGRES_ALL
 
 !> Read input atmospheric data from spectral gfs (global gaussian in
 !! nemsio format. Starting July 19, 2017).
@@ -745,6 +753,9 @@ implicit none
  deallocate(pi)
 
  end subroutine read_input_atm_gfs_gaussian_nemsio_file
+#endif
+
+#ifdef CHGRES_ALL
 
 !> Read input grid atmospheric fv3 gaussian nemsio files.
 !!
@@ -1024,6 +1035,7 @@ implicit none
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
  end subroutine read_input_atm_gaussian_nemsio_file
+#endif
 
 !> Read input grid fv3 atmospheric data 'warm' restart files.
 !!
@@ -3018,6 +3030,14 @@ else ! is native coordinate (hybrid).
      print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
      call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha)
 
+   elseif (gfld%igdtnum == 1) then ! grid definition template number - non-E stagger rotated lat/lon grid
+
+     latin1 = real(float(gfld%igdtmpl(20))/1.0E6, kind=esmf_kind_r4) + 90.0_esmf_kind_r4
+     lov = real(float(gfld%igdtmpl(21))/1.0E6, kind=esmf_kind_r4)
+
+     print*, "- CALL CALCALPHA_ROTLATLON with center lat,lon = ",latin1,lov
+     call calcalpha_rotlatlon(lat,lon,latin1,lov,alpha) 
+
    elseif (gfld%igdtnum == 30) then ! grid definition template number - lambert conformal grid.
 
      lov = real(float(gfld%igdtmpl(14))/1.0E6, kind=esmf_kind_r4)
@@ -3087,7 +3107,7 @@ else ! is native coordinate (hybrid).
           u(:,:,vlev) = u_tmp
           v(:,:,vlev) = v_tmp
         endif
-      else if (gfld%igdtnum == 32769) then ! grid definition template number - rotated lat/lon grid
+      else if (gfld%igdtnum == 32769 .or. gfld%igdtnum == 1) then ! grid definition template number - rotated lat/lon grid
         ws = sqrt(u_tmp**2 + v_tmp**2)
         wd = real((atan2(-u_tmp,-v_tmp) / d2r), kind=esmf_kind_r4) ! calculate grid-relative wind direction
         wd = real((wd + alpha + 180.0), kind=esmf_kind_r4) ! Rotate from grid- to earth-relative direction

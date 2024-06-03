@@ -12,10 +12,10 @@ set -x
 export DATA=$OUTDIR/25km_conus_gfs_pbgrib2
 rm -fr $DATA
 
-export CRES=403
+export CRES=405
 export KMRES=25km
 export FIXfv3=${HOMEreg}/fix/RRFS_CONUS_${KMRES}
-export FIXsfc=${FIXfv3}/fix_sfc
+
 export COMIN=${HOMEreg}/input_data/gfs.pbgrib2
 
 export GRIB2_FILE_INPUT=gfs.t18z.pgrb2.0p25.f006
@@ -23,7 +23,7 @@ export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export VARMAP_FILE=${HOMEufs}/parm/varmap_tables/GFSphys_var_map.txt
 export INPUT_TYPE='grib2'
 export CONVERT_NST=".false."
-export OROG_FILES_TARGET_GRID="C403_oro_data.tile7.halo4.nc"
+export OROG_FILES_TARGET_GRID="C405_oro_data.tile7.nc"
 export REGIONAL=1
 export HALO_BLEND=0
 export HALO_BNDY=4 

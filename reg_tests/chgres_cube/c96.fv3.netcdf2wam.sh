@@ -12,7 +12,10 @@ set -x
 export DATA=$OUTDIR/c96_fv3_netcdf2wam
 rm -fr $DATA
 
-export FIXfv3=${HOMEreg}/fix/C96
+export CRES=96
+export ocn=100
+export FIXfv3=${HOMEreg}/fix/C${CRES}
+
 export COMIN=${HOMEreg}/input_data/fv3.netcdf
 export ATM_FILES_INPUT=gfs.t00z.atmf000.nc
 export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt

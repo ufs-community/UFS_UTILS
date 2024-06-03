@@ -13,7 +13,9 @@ export DATA=$OUTDIR/c96_gefs_grib2
 rm -fr $DATA
 
 export CRES=96
-export FIXfv3=${HOMEreg}/fix/C96
+export ocn=100
+export FIXfv3=${HOMEreg}/fix/C${CRES}
+
 export COMIN=${HOMEreg}/input_data/gefs.grib2
 
 export GRIB2_FILE_INPUT=gec00.t06z.pgrb2abf00

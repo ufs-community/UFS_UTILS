@@ -108,9 +108,9 @@ TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=20
+WLCLK_dflt=35
 export WLCLK=$WLCLK_dflt
-MEM_dflt="--mem=12g"
+MEM_dflt="--mem=16g"
 export MEM=$MEM_dflt
 
 cd $PATHRT
@@ -151,6 +151,16 @@ elif [[ $target = orion ]]; then
     PARTITION=orion
     ulimit -s unlimited
     SBATCH_COMMAND="./cpld_gridgen.sh"
+elif [[ $target = hercules ]]; then
+    STMP=${STMP:-/work/noaa/stmp/$USER}
+    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
+    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
+    ACCOUNT=${ACCOUNT:-nems}
+    QUEUE=${QUEUE:-batch}
+    NCCMP=nccmp
+    PARTITION=hercules
+    ulimit -s unlimited
+    SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
     STMP=${STMP:-/lfs4/HFIP/h-nems/$USER}
     export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/mom6/20220805
@@ -160,7 +170,6 @@ elif [[ $target = jet ]]; then
     NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
-    WLCLK=25
     SBATCH_COMMAND="./cpld_gridgen.sh"
 fi
 NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE

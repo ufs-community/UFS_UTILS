@@ -21,6 +21,8 @@ PROJECT_CODE=GFS-DEV
 
 source config
 
+export machine=wcoss2
+
 this_dir=$PWD
 
 if [ $EXTRACT_DATA == yes ]; then
@@ -54,13 +56,11 @@ if [ $EXTRACT_DATA == yes ]; then
       fi
       ;;
     v15)
+      DATAH=$(qsub -V -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -A $PROJECT_CODE -l walltime=$WALLT \
+              -N get_${CDUMP} -l select=1:ncpus=1:mem=$MEM -- ${this_dir}/get_v15.data.sh ${CDUMP})
       if [ "$CDUMP" = "gfs" ] ; then
-        DATAH=$(qsub -V -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -A $PROJECT_CODE -l walltime=$WALLT \
-                -N get_${CDUMP} -l select=1:ncpus=1:mem=$MEM -- ${this_dir}/get_v15.data.sh ${CDUMP})
         DEPEND="-W depend=afterok:$DATAH"
       else
-        DATAH=$(qsub -V -o log.data.${CDUMP} -e log.data.${CDUMP} -q $QUEUE -A $PROJECT_CODE -l walltime=$WALLT \
-                -N get_${CDUMP} -l select=1:ncpus=1:mem=$MEM -- ${this_dir}/get_v15.data.sh ${CDUMP})
         DATA1=$(qsub -V -o log.data.grp1 -e log.data.grp1 -q $QUEUE -A $PROJECT_CODE -l walltime=$WALLT \
                 -N get_grp1 -l select=1:ncpus=1:mem=$MEM -- ${this_dir}/get_v15.data.sh grp1)
         DATA2=$(qsub -V -o log.data.grp2 -e log.data.grp2 -q $QUEUE -A $PROJECT_CODE -l walltime=$WALLT \
@@ -155,13 +155,8 @@ if [ $RUN_CHGRES == yes ]; then
       -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} -- ${this_dir}/run_v14.chgres.sh ${CDUMP}
       ;;
     v15)
-      if [ "$CDUMP" = "gdas" ]; then
-        qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
-        -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} -- ${this_dir}/run_v15.chgres.sh ${CDUMP}
-      else
-        qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
-        -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} ${this_dir}/run_v15.chgres.gfs.sh
-      fi
+      qsub -V -l select=${NODES}:ncpus=${NCPUS}:ompthreads=1:mem=${MEM} -l walltime=$WALLT -A $PROJECT_CODE -q $QUEUE \
+      -N chgres_${CDUMP} -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} -- ${this_dir}/run_v15.chgres.sh ${CDUMP}
       ;;
     v16retro)
       if [ "$CDUMP" = "gdas" ] ; then

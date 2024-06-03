@@ -5,10 +5,10 @@
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
-#SBATCH --nodes=1 --ntasks-per-node=24
+#SBATCH --nodes=6 --ntasks-per-node=12
 #SBATCH --partition=bigmem
 #SBATCH -q debug
-#SBATCH -t 00:20:00
+#SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on Hera.
@@ -103,7 +103,7 @@ export soil_type_src="bnu.v3.30s" #  Soil type data.
                                 # 3) "statsgo.conus.30s" for CONUS 30s data
                                 # 4) "statsgo.nh.30s" for NH 30s data
                                 # 5) "statsgo.30s" for global 30s data
-                                # For Beijing Norm. Univ. data
+                                 # For Beijing Norm. Univ. data
                                 # 1) "bnu.v3.30s" for global 30s data.
 
 # choose dataset sources for lakefrac & lakedepth so that lake_data_srce=LakeFrac_LakeDepth; 
@@ -115,6 +115,7 @@ if [ $gtype = uniform ]; then
   export add_lake=true         # Add lake frac and depth to orography data.
   export lake_cutoff=0.50      # return 0 if lake_frac <  lake_cutoff & add_lake=T
   export binary_lake=1         # return 1 if lake_frac >= lake_cutoff & add_lake=T
+  export ocn=${ocn:-"100"}     # use one of  "025", "050", "100", "500". Cannot be empty
 elif [ $gtype = stretch ]; then
   export res=96
   export stretch_fac=1.5       # Stretching factor for the grid
@@ -150,6 +151,7 @@ fi
 
 #-----------------------------------------------------------------------
 # Check paths.
+#
 #   home_dir - location of repository.
 #   TEMP_DIR - working directory.
 #   out_dir  - where files will be placed upon completion.

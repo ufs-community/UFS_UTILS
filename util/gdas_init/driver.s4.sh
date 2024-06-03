@@ -15,12 +15,14 @@ module load build.$target.$compiler
 module list
 
 # Needed for NDATE utility
-module load prod_util/1.2.2
+module load prod_util/2.1.1
 
 PROJECT_CODE=star
 QUEUE=s4
 
 source config
+
+export machine=s4
 
 if [ $EXTRACT_DATA == yes ]; then
 
@@ -58,13 +60,8 @@ if [ $RUN_CHGRES == yes ]; then
       -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v14.chgres.sh ${CDUMP}
       ;;
     v15)
-      if [ "$CDUMP" = "gdas" ]; then
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.sh ${CDUMP}
-      else
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.gfs.sh
-      fi
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+      -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.sh ${CDUMP}
       ;;
     v16retro)
       if [ "$CDUMP" = "gdas" ] ; then

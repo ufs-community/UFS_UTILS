@@ -3,7 +3,7 @@
 Introduction
 ------------
 
-The chgres_cube program creates initial condition files to “coldstart” the forecast model.  The initial conditions are created from either Finite-Volume Sphere (FV3) Global Forecast System (GFS), North American Mesoscale Forecast System (NAM), Rapid Refresh (RAP), or High Resolution Rapid Refresh (HRRR) gridded binary version 2 (GRIB2) data.
+The chgres_cube program creates initial condition files to coldstart the forecast model.  The initial conditions are created from either Finite-Volume Sphere (FV3) Global Forecast System (GFS), North American Mesoscale Forecast System (NAM), Rapid Refresh (RAP), or High Resolution Rapid Refresh (HRRR) gridded binary version 2 (GRIB2) data.
 
 Code structure
 --------------
@@ -55,7 +55,7 @@ Program inputs and outputs for global applications
 
 **Inputs**
 
-Users may create their own global grids, or use the pre-defined files are located `here <https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/>`_.
+Users may create their own global grids, or use the pre-defined files located in the `./CRES directories <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_. (where CRES is the atmospheric resolution and mxRES is the ocean resolution).
 
       * FV3 mosaic file - (NetCDF format)
 	      * CRES_mosaic.nc
@@ -69,22 +69,22 @@ Users may create their own global grids, or use the pre-defined files are locate
 	      * CRES_grid.tile6.nc
 
       * FV3 orography files - (NetCDF format)
-	      * CRES_oro_data.tile1.nc
-	      * CRES_oro_data.tile2.nc
-	      * CRES_oro_data.tile3.nc
-	      * CRES_oro_data.tile4.nc
-	      * CRES_oro_data.tile5.nc
-	      * CRES_oro_data.tile6.nc
+	      * CRES.mxRES_oro_data.tile1.nc
+	      * CRES.mxRES_oro_data.tile2.nc
+	      * CRES.mxRES_oro_data.tile3.nc
+	      * CRES.mxRES_oro_data.tile4.nc
+	      * CRES.mxRES_oro_data.tile5.nc
+	      * CRES.mxRES_oro_data.tile6.nc
 
-      * FV3 surface climatological files - Located under the `./fix_sfc <https://ftp.emc.ncep.noaa.gov/EIB/UFS/global/fix/fix_fv3_gmted2010.v20191213/C48/fix_sfc>`_ sub-directory.  One file for each tile.  NetCDF format.
-	      * CRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
-	      * CRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
-	      * CRES.slope_type.tileX.nc (slope type)
-	      * CRES.snowfree_albedo.tileX.nc (snow-free albedo)
-	      * CRES.soil_type.tileX.nc (soil type)
-	      * CRES.subtrate_temperature.tileX.nc (soil substrate temperature)
-	      * CRES.vegetation_greenness.tileX.nc (vegetation greenness)
-	      * CRES.vegetation_type.tileX.nc (vegetation type)
+      * FV3 surface climatological files - Located under the `./CRES/sfc <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_ subdirectories. One file for each tile.  NetCDF format.
+	      * CRES.mxRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
+	      * CRES.mxRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
+	      * CRES.mxRES.slope_type.tileX.nc (slope type)
+	      * CRES.mxRES.snowfree_albedo.tileX.nc (snow-free albedo)
+	      * CRES.mxRES.soil_type.tileX.nc (soil type)
+	      * CRES.mxRES.subtrate_temperature.tileX.nc (soil substrate temperature)
+	      * CRES.mxRES.vegetation_greenness.tileX.nc (vegetation greenness)
+	      * CRES.mxRES.vegetation_type.tileX.nc (vegetation type)
 
       * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
 	      * global_hyblev.l$LEVS.txt
@@ -93,7 +93,7 @@ Users may create their own global grids, or use the pre-defined files are locate
 
 **Outputs**
 
-      * Atmospheric “coldstart” files.  NetCDF.
+      * Atmospheric coldstart files.  NetCDF.
 	      * out.atm.tile1.nc
 	      * out.atm.tile2.nc
 	      * out.atm.tile3.nc
@@ -101,7 +101,7 @@ Users may create their own global grids, or use the pre-defined files are locate
 	      * out.atm.tile5.nc
 	      * out.atm.tile6.nc
 
-      * Surface/Near Sea Surface Temperature (NSST) “coldstart” files.  NetCDF
+      * Surface/Near Sea Surface Temperature (NSST) coldstart files.  NetCDF
 	      * out.sfc.tile1.nc
 	      * out.sfc.tile1.nc
 	      * out.sfc.tile1.nc
@@ -264,10 +264,10 @@ The following four sets of files/directories should all be located in the same d
 
 **Outputs**
 
-      * Atmospheric “coldstart” file.  NetCDF.
+      * Atmospheric coldstart file.  NetCDF.
         * out.atm.tile7.nc
 
-      * Surface “coldstart” file.  NetCDF.
+      * Surface coldstart file.  NetCDF.
         * out.sfc.tile7.nc
 
 Where to find FV3GFS, NAM, HRRR, and RAP GRIB2 data for regional applications
@@ -369,7 +369,7 @@ Namelist variables with “input” in their name refer to data input to chgres_
               * Set to 2 to create a boundary condition file. Use this option for all but the initialization time.
       * halo_blend - Integer number of row/columns to apply halo blending into the domain, where model and lateral boundary tendencies are applied.
       * halo_bndy - Integer number of rows/columns that exist within the halo, where pure lateral boundary conditions are applied.
-      * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR'. (Default: 'GFS')
+      * external_model - Name of source model for input data. Valid options: 'GFS', 'NAM', 'RAP', 'HRRR', 'RRFS'. (Default: 'GFS')
 
 **Optional Entries**
 

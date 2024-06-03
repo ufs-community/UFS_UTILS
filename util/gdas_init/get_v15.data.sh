@@ -21,33 +21,15 @@ dd_m6=$(echo $date10_m6 | cut -c7-8)
 hh_m6=$(echo $date10_m6 | cut -c9-10)
 
 #----------------------------------------------------------------------
-# Read the nemsio analysis files from the gfs bundle.
+# Because the use of nemsio data is being phased out from chgres_cube,
+# use the GDAS tiled restart files (which are netcdf) for both
+# the GDAS high-res and the GFS free forecast runs.
+#
+# Note: Need to use the 6-hour forecast files from the previous
+# cycle as they are not saved at the current cycle.
 #----------------------------------------------------------------------
 
-if [ $bundle = 'gfs' ]; then
-
-  directory=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
-  if [ $yy$mm$dd$hh -lt 2020022600 ]; then
-    file=gpfs_dell1_nco_ops_com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_nemsioa.tar
-  else
-    file=com_gfs_prod_gfs.${yy}${mm}${dd}_${hh}.gfs_nemsioa.tar
-  fi
-
-  htar -xvf $directory/$file ./gfs.${yy}${mm}${dd}/${hh}/gfs.t${hh}z.atmanl.nemsio
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-
-  htar -xvf $directory/$file ./gfs.${yy}${mm}${dd}/${hh}/gfs.t${hh}z.sfcanl.nemsio
-  rc=$?
-  [ $rc != 0 ] && exit $rc
-
-#----------------------------------------------------------------------
-# For GDAS, use the tiled restart files.  Need to use the 6-hour 
-# forecast files from the previous cycle as they are not saved
-# at the current cycle.
-#----------------------------------------------------------------------
-
-elif [ $bundle = 'gdas' ]; then
+if [ "$bundle" == "gdas" ] || [ "$bundle" == "gfs" ] ; then
 
   directory=/NCEPPROD/hpssprod/runhistory/rh${yy_m6}/${yy_m6}${mm_m6}/${yy_m6}${mm_m6}${dd_m6}
   if [ $date10_m6 -lt 2020022600 ]; then
@@ -70,6 +52,8 @@ elif [ $bundle = 'gdas' ]; then
   [ $rc != 0 ] && exit $rc
 
   rm -f ./list.hires*
+
+  [ "$bundle" == "gfs" ] && exit 0
 
 #----------------------------------------------------------------------
 # Get the 'abias' and 'radstat' files from current cycle

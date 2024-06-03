@@ -104,19 +104,26 @@ TEST5=$(qsub -V -o $LOG_FILE5 -e $LOG_FILE5 -q $QUEUE -A $PROJECT_CODE -l wallti
         -N esg.regional.pct.cat -l select=1:ncpus=30:mem=40GB $PWD/esg.regional.pct.cat.sh)
 
 #-----------------------------------------------------------------------------
-# Regional GSL gravity wave drag test.
+# Regional GSL gravity wave drag test.  Run with varying
+# thread counts.
 #-----------------------------------------------------------------------------
 
+export nthreads=15
 LOG_FILE6=${LOG_FILE}06
 TEST6=$(qsub -V -o $LOG_FILE6 -e $LOG_FILE6 -q $QUEUE -A $PROJECT_CODE -l walltime=00:07:00 \
-        -N rsg.gsl.gwd -l select=1:ncpus=30:mem=40GB $PWD/regional.gsl.gwd.sh)
+        -N reg.gsl.gwd.15 -l select=1:ncpus=15:mem=40GB $PWD/regional.gsl.gwd.sh)
+
+export nthreads=30
+LOG_FILE7=${LOG_FILE}07
+TEST7=$(qsub -V -o $LOG_FILE7 -e $LOG_FILE7 -q $QUEUE -A $PROJECT_CODE -l walltime=00:07:00 \
+        -N reg.gsl.gwd -l select=1:ncpus=30:mem=40GB $PWD/regional.gsl.gwd.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:02:00 \
-        -N grid_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6 << EOF
+        -N grid_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7 << EOF
 #!/bin/bash
 cd ${this_dir}
 grep -a '<<<' ${LOG_FILE}* | grep -v echo > $SUM_FILE

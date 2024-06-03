@@ -8,8 +8,11 @@
 
 set -x
 
-export TEMP_DIR=${WORK_DIR}/regional.gsl.gwd.work
-export out_dir=${WORK_DIR}/regional.gsl.gwd
+nthreads=${nthreads:-6}
+export OMP_NUM_THREADS=$nthreads
+
+export TEMP_DIR=${WORK_DIR}/regional.gsl.gwd.${nthreads}.work
+export out_dir=${WORK_DIR}/regional.gsl.gwd.${nthreads}
 
 export gtype=regional_esg
 export make_gsl_orog=true    # Create GSL gravity wave drag fields
@@ -34,7 +37,7 @@ $home_dir/ush/fv3gfs_driver_grid.sh
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< REGIONAL GSL GWD TEST FAILED. <<<"
+  echo "<<< REGIONAL ${nthreads} THREAD GSL GWD TEST FAILED. <<<"
   exit $iret
 fi
 
@@ -47,7 +50,7 @@ echo "Ending at: " `date`
 cd $out_dir/C772
 
 test_failed=0
-for files in *tile*.nc ./fix_sfc/*tile*.nc
+for files in *tile*.nc ./sfc/*tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
@@ -61,12 +64,12 @@ done
 
 set +x
 if [ $test_failed -ne 0 ]; then
-  echo "<<< REGIONAL GSL GWD TEST FAILED. >>>"
+  echo "<<< REGIONAL ${nthreads} THREAD GSL GWD TEST FAILED. >>>"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
     $home_dir/reg_tests/update_baseline.sh "${HOMEreg}/.." "regional.gsl.gwd" $commit_num
   fi
 else
-  echo "<<< REGIONAL GSL GWD TEST PASSED. >>>"
+  echo "<<< REGIONAL ${nthreads} THREAD GSL GWD TEST PASSED. >>>"
 fi
 
 exit 0

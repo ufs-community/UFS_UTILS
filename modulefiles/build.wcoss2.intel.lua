@@ -35,8 +35,9 @@ load(pathJoin("netcdf", netcdf_ver))
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
-load(pathJoin("sfcio", sfcio_ver))
+-- Uncomment when CHGRES_ALL is ON.
+--sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
+--load(pathJoin("sfcio", sfcio_ver))
 
 w3emc_ver=os.getenv("w3emc_ver") or "2.9.2"
 load(pathJoin("w3emc", w3emc_ver))

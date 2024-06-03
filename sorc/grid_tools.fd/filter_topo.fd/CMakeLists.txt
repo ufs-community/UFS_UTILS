@@ -24,6 +24,10 @@ target_link_libraries(
   PUBLIC
   NetCDF::NetCDF_Fortran)
 
+if(OpenMP_Fortran_FOUND)
+  target_link_libraries(filter_topo_lib PUBLIC OpenMP::OpenMP_Fortran)
+endif()
+
 target_link_libraries(${exe_name} PRIVATE filter_topo_lib)
 
 install(TARGETS ${exe_name})

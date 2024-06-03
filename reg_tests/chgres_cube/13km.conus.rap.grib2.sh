@@ -12,10 +12,10 @@ set -x
 export DATA=$OUTDIR/13km_conus_rap_grib2
 rm -fr $DATA
 
-export CRES=775
+export CRES=778
 export KMRES=13km
 export FIXfv3=${HOMEreg}/fix/RRFS_CONUS_${KMRES}
-export FIXsfc=${FIXfv3}/fix_sfc
+
 export COMIN=${HOMEreg}/input_data/rap.grib2
 
 export GRIB2_FILE_INPUT=1921221000900
@@ -23,7 +23,7 @@ export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
 export VARMAP_FILE=${HOMEufs}/parm/varmap_tables/GSDphys_var_map.txt
 export INPUT_TYPE='grib2'
 export CONVERT_NST=".false."
-export OROG_FILES_TARGET_GRID="C775_oro_data.tile7.nc"
+export OROG_FILES_TARGET_GRID="C778_oro_data.tile7.nc"
 export REGIONAL=1
 export HALO_BLEND=0
 export HALO_BNDY=4 

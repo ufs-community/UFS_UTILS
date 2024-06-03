@@ -21,6 +21,8 @@ module load prod_util/1.1.0
 PROJECT_CODE=fv3-cpu
 QUEUE=batch
 
+export machine=hera
+
 source config
 
 if [ $EXTRACT_DATA == yes ]; then
@@ -53,13 +55,11 @@ if [ $EXTRACT_DATA == yes ]; then
       fi
       ;;
     v15)
+      DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
+       -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_v15.data.sh ${CDUMP})
       if [ "$CDUMP" = "gfs" ] ; then
-        DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
-         -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_v15.data.sh ${CDUMP})
         DEPEND="-d afterok:$DATAH"
       else
-        DATAH=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_${CDUMP} \
-         -o log.data.${CDUMP} -e log.data.${CDUMP} ./get_v15.data.sh ${CDUMP})
         DATA1=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp1 \
          -o log.data.grp1 -e log.data.grp1 ./get_v15.data.sh grp1)
         DATA2=$(sbatch --parsable --partition=service --ntasks=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J get_grp2 \
@@ -141,13 +141,8 @@ if [ $RUN_CHGRES == yes ]; then
       -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v14.chgres.sh ${CDUMP}
       ;;
     v15)
-      if [ "$CDUMP" = "gdas" ]; then
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.sh ${CDUMP}
-      else
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-        -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.gfs.sh
-      fi
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+      -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.sh ${CDUMP}
       ;;
     v16retro)
       if [ "$CDUMP" = "gdas" ] ; then

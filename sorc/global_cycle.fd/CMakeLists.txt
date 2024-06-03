@@ -6,7 +6,7 @@
 set(lib_src
     machine.f90
     num_parthds.f90
-    ../../ccpp-physics/physics/sfcsub.F
+    ../../ccpp-physics/physics/Interstitials/UFS_SCM_NEPTUNE/sfcsub.F
     read_write_data.f90
     utils.F90
     land_increments.f90)
@@ -39,10 +39,13 @@ target_link_libraries(
   w3emc::w3emc_d
   bacio::bacio_4
   ip::ip_d
-  sp::sp_d
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran
   noah_lsm_routines)
+
+if(sp_FOUND)
+  target_link_libraries(global_cycle_lib PUBLIC sp::sp_d)
+endif()
 
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(global_cycle_lib PUBLIC OpenMP::OpenMP_Fortran)
