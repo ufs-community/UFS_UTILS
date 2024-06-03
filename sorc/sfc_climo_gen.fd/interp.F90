@@ -113,11 +113,11 @@
      
      call netcdf_err(status, "IN ROUTINE INTERP READING FIELD")
      status=nf90_get_att(ncid, varid, 'scale_factor', scale)
-      if (status /= 0) then
-          scale =1.0D0
+      if (status == 0) then
+          call scale_data(data_src_global,i_src,j_src,scale)
        endif
-      print *,"scale=", scale
-      call scale_data(data_src_global,i_src,j_src,scale)
+!      print *,"scale=", scale
+!      call scale_data(data_src_global,i_src,j_src,scale)
 
 
    endif
