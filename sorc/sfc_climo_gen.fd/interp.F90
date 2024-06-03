@@ -115,10 +115,7 @@
      status=nf90_get_att(ncid, varid, 'scale_factor', scale)
       if (status == 0) then
           call scale_data(data_src_global,i_src,j_src,scale)
-       endif
-!      print *,"scale=", scale
-!      call scale_data(data_src_global,i_src,j_src,scale)
-
+      endif
 
    endif
 
@@ -389,42 +386,29 @@
  
 !> use Scale to fix the data to the correct value
 !! 
-!! 
-!!
-!! 
 !! @param[inout] idim i dimension of model tile.
 !! @param[inout] jdim j dimension of model tile.
 !! @param[in] field_ch Field name.
 !! @author George Gayno NCEP/EMC
 !! @author Sanath Kumar NCEP/EMC
- subroutine scale_data(field,idim,jdim,scale)
+!!
+subroutine scale_data(field,idim,jdim,scale)
 
  use esmf
  use mpi
 
  implicit none
-
- 
-
  integer, intent(in)               :: idim, jdim
-
-
+ integer                           :: i, j
  real(esmf_kind_r4), intent(inout) :: field(idim,jdim)
-
-
- integer                           :: i, j, ierr
  double precision                  :: scale
 
-
- 
-
      do j = 1, jdim
-     do i = 1, idim
+      do i = 1, idim
          field(i,j) = field(i,j)*scale
       
+      enddo
      enddo
-     enddo
-
  end subroutine scale_data
 
  
