@@ -226,7 +226,6 @@
 
      print*,"- CALL FieldGather FOR MODEL GRID DATA."
      call ESMF_FieldGather(data_field_mdl, data_mdl_one_tile, rootPet=0, tile=tile, rc=rc)
-     !call scale_data (data_mdl_one_tile, i_mdl, j_mdl, scale)
      if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN FieldGather.", rc)
 
@@ -251,7 +250,6 @@
        if (.not. fract_vegsoil_type) then
          select case (field_names(n))
            case ('substrate_temperature','vegetation_greenness','leaf_area_index','slope_type','soil_type','soil_color')
-	   !call scale_data (data_mdl_one_tile, i_mdl, j_mdl,scale)
              call adjust_for_landice (data_mdl_one_tile, vegt_mdl_one_tile, i_mdl, j_mdl, field_names(n))
          end select
        endif
