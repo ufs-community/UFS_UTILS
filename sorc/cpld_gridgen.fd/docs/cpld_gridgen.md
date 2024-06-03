@@ -13,8 +13,9 @@ The cpld_gengrid program is part of the
 
 ## Creating Fix and IC files required for the Coupled Model
 
-For the UFS coupled model application S2S or S2SW, the following fix
-files are required:
+For the UFS coupled model applications, the following fix files are
+required, either for IC warmstart creation, at runtime, or for
+post-processing.
 
 - The CICE6 grid and mask file
 
@@ -23,12 +24,11 @@ files are required:
 
 - The mapped ocean mask on the FV3 tiles
 
-- The ESMF regridding weights required to create the CICE6 IC from CPC
-(SIS2) reanalysis or to map a 1/4 deg MOM6 or CICE6 tripole restart
-file to a lower tripole resolution.
+- The ESMF regridding weights required to map a 1/4 deg MOM6 or CICE6
+tripole restart file to a lower tripole resolution.
 
 - The latitude,longitude,depth and mask arrays required by WW3 to
-  create a mod_def file.
+  create a mod_def file for a tripole grid.
 
 - The ESMF regridding weights required to remap the CICE6 or MOM6
   output from tripole grid to a rectilinear grid (optional).
