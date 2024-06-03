@@ -85,12 +85,14 @@ input_soil_color_file="${input_sfc_climo_dir}/soil_color.clm.0.05.nc"
 input_vegetation_type_file="${VEG_TYPE_FILE}"
 input_vegetation_greenness_file="${input_sfc_climo_dir}/vegetation_greenness.0.144.nc"
 mosaic_file_mdl="$mosaic_file"
+input_leaf_area_index_file="/scratch2/NCEPDEV/land/Sanath.Kumar/ufs/lai/LAI_climo_pnnl.nc"
 orog_dir_mdl="$FIX_FV3"
 orog_files_mdl=$the_orog_files
 halo=$HALO
 maximum_snow_albedo_method="bilinear"
 snowfree_albedo_method="bilinear"
 vegetation_greenness_method="bilinear"
+leaf_area_index_method="conserve"
 fract_vegsoil_type=${vegsoilt_frac}
 /
 EOF

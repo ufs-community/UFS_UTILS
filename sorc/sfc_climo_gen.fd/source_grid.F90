@@ -81,6 +81,7 @@ module source_grid
  real(esmf_kind_r8), pointer      :: lon_corner_ptr(:,:)
  real                             :: lon_extent
  real(esmf_kind_r4)               :: missing
+ real(esmf_kind_r4)               :: scale
 
  type(esmf_field)                 :: mask_field
  type(esmf_polekind_flag)         :: polekindflag(2)
@@ -214,8 +215,11 @@ module source_grid
  call netcdf_err(status, "READING FIELD 1 ID")
  status=nf90_get_att(ncid, varid, 'missing_value', missing)
  call netcdf_err(status, "READING MISSING VALUE")
-
+! print *,"status=", status
  status = nf90_close(ncid)
+
+
+
 
 !--------------------------------------------------------------------------
 ! Create ESMF grid object for the source data grid.  Check if 
