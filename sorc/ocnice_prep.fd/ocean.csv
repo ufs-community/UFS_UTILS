@@ -1,8 +1,0 @@
-! variable name, dimension, grid location, remapping method, vector pair, grid location of vector pair
-  'sfc', 2 ,'Ct' , 'bilinear' , '', ''
-  'eta', 3 ,'Ct' , 'bilinear' , '', ''
- 'Temp', 3 ,'Ct' , 'bilinear' , '', ''
- 'Salt', 3 ,'Ct' , 'bilinear' , '', ''
-    'h', 3 ,'Ct' , 'bilinear' , '', ''
-    'u', 3 ,'Cu' , 'bilinear' , 'v' , 'Cv'
-    'v', 3 ,'Cv' , 'bilinear' , 'u' , 'Cu'
