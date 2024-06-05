@@ -71,7 +71,6 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -g -traceback")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
   set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -check all -ftrapuv")
-  #set(CMAKE_Fortran_FLAGS_DEBUG "-check bounds -fpe0 -ftrapuv -fPIC -init=snan,arrays -check uninit")
   if(APPLE)
     # The linker on macOS does not include `common symbols` by default.
     # Passing the -c flag includes them and fixes an error with undefined symbols.
