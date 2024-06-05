@@ -20,7 +20,6 @@ source "${DIR_ROOT}/sorc/machine-setup.sh"
 # User Options
 target=${target:-"NULL"}
 compiler=${compiler:-"intel"}
-#compiler="gnu"
 
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
   unset -f module
@@ -45,7 +44,6 @@ fi
 
 # Collect BUILD Options
 CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=${BUILD_TYPE:-Release}"
-#CMAKE_FLAGS+=" -DCMAKE_BUILD_TYPE=Debug"
 
 # Install options; destination for built executables, libraries, CMake Package config
 CMAKE_FLAGS+=" -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX:-${DIR_ROOT}} -DCMAKE_INSTALL_BINDIR=${INSTALL_BINDIR:-exec}"
@@ -55,7 +53,6 @@ CMAKE_FLAGS+=" -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX:-${DIR_ROOT}} -DCMAKE_INS
 # access the EMC ftp site, so turn off the build (-DBUILD_TESTING=OFF) of the units tests accordingly.
 # Those with access to the EMC ftp site are: Orion and Hera.
 CMAKE_FLAGS+=" -DBUILD_TESTING=${BUILD_TESTING:-OFF}"
-#CMAKE_FLAGS+=" -DBUILD_TESTING=ON"
 
 # Allow users of this script to provide CMake options e.g. -DGFS=ON|OFF to build GFS specific utilities only
 CMAKE_OPTS=${CMAKE_OPTS:-}
