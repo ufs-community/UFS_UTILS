@@ -105,8 +105,8 @@ else
 	    target=noaacloud
             module purge
         else
-            echo WARNING: UNKNOWN PLATFORM 1>&2
-            echo WARNING: UNSUPPORTED CSP PLATFORM 1>&2; exit 99
+            echo WARNING: UNSUPPORTED CSP PLATFORM 1>&2
+            echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
         fi
     fi
 fi
