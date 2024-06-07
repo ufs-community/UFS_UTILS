@@ -152,7 +152,7 @@ elif [[ $target = orion ]]; then
     ulimit -s unlimited
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = hercules ]]; then
-    STMP=${STMP:-/work/noaa/stmp/$USER}
+    STMP=${STMP:-/work2/noaa/stmp/$USER}
     export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
