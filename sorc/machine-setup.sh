@@ -69,17 +69,14 @@ elif [[ -d /data/prod ]] ; then
     module purge
 else
     if [[ ! -v PW_CSP ]]; then
-        echo WARNING: UNSUPPORTED CSP PLATFORM 1>&2
         echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
     elif [[ -z "${PW_CSP}" ]]; then
-        echo WARNING: UNSUPPORTED CSP PLATFORM 1>&2
         echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
     else
         if [[ "${PW_CSP}" == "aws" || "${PW_CSP}" == "azure" || "${PW_CSP}" == "google" ]]; then
             target=noaacloud
             module purge
         else
-            echo WARNING: UNSUPPORTED CSP PLATFORM 1>&2
             echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
         fi
     fi
