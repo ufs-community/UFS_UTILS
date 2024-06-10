@@ -32,7 +32,6 @@ target_link_libraries(
   ocnice_prep_lib
   PUBLIC
   esmf
-  MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
 
 if(OpenMP_Fortran_FOUND)

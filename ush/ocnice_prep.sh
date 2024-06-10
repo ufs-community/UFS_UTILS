@@ -30,14 +30,10 @@ APRUN=${APRUN:-"srun --nodes=1 -A nems "}
 # process the NCO command and rename (timestamp) the output files at the end.
 
 export SRCDIMS="1440,1080"
-#export DSTDIMS="720,576"
-#export DSTDIMS="360,320"
-#export FILETYPE="ocean"
 export FILETYPE=$FTYPE
 export WTSDIR=$WEIGHTS
 export GRDDIR=$WEIGHTS
 export DO_DEBUG=".false."
-
 
 if [ $RESNAME = 050 ]; then
     export DSTDIMS="720,576"
@@ -45,8 +41,6 @@ fi
 if [ $RESNAME = 100 ]; then
     export DSTDIMS="360,320"
 fi
-
-export OUTDIR_PATH=${OUTDIR_PATH:-/scratch1/NCEPDEV/climate/Denise.Worthen/}
 
 cd ${OUTDIR_PATH}
 
