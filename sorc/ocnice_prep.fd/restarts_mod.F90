@@ -1,3 +1,10 @@
+!> @file
+!! @brief Setup the new restart files for ocean and ice
+!! @author Denise.Worthen@noaa.gov
+!!
+!> This module defines the output variables and metadata
+!> for the remapped restart files
+!! @author Denise.Worthen@noaa.gov
 module restarts_mod
 
   use netcdf
@@ -10,6 +17,12 @@ module restarts_mod
   implicit none
 
 contains
+  !> Setup the remapped ice restart file
+  !!
+  !! @param[in]  fin   the source restart file name
+  !! @param[in]  fout  the remapped restart file name
+  !!
+  !! @author Denise.Worthen@noaa.gov
   !----------------------------------------------------------
   ! set up ice restart file
   !----------------------------------------------------------
@@ -83,6 +96,13 @@ contains
     if (debug)write(logunit,'(a)')'exit '//trim(subname)
   end subroutine setup_icerestart
 
+  !> Setup the remapped ocean restart file
+  !!
+  !! @param[in]  fin   the source restart file name
+  !! @param[in]  fout  the remapped restart file name
+  !! @param[in]  bathy the remapped bathymetry array
+  !!
+  !! @author Denise.Worthen@noaa.gov
   subroutine setup_ocnrestart(fin, fout, bathy)
 
     character(len=*), intent(in) :: fin, fout
