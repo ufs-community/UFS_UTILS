@@ -34,10 +34,6 @@ target_link_libraries(
   esmf
   NetCDF::NetCDF_Fortran)
 
-if(OpenMP_Fortran_FOUND)
-  target_link_libraries(${exe_name} PUBLIC OpenMP::OpenMP_Fortran)
-endif()
-
 target_link_libraries(${exe_name} PRIVATE ocnice_prep_lib)
 
 install(TARGETS ${exe_name})
