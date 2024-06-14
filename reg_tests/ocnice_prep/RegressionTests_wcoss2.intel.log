@@ -1,0 +1,34 @@
+Mon Jun 10 11:39:28 UTC 2024
+Start Regression test
+
+Working dir = /lfs/h2/emc/stmp/denise.worthen/OCNICE_PREP/rt_54595/050_ocean
+Baseline dir = /lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/baseline_data/050_ocean
+
+Checking test 050_ocean results ....
+Comparing ocean.mx050.nc........OK
+
+
+Working dir = /lfs/h2/emc/stmp/denise.worthen/OCNICE_PREP/rt_54595/050_ice
+Baseline dir = /lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/baseline_data/050_ice
+
+Checking test 050_ice results ....
+Comparing ice.mx050.nc........OK
+
+
+Working dir = /lfs/h2/emc/stmp/denise.worthen/OCNICE_PREP/rt_54595/100_ocean
+Baseline dir = /lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/baseline_data/100_ocean
+
+Checking test 100_ocean results ....
+Comparing ocean.mx100.nc........OK
+
+
+Working dir = /lfs/h2/emc/stmp/denise.worthen/OCNICE_PREP/rt_54595/100_ice
+Baseline dir = /lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/baseline_data/100_ice
+
+Checking test 100_ice results ....
+Comparing ice.mx100.nc........OK
+
+
+REGRESSION TEST WAS SUCCESSFUL
+Mon Jun 10 11:49:24 UTC 2024
+Elapsed time: 00h:10m:59s. Have a nice day!

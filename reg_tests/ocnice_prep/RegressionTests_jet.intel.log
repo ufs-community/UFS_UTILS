@@ -1,0 +1,34 @@
+Wed Jun 12 20:45:36 UTC 2024
+Start Regression test
+
+Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/OCNICE_PREP/rt_130374/050_ocean
+Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/050_ocean
+
+Checking test 050_ocean results ....
+Comparing ocean.mx050.nc........OK
+
+
+Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/OCNICE_PREP/rt_130374/050_ice
+Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/050_ice
+
+Checking test 050_ice results ....
+Comparing ice.mx050.nc........OK
+
+
+Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/OCNICE_PREP/rt_130374/100_ocean
+Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/100_ocean
+
+Checking test 100_ocean results ....
+Comparing ocean.mx100.nc........OK
+
+
+Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/OCNICE_PREP/rt_130374/100_ice
+Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/100_ice
+
+Checking test 100_ice results ....
+Comparing ice.mx100.nc........OK
+
+
+REGRESSION TEST WAS SUCCESSFUL
+Wed Jun 12 20:55:36 UTC 2024
+Elapsed time: 00h:11m:40s. Have a nice day!
