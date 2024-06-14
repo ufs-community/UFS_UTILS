@@ -22,7 +22,6 @@ export RESNAME=${RESNAME:-$1}
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.true.
-export OUTDIR_PATH=${OUTDIR_PATH:-/scratch1/NCEPDEV/climate/Denise.Worthen/grids-20220116}
 export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
 if [[ $MOSAICRES == C3072 ]]; then
     export NPX=3072
