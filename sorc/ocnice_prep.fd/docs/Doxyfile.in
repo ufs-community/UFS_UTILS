@@ -32,7 +32,7 @@ DOXYFILE_ENCODING      = UTF-8
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
 
-PROJECT_NAME           = cpld_gridgen
+PROJECT_NAME           = ocnice_prep
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. This
 # could be handy for archiving the generated documentation or if some version
@@ -58,7 +58,7 @@ PROJECT_LOGO           =
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ../../../docs/html/cpld_gridgen
+OUTPUT_DIRECTORY       = ../../../docs/html/ocnice_prep
 
 # If the CREATE_SUBDIRS tag is set to YES then doxygen will create 4096 sub-
 # directories (in 2 levels) under the output directory of each output format and
@@ -855,8 +855,8 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = @abs_top_srcdir@/sorc/cpld_gridgen.fd/docs/cpld_gridgen.md \
-                         @abs_top_srcdir@/sorc/cpld_gridgen.fd
+INPUT                  = @abs_top_srcdir@/sorc/ocnice_prep.fd/docs/ocnice_prep.md \
+                         @abs_top_srcdir@/sorc/ocnice_prep.fd
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -960,7 +960,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = @abs_top_srcdir@/sorc/cpld_gridgen.fd/docs/_static
+IMAGE_PATH             =
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -1016,7 +1016,7 @@ FILTER_SOURCE_PATTERNS =
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
 
-USE_MDFILE_AS_MAINPAGE = cpld_gridgen.md
+USE_MDFILE_AS_MAINPAGE = ocnice_prep.md
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing

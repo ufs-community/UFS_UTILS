@@ -1,0 +1,34 @@
+Mon Jun 10 11:47:37 UTC 2024
+Start Regression test
+
+Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/OCNICE_PREP/rt_237427/050_ocean
+Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/050_ocean
+
+Checking test 050_ocean results ....
+Comparing ocean.mx050.nc........OK
+
+
+Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/OCNICE_PREP/rt_237427/050_ice
+Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/050_ice
+
+Checking test 050_ice results ....
+Comparing ice.mx050.nc........OK
+
+
+Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/OCNICE_PREP/rt_237427/100_ocean
+Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/100_ocean
+
+Checking test 100_ocean results ....
+Comparing ocean.mx100.nc........OK
+
+
+Working dir = /scratch1/NCEPDEV/stmp4/Denise.Worthen/OCNICE_PREP/rt_237427/100_ice
+Baseline dir = /scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/100_ice
+
+Checking test 100_ice results ....
+Comparing ice.mx100.nc........OK
+
+
+REGRESSION TEST WAS SUCCESSFUL
+Mon Jun 10 11:56:38 UTC 2024
+Elapsed time: 00h:11m:00s. Have a nice day!

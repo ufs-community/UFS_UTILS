@@ -10,14 +10,13 @@ module postwgts
 
   use gengrid_kinds, only : CL,CM,CS
   use grdvars,       only : nv
-  use charstrings,   only : dirout, res, staggerlocs, logmsg
+  use charstrings,   only : dirout, res, logmsg
   use netcdf
 
   implicit none
 
 contains
-  !> Create the ESMF weights files to remap velocity points from their native stagger location to the center
-  !! (Ct) location. Create the ESMF weights file to remap from the Ct location to a rectilinear grid
+  !> Create the ESMF weights file to remap from the Ct location to a rectilinear grid
   !!
   !! @author Denise.Worthen@noaa.gov
 
@@ -25,7 +24,6 @@ contains
 
     ! local variables
     character(len=CL) :: fsrc, fdst, fwgt
-    character(len= 2) :: cstagger
 
     character(len=CM), dimension(2) :: methodname = (/'conserve', 'bilinear'/)
 
@@ -59,28 +57,6 @@ contains
        allocate(destgrds(ndest))
        destgrds = (/'5p00', '1p00', '0p50', '0p25'/)
     end if
-
-    !---------------------------------------------------------------------
-    ! use ESMF to create the weights for unstaggering the points onto
-    ! the Ct staggers for post; the destination is always Ct
-    !---------------------------------------------------------------------
-
-    method=ESMF_REGRIDMETHOD_BILINEAR
-    fdst = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
-    do k = 2,nv
-       cstagger = trim(staggerlocs(k))
-       fsrc = trim(dirout)//'/'//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
-       fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.'//trim(cstagger)//'.to.Ct.bilinear.nc'
-       logmsg = 'creating weight file '//trim(fwgt)
-       print '(a)',trim(logmsg)
-
-       call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
-            weightFile=trim(fwgt), regridmethod=method,                 &
-            ignoreDegenerate=.true.,                                    &
-            unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
-       if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-            line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
-    end do
 
     !---------------------------------------------------------------------
     ! use ESMF to create the weights from the Ct tripole to the rectilinear

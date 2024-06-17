@@ -77,7 +77,7 @@ check_results() {
 
 	mkdir -p $NEW_BASELINE
 
-	for file in *.nc; do
+	for file in *mx*.nc; do
 	    printf %s "Moving " $file "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
 	    cp $file $NEW_BASELINE/$file && d=$? || d=$?
@@ -107,10 +107,9 @@ export PATHTR
 TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
-# for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=35
+WLCLK_dflt=15
 export WLCLK=$WLCLK_dflt
-MEM_dflt="--mem=16g"
+MEM_dflt="--mem=24g"
 export MEM=$MEM_dflt
 
 cd $PATHRT
@@ -125,55 +124,60 @@ rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
 if [[ $target = wcoss2 ]]; then
     STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
-    export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/20220805
-    BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
+    BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/baseline_data
+    WEIGHTS_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-GFS-DEV}
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
     QUEUE=${QUEUE:-dev}
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+    SBATCH_COMMAND="./ocnice_prep.sh"
     NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
-    export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805
-    BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
+    WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
     PARTITION=hera
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+    SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = orion ]]; then
     STMP=${STMP:-/work/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
-    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/baseline_data
+    WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
     PARTITION=orion
     ulimit -s unlimited
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+    SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = hercules ]]; then
     STMP=${STMP:-/work2/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
-    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
+    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/baseline_data
+    WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
     PARTITION=hercules
     ulimit -s unlimited
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+    SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = jet ]]; then
     STMP=${STMP:-/lfs4/HFIP/h-nems/$USER}
-    export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/mom6/20220805
-    BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
+    WEIGHTS_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+    SBATCH_COMMAND="./ocnice_prep.sh"
 fi
-NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
-RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/rt_$$
+NEW_BASELINE_ROOT=$STMP/OCNICE_PREP/BASELINE
+RUNDIR_ROOT=$STMP/OCNICE_PREP/rt_$$
 
 BUILD_EXE=false
 CREATE_BASELINE=false
@@ -209,10 +213,10 @@ if [[ $BUILD_EXE = true ]]; then
     fi
 fi
 
-if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
-    error "cpld_gridgen exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
+if [[ ! -f $PATHTR/exec/oiprep ]]; then
+    error "oiprep exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
 else
-    echo "cpld_gridgen exe file is found in $PATHTR/exec/"
+    echo "oiprep exe file is found in $PATHTR/exec/"
 fi
 
 module use $PATHTR/modulefiles
@@ -235,8 +239,8 @@ while read -r line || [ "$line" ]; do
     [[ $line =~ \# ]] && continue
 
     TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
-    MOSAICRES=${TEST_NAME%_*}
-    TEST_NAME=${TEST_NAME##*_}
+    TEST_FTYP=${TEST_NAME##*_}
+    TEST_FRES=${TEST_NAME%_*}
 
     cd $PATHRT
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
@@ -244,14 +248,18 @@ while read -r line || [ "$line" ]; do
     NEW_BASELINE=$NEW_BASELINE_ROOT/$TEST_NAME
     mkdir -p $RUNDIR
 
-    # OUTDIR_PATH is passed down to $PATHTR/ush/cpld_gridgen.sh
+    # OUTDIR_PATH is passed down to $PATHTR/ush/ocnice_prep.sh
     # It MUST be set
     export OUTDIR_PATH=$RUNDIR
-    export MOSAICRES=$MOSAICRES
+    export RESNAME=$TEST_FRES
+    export FTYPE=$TEST_FTYP
+    export WEIGHTS=$WEIGHTS_ROOT
 
-    cp $PATHTR/exec/cpld_gridgen $RUNDIR
-    cp $PATHTR/ush/cpld_gridgen.sh $RUNDIR
-    cp $PATHRT/parm/grid.nml.IN $RUNDIR
+    cp $PATHTR/exec/oiprep $RUNDIR
+    cp $PATHTR/ush/ocnice_prep.sh $RUNDIR
+    cp $PATHRT/parm/ocniceprep.nml.IN $RUNDIR
+    cp $PATHRT/parm/$FTYPE.csv $RUNDIR
+    cp $INPUT_ROOT/$FTYPE.nc $RUNDIR
     cd $RUNDIR
 
     if [[ $target = wcoss2 ]]; then
@@ -259,7 +267,7 @@ while read -r line || [ "$line" ]; do
 	#   rm -f $RUNDIR/bad.${TEST_NAME}
 
 	TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-	    -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
+	    -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
 
 	#   qsub -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
 	    # -Wblock=true -l walltime=00:01:00 -N chgres_summary -l select=1:ncpus=1:mem=100MB -W depend=afternotok:$TEST << EOF

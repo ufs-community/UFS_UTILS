@@ -49,4 +49,6 @@ endif()
 if(OCEAN_MERGE)
   add_subdirectory(ocean_merge.fd)
 endif()
-
+if(OCNICE_PREP)
+  add_subdirectory(ocnice_prep.fd)
+endif()
