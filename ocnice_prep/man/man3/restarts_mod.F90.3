@@ -1,0 +1,89 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/restarts_mod.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/restarts_mod.F90 \- Setup the new restart files for ocean and ice\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBrestarts_mod::setup_icerestart\fP (fin, fout)"
+.br
+.RI "Setup the remapped ice restart file\&. "
+.ti -1c
+.RI "subroutine \fBrestarts_mod::setup_ocnrestart\fP (fin, fout, bathy)"
+.br
+.RI "Setup the remapped ocean restart file\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Setup the new restart files for ocean and ice\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module defines the output variables and metadata for the remapped restart files 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBrestarts_mod\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine restarts_mod::setup_icerestart (character(len=*), intent(in) fin, character(len=*), intent(in) fout)"
+
+.PP
+Setup the remapped ice restart file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfin\fP the source restart file name 
+.br
+\fIfout\fP the remapped restart file name
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 30 of file restarts_mod\&.F90\&.
+.SS "subroutine restarts_mod::setup_ocnrestart (character(len=*), intent(in) fin, character(len=*), intent(in) fout, real(kind=8), dimension(:), intent(in) bathy)"
+
+.PP
+Setup the remapped ocean restart file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfin\fP the source restart file name 
+.br
+\fIfout\fP the remapped restart file name 
+.br
+\fIbathy\fP the remapped bathymetry array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 107 of file restarts_mod\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

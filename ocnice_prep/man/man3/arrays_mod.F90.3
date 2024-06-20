@@ -1,0 +1,229 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/arrays_mod.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/arrays_mod.F90 \- Define arrays, dimensions and types\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBarrays_mod::setup_packing\fP (nvalid, vars)"
+.br
+.RI "Count numbers of fields to be remapped for each mapping type and allocate the packed arrays\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(vardefs), dimension(:), allocatable \fBarrays_mod::b2d\fP"
+.br
+.RI "variable metadata for 2D source fields bilinear remap "
+.ti -1c
+.RI "type(vardefs), dimension(:), allocatable \fBarrays_mod::b3d\fP"
+.br
+.RI "variable metadata for 3D source fields bilinear remap "
+.ti -1c
+.RI "real(kind=8), dimension(:,:), allocatable \fBarrays_mod::bilin2d\fP"
+.br
+.RI "packed 2D source fields for bilinear remap "
+.ti -1c
+.RI "real(kind=8), dimension(:,:,:), allocatable \fBarrays_mod::bilin3d\fP"
+.br
+.RI "packed 3D source fields for bilinear remap "
+.ti -1c
+.RI "type(vardefs), dimension(:), allocatable \fBarrays_mod::c2d\fP"
+.br
+.RI "variable metadata for 2D source fields conservative remap "
+.ti -1c
+.RI "real(kind=8), dimension(:,:), allocatable \fBarrays_mod::consd2d\fP"
+.br
+.RI "packed 2D source fields for conservative remap "
+.ti -1c
+.RI "real(kind=8), dimension(:,:), allocatable \fBarrays_mod::eta\fP"
+.br
+.RI "the interface heights (eta) on the source grid "
+.ti -1c
+.RI "real(kind=8), parameter \fBarrays_mod::hmin\fP = 1\&.0d\-3"
+.br
+.RI "minimum layer thickness for the ocean "
+.ti -1c
+.RI "real(kind=8), dimension(:,:), allocatable \fBarrays_mod::mask3d\fP"
+.br
+.RI "the 3D mask of the source fields on Ct grid points "
+.ti -1c
+.RI "real(kind=8), parameter \fBarrays_mod::maskspval\fP = 9\&.9692099683868690d+36"
+.br
+.RI "spval for RH mask values "
+.ti -1c
+.RI "integer \fBarrays_mod::nbilin2d\fP"
+.br
+.RI "the number of 2D fields mapped bilinearly "
+.ti -1c
+.RI "integer \fBarrays_mod::nbilin3d\fP"
+.br
+.RI "the number of 3D fields mapped bilinearly "
+.ti -1c
+.RI "integer \fBarrays_mod::nconsd2d\fP"
+.br
+.RI "the number of 2D fields mapped conservatively "
+.ti -1c
+.RI "real(kind=8), dimension(:,:), allocatable \fBarrays_mod::rgb2d\fP"
+.br
+.RI "packed 2D fields with bilinear remap "
+.ti -1c
+.RI "real(kind=8), dimension(:,:,:), allocatable \fBarrays_mod::rgb3d\fP"
+.br
+.RI "packed 3D fields with bilinear remap "
+.ti -1c
+.RI "real(kind=8), dimension(:,:), allocatable \fBarrays_mod::rgc2d\fP"
+.br
+.RI "packed 2D fields with conservative remap "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Define arrays, dimensions and types\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module contains arrays and types 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBarrays_mod\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public arrays_mod::setup_packing (integer, intent(in) nvalid, type(\fBvardefs\fP), dimension(:), intent(inout) vars)"
+
+.PP
+Count numbers of fields to be remapped for each mapping type and allocate the packed arrays\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIvars\fP a structure describing the variable metadata 
+.br
+\fInvalid\fP the number of variables provided in the ocean or ice csv file
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file arrays_mod\&.F90\&.
+.SH "Variable Documentation"
+.PP 
+.SS "type(vardefs), dimension(:), allocatable arrays_mod::b2d"
+
+.PP
+variable metadata for 2D source fields bilinear remap 
+.PP
+Definition at line 28 of file arrays_mod\&.F90\&.
+.SS "type(vardefs), dimension(:), allocatable arrays_mod::b3d"
+
+.PP
+variable metadata for 3D source fields bilinear remap 
+.PP
+Definition at line 30 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), dimension(:,:), allocatable arrays_mod::bilin2d"
+
+.PP
+packed 2D source fields for bilinear remap 
+.PP
+Definition at line 23 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), dimension(:,:,:), allocatable arrays_mod::bilin3d"
+
+.PP
+packed 3D source fields for bilinear remap 
+.PP
+Definition at line 25 of file arrays_mod\&.F90\&.
+.SS "type(vardefs), dimension(:), allocatable arrays_mod::c2d"
+
+.PP
+variable metadata for 2D source fields conservative remap 
+.PP
+Definition at line 29 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), dimension(:,:), allocatable arrays_mod::consd2d"
+
+.PP
+packed 2D source fields for conservative remap 
+.PP
+Definition at line 24 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), dimension(:,:), allocatable arrays_mod::eta"
+
+.PP
+the interface heights (eta) on the source grid 
+.PP
+Definition at line 41 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), parameter arrays_mod::hmin = 1\&.0d\-3"
+
+.PP
+minimum layer thickness for the ocean 
+.PP
+Definition at line 16 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), dimension(:,:), allocatable arrays_mod::mask3d"
+
+.PP
+the 3D mask of the source fields on Ct grid points 
+.PP
+Definition at line 38 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), parameter arrays_mod::maskspval = 9\&.9692099683868690d+36"
+
+.PP
+spval for RH mask values 
+.PP
+Definition at line 15 of file arrays_mod\&.F90\&.
+.SS "integer arrays_mod::nbilin2d"
+
+.PP
+the number of 2D fields mapped bilinearly 
+.PP
+Definition at line 18 of file arrays_mod\&.F90\&.
+.SS "integer arrays_mod::nbilin3d"
+
+.PP
+the number of 3D fields mapped bilinearly 
+.PP
+Definition at line 19 of file arrays_mod\&.F90\&.
+.SS "integer arrays_mod::nconsd2d"
+
+.PP
+the number of 2D fields mapped conservatively 
+.PP
+Definition at line 20 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), dimension(:,:), allocatable arrays_mod::rgb2d"
+
+.PP
+packed 2D fields with bilinear remap 
+.PP
+Definition at line 33 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), dimension(:,:,:), allocatable arrays_mod::rgb3d"
+
+.PP
+packed 3D fields with bilinear remap 
+.PP
+Definition at line 35 of file arrays_mod\&.F90\&.
+.SS "real(kind=8), dimension(:,:), allocatable arrays_mod::rgc2d"
+
+.PP
+packed 2D fields with conservative remap 
+.PP
+Definition at line 34 of file arrays_mod\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

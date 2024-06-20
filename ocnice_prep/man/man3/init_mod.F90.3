@@ -1,0 +1,276 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/init_mod.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/init_mod.F90 \- Define the input namelist variables\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "type \fBinit_mod::vardefs\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBinit_mod::readcsv\fP (fname, errmsg, rc, nvalid)"
+.br
+.RI "Read the input csv file and fill the vardefs type\&. "
+.ti -1c
+.RI "subroutine \fBinit_mod::readnml\fP (fname, errmsg, rc)"
+.br
+.RI "Read input namelist file\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "logical \fBinit_mod::debug\fP"
+.br
+.RI "If true, print debug messages and intermediate files\&. "
+.ti -1c
+.RI "logical \fBinit_mod::do_ocnprep\fP"
+.br
+.RI "If true, the source file is ocean, otherwise ice\&. "
+.ti -1c
+.RI "character(len=10) \fBinit_mod::fdst\fP"
+.br
+.RI "A character string for the destination grid\&. "
+.ti -1c
+.RI "character(len=10) \fBinit_mod::fsrc\fP"
+.br
+.RI "A character string for tripole grid\&. "
+.ti -1c
+.RI "character(len=10) \fBinit_mod::ftype\fP"
+.br
+.RI "The type of tripole grid (ocean or ice) "
+.ti -1c
+.RI "character(len=120) \fBinit_mod::griddir\fP"
+.br
+.RI "The directory containing the master tripole grid file\&. "
+.ti -1c
+.RI "character(len=20) \fBinit_mod::input_file\fP"
+.br
+.RI "The input file name\&. "
+.ti -1c
+.RI "integer \fBinit_mod::logunit\fP"
+.br
+.RI "The log unit\&. "
+.ti -1c
+.RI "character(len=10) \fBinit_mod::maskvar\fP = 'h'"
+.br
+.RI "The variable in the ocean source file used to create the interpolation mask with dynamic masking\&. "
+.ti -1c
+.RI "integer, parameter \fBinit_mod::maxvars\fP = 60"
+.br
+.RI "The maximum number of fields expected in a source file\&. "
+.ti -1c
+.RI "integer \fBinit_mod::nlevs\fP"
+.br
+.RI "The vertical or category dimension of the source tripole grid\&. "
+.ti -1c
+.RI "integer \fBinit_mod::nxr\fP"
+.br
+.RI "The x-dimension of the destination tripole grid\&. "
+.ti -1c
+.RI "integer \fBinit_mod::nxt\fP"
+.br
+.RI "The x-dimension of the source tripole grid\&. "
+.ti -1c
+.RI "integer \fBinit_mod::nyr\fP"
+.br
+.RI "The y-dimension of the destination tripole grid\&. "
+.ti -1c
+.RI "integer \fBinit_mod::nyt\fP"
+.br
+.RI "The y-dimension of the source tripole grid\&. "
+.ti -1c
+.RI "type(vardefs), dimension(maxvars) \fBinit_mod::outvars\fP"
+.br
+.RI "An empty structure filled by reading a csv file describing the fields\&. "
+.ti -1c
+.RI "character(len=120) \fBinit_mod::wgtsdir\fP"
+.br
+.RI "The directory containing the regridding weights\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Define the input namelist variables\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module contains the namelist variables 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBinit_mod\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine init_mod::readcsv (character(len=*), intent(in) fname, character(len=*), intent(out) errmsg, integer, intent(out) rc, integer, intent(out) nvalid)"
+
+.PP
+Read the input csv file and fill the vardefs type\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP input csv file 
+.br
+\fIerrmsg\fP return error message 
+.br
+\fIrc\fP return error code 
+.br
+\fInvalid\fP the number of variables in the csv file
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 162 of file init_mod\&.F90\&.
+.SS "subroutine init_mod::readnml (character(len=*), intent(in) fname, character(len=*), intent(out) errmsg, integer, intent(out) rc)"
+
+.PP
+Read input namelist file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP namelist file 
+.br
+\fIerrmsg\fP return error message 
+.br
+\fIrc\fP return error code
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 57 of file init_mod\&.F90\&.
+.SH "Variable Documentation"
+.PP 
+.SS "logical init_mod::debug"
+
+.PP
+If true, print debug messages and intermediate files\&. 
+.PP
+Definition at line 45 of file init_mod\&.F90\&.
+.SS "logical init_mod::do_ocnprep"
+
+.PP
+If true, the source file is ocean, otherwise ice\&. 
+.PP
+Definition at line 46 of file init_mod\&.F90\&.
+.SS "character(len=10) init_mod::fdst"
+
+.PP
+A character string for the destination grid\&. 
+.PP
+Definition at line 32 of file init_mod\&.F90\&.
+.SS "character(len=10) init_mod::fsrc"
+
+.PP
+A character string for tripole grid\&. 
+.PP
+Definition at line 31 of file init_mod\&.F90\&.
+.SS "character(len=10) init_mod::ftype"
+
+.PP
+The type of tripole grid (ocean or ice) 
+.PP
+Definition at line 30 of file init_mod\&.F90\&.
+.SS "character(len=120) init_mod::griddir"
+
+.PP
+The directory containing the master tripole grid file\&. 
+.PP
+Definition at line 34 of file init_mod\&.F90\&.
+.SS "character(len=20) init_mod::input_file"
+
+.PP
+The input file name\&. 
+.PP
+Definition at line 35 of file init_mod\&.F90\&.
+.SS "integer init_mod::logunit"
+
+.PP
+The log unit\&. 
+.PP
+Definition at line 44 of file init_mod\&.F90\&.
+.SS "character(len=10) init_mod::maskvar = 'h'"
+
+.PP
+The variable in the ocean source file used to create the interpolation mask with dynamic masking\&. 
+.PP
+Definition at line 14 of file init_mod\&.F90\&.
+.SS "integer, parameter init_mod::maxvars = 60"
+
+.PP
+The maximum number of fields expected in a source file\&. 
+.PP
+Definition at line 13 of file init_mod\&.F90\&.
+.SS "integer init_mod::nlevs"
+
+.PP
+The vertical or category dimension of the source tripole grid\&. 
+.PP
+Definition at line 39 of file init_mod\&.F90\&.
+.SS "integer init_mod::nxr"
+
+.PP
+The x-dimension of the destination tripole grid\&. 
+.PP
+Definition at line 41 of file init_mod\&.F90\&.
+.SS "integer init_mod::nxt"
+
+.PP
+The x-dimension of the source tripole grid\&. 
+.PP
+Definition at line 37 of file init_mod\&.F90\&.
+.SS "integer init_mod::nyr"
+
+.PP
+The y-dimension of the destination tripole grid\&. 
+.PP
+Definition at line 42 of file init_mod\&.F90\&.
+.SS "integer init_mod::nyt"
+
+.PP
+The y-dimension of the source tripole grid\&. 
+.PP
+Definition at line 38 of file init_mod\&.F90\&.
+.SS "type(vardefs), dimension(maxvars) init_mod::outvars"
+
+.PP
+An empty structure filled by reading a csv file describing the fields\&. 
+.PP
+Definition at line 27 of file init_mod\&.F90\&.
+.SS "character(len=120) init_mod::wgtsdir"
+
+.PP
+The directory containing the regridding weights\&. 
+.PP
+Definition at line 33 of file init_mod\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

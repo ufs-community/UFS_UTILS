@@ -1,0 +1,139 @@
+.TH "utils_mod::dumpnc" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils_mod::dumpnc
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdumpnc1d\fP (fname, vname, dims, field)"
+.br
+.RI "Write a bare netcdf file of a unpacked 2D field\&. "
+.ti -1c
+.RI "subroutine \fBdumpnc2d\fP (fname, vname, dims, nflds, field)"
+.br
+.RI "Write a bare netcdf file of a 2D packed field\&. "
+.ti -1c
+.RI "subroutine \fBdumpnc3d\fP (fname, vname, dims, nk, nflds, field)"
+.br
+.RI "Write a bare netcdf file of a packed 3D field\&. "
+.ti -1c
+.RI "subroutine \fBdumpnc3dk\fP (fname, vname, dims, field)"
+.br
+.RI "Write a bare netcdf file of an unpacked 3D field\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 38 of file utils_mod\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils_mod::dumpnc::dumpnc1d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(in) field)\fC [private]\fP"
+
+.PP
+Write a bare netcdf file of a unpacked 2D field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIvname\fP the name of the variable 
+.br
+\fIdims\fP the variable spatial dimensions 
+.br
+\fIfield\fP the field to write
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 673 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::dumpnc::dumpnc2d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(in) field)\fC [private]\fP"
+
+.PP
+Write a bare netcdf file of a 2D packed field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIvname\fP the name of the variable 
+.br
+\fIdims\fP the variable spatial dimensions 
+.br
+\fInflds\fP the number of fields 
+.br
+\fIfield\fP the field to write
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 545 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::dumpnc::dumpnc3d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, integer, intent(in) nk, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(in) field)\fC [private]\fP"
+
+.PP
+Write a bare netcdf file of a packed 3D field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIvname\fP the name of the variable 
+.br
+\fIdims\fP the variable spatial dimensions 
+.br
+\fInk\fP the number of levels 
+.br
+\fInflds\fP the number of fields 
+.br
+\fIfield\fP the field to write
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 588 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::dumpnc::dumpnc3dk (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(in) field)\fC [private]\fP"
+
+.PP
+Write a bare netcdf file of an unpacked 3D field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIvname\fP the name of the variable 
+.br
+\fIdims\fP the variable spatial dimensions 
+.br
+\fIfield\fP the field to write
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 632 of file utils_mod\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

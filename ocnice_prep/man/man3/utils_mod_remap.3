@@ -1,0 +1,105 @@
+.TH "utils_mod::remap" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils_mod::remap
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBremap1d\fP (fname, src_field, dst_field)"
+.br
+.RI "Remap a 1-D vector array from source to destination\&. "
+.ti -1c
+.RI "subroutine \fBremap2d\fP (fname, dim2, src_field, dst_field)"
+.br
+.RI "Remap a 2-D vector array of nflds or nlevs from source to destination\&. "
+.ti -1c
+.RI "subroutine \fBremap3d\fP (fname, nk, nflds, src_field, dst_field)"
+.br
+.RI "Remap a field packed array of nk levels and nflds fields\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 27 of file utils_mod\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils_mod::remap::remap1d (character(len=*), intent(in) fname, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field)\fC [private]\fP"
+
+.PP
+Remap a 1-D vector array from source to destination\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIsrc_field\fP the source field 
+.br
+\fIdst_field\fP the destination field
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 376 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::remap::remap2d (character(len=*), intent(in) fname, integer, intent(in) dim2, real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field)\fC [private]\fP"
+
+.PP
+Remap a 2-D vector array of nflds or nlevs from source to destination\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIdim2\fP the number of fields or levels 
+.br
+\fIsrc_field\fP the source field 
+.br
+\fIdst_field\fP the destination field
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 431 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::remap::remap3d (character(len=*), intent(in) fname, integer, intent(in) nk, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(in) src_field, real(kind=8), dimension(:,:,:), intent(out) dst_field)\fC [private]\fP"
+
+.PP
+Remap a field packed array of nk levels and nflds fields\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fInk\fP the number of levels 
+.br
+\fInflds\fP the number of fields 
+.br
+\fIsrc_field\fP the source field 
+.br
+\fIdst_field\fP the destination field
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 488 of file utils_mod\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

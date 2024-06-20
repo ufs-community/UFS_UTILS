@@ -1,0 +1,93 @@
+.TH "utils_mod::packarrays" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils_mod::packarrays
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBpackarrays2d\fP (filesrc, wgtsdir, cosrot, sinrot, vars, dims, nflds, fields)"
+.br
+.RI "Pack 2D fields into arrays by mapping type\&. "
+.ti -1c
+.RI "subroutine \fBpackarrays3d\fP (filesrc, wgtsdir, cosrot, sinrot, vars, dims, nflds, fields)"
+.br
+.RI "Pack 3D fields into arrays by mapping type\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 22 of file utils_mod\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils_mod::packarrays::packarrays2d (character(len=*), intent(in) filesrc, character(len=*), intent(in) wgtsdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, type(\fBvardefs\fP), dimension(:), intent(in) vars, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(out) fields)\fC [private]\fP"
+
+.PP
+Pack 2D fields into arrays by mapping type\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilesrc\fP the file containing the fields to retrieve 
+.br
+\fIwgtsdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvars\fP the typedefs for this packed array 
+.br
+\fIdims\fP the dimensions of the fields in the packed array 
+.br
+\fInflds\fP the number of fields in the packed array 
+.br
+\fIfields\fP the packed array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 65 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::packarrays::packarrays3d (character(len=*), intent(in) filesrc, character(len=*), intent(in) wgtsdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, type(\fBvardefs\fP), dimension(:), intent(in) vars, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(out) fields)\fC [private]\fP"
+
+.PP
+Pack 3D fields into arrays by mapping type\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilesrc\fP the file containing the fields to retrieve 
+.br
+\fIwgtsdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvars\fP the typedefs for this packed array 
+.br
+\fIdims\fP the dimensions of the fields in the packed array 
+.br
+\fInflds\fP the number of fields in the packed array 
+.br
+\fIfields\fP the packed array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 127 of file utils_mod\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

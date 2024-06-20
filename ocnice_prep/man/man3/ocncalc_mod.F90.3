@@ -1,0 +1,82 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/ocncalc_mod.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/ocncalc_mod.F90 \- Perform calculations needed when using an ocean file\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBocncalc_mod::calc_eta\fP (fname, dims, bathy)"
+.br
+.RI "Calculate interface heights locally\&. "
+.ti -1c
+.RI "subroutine, public \fBocncalc_mod::vfill\fP ()"
+.br
+.RI "Fill water column vertically on the destination grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Perform calculations needed when using an ocean file\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module calculates quantities needed only in the ocean case 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fBocncalc_mod\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public ocncalc_mod::calc_eta (character(len=*), intent(in) fname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(in) bathy)"
+
+.PP
+Calculate interface heights locally\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file name containing needed varables 
+.br
+\fIdims\fP the dimensions of the source domain 
+.br
+\fIbathy\fP the bathymetry on the source domain
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 32 of file ocncalc_mod\&.F90\&.
+.SS "subroutine, public ocncalc_mod::vfill ()"
+
+.PP
+Fill water column vertically on the destination grid\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 82 of file ocncalc_mod\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

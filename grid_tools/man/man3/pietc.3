@@ -1,0 +1,2191 @@
+.TH "pietc" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pietc \- Some of the commonly used constants (pi etc) mainly for double-precision subroutines\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "complex(dpc), parameter \fBc0\fP =(\fBu0\fP, \fBu0\fP)"
+.br
+.RI "complex zero "
+.ti -1c
+.RI "complex(dpc), parameter \fBc1\fP =(\fBu1\fP, \fBu0\fP)"
+.br
+.RI "complex one "
+.ti -1c
+.RI "complex(dpc), parameter \fBci\fP =(\fBu0\fP, \fBu1\fP)"
+.br
+.RI "complex i=sqrt(-1) "
+.ti -1c
+.RI "complex(dpc), parameter \fBcipi\fP =\fBci\fP*\fBpi\fP"
+.br
+.RI "complex i*pi "
+.ti -1c
+.RI "real(dp), parameter \fBdtor\fP =\fBpi\fP/180"
+.br
+.RI "Degrees to radians\&. "
+.ti -1c
+.RI "real(dp), parameter \fBeuler\fP =0\&.57721566490153286060651209008240243104215933593992359880e0_dp"
+.br
+.RI "Euler-Mascheroni constant\&. "
+.ti -1c
+.RI "logical, parameter \fBf\fP =\&.false\&."
+.br
+.RI "for pain-relief in logical ops "
+.ti -1c
+.RI "complex(dpc), parameter \fBmc1\fP =\-\fBc1\fP"
+.br
+.RI "complex minus-one "
+.ti -1c
+.RI "complex(dpc), parameter \fBmci\fP =\-\fBci\fP"
+.br
+.RI "complex minus-i "
+.ti -1c
+.RI "real(dp), parameter \fBmo2\fP =\-\fBo2\fP"
+.br
+.RI "minus-half "
+.ti -1c
+.RI "real(dp), parameter \fBmo3\fP =\-\fBo3\fP"
+.br
+.RI "minus-third "
+.ti -1c
+.RI "real(dp), parameter \fBmo4\fP =\-\fBo4\fP"
+.br
+.RI "minus-fourth "
+.ti -1c
+.RI "real(dp), parameter \fBmo5\fP =\-\fBo5\fP"
+.br
+.RI "minus-fifth "
+.ti -1c
+.RI "real(dp), parameter \fBmo6\fP =\-\fBo6\fP"
+.br
+.RI "minus-sixth "
+.ti -1c
+.RI "real(dp), parameter \fBms10\fP =\-\fBs10\fP"
+.br
+.RI "minus-sine(10 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms11\fP =\-\fBs11\fP"
+.br
+.RI "minus-sine(90/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms13\fP =\-\fBs13\fP"
+.br
+.RI "minus-sine(90/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms15\fP =\-\fBs15\fP"
+.br
+.RI "minus-sine(15 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms18\fP =\-\fBs18\fP"
+.br
+.RI "minus-sine(18 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms20\fP =\-\fBs20\fP"
+.br
+.RI "minus-sine(20 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms22\fP =\-\fBs22\fP"
+.br
+.RI "minus-sine(22\&.5 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms26\fP =\-\fBs26\fP"
+.br
+.RI "minus-sine(90*2/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms30\fP =\-\fBs30\fP"
+.br
+.RI "minus-sine(30 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms34\fP =\-\fBs34\fP"
+.br
+.RI "minus-sine(90*3/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms36\fP =\-\fBs36\fP"
+.br
+.RI "minus-sine(36 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms39\fP =\-\fBs39\fP"
+.br
+.RI "minus-sine(90*3/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms40\fP =\-\fBs40\fP"
+.br
+.RI "minus-sine(40 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms45\fP =\-\fBs45\fP"
+.br
+.RI "minus-sine(45 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms50\fP =\-\fBs50\fP"
+.br
+.RI "minus-sine(50 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms51\fP =\-\fBs51\fP"
+.br
+.RI "minus-sine(90*4/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms54\fP =\-\fBs54\fP"
+.br
+.RI "minus-sine(54 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms56\fP =\-\fBs56\fP"
+.br
+.RI "minus-sine(90*5/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms60\fP =\-\fBs60\fP"
+.br
+.RI "minus-sine(60 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms64\fP =\-\fBs64\fP"
+.br
+.RI "minus-sine(90*5/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms68\fP =\-\fBs68\fP"
+.br
+.RI "minus-sine(67\&.5 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms70\fP =\-\fBs70\fP"
+.br
+.RI "minus-sine(70 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms72\fP =\-\fBs72\fP"
+.br
+.RI "minus-sine(72 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms75\fP =\-\fBs75\fP"
+.br
+.RI "minus-sine(75 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms77\fP =\-\fBs77\fP"
+.br
+.RI "minus-sine(90*6/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms79\fP =\-\fBs79\fP"
+.br
+.RI "minus-sine(90*7/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBms80\fP =\-\fBs80\fP"
+.br
+.RI "minus-sine(80 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBmu1\fP =\-\fBu1\fP"
+.br
+.RI "minus-one "
+.ti -1c
+.RI "real(dp), parameter \fBmu2\fP =\-\fBu2\fP"
+.br
+.RI "minus-two "
+.ti -1c
+.RI "real(dp), parameter \fBmu3\fP =\-\fBu3\fP"
+.br
+.RI "minus-three "
+.ti -1c
+.RI "real(dp), parameter \fBmu4\fP =\-\fBu4\fP"
+.br
+.RI "minus-four "
+.ti -1c
+.RI "real(dp), parameter \fBmu5\fP =\-\fBu5\fP"
+.br
+.RI "minus-five "
+.ti -1c
+.RI "real(dp), parameter \fBmu6\fP =\-\fBu6\fP"
+.br
+.RI "minus-six "
+.ti -1c
+.RI "real(dp), parameter \fBo2\fP =\fBu1\fP/\fBu2\fP"
+.br
+.RI "half "
+.ti -1c
+.RI "real(dp), parameter \fBo3\fP =\fBu1\fP/\fBu3\fP"
+.br
+.RI "third "
+.ti -1c
+.RI "real(dp), parameter \fBo4\fP =\fBu1\fP/\fBu4\fP"
+.br
+.RI "fourth "
+.ti -1c
+.RI "real(dp), parameter \fBo5\fP =\fBu1\fP/\fBu5\fP"
+.br
+.RI "fifth "
+.ti -1c
+.RI "real(dp), parameter \fBo6\fP =\fBu1\fP/\fBu6\fP"
+.br
+.RI "sixth "
+.ti -1c
+.RI "real(dp), parameter \fBor2\fP =\fBu1\fP/\fBr2\fP"
+.br
+.RI "1\&. "
+.ti -1c
+.RI "real(dp), parameter \fBor3\fP =\fBu1\fP/\fBr3\fP"
+.br
+.RI "1\&. "
+.ti -1c
+.RI "real(dp), parameter \fBor5\fP =\fBu1\fP/\fBr5\fP"
+.br
+.RI "1\&. "
+.ti -1c
+.RI "real(dp), parameter \fBphi\fP =1\&.6180339887498948482045868343656381177203091798057628621354e0_dp"
+.br
+.RI "Golden number\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpi\fP =3\&.1415926535897932384626433832795028841971693993751058209749e0_dp"
+.br
+.RI "Pi\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpi2\fP =6\&.2831853071795864769252867665590057683943387987502116419498e0_dp"
+.br
+.RI "Pi*2\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpih\fP =1\&.5707963267948966192313216916397514420985846996875529104874e0_dp"
+.br
+.RI "pi*half "
+.ti -1c
+.RI "real(dp), parameter \fBr2\fP =1\&.4142135623730950488016887242096980785696718753769480731766e0_dp"
+.br
+.RI "Square root of 2\&. "
+.ti -1c
+.RI "real(dp), parameter \fBr3\fP =1\&.7320508075688772935274463415058723669428052538103806280558e0_dp"
+.br
+.RI "Square root of 3\&. "
+.ti -1c
+.RI "real(dp), parameter \fBr5\fP =2\&.2360679774997896964091736687312762354406183596115257242708e0_dp"
+.br
+.RI "Square root of 5\&. "
+.ti -1c
+.RI "real(dp), parameter \fBrpi\fP =1\&.7724538509055160272981674833411451827975494561223871282138e0_dp"
+.br
+.RI "square root of pi "
+.ti -1c
+.RI "real(dp), parameter \fBrtod\fP =180/\fBpi\fP"
+.br
+.RI "radians to degrees "
+.ti -1c
+.RI "real(dp), parameter \fBs10\fP =\&.173648177666930348851716626769314796000375677184069387236241e0_dp"
+.br
+.RI "sine(10 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs11\fP =\&.195090322016128267848284868477022240927691617751954807754502e0_dp"
+.br
+.RI "sine(90/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs13\fP =\&.222520933956314404288902564496794759466355568764544955311987e0_dp"
+.br
+.RI "sine(90/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs15\fP =\&.258819045102520762348898837624048328349068901319930513814003e0_dp"
+.br
+.RI "sine(15 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs18\fP =\&.309016994374947424102293417182819058860154589902881431067724e0_dp"
+.br
+.RI "sine(18 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs20\fP =\&.342020143325668733044099614682259580763083367514160628465048e0_dp"
+.br
+.RI "sine(20 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs22\fP =\&.382683432365089771728459984030398866761344562485627041433800e0_dp"
+.br
+.RI "sine(22\&.5 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs26\fP =\&.433883739117558120475768332848358754609990727787459876444547e0_dp"
+.br
+.RI "sine(90*2/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs30\fP =\fBo2\fP"
+.br
+.RI "sine(30 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs34\fP =\&.555570233019602224742830813948532874374937190754804045924153e0_dp"
+.br
+.RI "sine(90*3/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs36\fP =\&.587785252292473129168705954639072768597652437643145991072272e0_dp"
+.br
+.RI "sine(36 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs39\fP =\&.623489801858733530525004884004239810632274730896402105365549e0_dp"
+.br
+.RI "sine(90*3/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs40\fP =\&.642787609686539326322643409907263432907559884205681790324977e0_dp"
+.br
+.RI "sine(40 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs45\fP =\fBor2\fP"
+.br
+.RI "sine(45 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs50\fP =\&.766044443118978035202392650555416673935832457080395245854045e0_dp"
+.br
+.RI "sine(50 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs51\fP =\&.781831482468029808708444526674057750232334518708687528980634e0_dp"
+.br
+.RI "sine(90*4/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs54\fP =\&.809016994374947424102293417182819058860154589902881431067724e0_dp"
+.br
+.RI "sine(54 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs56\fP =\&.831469612302545237078788377617905756738560811987249963446124e0_dp"
+.br
+.RI "sine(90*5/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs60\fP =\fBr3\fP*\fBo2\fP"
+.br
+.RI "sine(60 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs64\fP =\&.900968867902419126236102319507445051165919162131857150053562e0_dp"
+.br
+.RI "sine(90*5/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs68\fP =\&.923879532511286756128183189396788286822416625863642486115097e0_dp"
+.br
+.RI "sine(67\&.5 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs70\fP =\&.939692620785908384054109277324731469936208134264464633090286e0_dp"
+.br
+.RI "sine(70 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs72\fP =\&.951056516295153572116439333379382143405698634125750222447305e0_dp"
+.br
+.RI "sine(72 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs75\fP =\&.965925826289068286749743199728897367633904839008404550402343e0_dp"
+.br
+.RI "sine(75 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs77\fP =\&.974927912181823607018131682993931217232785800619997437648079e0_dp"
+.br
+.RI "sine(90*6/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs79\fP =\&.980785280403230449126182236134239036973933730893336095002916e0_dp"
+.br
+.RI "sine(90*7/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBs80\fP =\&.984807753012208059366743024589523013670643251719842418790025e0_dp"
+.br
+.RI "sine(80 deg) "
+.ti -1c
+.RI "logical, parameter \fBt\fP =\&.true\&."
+.br
+.RI "for pain-relief in logical ops "
+.ti -1c
+.RI "real(dp), parameter \fBu0\fP =0_dp"
+.br
+.RI "zero "
+.ti -1c
+.RI "real(dp), parameter \fBu1\fP =1_dp"
+.br
+.RI "one "
+.ti -1c
+.RI "real(dp), parameter \fBu2\fP =2_dp"
+.br
+.RI "two "
+.ti -1c
+.RI "real(dp), parameter \fBu3\fP =3_dp"
+.br
+.RI "three "
+.ti -1c
+.RI "real(dp), parameter \fBu4\fP =4_dp"
+.br
+.RI "four "
+.ti -1c
+.RI "real(dp), parameter \fBu5\fP =5_dp"
+.br
+.RI "five "
+.ti -1c
+.RI "real(dp), parameter \fBu6\fP =6_dp"
+.br
+.RI "six "
+.ti -1c
+.RI "complex(dpc), parameter \fBz000\fP =\fBc1\fP"
+.br
+.RI "exp(2*pi*i*0) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz010\fP =( \fBs80\fP, \fBs10\fP)"
+.br
+.RI "exp(2*pi*i/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz011\fP =( \fBs79\fP, \fBs11\fP)"
+.br
+.RI "exp(2*pi*i/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz013\fP =( \fBs77\fP, \fBs13\fP)"
+.br
+.RI "exp(2*pi*i/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz015\fP =( \fBs75\fP, \fBs15\fP)"
+.br
+.RI "exp(2*pi*i/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz018\fP =( \fBs72\fP, \fBs18\fP)"
+.br
+.RI "exp(2*pi*i/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz020\fP =( \fBs70\fP, \fBs20\fP)"
+.br
+.RI "exp(2*pi*i/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz022\fP =( \fBs68\fP, \fBs22\fP)"
+.br
+.RI "exp(2*pi*i/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz026\fP =( \fBs64\fP, \fBs26\fP)"
+.br
+.RI "exp(2*pi*i/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz030\fP =( \fBs60\fP, \fBs30\fP)"
+.br
+.RI "exp(2*pi*i/12) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz034\fP =( \fBs56\fP, \fBs34\fP)"
+.br
+.RI "exp(2*pi*i*3/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz036\fP =( \fBs54\fP, \fBs36\fP)"
+.br
+.RI "exp(2*pi*i/10) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz039\fP =( \fBs51\fP, \fBs39\fP)"
+.br
+.RI "exp(2*pi*i*3/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz040\fP =( \fBs50\fP, \fBs40\fP)"
+.br
+.RI "exp(2*pi*i/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz045\fP =( \fBs45\fP, \fBs45\fP)"
+.br
+.RI "exp(2*pi*i/8) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz050\fP =( \fBs40\fP, \fBs50\fP)"
+.br
+.RI "exp(2*pi*i*5/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz051\fP =( \fBs39\fP, \fBs51\fP)"
+.br
+.RI "exp(2*pi*i/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz054\fP =( \fBs36\fP, \fBs54\fP)"
+.br
+.RI "exp(2*pi*i*3/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz056\fP =( \fBs34\fP, \fBs56\fP)"
+.br
+.RI "exp(2*pi*i*5/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz060\fP =( \fBs30\fP, \fBs60\fP)"
+.br
+.RI "exp(2*pi*i/6) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz064\fP =( \fBs26\fP, \fBs64\fP)"
+.br
+.RI "exp(2*pi*i*5/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz068\fP =( \fBs22\fP, \fBs68\fP)"
+.br
+.RI "exp(2*pi*i*3/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz070\fP =( \fBs20\fP, \fBs70\fP)"
+.br
+.RI "exp(2*pi*i*7/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz072\fP =( \fBs18\fP, \fBs72\fP)"
+.br
+.RI "exp(2*pi*i/5) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz075\fP =( \fBs15\fP, \fBs75\fP)"
+.br
+.RI "exp(2*pi*i*5/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz077\fP =( \fBs13\fP, \fBs77\fP)"
+.br
+.RI "exp(2*pi*i*3/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz079\fP =( \fBs11\fP, \fBs79\fP)"
+.br
+.RI "exp(2*pi*i*7/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz080\fP =( \fBs10\fP, \fBs80\fP)"
+.br
+.RI "exp(2*pi*i*2/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz090\fP =\fBci\fP"
+.br
+.RI "exp(2*pi*i/4) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz100\fP =(\fBms10\fP, \fBs80\fP)"
+.br
+.RI "exp(2*pi*i*5/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz101\fP =(\fBms11\fP, \fBs79\fP)"
+.br
+.RI "exp(2*pi*i*9/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz103\fP =(\fBms13\fP, \fBs77\fP)"
+.br
+.RI "exp(2*pi*i*2/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz105\fP =(\fBms15\fP, \fBs75\fP)"
+.br
+.RI "exp(2*pi*i*7/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz108\fP =(\fBms18\fP, \fBs72\fP)"
+.br
+.RI "exp(2*pi*i*3/10) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz110\fP =(\fBms20\fP, \fBs70\fP)"
+.br
+.RI "exp(2*pi*i*11/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz112\fP =(\fBms22\fP, \fBs68\fP)"
+.br
+.RI "exp(2*pi*i*5/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz116\fP =(\fBms26\fP, \fBs64\fP)"
+.br
+.RI "exp(2*pi*i*9/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz120\fP =(\fBms30\fP, \fBs60\fP)"
+.br
+.RI "exp(2*pi*i/3) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz124\fP =(\fBms34\fP, \fBs56\fP)"
+.br
+.RI "exp(2*pi*i*11/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz126\fP =(\fBms36\fP, \fBs54\fP)"
+.br
+.RI "exp(2*pi*i*7/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz129\fP =(\fBms39\fP, \fBs51\fP)"
+.br
+.RI "exp(2*pi*i*5/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz130\fP =(\fBms40\fP, \fBs50\fP)"
+.br
+.RI "exp(2*pi*i*13/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz135\fP =(\fBms45\fP, \fBs45\fP)"
+.br
+.RI "exp(2*pi*i*3/8) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz140\fP =(\fBms50\fP, \fBs40\fP)"
+.br
+.RI "exp(2*pi*i*7/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz141\fP =(\fBms51\fP, \fBs39\fP)"
+.br
+.RI "exp(2*pi*i*11/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz144\fP =(\fBms54\fP, \fBs36\fP)"
+.br
+.RI "exp(2*pi*i*2/5) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz146\fP =(\fBms56\fP, \fBs34\fP)"
+.br
+.RI "exp(2*pi*i*13/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz150\fP =(\fBms60\fP, \fBs30\fP)"
+.br
+.RI "exp(2*pi*i*5/12) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz154\fP =(\fBms64\fP, \fBs26\fP)"
+.br
+.RI "exp(2*pi*i*3/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz158\fP =(\fBms68\fP, \fBs22\fP)"
+.br
+.RI "exp(2*pi*i*7/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz160\fP =(\fBms70\fP, \fBs20\fP)"
+.br
+.RI "exp(2*pi*i*4/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz162\fP =(\fBms72\fP, \fBs18\fP)"
+.br
+.RI "exp(2*pi*i*9/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz165\fP =(\fBms75\fP, \fBs15\fP)"
+.br
+.RI "exp(2*pi*i*11/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz167\fP =(\fBms77\fP, \fBs13\fP)"
+.br
+.RI "exp(2*pi*i*13/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz169\fP =(\fBms79\fP, \fBs11\fP)"
+.br
+.RI "exp(2*pi*i*15/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz170\fP =(\fBms80\fP, \fBs10\fP)"
+.br
+.RI "exp(2*pi*i*17/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz180\fP =\-\fBz000\fP"
+.br
+.RI "exp(2*pi*i/2) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz190\fP =\-\fBz010\fP"
+.br
+.RI "exp(2*pi*i*19/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz191\fP =\-\fBz011\fP"
+.br
+.RI "exp(2*pi*i*17/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz193\fP =\-\fBz013\fP"
+.br
+.RI "exp(2*pi*i*15/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz195\fP =\-\fBz015\fP"
+.br
+.RI "exp(2*pi*i*13/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz198\fP =\-\fBz018\fP"
+.br
+.RI "exp(2*pi*i*11/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz200\fP =\-\fBz020\fP"
+.br
+.RI "exp(2*pi*i*5/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz202\fP =\-\fBz022\fP"
+.br
+.RI "exp(2*pi*i*9/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz206\fP =\-\fBz026\fP"
+.br
+.RI "exp(2*pi*i*4/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz210\fP =\-\fBz030\fP"
+.br
+.RI "exp(2*pi*i*7/12) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz214\fP =\-\fBz034\fP"
+.br
+.RI "exp(2*pi*i*19/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz216\fP =\-\fBz036\fP"
+.br
+.RI "exp(2*pi*i*3/5) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz219\fP =\-\fBz039\fP"
+.br
+.RI "exp(2*pi*i*17/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz220\fP =\-\fBz040\fP"
+.br
+.RI "exp(2*pi*i*11/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz225\fP =\-\fBz045\fP"
+.br
+.RI "exp(2*pi*i*5/8) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz230\fP =\-\fBz050\fP"
+.br
+.RI "exp(2*pi*i*23/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz231\fP =\-\fBz051\fP"
+.br
+.RI "exp(2*pi*i*9/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz234\fP =\-\fBz054\fP"
+.br
+.RI "exp(2*pi*i*13/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz236\fP =\-\fBz056\fP"
+.br
+.RI "exp(2*pi*i*21/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz240\fP =\-\fBz060\fP"
+.br
+.RI "exp(2*pi*i*2/3) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz244\fP =\-\fBz064\fP"
+.br
+.RI "exp(2*pi*i*19/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz248\fP =\-\fBz068\fP"
+.br
+.RI "exp(2*pi*i*11/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz250\fP =\-\fBz070\fP"
+.br
+.RI "exp(2*pi*i*25/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz252\fP =\-\fBz072\fP"
+.br
+.RI "exp(2*pi*i*7/10) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz255\fP =\-\fBz075\fP"
+.br
+.RI "exp(2*pi*i*17/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz257\fP =\-\fBz077\fP"
+.br
+.RI "exp(2*pi*i*5/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz259\fP =\-\fBz079\fP"
+.br
+.RI "exp(2*pi*i*23/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz260\fP =\-\fBz080\fP"
+.br
+.RI "exp(2*pi*i*13/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz270\fP =\-\fBz090\fP"
+.br
+.RI "exp(2*pi*i*3/4) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz280\fP =\-\fBz100\fP"
+.br
+.RI "exp(2*pi*i*7/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz281\fP =\-\fBz101\fP"
+.br
+.RI "exp(2*pi*i*25/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz283\fP =\-\fBz103\fP"
+.br
+.RI "exp(2*pi*i*11/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz285\fP =\-\fBz105\fP"
+.br
+.RI "exp(2*pi*i*19/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz288\fP =\-\fBz108\fP"
+.br
+.RI "exp(2*pi*i*4/5) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz290\fP =\-\fBz110\fP"
+.br
+.RI "exp(2*pi*i*29/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz292\fP =\-\fBz112\fP"
+.br
+.RI "exp(2*pi*i*13/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz296\fP =\-\fBz116\fP"
+.br
+.RI "exp(2*pi*i*23/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz300\fP =\-\fBz120\fP"
+.br
+.RI "exp(2*pi*i*5/6) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz304\fP =\-\fBz124\fP"
+.br
+.RI "exp(2*pi*i*27/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz306\fP =\-\fBz126\fP"
+.br
+.RI "exp(2*pi*i*17/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz309\fP =\-\fBz129\fP"
+.br
+.RI "exp(2*pi*i*6/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz310\fP =\-\fBz130\fP"
+.br
+.RI "exp(2*pi*i*31/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz315\fP =\-\fBz135\fP"
+.br
+.RI "exp(2*pi*i*7/8) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz320\fP =\-\fBz140\fP"
+.br
+.RI "exp(2*pi*i*8/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz321\fP =\-\fBz141\fP"
+.br
+.RI "exp(2*pi*i*25/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz324\fP =\-\fBz144\fP"
+.br
+.RI "exp(2*pi*i*9/10) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz326\fP =\-\fBz146\fP"
+.br
+.RI "exp(2*pi*i*29/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz330\fP =\-\fBz150\fP"
+.br
+.RI "exp(2*pi*i*11/12) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz334\fP =\-\fBz154\fP"
+.br
+.RI "exp(2*pi*i*13/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz338\fP =\-\fBz158\fP"
+.br
+.RI "exp(2*pi*i*15/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz340\fP =\-\fBz160\fP"
+.br
+.RI "exp(2*pi*i*17/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz342\fP =\-\fBz162\fP"
+.br
+.RI "exp(2*pi*i*19/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz345\fP =\-\fBz165\fP"
+.br
+.RI "exp(2*pi*i*23/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz347\fP =\-\fBz167\fP"
+.br
+.RI "exp(2*pi*i*27/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz349\fP =\-\fBz169\fP"
+.br
+.RI "exp(2*pi*i*31/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBz350\fP =\-\fBz170\fP"
+.br
+.RI "exp(2*pi*i*35/36) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Some of the commonly used constants (pi etc) mainly for double-precision subroutines\&. 
+
+ms10 etc are needed to satisfy the some (eg\&., gnu fortran) compilers' more rigorous standards regarding the way 'data' statements are initialized\&. Zero and the first few units are u0,u1,u2, etc\&., their reciprocals being, o2,o3 etc and their square roots, r2,r3\&. Reciprocal roots are or2,or3 etc\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2014 
+.RE
+.PP
+
+.SH "Variable Documentation"
+.PP 
+.SS "complex(dpc), parameter pietc::c0 =(\fBu0\fP, \fBu0\fP)"
+
+.PP
+complex zero 
+.PP
+Definition at line 112 of file pietc\&.f90\&.
+.PP
+Referenced by pmat::cldumf(), and pmat2::clib_c()\&.
+.SS "complex(dpc), parameter pietc::c1 =(\fBu1\fP, \fBu0\fP)"
+
+.PP
+complex one 
+.PP
+Definition at line 113 of file pietc\&.f90\&.
+.PP
+Referenced by pmat::cinvmtf(), pmat::cldumf(), pmat::cudlmm(), and pmat::cudlmv()\&.
+.SS "complex(dpc), parameter pietc::ci =(\fBu0\fP, \fBu1\fP)"
+
+.PP
+complex i=sqrt(-1) 
+.PP
+Definition at line 115 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::cipi =\fBci\fP*\fBpi\fP"
+
+.PP
+complex i*pi 
+.PP
+Definition at line 117 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::dtor =\fBpi\fP/180"
+
+.PP
+Degrees to radians\&. 
+.PP
+Definition at line 54 of file pietc\&.f90\&.
+.PP
+Referenced by pmat5::dgtoc(), pmat5::dgtocd(), pmat5::dgtocdd(), pmat5::dininmap(), pmat5::dinivmap(), pesg::get_edges(), pesg::gtoxm_ak_dd_g(), pesg::gtoxm_ak_dd_m(), pesg::hgrid_ak_dc(), pesg::hgrid_ak_dd(), pesg::hgrid_ak_dd_c(), regional_grid(), pesg::xmtog_ak_dd_g(), and pesg::xmtog_ak_dd_m()\&.
+.SS "real(dp), parameter pietc::euler =0\&.57721566490153286060651209008240243104215933593992359880e0_dp"
+
+.PP
+Euler-Mascheroni constant\&. 
+.PP
+Definition at line 53 of file pietc\&.f90\&.
+.SS "logical, parameter pietc::f =\&.false\&."
+
+.PP
+for pain-relief in logical ops 
+.PP
+Definition at line 18 of file pietc\&.f90\&.
+.PP
+Referenced by pmat::sl1lmf(), pmat::sldlmf(), pmat::sldumf(), pesg::xctoxm_ak(), pesg::zmtozt(), and pesg::zttozm()\&.
+.SS "complex(dpc), parameter pietc::mc1 =\-\fBc1\fP"
+
+.PP
+complex minus-one 
+.PP
+Definition at line 114 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::mci =\-\fBci\fP"
+
+.PP
+complex minus-i 
+.PP
+Definition at line 116 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mo2 =\-\fBo2\fP"
+
+.PP
+minus-half 
+.PP
+Definition at line 37 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mo3 =\-\fBo3\fP"
+
+.PP
+minus-third 
+.PP
+Definition at line 38 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mo4 =\-\fBo4\fP"
+
+.PP
+minus-fourth 
+.PP
+Definition at line 39 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mo5 =\-\fBo5\fP"
+
+.PP
+minus-fifth 
+.PP
+Definition at line 40 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mo6 =\-\fBo6\fP"
+
+.PP
+minus-sixth 
+.PP
+Definition at line 41 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms10 =\-\fBs10\fP"
+
+.PP
+minus-sine(10 deg) 
+.PP
+Definition at line 85 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms11 =\-\fBs11\fP"
+
+.PP
+minus-sine(90/8 deg) 
+.PP
+Definition at line 86 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms13 =\-\fBs13\fP"
+
+.PP
+minus-sine(90/7 deg) 
+.PP
+Definition at line 87 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms15 =\-\fBs15\fP"
+
+.PP
+minus-sine(15 deg) 
+.PP
+Definition at line 88 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms18 =\-\fBs18\fP"
+
+.PP
+minus-sine(18 deg) 
+.PP
+Definition at line 89 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::ms20 =\-\fBs20\fP"
+
+.PP
+minus-sine(20 deg) 
+.PP
+Definition at line 90 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms22 =\-\fBs22\fP"
+
+.PP
+minus-sine(22\&.5 deg) 
+.PP
+Definition at line 91 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms26 =\-\fBs26\fP"
+
+.PP
+minus-sine(90*2/7 deg) 
+.PP
+Definition at line 92 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms30 =\-\fBs30\fP"
+
+.PP
+minus-sine(30 deg) 
+.PP
+Definition at line 93 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms34 =\-\fBs34\fP"
+
+.PP
+minus-sine(90*3/8 deg) 
+.PP
+Definition at line 94 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms36 =\-\fBs36\fP"
+
+.PP
+minus-sine(36 deg) 
+.PP
+Definition at line 95 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::ms39 =\-\fBs39\fP"
+
+.PP
+minus-sine(90*3/7 deg) 
+.PP
+Definition at line 96 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms40 =\-\fBs40\fP"
+
+.PP
+minus-sine(40 deg) 
+.PP
+Definition at line 97 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms45 =\-\fBs45\fP"
+
+.PP
+minus-sine(45 deg) 
+.PP
+Definition at line 98 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms50 =\-\fBs50\fP"
+
+.PP
+minus-sine(50 deg) 
+.PP
+Definition at line 99 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms51 =\-\fBs51\fP"
+
+.PP
+minus-sine(90*4/7 deg) 
+.PP
+Definition at line 100 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms54 =\-\fBs54\fP"
+
+.PP
+minus-sine(54 deg) 
+.PP
+Definition at line 101 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::ms56 =\-\fBs56\fP"
+
+.PP
+minus-sine(90*5/8 deg) 
+.PP
+Definition at line 102 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms60 =\-\fBs60\fP"
+
+.PP
+minus-sine(60 deg) 
+.PP
+Definition at line 103 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms64 =\-\fBs64\fP"
+
+.PP
+minus-sine(90*5/7 deg) 
+.PP
+Definition at line 104 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms68 =\-\fBs68\fP"
+
+.PP
+minus-sine(67\&.5 deg) 
+.PP
+Definition at line 105 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms70 =\-\fBs70\fP"
+
+.PP
+minus-sine(70 deg) 
+.PP
+Definition at line 106 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms72 =\-\fBs72\fP"
+
+.PP
+minus-sine(72 deg) 
+.PP
+Definition at line 107 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::ms75 =\-\fBs75\fP"
+
+.PP
+minus-sine(75 deg) 
+.PP
+Definition at line 108 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms77 =\-\fBs77\fP"
+
+.PP
+minus-sine(90*6/7 deg) 
+.PP
+Definition at line 109 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms79 =\-\fBs79\fP"
+
+.PP
+minus-sine(90*7/8 deg) 
+.PP
+Definition at line 110 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::ms80 =\-\fBs80\fP"
+
+.PP
+minus-sine(80 deg) 
+.PP
+Definition at line 111 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mu1 =\-\fBu1\fP"
+
+.PP
+minus-one 
+.PP
+Definition at line 21 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mu2 =\-\fBu2\fP"
+
+.PP
+minus-two 
+.PP
+Definition at line 23 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mu3 =\-\fBu3\fP"
+
+.PP
+minus-three 
+.PP
+Definition at line 25 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mu4 =\-\fBu4\fP"
+
+.PP
+minus-four 
+.PP
+Definition at line 27 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mu5 =\-\fBu5\fP"
+
+.PP
+minus-five 
+.PP
+Definition at line 29 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::mu6 =\-\fBu6\fP"
+
+.PP
+minus-six 
+.PP
+Definition at line 31 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::o2 =\fBu1\fP/\fBu2\fP"
+
+.PP
+half 
+.PP
+Definition at line 32 of file pietc\&.f90\&.
+.PP
+Referenced by pfun::atanh_d(), pfun::atanh_s(), pmat4::axial33_d(), psym2::eigensym2(), psym2::eigensym2d(), pmat4::expmat(), pmat4::expmatd(), pmat4::expmatdd(), psym2::expsym2d(), pesg::get_qx(), pesg::get_qxd(), pfun::hav_d(), pmat4::hav_d(), pfun::hav_s(), pfun::havh_d(), pfun::havh_s(), psym2::logsym2d(), psym2::sqrtsym2d_e(), psym2::sqrtsym2d_t(), and pesg::xttoxs1()\&.
+.SS "real(dp), parameter pietc::o3 =\fBu1\fP/\fBu3\fP"
+
+.PP
+third 
+.PP
+Definition at line 33 of file pietc\&.f90\&.
+.PP
+Referenced by pfun::atanh_d(), and pesg::zmtozt1()\&.
+.SS "real(dp), parameter pietc::o4 =\fBu1\fP/\fBu4\fP"
+
+.PP
+fourth 
+.PP
+Definition at line 34 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::o5 =\fBu1\fP/\fBu5\fP"
+
+.PP
+fifth 
+.PP
+Definition at line 35 of file pietc\&.f90\&.
+.PP
+Referenced by pfun::atanh_d(), pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::o6 =\fBu1\fP/\fBu6\fP"
+
+.PP
+sixth 
+.PP
+Definition at line 36 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::or2 =\fBu1\fP/\fBr2\fP"
+
+.PP
+1\&. /root of two 
+.PP
+Definition at line 49 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::or3 =\fBu1\fP/\fBr3\fP"
+
+.PP
+1\&. /root of three 
+.PP
+Definition at line 50 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::or5 =\fBu1\fP/\fBr5\fP"
+
+.PP
+1\&. /root of five 
+.PP
+Definition at line 51 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::phi =1\&.6180339887498948482045868343656381177203091798057628621354e0_dp"
+
+.PP
+Golden number\&. 
+.PP
+Definition at line 52 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::pi =3\&.1415926535897932384626433832795028841971693993751058209749e0_dp"
+
+.PP
+Pi\&. 
+.PP
+Definition at line 42 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::pi2 =6\&.2831853071795864769252867665590057683943387987502116419498e0_dp"
+
+.PP
+Pi*2\&. 
+.PP
+Definition at line 43 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::pih =1\&.5707963267948966192313216916397514420985846996875529104874e0_dp"
+
+.PP
+pi*half 
+.PP
+Definition at line 44 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::gaulegh(), and pesg::zmtozt()\&.
+.SS "real(dp), parameter pietc::r2 =1\&.4142135623730950488016887242096980785696718753769480731766e0_dp"
+
+.PP
+Square root of 2\&. 
+.PP
+Definition at line 46 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::r3 =1\&.7320508075688772935274463415058723669428052538103806280558e0_dp"
+
+.PP
+Square root of 3\&. 
+.PP
+Definition at line 47 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::r5 =2\&.2360679774997896964091736687312762354406183596115257242708e0_dp"
+
+.PP
+Square root of 5\&. 
+.PP
+Definition at line 48 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::rpi =1\&.7724538509055160272981674833411451827975494561223871282138e0_dp"
+
+.PP
+square root of pi 
+.PP
+Definition at line 45 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::rtod =180/\fBpi\fP"
+
+.PP
+radians to degrees 
+.PP
+Definition at line 55 of file pietc\&.f90\&.
+.PP
+Referenced by pmat5::dctog(), pesg::get_meanqd(), pesg::guessak_map(), pesg::hgrid_ak_c(), pesg::hgrid_ak_dd(), pesg::hgrid_ak_dd_c(), regional_grid(), pesg::xmtog_ak_dd_g(), and pesg::xmtog_ak_dd_m()\&.
+.SS "real(dp), parameter pietc::s10 =\&.173648177666930348851716626769314796000375677184069387236241e0_dp"
+
+.PP
+sine(10 deg) 
+.PP
+Definition at line 57 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s11 =\&.195090322016128267848284868477022240927691617751954807754502e0_dp"
+
+.PP
+sine(90/8 deg) 
+.PP
+Definition at line 58 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s13 =\&.222520933956314404288902564496794759466355568764544955311987e0_dp"
+
+.PP
+sine(90/7 deg) 
+.PP
+Definition at line 59 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s15 =\&.258819045102520762348898837624048328349068901319930513814003e0_dp"
+
+.PP
+sine(15 deg) 
+.PP
+Definition at line 60 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s18 =\&.309016994374947424102293417182819058860154589902881431067724e0_dp"
+
+.PP
+sine(18 deg) 
+.PP
+Definition at line 61 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::s20 =\&.342020143325668733044099614682259580763083367514160628465048e0_dp"
+
+.PP
+sine(20 deg) 
+.PP
+Definition at line 62 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s22 =\&.382683432365089771728459984030398866761344562485627041433800e0_dp"
+
+.PP
+sine(22\&.5 deg) 
+.PP
+Definition at line 63 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s26 =\&.433883739117558120475768332848358754609990727787459876444547e0_dp"
+
+.PP
+sine(90*2/7 deg) 
+.PP
+Definition at line 64 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s30 =\fBo2\fP"
+
+.PP
+sine(30 deg) 
+.PP
+Definition at line 65 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s34 =\&.555570233019602224742830813948532874374937190754804045924153e0_dp"
+
+.PP
+sine(90*3/8 deg) 
+.PP
+Definition at line 66 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s36 =\&.587785252292473129168705954639072768597652437643145991072272e0_dp"
+
+.PP
+sine(36 deg) 
+.PP
+Definition at line 67 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::s39 =\&.623489801858733530525004884004239810632274730896402105365549e0_dp"
+
+.PP
+sine(90*3/7 deg) 
+.PP
+Definition at line 68 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s40 =\&.642787609686539326322643409907263432907559884205681790324977e0_dp"
+
+.PP
+sine(40 deg) 
+.PP
+Definition at line 69 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s45 =\fBor2\fP"
+
+.PP
+sine(45 deg) 
+.PP
+Definition at line 70 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s50 =\&.766044443118978035202392650555416673935832457080395245854045e0_dp"
+
+.PP
+sine(50 deg) 
+.PP
+Definition at line 71 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s51 =\&.781831482468029808708444526674057750232334518708687528980634e0_dp"
+
+.PP
+sine(90*4/7 deg) 
+.PP
+Definition at line 72 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s54 =\&.809016994374947424102293417182819058860154589902881431067724e0_dp"
+
+.PP
+sine(54 deg) 
+.PP
+Definition at line 73 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::s56 =\&.831469612302545237078788377617905756738560811987249963446124e0_dp"
+
+.PP
+sine(90*5/8 deg) 
+.PP
+Definition at line 74 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s60 =\fBr3\fP*\fBo2\fP"
+
+.PP
+sine(60 deg) 
+.PP
+Definition at line 75 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s64 =\&.900968867902419126236102319507445051165919162131857150053562e0_dp"
+
+.PP
+sine(90*5/7 deg) 
+.PP
+Definition at line 76 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s68 =\&.923879532511286756128183189396788286822416625863642486115097e0_dp"
+
+.PP
+sine(67\&.5 deg) 
+.PP
+Definition at line 77 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s70 =\&.939692620785908384054109277324731469936208134264464633090286e0_dp"
+
+.PP
+sine(70 deg) 
+.PP
+Definition at line 78 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s72 =\&.951056516295153572116439333379382143405698634125750222447305e0_dp"
+
+.PP
+sine(72 deg) 
+.PP
+Definition at line 79 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::s75 =\&.965925826289068286749743199728897367633904839008404550402343e0_dp"
+
+.PP
+sine(75 deg) 
+.PP
+Definition at line 80 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s77 =\&.974927912181823607018131682993931217232785800619997437648079e0_dp"
+
+.PP
+sine(90*6/7 deg) 
+.PP
+Definition at line 81 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s79 =\&.980785280403230449126182236134239036973933730893336095002916e0_dp"
+
+.PP
+sine(90*7/8 deg) 
+.PP
+Definition at line 82 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::s80 =\&.984807753012208059366743024589523013670643251719842418790025e0_dp"
+
+.PP
+sine(80 deg) 
+.PP
+Definition at line 83 of file pietc\&.f90\&.
+.SS "logical, parameter pietc::t =\&.true\&."
+
+.PP
+for pain-relief in logical ops 
+.PP
+Definition at line 17 of file pietc\&.f90\&.
+.PP
+Referenced by pfun::ahav_s(), pfun::ahavh_s(), pfun::atanh_s(), pfun::hav_s(), pmat4::hav_s(), pfun::havh_s(), pmat::iinvf(), pmat5::plrot(), pmat5::plroti(), and pmat::sldumf()\&.
+.SS "real(dp), parameter pietc::u0 =0_dp"
+
+.PP
+zero 
+.PP
+Definition at line 19 of file pietc\&.f90\&.
+.PP
+Referenced by pmat2::avco(), pmat4::axial3_d(), psym2::chol2(), pmat::cldumf(), pmat2::clib_d(), pmat4::corral(), pmat4::ctoz(), pmat2::davco(), pmat5::dctocd(), pmat5::dctocdd(), pmat5::dctog(), pmat5::dctogr(), pmat2::ddfco(), pmat2::ddfco2(), pmat4::det_d(), pmat5::dgrtocd(), pmat5::dgrtocdd(), pmat5::dgtocd(), pmat5::dgtocdd(), pmat4::diagn_d(), pmat4::diagn_s(), pmat5::dininmap(), pmat5::dinivmap(), pmat::dinvl(), pmat::dl1lmf(), pmat2::dl1ubb(), pmat2::dl1ueb(), pmat::dldlmf(), pmat2::dldltb(), pmat2::dldub(), pmat::dldumf(), pmat4::dtarea_d(), psym2::eigensym2(), psym2::eigensym2d(), pmat4::expmat(), pmat4::expmatd(), pmat4::expmatdd(), psym2::expsym2d_e(), pesg::gaulegh(), pesg::get_edges(), pesg::get_meanqd(), pesg::get_meanqs(), pesg::get_qxd(), pmat4::gram_d(), pmat4::graml_d(), pmat5::gtoframev(), pesg::gtoxm_ak_rr_m(), pesg::hgrid_ak_rc(), pesg::hgrid_ak_rr(), pesg::hgrid_ak_rr_c(), psym2::logsym2(), psym2::logsym2d(), pmat4::normalize_d(), pmat4::normalized_d(), pmat4::plaingram_d(), pmat4::rottoq(), pmat4::rowgram(), pmat4::sarea_d(), psym2::sqrtsym2d_e(), psym2::sqrtsym2d_t(), pesg::xmtog_ak_rr_m(), pesg::xmtoxt(), pesg::xmtoxt1(), pesg::xstoxc1(), pesg::xttoxs(), pesg::xttoxs1(), pesg::zmtozt(), pmat4::znfun(), and pesg::zttozm()\&.
+.SS "real(dp), parameter pietc::u1 =1_dp"
+
+.PP
+one 
+.PP
+Definition at line 20 of file pietc\&.f90\&.
+.PP
+Referenced by pfun::atanh_d(), pfun::atanh_s(), pmat2::avco(), pmat::cldumf(), pmat4::corral(), pmat4::ctoz(), pmat2::davco(), pmat5::dctoc(), pmat5::dctocd(), pmat5::dctocdd(), pmat2::ddfco(), pmat2::ddfco2(), pmat::dinvl(), pmat::dl1lmf(), pmat2::dl1ubb(), pmat2::dl1ueb(), pmat::dldlmf(), pmat2::dldltb(), pmat2::dldub(), pmat::dldumf(), pmat4::dtarea_d(), pmat::dudlmm(), pmat::dudlmv(), psym2::eigensym2(), psym2::eigensym2d(), pmat4::expmat(), pmat4::expmatd(), pmat4::expmatdd(), psym2::expsym2d_t(), pesg::gaulegh(), pesg::get_qofv(), pesg::get_qofvd(), pesg::get_qsofvs(), pmat4::gram_d(), pmat5::gtoframev(), pesg::gtoxm_ak_rr_m(), pesg::hgrid_ak_rc(), pesg::hgrid_ak_rr(), pesg::hgrid_ak_rr_c(), psym2::logsym2d(), pmat4::normalize_d(), pmat4::rottoq(), pmat4::rowgram(), pfun::sech_d(), pfun::sech_s(), pfun::sinhox_d(), pfun::sinhoxm_d(), pfun::sinox_d(), pfun::sinoxm_d(), psym2::sqrtsym2d(), psym2::sqrtsym2d_e(), psym2::sqrtsym2d_t(), pesg::xctoxs(), pesg::xmtog_ak_rr_m(), pesg::xstoxc(), pesg::xstoxc1(), pesg::xstoxt(), pesg::xttoxs(), pesg::xttoxs1(), pesg::zmtozt(), and pesg::zttozm()\&.
+.SS "real(dp), parameter pietc::u2 =2_dp"
+
+.PP
+two 
+.PP
+Definition at line 22 of file pietc\&.f90\&.
+.PP
+Referenced by pfun::ahav_d(), pfun::ahav_s(), pfun::ahavh_d(), pfun::ahavh_s(), pmat5::dctoc(), pmat5::dctocd(), pmat5::dctocdd(), pmat4::dlltoxy_d(), pmat4::expmat(), pmat4::expmatd(), pmat4::expmatdd(), pesg::gaulegh(), pesg::get_qofvd(), pesg::get_qx(), pesg::get_qxd(), pmat4::rottoq(), pfun::sech_d(), pfun::sech_s(), pesg::xstoxc(), pesg::xstoxc1(), pesg::xstoxt(), pesg::xttoxs1(), pmat4::znfun(), and pmat4::zntay()\&.
+.SS "real(dp), parameter pietc::u3 =3_dp"
+
+.PP
+three 
+.PP
+Definition at line 24 of file pietc\&.f90\&.
+.PP
+Referenced by pmat4::znfun()\&.
+.SS "real(dp), parameter pietc::u4 =4_dp"
+
+.PP
+four 
+.PP
+Definition at line 26 of file pietc\&.f90\&.
+.SS "real(dp), parameter pietc::u5 =5_dp"
+
+.PP
+five 
+.PP
+Definition at line 28 of file pietc\&.f90\&.
+.PP
+Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+.SS "real(dp), parameter pietc::u6 =6_dp"
+
+.PP
+six 
+.PP
+Definition at line 30 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z000 =\fBc1\fP"
+
+.PP
+exp(2*pi*i*0) 
+.PP
+Definition at line 119 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z010 =( \fBs80\fP, \fBs10\fP)"
+
+.PP
+exp(2*pi*i/36) 
+.PP
+Definition at line 120 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z011 =( \fBs79\fP, \fBs11\fP)"
+
+.PP
+exp(2*pi*i/32) 
+.PP
+Definition at line 121 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z013 =( \fBs77\fP, \fBs13\fP)"
+
+.PP
+exp(2*pi*i/28) 
+.PP
+Definition at line 122 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z015 =( \fBs75\fP, \fBs15\fP)"
+
+.PP
+exp(2*pi*i/24) 
+.PP
+Definition at line 123 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z018 =( \fBs72\fP, \fBs18\fP)"
+
+.PP
+exp(2*pi*i/20) 
+.PP
+Definition at line 124 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z020 =( \fBs70\fP, \fBs20\fP)"
+
+.PP
+exp(2*pi*i/18) 
+.PP
+Definition at line 125 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z022 =( \fBs68\fP, \fBs22\fP)"
+
+.PP
+exp(2*pi*i/16) 
+.PP
+Definition at line 126 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z026 =( \fBs64\fP, \fBs26\fP)"
+
+.PP
+exp(2*pi*i/14) 
+.PP
+Definition at line 127 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z030 =( \fBs60\fP, \fBs30\fP)"
+
+.PP
+exp(2*pi*i/12) 
+.PP
+Definition at line 128 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z034 =( \fBs56\fP, \fBs34\fP)"
+
+.PP
+exp(2*pi*i*3/32) 
+.PP
+Definition at line 129 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z036 =( \fBs54\fP, \fBs36\fP)"
+
+.PP
+exp(2*pi*i/10) 
+.PP
+Definition at line 130 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z039 =( \fBs51\fP, \fBs39\fP)"
+
+.PP
+exp(2*pi*i*3/28) 
+.PP
+Definition at line 131 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z040 =( \fBs50\fP, \fBs40\fP)"
+
+.PP
+exp(2*pi*i/9) 
+.PP
+Definition at line 132 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z045 =( \fBs45\fP, \fBs45\fP)"
+
+.PP
+exp(2*pi*i/8) 
+.PP
+Definition at line 133 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z050 =( \fBs40\fP, \fBs50\fP)"
+
+.PP
+exp(2*pi*i*5/36) 
+.PP
+Definition at line 134 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z051 =( \fBs39\fP, \fBs51\fP)"
+
+.PP
+exp(2*pi*i/7) 
+.PP
+Definition at line 135 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z054 =( \fBs36\fP, \fBs54\fP)"
+
+.PP
+exp(2*pi*i*3/20) 
+.PP
+Definition at line 136 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z056 =( \fBs34\fP, \fBs56\fP)"
+
+.PP
+exp(2*pi*i*5/32) 
+.PP
+Definition at line 137 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z060 =( \fBs30\fP, \fBs60\fP)"
+
+.PP
+exp(2*pi*i/6) 
+.PP
+Definition at line 138 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z064 =( \fBs26\fP, \fBs64\fP)"
+
+.PP
+exp(2*pi*i*5/28) 
+.PP
+Definition at line 139 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z068 =( \fBs22\fP, \fBs68\fP)"
+
+.PP
+exp(2*pi*i*3/16) 
+.PP
+Definition at line 140 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z070 =( \fBs20\fP, \fBs70\fP)"
+
+.PP
+exp(2*pi*i*7/36) 
+.PP
+Definition at line 141 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z072 =( \fBs18\fP, \fBs72\fP)"
+
+.PP
+exp(2*pi*i/5) 
+.PP
+Definition at line 142 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z075 =( \fBs15\fP, \fBs75\fP)"
+
+.PP
+exp(2*pi*i*5/24) 
+.PP
+Definition at line 143 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z077 =( \fBs13\fP, \fBs77\fP)"
+
+.PP
+exp(2*pi*i*3/14) 
+.PP
+Definition at line 144 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z079 =( \fBs11\fP, \fBs79\fP)"
+
+.PP
+exp(2*pi*i*7/32) 
+.PP
+Definition at line 145 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z080 =( \fBs10\fP, \fBs80\fP)"
+
+.PP
+exp(2*pi*i*2/9) 
+.PP
+Definition at line 146 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z090 =\fBci\fP"
+
+.PP
+exp(2*pi*i/4) 
+.PP
+Definition at line 147 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z100 =(\fBms10\fP, \fBs80\fP)"
+
+.PP
+exp(2*pi*i*5/18) 
+.PP
+Definition at line 148 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z101 =(\fBms11\fP, \fBs79\fP)"
+
+.PP
+exp(2*pi*i*9/32) 
+.PP
+Definition at line 149 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z103 =(\fBms13\fP, \fBs77\fP)"
+
+.PP
+exp(2*pi*i*2/7) 
+.PP
+Definition at line 150 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z105 =(\fBms15\fP, \fBs75\fP)"
+
+.PP
+exp(2*pi*i*7/24) 
+.PP
+Definition at line 151 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z108 =(\fBms18\fP, \fBs72\fP)"
+
+.PP
+exp(2*pi*i*3/10) 
+.PP
+Definition at line 152 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z110 =(\fBms20\fP, \fBs70\fP)"
+
+.PP
+exp(2*pi*i*11/36) 
+.PP
+Definition at line 153 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z112 =(\fBms22\fP, \fBs68\fP)"
+
+.PP
+exp(2*pi*i*5/16) 
+.PP
+Definition at line 154 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z116 =(\fBms26\fP, \fBs64\fP)"
+
+.PP
+exp(2*pi*i*9/28) 
+.PP
+Definition at line 155 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z120 =(\fBms30\fP, \fBs60\fP)"
+
+.PP
+exp(2*pi*i/3) 
+.PP
+Definition at line 156 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z124 =(\fBms34\fP, \fBs56\fP)"
+
+.PP
+exp(2*pi*i*11/32) 
+.PP
+Definition at line 157 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z126 =(\fBms36\fP, \fBs54\fP)"
+
+.PP
+exp(2*pi*i*7/20) 
+.PP
+Definition at line 158 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z129 =(\fBms39\fP, \fBs51\fP)"
+
+.PP
+exp(2*pi*i*5/14) 
+.PP
+Definition at line 159 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z130 =(\fBms40\fP, \fBs50\fP)"
+
+.PP
+exp(2*pi*i*13/36) 
+.PP
+Definition at line 160 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z135 =(\fBms45\fP, \fBs45\fP)"
+
+.PP
+exp(2*pi*i*3/8) 
+.PP
+Definition at line 161 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z140 =(\fBms50\fP, \fBs40\fP)"
+
+.PP
+exp(2*pi*i*7/18) 
+.PP
+Definition at line 162 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z141 =(\fBms51\fP, \fBs39\fP)"
+
+.PP
+exp(2*pi*i*11/28) 
+.PP
+Definition at line 163 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z144 =(\fBms54\fP, \fBs36\fP)"
+
+.PP
+exp(2*pi*i*2/5) 
+.PP
+Definition at line 164 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z146 =(\fBms56\fP, \fBs34\fP)"
+
+.PP
+exp(2*pi*i*13/32) 
+.PP
+Definition at line 165 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z150 =(\fBms60\fP, \fBs30\fP)"
+
+.PP
+exp(2*pi*i*5/12) 
+.PP
+Definition at line 166 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z154 =(\fBms64\fP, \fBs26\fP)"
+
+.PP
+exp(2*pi*i*3/7) 
+.PP
+Definition at line 167 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z158 =(\fBms68\fP, \fBs22\fP)"
+
+.PP
+exp(2*pi*i*7/16) 
+.PP
+Definition at line 168 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z160 =(\fBms70\fP, \fBs20\fP)"
+
+.PP
+exp(2*pi*i*4/9) 
+.PP
+Definition at line 169 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z162 =(\fBms72\fP, \fBs18\fP)"
+
+.PP
+exp(2*pi*i*9/20) 
+.PP
+Definition at line 170 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z165 =(\fBms75\fP, \fBs15\fP)"
+
+.PP
+exp(2*pi*i*11/24) 
+.PP
+Definition at line 171 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z167 =(\fBms77\fP, \fBs13\fP)"
+
+.PP
+exp(2*pi*i*13/28) 
+.PP
+Definition at line 172 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z169 =(\fBms79\fP, \fBs11\fP)"
+
+.PP
+exp(2*pi*i*15/32) 
+.PP
+Definition at line 173 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z170 =(\fBms80\fP, \fBs10\fP)"
+
+.PP
+exp(2*pi*i*17/36) 
+.PP
+Definition at line 174 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z180 =\-\fBz000\fP"
+
+.PP
+exp(2*pi*i/2) 
+.PP
+Definition at line 175 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z190 =\-\fBz010\fP"
+
+.PP
+exp(2*pi*i*19/36) 
+.PP
+Definition at line 176 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z191 =\-\fBz011\fP"
+
+.PP
+exp(2*pi*i*17/32) 
+.PP
+Definition at line 177 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z193 =\-\fBz013\fP"
+
+.PP
+exp(2*pi*i*15/28) 
+.PP
+Definition at line 178 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z195 =\-\fBz015\fP"
+
+.PP
+exp(2*pi*i*13/24) 
+.PP
+Definition at line 179 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z198 =\-\fBz018\fP"
+
+.PP
+exp(2*pi*i*11/20) 
+.PP
+Definition at line 180 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z200 =\-\fBz020\fP"
+
+.PP
+exp(2*pi*i*5/9) 
+.PP
+Definition at line 181 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z202 =\-\fBz022\fP"
+
+.PP
+exp(2*pi*i*9/16) 
+.PP
+Definition at line 182 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z206 =\-\fBz026\fP"
+
+.PP
+exp(2*pi*i*4/7) 
+.PP
+Definition at line 183 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z210 =\-\fBz030\fP"
+
+.PP
+exp(2*pi*i*7/12) 
+.PP
+Definition at line 184 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z214 =\-\fBz034\fP"
+
+.PP
+exp(2*pi*i*19/32) 
+.PP
+Definition at line 185 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z216 =\-\fBz036\fP"
+
+.PP
+exp(2*pi*i*3/5) 
+.PP
+Definition at line 186 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z219 =\-\fBz039\fP"
+
+.PP
+exp(2*pi*i*17/28) 
+.PP
+Definition at line 187 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z220 =\-\fBz040\fP"
+
+.PP
+exp(2*pi*i*11/18) 
+.PP
+Definition at line 188 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z225 =\-\fBz045\fP"
+
+.PP
+exp(2*pi*i*5/8) 
+.PP
+Definition at line 189 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z230 =\-\fBz050\fP"
+
+.PP
+exp(2*pi*i*23/36) 
+.PP
+Definition at line 190 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z231 =\-\fBz051\fP"
+
+.PP
+exp(2*pi*i*9/14) 
+.PP
+Definition at line 191 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z234 =\-\fBz054\fP"
+
+.PP
+exp(2*pi*i*13/20) 
+.PP
+Definition at line 192 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z236 =\-\fBz056\fP"
+
+.PP
+exp(2*pi*i*21/32) 
+.PP
+Definition at line 193 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z240 =\-\fBz060\fP"
+
+.PP
+exp(2*pi*i*2/3) 
+.PP
+Definition at line 194 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z244 =\-\fBz064\fP"
+
+.PP
+exp(2*pi*i*19/28) 
+.PP
+Definition at line 195 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z248 =\-\fBz068\fP"
+
+.PP
+exp(2*pi*i*11/16) 
+.PP
+Definition at line 196 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z250 =\-\fBz070\fP"
+
+.PP
+exp(2*pi*i*25/36) 
+.PP
+Definition at line 197 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z252 =\-\fBz072\fP"
+
+.PP
+exp(2*pi*i*7/10) 
+.PP
+Definition at line 198 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z255 =\-\fBz075\fP"
+
+.PP
+exp(2*pi*i*17/24) 
+.PP
+Definition at line 199 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z257 =\-\fBz077\fP"
+
+.PP
+exp(2*pi*i*5/7) 
+.PP
+Definition at line 200 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z259 =\-\fBz079\fP"
+
+.PP
+exp(2*pi*i*23/32) 
+.PP
+Definition at line 201 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z260 =\-\fBz080\fP"
+
+.PP
+exp(2*pi*i*13/18) 
+.PP
+Definition at line 202 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z270 =\-\fBz090\fP"
+
+.PP
+exp(2*pi*i*3/4) 
+.PP
+Definition at line 203 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z280 =\-\fBz100\fP"
+
+.PP
+exp(2*pi*i*7/9) 
+.PP
+Definition at line 204 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z281 =\-\fBz101\fP"
+
+.PP
+exp(2*pi*i*25/32) 
+.PP
+Definition at line 205 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z283 =\-\fBz103\fP"
+
+.PP
+exp(2*pi*i*11/14) 
+.PP
+Definition at line 206 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z285 =\-\fBz105\fP"
+
+.PP
+exp(2*pi*i*19/24) 
+.PP
+Definition at line 207 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z288 =\-\fBz108\fP"
+
+.PP
+exp(2*pi*i*4/5) 
+.PP
+Definition at line 208 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z290 =\-\fBz110\fP"
+
+.PP
+exp(2*pi*i*29/36) 
+.PP
+Definition at line 209 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z292 =\-\fBz112\fP"
+
+.PP
+exp(2*pi*i*13/16) 
+.PP
+Definition at line 210 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z296 =\-\fBz116\fP"
+
+.PP
+exp(2*pi*i*23/28) 
+.PP
+Definition at line 211 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z300 =\-\fBz120\fP"
+
+.PP
+exp(2*pi*i*5/6) 
+.PP
+Definition at line 212 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z304 =\-\fBz124\fP"
+
+.PP
+exp(2*pi*i*27/32) 
+.PP
+Definition at line 213 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z306 =\-\fBz126\fP"
+
+.PP
+exp(2*pi*i*17/20) 
+.PP
+Definition at line 214 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z309 =\-\fBz129\fP"
+
+.PP
+exp(2*pi*i*6/7) 
+.PP
+Definition at line 215 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z310 =\-\fBz130\fP"
+
+.PP
+exp(2*pi*i*31/36) 
+.PP
+Definition at line 216 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z315 =\-\fBz135\fP"
+
+.PP
+exp(2*pi*i*7/8) 
+.PP
+Definition at line 217 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z320 =\-\fBz140\fP"
+
+.PP
+exp(2*pi*i*8/9) 
+.PP
+Definition at line 218 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z321 =\-\fBz141\fP"
+
+.PP
+exp(2*pi*i*25/28) 
+.PP
+Definition at line 219 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z324 =\-\fBz144\fP"
+
+.PP
+exp(2*pi*i*9/10) 
+.PP
+Definition at line 220 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z326 =\-\fBz146\fP"
+
+.PP
+exp(2*pi*i*29/32) 
+.PP
+Definition at line 221 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z330 =\-\fBz150\fP"
+
+.PP
+exp(2*pi*i*11/12) 
+.PP
+Definition at line 222 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z334 =\-\fBz154\fP"
+
+.PP
+exp(2*pi*i*13/14) 
+.PP
+Definition at line 223 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z338 =\-\fBz158\fP"
+
+.PP
+exp(2*pi*i*15/16) 
+.PP
+Definition at line 224 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z340 =\-\fBz160\fP"
+
+.PP
+exp(2*pi*i*17/18) 
+.PP
+Definition at line 225 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z342 =\-\fBz162\fP"
+
+.PP
+exp(2*pi*i*19/20) 
+.PP
+Definition at line 226 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z345 =\-\fBz165\fP"
+
+.PP
+exp(2*pi*i*23/24) 
+.PP
+Definition at line 227 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z347 =\-\fBz167\fP"
+
+.PP
+exp(2*pi*i*27/28) 
+.PP
+Definition at line 228 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z349 =\-\fBz169\fP"
+
+.PP
+exp(2*pi*i*31/32) 
+.PP
+Definition at line 229 of file pietc\&.f90\&.
+.SS "complex(dpc), parameter pietc::z350 =\-\fBz170\fP"
+
+.PP
+exp(2*pi*i*35/36) 
+.PP
+Definition at line 230 of file pietc\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

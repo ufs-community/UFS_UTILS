@@ -1,0 +1,496 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/utils_mod.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/utils_mod.F90 \- Define utility procedures\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fButils_mod::dumpnc\fP"
+.br
+.ti -1c
+.RI "interface \fButils_mod::getfield\fP"
+.br
+.ti -1c
+.RI "interface \fButils_mod::getvecpair\fP"
+.br
+.ti -1c
+.RI "interface \fButils_mod::packarrays\fP"
+.br
+.ti -1c
+.RI "interface \fButils_mod::remap\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fButils_mod::dumpnc1d\fP (fname, vname, dims, field)"
+.br
+.RI "Write a bare netcdf file of a unpacked 2D field\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::dumpnc2d\fP (fname, vname, dims, nflds, field)"
+.br
+.RI "Write a bare netcdf file of a 2D packed field\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::dumpnc3d\fP (fname, vname, dims, nk, nflds, field)"
+.br
+.RI "Write a bare netcdf file of a packed 3D field\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::dumpnc3dk\fP (fname, vname, dims, field)"
+.br
+.RI "Write a bare netcdf file of an unpacked 3D field\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::getfield2d\fP (fname, vname, dims, field, wgts)"
+.br
+.RI "Obtain a 2D field and return a 1-D vector array\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::getfield3d\fP (fname, vname, dims, field, wgts)"
+.br
+.RI "Obtain a 3D field and return a 2-D vector array\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::getvecpair2d\fP (fname, wdir, cosrot, sinrot, vname1, vgrid1, vname2, vgrid2, dims, vecpair)"
+.br
+.RI "Obtain 2D vector pairs mapped to Ct and rotated to EN\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::getvecpair3d\fP (fname, wdir, cosrot, sinrot, vname1, vgrid1, vname2, vgrid2, dims, vecpair)"
+.br
+.RI "Obtain 3D vector pairs mapped to Ct and rotated to EN\&. "
+.ti -1c
+.RI "subroutine, public \fButils_mod::nf90_err\fP (ierr, string)"
+.br
+.RI "Handle netcdf errors\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::packarrays2d\fP (filesrc, wgtsdir, cosrot, sinrot, vars, dims, nflds, fields)"
+.br
+.RI "Pack 2D fields into arrays by mapping type\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::packarrays3d\fP (filesrc, wgtsdir, cosrot, sinrot, vars, dims, nflds, fields)"
+.br
+.RI "Pack 3D fields into arrays by mapping type\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::remap1d\fP (fname, src_field, dst_field)"
+.br
+.RI "Remap a 1-D vector array from source to destination\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::remap2d\fP (fname, dim2, src_field, dst_field)"
+.br
+.RI "Remap a 2-D vector array of nflds or nlevs from source to destination\&. "
+.ti -1c
+.RI "subroutine \fButils_mod::remap3d\fP (fname, nk, nflds, src_field, dst_field)"
+.br
+.RI "Remap a field packed array of nk levels and nflds fields\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Define utility procedures\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov
+.RE
+.PP
+This module defines a set of utility procedures 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition in file \fButils_mod\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils_mod::dumpnc1d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(in) field)\fC [private]\fP"
+
+.PP
+Write a bare netcdf file of a unpacked 2D field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIvname\fP the name of the variable 
+.br
+\fIdims\fP the variable spatial dimensions 
+.br
+\fIfield\fP the field to write
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 673 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::dumpnc2d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(in) field)\fC [private]\fP"
+
+.PP
+Write a bare netcdf file of a 2D packed field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIvname\fP the name of the variable 
+.br
+\fIdims\fP the variable spatial dimensions 
+.br
+\fInflds\fP the number of fields 
+.br
+\fIfield\fP the field to write
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 545 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::dumpnc3d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, integer, intent(in) nk, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(in) field)\fC [private]\fP"
+
+.PP
+Write a bare netcdf file of a packed 3D field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIvname\fP the name of the variable 
+.br
+\fIdims\fP the variable spatial dimensions 
+.br
+\fInk\fP the number of levels 
+.br
+\fInflds\fP the number of fields 
+.br
+\fIfield\fP the field to write
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 588 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::dumpnc3dk (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(in) field)\fC [private]\fP"
+
+.PP
+Write a bare netcdf file of an unpacked 3D field\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIvname\fP the name of the variable 
+.br
+\fIdims\fP the variable spatial dimensions 
+.br
+\fIfield\fP the field to write
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 632 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::getfield2d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(out) field, character(len=*), intent(in), optional wgts)\fC [private]\fP"
+
+.PP
+Obtain a 2D field and return a 1-D vector array\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing the fields to retrieve 
+.br
+\fIvname\fP the variable to retrieve 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fIfield\fP the field 
+.br
+\fIwgts\fP the optional ESMF regridding weights
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 286 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::getfield3d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(out) field, character(len=*), intent(in), optional wgts)\fC [private]\fP"
+
+.PP
+Obtain a 3D field and return a 2-D vector array\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing the fields to retrieve 
+.br
+\fIvname\fP the variable to retrieve 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fIfield\fP the field 
+.br
+\fIwgts\fP the optional ESMF regridding weights
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 331 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::getvecpair2d (character(len=*), intent(in) fname, character(len=*), intent(in) wdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, character(len=*), intent(in) vname1, character(len=*), intent(in) vgrid1, character(len=*), intent(in) vname2, character(len=*), intent(in) vgrid2, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(out) vecpair)\fC [private]\fP"
+
+.PP
+Obtain 2D vector pairs mapped to Ct and rotated to EN\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing the fields to retrieve 
+.br
+\fIwdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvname1\fP the variable name of the first vector 
+.br
+\fIvgrid1\fP the grid location of the first vector 
+.br
+\fIvname2\fP the variable name of the second vector 
+.br
+\fIvgrid2\fP the grid location of the second vector 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fIvecpair\fP the vector pair array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 191 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::getvecpair3d (character(len=*), intent(in) fname, character(len=*), intent(in) wdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, character(len=*), intent(in) vname1, character(len=*), intent(in) vgrid1, character(len=*), intent(in) vname2, character(len=*), intent(in) vgrid2, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:,:), intent(out) vecpair)\fC [private]\fP"
+
+.PP
+Obtain 3D vector pairs mapped to Ct and rotated to EN\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing the fields to retrieve 
+.br
+\fIwdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvname1\fP the variable name of the first vector 
+.br
+\fIvgrid1\fP the grid location of the first vector 
+.br
+\fIvname2\fP the variable name of the second vector 
+.br
+\fIvgrid2\fP the grid location of the second vector 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fIvecpair\fP the vector pair array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 241 of file utils_mod\&.F90\&.
+.SS "subroutine, public utils_mod::nf90_err (integer, intent(in) ierr, character(len=*), intent(in) string)"
+
+.PP
+Handle netcdf errors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIierr\fP the error code 
+.br
+\fIstring\fP the error message
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 709 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::packarrays2d (character(len=*), intent(in) filesrc, character(len=*), intent(in) wgtsdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, type(\fBvardefs\fP), dimension(:), intent(in) vars, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(out) fields)\fC [private]\fP"
+
+.PP
+Pack 2D fields into arrays by mapping type\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilesrc\fP the file containing the fields to retrieve 
+.br
+\fIwgtsdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvars\fP the typedefs for this packed array 
+.br
+\fIdims\fP the dimensions of the fields in the packed array 
+.br
+\fInflds\fP the number of fields in the packed array 
+.br
+\fIfields\fP the packed array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 65 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::packarrays3d (character(len=*), intent(in) filesrc, character(len=*), intent(in) wgtsdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, type(\fBvardefs\fP), dimension(:), intent(in) vars, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(out) fields)\fC [private]\fP"
+
+.PP
+Pack 3D fields into arrays by mapping type\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfilesrc\fP the file containing the fields to retrieve 
+.br
+\fIwgtsdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvars\fP the typedefs for this packed array 
+.br
+\fIdims\fP the dimensions of the fields in the packed array 
+.br
+\fInflds\fP the number of fields in the packed array 
+.br
+\fIfields\fP the packed array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 127 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::remap1d (character(len=*), intent(in) fname, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field)\fC [private]\fP"
+
+.PP
+Remap a 1-D vector array from source to destination\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIsrc_field\fP the source field 
+.br
+\fIdst_field\fP the destination field
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 376 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::remap2d (character(len=*), intent(in) fname, integer, intent(in) dim2, real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field)\fC [private]\fP"
+
+.PP
+Remap a 2-D vector array of nflds or nlevs from source to destination\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fIdim2\fP the number of fields or levels 
+.br
+\fIsrc_field\fP the source field 
+.br
+\fIdst_field\fP the destination field
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 431 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::remap3d (character(len=*), intent(in) fname, integer, intent(in) nk, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(in) src_field, real(kind=8), dimension(:,:,:), intent(out) dst_field)\fC [private]\fP"
+
+.PP
+Remap a field packed array of nk levels and nflds fields\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing ESMF regridding weights 
+.br
+\fInk\fP the number of levels 
+.br
+\fInflds\fP the number of fields 
+.br
+\fIsrc_field\fP the source field 
+.br
+\fIdst_field\fP the destination field
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 488 of file utils_mod\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

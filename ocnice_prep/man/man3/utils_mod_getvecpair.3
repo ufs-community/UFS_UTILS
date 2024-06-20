@@ -1,0 +1,101 @@
+.TH "utils_mod::getvecpair" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils_mod::getvecpair
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgetvecpair2d\fP (fname, wdir, cosrot, sinrot, vname1, vgrid1, vname2, vgrid2, dims, vecpair)"
+.br
+.RI "Obtain 2D vector pairs mapped to Ct and rotated to EN\&. "
+.ti -1c
+.RI "subroutine \fBgetvecpair3d\fP (fname, wdir, cosrot, sinrot, vname1, vgrid1, vname2, vgrid2, dims, vecpair)"
+.br
+.RI "Obtain 3D vector pairs mapped to Ct and rotated to EN\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 33 of file utils_mod\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils_mod::getvecpair::getvecpair2d (character(len=*), intent(in) fname, character(len=*), intent(in) wdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, character(len=*), intent(in) vname1, character(len=*), intent(in) vgrid1, character(len=*), intent(in) vname2, character(len=*), intent(in) vgrid2, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(out) vecpair)\fC [private]\fP"
+
+.PP
+Obtain 2D vector pairs mapped to Ct and rotated to EN\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing the fields to retrieve 
+.br
+\fIwdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvname1\fP the variable name of the first vector 
+.br
+\fIvgrid1\fP the grid location of the first vector 
+.br
+\fIvname2\fP the variable name of the second vector 
+.br
+\fIvgrid2\fP the grid location of the second vector 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fIvecpair\fP the vector pair array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 191 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::getvecpair::getvecpair3d (character(len=*), intent(in) fname, character(len=*), intent(in) wdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, character(len=*), intent(in) vname1, character(len=*), intent(in) vgrid1, character(len=*), intent(in) vname2, character(len=*), intent(in) vgrid2, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:,:), intent(out) vecpair)\fC [private]\fP"
+
+.PP
+Obtain 3D vector pairs mapped to Ct and rotated to EN\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing the fields to retrieve 
+.br
+\fIwdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvname1\fP the variable name of the first vector 
+.br
+\fIvgrid1\fP the grid location of the first vector 
+.br
+\fIvname2\fP the variable name of the second vector 
+.br
+\fIvgrid2\fP the grid location of the second vector 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fIvecpair\fP the vector pair array
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 241 of file utils_mod\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

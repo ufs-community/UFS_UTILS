@@ -1,0 +1,135 @@
+.TH "utils_esmf_mod::remaprh" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils_esmf_mod::remaprh
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBremaprh1d\fP (kk, src_field, dst_field, rc)"
+.br
+.RI "Remap a field of nlen via ESMF RH\&. "
+.ti -1c
+.RI "subroutine \fBremaprh1ddyn\fP (kk, src_field, dst_field, hmask, rc)"
+.br
+.RI "Remap a field of nlen via ESMF RH with dynamic masking\&. "
+.ti -1c
+.RI "subroutine \fBremaprh2d\fP (src_field, dst_field, rc)"
+.br
+.RI "Remap a packed field of nflds,nlen via ESMF RH\&. "
+.ti -1c
+.RI "subroutine \fBremaprh2ddyn\fP (kk, src_field, dst_field, hmask, rc)"
+.br
+.RI "Remap a packed field of nflds,nlen via ESMF RH with dyanmic masking\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 26 of file utils_esmf_mod\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils_esmf_mod::remaprh::remaprh1d (integer, intent(in) kk, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field, integer, intent(out) rc)\fC [private]\fP"
+
+.PP
+Remap a field of nlen via ESMF RH\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIkk\fP the vertical or category index 
+.br
+\fIsrc_field\fP the field on the source grid 
+.br
+\fIdst_field\fP the field on the destination grid 
+.br
+\fIrc\fP an error return code
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 129 of file utils_esmf_mod\&.F90\&.
+.SS "subroutine utils_esmf_mod::remaprh::remaprh1ddyn (integer, intent(in) kk, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field, real(kind=8), dimension(:), intent(in) hmask, integer, intent(out) rc)\fC [private]\fP"
+
+.PP
+Remap a field of nlen via ESMF RH with dynamic masking\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIkk\fP the vertical or category index 
+.br
+\fIsrc_field\fP the field on the source grid 
+.br
+\fIhmask\fP the mask field to use with dynamic masking 
+.br
+\fIdst_field\fP the field on the destination grid 
+.br
+\fIrc\fP an error return code
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 228 of file utils_esmf_mod\&.F90\&.
+.SS "subroutine utils_esmf_mod::remaprh::remaprh2d (real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field, integer, intent(out) rc)\fC [private]\fP"
+
+.PP
+Remap a packed field of nflds,nlen via ESMF RH\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsrc_field\fP the field on the source grid 
+.br
+\fIdst_field\fP the field on the destination grid 
+.br
+\fIrc\fP an error return code
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 176 of file utils_esmf_mod\&.F90\&.
+.SS "subroutine utils_esmf_mod::remaprh::remaprh2ddyn (integer, intent(in) kk, real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field, real(kind=8), dimension(:), intent(in) hmask, integer, intent(out) rc)\fC [private]\fP"
+
+.PP
+Remap a packed field of nflds,nlen via ESMF RH with dyanmic masking\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIkk\fP the vertical or category index 
+.br
+\fIsrc_field\fP the field on the source grid 
+.br
+\fIhmask\fP the mask field to use with dynamic masking 
+.br
+\fIdst_field\fP the field on the destination grid 
+.br
+\fIrc\fP an error return code
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 281 of file utils_esmf_mod\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

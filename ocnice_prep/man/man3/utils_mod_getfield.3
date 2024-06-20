@@ -1,0 +1,81 @@
+.TH "utils_mod::getfield" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils_mod::getfield
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgetfield2d\fP (fname, vname, dims, field, wgts)"
+.br
+.RI "Obtain a 2D field and return a 1-D vector array\&. "
+.ti -1c
+.RI "subroutine \fBgetfield3d\fP (fname, vname, dims, field, wgts)"
+.br
+.RI "Obtain a 3D field and return a 2-D vector array\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 17 of file utils_mod\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils_mod::getfield::getfield2d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(out) field, character(len=*), intent(in), optional wgts)\fC [private]\fP"
+
+.PP
+Obtain a 2D field and return a 1-D vector array\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing the fields to retrieve 
+.br
+\fIvname\fP the variable to retrieve 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fIfield\fP the field 
+.br
+\fIwgts\fP the optional ESMF regridding weights
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 286 of file utils_mod\&.F90\&.
+.SS "subroutine utils_mod::getfield::getfield3d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(out) field, character(len=*), intent(in), optional wgts)\fC [private]\fP"
+
+.PP
+Obtain a 3D field and return a 2-D vector array\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file containing the fields to retrieve 
+.br
+\fIvname\fP the variable to retrieve 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fIfield\fP the field 
+.br
+\fIwgts\fP the optional ESMF regridding weights
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 331 of file utils_mod\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.

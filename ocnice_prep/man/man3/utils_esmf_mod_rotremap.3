@@ -1,0 +1,89 @@
+.TH "utils_esmf_mod::rotremap" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utils_esmf_mod::rotremap
+.SH SYNOPSIS
+.br
+.PP
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBrotremap2d\fP (wdir, vars, cosrot, sinrot, dims, nflds, fields)"
+.br
+.RI "Rotate 2D vectors from EN->IJ and map back to native staggers\&. "
+.ti -1c
+.RI "subroutine \fBrotremap3d\fP (wdir, vars, cosrot, sinrot, dims, nflds, fields)"
+.br
+.RI "Rotate 3D vectors on nlevs from EN->IJ and map back to native staggers\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 33 of file utils_esmf_mod\&.F90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utils_esmf_mod::rotremap::rotremap2d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(inout) fields)\fC [private]\fP"
+
+.PP
+Rotate 2D vectors from EN->IJ and map back to native staggers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIwdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvars\fP a structure describing the variable metadata 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fInflds\fP the number of fields in the packed array 
+.br
+\fIfields\fP the rotated and mapped fields
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 344 of file utils_esmf_mod\&.F90\&.
+.SS "subroutine utils_esmf_mod::rotremap::rotremap3d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(inout) fields)\fC [private]\fP"
+
+.PP
+Rotate 3D vectors on nlevs from EN->IJ and map back to native staggers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIwdir\fP the path to the required ESMF regridding weights 
+.br
+\fIcosrot\fP the cosine of the rotation angle 
+.br
+\fIsinrot\fP the sine of the rotation angle 
+.br
+\fIvars\fP a structure describing the variable metadata 
+.br
+\fIdims\fP the dimensions of the fields 
+.br
+\fInflds\fP the number of fields in the packed array 
+.br
+\fIfields\fP the rotated and mapped fields
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 401 of file utils_esmf_mod\&.F90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocnice_prep from the source code\&.
