@@ -1,8 +1,8 @@
-.TH "pmat4::outer_product" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::outer_product" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat4::outer_product \- 
+pmat4::outer_product
 .SH SYNOPSIS
 .br
 .PP
@@ -10,30 +10,24 @@ pmat4::outer_product \-
 
 .in +1c
 .ti -1c
-.RI "real(dp) function, dimension(size(a), 
+.RI "real(dp) function, dimension(size(a), size(b)) \fBouter_product_d\fP (a, b)"
 .br
-size(b)) \fBouter_product_d\fP (a, b)"
-.br
-.RI "\fIReturn the outer product matrix of two double precision real vectors\&. \fP"
+.RI "Return the outer product matrix of two double precision real vectors\&. "
 .ti -1c
-.RI "integer(spi) function, 
+.RI "integer(spi) function, dimension(size(a), size(b)) \fBouter_product_i\fP (a, b)"
 .br
-dimension(size(a), size(b)) \fBouter_product_i\fP (a, b)"
-.br
-.RI "\fIReturn the outer product matrix of two integer vectors\&. \fP"
+.RI "Return the outer product matrix of two integer vectors\&. "
 .ti -1c
-.RI "real(sp) function, dimension(size(a), 
+.RI "real(sp) function, dimension(size(a), size(b)) \fBouter_product_s\fP (a, b)"
 .br
-size(b)) \fBouter_product_s\fP (a, b)"
-.br
-.RI "\fIReturn the outer product matrix of two single precision real vectors\&. \fP"
+.RI "Return the outer product matrix of two single precision real vectors\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 67 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "real(dp) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_d (real(dp), dimension(:), intent(in)a, real(dp), dimension(:), intent(in)b)\fC [private]\fP"
+.SS "real(dp) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_d (real(dp), dimension(:), intent(in) a, real(dp), dimension(:), intent(in) b)\fC [private]\fP"
 
 .PP
 Return the outer product matrix of two double precision real vectors\&. 
@@ -57,8 +51,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 288 of file pmat4\&.f90\&.
-.SS "integer(spi) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_i (integer(spi), dimension(:), intent(in)a, integer(spi), dimension(:), intent(in)b)\fC [private]\fP"
+Definition at line 289 of file pmat4\&.f90\&.
+.SS "integer(spi) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_i (integer(spi), dimension(:), intent(in) a, integer(spi), dimension(:), intent(in) b)\fC [private]\fP"
 
 .PP
 Return the outer product matrix of two integer vectors\&. 
@@ -82,8 +76,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 304 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_s (real(sp), dimension(:), intent(in)a, real(sp), dimension(:), intent(in)b)\fC [private]\fP"
+Definition at line 305 of file pmat4\&.f90\&.
+.SS "real(sp) function, dimension(size(a),size(b)) pmat4::outer_product::outer_product_s (real(sp), dimension(:), intent(in) a, real(sp), dimension(:), intent(in) b)\fC [private]\fP"
 
 .PP
 Return the outer product matrix of two single precision real vectors\&. 
@@ -107,7 +101,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 272 of file pmat4\&.f90\&.
+Definition at line 273 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

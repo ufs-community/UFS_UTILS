@@ -1,20 +1,27 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/debugprint.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/debugprint.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/debugprint.F90 \- 
-.PP
-Print debugging information\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/debugprint.F90 \- Print debugging information\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Functions/Subroutines"
 
 .in +1c
 .ti -1c
-.RI "module \fBdebugprint\fP"
+.RI "subroutine, public \fBdebugprint::checkpoint\fP"
 .br
+.RI "Print values at specified point\&. "
+.ti -1c
+.RI "subroutine, public \fBdebugprint::checkseam\fP"
+.br
+.RI "Print values across the tripole seam\&. "
+.ti -1c
+.RI "subroutine, public \fBdebugprint::checkxlatlon\fP"
+.br
+.RI "Print values near the poles and along the domain edges\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -37,6 +44,47 @@ Denise.Worthen@noaa.gov
 
 .PP
 Definition in file \fBdebugprint\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public debugprint::checkpoint ()"
+
+.PP
+Print values at specified point\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 171 of file debugprint\&.F90\&.
+.SS "subroutine, public debugprint::checkseam ()"
+
+.PP
+Print values across the tripole seam\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 28 of file debugprint\&.F90\&.
+.SS "subroutine, public debugprint::checkxlatlon ()"
+
+.PP
+Print values near the poles and along the domain edges\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 109 of file debugprint\&.F90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

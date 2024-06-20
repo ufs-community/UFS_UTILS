@@ -1,10 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/vcoord_gen.fd/matrix_utils.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "vcoord_gen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/vcoord_gen.fd/matrix_utils.f90" 3 "Thu Jun 20 2024" "Version 1.13.0" "vcoord_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/vcoord_gen.fd/matrix_utils.f90 \- 
-.PP
-Lower and upper triangular decomposition\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/vcoord_gen.fd/matrix_utils.f90 \- Lower and upper triangular decomposition\&.  
 
 .SH SYNOPSIS
 .br
@@ -15,11 +13,11 @@ Lower and upper triangular decomposition\&.
 .ti -1c
 .RI "subroutine \fBlubksb\fP (a, n, np, indx, b)"
 .br
-.RI "\fILower and upper triangular back substitution\&. \fP"
+.RI "Lower and upper triangular back substitution\&. "
 .ti -1c
 .RI "subroutine \fBludcmp\fP (a, n, np, indx, d)"
 .br
-.RI "\fIThis subprogram decomposes a matrix into a product of lower and upper triangular matrices\&. \fP"
+.RI "This subprogram decomposes a matrix into a product of lower and upper triangular matrices\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -42,7 +40,7 @@ Mark Iredell
 Definition in file \fBmatrix_utils\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine lubksb (real, dimension(np,np), intent(in)a, integer, intent(in)n, integer, intent(in)np, integer, dimension(n), intent(in)indx, real, dimension(n), intent(inout)b)"
+.SS "subroutine lubksb (real, dimension(np,np), intent(in) a, integer, intent(in) n, integer, intent(in) np, integer, dimension(n), intent(in) indx, real, dimension(n), intent(inout) b)"
 
 .PP
 Lower and upper triangular back substitution\&. 
@@ -87,10 +85,10 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 100 of file matrix_utils\&.f90\&.
+Definition at line 101 of file matrix_utils\&.f90\&.
 .PP
 Referenced by vcoord_gen()\&.
-.SS "subroutine ludcmp (real, dimension(np,np), intent(inout)a, integer, intent(in)n, integer, intent(in)np, integer, dimension(n), intent(out)indx, real, intent(out)d)"
+.SS "subroutine ludcmp (real, dimension(np,np), intent(inout) a, integer, intent(in) n, integer, intent(in) np, integer, dimension(n), intent(out) indx, real, intent(out) d)"
 
 .PP
 This subprogram decomposes a matrix into a product of lower and upper triangular matrices\&. 
@@ -123,7 +121,7 @@ Mark Iredell
 .PP
 
 .PP
-Definition at line 20 of file matrix_utils\&.f90\&.
+Definition at line 21 of file matrix_utils\&.f90\&.
 .PP
 Referenced by vcoord_gen()\&.
 .SH "Author"

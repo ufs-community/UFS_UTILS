@@ -1,10 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/netcdf_io.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/netcdf_io.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/netcdf_io.F90 \- 
-.PP
-Write out data in netcdf format\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/netcdf_io.F90 \- Write out data in netcdf format\&.  
 
 .SH SYNOPSIS
 .br
@@ -15,19 +13,19 @@ Write out data in netcdf format\&.
 .ti -1c
 .RI "subroutine \fBnetcdf_err\fP (err, string)"
 .br
-.RI "\fICheck NetCDF error code and output the error message\&. \fP"
+.RI "Check NetCDF error code and output the error message\&. "
 .ti -1c
 .RI "subroutine \fBread_mask\fP (merge_file, slm, land_frac, \fBlake_frac\fP, im, jm)"
 .br
-.RI "\fIRead the land mask file\&. \fP"
+.RI "Read the land mask file\&. "
 .ti -1c
 .RI "subroutine \fBwrite_mask_netcdf\fP (im, jm, slm, land_frac, ntiles, tile, geolon, geolat)"
 .br
-.RI "\fIWrite the land mask file\&. \fP"
+.RI "Write the land mask file\&. "
 .ti -1c
 .RI "subroutine \fBwrite_netcdf\fP (im, jm, slm, land_frac, oro, orf, hprime, ntiles, tile, geolon, geolat, lon, lat)"
 .br
-.RI "\fIWrite out orography file in netcdf format\&. \fP"
+.RI "Write out orography file in netcdf format\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -45,7 +43,7 @@ Jordan Alpert NOAA/EMC
 Definition in file \fBnetcdf_io\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine netcdf_err (integer, intent(in)err, character(len=*), intent(in)string)"
+.SS "subroutine netcdf_err (integer, intent(in) err, character(len=*), intent(in) string)"
 
 .PP
 Check NetCDF error code and output the error message\&. 
@@ -64,10 +62,10 @@ Jordan Alpert NOAA/EMC
 .PP
 
 .PP
-Definition at line 218 of file netcdf_io\&.F90\&.
+Definition at line 219 of file netcdf_io\&.F90\&.
 .PP
 Referenced by __mtnlm7_oclsm\&.f__(), gsl_oro_data_lg_scale::calc_gsl_oro_data_lg_scale(), gsl_oro_data_sm_scale::calc_gsl_oro_data_sm_scale(), read_g(), read_mask(), tersub(), write_mask_netcdf(), and write_netcdf()\&.
-.SS "subroutine read_mask (character(len=*), intent(in)merge_file, real, dimension(im,jm), intent(out)slm, real, dimension(im,jm), intent(out)land_frac, real, dimension(im,jm), intent(out)lake_frac, integer, intent(in)im, integer, intent(in)jm)"
+.SS "subroutine read_mask (character(len=*), intent(in) merge_file, real, dimension(im,jm), intent(out) slm, real, dimension(im,jm), intent(out) land_frac, real, dimension(im,jm), intent(out) lake_frac, integer, intent(in) im, integer, intent(in) jm)"
 
 .PP
 Read the land mask file\&. 
@@ -94,12 +92,12 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 334 of file netcdf_io\&.F90\&.
+Definition at line 336 of file netcdf_io\&.F90\&.
 .PP
-References lake_frac(), and netcdf_err()\&.
+References netcdf_err()\&.
 .PP
 Referenced by tersub()\&.
-.SS "subroutine write_mask_netcdf (integer, intent(in)im, integer, intent(in)jm, real, dimension(im,jm), intent(in)slm, real, dimension(im,jm), intent(in)land_frac, integer, intent(in)ntiles, integer, intent(in)tile, real, dimension(im,jm), intent(in)geolon, real, dimension(im,jm), intent(in)geolat)"
+.SS "subroutine write_mask_netcdf (integer, intent(in) im, integer, intent(in) jm, real, dimension(im,jm), intent(in) slm, real, dimension(im,jm), intent(in) land_frac, integer, intent(in) ntiles, integer, intent(in) tile, real, dimension(im,jm), intent(in) geolon, real, dimension(im,jm), intent(in) geolat)"
 
 .PP
 Write the land mask file\&. 
@@ -130,12 +128,12 @@ George Gayno NOAA/EMC
 .PP
 
 .PP
-Definition at line 243 of file netcdf_io\&.F90\&.
+Definition at line 245 of file netcdf_io\&.F90\&.
 .PP
 References netcdf_err()\&.
 .PP
 Referenced by tersub()\&.
-.SS "subroutine write_netcdf (integer, intent(in)im, integer, intent(in)jm, real, dimension(im,jm), intent(in)slm, real, dimension(im,jm), intent(in)land_frac, real, dimension(im,jm), intent(in)oro, real, dimension(im,jm), intent(in)orf, real, dimension(im,jm,14), intent(in)hprime, integer, intent(in)ntiles, integer, intent(in)tile, real, dimension(im,jm), intent(in)geolon, real, dimension(im,jm), intent(in)geolat, real, dimension(im), intent(in)lon, real, dimension(jm), intent(in)lat)"
+.SS "subroutine write_netcdf (integer, intent(in) im, integer, intent(in) jm, real, dimension(im,jm), intent(in) slm, real, dimension(im,jm), intent(in) land_frac, real, dimension(im,jm), intent(in) oro, real, dimension(im,jm), intent(in) orf, real, dimension(im,jm,14), intent(in) hprime, integer, intent(in) ntiles, integer, intent(in) tile, real, dimension(im,jm), intent(in) geolon, real, dimension(im,jm), intent(in) geolat, real, dimension(im), intent(in) lon, real, dimension(jm), intent(in) lat)"
 
 .PP
 Write out orography file in netcdf format\&. 
@@ -176,7 +174,7 @@ Jordan Alpert NOAA/EMC GFDL Programmer
 .PP
 
 .PP
-Definition at line 21 of file netcdf_io\&.F90\&.
+Definition at line 22 of file netcdf_io\&.F90\&.
 .PP
 References netcdf_err()\&.
 .PP

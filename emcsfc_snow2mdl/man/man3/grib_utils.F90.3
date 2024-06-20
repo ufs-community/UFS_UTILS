@@ -1,10 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/grib_utils.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/grib_utils.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/grib_utils.F90 \- 
-.PP
-Determine whether file is grib or not\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/grib_utils.F90 \- Determine whether file is grib or not\&.  
 
 .SH SYNOPSIS
 .br
@@ -15,31 +13,31 @@ Determine whether file is grib or not\&.
 .ti -1c
 .RI "subroutine \fBgdt_to_gds\fP (igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)"
 .br
-.RI "\fIConvert from the grib2 grid description template array used by the ncep grib2 library, to the grib1 grid description section array used by ncep ipolates library\&. \fP"
+.RI "Convert from the grib2 grid description template array used by the ncep grib2 library, to the grib1 grid description section array used by ncep ipolates library\&. "
 .ti -1c
 .RI "subroutine \fBgrib2_check\fP (kgds, igdstmplen)"
 .br
-.RI "\fIDetermine length of grib2 gds template array, which is a function of the map projection\&. \fP"
+.RI "Determine length of grib2 gds template array, which is a function of the map projection\&. "
 .ti -1c
 .RI "subroutine \fBgrib2_free\fP (gfld)"
 .br
-.RI "\fIDeallocate the grib2 gribfield pointers\&. \fP"
+.RI "Deallocate the grib2 gribfield pointers\&. "
 .ti -1c
 .RI "subroutine \fBgrib2_null\fP (gfld)"
 .br
-.RI "\fINullify the grib2 gribfield pointers\&. \fP"
+.RI "Nullify the grib2 gribfield pointers\&. "
 .ti -1c
 .RI "subroutine \fBgrib_check\fP (file_name, isgrib)"
 .br
-.RI "\fIDetermine whether file is grib or not\&. \fP"
+.RI "Determine whether file is grib or not\&. "
 .ti -1c
 .RI "subroutine \fBinit_grib2\fP (century, year, month, day, hour, kgds, lat11, latlast, lon11, lonlast, listsec0, listsec1, igds, ipdstmpl, ipdsnum, igdstmpl, igdstmplen, idefnum, ideflist, ngrdpts)"
 .br
-.RI "\fIInitialize grib2 arrays required by the ncep g2 library according to grib1 gds information\&. \fP"
+.RI "Initialize grib2 arrays required by the ncep g2 library according to grib1 gds information\&. "
 .ti -1c
 .RI "subroutine \fBskgb2\fP (LUGB, ISEEK, MSEEK, LSKIP, LGRIB, I1)"
 .br
-.RI "\fIDetermine whether file is grib or not\&. \fP"
+.RI "Determine whether file is grib or not\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -62,7 +60,7 @@ gayno org: w/np2
 Definition in file \fBgrib_utils\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine gdt_to_gds (integer, intent(in)igdtnum, integer, dimension(igdtlen), intent(in)igdstmpl, integer, intent(in)igdtlen, integer, dimension(200), intent(out)kgds, integer, intent(out)ni, integer, intent(out)nj, real, intent(out)res)"
+.SS "subroutine gdt_to_gds (integer, intent(in) igdtnum, integer, dimension(igdtlen), intent(in) igdstmpl, integer, intent(in) igdtlen, integer, dimension(200), intent(out) kgds, integer, intent(out) ni, integer, intent(out) nj, real, intent(out) res)"
 
 .PP
 Convert from the grib2 grid description template array used by the ncep grib2 library, to the grib1 grid description section array used by ncep ipolates library\&. 
@@ -98,17 +96,19 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 139 of file grib_utils\&.F90\&.
+Definition at line 140 of file grib_utils\&.F90\&.
 .PP
 Referenced by model_grid::read_mdl_grid_info(), snowdat::readafwa(), snowdat::readautosnow(), and snowdat::readnesdis()\&.
-.SS "subroutine grib2_check (integer, dimension(200), intent(in)kgds, integer, intent(out)igdstmplen)"
+.SS "subroutine grib2_check (integer, dimension(200), intent(in) kgds, integer, intent(out) igdstmplen)"
 
 .PP
 Determine length of grib2 gds template array, which is a function of the map projection\&. 
 .PP
 \fBNote:\fP
 .RS 4
-call this routine before init_grib2\&.
+call this routine before init_grib2\&. 
+.br
+ 
 .RE
 .PP
 \fBParameters:\fP
@@ -132,10 +132,10 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 350 of file grib_utils\&.F90\&.
+Definition at line 351 of file grib_utils\&.F90\&.
 .PP
 Referenced by snow2mdl::write_grib2()\&.
-.SS "subroutine grib2_free (type(gribfield), intent(inout)gfld)"
+.SS "subroutine grib2_free (type(gribfield), intent(inout) gfld)"
 
 .PP
 Deallocate the grib2 gribfield pointers\&. 
@@ -157,10 +157,10 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 635 of file grib_utils\&.F90\&.
+Definition at line 636 of file grib_utils\&.F90\&.
 .PP
 Referenced by snowdat::nh_climo_check(), model_grid::read_mdl_grid_info(), snowdat::readautosnow(), and snowdat::readnesdis()\&.
-.SS "subroutine grib2_null (type(gribfield), intent(inout)gfld)"
+.SS "subroutine grib2_null (type(gribfield), intent(inout) gfld)"
 
 .PP
 Nullify the grib2 gribfield pointers\&. 
@@ -182,10 +182,10 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 610 of file grib_utils\&.F90\&.
+Definition at line 611 of file grib_utils\&.F90\&.
 .PP
 Referenced by snowdat::nh_climo_check(), model_grid::read_mdl_grid_info(), snowdat::readafwa(), snowdat::readautosnow(), and snowdat::readnesdis()\&.
-.SS "subroutine grib_check (character*(*), intent(in)file_name, integer, intent(out)isgrib)"
+.SS "subroutine grib_check (character*(*), intent(in) file_name, integer, intent(out) isgrib)"
 
 .PP
 Determine whether file is grib or not\&. program history log:
@@ -215,12 +215,12 @@ bad file open, fort\&.11
 .PP
 
 .PP
-Definition at line 23 of file grib_utils\&.F90\&.
+Definition at line 24 of file grib_utils\&.F90\&.
 .PP
 References skgb2()\&.
 .PP
 Referenced by model_grid::read_mdl_grid_info(), snowdat::readafwa(), and snowdat::readnesdis()\&.
-.SS "subroutine init_grib2 (integer, intent(in)century, integer, intent(in)year, integer, intent(in)month, integer, intent(in)day, integer, intent(in)hour, integer, dimension(200), intent(in)kgds, real, intent(in)lat11, real, intent(in)latlast, real, intent(in)lon11, real, intent(in)lonlast, integer, dimension(2), intent(out)listsec0, integer, dimension(13), intent(out)listsec1, integer, dimension(5), intent(out)igds, integer, dimension(15), intent(out)ipdstmpl, integer, intent(out)ipdsnum, integer, dimension(igdstmplen), intent(out)igdstmpl, integer, intent(in)igdstmplen, integer, intent(out)idefnum, integer, intent(out)ideflist, integer, intent(out)ngrdpts)"
+.SS "subroutine init_grib2 (integer, intent(in) century, integer, intent(in) year, integer, intent(in) month, integer, intent(in) day, integer, intent(in) hour, integer, dimension(200), intent(in) kgds, real, intent(in) lat11, real, intent(in) latlast, real, intent(in) lon11, real, intent(in) lonlast, integer, dimension(2), intent(out) listsec0, integer, dimension(13), intent(out) listsec1, integer, dimension(5), intent(out) igds, integer, dimension(15), intent(out) ipdstmpl, integer, intent(out) ipdsnum, integer, dimension(igdstmplen), intent(out) igdstmpl, integer, intent(in) igdstmplen, integer, intent(out) idefnum, integer, intent(out) ideflist, integer, intent(out) ngrdpts)"
 
 .PP
 Initialize grib2 arrays required by the ncep g2 library according to grib1 gds information\&. The grib1 gds is held in the kgds array, which is used by the ncep ipolates and w3nco (grib 1) libraries\&.
@@ -282,10 +282,10 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 397 of file grib_utils\&.F90\&.
+Definition at line 401 of file grib_utils\&.F90\&.
 .PP
 Referenced by snow2mdl::write_grib2()\&.
-.SS "subroutine skgb2 (integer, intent(in)LUGB, integer, intent(in)ISEEK, integer, intent(in)MSEEK, integer, intent(out)LSKIP, integer, intent(out)LGRIB, integer, intent(out)I1)"
+.SS "subroutine skgb2 (integer, intent(in) LUGB, integer, intent(in) ISEEK, integer, intent(in) MSEEK, integer, intent(out) LSKIP, integer, intent(out) LGRIB, integer, intent(out) I1)"
 
 .PP
 Determine whether file is grib or not\&. Based on w3nco library routine skgb\&.
@@ -322,7 +322,7 @@ George Gayno org: w/np2
 .PP
 
 .PP
-Definition at line 75 of file grib_utils\&.F90\&.
+Definition at line 76 of file grib_utils\&.F90\&.
 .PP
 Referenced by grib_check()\&.
 .SH "Author"

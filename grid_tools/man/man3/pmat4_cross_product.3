@@ -1,8 +1,8 @@
-.TH "pmat4::cross_product" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::cross_product" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat4::cross_product \- 
+pmat4::cross_product
 .SH SYNOPSIS
 .br
 .PP
@@ -12,26 +12,26 @@ pmat4::cross_product \-
 .ti -1c
 .RI "real(dp) function, dimension(3) \fBcross_product_d\fP (a, b)"
 .br
-.RI "\fIReturn the cross product of two double precision real 3-vectors\&. \fP"
+.RI "Return the cross product of two double precision real 3-vectors\&. "
 .ti -1c
 .RI "real(sp) function, dimension(3) \fBcross_product_s\fP (a, b)"
 .br
-.RI "\fIReturn the cross product of two single precision real 3-vectors\&. \fP"
+.RI "Return the cross product of two single precision real 3-vectors\&. "
 .ti -1c
 .RI "real(dp) function, dimension(4) \fBtriple_cross_product_d\fP (u, v, w)"
 .br
-.RI "\fIReturn the triple_cross_product for 4-vectors\&. \fP"
+.RI "Return the triple_cross_product for 4-vectors\&. "
 .ti -1c
 .RI "real(sp) function, dimension(4) \fBtriple_cross_product_s\fP (u, v, w)"
 .br
-.RI "\fIDeliver the triple-cross-product, x, of the three 4-vectors, u, v, w, with the sign convention that ordered, {u,v,w,x} form a right-handed quartet in the generic case (determinant >= 0)\&. \fP"
+.RI "Deliver the triple-cross-product, x, of the three 4-vectors, u, v, w, with the sign convention that ordered, {u,v,w,x} form a right-handed quartet in the generic case (determinant >= 0)\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 64 of file pmat4\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "real(dp) function, dimension(3) pmat4::cross_product::cross_product_d (real(dp), dimension(3), intent(in)a, real(dp), dimension(3), intent(in)b)\fC [private]\fP"
+.SS "real(dp) function, dimension(3) pmat4::cross_product::cross_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b)\fC [private]\fP"
 
 .PP
 Return the cross product of two double precision real 3-vectors\&. 
@@ -55,8 +55,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 214 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(3) pmat4::cross_product::cross_product_s (real(sp), dimension(3), intent(in)a, real(sp), dimension(3), intent(in)b)\fC [private]\fP"
+Definition at line 215 of file pmat4\&.f90\&.
+.SS "real(sp) function, dimension(3) pmat4::cross_product::cross_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b)\fC [private]\fP"
 
 .PP
 Return the cross product of two single precision real 3-vectors\&. 
@@ -80,8 +80,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 201 of file pmat4\&.f90\&.
-.SS "real(dp) function, dimension(4) pmat4::cross_product::triple_cross_product_d (real(dp), dimension(4), intent(in)u, real(dp), dimension(4), intent(in)v, real(dp), dimension(4), intent(in)w)\fC [private]\fP"
+Definition at line 202 of file pmat4\&.f90\&.
+.SS "real(dp) function, dimension(4) pmat4::cross_product::triple_cross_product_d (real(dp), dimension(4), intent(in) u, real(dp), dimension(4), intent(in) v, real(dp), dimension(4), intent(in) w)\fC [private]\fP"
 
 .PP
 Return the triple_cross_product for 4-vectors\&. 
@@ -107,8 +107,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 252 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(4) pmat4::cross_product::triple_cross_product_s (real(sp), dimension(4), intent(in)u, real(sp), dimension(4), intent(in)v, real(sp), dimension(4), intent(in)w)\fC [private]\fP"
+Definition at line 253 of file pmat4\&.f90\&.
+.SS "real(sp) function, dimension(4) pmat4::cross_product::triple_cross_product_s (real(sp), dimension(4), intent(in) u, real(sp), dimension(4), intent(in) v, real(sp), dimension(4), intent(in) w)\fC [private]\fP"
 
 .PP
 Deliver the triple-cross-product, x, of the three 4-vectors, u, v, w, with the sign convention that ordered, {u,v,w,x} form a right-handed quartet in the generic case (determinant >= 0)\&. 
@@ -134,7 +134,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 231 of file pmat4\&.f90\&.
+Definition at line 232 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

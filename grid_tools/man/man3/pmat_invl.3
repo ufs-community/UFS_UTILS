@@ -1,8 +1,8 @@
-.TH "pmat::invl" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::invl" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat::invl \- 
+pmat::invl
 .SH SYNOPSIS
 .br
 .PP
@@ -12,26 +12,26 @@ pmat::invl \-
 .ti -1c
 .RI "subroutine \fBdinvl\fP (a)"
 .br
-.RI "\fIInvert lower triangular matrix in place\&. \fP"
+.RI "Invert lower triangular matrix in place\&. "
 .ti -1c
 .RI "subroutine \fBdlinlv\fP (a, u)"
 .br
-.RI "\fISolve linear system involving lower triangular system matrix\&. \fP"
+.RI "Solve linear system involving lower triangular system matrix\&. "
 .ti -1c
 .RI "subroutine \fBsinvl\fP (a)"
 .br
-.RI "\fIInvert lower triangular matrix in place\&. \fP"
+.RI "Invert lower triangular matrix in place\&. "
 .ti -1c
 .RI "subroutine \fBslinlv\fP (a, u)"
 .br
-.RI "\fISolve linear system involving lower triangular system matrix\&. \fP"
+.RI "Solve linear system involving lower triangular system matrix\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 39 of file pmat\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat::invl::dinvl (real(dp), dimension(:,:), intent(inout)a)\fC [private]\fP"
+.SS "subroutine pmat::invl::dinvl (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
 
 .PP
 Invert lower triangular matrix in place\&. Double precision\&.
@@ -48,10 +48,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1153 of file pmat\&.f90\&.
-.PP
-Referenced by pmat::dinvu()\&.
-.SS "subroutine pmat::invl::dlinlv (real(dp), dimension(:,:), intent(in)a, real(dp), dimension(:), intent(inout)u)\fC [private]\fP"
+Definition at line 1154 of file pmat\&.f90\&.
+.SS "subroutine pmat::invl::dlinlv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fC [private]\fP"
 
 .PP
 Solve linear system involving lower triangular system matrix\&. Double precision version\&.
@@ -70,8 +68,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1188 of file pmat\&.f90\&.
-.SS "subroutine pmat::invl::sinvl (real(sp), dimension(:,:), intent(inout)a)\fC [private]\fP"
+Definition at line 1189 of file pmat\&.f90\&.
+.SS "subroutine pmat::invl::sinvl (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
 
 .PP
 Invert lower triangular matrix in place\&. Single precision\&.
@@ -88,10 +86,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1135 of file pmat\&.f90\&.
-.PP
-Referenced by pmat::sinvu()\&.
-.SS "subroutine pmat::invl::slinlv (real(sp), dimension(:,:), intent(in)a, real(sp), dimension(:), intent(inout)u)\fC [private]\fP"
+Definition at line 1136 of file pmat\&.f90\&.
+.SS "subroutine pmat::invl::slinlv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)\fC [private]\fP"
 
 .PP
 Solve linear system involving lower triangular system matrix\&. Single precision version\&.
@@ -110,7 +106,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1173 of file pmat\&.f90\&.
+Definition at line 1174 of file pmat\&.f90\&.
 
 .SH "Author"
 .PP 

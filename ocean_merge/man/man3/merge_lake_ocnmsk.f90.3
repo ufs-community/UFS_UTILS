@@ -1,9 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocean_merge.fd/merge_lake_ocnmsk.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "ocean_merge" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocean_merge.fd/merge_lake_ocnmsk.f90" 3 "Thu Jun 20 2024" "Version 1.13.0" "ocean_merge" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocean_merge.fd/merge_lake_ocnmsk.f90 \- 
-Determines the water mask by merging the lake mask with the mapped ocean mask from MOM6\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocean_merge.fd/merge_lake_ocnmsk.f90 \- Determines the water mask by merging the lake mask with the mapped ocean mask from MOM6\&.  
 
 .SH SYNOPSIS
 .br
@@ -14,15 +13,15 @@ Determines the water mask by merging the lake mask with the mapped ocean mask fr
 .ti -1c
 .RI "subroutine \fBhandle_err\fP (ret)"
 .br
-.RI "\fIHandle netCDF errors\&. \fP"
+.RI "Handle netCDF errors\&. "
 .ti -1c
 .RI "program \fBmerge_lake_ocnmsk\fP"
 .br
-.RI "\fIDetermine the water mask by merging the lake mask with the mapped ocean mask from MOM6, both are on the FV3 grid\&. \fP"
+.RI "Determine the water mask by merging the lake mask with the mapped ocean mask from MOM6, both are on the FV3 grid\&. "
 .ti -1c
 .RI "subroutine \fBread_nml\fP (ocean_mask_dir, lake_mask_dir, atmres, ocnres, out_dir, binary_lake)"
 .br
-.RI "\fIRead program namelist\&. \fP"
+.RI "Read program namelist\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -44,7 +43,7 @@ Sanath Kumar
 Definition in file \fBmerge_lake_ocnmsk\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine handle_err (integer, intent(in)ret)"
+.SS "subroutine handle_err (integer, intent(in) ret)"
 
 .PP
 Handle netCDF errors\&. 
@@ -61,7 +60,7 @@ Shan Sun
 .PP
 
 .PP
-Definition at line 146 of file merge_lake_ocnmsk\&.f90\&.
+Definition at line 147 of file merge_lake_ocnmsk\&.f90\&.
 .PP
 Referenced by merge_lake_ocnmsk(), and read_nml()\&.
 .SS "program merge_lake_ocnmsk ()"
@@ -88,7 +87,7 @@ Sanath Kumar
 Definition at line 17 of file merge_lake_ocnmsk\&.f90\&.
 .PP
 References handle_err(), and read_nml()\&.
-.SS "subroutine read_nml (character(len=120), intent(out)ocean_mask_dir, character(len=120), intent(out)lake_mask_dir, character(len=10), intent(out)atmres, character(len=10), intent(out)ocnres, character(len=120), intent(out)out_dir, integer, intent(out)binary_lake)"
+.SS "subroutine read_nml (character(len=120), intent(out) ocean_mask_dir, character(len=120), intent(out) lake_mask_dir, character(len=10), intent(out) atmres, character(len=10), intent(out) ocnres, character(len=120), intent(out) out_dir, integer, intent(out) binary_lake)"
 
 .PP
 Read program namelist\&. 
@@ -117,7 +116,7 @@ Sanath Kumar
 .PP
 
 .PP
-Definition at line 166 of file merge_lake_ocnmsk\&.f90\&.
+Definition at line 167 of file merge_lake_ocnmsk\&.f90\&.
 .PP
 References handle_err()\&.
 .PP

@@ -1,21 +1,55 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/snow2mdl.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/snow2mdl.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/snow2mdl.F90 \- 
-.PP
-Interpolate snow data to model grid and grib the result\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/snow2mdl.F90 \- Interpolate snow data to model grid and grib the result\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fBsnow2mdl\fP"
 .br
-.RI "\fIInterpolate snow data to model grid and grib the result\&. \fP"
+.RI "Interpolate snow data to model grid and grib the result\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBsnow2mdl::interp\fP"
+.br
+.RI "Interpolate snow data to model grid\&. "
+.ti -1c
+.RI "subroutine \fBsnow2mdl::intlon\fP (iord, imon, imsk, m1, m2, k1, f1, f2)"
+.br
+.RI "Convert data from the thinned (or reduced) to the full grid along a single row\&. "
+.ti -1c
+.RI "subroutine \fBsnow2mdl::uninterpred\fP (iord, kmsk, fi, f, lonl, latd, len, lonsperlat)"
+.br
+.RI "Fills out full grid using thinned grid data\&. "
+.ti -1c
+.RI "subroutine \fBsnow2mdl::write_grib1\fP"
+.br
+.RI "Write grib1 snow cover and depth on the model grid\&. "
+.ti -1c
+.RI "subroutine \fBsnow2mdl::write_grib2\fP"
+.br
+.RI "Write grib2 snow cover and depth on the model grid\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBsnow2mdl::snow_cvr_mdl\fP"
+.br
+.RI "snow cover on model grid in percent "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBsnow2mdl::snow_dep_mdl\fP"
+.br
+.RI "snow depth on model grid in meters "
 .in -1c
 .SH "Detailed Description"
 .PP 

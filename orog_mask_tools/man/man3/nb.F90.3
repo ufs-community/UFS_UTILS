@@ -1,10 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/inland.fd/nb.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/inland.fd/nb.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/inland.fd/nb.F90 \- 
-.PP
-This module contains the subroutines that find the adjacent neighbors of a given cell, in a cubed sphere grid\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/inland.fd/nb.F90 \- This module contains the subroutines that find the adjacent neighbors of a given cell, in a cubed sphere grid\&.  
 
 .SH SYNOPSIS
 .br
@@ -13,16 +11,61 @@ This module contains the subroutines that find the adjacent neighbors of a given
 
 .in +1c
 .ti -1c
-.RI "module \fBcs_nb\fP"
-.br
-.ti -1c
 .RI "type \fBcs_nb::nb_gp_idx\fP"
 .br
-.RI "\fINeighboring cell descriptor\&. \fP"
+.RI "Neighboring cell descriptor\&. "
 .ti -1c
 .RI "type \fBcs_nb::nb_tile_idx\fP"
 .br
-.RI "\fINeighboring tile descriptor\&. \fP"
+.RI "Neighboring tile descriptor\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBcs_nb::bndry\fP (i, j)"
+.br
+.RI "Get boundary type from indices for global grid\&. "
+.ti -1c
+.RI "integer function \fBcs_nb::bndry_reg\fP (i, j)"
+.br
+.RI "Get boundary type from indices for regional grid\&. "
+.ti -1c
+.RI "subroutine \fBcs_nb::idx_init\fP (cres_in)"
+.br
+.RI "Initialize inter-panel neighbor index for global grid\&. "
+.ti -1c
+.RI "subroutine \fBcs_nb::idx_init_reg\fP (xres_in, yres_in)"
+.br
+.RI "Initialize resolution module variables for regional grid\&. "
+.ti -1c
+.RI "subroutine \fBcs_nb::neighbors\fP (tile, i, j, nb)"
+.br
+.RI "Get neighbors of cell 'c' at (tile, i, j) for global grid\&. "
+.ti -1c
+.RI "subroutine \fBcs_nb::neighbors_reg\fP (i, j, nb)"
+.br
+.RI "Get neighbors of cell 'c' at (tile, i, j) for regional grid\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer \fBcs_nb::cres\fP"
+.br
+.RI "Cubed sphere resolution\&. "
+.ti -1c
+.RI "type(nb_tile_idx), dimension(4, 6) \fBcs_nb::nb_tile\fP"
+.br
+.RI "Descriptor for each edge of each tile on the cubed sphere\&. "
+.ti -1c
+.RI "integer \fBcs_nb::xres\fP"
+.br
+.RI "x resolution of regional grid "
+.ti -1c
+.RI "integer \fBcs_nb::yres\fP"
+.br
+.RI "y resolution of regional grid "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -43,44 +86,199 @@ July 1, 2020
 
 .PP
 Definition in file \fBnb\&.F90\fP\&.
-.SH "Data Type Documentation"
+.SH "Function/Subroutine Documentation"
 .PP 
-.SH "type cs_nb::nb_gp_idx"
-.PP 
-Neighboring cell descriptor\&. 
-
+.SS "integer function cs_nb::bndry (integer i, integer j)"
 
 .PP
-Definition at line 17 of file nb\&.F90\&.
+Get boundary type from indices for global grid\&. 
 .PP
-\fBData Fields:\fP
+\fBParameters:\fP
 .RS 4
-integer \fIgp_type\fP Cell boundary type from bndry function\&. 
+\fIi\fP cell index 
 .br
-.PP
-integer, dimension(3, 8) \fIijt\fP Neighboring cell indices\&. 
-.br
-.PP
+\fIj\fP cell index 
 .RE
 .PP
-.SH "type cs_nb::nb_tile_idx"
-.PP 
-Neighboring tile descriptor\&. 
-
-
-.PP
-Definition at line 11 of file nb\&.F90\&.
-.PP
-\fBData Fields:\fP
+\fBReturns:\fP
 .RS 4
-character(1) \fInb_tile_bndry\fP Neighbor tile boundary (l)eft, (r)ight, (t)op, (b)ottom\&. 
-.br
-.PP
-integer \fInb_tile_num\fP Neighbor tile number (1\&.\&.6) 
-.br
-.PP
+bndry cell boundary type
 .RE
 .PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 107 of file nb\&.F90\&.
+.SS "integer function cs_nb::bndry_reg (integer i, integer j)"
+
+.PP
+Get boundary type from indices for regional grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIi\fP cell index 
+.br
+\fIj\fP cell index 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+cell boundary type
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 141 of file nb\&.F90\&.
+.SS "subroutine cs_nb::idx_init (integer cres_in)"
+
+.PP
+Initialize inter-panel neighbor index for global grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcres_in\fP cubed sphere resolution (48, 96\&.\&.\&.)
+.RE
+.PP
+.PP
+.nf
+   _______1_______
+  |               |       1-upper, 2-bottom, 3-left, 4-right 
+  |               |
+  |               |
+ 3|               |4
+  |               |
+  |               |
+  |_______________|
+          2
+      Figure 1. Boundary numbers.fi
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 49 of file nb\&.F90\&.
+.SS "subroutine cs_nb::idx_init_reg (integer, intent(in) xres_in, integer, intent(in) yres_in)"
+
+.PP
+Initialize resolution module variables for regional grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIxres_in\fP x resolution 
+.br
+\fIyres_in\fP y resolution
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file nb\&.F90\&.
+.SS "subroutine cs_nb::neighbors (integer tile, integer i, integer j, type(\fBnb_gp_idx\fP) nb)"
+
+.PP
+Get neighbors of cell 'c' at (tile, i, j) for global grid\&. 
+.PP
+.nf
+     ______________
+    |    |    |    |              ________
+    | 5  | 1  | 6  |             /\ 1 \ 6 
+    |____|____|____|            /  \___\___
+    |    |    |    |           /\2 / c / 3 /
+    | 2  | c  | 3  |          /  \/___/___/
+    |____|____|____|          \7 / 4 / 8 /
+    |    |    |    |           \/___/___/
+    | 7  | 4  | 8  |       
+    |____|____|____|    
+  
+ Figure 2.  Eight neighbors of cell 'c' and special cases at upper left
+ cornner of the tile
+.fi
+.PP
+.PP
+\fBParameters:\fP
+.RS 4
+\fItile\fP tile face 
+.br
+\fIi\fP cell index 
+.br
+\fIj\fP cell index 
+.br
+\fInb\fP neighbors
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 193 of file nb\&.F90\&.
+.SS "subroutine cs_nb::neighbors_reg (integer i, integer j, type(\fBnb_gp_idx\fP) nb)"
+
+.PP
+Get neighbors of cell 'c' at (tile, i, j) for regional grid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIi\fP cell index 
+.br
+\fIj\fP cell index 
+.br
+\fInb\fP neighbors
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Ning Wang 
+.RE
+.PP
+
+.PP
+Definition at line 394 of file nb\&.F90\&.
+.SH "Variable Documentation"
+.PP 
+.SS "integer cs_nb::cres"
+
+.PP
+Cubed sphere resolution\&. 
+.PP
+Definition at line 24 of file nb\&.F90\&.
+.SS "type(nb_tile_idx), dimension(4,6) cs_nb::nb_tile"
+
+.PP
+Descriptor for each edge of each tile on the cubed sphere\&. 
+.PP
+Definition at line 22 of file nb\&.F90\&.
+.SS "integer cs_nb::xres"
+
+.PP
+x resolution of regional grid 
+.PP
+Definition at line 25 of file nb\&.F90\&.
+.SS "integer cs_nb::yres"
+
+.PP
+y resolution of regional grid 
+.PP
+Definition at line 26 of file nb\&.F90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for orog_mask_tools from the source code\&.

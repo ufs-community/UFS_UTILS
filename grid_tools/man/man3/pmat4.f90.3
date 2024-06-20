@@ -1,10 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90 \- 
-.PP
-Euclidean geometry, geometric (stereographic) projections, related transformations (Mobius)\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90 \- Euclidean geometry, geometric (stereographic) projections, related transformations (Mobius)\&.  
 
 .SH SYNOPSIS
 .br
@@ -79,10 +77,6 @@ Euclidean geometry, geometric (stereographic) projections, related transformatio
 .RI "interface \fBpmat4::outer_product\fP"
 .br
 .ti -1c
-.RI "module \fBpmat4\fP"
-.br
-.RI "\fIModule for handy vector and matrix operations in Euclidean geometry\&. \fP"
-.ti -1c
 .RI "interface \fBpmat4::qtoax\fP"
 .br
 .ti -1c
@@ -128,17 +122,341 @@ Euclidean geometry, geometric (stereographic) projections, related transformatio
 .RI "interface \fBpmat4::ztoc\fP"
 .br
 .in -1c
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBpmat4\fP"
+.br
+.RI "Module for handy vector and matrix operations in Euclidean geometry\&. "
+.in -1c
 .SS "Functions/Subroutines"
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBcyclic\fP (u1, u2, u3, d1, d2, d3)"
+.RI "real(dp) function \fBpmat4::absv_d\fP (a)"
 .br
-.RI "\fICyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. \fP"
+.RI "Return the absolute magnitude of a double precision real vector\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::absv_s\fP (a)"
+.br
+.RI "Return the absolute magnitude of a single precision real vector\&. "
+.ti -1c
+.RI "real(dp) function, dimension(3) \fBpmat4::axial33_d\fP (b)"
+.br
+.RI "Return the 3-vector corresponding to the given antisymmetric 'axial vector' matrix, assuming a right-handed correspondence\&. "
+.ti -1c
+.RI "real(sp) function, dimension(3) \fBpmat4::axial33_s\fP (b)"
+.br
+.RI "Return the 3-vector corresponding to the given antisymmetric 'axial vector' matrix, assuming a right-handed correspondence\&. "
+.ti -1c
+.RI "real(dp) function, dimension(3, 3) \fBpmat4::axial3_d\fP (a)"
+.br
+.RI "Return the axial 'vector', as an antisymmetric matrix, corresponding to the given 3-vector assuming a right-handed correspondence\&. "
+.ti -1c
+.RI "real(sp) function, dimension(3, 3) \fBpmat4::axial3_s\fP (a)"
+.br
+.RI "Return the axial 'vector', as an antisymmetric matrix, corresponding to the given 3-vector assuming a right-handed correspondence\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::axtoq\fP (v, q)"
+.br
+.RI "Go from an axial 3-vector to its equivalent quaternion\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::axtorot\fP (ax3, orth33)"
+.br
+.RI "Construct the 3*3 orthogonal matrix, orth33, that corresponds to the proper rotation encoded by the 3-vector, ax3\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::cmobius\fP (aa, bb, cc, dd, vz, vw)"
+.br
+.RI "Perform a complex Mobius transformation from cartesian vz to cartesian vw where the transformation coefficients are the standard aa,bb,cc,dd\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::corral\fP (m, n, mask, a, d, aa, e)"
+.br
+.RI "Find positive diagonals D and E and a Lagrange multiplier F that minimize the row-sum +column-sum of masked terms, (D_i +log(|A_ij|) +E_j)^2 subject to the single constraint, sum_j E_j =0, where the mask permits only nonnegligible A_ij to participate in the quadratic quantities\&. "
+.ti -1c
+.RI "real(dp) function, dimension(3) \fBpmat4::cross_product_d\fP (a, b)"
+.br
+.RI "Return the cross product of two double precision real 3-vectors\&. "
+.ti -1c
+.RI "real(sp) function, dimension(3) \fBpmat4::cross_product_s\fP (a, b)"
+.br
+.RI "Return the cross product of two single precision real 3-vectors\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::ctoz\fP (v, z, infz)"
+.br
+.RI "Utility codes for various Mobius transformations\&. "
 .ti -1c
 .RI "subroutine \fBcyclic\fP (u1, u2, u3, d1, d2, d3)"
 .br
-.RI "\fICyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. \fP"
+.RI "Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. "
+.ti -1c
+.RI "subroutine \fBcyclic\fP (u1, u2, u3, d1, d2, d3)"
+.br
+.RI "Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. "
+.ti -1c
+.RI "real(dp) function \fBpmat4::det_d\fP (a)"
+.br
+.RI "Return the determinant of a double precision matrix\&. "
+.ti -1c
+.RI "integer(spi) function \fBpmat4::det_i\fP (a)"
+.br
+.RI "Return the determinant of a single precision integer matrix\&. "
+.ti -1c
+.RI "integer(dpi) function \fBpmat4::det_id\fP (a)"
+.br
+.RI "Return the determinant of a double precision integer matrix\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::det_s\fP (a)"
+.br
+.RI "Return the determinant of a single precision matrix\&. "
+.ti -1c
+.RI "real(dp) function, dimension(size(a), size(a)) \fBpmat4::diagn_d\fP (a)"
+.br
+.RI "Return the diagonal matrix whose elements are the given vector\&. "
+.ti -1c
+.RI "integer(spi) function, dimension(size(a), size(a)) \fBpmat4::diagn_i\fP (a)"
+.br
+.RI "Return the diagonal matrix whose elements are the given vector\&. "
+.ti -1c
+.RI "real(sp) function, dimension(size(a), size(a)) \fBpmat4::diagn_s\fP (a)"
+.br
+.RI "Return the diagonal matrix whose elements are the given vector\&. "
+.ti -1c
+.RI "real(dp) function, dimension(size(b, 1)) \fBpmat4::diagnn_d\fP (b)"
+.br
+.RI "Return the vector whose elements are the diagonal ones of a given matrix\&. "
+.ti -1c
+.RI "integer(spi) function, dimension(size(b, 1)) \fBpmat4::diagnn_i\fP (b)"
+.br
+.RI "Return the vector whose elements are the diagonal ones of a given matrix\&. "
+.ti -1c
+.RI "real(sp) function, dimension(size(b, 1)) \fBpmat4::diagnn_s\fP (b)"
+.br
+.RI "Return the vector whose elements are the diagonal ones of a given matrix\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::dlltoxy_d\fP (rlat, drlat, drlon, x2)"
+.br
+.RI "From a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::dlltoxy_s\fP (rlat, drlat, drlon, x2)"
+.br
+.RI "From a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. "
+.ti -1c
+.RI "real(dp) function \fBpmat4::dqarea_d\fP (rlat, drlata, drlona, drlatb, drlonb, drlatc, drlonc)"
+.br
+.RI "Compute the area of the spherical quadrilateral with a vertex at latitude rlat, and three other vertices at A, B, and C in turn, whose incremented latitudes and longitudes are drlata,drlona (for A), drlatb,drlonb (for B), and drlatc,drlonc (for C)\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::dqarea_s\fP (rlat, drlata, drlona, drlatb, drlonb, drlatc, drlonc)"
+.br
+.RI "Compute the area of the spherical quadrilateral with a vertex at latitude rlat, and three other vertices at A, B, and C in turn, whose incremented latitudes and longitudes are drlata,drlona (for A), drlatb,drlonb (for B), and drlatc,drlonc (for C)\&. "
+.ti -1c
+.RI "real(dp) function \fBpmat4::dtarea_d\fP (rlat, drlata, drlona, drlatb, drlonb)"
+.br
+.RI "Compute the area of the spherical triangle with a vertex at latitude rlat, and two other vertices, A and B, whose incremented latitudes and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B)\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::dtarea_s\fP (rlat, drlata, drlona, drlatb, drlonb)"
+.br
+.RI "Compute the area of the spherical triangle with a vertex at latitude rlat, and two other vertices, A and B, whose incremented latitudes and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B)\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::expmat\fP (n, a, b, detb)"
+.br
+.RI "Evaluate the exponential, B, of a matrix, A, of degree n\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::expmatd\fP (n, a, b, bd, detb, detbd)"
+.br
+.RI "Like expmat, but for the 1st derivatives also\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::expmatdd\fP (n, a, b, bd, bdd, detb, detbd, detbdd)"
+.br
+.RI "Like expmat, but for the 1st and 2nd derivatives also\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::gram_d\fP (as, b, nrank, det)"
+.br
+.RI "Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::gram_s\fP (as, b, nrank, det)"
+.br
+.RI "Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::graml_d\fP (as, b, nrank, detsign, ldet)"
+.br
+.RI "A version of gram_d where the determinant information is returned in logarithmic form (to avoid overflows for large matrices)\&. "
+.ti -1c
+.RI "real(dp) function \fBpmat4::hav_d\fP (t)"
+.br
+.RI "Haversine function in double precision\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::hav_s\fP (t)"
+.br
+.RI "Haversine function in single precision\&. "
+.ti -1c
+.RI "real(dp) function \fBpmat4::huarea_d\fP (sa, sb)"
+.br
+.RI "Spherical area of right-angle triangle whose orthogonal sides have orthographic projection dimensions, sa and sb, sphere of unit radius\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::huarea_s\fP (sa, sb)"
+.br
+.RI "Spherical area of right-angle triangle whose orthogonal sides have orthographic projection dimensions, sa and sb, sphere of unit radius\&. "
+.ti -1c
+.RI "integer(spi) function, dimension(3, 3) \fBpmat4::identity3_i\fP ()"
+.br
+.RI "Return the 3-dimensional integer identity matrix\&. "
+.ti -1c
+.RI "integer(spi) function, dimension(n, n) \fBpmat4::identity_i\fP (n)"
+.br
+.RI "Return the integer identity matrix for a given dimensionality\&. "
+.ti -1c
+.RI "real(dp) function, dimension(0:3), public \fBpmat4::mulqq\fP (a, b)"
+.br
+.RI "Multiply quaternions, a*b, assuming operation performed from right to left\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::normalize_d\fP (v)"
+.br
+.RI "Normalize the given double precision real vector\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::normalize_s\fP (v)"
+.br
+.RI "Normalize the given single precision real vector\&. "
+.ti -1c
+.RI "real(dp) function, dimension(size(a)) \fBpmat4::normalized_d\fP (a)"
+.br
+.RI "Return the normalized version of a double precision real vector\&. "
+.ti -1c
+.RI "real(sp) function, dimension(size(a)) \fBpmat4::normalized_s\fP (a)"
+.br
+.RI "Return the normalized version of a single precision real vector\&. "
+.ti -1c
+.RI "real(dp) function, dimension(size(u)) \fBpmat4::orthogonalized_d\fP (u, a)"
+.br
+.RI "Return the part of vector a that is orthogonal to unit vector u\&. "
+.ti -1c
+.RI "real(sp) function, dimension(size(u)) \fBpmat4::orthogonalized_s\fP (u, a)"
+.br
+.RI "Return the part of vector a that is orthogonal to unit vector u\&. "
+.ti -1c
+.RI "real(dp) function, dimension(size(a), size(b)) \fBpmat4::outer_product_d\fP (a, b)"
+.br
+.RI "Return the outer product matrix of two double precision real vectors\&. "
+.ti -1c
+.RI "integer(spi) function, dimension(size(a), size(b)) \fBpmat4::outer_product_i\fP (a, b)"
+.br
+.RI "Return the outer product matrix of two integer vectors\&. "
+.ti -1c
+.RI "real(sp) function, dimension(size(a), size(b)) \fBpmat4::outer_product_s\fP (a, b)"
+.br
+.RI "Return the outer product matrix of two single precision real vectors\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::plaingram_d\fP (b, nrank)"
+.br
+.RI "A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::plaingram_s\fP (b, nrank)"
+.br
+.RI "A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::qtoax\fP (q, v)"
+.br
+.RI "Go from quaternion to axial 3-vector\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::qtorot\fP (q, rot)"
+.br
+.RI "Go from quaternion to rotation matrix representations\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::qtospin\fP (q, cspin)"
+.br
+.RI "Go from the unit quaternion to the complex spinor representation\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::rottoax\fP (orth33, ax3)"
+.br
+.RI "Assuming that given orth33 is a 3*3 proper rotation matrix, derive an axial 3-vector, ax3, such that orth33 is implied by ax3 when the latter is interpreted as encoding a rotation (as in subroutine axtorot)\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::rottoq\fP (rot, q)"
+.br
+.RI "Go from rotation matrix to a corresponding unit quaternion representation\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::rowgram\fP (m, n, a, ipiv, tt, b, rank)"
+.br
+.RI "Without changing (tall) rectangular input matrix a, perform pivoted gram- Schmidt operations to orthogonalize the rows, until rows that remain become negligible\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::rowops\fP (m, n, ipiv, tt, v, vv)"
+.br
+.RI "Apply the row-operations, implied by ipiv and tt returned by rowgram, to the single column vector, v, to produce the transformed vector vv\&. "
+.ti -1c
+.RI "real(dp) function \fBpmat4::sarea_d\fP (v1, v2, v3)"
+.br
+.RI "Compute the area of the spherical triangle, {v1,v2,v3}\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::sarea_s\fP (v1, v2, v3)"
+.br
+.RI "Compute the area of the spherical triangle, {v1,v2,v3}, measured in the right-handed sense, by dropping a perpendicular to u0 on the longest side so that the area becomes the sum of areas of the two simpler right-angled triangles\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::setem\fP (c, d, e, g, r)"
+.br
+.RI "Given the 4 components of a unit quaternion, return the associated 3*3 rotation matrix\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::setmobius\fP (xc0, xc1, xc2, aa, bb, cc, dd)"
+.br
+.RI "Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*cc=1, for a standard (north-)polar stereographic transformation that takes cartesian point, xc0 to the north pole, xc1 to (lat=0,lon=0), xc2 to the south pole (=complex infinity)\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::spintoq\fP (cspin, q)"
+.br
+.RI "Go from the complex spinor matrix to the unit quaternion representation\&. "
+.ti -1c
+.RI "real(dp) function \fBpmat4::trace_d\fP (b)"
+.br
+.RI "Return the trace of a given double precision real matrix\&. "
+.ti -1c
+.RI "integer(spi) function \fBpmat4::trace_i\fP (b)"
+.br
+.RI "Return the trace of a given integer matrix\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::trace_s\fP (b)"
+.br
+.RI "Return the trace of a given single precision real matrix\&. "
+.ti -1c
+.RI "real(dp) function, dimension(4) \fBpmat4::triple_cross_product_d\fP (u, v, w)"
+.br
+.RI "Return the triple_cross_product for 4-vectors\&. "
+.ti -1c
+.RI "real(sp) function, dimension(4) \fBpmat4::triple_cross_product_s\fP (u, v, w)"
+.br
+.RI "Deliver the triple-cross-product, x, of the three 4-vectors, u, v, w, with the sign convention that ordered, {u,v,w,x} form a right-handed quartet in the generic case (determinant >= 0)\&. "
+.ti -1c
+.RI "real(dp) function \fBpmat4::triple_product_d\fP (a, b, c)"
+.br
+.RI "Return the triple product of three double precision real 3-vectors\&. "
+.ti -1c
+.RI "real(sp) function \fBpmat4::triple_product_s\fP (a, b, c)"
+.br
+.RI "Return the triple product of three single precision real 3-vectors\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::zmobius\fP (aa, bb, cc, dd, z, infz, w, infw)"
+.br
+.RI "Perform a complex Mobius transformation from (z,infz) to (w,infw) where the transformation coefficients are the standard aa,bb,cc,dd\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::zmobiusi\fP (aa, bb, cc, dd, zz, infz, zw, infw)"
+.br
+.RI "Perform the inverse of the mobius transformation with coefficients, {aa,bb,cc,dd}\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::znfun\fP (n, z, zn, znd, zndd, znddd)"
+.br
+.RI "For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::zntay\fP (n, z, zn)"
+.br
+.RI "Evaluate, by Taylor-Maclaurin expansion, the nth-derivative of the function, C(z)=cosh(sqrt(2z)), or equiavlently, of C(z)=cos(sqrt(-2z))\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::zsetmobius\fP (z0, infz0, z1, infz1, z2, infz2, aa, bb, cc, dd)"
+.br
+.RI "Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*cc=1, that takes polar stereographic point, z0 to the north pole, z1 to (lat=0,lon=0), z2 to the south pole (=complex infinity)\&. "
+.ti -1c
+.RI "subroutine, public \fBpmat4::ztoc\fP (z, infz, v)"
+.br
+.RI "Given a complex z, return the equivalent cartesian unit 3-vector associated by the polar stereographic projection\&. "
+.ti -1c
+.RI "subroutine \fBpmat4::ztocd\fP (z, infz, v, vd)"
+.br
+.RI "The convention adopted for the complex derivative is that, for a complex infinitesimal map displacement, delta_z, the corresponding infinitesimal change of cartesian vector position is delta_v given by: delta_v = Real(vd*delta_z)\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -161,7 +479,7 @@ Oct 2005
 Definition in file \fBpmat4\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine sarea_s::cyclic (real(sp), dimension(3), intent(inout)u1, real(sp), dimension(3), intent(inout)u2, real(sp), dimension(3), intent(inout)u3, real(sp), intent(inout)d1, real(sp), intent(inout)d2, real(sp), intent(inout)d3)"
+.SS "subroutine sarea_s::cyclic (real(sp), dimension(3), intent(inout) u1, real(sp), dimension(3), intent(inout) u2, real(sp), dimension(3), intent(inout) u3, real(sp), intent(inout) d1, real(sp), intent(inout) d2, real(sp), intent(inout) d3)"
 
 .PP
 Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. 
@@ -188,10 +506,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 704 of file pmat4\&.f90\&.
+Definition at line 705 of file pmat4\&.f90\&.
 .PP
 Referenced by pmat4::sarea_d(), and pmat4::sarea_s()\&.
-.SS "subroutine sarea_d::cyclic (real(dp), dimension(3), intent(inout)u1, real(dp), dimension(3), intent(inout)u2, real(dp), dimension(3), intent(inout)u3, real(dp), intent(inout)d1, real(dp), intent(inout)d2, real(dp), intent(inout)d3)"
+.SS "subroutine sarea_d::cyclic (real(dp), dimension(3), intent(inout) u1, real(dp), dimension(3), intent(inout) u2, real(dp), dimension(3), intent(inout) u3, real(dp), intent(inout) d1, real(dp), intent(inout) d2, real(dp), intent(inout) d3)"
 
 .PP
 Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. 
@@ -218,7 +536,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 759 of file pmat4\&.f90\&.
+Definition at line 760 of file pmat4\&.f90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

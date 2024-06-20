@@ -1,8 +1,8 @@
-.TH "pmat5::grtoc" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::grtoc" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat5::grtoc \- 
+pmat5::grtoc
 .SH SYNOPSIS
 .br
 .PP
@@ -12,34 +12,34 @@ pmat5::grtoc \-
 .ti -1c
 .RI "subroutine \fBdgrtoc\fP (rlat, rlon, xe)"
 .br
-.RI "\fITransform 'Geographical' to 'Cartesian' coordinates\&. \fP"
+.RI "Transform 'Geographical' to 'Cartesian' coordinates\&. "
 .ti -1c
 .RI "subroutine \fBdgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
 .br
-.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. \fP"
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. "
 .ti -1c
 .RI "subroutine \fBdgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
 .br
-.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. \fP"
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. "
 .ti -1c
 .RI "subroutine \fBsgrtoc\fP (rlat, rlon, xe)"
 .br
-.RI "\fITransform 'Geographical' to 'Cartesian' coordinates\&. \fP"
+.RI "Transform 'Geographical' to 'Cartesian' coordinates\&. "
 .ti -1c
 .RI "subroutine \fBsgrtocd\fP (rlat, rlon, xe, dxedlat, dxedlon)"
 .br
-.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. \fP"
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. "
 .ti -1c
 .RI "subroutine \fBsgrtocdd\fP (rlat, rlon, xe, dxedlat, dxedlon, ddxedlatdlat, ddxedlatdlon, ddxedlondlon)"
 .br
-.RI "\fITransform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. \fP"
+.RI "Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 37 of file pmat5\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat5::grtoc::dgrtoc (real(dp), intent(in)rlat, real(dp), intent(in)rlon, real(dp), dimension(3), intent(out)xe)\fC [private]\fP"
+.SS "subroutine pmat5::grtoc::dgrtoc (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates\&. Double proecision version\&.
@@ -60,8 +60,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 236 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::grtoc::dgrtocd (real(dp), intent(in)rlat, real(dp), intent(in)rlon, real(dp), dimension(3), intent(out)xe, real(dp), dimension(3), intent(out)dxedlat, real(dp), dimension(3), intent(out)dxedlon)\fC [private]\fP"
+Definition at line 237 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::dgrtocd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. Double precision version\&.
@@ -86,10 +86,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 279 of file pmat5\&.f90\&.
-.PP
-Referenced by pmat5::sgrtocd()\&.
-.SS "subroutine pmat5::grtoc::dgrtocdd (real(dp), intent(in)rlat, real(dp), intent(in)rlon, real(dp), dimension(3), intent(out)xe, real(dp), dimension(3), intent(out)dxedlat, real(dp), dimension(3), intent(out)dxedlon, real(dp), dimension(3), intent(out)ddxedlatdlat, real(dp), dimension(3), intent(out)ddxedlatdlon, real(dp), dimension(3), intent(out)ddxedlondlon)\fC [private]\fP"
+Definition at line 280 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::dgrtocdd (real(dp), intent(in) rlat, real(dp), intent(in) rlon, real(dp), dimension(3), intent(out) xe, real(dp), dimension(3), intent(out) dxedlat, real(dp), dimension(3), intent(out) dxedlon, real(dp), dimension(3), intent(out) ddxedlatdlat, real(dp), dimension(3), intent(out) ddxedlatdlon, real(dp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. Double precision version\&.
@@ -120,8 +118,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 338 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::grtoc::sgrtoc (real(sp), intent(in)rlat, real(sp), intent(in)rlon, real(sp), dimension(3), intent(out)xe)\fC [private]\fP"
+Definition at line 340 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::sgrtoc (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates\&. Single proecision version\&.
@@ -142,8 +140,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 219 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::grtoc::sgrtocd (real(sp), intent(in)rlat, real(sp), intent(in)rlon, real(sp), dimension(3), intent(out)xe, real(sp), dimension(3), intent(out)dxedlat, real(sp), dimension(3), intent(out)dxedlon)\fC [private]\fP"
+Definition at line 220 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::sgrtocd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, together with the partial derivatives of cartesians wrt latitude and longitude\&. Single precision version\&.
@@ -168,8 +166,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 256 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::grtoc::sgrtocdd (real(sp), intent(in)rlat, real(sp), intent(in)rlon, real(sp), dimension(3), intent(out)xe, real(sp), dimension(3), intent(out)dxedlat, real(sp), dimension(3), intent(out)dxedlon, real(sp), dimension(3), intent(out)ddxedlatdlat, real(sp), dimension(3), intent(out)ddxedlatdlon, real(sp), dimension(3), intent(out)ddxedlondlon)\fC [private]\fP"
+Definition at line 257 of file pmat5\&.f90\&.
+.SS "subroutine pmat5::grtoc::sgrtocdd (real(sp), intent(in) rlat, real(sp), intent(in) rlon, real(sp), dimension(3), intent(out) xe, real(sp), dimension(3), intent(out) dxedlat, real(sp), dimension(3), intent(out) dxedlon, real(sp), dimension(3), intent(out) ddxedlatdlat, real(sp), dimension(3), intent(out) ddxedlatdlon, real(sp), dimension(3), intent(out) ddxedlondlon)\fC [private]\fP"
 
 .PP
 Transform 'Geographical' to 'Cartesian' coordinates, together with the 1st and 2nd partial derivatives of cartesians wrt latitude and longitude\&. Single precision version\&.
@@ -200,7 +198,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 305 of file pmat5\&.f90\&.
+Definition at line 307 of file pmat5\&.f90\&.
 
 .SH "Author"
 .PP 

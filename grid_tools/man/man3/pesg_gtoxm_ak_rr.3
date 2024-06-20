@@ -1,8 +1,8 @@
-.TH "pesg::gtoxm_ak_rr" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::gtoxm_ak_rr" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::gtoxm_ak_rr \- 
+pesg::gtoxm_ak_rr
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pesg::gtoxm_ak_rr \-
 .ti -1c
 .RI "subroutine \fBgtoxm_ak_rr_g\fP (A, K, plat, plon, pazi, delx, dely, lat, lon, xm, ff)"
 .br
-.RI "\fIGiven the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. \fP"
+.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
 .ti -1c
 .RI "subroutine \fBgtoxm_ak_rr_m\fP (A, K, plat, plon, pazi, lat, lon, xm, ff)"
 .br
-.RI "\fIGiven the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. \fP"
+.RI "Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 49 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_g (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), intent(in)lat, real(dp), intent(in)lon, real(dp), dimension(2), intent(out)xm, logical, intent(out)ff)\fC [private]\fP"
+.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_g (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. If the transformation is invalid, return a \&.true\&. failure flag\&.
@@ -60,10 +60,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1931 of file pesg\&.f90\&.
-.PP
-Referenced by pesg::gtoxm_ak_dd_g()\&.
-.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_m (real(dp), intent(in)A, real(dp), intent(in)K, real(dp), intent(in)plat, real(dp), intent(in)plon, real(dp), intent(in)pazi, real(dp), intent(in)lat, real(dp), intent(in)lon, real(dp), dimension(2), intent(out)xm, logical, intent(out)ff)\fC [private]\fP"
+Definition at line 1933 of file pesg\&.f90\&.
+.SS "subroutine pesg::gtoxm_ak_rr::gtoxm_ak_rr_m (real(dp), intent(in) A, real(dp), intent(in) K, real(dp), intent(in) plat, real(dp), intent(in) plon, real(dp), intent(in) pazi, real(dp), intent(in) lat, real(dp), intent(in) lon, real(dp), dimension(2), intent(out) xm, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Given the map specification (angles in radians), the grid spacing (in map-space units) and the sample lat-lon (in radian), return the the image in map space in a 2-vector in grid units\&. If the transformation is invalid, return a \&.true\&. failure flag\&.
@@ -96,9 +94,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1887 of file pesg\&.f90\&.
-.PP
-Referenced by pesg::gtoxm_ak_dd_m(), and pesg::gtoxm_ak_rr_g()\&.
+Definition at line 1888 of file pesg\&.f90\&.
 
 .SH "Author"
 .PP 

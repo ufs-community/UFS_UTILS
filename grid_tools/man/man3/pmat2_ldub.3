@@ -1,8 +1,8 @@
-.TH "pmat2::ldub" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::ldub" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::ldub \- 
+pmat2::ldub
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pmat2::ldub \-
 .ti -1c
 .RI "subroutine \fBldub\fP (m, mah1, mah2, a)"
 .br
-.RI "\fI[L]*[D]*[U] factoring of single precision band-matrix\&. \fP"
+.RI "[L]*[D]*[U] factoring of single precision band-matrix\&. "
 .ti -1c
 .RI "subroutine \fBdldub\fP (m, mah1, mah2, a)"
 .br
-.RI "\fI[L]*[D]*[U] factoring of double precision band-matrix\&. \fP"
+.RI "[L]*[D]*[U] factoring of double precision band-matrix\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 64 of file pmat2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::ldub::ldub (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(sp), dimension(m,-mah1:mah2), intent(inout)a)\fC [private]\fP"
+.SS "subroutine pmat2::ldub::ldub (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
 
 .PP
 [L]*[D]*[U] factoring of single precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
@@ -51,10 +51,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 531 of file pmat2\&.f90\&.
+Definition at line 532 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::ldub::dldub (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, real(dp), dimension(m,-mah1:mah2), intent(inout)a)\fC [private]\fP"
+.SS "subroutine pmat2::ldub::dldub (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
 
 .PP
 [L]*[D]*[U] factoring of double precision band-matrix\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix [U] is upper triangular with unit main diagonal 
@@ -82,9 +82,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 570 of file pmat2\&.f90\&.
-.PP
-Referenced by pmat2::dudlb()\&.
+Definition at line 571 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

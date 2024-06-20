@@ -1,8 +1,8 @@
-.TH "pesg::zmtozt" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::zmtozt" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::zmtozt \- 
+pesg::zmtozt
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pesg::zmtozt \-
 .ti -1c
 .RI "subroutine \fBzmtozt\fP (a, zm, zt, ztd, ff)"
 .br
-.RI "\fIEvaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd, for positive and negative A and for the limiting case, A --> 0\&. \fP"
+.RI "Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd, for positive and negative A and for the limiting case, A --> 0\&. "
 .ti -1c
 .RI "subroutine \fBzmtozt1\fP (a, zm, zt, ztd, zt1, ztd1, ff)"
 .br
-.RI "\fILike zmtozt, but also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd\&. \fP"
+.RI "Like zmtozt, but also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 32 of file pesg\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::zmtozt::zmtozt (real(dp), intent(in)a, real(dp), intent(in)zm, real(dp), intent(out)zt, real(dp), intent(out)ztd, logical, intent(out)ff)\fC [private]\fP"
+.SS "subroutine pesg::zmtozt::zmtozt (real(dp), intent(in) a, real(dp), intent(in) zm, real(dp), intent(out) zt, real(dp), intent(out) ztd, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Evaluate the function, zt = tan(sqrt(A)*z)/sqrt(A), and its derivative, ztd, for positive and negative A and for the limiting case, A --> 0\&. 
@@ -48,10 +48,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 322 of file pesg\&.f90\&.
+Definition at line 323 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::zmtozt::zmtozt1 (real(dp), intent(in)a, real(dp), intent(in)zm, real(dp), intent(out)zt, real(dp), intent(out)ztd, real(dp), intent(out)zt1, real(dp), intent(out)ztd1, logical, intent(out)ff)\fC [private]\fP"
+.SS "subroutine pesg::zmtozt::zmtozt1 (real(dp), intent(in) a, real(dp), intent(in) zm, real(dp), intent(out) zt, real(dp), intent(out) ztd, real(dp), intent(out) zt1, real(dp), intent(out) ztd1, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Like zmtozt, but also, get the derivative with respect to a, zt1 of zt, and ztd1 of ztd\&. 
@@ -80,9 +80,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 347 of file pesg\&.f90\&.
-.PP
-Referenced by pesg::xmtoxt1()\&.
+Definition at line 348 of file pesg\&.f90\&.
 
 .SH "Author"
 .PP 

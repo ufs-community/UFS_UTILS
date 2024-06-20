@@ -1,8 +1,8 @@
-.TH "pesg::bestesg_map" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::bestesg_map" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::bestesg_map \- 
+pesg::bestesg_map
 .SH SYNOPSIS
 .br
 .PP
@@ -12,14 +12,14 @@ pesg::bestesg_map \-
 .ti -1c
 .RI "subroutine \fBbestesg_map\fP (lam, marcx, marcy, a, k, garcx, garcy, q, ff)"
 .br
-.RI "\fIGet the best Extended Schmidt Gnomonic parameter, (a,k), for the given map-coordinate half-spans, marcx and marcy, as well as the corresponding geographical half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. \fP"
+.RI "Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given map-coordinate half-spans, marcx and marcy, as well as the corresponding geographical half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 43 of file pesg\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::bestesg_map::bestesg_map (real(dp), intent(in)lam, real(dp), intent(in)marcx, real(dp), intent(in)marcy, real(dp), intent(out)a, real(dp), intent(out)k, real(dp), intent(out)garcx, real(dp), intent(out)garcy, real(dp), intent(out)q, logical, intent(out)ff)\fC [private]\fP"
+.SS "subroutine pesg::bestesg_map::bestesg_map (real(dp), intent(in) lam, real(dp), intent(in) marcx, real(dp), intent(in) marcy, real(dp), intent(out) a, real(dp), intent(out) k, real(dp), intent(out) garcx, real(dp), intent(out) garcy, real(dp), intent(out) q, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given map-coordinate half-spans, marcx and marcy, as well as the corresponding geographical half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. If this process fails for any reason, the failure is alerted by a raised flag, FF, and the other output arguments must then be taken to be meaningless\&.
@@ -56,7 +56,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1072 of file pesg\&.f90\&.
+Definition at line 1073 of file pesg\&.f90\&.
 
 .SH "Author"
 .PP 

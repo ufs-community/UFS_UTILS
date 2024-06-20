@@ -1,8 +1,8 @@
-.TH "pmat2::dfco" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::dfco" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::dfco \- 
+pmat2::dfco
 .SH SYNOPSIS
 .br
 .PP
@@ -12,22 +12,22 @@ pmat2::dfco \-
 .ti -1c
 .RI "subroutine \fBdfco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "\fICompute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. \fP"
+.RI "Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. "
 .ti -1c
 .RI "subroutine \fBddfco\fP (na, nb, za, zb, z0, a, b)"
 .br
-.RI "\fIDouble precision version of dfco for compact differentiation coefficients\&. \fP"
+.RI "Double precision version of dfco for compact differentiation coefficients\&. "
 .ti -1c
 .RI "subroutine \fBtdfco\fP (xa, xb, a, b)"
 .br
-.RI "\fISimplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. \fP"
+.RI "Simplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 57 of file pmat2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::dfco::dfco (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(sp), dimension(na), intent(in)za, real(sp), dimension(nb), intent(in)zb, real(sp), intent(in)z0, real(sp), dimension(na), intent(out)a, real(sp), dimension(nb), intent(out)b)\fC [private]\fP"
+.SS "subroutine pmat2::dfco::dfco (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(sp), dimension(na), intent(in) za, real(sp), dimension(nb), intent(in) zb, real(sp), intent(in) z0, real(sp), dimension(na), intent(out) a, real(sp), dimension(nb), intent(out) b)\fC [private]\fP"
 
 .PP
 Compute one row of the coefficients for either the compact differencing or quadrature scheme characterized by matrix equation of the form, A\&.d = B\&.c (*) In either case, d is the derivative (or density) of cumulative c\&. 
@@ -61,10 +61,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 189 of file pmat2\&.f90\&.
+Definition at line 190 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::dfco::ddfco (integer(spi), intent(in)na, integer(spi), intent(in)nb, real(dp), dimension(na), intent(in)za, real(dp), dimension(nb), intent(in)zb, real(dp), intent(in)z0, real(dp), dimension(na), intent(out)a, real(dp), dimension(nb), intent(out)b)\fC [private]\fP"
+.SS "subroutine pmat2::dfco::ddfco (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)\fC [private]\fP"
 
 .PP
 Double precision version of dfco for compact differentiation coefficients\&. 
@@ -98,10 +98,8 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 224 of file pmat2\&.f90\&.
-.PP
-Referenced by pmat2::tdfco()\&.
-.SS "subroutine pmat2::dfco::tdfco (real(dp), dimension(:), intent(in)xa, real(dp), dimension(:), intent(in)xb, real(dp), dimension(:), intent(out)a, real(dp), dimension(:), intent(out)b)\fC [private]\fP"
+Definition at line 225 of file pmat2\&.f90\&.
+.SS "subroutine pmat2::dfco::tdfco (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)\fC [private]\fP"
 
 .PP
 Simplified computation of compact differencing coefficients to get derivatives d from cumulatives c, or vice-versa\&. 
@@ -129,7 +127,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 257 of file pmat2\&.f90\&.
+Definition at line 258 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

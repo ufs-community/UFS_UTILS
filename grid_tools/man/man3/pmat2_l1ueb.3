@@ -1,8 +1,8 @@
-.TH "pmat2::l1ueb" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::l1ueb" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::l1ueb \- 
+pmat2::l1ueb
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pmat2::l1ueb \-
 .ti -1c
 .RI "subroutine \fBl1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "\fIForm the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. \fP"
+.RI "Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. "
 .ti -1c
 .RI "subroutine \fBdl1ueb\fP (m, mah1, mah2, mbh1, mbh2, a, b)"
 .br
-.RI "\fIDouble precision version of L1UEB\&. \fP"
+.RI "Double precision version of L1UEB\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 67 of file pmat2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::l1ueb::l1ueb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(sp), dimension(0:m,-mah1:mah2), intent(inout)a, real(sp), dimension(m,-mbh1:mbh2), intent(inout)b)\fC [private]\fP"
+.SS "subroutine pmat2::l1ueb::l1ueb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(sp), dimension(0:m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m,\-mbh1:mbh2), intent(inout) b)\fC [private]\fP"
 
 .PP
 Form the [L]*[D]*[U] decomposition of asymmetric band-matrix [A] replace all but row zero of the lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. This is a special adaptation of L1UBB used to process quadrature weights for QEDBV etc in which the initial quadrature value is provided as input instead of being implicitly assumed zero (which is the case for QZDBV etc)\&.
@@ -57,10 +57,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 817 of file pmat2\&.f90\&.
+Definition at line 818 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::l1ueb::dl1ueb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, integer(spi), intent(in)mah2, integer(spi), intent(in)mbh1, integer(spi), intent(in)mbh2, real(dp), dimension(0:,-mah1:), intent(inout)a, real(dp), dimension(:,-mbh1:), intent(inout)b)\fC [private]\fP"
+.SS "subroutine pmat2::l1ueb::dl1ueb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(dp), dimension(0:,\-mah1:), intent(inout) a, real(dp), dimension(:,\-mbh1:), intent(inout) b)\fC [private]\fP"
 
 .PP
 Double precision version of L1UEB\&. 
@@ -94,7 +94,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 854 of file pmat2\&.f90\&.
+Definition at line 855 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

@@ -1,6 +1,6 @@
 var structmodule__ncio_1_1ncio =
 [
-    [ "add_new_var", "structmodule__ncio_1_1ncio.html#afe876caa85c71d53f8ee5f87f12054e7", null ],
+    [ "add_new_var", "structmodule__ncio_1_1ncio.html#a8851d6006e00d7055e2921dce6e99cd8", null ],
     [ "add_new_var_2d", "structmodule__ncio_1_1ncio.html#a3436a66b0d823559d365992916b7832c", null ],
     [ "add_new_var_3d", "structmodule__ncio_1_1ncio.html#ab8dbeffbba653826686bb5ed1795149e", null ],
     [ "close", "structmodule__ncio_1_1ncio.html#a782798cda1e2777d0a7d8998fc264ed9", null ],
@@ -10,7 +10,7 @@ var structmodule__ncio_1_1ncio =
     [ "get_att_nc_real", "structmodule__ncio_1_1ncio.html#a5844b694f7933e49ede08d05b0d5d57f", null ],
     [ "get_att_nc_string", "structmodule__ncio_1_1ncio.html#adad86eda2a4b41d6f7d73e5eaaf4f1a1", null ],
     [ "get_dim", "structmodule__ncio_1_1ncio.html#ab79ff7acc30376d1d459803d53468cfb", null ],
-    [ "get_var", "structmodule__ncio_1_1ncio.html#a1bbaeafe7f2a5f28b14179ab506db7a5", null ],
+    [ "get_var", "structmodule__ncio_1_1ncio.html#aa8ecd7a7f447f30751ca023205675166", null ],
     [ "get_var_nc_char", "structmodule__ncio_1_1ncio.html#a9458c74f6489fb0c3fab458da1165a3f", null ],
     [ "get_var_nc_char_1d", "structmodule__ncio_1_1ncio.html#a8e16f9f8cd6e097afb735eb856dd9097", null ],
     [ "get_var_nc_char_2d", "structmodule__ncio_1_1ncio.html#a8d9f4efe9eddb77a5d3ae75d2f5e5596", null ],
@@ -32,7 +32,7 @@ var structmodule__ncio_1_1ncio =
     [ "get_var_nc_short_2d", "structmodule__ncio_1_1ncio.html#a639270062b980a83d4adc54c3d2edbc1", null ],
     [ "handle_err", "structmodule__ncio_1_1ncio.html#a56a713d2470067afb55eeaa47198483c", null ],
     [ "open", "structmodule__ncio_1_1ncio.html#ab403c269b83f9d22599bb22d0fee6a83", null ],
-    [ "replace_var", "structmodule__ncio_1_1ncio.html#a74bcbe353891d196b9be4293a7300101", null ],
+    [ "replace_var", "structmodule__ncio_1_1ncio.html#aed5eef1278d15a0c7141fd5cdfb19b58", null ],
     [ "replace_var_nc_char", "structmodule__ncio_1_1ncio.html#ae74ff4f16d1f83a7c9af9649b25426be", null ],
     [ "replace_var_nc_char_1d", "structmodule__ncio_1_1ncio.html#acc91961c2729e90e51fa3030069366e5", null ],
     [ "replace_var_nc_char_2d", "structmodule__ncio_1_1ncio.html#a2ccd1e207892931d4b66f4c5464f44c6", null ],

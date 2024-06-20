@@ -1,21 +1,203 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface_target_data.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface_target_data.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface_target_data.F90 \- 
-.PP
-Define target grid surface data variables\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface_target_data.F90 \- Define target grid surface data variables\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fBsurface_target_data\fP"
 .br
-.RI "\fIModule to hold ESMF fields associated with the target grid surface data\&. \fP"
+.RI "Module to hold ESMF fields associated with the target grid surface data\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBsurface_target_data::cleanup_target_nst_data\fP"
+.br
+.RI "Free up memory once the target grid nst fields are no longer needed\&. "
+.ti -1c
+.RI "subroutine, public \fBsurface_target_data::cleanup_target_sfc_data\fP"
+.br
+.RI "Free up memory once the target grid surface fields are no longer needed\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::c_0_target_grid\fP"
+.br
+.RI "Coefficient 1 to calculate d(tz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::c_d_target_grid\fP"
+.br
+.RI "Coefficient 2 to calculate d(tz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::canopy_mc_target_grid\fP"
+.br
+.RI "Canopy moisture content\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::d_conv_target_grid\fP"
+.br
+.RI "Thickness of free convection layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::dt_cool_target_grid\fP"
+.br
+.RI "Sub-layer cooling amount\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::f10m_target_grid\fP"
+.br
+.RI "log((z0+10)*1/z0) See sfc_diff\&.f for details\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::ffmm_target_grid\fP"
+.br
+.RI "log((z0+z1)*1/z0) See sfc_diff\&.f for details\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::ice_temp_target_grid\fP"
+.br
+.RI "3-d sea ice column temperature "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::ifd_target_grid\fP"
+.br
+.RI "Model mode index\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::lai_target_grid\fP"
+.br
+.RI "Leaf area index\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::q2m_target_grid\fP"
+.br
+.RI "2-m specific humidity\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::qrain_target_grid\fP"
+.br
+.RI "Sensible heat flux due to rainfall\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::seaice_depth_target_grid\fP"
+.br
+.RI "Sea ice depth\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::seaice_fract_target_grid\fP"
+.br
+.RI "Sea ice fraction\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::seaice_skin_temp_target_grid\fP"
+.br
+.RI "Sea ice skin temperature\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::skin_temp_target_grid\fP"
+.br
+.RI "Skin temperature/sst\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::snow_depth_at_ice_target_grid\fP"
+.br
+.RI "physical snow depth at sea ice\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::snow_depth_target_grid\fP"
+.br
+.RI "Physical snow depth at land\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::snow_liq_equiv_at_ice_target_grid\fP"
+.br
+.RI "Liquid equivalent snow depth at sea ice\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::snow_liq_equiv_target_grid\fP"
+.br
+.RI "Liquid equivalent snow depth at land\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::soil_temp_target_grid\fP"
+.br
+.RI "3-d soil temperature\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::soilm_liq_target_grid\fP"
+.br
+.RI "3-d liquid soil moisture\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::soilm_tot_target_grid\fP"
+.br
+.RI "3-d total soil moisture\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::srflag_target_grid\fP"
+.br
+.RI "Snow/rain flag\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::sst_target_grid\fP"
+.br
+.RI "SST at open water\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::t2m_target_grid\fP"
+.br
+.RI "2-m temperatrure\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::tprcp_target_grid\fP"
+.br
+.RI "Precipitation\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::tref_target_grid\fP"
+.br
+.RI "Reference temperature\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::ustar_target_grid\fP"
+.br
+.RI "Friction velocity\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::w_0_target_grid\fP"
+.br
+.RI "Coefficient 3 to calculate d(tz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::w_d_target_grid\fP"
+.br
+.RI "Coefficient 4 to calculate d(tz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::xs_target_grid\fP"
+.br
+.RI "Salinity content in diurnal thermocline layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::xt_target_grid\fP"
+.br
+.RI "Heat content in diurnal thermocline layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::xtts_target_grid\fP"
+.br
+.RI "d(xt)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::xu_target_grid\fP"
+.br
+.RI "u-current content in diurnal thermocline layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::xv_target_grid\fP"
+.br
+.RI "v-current content in diurnal thermocline layer\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::xz_target_grid\fP"
+.br
+.RI "Diurnal thermocline layer thickness\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::xzts_target_grid\fP"
+.br
+.RI "d(xz)/d(ts)\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::z0_ice_target_grid\fP"
+.br
+.RI "roughness length at sea ice "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::z0_water_target_grid\fP"
+.br
+.RI "roughness length at open water "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::z_c_target_grid\fP"
+.br
+.RI "Sub-layer cooling thickness\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBsurface_target_data::zm_target_grid\fP"
+.br
+.RI "Oceanic mixed layer depth\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

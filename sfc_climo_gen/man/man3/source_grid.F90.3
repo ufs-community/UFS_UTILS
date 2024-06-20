@@ -1,21 +1,71 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/source_grid.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/source_grid.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/source_grid.F90 \- 
-.PP
-Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/source_grid.F90 \- Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fBsource_grid\fP"
 .br
-.RI "\fIRead grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&. \fP"
+.RI "Read grid specs, date information and land/sea mask for the source data that will be interpolated to the model grid\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBsource_grid::define_source_grid\fP (localpet, npets, input_file)"
+.br
+.RI "Defines esmf grid object for source grid\&. "
+.ti -1c
+.RI "subroutine, public \fBsource_grid::source_grid_cleanup\fP"
+.br
+.RI "Free up memory associated with this module\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, dimension(:), allocatable, public \fBsource_grid::day_of_rec\fP"
+.br
+.RI "Day of each time record with respect to Jan 1\&. "
+.ti -1c
+.RI "character(len=50), dimension(:), allocatable, public \fBsource_grid::field_names\fP"
+.br
+.RI "Names of fields to be processed\&. "
+.ti -1c
+.RI "type(esmf_grid), public \fBsource_grid::grid_src\fP"
+.br
+.RI "ESMF grid object for the source grid\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::i_src\fP"
+.br
+.RI "i dimension of the source grid\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::j_src\fP"
+.br
+.RI "j dimension of the source grid\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::num_fields\fP"
+.br
+.RI "Number of fields in the file\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::num_records\fP"
+.br
+.RI "Number of fields times time records\&. "
+.ti -1c
+.RI "integer, public \fBsource_grid::num_time_recs\fP"
+.br
+.RI "Number of time records\&. "
+.ti -1c
+.RI "character(len=75), public \fBsource_grid::source\fP"
+.br
+.RI "Original source of the data\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

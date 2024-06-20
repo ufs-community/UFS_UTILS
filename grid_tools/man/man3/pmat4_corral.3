@@ -1,8 +1,8 @@
-.TH "pmat4::corral" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::corral" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat4::corral \- 
+pmat4::corral
 .SH SYNOPSIS
 .br
 .PP
@@ -12,14 +12,14 @@ pmat4::corral \-
 .ti -1c
 .RI "subroutine \fBcorral\fP (m, n, mask, a, d, aa, e)"
 .br
-.RI "\fIFind positive diagonals D and E and a Lagrange multiplier F that minimize the row-sum +column-sum of masked terms, (D_i +log(|A_ij|) +E_j)^2 subject to the single constraint, sum_j E_j =0, where the mask permits only nonnegligible A_ij to participate in the quadratic quantities\&. \fP"
+.RI "Find positive diagonals D and E and a Lagrange multiplier F that minimize the row-sum +column-sum of masked terms, (D_i +log(|A_ij|) +E_j)^2 subject to the single constraint, sum_j E_j =0, where the mask permits only nonnegligible A_ij to participate in the quadratic quantities\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 91 of file pmat4\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat4::corral::corral (integer(spi), intent(in)m, integer(spi), intent(in)n, logical, dimension(m,n), intent(in)mask, real(dp), dimension(m,n), intent(in)a, real(dp), dimension(m  ), intent(out)d, real(dp), dimension(m,n), intent(out)aa, real(dp), dimension(  n), intent(out)e)\fC [private]\fP"
+.SS "subroutine pmat4::corral::corral (integer(spi), intent(in) m, integer(spi), intent(in) n, logical, dimension(m,n), intent(in) mask, real(dp), dimension(m,n), intent(in) a, real(dp), dimension(m  ), intent(out) d, real(dp), dimension(m,n), intent(out) aa, real(dp), dimension(  n), intent(out) e)\fC [private]\fP"
 
 .PP
 Find positive diagonals D and E and a Lagrange multiplier F that minimize the row-sum +column-sum of masked terms, (D_i +log(|A_ij|) +E_j)^2 subject to the single constraint, sum_j E_j =0, where the mask permits only nonnegligible A_ij to participate in the quadratic quantities\&. Once a solution for D and E is found, return their exponentials, d and e, together with the rescaled matrix aa such that a = d\&.aa\&.e when d and e are interpreted as diagonal matrices\&.
@@ -48,7 +48,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1440 of file pmat4\&.f90\&.
+Definition at line 1441 of file pmat4\&.f90\&.
 
 .SH "Author"
 .PP 

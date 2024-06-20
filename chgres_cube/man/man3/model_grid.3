@@ -1,187 +1,179 @@
-.TH "model_grid" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "model_grid" 3 "Thu Jun 20 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-model_grid \- 
-.PP
-Sets up the ESMF grid objects for the input data grid and target FV3 grid\&.  
+model_grid \- Sets up the ESMF grid objects for the input data grid and target FV3 grid\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Public Member Functions"
+.SS "Functions/Subroutines"
 
 .in +1c
 .ti -1c
 .RI "subroutine, public \fBcleanup_input_target_grid_data\fP"
 .br
-.RI "\fIDeallocate all esmf grid objects\&. \fP"
+.RI "Deallocate all esmf grid objects\&. "
 .ti -1c
 .RI "subroutine, public \fBdefine_input_grid\fP (localpet, npets)"
 .br
-.RI "\fIDriver routine to setup the esmf grid object for the input grid\&. \fP"
+.RI "Driver routine to setup the esmf grid object for the input grid\&. "
 .ti -1c
 .RI "subroutine \fBdefine_input_grid_gaussian\fP (npets)"
 .br
-.RI "\fIDefine grid object for input data on global gaussian grids\&. \fP"
+.RI "Define grid object for input data on global gaussian grids\&. "
 .ti -1c
 .RI "subroutine \fBdefine_input_grid_grib2\fP (npets)"
 .br
-.RI "\fIDefine input grid object for grib2 input data\&. \fP"
+.RI "Define input grid object for grib2 input data\&. "
 .ti -1c
 .RI "subroutine \fBdefine_input_grid_mosaic\fP (localpet, npets)"
 .br
-.RI "\fIDefine input grid for tiled data using the 'mosaic', 'grid' and orography files\&. \fP"
+.RI "Define input grid for tiled data using the 'mosaic', 'grid' and orography files\&. "
 .ti -1c
 .RI "subroutine, public \fBdefine_target_grid\fP (localpet, npets)"
 .br
-.RI "\fISetup the esmf grid object for the target grid\&. \fP"
+.RI "Setup the esmf grid object for the target grid\&. "
+.ti -1c
+.RI "subroutine \fBgdt_to_gds\fP (igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)"
+.br
+.RI "Convert the GRIB2 grid description template to to the GRIB1 grid description section\&. "
 .ti -1c
 .RI "subroutine \fBget_model_latlons\fP (mosaic_file, orog_dir, num_tiles, tile, i_tile, j_tile, ip1_tile, jp1_tile, latitude, latitude_s, latitude_w, longitude, longitude_s, longitude_w)"
 .br
-.RI "\fIRead model lat/lons for a single tile from the 'grid' specificaton file\&. \fP"
+.RI "Read model lat/lons for a single tile from the 'grid' specificaton file\&. "
 .ti -1c
 .RI "subroutine \fBget_model_mask_terrain\fP (orog_file, idim, jdim, mask, terrain, land_frac)"
 .br
-.RI "\fIRead the model land mask and terrain for a single tile from the orography file\&. \fP"
+.RI "Read the model land mask and terrain for a single tile from the orography file\&. "
 .in -1c
-.SS "Data Fields"
+.SS "Variables"
 
 .in +1c
 .ti -1c
 .RI "integer, public \fBi_input\fP"
 .br
-.RI "\fIi-dimension of input grid (or of each global tile) \fP"
+.RI "i-dimension of input grid (or of each global tile) "
 .ti -1c
 .RI "integer, public \fBi_target\fP"
 .br
-.RI "\fIi dimension of each global tile, or of a nest, target grid\&. \fP"
+.RI "i dimension of each global tile, or of a nest, target grid\&. "
 .ti -1c
 .RI "type(esmf_grid), public \fBinput_grid\fP"
 .br
-.RI "\fIinput grid esmf grid object \fP"
+.RI "input grid esmf grid object "
 .ti -1c
 .RI "character(len=50), public \fBinput_grid_type\fP = 'latlon'"
 .br
-.RI "\fImap projection of input grid \fP"
+.RI "map projection of input grid "
 .ti -1c
 .RI "integer, public \fBip1_input\fP"
 .br
-.RI "\fIi_input plus 1 \fP"
+.RI "i_input plus 1 "
 .ti -1c
 .RI "integer, public \fBip1_target\fP"
 .br
-.RI "\fIip1_target plus 1 \fP"
+.RI "ip1_target plus 1 "
 .ti -1c
 .RI "integer, public \fBj_input\fP"
 .br
-.RI "\fIj-dimension of input grid (or of each global tile) \fP"
+.RI "j-dimension of input grid (or of each global tile) "
 .ti -1c
 .RI "integer, public \fBj_target\fP"
 .br
-.RI "\fIj dimension of each global tile, or of a nest, target grid\&. \fP"
+.RI "j dimension of each global tile, or of a nest, target grid\&. "
 .ti -1c
 .RI "integer, public \fBjp1_input\fP"
 .br
-.RI "\fIj_input plus 1 \fP"
+.RI "j_input plus 1 "
 .ti -1c
 .RI "integer, public \fBjp1_target\fP"
 .br
-.RI "\fIjp1_target plus 1 \fP"
+.RI "jp1_target plus 1 "
 .ti -1c
 .RI "type(esmf_field), public \fBland_frac_target_grid\fP"
 .br
-.RI "\fIland fraction, target grid \fP"
+.RI "land fraction, target grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlandmask_target_grid\fP"
 .br
-.RI "\fIland mask target grid - '1' some or all land; '0' all non-land \fP"
+.RI "land mask target grid - '1' some or all land; '0' all non-land "
 .ti -1c
 .RI "type(esmf_field), public \fBlatitude_input_grid\fP"
 .br
-.RI "\fIlatitude of grid center, input grid \fP"
+.RI "latitude of grid center, input grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlatitude_s_input_grid\fP"
 .br
-.RI "\fIlatitude of 'south' edge of grid box, input grid \fP"
+.RI "latitude of 'south' edge of grid box, input grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlatitude_s_target_grid\fP"
 .br
-.RI "\fIlatitude of 'south' edge of grid box, target grid \fP"
+.RI "latitude of 'south' edge of grid box, target grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlatitude_target_grid\fP"
 .br
-.RI "\fIlatitude of grid center, target grid \fP"
+.RI "latitude of grid center, target grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlatitude_w_input_grid\fP"
 .br
-.RI "\fIlatitude of 'west' edge of grid box, input grid \fP"
+.RI "latitude of 'west' edge of grid box, input grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlatitude_w_target_grid\fP"
 .br
-.RI "\fIlatitude of 'west' edge of grid box, target grid \fP"
+.RI "latitude of 'west' edge of grid box, target grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlongitude_input_grid\fP"
 .br
-.RI "\fIlongitude of grid center, input grid \fP"
+.RI "longitude of grid center, input grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlongitude_s_input_grid\fP"
 .br
-.RI "\fIlongitude of 'south' edge of grid box, input grid \fP"
+.RI "longitude of 'south' edge of grid box, input grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlongitude_s_target_grid\fP"
 .br
-.RI "\fIlongitude of 'south' edge of grid box, target grid \fP"
+.RI "longitude of 'south' edge of grid box, target grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlongitude_target_grid\fP"
 .br
-.RI "\fIlongitude of grid center, target grid \fP"
+.RI "longitude of grid center, target grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlongitude_w_input_grid\fP"
 .br
-.RI "\fIlongitude of 'west' edge of grid box, input grid \fP"
+.RI "longitude of 'west' edge of grid box, input grid "
 .ti -1c
 .RI "type(esmf_field), public \fBlongitude_w_target_grid\fP"
 .br
-.RI "\fIlongitude of 'west' edge of grid box, target grid \fP"
+.RI "longitude of 'west' edge of grid box, target grid "
 .ti -1c
 .RI "integer, public \fBlsoil_target\fP = 4"
 .br
-.RI "\fINumber of soil layers, target grid\&. \fP"
+.RI "Number of soil layers, target grid\&. "
 .ti -1c
 .RI "integer, public \fBnum_tiles_input_grid\fP"
 .br
-.RI "\fINumber of tiles, input grid\&. \fP"
+.RI "Number of tiles, input grid\&. "
 .ti -1c
 .RI "integer, public \fBnum_tiles_target_grid\fP"
 .br
-.RI "\fINumber of tiles, target grid\&. \fP"
+.RI "Number of tiles, target grid\&. "
 .ti -1c
 .RI "type(esmf_field), public \fBseamask_target_grid\fP"
 .br
-.RI "\fIsea mask target grid - '1' some or all non-land; '0' all land \fP"
+.RI "sea mask target grid - '1' some or all non-land; '0' all land "
 .ti -1c
 .RI "type(esmf_grid), public \fBtarget_grid\fP"
 .br
-.RI "\fItarget grid esmf grid object\&. \fP"
+.RI "target grid esmf grid object\&. "
 .ti -1c
 .RI "type(esmf_field), public \fBterrain_target_grid\fP"
 .br
-.RI "\fIterrain height target grid \fP"
+.RI "terrain height target grid "
 .ti -1c
-.RI "character(len=5), dimension(:), 
+.RI "character(len=5), dimension(:), allocatable, public \fBtiles_target_grid\fP"
 .br
-allocatable, public \fBtiles_target_grid\fP"
-.br
-.RI "\fITile names of target grid\&. \fP"
-.in -1c
-.SS "Private Member Functions"
-
-.in +1c
-.ti -1c
-.RI "subroutine \fBgdt_to_gds\fP (igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)"
-.br
-.RI "\fIConvert the GRIB2 grid description template to to the GRIB1 grid description section\&. \fP"
+.RI "Tile names of target grid\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -195,9 +187,7 @@ George Gayno NCEP/EMC
 .RE
 .PP
 
-.PP
-Definition at line 9 of file model_grid\&.F90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Function/Subroutine Documentation"
 .PP 
 .SS "subroutine, public model_grid::cleanup_input_target_grid_data ()"
 
@@ -211,10 +201,12 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1418 of file model_grid\&.F90\&.
+Definition at line 1431 of file model_grid\&.F90\&.
+.PP
+References input_grid, land_frac_target_grid, landmask_target_grid, latitude_input_grid, latitude_s_input_grid, latitude_s_target_grid, latitude_target_grid, latitude_w_input_grid, latitude_w_target_grid, longitude_input_grid, longitude_s_input_grid, longitude_s_target_grid, longitude_target_grid, longitude_w_input_grid, longitude_w_target_grid, seamask_target_grid, target_grid, and terrain_target_grid\&.
 .PP
 Referenced by chgres()\&.
-.SS "subroutine, public model_grid::define_input_grid (integer, intent(in)localpet, integer, intent(in)npets)"
+.SS "subroutine, public model_grid::define_input_grid (integer, intent(in) localpet, integer, intent(in) npets)"
 
 .PP
 Driver routine to setup the esmf grid object for the input grid\&. If the input source is tiled fv3 restart or history data, the grid is created by reading the mosaic and grid files\&. If the input source is fv3 global gaussian nemsio, spectral gfs global gaussian nemsio, or spectral gfs global gaussian sigio/sfcio, the grid is setup by computing lat/lons using the sp library\&.
@@ -233,12 +225,12 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 117 of file model_grid\&.F90\&.
+Definition at line 118 of file model_grid\&.F90\&.
 .PP
-References define_input_grid_gaussian(), define_input_grid_grib2(), and define_input_grid_mosaic()\&.
+References define_input_grid_gaussian(), define_input_grid_grib2(), define_input_grid_mosaic(), and program_setup::input_type\&.
 .PP
 Referenced by chgres()\&.
-.SS "subroutine model_grid::define_input_grid_gaussian (integer, intent(in)npets)"
+.SS "subroutine model_grid::define_input_grid_gaussian (integer, intent(in) npets)"
 
 .PP
 Define grid object for input data on global gaussian grids\&. Recognized file formats:
@@ -264,12 +256,12 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 148 of file model_grid\&.F90\&.
+Definition at line 149 of file model_grid\&.F90\&.
 .PP
-References utilities::error_handler(), and utilities::netcdf_err()\&.
+References program_setup::atm_files_input_grid, program_setup::convert_atm, program_setup::convert_sfc, program_setup::data_dir_input_grid, i_input, input_grid, program_setup::input_type, ip1_input, j_input, jp1_input, latitude_input_grid, longitude_input_grid, num_tiles_input_grid, and program_setup::sfc_files_input_grid\&.
 .PP
 Referenced by define_input_grid()\&.
-.SS "subroutine model_grid::define_input_grid_grib2 (integer, intent(in)npets)"
+.SS "subroutine model_grid::define_input_grid_grib2 (integer, intent(in) npets)"
 
 .PP
 Define input grid object for grib2 input data\&. 
@@ -290,12 +282,12 @@ George Gayno
 .PP
 
 .PP
-Definition at line 610 of file model_grid\&.F90\&.
+Definition at line 623 of file model_grid\&.F90\&.
 .PP
-References utilities::error_handler(), and gdt_to_gds()\&.
+References program_setup::data_dir_input_grid, gdt_to_gds(), program_setup::grib2_file_input_grid, i_input, input_grid, input_grid_type, ip1_input, j_input, jp1_input, latitude_input_grid, and longitude_input_grid\&.
 .PP
 Referenced by define_input_grid()\&.
-.SS "subroutine model_grid::define_input_grid_mosaic (integer, intent(in)localpet, integer, intent(in)npets)"
+.SS "subroutine model_grid::define_input_grid_mosaic (integer, intent(in) localpet, integer, intent(in) npets)"
 
 .PP
 Define input grid for tiled data using the 'mosaic', 'grid' and orography files\&. 
@@ -314,12 +306,12 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 402 of file model_grid\&.F90\&.
+Definition at line 415 of file model_grid\&.F90\&.
 .PP
-References utilities::error_handler(), get_model_latlons(), and utilities::netcdf_err()\&.
+References get_model_latlons(), i_input, input_grid, ip1_input, j_input, jp1_input, latitude_input_grid, latitude_s_input_grid, latitude_w_input_grid, longitude_input_grid, longitude_s_input_grid, longitude_w_input_grid, program_setup::mosaic_file_input_grid, num_tiles_input_grid, program_setup::orog_dir_input_grid, and program_setup::orog_files_input_grid\&.
 .PP
 Referenced by define_input_grid()\&.
-.SS "subroutine, public model_grid::define_target_grid (integer, intent(in)localpet, integer, intent(in)npets)"
+.SS "subroutine, public model_grid::define_target_grid (integer, intent(in) localpet, integer, intent(in) npets)"
 
 .PP
 Setup the esmf grid object for the target grid\&. 
@@ -338,12 +330,12 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 883 of file model_grid\&.F90\&.
+Definition at line 896 of file model_grid\&.F90\&.
 .PP
-References utilities::error_handler(), get_model_latlons(), get_model_mask_terrain(), and utilities::netcdf_err()\&.
+References get_model_latlons(), get_model_mask_terrain(), i_target, ip1_target, j_target, jp1_target, land_frac_target_grid, landmask_target_grid, latitude_s_target_grid, latitude_target_grid, latitude_w_target_grid, longitude_s_target_grid, longitude_target_grid, longitude_w_target_grid, lsoil_target, program_setup::mosaic_file_target_grid, program_setup::nsoill_out, num_tiles_target_grid, program_setup::orog_dir_target_grid, program_setup::orog_files_target_grid, seamask_target_grid, target_grid, terrain_target_grid, and tiles_target_grid\&.
 .PP
 Referenced by chgres()\&.
-.SS "subroutine model_grid::gdt_to_gds (integer, intent(in)igdtnum, integer, dimension(igdtlen), intent(in)igdstmpl, integer, intent(in)igdtlen, integer, dimension(200), intent(out)kgds, integer, intent(out)ni, integer, intent(out)nj, real, intent(out)res)\fC [private]\fP"
+.SS "subroutine model_grid::gdt_to_gds (integer, intent(in) igdtnum, integer, dimension(igdtlen), intent(in) igdstmpl, integer, intent(in) igdtlen, integer, dimension(200), intent(out) kgds, integer, intent(out) ni, integer, intent(out) nj, real, intent(out) res)\fC [private]\fP"
 
 .PP
 Convert the GRIB2 grid description template to to the GRIB1 grid description section\&. 
@@ -372,12 +364,10 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1474 of file model_grid\&.F90\&.
-.PP
-References utilities::error_handler()\&.
+Definition at line 1487 of file model_grid\&.F90\&.
 .PP
 Referenced by define_input_grid_grib2()\&.
-.SS "subroutine model_grid::get_model_latlons (character(len=*), intent(in)mosaic_file, character(len=*), intent(in)orog_dir, integer, intent(in)num_tiles, integer, intent(in)tile, integer, intent(in)i_tile, integer, intent(in)j_tile, integer, intent(in)ip1_tile, integer, intent(in)jp1_tile, real(esmf_kind_r8), dimension(i_tile, j_tile), intent(out)latitude, real(esmf_kind_r8), dimension(i_tile, jp1_tile), intent(out)latitude_s, real(esmf_kind_r8), dimension(ip1_tile, j_tile), intent(out)latitude_w, real(esmf_kind_r8), dimension(i_tile, j_tile), intent(out)longitude, real(esmf_kind_r8), dimension(i_tile, jp1_tile), intent(out)longitude_s, real(esmf_kind_r8), dimension(ip1_tile, j_tile), intent(out)longitude_w)"
+.SS "subroutine model_grid::get_model_latlons (character(len=*), intent(in) mosaic_file, character(len=*), intent(in) orog_dir, integer, intent(in) num_tiles, integer, intent(in) tile, integer, intent(in) i_tile, integer, intent(in) j_tile, integer, intent(in) ip1_tile, integer, intent(in) jp1_tile, real(esmf_kind_r8), dimension(i_tile, j_tile), intent(out) latitude, real(esmf_kind_r8), dimension(i_tile, jp1_tile), intent(out) latitude_s, real(esmf_kind_r8), dimension(ip1_tile, j_tile), intent(out) latitude_w, real(esmf_kind_r8), dimension(i_tile, j_tile), intent(out) longitude, real(esmf_kind_r8), dimension(i_tile, jp1_tile), intent(out) longitude_s, real(esmf_kind_r8), dimension(ip1_tile, j_tile), intent(out) longitude_w)"
 
 .PP
 Read model lat/lons for a single tile from the 'grid' specificaton file\&. 
@@ -420,12 +410,10 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1191 of file model_grid\&.F90\&.
-.PP
-References utilities::error_handler(), and utilities::netcdf_err()\&.
+Definition at line 1207 of file model_grid\&.F90\&.
 .PP
 Referenced by define_input_grid_mosaic(), and define_target_grid()\&.
-.SS "subroutine model_grid::get_model_mask_terrain (character(len=*), intent(in)orog_file, integer, intent(in)idim, integer, intent(in)jdim, integer(esmf_kind_i8), dimension(idim,jdim), intent(out)mask, real(esmf_kind_i8), dimension(idim,jdim), intent(out)terrain, real(esmf_kind_i8), dimension(idim,jdim), intent(out)land_frac)"
+.SS "subroutine model_grid::get_model_mask_terrain (character(len=*), intent(in) orog_file, integer, intent(in) idim, integer, intent(in) jdim, integer(esmf_kind_i8), dimension(idim,jdim), intent(out) mask, real(esmf_kind_i8), dimension(idim,jdim), intent(out) terrain, real(esmf_kind_i8), dimension(idim,jdim), intent(out) land_frac)"
 
 .PP
 Read the model land mask and terrain for a single tile from the orography file\&. 
@@ -452,12 +440,10 @@ George Gayno NCEP/EMC
 .PP
 
 .PP
-Definition at line 1343 of file model_grid\&.F90\&.
-.PP
-References utilities::error_handler(), and utilities::netcdf_err()\&.
+Definition at line 1356 of file model_grid\&.F90\&.
 .PP
 Referenced by define_target_grid()\&.
-.SH "Field Documentation"
+.SH "Variable Documentation"
 .PP 
 .SS "integer, public model_grid::i_input"
 
@@ -465,187 +451,248 @@ Referenced by define_target_grid()\&.
 i-dimension of input grid (or of each global tile) 
 .PP
 Definition at line 27 of file model_grid\&.F90\&.
+.PP
+Referenced by surface::adjust_soil_levels(), atm_input_data::calcalpha_rotlatlon(), define_input_grid_gaussian(), define_input_grid_grib2(), define_input_grid_mosaic(), atm_input_data::gridrot(), atm_input_data::init_atm_esmf_fields(), sfc_input_data::read_grib_soil(), atm_input_data::read_input_atm_gaussian_netcdf_file(), atm_input_data::read_input_atm_grib2_file(), atm_input_data::read_input_atm_restart_file(), atm_input_data::read_input_atm_tiled_history_file(), nst_input_data::read_input_nst_netcdf_file(), sfc_input_data::read_input_sfc_data(), sfc_input_data::read_input_sfc_netcdf_file(), sfc_input_data::read_input_sfc_restart_file(), atm_input_data::read_winds(), and grib2_util::rh2spfh_gfs()\&.
 .SS "integer, public model_grid::i_target"
 
 .PP
 i dimension of each global tile, or of a nest, target grid\&. 
 .PP
 Definition at line 37 of file model_grid\&.F90\&.
+.PP
+Referenced by define_target_grid(), static_data::get_static_fields(), surface::interp(), surface::regrid_many(), surface::search_many(), write_data::write_fv3_atm_bndy_data_netcdf(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_grid), public model_grid::input_grid"
 
 .PP
 input grid esmf grid object 
 .PP
 Definition at line 52 of file model_grid\&.F90\&.
+.PP
+Referenced by surface::adjust_soil_levels(), cleanup_input_target_grid_data(), define_input_grid_gaussian(), define_input_grid_grib2(), define_input_grid_mosaic(), atm_input_data::init_atm_esmf_fields(), sfc_input_data::init_sfc_esmf_fields(), surface::interp(), atm_input_data::read_input_atm_gaussian_netcdf_file(), atm_input_data::read_input_atm_restart_file(), atm_input_data::read_input_atm_tiled_history_file(), and nst_input_data::read_input_nst_data()\&.
 .SS "character(len=50), public model_grid::input_grid_type = 'latlon'"
 
 .PP
 map projection of input grid 
 .PP
 Definition at line 21 of file model_grid\&.F90\&.
+.PP
+Referenced by define_input_grid_grib2(), and sfc_input_data::read_input_sfc_grib2_file()\&.
 .SS "integer, public model_grid::ip1_input"
 
 .PP
 i_input plus 1 
 .PP
 Definition at line 33 of file model_grid\&.F90\&.
+.PP
+Referenced by define_input_grid_gaussian(), define_input_grid_grib2(), and define_input_grid_mosaic()\&.
 .SS "integer, public model_grid::ip1_target"
 
 .PP
 ip1_target plus 1 
 .PP
 Definition at line 43 of file model_grid\&.F90\&.
+.PP
+Referenced by define_target_grid(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
 .SS "integer, public model_grid::j_input"
 
 .PP
 j-dimension of input grid (or of each global tile) 
 .PP
 Definition at line 30 of file model_grid\&.F90\&.
+.PP
+Referenced by surface::adjust_soil_levels(), atm_input_data::calcalpha_rotlatlon(), define_input_grid_gaussian(), define_input_grid_grib2(), define_input_grid_mosaic(), atm_input_data::gridrot(), atm_input_data::init_atm_esmf_fields(), sfc_input_data::read_grib_soil(), atm_input_data::read_input_atm_gaussian_netcdf_file(), atm_input_data::read_input_atm_grib2_file(), atm_input_data::read_input_atm_restart_file(), atm_input_data::read_input_atm_tiled_history_file(), nst_input_data::read_input_nst_netcdf_file(), sfc_input_data::read_input_sfc_data(), sfc_input_data::read_input_sfc_netcdf_file(), sfc_input_data::read_input_sfc_restart_file(), atm_input_data::read_winds(), and grib2_util::rh2spfh_gfs()\&.
 .SS "integer, public model_grid::j_target"
 
 .PP
 j dimension of each global tile, or of a nest, target grid\&. 
 .PP
 Definition at line 40 of file model_grid\&.F90\&.
+.PP
+Referenced by define_target_grid(), static_data::get_static_fields(), surface::interp(), surface::regrid_many(), surface::search_many(), write_data::write_fv3_atm_bndy_data_netcdf(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "integer, public model_grid::jp1_input"
 
 .PP
 j_input plus 1 
 .PP
 Definition at line 35 of file model_grid\&.F90\&.
+.PP
+Referenced by define_input_grid_gaussian(), define_input_grid_grib2(), define_input_grid_mosaic(), and atm_input_data::read_winds()\&.
 .SS "integer, public model_grid::jp1_target"
 
 .PP
 jp1_target plus 1 
 .PP
 Definition at line 45 of file model_grid\&.F90\&.
+.PP
+Referenced by define_target_grid(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
 .SS "type(esmf_field), public model_grid::land_frac_target_grid"
 
 .PP
 land fraction, target grid 
 .PP
 Definition at line 76 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), define_target_grid(), static_data::get_static_fields(), and surface::update_landmask()\&.
 .SS "type(esmf_field), public model_grid::landmask_target_grid"
 
 .PP
 land mask target grid - '1' some or all land; '0' all non-land 
 .PP
 Definition at line 73 of file model_grid\&.F90\&.
+.PP
+Referenced by surface::adjust_soilt_for_terrain(), surface::calc_liq_soil_moisture(), cleanup_input_target_grid_data(), define_target_grid(), surface::interp(), surface::qc_check(), surface::rescale_soil_moisture(), surface::roughness(), surface::update_landmask(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public model_grid::latitude_input_grid"
 
 .PP
 latitude of grid center, input grid 
 .PP
 Definition at line 57 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), atm_input_data::convert_winds_to_xyz(), define_input_grid_gaussian(), define_input_grid_grib2(), define_input_grid_mosaic(), and atm_input_data::read_winds()\&.
 .SS "type(esmf_field), public model_grid::latitude_s_input_grid"
 
 .PP
 latitude of 'south' edge of grid box, input grid 
 .PP
 Definition at line 61 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), and define_input_grid_mosaic()\&.
 .SS "type(esmf_field), public model_grid::latitude_s_target_grid"
 
 .PP
 latitude of 'south' edge of grid box, target grid 
 .PP
 Definition at line 80 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), atmosphere::convert_winds_to_uv(), define_target_grid(), atmosphere::vintg_wam(), and write_data::write_fv3_atm_data_netcdf()\&.
 .SS "type(esmf_field), public model_grid::latitude_target_grid"
 
 .PP
 latitude of grid center, target grid 
 .PP
 Definition at line 78 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), define_target_grid(), surface::interp(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public model_grid::latitude_w_input_grid"
 
 .PP
 latitude of 'west' edge of grid box, input grid 
 .PP
 Definition at line 67 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), and define_input_grid_mosaic()\&.
 .SS "type(esmf_field), public model_grid::latitude_w_target_grid"
 
 .PP
 latitude of 'west' edge of grid box, target grid 
 .PP
 Definition at line 83 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), atmosphere::convert_winds_to_uv(), define_target_grid(), and write_data::write_fv3_atm_data_netcdf()\&.
 .SS "type(esmf_field), public model_grid::longitude_input_grid"
 
 .PP
 longitude of grid center, input grid 
 .PP
 Definition at line 59 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), atm_input_data::convert_winds_to_xyz(), define_input_grid_gaussian(), define_input_grid_grib2(), define_input_grid_mosaic(), and atm_input_data::read_winds()\&.
 .SS "type(esmf_field), public model_grid::longitude_s_input_grid"
 
 .PP
 longitude of 'south' edge of grid box, input grid 
 .PP
 Definition at line 64 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), and define_input_grid_mosaic()\&.
 .SS "type(esmf_field), public model_grid::longitude_s_target_grid"
 
 .PP
 longitude of 'south' edge of grid box, target grid 
 .PP
 Definition at line 88 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), atmosphere::convert_winds_to_uv(), define_target_grid(), and write_data::write_fv3_atm_data_netcdf()\&.
 .SS "type(esmf_field), public model_grid::longitude_target_grid"
 
 .PP
 longitude of grid center, target grid 
 .PP
 Definition at line 86 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), define_target_grid(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public model_grid::longitude_w_input_grid"
 
 .PP
 longitude of 'west' edge of grid box, input grid 
 .PP
 Definition at line 70 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), and define_input_grid_mosaic()\&.
 .SS "type(esmf_field), public model_grid::longitude_w_target_grid"
 
 .PP
 longitude of 'west' edge of grid box, target grid 
 .PP
 Definition at line 91 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), atmosphere::convert_winds_to_uv(), define_target_grid(), and write_data::write_fv3_atm_data_netcdf()\&.
 .SS "integer, public model_grid::lsoil_target = 4"
 
 .PP
 Number of soil layers, target grid\&. 
 .PP
 Definition at line 25 of file model_grid\&.F90\&.
+.PP
+Referenced by surface::adjust_soil_levels(), surface::create_surface_esmf_fields(), define_target_grid(), surface::interp(), surface::search_many(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "integer, public model_grid::num_tiles_input_grid"
 
 .PP
 Number of tiles, input grid\&. 
 .PP
 Definition at line 47 of file model_grid\&.F90\&.
+.PP
+Referenced by define_input_grid_gaussian(), define_input_grid_mosaic(), atm_input_data::read_input_atm_restart_file(), atm_input_data::read_input_atm_tiled_history_file(), nst_input_data::read_input_nst_netcdf_file(), sfc_input_data::read_input_sfc_netcdf_file(), and sfc_input_data::read_input_sfc_restart_file()\&.
 .SS "integer, public model_grid::num_tiles_target_grid"
 
 .PP
 Number of tiles, target grid\&. 
 .PP
 Definition at line 49 of file model_grid\&.F90\&.
+.PP
+Referenced by define_target_grid(), static_data::get_static_fields(), surface::interp(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_sfc_data_netcdf()\&.
 .SS "type(esmf_field), public model_grid::seamask_target_grid"
 
 .PP
 sea mask target grid - '1' some or all non-land; '0' all land 
 .PP
 Definition at line 94 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), define_target_grid(), surface::interp(), surface::nst_land_fill(), surface::qc_check(), and surface::roughness()\&.
 .SS "type(esmf_grid), public model_grid::target_grid"
 
 .PP
 target grid esmf grid object\&. 
 .PP
 Definition at line 54 of file model_grid\&.F90\&.
+.PP
+Referenced by cleanup_input_target_grid_data(), atmosphere::create_atm_b4adj_esmf_fields(), atmosphere::create_atm_esmf_fields(), surface::create_nst_esmf_fields(), static_data::create_static_fields(), surface::create_surface_esmf_fields(), define_target_grid(), atmosphere::horiz_interp_thomp_mp_climo(), and surface::interp()\&.
 .SS "type(esmf_field), public model_grid::terrain_target_grid"
 
 .PP
 terrain height target grid 
 .PP
 Definition at line 97 of file model_grid\&.F90\&.
+.PP
+Referenced by surface::adjust_soilt_for_terrain(), cleanup_input_target_grid_data(), atmosphere::compute_zh(), define_target_grid(), and atmosphere::newps()\&.
 .SS "character(len=5), dimension(:), allocatable, public model_grid::tiles_target_grid"
 
 .PP
 Tile names of target grid\&. 
 .PP
 Definition at line 19 of file model_grid\&.F90\&.
-
+.PP
+Referenced by define_target_grid(), and static_data::read_static_file()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

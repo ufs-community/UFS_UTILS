@@ -1,10 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface.F90 \- 
-.PP
-Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface.F90 \- Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields\&.  
 
 .SH SYNOPSIS
 .br
@@ -18,10 +16,130 @@ Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) field
 .ti -1c
 .RI "type \fBsurface::realptr_3d\fP"
 .br
+.in -1c
+.SS "Modules"
+
+.in +1c
 .ti -1c
 .RI "module \fBsurface\fP"
 .br
-.RI "\fIProcess surface and nst fields\&. \fP"
+.RI "Process surface and nst fields\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBsurface::adjust_soil_levels\fP (localpet)"
+.br
+.RI "Adjust soil levels of the input grid if there is a mismatch between input and target grids\&. "
+.ti -1c
+.RI "subroutine \fBsurface::adjust_soilt_for_terrain\fP"
+.br
+.RI "Adjust soil temperature for changes in terrain height between the input and target grids\&. "
+.ti -1c
+.RI "subroutine \fBsurface::calc_liq_soil_moisture\fP"
+.br
+.RI "Compute liquid portion of the total soil moisture\&. "
+.ti -1c
+.RI "subroutine \fBsurface::cleanup_all_target_sfc_data\fP"
+.br
+.RI "Free up memory once the target grid surface fields are no longer needed\&. "
+.ti -1c
+.RI "subroutine, public \fBsurface::create_nst_esmf_fields\fP"
+.br
+.RI "Create ESMF fields for the target grid nst variables\&. "
+.ti -1c
+.RI "subroutine, public \fBsurface::create_surface_esmf_fields\fP"
+.br
+.RI "Create ESMF fields for the target grid surface variables\&. "
+.ti -1c
+.RI "real function \fBsurface::frh2o\fP (TKELV, SMC, SH2O, SMCMAX, BEXP, PSIS)"
+.br
+.RI "Calculate supercooled soil moisture\&. "
+.ti -1c
+.RI "subroutine \fBsurface::ij_to_i_j\fP (ij, itile, jtile, i, j)"
+.br
+.RI "Convert 1d index to 2d indices\&. "
+.ti -1c
+.RI "subroutine, public \fBsurface::interp\fP (localpet)"
+.br
+.RI "Horizontally interpolate surface fields from input to target FV3 grid using esmf routines\&. "
+.ti -1c
+.RI "subroutine, public \fBsurface::nst_land_fill\fP"
+.br
+.RI "nst is not active at land or sea ice points\&. "
+.ti -1c
+.RI "subroutine \fBsurface::qc_check\fP"
+.br
+.RI "Perform some quality control checks and set flag values at non-active points\&. "
+.ti -1c
+.RI "subroutine, public \fBsurface::regrid_many\fP (bundle_pre, bundle_post, num_field, route, dozero, unmapped_ptr, resetifd)"
+.br
+.RI "Regrid multiple ESMF fields from input to target grid\&. "
+.ti -1c
+.RI "subroutine \fBsurface::rescale_soil_moisture\fP"
+.br
+.RI "Adjust soil moisture for changes in soil type between the input and target grids\&. "
+.ti -1c
+.RI "subroutine \fBsurface::roughness\fP"
+.br
+.RI "Set roughness length at points with some sea ice to 1 cm\&. "
+.ti -1c
+.RI "subroutine, public \fBsurface::search_many\fP (num_field, bundle_target, tile, search_nums, localpet, latitude, terrain_land, soilt_climo, mask)"
+.br
+.RI "Execute the search function for multple fields\&. "
+.ti -1c
+.RI "subroutine, public \fBsurface::surface_driver\fP (localpet)"
+.br
+.RI "Driver routine to process surface/nst data\&. "
+.ti -1c
+.RI "subroutine \fBsurface::update_landmask\fP"
+.br
+.RI "Update landmask for sea ice\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real, parameter, private \fBsurface::blim\fP = 5\&.5"
+.br
+.RI "soil 'b' parameter limit "
+.ti -1c
+.RI "real, parameter, private \fBsurface::frz_h2o\fP = 273\&.15"
+.br
+.RI "melting pt water "
+.ti -1c
+.RI "real, parameter, private \fBsurface::frz_ice\fP = 271\&.21"
+.br
+.RI "melting pt sea ice "
+.ti -1c
+.RI "real, parameter, private \fBsurface::grav\fP = 9\&.81"
+.br
+.RI "gravity "
+.ti -1c
+.RI "real, parameter, private \fBsurface::hlice\fP = 3\&.335E5"
+.br
+.RI "latent heat of fusion "
+.ti -1c
+.RI "real(esmf_kind_r8), parameter, private \fBsurface::missing\fP = \-1\&.e20_esmf_kind_r8"
+.br
+.RI "flag for non-active points\&. "
+.ti -1c
+.RI "type(esmf_field) \fBsurface::soil_type_from_input_grid\fP"
+.br
+.RI "soil type interpolated from input grid "
+.ti -1c
+.RI "type(esmf_field) \fBsurface::terrain_from_input_grid\fP"
+.br
+.RI "terrain height interpolated from input grid "
+.ti -1c
+.RI "type(esmf_field) \fBsurface::terrain_from_input_grid_land\fP"
+.br
+.RI "terrain height interpolated from input grid at all land points "
+.ti -1c
+.RI "integer, parameter \fBsurface::veg_type_landice_target\fP = 15"
+.br
+.RI "Vegetation type category that defines permanent land ice points\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

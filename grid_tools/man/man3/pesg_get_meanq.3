@@ -1,8 +1,8 @@
-.TH "pesg::get_meanq" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::get_meanq" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::get_meanq \- 
+pesg::get_meanq
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pesg::get_meanq \-
 .ti -1c
 .RI "subroutine \fBget_meanqd\fP (ngh, lam, xg, wg, ak, ma, q, qdak, qdma, ga, gadak, gadma, ff)"
 .br
-.RI "\fIFor a parameter vector, ak and a map-space domain-parameter vector, ma, return the lambda-parameterized quality diagnostic, Q, and the geographic domain-parameter vector ga\&. \fP"
+.RI "For a parameter vector, ak and a map-space domain-parameter vector, ma, return the lambda-parameterized quality diagnostic, Q, and the geographic domain-parameter vector ga\&. "
 .ti -1c
 .RI "subroutine \fBget_meanqs\fP (n, ngh, lam, xg, wg, aks, mas, qs, ff)"
 .br
-.RI "\fILike getmeanqd, except for n different values, aks, of ak and n different values, mas of ma, and without any of the derivatives\&. \fP"
+.RI "Like getmeanqd, except for n different values, aks, of ak and n different values, mas of ma, and without any of the derivatives\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 39 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::get_meanq::get_meanqd (integer(spi), intent(in)ngh, real(dp), intent(in)lam, real(dp), dimension(ngh), intent(in)xg, real(dp), dimension(ngh), intent(in)wg, real(dp), dimension(2), intent(in)ak, real(dp), dimension(2), intent(in)ma, real(dp), intent(out)q, real(dp), dimension(2), intent(out)qdak, real(dp), dimension(2), intent(out)qdma, real(dp), dimension(2), intent(out)ga, real(dp), dimension(2,2), intent(out)gadak, real(dp), dimension(2,2), intent(out)gadma, logical, intent(out)ff)\fC [private]\fP"
+.SS "subroutine pesg::get_meanq::get_meanqd (integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) ma, real(dp), intent(out) q, real(dp), dimension(2), intent(out) qdak, real(dp), dimension(2), intent(out) qdma, real(dp), dimension(2), intent(out) ga, real(dp), dimension(2,2), intent(out) gadak, real(dp), dimension(2,2), intent(out) gadma, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 For a parameter vector, ak and a map-space domain-parameter vector, ma, return the lambda-parameterized quality diagnostic, Q, and the geographic domain-parameter vector ga\&. Lambda is given by lam <1\&. Also, return the derivatives, qdak and qdma, of Q wrt ak and ma, and the derivatives gadak and gadma, of ga wrt ak and ma\&.
@@ -68,8 +68,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 602 of file pesg\&.f90\&.
-.SS "subroutine pesg::get_meanq::get_meanqs (integer(spi), intent(in)n, integer(spi), intent(in)ngh, real(dp), intent(in)lam, real(dp), dimension(ngh), intent(in)xg, real(dp), dimension(ngh), intent(in)wg, real(dp), dimension(2,n), intent(in)aks, real(dp), dimension(2,n), intent(in)mas, real(dp), dimension(n), intent(out)qs, logical, intent(out)ff)\fC [private]\fP"
+Definition at line 604 of file pesg\&.f90\&.
+.SS "subroutine pesg::get_meanq::get_meanqs (integer(spi), intent(in) n, integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2,n), intent(in) aks, real(dp), dimension(2,n), intent(in) mas, real(dp), dimension(n), intent(out) qs, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Like getmeanqd, except for n different values, aks, of ak and n different values, mas of ma, and without any of the derivatives\&. 
@@ -102,7 +102,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 681 of file pesg\&.f90\&.
+Definition at line 682 of file pesg\&.f90\&.
 
 .SH "Author"
 .PP 

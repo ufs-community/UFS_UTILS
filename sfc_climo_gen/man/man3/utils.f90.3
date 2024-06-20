@@ -1,21 +1,31 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/utils.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/utils.f90" 3 "Thu Jun 20 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/utils.f90 \- 
-.PP
-Utilities\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/utils.f90 \- Utilities\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fButils\fP"
 .br
-.RI "\fIUtilities\&. \fP"
+.RI "Utilities\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fButils::error_handler\fP (string, rc)"
+.br
+.RI "Handle errors\&. "
+.ti -1c
+.RI "subroutine, public \fButils::netcdf_err\fP (err, string)"
+.br
+.RI "Handle netCDF error codes\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

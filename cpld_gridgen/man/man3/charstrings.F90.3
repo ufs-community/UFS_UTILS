@@ -1,20 +1,71 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/charstrings.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/charstrings.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/charstrings.F90 \- 
-.PP
-Define required character string variables\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/charstrings.F90 \- Define required character string variables\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Variables"
 
 .in +1c
 .ti -1c
-.RI "module \fBcharstrings\fP"
+.RI "character(len=cs) \fBcharstrings::atmres\fP"
 .br
+.RI "The ATM resolution, e\&.g\&. "
+.ti -1c
+.RI "character(len=cs) \fBcharstrings::cdate\fP"
+.br
+.RI "The date stamp of file creation\&. "
+.ti -1c
+.RI "character(len=cl) \fBcharstrings::dirout\fP"
+.br
+.RI "The directory where output files will be written\&. "
+.ti -1c
+.RI "character(len=cl) \fBcharstrings::dirsrc\fP"
+.br
+.RI "The source directory containing the fix files for MOM6\&. "
+.ti -1c
+.RI "character(len=cl) \fBcharstrings::editsfile\fP"
+.br
+.RI "The name of the topo edits file (resolution specific) "
+.ti -1c
+.RI "character(len=cl) \fBcharstrings::fv3dir\fP"
+.br
+.RI "The directory containing the FV3 mosaic files\&. "
+.ti -1c
+.RI "character(len=cl) \fBcharstrings::history\fP"
+.br
+.RI "A documentation string\&. "
+.ti -1c
+.RI "character(len=cl) \fBcharstrings::logmsg\fP"
+.br
+.RI "An informational message\&. "
+.ti -1c
+.RI "character(len=cl) \fBcharstrings::maskfile\fP = 'ocean_mask\&.nc'"
+.br
+.RI "The name of the MOM6 mask file\&. "
+.ti -1c
+.RI "character(len=cs) \fBcharstrings::maskname\fP = 'mask'"
+.br
+.RI "The variable name of the mask field\&. "
+.ti -1c
+.RI "character(len=cs) \fBcharstrings::res\fP"
+.br
+.RI "The Ocean/Ice resolution, e\&.g\&. "
+.ti -1c
+.RI "character(len=2), dimension(4) \fBcharstrings::staggerlocs\fP = (/'Ct','Cu','Cv','Bu'/)"
+.br
+.RI "The named stagger locations of the grid\&. "
+.ti -1c
+.RI "character(len=cl) \fBcharstrings::topofile\fP"
+.br
+.RI "The name of the MOM6 bathymetry file\&. "
+.ti -1c
+.RI "character(len=cs) \fBcharstrings::toponame\fP = 'depth'"
+.br
+.RI "The name of the bathymetry field\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -37,58 +88,92 @@ Denise.Worthen@noaa.gov
 
 .PP
 Definition in file \fBcharstrings\&.F90\fP\&.
-.SH "Data Type Documentation"
+.SH "Variable Documentation"
 .PP 
-.SH "module charstrings"
-.PP 
-Definition at line 8 of file charstrings\&.F90\&.
+.SS "character(len=cs) charstrings::atmres"
+
 .PP
-\fBData Fields:\fP
-.RS 4
-character(len=cs) \fIatmres\fP The ATM resolution, e\&.g\&. C96, C192, C384 
-.br
+The ATM resolution, e\&.g\&. C96, C192, C384 
 .PP
-character(len=cs) \fIcdate\fP The date stamp of file creation\&. 
-.br
+Definition at line 19 of file charstrings\&.F90\&.
+.SS "character(len=cs) charstrings::cdate"
+
 .PP
-character(len=cl) \fIdirout\fP The directory where output files will be written\&. 
-.br
+The date stamp of file creation\&. 
 .PP
-character(len=cl) \fIdirsrc\fP The source directory containing the fix files for MOM6\&. 
-.br
+Definition at line 30 of file charstrings\&.F90\&.
+.SS "character(len=cl) charstrings::dirout"
+
 .PP
-character(len=cl) \fIeditsfile\fP The name of the topo edits file (resolution specific) 
-.br
+The directory where output files will be written\&. 
 .PP
-character(len=cl) \fIfv3dir\fP The directory containing the FV3 mosaic files\&. 
-.br
+Definition at line 15 of file charstrings\&.F90\&.
+.SS "character(len=cl) charstrings::dirsrc"
+
 .PP
-character(len=cl) \fIhistory\fP A documentation string\&. 
-.br
+The source directory containing the fix files for MOM6\&. 
 .PP
-character(len=cl) \fIlogmsg\fP An informational message\&. 
-.br
+Definition at line 14 of file charstrings\&.F90\&.
+.SS "character(len=cl) charstrings::editsfile"
+
 .PP
-character(len=cl) \fImaskfile\fP The name of the MOM6 mask file\&. 
-.br
+The name of the topo edits file (resolution specific) 
 .PP
-character(len=cs) \fImaskname\fP The variable name of the mask field\&. 
-.br
+Definition at line 24 of file charstrings\&.F90\&.
+.SS "character(len=cl) charstrings::fv3dir"
+
 .PP
-character(len=cs) \fIres\fP The Ocean/Ice resolution, e\&.g\&. 500 (5deg), 100 (1deg) 050 (1/2deg), 025 (1/4deg) 
-.br
+The directory containing the FV3 mosaic files\&. 
 .PP
-character(len=2), dimension(4) \fIstaggerlocs\fP The named stagger locations of the grid\&. 
-.br
+Definition at line 16 of file charstrings\&.F90\&.
+.SS "character(len=cl) charstrings::history"
+
 .PP
-character(len=cl) \fItopofile\fP The name of the MOM6 bathymetry file\&. 
-.br
+A documentation string\&. 
 .PP
-character(len=cs) \fItoponame\fP The name of the bathymetry field\&. 
-.br
+Definition at line 29 of file charstrings\&.F90\&.
+.SS "character(len=cl) charstrings::logmsg"
+
 .PP
-.RE
+An informational message\&. 
 .PP
+Definition at line 20 of file charstrings\&.F90\&.
+.SS "character(len=cl) charstrings::maskfile = 'ocean_mask\&.nc'"
+
+.PP
+The name of the MOM6 mask file\&. 
+.PP
+Definition at line 22 of file charstrings\&.F90\&.
+.SS "character(len=cs) charstrings::maskname = 'mask'"
+
+.PP
+The variable name of the mask field\&. 
+.PP
+Definition at line 23 of file charstrings\&.F90\&.
+.SS "character(len=cs) charstrings::res"
+
+.PP
+The Ocean/Ice resolution, e\&.g\&. 500 (5deg), 100 (1deg) 050 (1/2deg), 025 (1/4deg) 
+.PP
+Definition at line 17 of file charstrings\&.F90\&.
+.SS "character(len= 2), dimension(4) charstrings::staggerlocs = (/'Ct','Cu','Cv','Bu'/)"
+
+.PP
+The named stagger locations of the grid\&. 
+.PP
+Definition at line 32 of file charstrings\&.F90\&.
+.SS "character(len=cl) charstrings::topofile"
+
+.PP
+The name of the MOM6 bathymetry file\&. 
+.PP
+Definition at line 26 of file charstrings\&.F90\&.
+.SS "character(len=cs) charstrings::toponame = 'depth'"
+
+.PP
+The name of the bathymetry field\&. 
+.PP
+Definition at line 27 of file charstrings\&.F90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

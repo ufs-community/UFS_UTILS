@@ -1,8 +1,8 @@
-.TH "module_nwp::fcst_nwp" 3 "Wed Mar 13 2024" "Version 1.13.0" "fvcom_tools" \" -*- nroff -*-
+.TH "module_nwp::fcst_nwp" 3 "Thu Jun 20 2024" "Version 1.13.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-module_nwp::fcst_nwp \- 
+module_nwp::fcst_nwp
 .SH SYNOPSIS
 .br
 .PP
@@ -12,23 +12,23 @@ module_nwp::fcst_nwp \-
 .ti -1c
 .RI "procedure \fBfinish\fP => \fBfinish_nwp\fP"
 .br
-.RI "\fIFinish and deallocate\&. \fP"
+.RI "Finish and deallocate\&. "
 .ti -1c
 .RI "procedure \fBget_time_ind\fP => \fBget_time_ind_nwp\fP"
 .br
-.RI "\fIGet time ind\&. \fP"
+.RI "Get time ind\&. "
 .ti -1c
 .RI "procedure \fBinitial\fP => \fBinitial_nwp\fP"
 .br
-.RI "\fIDefines vars and names\&. \fP"
+.RI "Defines vars and names\&. "
 .ti -1c
 .RI "procedure \fBlist_initial\fP => \fBlist_initial_nwp\fP"
 .br
-.RI "\fIList the setup\&. \fP"
+.RI "List the setup\&. "
 .ti -1c
 .RI "procedure \fBread_n\fP => \fBread_nwp\fP"
 .br
-.RI "\fIInitialize arrays, get data\&. \fP"
+.RI "Initialize arrays, get data\&. "
 .in -1c
 .SS "Private Attributes"
 
@@ -36,185 +36,151 @@ module_nwp::fcst_nwp \-
 .ti -1c
 .RI "character(len=6) \fBdatatype\fP"
 .br
-.RI "\fIData type\&. \fP"
+.RI "Data type\&. "
 .ti -1c
 .RI "integer \fBdatelen\fP"
 .br
-.RI "\fILength of date string\&. \fP"
+.RI "Length of date string\&. "
 .ti -1c
 .RI "character(len=20), allocatable \fBdimnamedate\fP"
 .br
-.RI "\fIString dimension name\&. \fP"
+.RI "String dimension name\&. "
 .ti -1c
 .RI "character(len=20), allocatable \fBdimnameew\fP"
 .br
-.RI "\fIEast/West dimension name\&. \fP"
+.RI "East/West dimension name\&. "
 .ti -1c
 .RI "character(len=20), allocatable \fBdimnamens\fP"
 .br
-.RI "\fINorth/South dimension name\&. \fP"
+.RI "North/South dimension name\&. "
 .ti -1c
 .RI "character(len=20), allocatable \fBdimnametime\fP"
 .br
-.RI "\fITime dimension name\&. \fP"
+.RI "Time dimension name\&. "
 .ti -1c
 .RI "integer \fBi_hice\fP"
 .br
-.RI "\fIIndex of ice thickness\&. \fP"
+.RI "Index of ice thickness\&. "
 .ti -1c
 .RI "integer \fBi_ice\fP"
 .br
-.RI "\fIIndex of ice var\&. \fP"
+.RI "Index of ice var\&. "
 .ti -1c
 .RI "integer \fBi_icet\fP"
 .br
-.RI "\fIIndex of ice temp var\&. \fP"
+.RI "Index of ice temp var\&. "
 .ti -1c
 .RI "integer \fBi_mask\fP"
 .br
-.RI "\fIIs var visible (always 1)\&. \fP"
+.RI "Is var visible (always 1)\&. "
 .ti -1c
 .RI "integer \fBi_sfct\fP"
 .br
-.RI "\fIIndex of sst temp var\&. \fP"
+.RI "Index of sst temp var\&. "
 .ti -1c
 .RI "integer \fBi_sfctl\fP"
 .br
-.RI "\fIIndex of sfcTl\&. \fP"
+.RI "Index of sfcTl\&. "
 .ti -1c
 .RI "integer \fBi_sst\fP"
 .br
-.RI "\fIIndex of sst var\&. \fP"
+.RI "Index of sst var\&. "
 .ti -1c
 .RI "integer \fBi_zorl\fP"
 .br
-.RI "\fIIndex of surface roughness\&. \fP"
+.RI "Index of surface roughness\&. "
 .ti -1c
 .RI "character(len=20), allocatable \fBlatname\fP"
 .br
-.RI "\fILatitude name\&. \fP"
+.RI "Latitude name\&. "
 .ti -1c
 .RI "character(len=20), allocatable \fBlonname\fP"
 .br
-.RI "\fILongitude name\&. \fP"
+.RI "Longitude name\&. "
 .ti -1c
 .RI "integer \fBnumvar\fP"
 .br
-.RI "\fINumber of variabls\&. \fP"
+.RI "Number of variabls\&. "
 .ti -1c
-.RI "real(r_single), dimension(:,:,:), 
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_hice_c\fP"
 .br
-allocatable \fBnwp_hice_c\fP"
-.br
-.RI "\fIcold start ice thickness \fP"
+.RI "cold start ice thickness "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_hice_w\fP"
 .br
-allocatable \fBnwp_hice_w\fP"
-.br
-.RI "\fIwarm start ice thickness \fP"
+.RI "warm start ice thickness "
 .ti -1c
-.RI "real(r_single), dimension(:,:,:), 
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_ice_c\fP"
 .br
-allocatable \fBnwp_ice_c\fP"
-.br
-.RI "\fIcold start over water ice concentration 3d array \fP"
+.RI "cold start over water ice concentration 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_ice_w\fP"
 .br
-allocatable \fBnwp_ice_w\fP"
-.br
-.RI "\fIwarm start over water ice concentration 3d array \fP"
+.RI "warm start over water ice concentration 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:,:), 
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_icet_c\fP"
 .br
-allocatable \fBnwp_icet_c\fP"
-.br
-.RI "\fIcold start ice skin temperature 3d array \fP"
+.RI "cold start ice skin temperature 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_icet_w\fP"
 .br
-allocatable \fBnwp_icet_w\fP"
-.br
-.RI "\fIwarm start ice skin temperature 3d array \fP"
+.RI "warm start ice skin temperature 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_mask_c\fP"
 .br
-allocatable \fBnwp_mask_c\fP"
-.br
-.RI "\fIcold start land/water mask 3d array \fP"
+.RI "cold start land/water mask 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_mask_w\fP"
 .br
-allocatable \fBnwp_mask_w\fP"
-.br
-.RI "\fIwarm start land/water mask 3d array \fP"
+.RI "warm start land/water mask 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:,:), 
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_sfct_c\fP"
 .br
-allocatable \fBnwp_sfct_c\fP"
-.br
-.RI "\fIcold start skin temperature 3d array \fP"
+.RI "cold start skin temperature 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_sfct_w\fP"
 .br
-allocatable \fBnwp_sfct_w\fP"
-.br
-.RI "\fIwarm start skin temperature 3d array \fP"
+.RI "warm start skin temperature 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_sfctl_w\fP"
 .br
-allocatable \fBnwp_sfctl_w\fP"
-.br
-.RI "\fIwarm start skin temperature 3d array \fP"
+.RI "warm start skin temperature 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:,:), 
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_sst_c\fP"
 .br
-allocatable \fBnwp_sst_c\fP"
-.br
-.RI "\fIcold start sst 3d array \fP"
+.RI "cold start sst 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_sst_w\fP"
 .br
-allocatable \fBnwp_sst_w\fP"
-.br
-.RI "\fIwarm start sst 3d array \fP"
+.RI "warm start sst 3d array "
 .ti -1c
-.RI "real(r_single), dimension(:,:,:), 
+.RI "real(r_single), dimension(:,:,:), allocatable \fBnwp_zorl_c\fP"
 .br
-allocatable \fBnwp_zorl_c\fP"
-.br
-.RI "\fIcold start surface roughness \fP"
+.RI "cold start surface roughness "
 .ti -1c
-.RI "real(r_single), dimension(:,:), 
+.RI "real(r_single), dimension(:,:), allocatable \fBnwp_zorl_w\fP"
 .br
-allocatable \fBnwp_zorl_w\fP"
-.br
-.RI "\fIwarm start surface roughness \fP"
+.RI "warm start surface roughness "
 .ti -1c
-.RI "character(len=1), dimension(:,:), 
+.RI "character(len=1), dimension(:,:), allocatable \fBtimes\fP"
 .br
-allocatable \fBtimes\fP"
-.br
-.RI "\fIArray of times in FVCOM\&. \fP"
+.RI "Array of times in FVCOM\&. "
 .ti -1c
-.RI "character(len=20), dimension(:), 
+.RI "character(len=20), dimension(:), allocatable \fBvarnames\fP"
 .br
-allocatable \fBvarnames\fP"
-.br
-.RI "\fIVariable names\&. \fP"
+.RI "Variable names\&. "
 .ti -1c
 .RI "integer \fBxlat\fP"
 .br
-.RI "\fINumber of latitudes\&. \fP"
+.RI "Number of latitudes\&. "
 .ti -1c
 .RI "integer \fBxlon\fP"
 .br
-.RI "\fINumber of longitudes\&. \fP"
+.RI "Number of longitudes\&. "
 .ti -1c
 .RI "integer \fBxtime\fP"
 .br
-.RI "\fINumber of times\&. \fP"
+.RI "Number of times\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -234,8 +200,6 @@ Finish and deallocate\&.
 
 .PP
 Definition at line 72 of file module_nwp\&.f90\&.
-.PP
-References module_nwp::finish_nwp()\&.
 .SS "procedure module_nwp::fcst_nwp::get_time_ind ()\fC [private]\fP"
 
 .PP
@@ -249,8 +213,6 @@ Get time ind\&.
 
 .PP
 Definition at line 71 of file module_nwp\&.f90\&.
-.PP
-References module_nwp::get_time_ind_nwp()\&.
 .SS "procedure module_nwp::fcst_nwp::initial ()\fC [private]\fP"
 
 .PP
@@ -264,8 +226,6 @@ Defines vars and names\&.
 
 .PP
 Definition at line 68 of file module_nwp\&.f90\&.
-.PP
-References module_nwp::initial_nwp()\&.
 .SS "procedure module_nwp::fcst_nwp::list_initial ()\fC [private]\fP"
 
 .PP
@@ -279,8 +239,6 @@ List the setup\&.
 
 .PP
 Definition at line 69 of file module_nwp\&.f90\&.
-.PP
-References module_nwp::list_initial_nwp()\&.
 .SS "procedure module_nwp::fcst_nwp::read_n ()\fC [private]\fP"
 
 .PP
@@ -294,8 +252,6 @@ Initialize arrays, get data\&.
 
 .PP
 Definition at line 70 of file module_nwp\&.f90\&.
-.PP
-References module_nwp::read_nwp()\&.
 .SH "Field Documentation"
 .PP 
 .SS "character(len=6) module_nwp::fcst_nwp::datatype\fC [private]\fP"

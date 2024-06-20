@@ -1,8 +1,8 @@
-.TH "pmat2::ltdlbv" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::ltdlbv" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::ltdlbv \- 
+pmat2::ltdlbv
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pmat2::ltdlbv \-
 .ti -1c
 .RI "subroutine \fBltdlbv\fP (m, mah1, a, v)"
 .br
-.RI "\fILike udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) \fP"
+.RI "Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) "
 .ti -1c
 .RI "subroutine \fBdltdlbv\fP (m, mah1, a, v)"
 .br
-.RI "\fILike udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) \fP"
+.RI "Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 68 of file pmat2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::ltdlbv::ltdlbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(in)a, real(sp), dimension(m), intent(inout)v)\fC [private]\fP"
+.SS "subroutine pmat2::ltdlbv::ltdlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(sp), dimension(m,\-mah1:0), intent(in) a, real(sp), dimension(m), intent(inout) v)\fC [private]\fP"
 
 .PP
 Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
@@ -51,10 +51,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 949 of file pmat2\&.f90\&.
+Definition at line 950 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::ltdlbv::dltdlbv (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(in)a, real(dp), dimension(m), intent(inout)v)\fC [private]\fP"
+.SS "subroutine pmat2::ltdlbv::dltdlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(dp), dimension(m,\-mah1:0), intent(in) a, real(dp), dimension(m), intent(inout) v)\fC [private]\fP"
 
 .PP
 Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
@@ -82,7 +82,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 979 of file pmat2\&.f90\&.
+Definition at line 980 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

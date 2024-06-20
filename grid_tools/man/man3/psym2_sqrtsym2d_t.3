@@ -1,8 +1,8 @@
-.TH "psym2::sqrtsym2d_t" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "psym2::sqrtsym2d_t" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-psym2::sqrtsym2d_t \- 
+psym2::sqrtsym2d_t
 .SH SYNOPSIS
 .br
 .PP
@@ -12,14 +12,14 @@ psym2::sqrtsym2d_t \-
 .ti -1c
 .RI "subroutine \fBsqrtsym2d_t\fP (x, z, zd)"
 .br
-.RI "\fIUse the Taylor-series method (eigenvalues both fairly close to unity)\&. \fP"
+.RI "Use the Taylor-series method (eigenvalues both fairly close to unity)\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 25 of file psym2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine psym2::sqrtsym2d_t::sqrtsym2d_t (real(dp), dimension(2,2), intent(in)x, real(dp), dimension(2,2), intent(out)z, real(dp), dimension(2,2,2,2), intent(out)zd)\fC [private]\fP"
+.SS "subroutine psym2::sqrtsym2d_t::sqrtsym2d_t (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
 
 .PP
 Use the Taylor-series method (eigenvalues both fairly close to unity)\&. For a 2*2 positive definite symmetric matrix x, try to get both the z=sqrt(x) and dz/dx using the binomial-expansion method applied to the intermediate matrix, 
@@ -46,7 +46,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 235 of file psym2\&.f90\&.
+Definition at line 236 of file psym2\&.f90\&.
 
 .SH "Author"
 .PP 

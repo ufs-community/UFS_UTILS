@@ -1,21 +1,203 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/snowdat.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/snowdat.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/snowdat.F90 \- 
-.PP
-Read and qc afwa, nesdis/ims and autosnow snow data\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_snow2mdl.fd/snowdat.F90 \- Read and qc afwa, nesdis/ims and autosnow snow data\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fBsnowdat\fP"
 .br
-.RI "\fIRead and qc afwa, nesdis/ims and autosnow snow data\&. \fP"
+.RI "Read and qc afwa, nesdis/ims and autosnow snow data\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBsnowdat::afwa_check\fP (hemi)"
+.br
+.RI "Check for corrupt afwa data\&. "
+.ti -1c
+.RI "subroutine \fBsnowdat::nh_climo_check\fP (kgds_data, snow_data, bitmap_data, idata, jdata, isrc, bad)"
+.br
+.RI "Check for corrupt nh snow cover data\&. "
+.ti -1c
+.RI "subroutine \fBsnowdat::read_afwa_binary\fP (file_name, snow_dep_afwa)"
+.br
+.RI "Read afwa binary snow depth file\&. "
+.ti -1c
+.RI "subroutine \fBsnowdat::read_afwa_mask\fP (file_name, bitmap_afwa)"
+.br
+.RI "Read afwa land mask file to get a bitmap\&. "
+.ti -1c
+.RI "subroutine \fBsnowdat::readafwa\fP"
+.br
+.RI "Read snow depth data and masks\&. "
+.ti -1c
+.RI "subroutine \fBsnowdat::readautosnow\fP"
+.br
+.RI "Read autosnow snow cover\&. "
+.ti -1c
+.RI "subroutine \fBsnowdat::readnesdis\fP"
+.br
+.RI "Read nesdis/ims snow cover/ice data\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real \fBsnowdat::afwa_res\fP"
+.br
+.RI "Resolution of afwa data in km\&. "
+.ti -1c
+.RI "real \fBsnowdat::autosnow_res\fP"
+.br
+.RI "Resolution of autosnow in km\&. "
+.ti -1c
+.RI "logical \fBsnowdat::bad_afwa_global\fP"
+.br
+.RI "When true, the global afwa data failed its quality control check\&. "
+.ti -1c
+.RI "logical \fBsnowdat::bad_afwa_nh\fP"
+.br
+.RI "When true, the northern hemisphere afwa data failed its quality control check\&. "
+.ti -1c
+.RI "logical \fBsnowdat::bad_afwa_sh\fP"
+.br
+.RI "When true, the southern hemisphere afwa data failed its quality control check\&. "
+.ti -1c
+.RI "logical \fBsnowdat::bad_nesdis\fP"
+.br
+.RI "When true, the nesdis data failed its quality control check\&. "
+.ti -1c
+.RI "logical *1, dimension(:,:), allocatable \fBsnowdat::bitmap_afwa_global\fP"
+.br
+.RI "The global afwa data grib bitmap\&. "
+.ti -1c
+.RI "logical *1, dimension(:,:), allocatable \fBsnowdat::bitmap_afwa_nh\fP"
+.br
+.RI "The northern hemisphere afwa data grib bitmap\&. "
+.ti -1c
+.RI "logical *1, dimension(:,:), allocatable \fBsnowdat::bitmap_afwa_sh\fP"
+.br
+.RI "The southern hemisphere afwa data grib bitmap\&. "
+.ti -1c
+.RI "logical *1, dimension(:,:), allocatable \fBsnowdat::bitmap_autosnow\fP"
+.br
+.RI "autosnow data grib bitmap (false-non land, true-land)\&. "
+.ti -1c
+.RI "logical *1, dimension(:,:), allocatable \fBsnowdat::bitmap_nesdis\fP"
+.br
+.RI "nesdis data grib bitmap (false-non land, true-land)\&. "
+.ti -1c
+.RI "integer \fBsnowdat::iafwa\fP"
+.br
+.RI "i-dimension of afwa grid "
+.ti -1c
+.RI "integer \fBsnowdat::iautosnow\fP"
+.br
+.RI "i-dimension of autosnow grid "
+.ti -1c
+.RI "integer \fBsnowdat::inesdis\fP"
+.br
+.RI "i-dimension of nesdis grid "
+.ti -1c
+.RI "integer \fBsnowdat::jafwa\fP"
+.br
+.RI "j-dimension of afwa grid "
+.ti -1c
+.RI "integer \fBsnowdat::jautosnow\fP"
+.br
+.RI "j-dimension of autosnow grid "
+.ti -1c
+.RI "integer \fBsnowdat::jnesdis\fP"
+.br
+.RI "j-dimension of nesdis grid "
+.ti -1c
+.RI "integer, dimension(200) \fBsnowdat::kgds_afwa_global\fP"
+.br
+.RI "grib1 grid description section for global afwa data\&. "
+.ti -1c
+.RI "integer, dimension(200) \fBsnowdat::kgds_afwa_nh\fP"
+.br
+.RI "grib1 grid description section for northern hemisphere 16th mesh afwa data\&. "
+.ti -1c
+.RI "integer, dimension(200) \fBsnowdat::kgds_afwa_nh_8th\fP"
+.br
+.RI "grib1 grid description section for northern hemisphere 8th mesh afwa data\&. "
+.ti -1c
+.RI "integer, dimension(200) \fBsnowdat::kgds_afwa_sh\fP"
+.br
+.RI "grib1 grid description section for southern hemisphere 16th mesh afwa data\&. "
+.ti -1c
+.RI "integer, dimension(200) \fBsnowdat::kgds_afwa_sh_8th\fP"
+.br
+.RI "grib1 grid description section for southern hemisphere 8th mesh afwa data\&. "
+.ti -1c
+.RI "integer, dimension(200) \fBsnowdat::kgds_autosnow\fP"
+.br
+.RI "autosnow grid description section (grib section 2) "
+.ti -1c
+.RI "integer, dimension(200) \fBsnowdat::kgds_nesdis\fP"
+.br
+.RI "nesdis/ims grid description section (grib section 2) "
+.ti -1c
+.RI "integer \fBsnowdat::mesh_nesdis\fP"
+.br
+.RI "nesdis/ims data is 96th mesh (or bediant) "
+.ti -1c
+.RI "real \fBsnowdat::nesdis_res\fP"
+.br
+.RI "Resolution of the nesdis data in km\&. "
+.ti -1c
+.RI "integer *1, dimension(:,:), allocatable \fBsnowdat::sea_ice_nesdis\fP"
+.br
+.RI "nesdis/ims sea ice flag (0-open water, 1-ice) "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBsnowdat::snow_cvr_autosnow\fP"
+.br
+.RI "autosnow snow cover flag (0-no, 100-yes) "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBsnowdat::snow_cvr_nesdis\fP"
+.br
+.RI "nesdis/ims snow cover flag (0-no, 100-yes) "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBsnowdat::snow_dep_afwa_global\fP"
+.br
+.RI "The global afwa snow depth\&. "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBsnowdat::snow_dep_afwa_nh\fP"
+.br
+.RI "Northern hemisphere afwa snow depth\&. "
+.ti -1c
+.RI "real, dimension(:,:), allocatable \fBsnowdat::snow_dep_afwa_sh\fP"
+.br
+.RI "Southern hemisphere afwa snow depth\&. "
+.ti -1c
+.RI "logical \fBsnowdat::use_autosnow\fP"
+.br
+.RI "True if autosnow data to be used\&. "
+.ti -1c
+.RI "logical \fBsnowdat::use_global_afwa\fP"
+.br
+.RI "True if global hemisphere afwa data to be used\&. "
+.ti -1c
+.RI "logical \fBsnowdat::use_nesdis\fP"
+.br
+.RI "True if nesdis/ims data to be used\&. "
+.ti -1c
+.RI "logical \fBsnowdat::use_nh_afwa\fP"
+.br
+.RI "True if northern hemisphere afwa data to be used\&. "
+.ti -1c
+.RI "logical \fBsnowdat::use_sh_afwa\fP"
+.br
+.RI "True if southern hemisphere afwa data to be used\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

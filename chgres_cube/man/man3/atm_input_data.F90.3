@@ -1,20 +1,131 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atm_input_data.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atm_input_data.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atm_input_data.F90 \- 
-Read atmospheric data from GRIB2, NEMSIO and NetCDF files\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atm_input_data.F90 \- Read atmospheric data from GRIB2, NEMSIO and NetCDF files\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fBatm_input_data\fP"
 .br
-.RI "\fIRead atmospheric data on the input grid\&. \fP"
+.RI "Read atmospheric data on the input grid\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBatm_input_data::calcalpha_rotlatlon\fP (latgrid, longrid, cenlat, cenlon, alpha)"
+.br
+.RI "Calculate rotation angle for rotated latlon grids\&. "
+.ti -1c
+.RI "subroutine, public \fBatm_input_data::cleanup_input_atm_data\fP"
+.br
+.RI "Free up memory associated with atm data\&. "
+.ti -1c
+.RI "subroutine, public \fBatm_input_data::convert_winds_to_xyz\fP"
+.br
+.RI "Convert winds from 2-d to 3-d components\&. "
+.ti -1c
+.RI "subroutine \fBatm_input_data::gridrot\fP (lov, latin1, latin2, lon, rot)"
+.br
+.RI "Compute grid rotation angle for non-latlon grids\&. "
+.ti -1c
+.RI "subroutine \fBatm_input_data::init_atm_esmf_fields\fP"
+.br
+.RI "Create atmospheric esmf fields\&. "
+.ti -1c
+.RI "subroutine, public \fBatm_input_data::read_input_atm_data\fP (localpet)"
+.br
+.RI "Read input grid atmospheric data driver\&. "
+.ti -1c
+.RI "subroutine \fBatm_input_data::read_input_atm_gaussian_netcdf_file\fP (localpet)"
+.br
+.RI "Read fv3 netcdf gaussian history file\&. "
+.ti -1c
+.RI "subroutine \fBatm_input_data::read_input_atm_grib2_file\fP (localpet)"
+.br
+.RI "Read input grid atmospheric fv3gfs grib2 files\&. "
+.ti -1c
+.RI "subroutine \fBatm_input_data::read_input_atm_restart_file\fP (localpet)"
+.br
+.RI "Read input grid fv3 atmospheric data 'warm' restart files\&. "
+.ti -1c
+.RI "subroutine \fBatm_input_data::read_input_atm_tiled_history_file\fP (localpet)"
+.br
+.RI "Read input grid fv3 atmospheric tiled history files in netcdf format\&. "
+.ti -1c
+.RI "subroutine \fBatm_input_data::read_winds\fP (u, v, localpet, octet_23, rlevs, lugb, pdt_num)"
+.br
+.RI "Read winds from a grib2 file\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field) \fBatm_input_data::dpres_input_grid\fP"
+.br
+.RI "pressure thickness "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::dzdt_input_grid\fP"
+.br
+.RI "vert velocity "
+.ti -1c
+.RI "integer, public \fBatm_input_data::lev_input\fP"
+.br
+.RI "number of atmospheric layers "
+.ti -1c
+.RI "integer, public \fBatm_input_data::levp1_input\fP"
+.br
+.RI "number of atmos layer interfaces "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::pres_input_grid\fP"
+.br
+.RI "3-d pressure "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::ps_input_grid\fP"
+.br
+.RI "surface pressure "
+.ti -1c
+.RI "character(len=50), dimension(:), allocatable, private \fBatm_input_data::slevs\fP"
+.br
+.RI "The atmospheric levels in the GRIB2 input file\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::temp_input_grid\fP"
+.br
+.RI "temperature "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::terrain_input_grid\fP"
+.br
+.RI "terrain height "
+.ti -1c
+.RI "type(esmf_field), dimension(:), allocatable, public \fBatm_input_data::tracers_input_grid\fP"
+.br
+.RI "tracers "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::u_input_grid\fP"
+.br
+.RI "u/v wind at grid "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::v_input_grid\fP"
+.br
+.RI "box center "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::xwind_input_grid\fP"
+.br
+.RI "x-component wind "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::ywind_input_grid\fP"
+.br
+.RI "y-component wind "
+.ti -1c
+.RI "type(esmf_field), public \fBatm_input_data::zwind_input_grid\fP"
+.br
+.RI "z-component wind "
 .in -1c
 .SH "Detailed Description"
 .PP 

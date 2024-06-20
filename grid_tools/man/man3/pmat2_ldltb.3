@@ -1,8 +1,8 @@
-.TH "pmat2::ldltb" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::ldltb" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat2::ldltb \- 
+pmat2::ldltb
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pmat2::ldltb \-
 .ti -1c
 .RI "subroutine \fBldltb\fP (m, mah1, a)"
 .br
-.RI "\fI[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. \fP"
+.RI "[L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. "
 .ti -1c
 .RI "subroutine \fBdldltb\fP (m, mah1, a)"
 .br
-.RI "\fI[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. \fP"
+.RI "[L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 65 of file pmat2\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::ldltb::ldltb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(sp), dimension(m,-mah1:0), intent(inout)a)\fC [private]\fP"
+.SS "subroutine pmat2::ldltb::ldltb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(sp), dimension(m,\-mah1:0), intent(inout) a)\fC [private]\fP"
 
 .PP
 [L]*[D]*[L^T] factoring of symmetric band matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix\&.
@@ -49,10 +49,10 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 608 of file pmat2\&.f90\&.
+Definition at line 609 of file pmat2\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::ldltb::dldltb (integer(spi), intent(in)m, integer(spi), intent(in)mah1, real(dp), dimension(m,-mah1:0), intent(inout)a)\fC [private]\fP"
+.SS "subroutine pmat2::ldltb::dldltb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(dp), dimension(m,\-mah1:0), intent(inout) a)\fC [private]\fP"
 
 .PP
 [L]*[D]*[L^T] factoring of symmetric matrix A (root-free Cholesky)\&. [L] is lower triangular with unit main diagonal [D] is a diagonal matrix 
@@ -78,7 +78,7 @@ R\&. J\&. Purser, Tsukasa Fujita (JMA)
 .PP
 
 .PP
-Definition at line 644 of file pmat2\&.f90\&.
+Definition at line 645 of file pmat2\&.f90\&.
 
 .SH "Author"
 .PP 

@@ -1,21 +1,91 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/model_grid.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/model_grid.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/model_grid.F90 \- 
-.PP
-Defines the model grid\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/model_grid.F90 \- Defines the model grid\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fBmodel_grid\fP"
 .br
-.RI "\fIThis module defines the model grid\&. \fP"
+.RI "This module defines the model grid\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBmodel_grid::define_model_grid\fP (localpet, npets)"
+.br
+.RI "Define model grid\&. "
+.ti -1c
+.RI "subroutine \fBmodel_grid::get_model_info\fP (orog_file, mask, land_frac, lat2d, lon2d, idim, jdim)"
+.br
+.RI "Get model information\&. "
+.ti -1c
+.RI "subroutine, public \fBmodel_grid::model_grid_cleanup\fP"
+.br
+.RI "Model grid cleanup\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::data_field_mdl\fP"
+.br
+.RI "ESMF field object that holds the data interpolated to model grid\&. "
+.ti -1c
+.RI "type(esmf_grid), public \fBmodel_grid::grid_mdl\fP"
+.br
+.RI "ESMF grid object for the model grid\&. "
+.ti -1c
+.RI "character(len=5), dimension(:), allocatable, public \fBmodel_grid::grid_tiles\fP"
+.br
+.RI "Array of model grid tile names\&. "
+.ti -1c
+.RI "integer, public \fBmodel_grid::i_mdl\fP"
+.br
+.RI "i dimension of model tile\&. "
+.ti -1c
+.RI "integer, public \fBmodel_grid::ij_mdl\fP"
+.br
+.RI "Total number of points on a model tile\&. "
+.ti -1c
+.RI "integer, public \fBmodel_grid::j_mdl\fP"
+.br
+.RI "j dimension of model tile\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::land_frac_field_mdl\fP"
+.br
+.RI "ESMF field object that holds the model land fraction\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::latitude_field_mdl\fP"
+.br
+.RI "ESMF field object that holds the model grid latitude\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::longitude_field_mdl\fP"
+.br
+.RI "ESMF field object that holds the model grid longitude\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::mask_field_mdl\fP"
+.br
+.RI "ESMF field object that holds the model land mask\&. "
+.ti -1c
+.RI "real(kind=4), public \fBmodel_grid::missing\fP = \-999\&."
+.br
+.RI "Value assigned to undefined points (i\&.e\&., ocean points for a land field)\&. "
+.ti -1c
+.RI "integer, public \fBmodel_grid::num_tiles\fP"
+.br
+.RI "Total number of model grid tiles\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBmodel_grid::vegt_field_mdl\fP"
+.br
+.RI "ESMF field object that holds the vegetation type on the model grid\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 

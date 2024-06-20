@@ -1,8 +1,8 @@
-.TH "pesg::hgrid_ak_dc" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::hgrid_ak_dc" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::hgrid_ak_dc \- 
+pesg::hgrid_ak_dc
 .SH SYNOPSIS
 .br
 .PP
@@ -12,14 +12,14 @@ pesg::hgrid_ak_dc \-
 .ti -1c
 .RI "subroutine \fBhgrid_ak_dc\fP (lx, ly, nx, ny, a, k, pdlat, pdlon, pdazi, delx, dely, xc, xcd, garea, ff)"
 .br
-.RI "\fIUse a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. \fP"
+.RI "Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 47 of file pesg\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::hgrid_ak_dc::hgrid_ak_dc (integer(spi), intent(in)lx, integer(spi), intent(in)ly, integer(spi), intent(in)nx, integer(spi), intent(in)ny, real(dp), intent(in)a, real(dp), intent(in)k, real(dp), intent(in)pdlat, real(dp), intent(in)pdlon, real(dp), intent(in)pdazi, real(dp), intent(in)delx, real(dp), intent(in)dely, real(dp), dimension(3,  lx:lx+nx  ,ly:ly+ny  ), intent(out)xc, real(dp), dimension(3,2,lx:lx+nx  ,ly:ly+ny  ), intent(out)xcd, real(dp), dimension(    lx:lx+nx-1,ly:ly+ny-1), intent(out)garea, logical, intent(out)ff)\fC [private]\fP"
+.SS "subroutine pesg::hgrid_ak_dc::hgrid_ak_dc (integer(spi), intent(in) lx, integer(spi), intent(in) ly, integer(spi), intent(in) nx, integer(spi), intent(in) ny, real(dp), intent(in) a, real(dp), intent(in) k, real(dp), intent(in) pdlat, real(dp), intent(in) pdlon, real(dp), intent(in) pdazi, real(dp), intent(in) delx, real(dp), intent(in) dely, real(dp), dimension(3,  lx:lx+nx  ,ly:ly+ny  ), intent(out) xc, real(dp), dimension(3,2,lx:lx+nx  ,ly:ly+ny  ), intent(out) xcd, real(dp), dimension(    lx:lx+nx\-1,ly:ly+ny\-1), intent(out) garea, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Use a and k as the parameters of an Extended Schmidt-transformed Gnomonic (ESG) mapping centered at (pdlat,pdlon) and twisted about this center by an azimuth angle of pdazi counterclockwise (these angles in degrees)\&. Like hgrid_ak_rx, return the grid points' cartesians xc and Jacobian matrices, xcd\&. Garea, the area of each grid cell, is also returned as in hgrid_ak_rx, and a failure flag, ff, raised when a failure occurs anywhere in these calculations\&.
@@ -64,7 +64,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 1722 of file pesg\&.f90\&.
+Definition at line 1724 of file pesg\&.f90\&.
 
 .SH "Author"
 .PP 

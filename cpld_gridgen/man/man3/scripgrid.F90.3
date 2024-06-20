@@ -1,20 +1,19 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/scripgrid.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/scripgrid.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/scripgrid.F90 \- 
-.PP
-Write a SCRIP format file\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/scripgrid.F90 \- Write a SCRIP format file\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Functions/Subroutines"
 
 .in +1c
 .ti -1c
-.RI "module \fBscripgrid\fP"
+.RI "subroutine, public \fBscripgrid::write_scripgrid\fP (fname, cstagger, imask)"
 .br
+.RI "Write a SCRIP grid file\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -37,6 +36,30 @@ Denise.Worthen@noaa.gov
 
 .PP
 Definition in file \fBscripgrid\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public scripgrid::write_scripgrid (character(len=*), intent(in) fname, character(len=*), intent(in) cstagger, integer(int_kind), dimension(:,:), intent(in), optional imask)"
+
+.PP
+Write a SCRIP grid file\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIfname\fP the file name to write 
+.br
+\fIcstagger\fP the name of the stagger location 
+.br
+\fIimask\fP (optional) the land mask values
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 35 of file scripgrid\&.F90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

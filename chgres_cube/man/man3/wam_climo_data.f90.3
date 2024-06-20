@@ -1,10 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90" 3 "Thu Jun 20 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90 \- 
-.PP
-Process vertical profile climatologic data for WAM\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90 \- Process vertical profile climatologic data for WAM\&.  
 
 .SH SYNOPSIS
 .br
@@ -15,11 +13,11 @@ Process vertical profile climatologic data for WAM\&.
 .ti -1c
 .RI "subroutine \fBgettemp\fP (iday, xlat, pr, np, pf, temp, n_o, n_o2, n_n2)"
 .br
-.RI "\fIRoutine that computes temperature and neutral density values utilizing MSIS 2\&.1\&. \fP"
+.RI "Routine that computes temperature and neutral density values utilizing MSIS 2\&.1\&. "
 .ti -1c
 .RI "subroutine \fBghp8\fP (day, utsec, z0, glat, glon, f107a, f107, ap, pres, alt, dn, tn)"
 .br
-.RI "\fIWrapper routine for calls to MSIS 2\&.1 for computing temperature and neutral density at a given pressure level\&. \fP"
+.RI "Wrapper routine for calls to MSIS 2\&.1 for computing temperature and neutral density at a given pressure level\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -37,7 +35,7 @@ Adam Kubaryk NCEP/SWPC
 Definition in file \fBwam_climo_data\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine gettemp (integer, intent(in)iday, real(kind=esmf_kind_r8), intent(in)xlat, real(kind=esmf_kind_r8), dimension(np), intent(in)pr, integer, intent(in)np, character(*), intent(in)pf, real(kind=esmf_kind_r8), dimension(np), intent(out)temp, real(kind=esmf_kind_r8), dimension(np), intent(out)n_o, real(kind=esmf_kind_r8), dimension(np), intent(out)n_o2, real(kind=esmf_kind_r8), dimension(np), intent(out)n_n2)"
+.SS "subroutine gettemp (integer, intent(in) iday, real(kind=esmf_kind_r8), intent(in) xlat, real(kind=esmf_kind_r8), dimension(np), intent(in) pr, integer, intent(in) np, character(*), intent(in) pf, real(kind=esmf_kind_r8), dimension(np), intent(out) temp, real(kind=esmf_kind_r8), dimension(np), intent(out) n_o, real(kind=esmf_kind_r8), dimension(np), intent(out) n_o2, real(kind=esmf_kind_r8), dimension(np), intent(out) n_n2)"
 
 .PP
 Routine that computes temperature and neutral density values utilizing MSIS 2\&.1\&. 
@@ -70,12 +68,12 @@ Adam Kubaryk NCEP/SWPC
 .PP
 
 .PP
-Definition at line 23 of file wam_climo_data\&.f90\&.
+Definition at line 24 of file wam_climo_data\&.f90\&.
 .PP
 References ghp8()\&.
 .PP
 Referenced by atmosphere::vintg_wam()\&.
-.SS "subroutine ghp8 (real(kind=rp), intent(in)day, real(kind=rp), intent(in)utsec, real(kind=rp), intent(in)z0, real(kind=rp), intent(in)glat, real(kind=rp), intent(in)glon, real(kind=rp), intent(in)f107a, real(kind=rp), intent(in)f107, real(kind=rp), dimension(7), intent(in)ap, real(kind=rp), intent(in)pres, real(kind=rp), intent(out)alt, real(kind=rp), dimension(10), intent(out)dn, real(kind=rp), intent(out)tn)"
+.SS "subroutine ghp8 (real(kind=rp), intent(in) day, real(kind=rp), intent(in) utsec, real(kind=rp), intent(in) z0, real(kind=rp), intent(in) glat, real(kind=rp), intent(in) glon, real(kind=rp), intent(in) f107a, real(kind=rp), intent(in) f107, real(kind=rp), dimension(7), intent(in) ap, real(kind=rp), intent(in) pres, real(kind=rp), intent(out) alt, real(kind=rp), dimension(10), intent(out) dn, real(kind=rp), intent(out) tn)"
 
 .PP
 Wrapper routine for calls to MSIS 2\&.1 for computing temperature and neutral density at a given pressure level\&. 
@@ -114,7 +112,7 @@ Adam Kubaryk NCEP/SWPC
 .PP
 
 .PP
-Definition at line 85 of file wam_climo_data\&.f90\&.
+Definition at line 86 of file wam_climo_data\&.f90\&.
 .PP
 Referenced by gettemp()\&.
 .SH "Author"

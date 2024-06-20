@@ -1,8 +1,8 @@
-.TH "pmat::l1lm" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::l1lm" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat::l1lm \- 
+pmat::l1lm
 .SH SYNOPSIS
 .br
 .PP
@@ -12,26 +12,26 @@ pmat::l1lm \-
 .ti -1c
 .RI "subroutine \fBdl1lm\fP (a, b)"
 .br
-.RI "\fICholesky, M -> L*U, U(i,j)=L(j,i) \fP"
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
 .ti -1c
 .RI "subroutine \fBdl1lmf\fP (a, b, ff)"
 .br
-.RI "\fICholesky, M -> L*U, U(i,j)=L(j,i) \fP"
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
 .ti -1c
 .RI "subroutine \fBsl1lm\fP (a, b)"
 .br
-.RI "\fICholesky, M -> L*U, U(i,j)=L(j,i) \fP"
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
 .ti -1c
 .RI "subroutine \fBsl1lmf\fP (a, b, ff)"
 .br
-.RI "\fICholesky, M -> L*U, U(i,j)=L(j,i) \fP"
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 37 of file pmat\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat::l1lm::dl1lm (real(dp), dimension(:,:), intent(in)a, real(dp), dimension(:,:), intent(inout)b)\fC [private]\fP"
+.SS "subroutine pmat::l1lm::dl1lm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b)\fC [private]\fP"
 
 .PP
 Cholesky, M -> L*U, U(i,j)=L(j,i) 
@@ -50,52 +50,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 933 of file pmat\&.f90\&.
-.SS "subroutine pmat::l1lm::dl1lmf (real(dp), dimension(:,:), intent(in)a, real(dp), dimension(:,:), intent(inout)b, logical, intent(out)ff)\fC [private]\fP"
-
-.PP
-Cholesky, M -> L*U, U(i,j)=L(j,i) 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIa\fP symmetric matrix\&. 
-.br
-\fIb\fP Cholesky factor matrix\&. 
-.br
-\fIff\fP failure flag 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-R\&. J\&. Purser 
-.RE
-.PP
-
-.PP
-Definition at line 981 of file pmat\&.f90\&.
-.PP
-Referenced by pmat::dl1lm()\&.
-.SS "subroutine pmat::l1lm::sl1lm (real(sp), dimension(:,:), intent(in)a, real(sp), dimension(:,:), intent(inout)b)\fC [private]\fP"
-
-.PP
-Cholesky, M -> L*U, U(i,j)=L(j,i) 
-.PP
-\fBParameters:\fP
-.RS 4
-\fIa\fP symmetric matrix\&. 
-.br
-\fIb\fP Cholesky factor matrix\&. 
-.RE
-.PP
-\fBAuthor:\fP
-.RS 4
-R\&. J\&. Purser 
-.RE
-.PP
-
-.PP
-Definition at line 920 of file pmat\&.f90\&.
-.SS "subroutine pmat::l1lm::sl1lmf (real(sp), dimension(:,:), intent(in)a, real(sp), dimension(:,:), intent(inout)b, logical, intent(out)ff)\fC [private]\fP"
+Definition at line 934 of file pmat\&.f90\&.
+.SS "subroutine pmat::l1lm::dl1lmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Cholesky, M -> L*U, U(i,j)=L(j,i) 
@@ -116,9 +72,49 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 947 of file pmat\&.f90\&.
+Definition at line 982 of file pmat\&.f90\&.
+.SS "subroutine pmat::l1lm::sl1lm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b)\fC [private]\fP"
+
 .PP
-Referenced by pmat::sl1lm()\&.
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP symmetric matrix\&. 
+.br
+\fIb\fP Cholesky factor matrix\&. 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 921 of file pmat\&.f90\&.
+.SS "subroutine pmat::l1lm::sl1lmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+
+.PP
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP symmetric matrix\&. 
+.br
+\fIb\fP Cholesky factor matrix\&. 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line 948 of file pmat\&.f90\&.
 
 .SH "Author"
 .PP 

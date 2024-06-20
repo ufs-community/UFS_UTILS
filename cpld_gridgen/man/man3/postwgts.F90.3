@@ -1,20 +1,19 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/postwgts.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/postwgts.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/postwgts.F90 \- 
-.PP
-Create the ESMF weights for post\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/postwgts.F90 \- Create the ESMF weights for post\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Functions/Subroutines"
 
 .in +1c
 .ti -1c
-.RI "module \fBpostwgts\fP"
+.RI "subroutine \fBpostwgts::make_postwgts\fP"
 .br
+.RI "Create the ESMF weights file to remap from the Ct location to a rectilinear grid\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -37,6 +36,21 @@ Denise.Worthen@noaa.gov
 
 .PP
 Definition in file \fBpostwgts\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine postwgts::make_postwgts ()"
+
+.PP
+Create the ESMF weights file to remap from the Ct location to a rectilinear grid\&. 
+.PP
+\fBAuthor:\fP
+.RS 4
+Denise.Worthen@noaa.gov 
+.RE
+.PP
+
+.PP
+Definition at line 24 of file postwgts\&.F90\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

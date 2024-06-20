@@ -1,21 +1,63 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/thompson_mp_climo_data.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/thompson_mp_climo_data.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/thompson_mp_climo_data.F90 \- 
-.PP
-Process Thompson climatological MP data\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/thompson_mp_climo_data.F90 \- Process Thompson climatological MP data\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fBthompson_mp_climo_data\fP"
 .br
-.RI "\fIModule to read the Thompson climatological MP data file and set up the associated esmf field and grid objects\&. \fP"
+.RI "Module to read the Thompson climatological MP data file and set up the associated esmf field and grid objects\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBthompson_mp_climo_data::cleanup_thomp_mp_climo_input_data\fP"
+.br
+.RI "Free up memory associated with this module\&. "
+.ti -1c
+.RI "subroutine, public \fBthompson_mp_climo_data::read_thomp_mp_climo_data\fP"
+.br
+.RI "Read Thompson climatological MP data file and time interpolate data to current cycle time\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer \fBthompson_mp_climo_data::i_thomp_mp_climo\fP"
+.br
+.RI "i-dimension of Thompson climo data "
+.ti -1c
+.RI "integer \fBthompson_mp_climo_data::j_thomp_mp_climo\fP"
+.br
+.RI "j-dimension of Thompson climo data "
+.ti -1c
+.RI "integer, public \fBthompson_mp_climo_data::lev_thomp_mp_climo\fP"
+.br
+.RI "number of vert lvls of Thompson climo data "
+.ti -1c
+.RI "type(esmf_field), public \fBthompson_mp_climo_data::qnifa_climo_input_grid\fP"
+.br
+.RI "number concentration of ice friendly nuclei\&. "
+.ti -1c
+.RI "type(esmf_field), public \fBthompson_mp_climo_data::qnwfa_climo_input_grid\fP"
+.br
+.RI "number concentration of water friendly nuclei\&. "
+.ti -1c
+.RI "type(esmf_grid) \fBthompson_mp_climo_data::thomp_mp_climo_grid\fP"
+.br
+.RI "esmf grid object for Thompson data grid "
+.ti -1c
+.RI "type(esmf_field), public \fBthompson_mp_climo_data::thomp_pres_climo_input_grid\fP"
+.br
+.RI "3-d pressure of the Thompson climo data points "
 .in -1c
 .SH "Detailed Description"
 .PP 

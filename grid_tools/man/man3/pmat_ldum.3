@@ -1,8 +1,8 @@
-.TH "pmat::ldum" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::ldum" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pmat::ldum \- 
+pmat::ldum
 .SH SYNOPSIS
 .br
 .PP
@@ -12,34 +12,34 @@ pmat::ldum \-
 .ti -1c
 .RI "subroutine \fBcldum\fP (a, ipiv, d)"
 .br
-.RI "\fIPerform L*D*U decomposition, with pivoting, of square matrix\&. \fP"
+.RI "Perform L*D*U decomposition, with pivoting, of square matrix\&. "
 .ti -1c
 .RI "subroutine \fBcldumf\fP (a, ipiv, d, ff)"
 .br
-.RI "\fIPerform l-d-u decomposition of square matrix a in place with pivoting\&. \fP"
+.RI "Perform l-d-u decomposition of square matrix a in place with pivoting\&. "
 .ti -1c
 .RI "subroutine \fBdldum\fP (a, ipiv, d)"
 .br
-.RI "\fIPerform L*D*U decomposition, with pivoting, of square matrix\&. \fP"
+.RI "Perform L*D*U decomposition, with pivoting, of square matrix\&. "
 .ti -1c
 .RI "subroutine \fBdldumf\fP (a, ipiv, d, ff)"
 .br
-.RI "\fIPerform l-d-u decomposition of square matrix a in place with pivoting\&. \fP"
+.RI "Perform l-d-u decomposition of square matrix a in place with pivoting\&. "
 .ti -1c
 .RI "subroutine \fBsldum\fP (a, ipiv, d)"
 .br
-.RI "\fIPerform L*D*U decomposition, with pivoting, of square matrix\&. \fP"
+.RI "Perform L*D*U decomposition, with pivoting, of square matrix\&. "
 .ti -1c
 .RI "subroutine \fBsldumf\fP (a, ipiv, d, ff)"
 .br
-.RI "\fIPerform l-d-u decomposition of square matrix a in place with pivoting\&. \fP"
+.RI "Perform l-d-u decomposition of square matrix a in place with pivoting\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 27 of file pmat\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat::ldum::cldum (complex(dpc), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, complex(dpc), intent(out)d)\fC [private]\fP"
+.SS "subroutine pmat::ldum::cldum (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d)\fC [private]\fP"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Complex double precision version\&.
@@ -60,8 +60,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 508 of file pmat\&.f90\&.
-.SS "subroutine pmat::ldum::cldumf (complex(dpc), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, complex(dpc), intent(out)d, logical, intent(out)ff)\fC [private]\fP"
+Definition at line 509 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldum::cldumf (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Complex double precision version\&.
@@ -74,7 +74,7 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Complex
 .br
 \fId\fP indicator for possible sign change of determinant 
 .br
-\fIff,:\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+\fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
 \fBAuthor:\fP
@@ -84,10 +84,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 659 of file pmat\&.f90\&.
-.PP
-Referenced by pmat::cinvmtf(), pmat::cldum(), pmat::clinmmtf(), and pmat::clinmvtf()\&.
-.SS "subroutine pmat::ldum::dldum (real(dp), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, real(dp), intent(out)d)\fC [private]\fP"
+Definition at line 660 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldum::dldum (real(dp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(dp), intent(out) d)\fC [private]\fP"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Double precision version\&.
@@ -108,8 +106,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 492 of file pmat\&.f90\&.
-.SS "subroutine pmat::ldum::dldumf (real(dp), dimension(:,:), intent(inout)a, integer, dimension(:), intent(out)ipiv, real(dp), intent(out)d, logical(spi), intent(out)ff)\fC [private]\fP"
+Definition at line 493 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldum::dldumf (real(dp), dimension(:,:), intent(inout) a, integer, dimension(:), intent(out) ipiv, real(dp), intent(out) d, logical(spi), intent(out) ff)\fC [private]\fP"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Double precision version\&.
@@ -122,7 +120,7 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Double 
 .br
 \fId\fP indicator for possible sign change of determinant 
 .br
-\fIff,:\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+\fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
 \fBAuthor:\fP
@@ -132,10 +130,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 592 of file pmat\&.f90\&.
-.PP
-Referenced by pmat::dinvmtf(), pmat::dldum(), pmat::dlinmmtf(), and pmat::dlinmvtf()\&.
-.SS "subroutine pmat::ldum::sldum (real(sp), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, real(sp), intent(out)d)\fC [private]\fP"
+Definition at line 593 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldum::sldum (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d)\fC [private]\fP"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Single precision version\&.
@@ -156,8 +152,8 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 476 of file pmat\&.f90\&.
-.SS "subroutine pmat::ldum::sldumf (real(sp), dimension(:,:), intent(inout)a, integer(spi), dimension(:), intent(out)ipiv, real(sp), intent(out)d, logical, intent(out)ff)\fC [private]\fP"
+Definition at line 477 of file pmat\&.f90\&.
+.SS "subroutine pmat::ldum::sldumf (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Single precision version\&.
@@ -170,7 +166,7 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Single 
 .br
 \fId\fP indicator for possible sign change of determinant 
 .br
-\fIff,:\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
+\fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
 \fBAuthor:\fP
@@ -180,9 +176,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 525 of file pmat\&.f90\&.
-.PP
-Referenced by pmat::sinvmtf(), pmat::sldum(), pmat::slinmmtf(), and pmat::slinmvtf()\&.
+Definition at line 526 of file pmat\&.f90\&.
 
 .SH "Author"
 .PP 

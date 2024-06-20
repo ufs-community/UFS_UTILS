@@ -1,103 +1,99 @@
-.TH "program_setup" 3 "Wed Mar 13 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "program_setup" 3 "Thu Jun 20 2024" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-program_setup \- 
-.PP
-Set up program execution\&.  
+program_setup \- Set up program execution\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Public Member Functions"
+.SS "Functions/Subroutines"
 
 .in +1c
 .ti -1c
 .RI "subroutine, public \fBread_setup_namelist\fP (localpet)"
 .br
-.RI "\fIRead program setup namelist\&. \fP"
+.RI "Read program setup namelist\&. "
 .in -1c
-.SS "Data Fields"
+.SS "Variables"
 
 .in +1c
 .ti -1c
 .RI "logical, public \fBfract_vegsoil_type\fP = \&.false\&."
 .br
-.RI "\fIWhen true, output the percentage of each soil and vegetation type category, and the dominant category within a model grid box\&. \fP"
+.RI "When true, output the percentage of each soil and vegetation type category, and the dominant category within a model grid box\&. "
 .ti -1c
 .RI "integer, public \fBhalo\fP = 0"
 .br
-.RI "\fINumber of row/cols defining the lateral boundary halo\&. \fP"
+.RI "Number of row/cols defining the lateral boundary halo\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_facsf_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input fractional coverage data for strong zenith angle dependent albedo\&. \fP"
+.RI "File containing input fractional coverage data for strong zenith angle dependent albedo\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_leaf_area_index_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input leaf area index data\&. \fP"
+.RI "File containing input leaf area index data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_maximum_snow_albedo_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input maximum snow albedo data\&. \fP"
+.RI "File containing input maximum snow albedo data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_slope_type_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input slope type data\&. \fP"
+.RI "File containing input slope type data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_snowfree_albedo_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input snow-free albedo data\&. \fP"
+.RI "File containing input snow-free albedo data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_soil_color_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input soil color data\&. \fP"
+.RI "File containing input soil color data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_soil_type_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input soil type data\&. \fP"
+.RI "File containing input soil type data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_substrate_temperature_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input soil substrate temperature data\&. \fP"
+.RI "File containing input soil substrate temperature data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_vegetation_greenness_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input vegetation greenness data\&. \fP"
+.RI "File containing input vegetation greenness data\&. "
 .ti -1c
 .RI "character(len=500), public \fBinput_vegetation_type_file\fP = 'NULL'"
 .br
-.RI "\fIFile containing input vegetation type data\&. \fP"
+.RI "File containing input vegetation type data\&. "
 .ti -1c
 .RI "character(len=50), public \fBleaf_area_index_method\fP ='bilinear'"
 .br
-.RI "\fIInterpolation method for leaf area index\&. \fP"
+.RI "Interpolation method for leaf area index\&. "
 .ti -1c
 .RI "character(len=50), public \fBmaximum_snow_albedo_method\fP ='bilinear'"
 .br
-.RI "\fIInterpolation method for max snow albedo\&. \fP"
+.RI "Interpolation method for max snow albedo\&. "
 .ti -1c
 .RI "character(len=500), public \fBmosaic_file_mdl\fP = 'NULL'"
 .br
-.RI "\fIModel grid mosaic file\&. \fP"
+.RI "Model grid mosaic file\&. "
 .ti -1c
 .RI "character(len=500), public \fBorog_dir_mdl\fP = 'NULL'"
 .br
-.RI "\fIDirectory containing the model grid orography files\&. \fP"
+.RI "Directory containing the model grid orography files\&. "
 .ti -1c
-.RI "character(len=500), dimension(6), 
+.RI "character(len=500), dimension(6), public \fBorog_files_mdl\fP = 'NULL'"
 .br
-public \fBorog_files_mdl\fP = 'NULL'"
-.br
-.RI "\fIModel grid orography filenames\&. \fP"
+.RI "Model grid orography filenames\&. "
 .ti -1c
 .RI "character(len=50), public \fBsnowfree_albedo_method\fP ='bilinear'"
 .br
-.RI "\fIInterpolation method for snowfree albedo\&. \fP"
+.RI "Interpolation method for snowfree albedo\&. "
 .ti -1c
 .RI "character(len=50), public \fBvegetation_greenness_method\fP ='bilinear'"
 .br
-.RI "\fIInterpolation method for vegetation greenness\&. \fP"
+.RI "Interpolation method for vegetation greenness\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -120,11 +116,9 @@ George Gayno
 .RE
 .PP
 
-.PP
-Definition at line 17 of file program_setup\&.f90\&.
-.SH "Member Function/Subroutine Documentation"
+.SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine, public program_setup::read_setup_namelist (integer, intent(in)localpet)"
+.SS "subroutine, public program_setup::read_setup_namelist (integer, intent(in) localpet)"
 
 .PP
 Read program setup namelist\&. 
@@ -146,10 +140,12 @@ George Gayno
 .PP
 
 .PP
-Definition at line 63 of file program_setup\&.f90\&.
+Definition at line 64 of file program_setup\&.f90\&.
+.PP
+References fract_vegsoil_type, halo, input_facsf_file, input_leaf_area_index_file, input_maximum_snow_albedo_file, input_slope_type_file, input_snowfree_albedo_file, input_soil_color_file, input_soil_type_file, input_substrate_temperature_file, input_vegetation_greenness_file, input_vegetation_type_file, leaf_area_index_method, maximum_snow_albedo_method, mosaic_file_mdl, orog_dir_mdl, orog_files_mdl, snowfree_albedo_method, and vegetation_greenness_method\&.
 .PP
 Referenced by driver()\&.
-.SH "Field Documentation"
+.SH "Variable Documentation"
 .PP 
 .SS "logical, public program_setup::fract_vegsoil_type = \&.false\&."
 
@@ -157,115 +153,152 @@ Referenced by driver()\&.
 When true, output the percentage of each soil and vegetation type category, and the dominant category within a model grid box\&. 
 .PP
 Definition at line 51 of file program_setup\&.f90\&.
+.PP
+Referenced by model_grid::define_model_grid(), driver(), interp(), and read_setup_namelist()\&.
 .SS "integer, public program_setup::halo = 0"
 
 .PP
 Number of row/cols defining the lateral boundary halo\&. Used for regional nests\&. 
 .PP
 Definition at line 48 of file program_setup\&.f90\&.
+.PP
+Referenced by output(), output_frac_cats::output_driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_facsf_file = 'NULL'"
 
 .PP
 File containing input fractional coverage data for strong zenith angle dependent albedo\&. 
 .PP
 Definition at line 24 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_leaf_area_index_file = 'NULL'"
 
 .PP
 File containing input leaf area index data\&. 
 .PP
 Definition at line 23 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_maximum_snow_albedo_file = 'NULL'"
 
 .PP
 File containing input maximum snow albedo data\&. 
 .PP
 Definition at line 28 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_slope_type_file = 'NULL'"
 
 .PP
 File containing input slope type data\&. 
 .PP
 Definition at line 30 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_snowfree_albedo_file = 'NULL'"
 
 .PP
 File containing input snow-free albedo data\&. 
 .PP
 Definition at line 29 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_soil_color_file = 'NULL'"
 
 .PP
 File containing input soil color data\&. 
 .PP
 Definition at line 32 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_soil_type_file = 'NULL'"
 
 .PP
 File containing input soil type data\&. 
 .PP
 Definition at line 31 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_substrate_temperature_file = 'NULL'"
 
 .PP
 File containing input soil substrate temperature data\&. 
 .PP
 Definition at line 27 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_vegetation_greenness_file = 'NULL'"
 
 .PP
 File containing input vegetation greenness data\&. 
 .PP
 Definition at line 34 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::input_vegetation_type_file = 'NULL'"
 
 .PP
 File containing input vegetation type data\&. 
 .PP
 Definition at line 33 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::leaf_area_index_method ='bilinear'"
 
 .PP
 Interpolation method for leaf area index\&. Conservative or bilinear (default)\&. 
 .PP
 Definition at line 39 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::maximum_snow_albedo_method ='bilinear'"
 
 .PP
 Interpolation method for max snow albedo\&. Conservative or bilinear (default)\&. 
 .PP
 Definition at line 41 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::mosaic_file_mdl = 'NULL'"
 
 .PP
 Model grid mosaic file\&. 
 .PP
 Definition at line 35 of file program_setup\&.f90\&.
+.PP
+Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .SS "character(len=500), public program_setup::orog_dir_mdl = 'NULL'"
 
 .PP
 Directory containing the model grid orography files\&. 
 .PP
 Definition at line 36 of file program_setup\&.f90\&.
+.PP
+Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .SS "character(len=500), dimension(6), public program_setup::orog_files_mdl = 'NULL'"
 
 .PP
 Model grid orography filenames\&. 
 .PP
 Definition at line 37 of file program_setup\&.f90\&.
+.PP
+Referenced by model_grid::define_model_grid(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::snowfree_albedo_method ='bilinear'"
 
 .PP
 Interpolation method for snowfree albedo\&. Conservative or bilinear (default)\&. 
 .PP
 Definition at line 43 of file program_setup\&.f90\&.
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SS "character(len=50), public program_setup::vegetation_greenness_method ='bilinear'"
 
 .PP
 Interpolation method for vegetation greenness\&. Conservative or bilinear (default)\&. 
 .PP
 Definition at line 45 of file program_setup\&.f90\&.
-
+.PP
+Referenced by driver(), and read_setup_namelist()\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

@@ -1,8 +1,8 @@
-.TH "pesg::xttoxs" 3 "Wed Mar 13 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::xttoxs" 3 "Thu Jun 20 2024" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-pesg::xttoxs \- 
+pesg::xttoxs
 .SH SYNOPSIS
 .br
 .PP
@@ -12,18 +12,18 @@ pesg::xttoxs \-
 .ti -1c
 .RI "subroutine \fBxttoxs\fP (k, xt, xs, xsd, ff)"
 .br
-.RI "\fIScaled gnomonic plane xt to standard stereographic plane xs\&. \fP"
+.RI "Scaled gnomonic plane xt to standard stereographic plane xs\&. "
 .ti -1c
 .RI "subroutine \fBxttoxs1\fP (k, xt, xs, xsd, xsdd, xs1, xsd1, ff)"
 .br
-.RI "\fILike xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. \fP"
+.RI "Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
 Definition at line 28 of file pesg\&.f90\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::xttoxs::xttoxs (real(dp), intent(in)k, real(dp), dimension(2), intent(in)xt, real(dp), dimension(2), intent(out)xs, real(dp), dimension(2,2), intent(out)xsd, logical, intent(out)ff)\fC [private]\fP"
+.SS "subroutine pesg::xttoxs::xttoxs (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Scaled gnomonic plane xt to standard stereographic plane xs\&. 
@@ -48,10 +48,10 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 158 of file pesg\&.f90\&.
+Definition at line 159 of file pesg\&.f90\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::xttoxs::xttoxs1 (real(dp), intent(in)k, real(dp), dimension(2), intent(in)xt, real(dp), dimension(2), intent(out)xs, real(dp), dimension(2,2), intent(out)xsd, real(dp), dimension(2,2,2), intent(out)xsdd, real(dp), dimension(2), intent(out)xs1, real(dp), dimension(2,2), intent(out)xsd1, logical, intent(out)ff)\fC [private]\fP"
+.SS "subroutine pesg::xttoxs::xttoxs1 (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, real(dp), dimension(2,2,2), intent(out) xsdd, real(dp), dimension(2), intent(out) xs1, real(dp), dimension(2,2), intent(out) xsd1, logical, intent(out) ff)\fC [private]\fP"
 
 .PP
 Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. 
@@ -82,9 +82,7 @@ R\&. J\&. Purser
 .PP
 
 .PP
-Definition at line 192 of file pesg\&.f90\&.
-.PP
-Referenced by pesg::xmtoxc_vak1()\&.
+Definition at line 193 of file pesg\&.f90\&.
 
 .SH "Author"
 .PP 

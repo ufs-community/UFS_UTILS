@@ -1,21 +1,27 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/utils.F90" 3 "Wed Mar 13 2024" "Version 1.13.0" "global_cycle" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/utils.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/utils.F90 \- 
-.PP
-Utility routines\&.  
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/global_cycle.fd/utils.F90 \- Utility routines\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-.SS "Data Types"
+.SS "Modules"
 
 .in +1c
 .ti -1c
 .RI "module \fButils\fP"
 .br
-.RI "\fIModule containing utility routines\&. \fP"
+.RI "Module containing utility routines\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fButils::remap_coef\fP (is, ie, js, je, im, jm, lon, lat, id1, id2, jdc, s2c, agrid)"
+.br
+.RI "Generate the weights and index of the grids used in the bilinear interpolation\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
