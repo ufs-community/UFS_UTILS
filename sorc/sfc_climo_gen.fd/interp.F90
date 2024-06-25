@@ -385,10 +385,11 @@
  
  
 !> use Scale to fix the data to the correct value
-!! 
-!! @param[inout] idim i dimension of model tile.
-!! @param[inout] jdim j dimension of model tile.
-!! @param[in] field_ch Field name.
+!!
+!! @param[inout]   field to scale. 
+!! @param[in] idim i dimension of model tile.
+!! @param[in] jdim j dimension of model tile.
+!! @param[inout] scale factor to scale the field. 
 !! @author George Gayno NCEP/EMC
 !! @author Sanath Kumar NCEP/EMC
 !!
