@@ -50,7 +50,7 @@ elif [[ -d /gpfs && -d /ncrc ]] ; then
     fi
     module reset
     target=gaea
-elif [[ "$(hostname)" =~ "Orion" ]]; then
+elif [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then
     target="orion"
     module purge
 elif [[ "$(hostname)" =~ "hercules" || "$(hostname)" =~ "Hercules" ]]; then
