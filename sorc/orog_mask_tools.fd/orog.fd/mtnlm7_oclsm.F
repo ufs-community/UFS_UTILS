@@ -77,14 +77,12 @@ C> @return 0 for success, error code otherwise.
       character(len=256) :: INPUTOROG = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
-      integer :: MTNRES,IM,JM,NM,NR,NF0,NF1,EFAC,NW
+      integer :: MTNRES,IM,JM,NM,NR,EFAC
       fsize=65536
       READ(5,*) OUTGRID
       READ(5,*) mask_only
       READ(5,*) merge_file
       NM=0
-      NF0=0             
-      NF1=0              
       EFAC=0
       NR=0
       print*, "INPUTOROG= ", trim(INPUTOROG)
@@ -97,8 +95,7 @@ C> @return 0 for success, error code otherwise.
 ! --- other possibilities are =8 for 4' and =4 for 2' see
 !     HJ for T1000 test. Must set to 1 for now.
       MTNRES=1
-      print*, MTNRES,NM,NR,NF0,NF1,EFAC
-      NW=(NM+1)*((NR+1)*NM+2)
+      print*, MTNRES,NM,NR,EFAC
       IMN = 360*120/MTNRES
       JMN = 180*120/MTNRES
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
@@ -137,7 +134,7 @@ C> @return 0 for success, error code otherwise.
       error=nf_close(ncid)
       call netcdf_err(error, 'close file '//trim(OUTGRID) )
          
-      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,
+      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,EFAC,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       STOP
       END
@@ -150,9 +147,6 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] JM "j" dimension of the model grid tile.
 !! @param[in] NM Spectral truncation.
 !! @param[in] NR Rhomboidal flag.
-!! @param[in] NF0 First order spectral filter parameters.
-!! @param[in] NF1 Second order spectral filter parameters.
-!! @param[in] NW Number of waves.
 !! @param[in] EFAC Factor to adjust orography by its variance.
 !! @param[in] OUTGRID The 'grid' file for the model tile.
 !! @param[in] INPUTOROG Input orography/GWD file on gaussian
@@ -162,12 +156,12 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] MASK_ONLY Flag to generate the Land Mask only
 !! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW,EFAC,
+      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,EFAC,
      &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
 C
-      integer                      :: IMN,JMN,IM,JM,NM,NR,NF0,NF1,NW
+      integer                      :: IMN,JMN,IM,JM,NM,NR
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
       character(len=*), intent(in) :: MERGE_FILE
@@ -202,7 +196,7 @@ C
       real :: sumdif,avedif
 
       real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
-      real, allocatable :: XLON(:),ORS(:),oaa(:),ola(:),GLAT(:)
+      real, allocatable :: XLON(:),oaa(:),ola(:),GLAT(:)
 
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
       real, allocatable :: GEOLAT(:,:),GEOLAT_C(:,:),DY(:,:)
@@ -233,7 +227,7 @@ C
 
 ! reals
       allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
-      allocate (XLON(IM),ORS(NW),oaa(4),ola(4),GLAT(JMN))
+      allocate (XLON(IM),oaa(4),ola(4),GLAT(JMN))
 
       allocate (ZAVG(IMN,JMN))
       allocate (ZSLM(IMN,JMN))
@@ -297,8 +291,8 @@ C
 !
 
 !  --- IMN,JMN
-      print*, ' IM, JM, NM, NR, NF0, NF1, EFAC'
-      print*, IM,JM,NM,NR,NF0,NF1,EFAC
+      print*, ' IM, JM, NM, NR, EFAC'
+      print*, IM,JM,NM,NR,EFAC
        print *,'  imn,jmn,glob(imn,jmn)=',imn,jmn,glob(imn,jmn)
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
@@ -1175,18 +1169,10 @@ C
       ENDDO
 !
        call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
-! --- Quadratic filter applied by default.
-! --- NF0 is normally set to an even value beyond the previous truncation, 
-! --- for example, for jcap=382, NF0=254+2
-! --- NF1 is set as jcap+2 (and/or nearest even), eg., for t382, NF1=382+2=384
-! --- if no filter is desired then NF1=NF0=0 and ORF=ORO
-! --- if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1
 !
       deallocate(VAR4)
       allocate (ORF(IM,JM))
-      print *,' NF1, NF0=',NF1,NF0
 
-      ORS=0.
       ORF=ORO
 
       deallocate (WORK1)
@@ -1249,7 +1235,7 @@ C
 
 !     Deallocate 1d vars
       deallocate(JST,JEN,numi)
-      deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,ORS,oaa,ola,GLAT)
+      deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
       deallocate (OCLSM)
