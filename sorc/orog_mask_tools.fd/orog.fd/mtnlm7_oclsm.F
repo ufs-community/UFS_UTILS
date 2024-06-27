@@ -182,7 +182,7 @@ C
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
-      integer :: M,N,ios,istat,itest,jtest
+      integer :: ios,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
@@ -198,7 +198,7 @@ C
       integer, allocatable :: IWORK(:,:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
-      real :: PHI,DELXN,slma,oroa,vara,var4a,xn,XS,FFF,WWW
+      real :: PHI,DELXN,slma,oroa,vara,var4a,xn,XS
       real :: sumdif,avedif
 
       real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
@@ -220,7 +220,7 @@ C
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
 
       logical :: grid_from_file,fexist,opened
-      logical :: SPECTR, FILTER
+      logical :: SPECTR
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
 
       tbeg1=timef()
@@ -244,7 +244,6 @@ C
 !
       DEGRAD = 180./PI
       SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
-      FILTER = .TRUE.        ! Spectr Filter defaults true and set by NF1 & NF0
       MSKOCN = 1             ! Ocean land sea mask =1, =0 if not present
       NOTOCN = 1             ! =1 Ocean lsm input reverse: Ocean=1, land=0 
 ! --- The LSM Gaussian file from the ocean model sometimes arrives with 
@@ -1185,33 +1184,10 @@ C
 !
       deallocate(VAR4)
       allocate (ORF(IM,JM))
-      IF ( NF1 - NF0 .eq. 0 ) FILTER=.FALSE.
-      print *,' NF1, NF0, FILTER=',NF1,NF0,FILTER
-      IF (FILTER) THEN
-C       SPECTRALLY TRUNCATE AND FILTER OROGRAPHY
+      print *,' NF1, NF0=',NF1,NF0
 
-        CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORO,-1)
-!
-      print *,' about to apply spectral filter '
-        FFF=1./(NF1-NF0)**2
-        I=0
-        DO M=0,NM
-        DO N=M,NM+NR*M
-          IF(N.GT.NF0) THEN
-            WWW=MAX(1.-FFF*(N-NF0)**2,0.)
-            ORS(I+1)=ORS(I+1)*WWW
-            ORS(I+2)=ORS(I+2)*WWW
-          ENDIF
-        I=I+2
-        ENDDO
-        ENDDO
-!
-        CALL SPTEZ(NR,NM,4,IM,JM,ORS,ORF,+1)
-
-      ELSE
-        ORS=0.
-        ORF=ORO
-      ENDIF
+      ORS=0.
+      ORF=ORO
 
       deallocate (WORK1)
 
