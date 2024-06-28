@@ -2,15 +2,12 @@ set(lib_src netcdf_io.F90)
 set(exe_src mtnlm7_oclsm.F)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -warn unused -r8 -convert big_endian -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8 -fconvert=big-endian -fno-range-check")
   if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-invalid-boz")
   endif()
-endif()
-if(ip_VERSION GREATER_EQUAL 4.0.0)
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DIP_V4")
 endif()
 
 set(exe_name orog)
@@ -27,7 +24,6 @@ target_link_libraries(
   PUBLIC
   bacio::bacio_4
   w3emc::w3emc_d
-  ip::ip_d
   NetCDF::NetCDF_Fortran)
 
 if(sp_FOUND)
