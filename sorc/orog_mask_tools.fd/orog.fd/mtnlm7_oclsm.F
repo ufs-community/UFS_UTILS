@@ -200,7 +200,7 @@ C
 
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
       real, allocatable :: GEOLAT(:,:),GEOLAT_C(:,:),DY(:,:)
-      real, allocatable :: SLM(:,:),ORO(:,:),VAR(:,:),ORF(:,:)
+      real, allocatable :: SLM(:,:),ORO(:,:),VAR(:,:)
       real, allocatable :: land_frac(:,:),lake_frac(:,:)
       real, allocatable :: THETA(:,:),GAMMA(:,:),SIGMA(:,:),ELVMAX(:,:)
       real, allocatable :: VAR4(:,:),SLMI(:,:)
@@ -1168,29 +1168,15 @@ C
         ENDDO
       ENDDO
 !
-       call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
-!
       deallocate(VAR4)
-      allocate (ORF(IM,JM))
-
-      ORF=ORO
-
       deallocate (WORK1)
 
-       call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
-      print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
-      print *,' after spectral filter is applied'
-       call minmxj(IM,JM,ORO,'     ORO')
-       call minmxj(IM,JM,ORF,'     ORF')
-C
-      print *,' after nearest neighbor interpolation applied '
-       call minmxj(IM,JM,ORO,'     ORO')
-       call minmxj(IM,JM,ORF,'     ORF')
-       call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
-       print *,' ORO,ORF(itest,jtest),itest,jtest:',
-     &          ORO(itest,jtest),ORF(itest,jtest),itest,jtest
-      print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
+      call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
+      call minmxj(IM,JM,ORO,'     ORO')
 
+      print *,' ORO(itest,jtest),itest,jtest:',
+     &          ORO(itest,jtest),itest,jtest
+      print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
 
 C   check antarctic pole 
       DO J = 1,JM
@@ -1225,7 +1211,7 @@ C
       endif
 
       tbeg=timef()
-      CALL WRITE_NETCDF(IM,JM,SLM,land_frac,ORO,ORF,HPRIME,1,1,
+      CALL WRITE_NETCDF(IM,JM,SLM,land_frac,ORO,HPRIME,1,1,
      1                  GEOLON(1:IM,1:JM),GEOLAT(1:IM,1:JM), XLON,XLAT)
       tend=timef()
       write(6,*)' WRITE_NETCDF time= ',tend-tbeg
@@ -1240,7 +1226,7 @@ C
 !     Deallocate 2d vars
       deallocate (OCLSM)
       deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
-      deallocate (SLM,ORO,VAR,ORF,land_frac)
+      deallocate (SLM,ORO,VAR,land_frac)
       deallocate (THETA,GAMMA,SIGMA,ELVMAX)
 
 

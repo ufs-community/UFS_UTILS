@@ -9,7 +9,6 @@
 !! @param[in] slm Land-sea mask.
 !! @param[in] land_frac Land fraction.
 !! @param[in] oro Orography
-!! @param[in] orf Filtered orography. Currently the same as 'oro'.
 !! @param[in] hprime The gravity wave drag fields on the model grid tile.
 !! @param[in] ntiles Number of tiles to output.
 !! @param[in] tile Tile number to output.
@@ -18,11 +17,11 @@
 !! @param[in] lon Longitude of the first row of the model grid tile.
 !! @param[in] lat Latitude of the first column of the model grid tile.
 !! @author Jordan Alpert NOAA/EMC GFDL Programmer
-  subroutine write_netcdf(im, jm, slm, land_frac, oro, orf, hprime, ntiles, tile, geolon, geolat, lon, lat)
+  subroutine write_netcdf(im, jm, slm, land_frac, oro, hprime, ntiles, tile, geolon, geolat, lon, lat)
     implicit none
     integer, intent(in):: im, jm, ntiles, tile
     real, intent(in) :: lon(im), lat(jm)
-    real, intent(in), dimension(im,jm)  :: slm, oro, orf, geolon, geolat, land_frac
+    real, intent(in), dimension(im,jm)  :: slm, oro, geolon, geolat, land_frac
     real, intent(in), dimension(im,jm,14):: hprime
     character(len=128) :: outfile
     integer            :: error, ncid
@@ -170,7 +169,8 @@
 
     error = nf_put_var_double( ncid, id_orog_raw, oro(:dim1,:dim2))
     call netcdf_err(error, 'write var orog_raw for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_orog_filt, orf(:dim1,:dim2))
+! We no longer filter the orog, so the raw and filtered records are the same.
+    error = nf_put_var_double( ncid, id_orog_filt, oro(:dim1,:dim2))
     call netcdf_err(error, 'write var orog_filt for file='//trim(outfile) )
 
     error = nf_put_var_double( ncid, id_stddev, hprime(:dim1,:dim2,1))
