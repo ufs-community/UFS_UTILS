@@ -65,7 +65,6 @@ C> @return 0 for success, error code otherwise.
       integer imn, jmn
       integer fsize, ncid, error, id_dim, nx, ny
       character(len=256) :: OUTGRID = "none"
-      character(len=256) :: INPUTOROG = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
       integer :: MTNRES,IM,JM,EFAC
@@ -74,7 +73,6 @@ C> @return 0 for success, error code otherwise.
       READ(5,*) mask_only
       READ(5,*) merge_file
       EFAC=0
-      print*, "INPUTOROG= ", trim(INPUTOROG)
       print*, "MASK_ONLY", mask_only
       print*, "MERGE_FILE ", trim(merge_file)
 ! --- MTNRES defines the input (highest) elev resolution
@@ -124,7 +122,7 @@ C> @return 0 for success, error code otherwise.
       call netcdf_err(error, 'close file '//trim(OUTGRID) )
          
       CALL TERSUB(IMN,JMN,IM,JM,EFAC,
-     &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
+     &            OUTGRID,MASK_ONLY,MERGE_FILE)
       STOP
       END
 
@@ -136,7 +134,6 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] JM "j" dimension of the model grid tile.
 !! @param[in] EFAC Factor to adjust orography by its variance.
 !! @param[in] OUTGRID The 'grid' file for the model tile.
-!! @param[in] INPUTOROG Input orography/GWD file on gaussian
 !! grid. When specified, will be interpolated to model tile.
 !! When not specified, program will create fields from
 !! raw high-resolution topography data.
@@ -144,13 +141,12 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,EFAC,
-     &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
+     &     OUTGRID,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
 C
       integer                      :: IMN,JMN,IM,JM
       character(len=*), intent(in) :: OUTGRID
-      character(len=*), intent(in) :: INPUTOROG
       character(len=*), intent(in) :: MERGE_FILE
 
       logical, intent(in) :: mask_only
@@ -162,7 +158,7 @@ C
       integer :: efac,zsave1,zsave2
       integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
-      integer :: id_var,nx_in,ny_in,fsize,wgta,IN,INW,INE,IS,ISW,ISE
+      integer :: id_var,fsize,wgta,IN,INW,INE,IS,ISW,ISE
       integer :: ios,istat,itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
@@ -193,11 +189,9 @@ C
       real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
       real, allocatable :: WORK5(:,:),WORK6(:,:)
       real, allocatable :: tmpvar(:,:)
-      real, allocatable :: slm_in(:,:), lon_in(:,:), lat_in(:,:)
       real(4), allocatable::  GICE(:,:),OCLSM(:,:)
 
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
-      real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
 
       logical :: grid_from_file,fexist,opened
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
@@ -698,130 +692,16 @@ C
        allocate (WORK5(IM,JM),WORK6(IM,JM))
 
        call minmxj(IM,JM,ORO,'     ORO')
-       print*, "inputorog=", trim(INPUTOROG)
+
        if(grid_from_file) then
-         if(trim(INPUTOROG) == "none") then
-           print*, "calling MAKEOA2 to compute OA, OL"
-      tbeg=timef()
-           CALL MAKEOA2(ZAVG,zslm,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
+         print*, "calling MAKEOA2 to compute OA, OL"
+         tbeg=timef()
+         CALL MAKEOA2(ZAVG,zslm,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
      1            WORK1,WORK2,WORK3,WORK4,WORK5,WORK6,
      2            IM,JM,IMN,JMN,geolon_c,geolat_c,
      3            geolon,geolat,dx,dy,is_south_pole,is_north_pole)
-      tend=timef()
-      write(6,*)' MAKEOA2 time= ',tend-tbeg
-         else
-           !-- read the data from INPUTOROG file.
-           error=NF__OPEN(trim(INPUTOROG),NF_NOWRITE,fsize,ncid)
-           call netcdf_err(error, 'Open file '//trim(INPUTOROG) )
-           error=nf_inq_dimid(ncid, 'lon', id_dim)
-           call netcdf_err(error, 'inquire dimension lon from file '//
-     &                   trim(INPUTOROG) )
-           error=nf_inq_dimlen(ncid,id_dim,nx_in)
-           call netcdf_err(error, 'inquire dimension lon length '//
-     &       'from file '//trim(INPUTOROG) )
-           error=nf_inq_dimid(ncid, 'lat', id_dim)
-           call netcdf_err(error, 'inquire dimension lat from file '//
-     &                   trim(INPUTOROG) )
-           error=nf_inq_dimlen(ncid,id_dim,ny_in)
-           call netcdf_err(error, 'inquire dimension lat length '//
-     &       'from file '//trim(INPUTOROG) )
-           
-           print*, "extrapolate OA, OL from Gaussian grid with nx=",
-     &              nx_in, ", ny=", ny_in
-           allocate(oa_in(nx_in,ny_in,4), ol_in(nx_in,ny_in,4))
-           allocate(slm_in(nx_in,ny_in) )
-           allocate(lon_in(nx_in,ny_in), lat_in(nx_in,ny_in) )
-           
-           error=nf_inq_varid(ncid, 'oa1', id_var)
-           call netcdf_err(error, 'inquire varid of oa1 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, oa_in(:,:,1))
-           call netcdf_err(error, 'inquire data of oa1 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_inq_varid(ncid, 'oa2', id_var)
-           call netcdf_err(error, 'inquire varid of oa2 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, oa_in(:,:,2))
-           call netcdf_err(error, 'inquire data of oa2 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_inq_varid(ncid, 'oa3', id_var)
-           call netcdf_err(error, 'inquire varid of oa3 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, oa_in(:,:,3))
-           call netcdf_err(error, 'inquire data of oa3 from file '
-     &                   //trim(INPUTOROG) )           
-           error=nf_inq_varid(ncid, 'oa4', id_var)
-           call netcdf_err(error, 'inquire varid of oa4 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, oa_in(:,:,4))
-           call netcdf_err(error, 'inquire data of oa4 from file '
-     &                   //trim(INPUTOROG) )
-
-           error=nf_inq_varid(ncid, 'ol1', id_var)
-           call netcdf_err(error, 'inquire varid of ol1 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, ol_in(:,:,1))
-           call netcdf_err(error, 'inquire data of ol1 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_inq_varid(ncid, 'ol2', id_var)
-           call netcdf_err(error, 'inquire varid of ol2 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, ol_in(:,:,2))
-           call netcdf_err(error, 'inquire data of ol2 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_inq_varid(ncid, 'ol3', id_var)
-           call netcdf_err(error, 'inquire varid of ol3 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, ol_in(:,:,3))
-           call netcdf_err(error, 'inquire data of ol3 from file '
-     &                   //trim(INPUTOROG) )           
-           error=nf_inq_varid(ncid, 'ol4', id_var)
-           call netcdf_err(error, 'inquire varid of ol4 from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, ol_in(:,:,4))
-           call netcdf_err(error, 'inquire data of ol4 from file '
-     &                   //trim(INPUTOROG) )
-
-           error=nf_inq_varid(ncid, 'slmsk', id_var)
-           call netcdf_err(error, 'inquire varid of slmsk from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, slm_in)
-           call netcdf_err(error, 'inquire data of slmsk from file '
-     &                   //trim(INPUTOROG) )
-
-           error=nf_inq_varid(ncid, 'geolon', id_var)
-           call netcdf_err(error, 'inquire varid of geolon from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, lon_in)
-           call netcdf_err(error, 'inquire data of geolon from file '
-     &                   //trim(INPUTOROG) )
-
-           error=nf_inq_varid(ncid, 'geolat', id_var)
-           call netcdf_err(error, 'inquire varid of geolat from file '
-     &                   //trim(INPUTOROG) )
-           error=nf_get_var_double(ncid, id_var, lat_in)
-           call netcdf_err(error, 'inquire data of geolat from file '
-     &                   //trim(INPUTOROG) )
-           
-           ! set slmsk=2 to be ocean (0)
-           do j=1,ny_in; do i=1,nx_in
-              if(slm_in(i,j) == 2) slm_in(i,j) = 0
-           enddo; enddo
-           
-           error=nf_close(ncid)
-           call netcdf_err(error, 'close file '
-     &                   //trim(INPUTOROG) )
-           
-           print*, "calling MAKEOA3 to compute OA, OL"
-           CALL MAKEOA3(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,SLM,
-     1            WORK1,WORK2,WORK3,WORK4,WORK5,WORK6,
-     2            IM,JM,IMN,JMN,geolon_c,geolat_c,
-     3            geolon,geolat,nx_in,ny_in,
-     4            oa_in,ol_in,slm_in,lon_in,lat_in)
-
-           deallocate(oa_in,ol_in,slm_in,lon_in,lat_in)
-
-         endif
+         tend=timef()
+         write(6,*)' MAKEOA2 time= ',tend-tbeg
        else
          CALL MAKEOA(ZAVG,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
      1            WORK1,WORK2,WORK3,WORK4,
