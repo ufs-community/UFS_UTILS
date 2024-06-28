@@ -70,21 +70,21 @@ C>  -   SPTEZ      - SPHERICAL TRANSFORM
 C>  -   GBYTES     - UNPACK BITS
 C>
 C> @return 0 for success, error code otherwise.
+      implicit none
       include 'netcdf.inc'
       logical fexist, opened
+      integer imn, jmn
       integer fsize, ncid, error, id_dim, nx, ny
       character(len=256) :: OUTGRID = "none"
       character(len=256) :: INPUTOROG = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
-      integer :: MTNRES,IM,JM,NM,NR,EFAC
+      integer :: MTNRES,IM,JM,EFAC
       fsize=65536
       READ(5,*) OUTGRID
       READ(5,*) mask_only
       READ(5,*) merge_file
-      NM=0
       EFAC=0
-      NR=0
       print*, "INPUTOROG= ", trim(INPUTOROG)
       print*, "MASK_ONLY", mask_only
       print*, "MERGE_FILE ", trim(merge_file)
@@ -95,7 +95,7 @@ C> @return 0 for success, error code otherwise.
 ! --- other possibilities are =8 for 4' and =4 for 2' see
 !     HJ for T1000 test. Must set to 1 for now.
       MTNRES=1
-      print*, MTNRES,NM,NR,EFAC
+      print*, MTNRES,EFAC
       IMN = 360*120/MTNRES
       JMN = 180*120/MTNRES
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
@@ -134,7 +134,7 @@ C> @return 0 for success, error code otherwise.
       error=nf_close(ncid)
       call netcdf_err(error, 'close file '//trim(OUTGRID) )
          
-      CALL TERSUB(IMN,JMN,IM,JM,NM,NR,EFAC,
+      CALL TERSUB(IMN,JMN,IM,JM,EFAC,
      &            OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       STOP
       END
@@ -145,8 +145,6 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] JMN "j" dimension of the input terrain dataset.
 !! @param[in] IM "i" dimension of the model grid tile.
 !! @param[in] JM "j" dimension of the model grid tile.
-!! @param[in] NM Spectral truncation.
-!! @param[in] NR Rhomboidal flag.
 !! @param[in] EFAC Factor to adjust orography by its variance.
 !! @param[in] OUTGRID The 'grid' file for the model tile.
 !! @param[in] INPUTOROG Input orography/GWD file on gaussian
@@ -156,12 +154,12 @@ C> @return 0 for success, error code otherwise.
 !! @param[in] MASK_ONLY Flag to generate the Land Mask only
 !! @param[in] MERGE_FILE Ocean merge file 
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE TERSUB(IMN,JMN,IM,JM,NM,NR,EFAC,
+      SUBROUTINE TERSUB(IMN,JMN,IM,JM,EFAC,
      &     OUTGRID,INPUTOROG,MASK_ONLY,MERGE_FILE)
       implicit none
       include 'netcdf.inc'
 C
-      integer                      :: IMN,JMN,IM,JM,NM,NR
+      integer                      :: IMN,JMN,IM,JM
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: INPUTOROG
       character(len=*), intent(in) :: MERGE_FILE
@@ -192,7 +190,7 @@ C
       integer, allocatable :: IWORK(:,:,:)
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
-      real :: PHI,DELXN,slma,oroa,vara,var4a,xn,XS
+      real :: DELXN,slma,oroa,vara,var4a,xn,XS
       real :: sumdif,avedif
 
       real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
@@ -214,7 +212,6 @@ C
       real, allocatable :: oa_in(:,:,:), ol_in(:,:,:)
 
       logical :: grid_from_file,fexist,opened
-      logical :: SPECTR
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
 
       tbeg1=timef()
@@ -237,7 +234,6 @@ C
 !  SET CONSTANTS AND ZERO FIELDS
 !
       DEGRAD = 180./PI
-      SPECTR = NM .GT. 0     ! if NM <=0 grid is assumed lat/lon
       MSKOCN = 1             ! Ocean land sea mask =1, =0 if not present
       NOTOCN = 1             ! =1 Ocean lsm input reverse: Ocean=1, land=0 
 ! --- The LSM Gaussian file from the ocean model sometimes arrives with 
@@ -291,8 +287,8 @@ C
 !
 
 !  --- IMN,JMN
-      print*, ' IM, JM, NM, NR, EFAC'
-      print*, IM,JM,NM,NR,EFAC
+      print*, ' IM, JM, EFAC'
+      print*, IM,JM,EFAC
        print *,'  imn,jmn,glob(imn,jmn)=',imn,jmn,glob(imn,jmn)
        print *,' UBOUND ZAVG=',UBOUND(ZAVG)
        print *,' UBOUND glob=',UBOUND(glob)
@@ -354,25 +350,11 @@ C
 !
 !    This code assumes that lat runs from north to south for gg!
 !
-
-      print *,' SPECTR=',SPECTR,' ** with GICE-07 **'
-      IF (SPECTR) THEN
-        CALL SPLAT(4,JM,COSCLT,WGTCLT)
-        DO J=1,JM/2
-          RCLT(J)      = ACOS(COSCLT(J))
-        ENDDO
-        DO J = 1,JM/2
-           PHI = RCLT(J) * DEGRAD
-           XLAT(J) = 90. - PHI
-           XLAT(JM-J+1) =  PHI - 90.
-        ENDDO
-      ELSE
-        CALL SPLAT(0,JM,COSCLT,WGTCLT)
-        DO J=1,JM
-          RCLT(J) = ACOS(COSCLT(J))
-          XLAT(J) = 90.0 - RCLT(J) * DEGRAD
-        ENDDO
-      ENDIF
+       CALL SPLAT(0,JM,COSCLT,WGTCLT)
+       DO J=1,JM
+         RCLT(J) = ACOS(COSCLT(J))
+         XLAT(J) = 90.0 - RCLT(J) * DEGRAD
+       ENDDO
 
       allocate (GICE(IMN+1,3601))
 !
