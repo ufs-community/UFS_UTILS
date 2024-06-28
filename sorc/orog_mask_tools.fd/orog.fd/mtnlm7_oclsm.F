@@ -16,11 +16,6 @@ C> 5. unfiltered gridded orography on model physics grid
 C> 6. grib sea-land mask on model physics grid
 C> 7. grib gridded orography on model physics grid
 C>
-C> The orography is only filtered for wavenumbers greater than nf0. For
-C> wavenumbers n between nf0 and nf1, the orography is filtered by the
-C> factor 1-((n-nf0)/(nf1-nf0))**2. The filtered orography will not have
-C> information beyond wavenumber nf1.
-C>
 C> PROGRAM HISTORY LOG:
 C> -  92-04-16  IREDELL
 C> -  98-02-02  IREDELL  FILTER
@@ -37,12 +32,6 @@ C>  - 04-09-04   minus sign here in MAKEOA IST and IEN as in MAKEMT!
 C>  - 05-09-05   if test on HK and HLPRIM for GAMMA SQRT
 C>  - 07-08-07   replace 8' with 30" incl GICE, conintue w/ S-Y. lake slm
 C>  - 08-08-07  All input 30", UMD option, and filter as described below
-C> Quadratic filter applied by default.
-C> NF0 is normally set to an even value beyond the previous truncation, 
-C> for example, for jcap=382, NF0=254+2
-C> NF1 is set as jcap+2 (and/or nearest even), eg., for t382, NF1=382+2=384
-C> if no filter is desired then NF1=NF0=0 and ORF=ORO
-C> but if no filter but spectral to grid (with gibbs) then NF1=jcap+2, and NF1=jcap+1
 C>       
 C>   INPUT FILES:
 C>  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
@@ -191,9 +180,8 @@ C
 
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
       real :: DELXN,slma,oroa,vara,var4a,xn,XS
-      real :: sumdif,avedif
 
-      real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:),DIFFX(:)
+      real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:)
       real, allocatable :: XLON(:),oaa(:),ola(:),GLAT(:)
 
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
@@ -223,7 +211,7 @@ C
       allocate (glob(IMN,JMN))
 
 ! reals
-      allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM),DIFFX(JM/2))
+      allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM))
       allocate (XLON(IM),oaa(4),ola(4),GLAT(JMN))
 
       allocate (ZAVG(IMN,JMN))
@@ -347,9 +335,8 @@ C
        do j=1,jm
          numi(j)=im
        enddo
-!
-!    This code assumes that lat runs from north to south for gg!
-!
+!  When the gaussian grid routines makemt, makepc and makeoa are
+!  removed, xlat can be removed.
        CALL SPLAT(0,JM,COSCLT,WGTCLT)
        DO J=1,JM
          RCLT(J) = ACOS(COSCLT(J))
@@ -358,18 +345,9 @@ C
 
       allocate (GICE(IMN+1,3601))
 !
-       sumdif = 0.
-       DO J = JM/2,2,-1
-       DIFFX(J) = xlat(J) - XLAT(j-1)
-       sumdif = sumdif + DIFFX(J)
-       ENDDO
-       avedif=sumdif/(float(JM/2))
-!      print *,' XLAT= avedif: ',avedif
-!      write (6,107) (xlat(J)-xlat(j-1),J=JM,2,-1)
        print *,' XLAT='
        write (6,106) (xlat(J),J=JM,1,-1)
   106 format( 10(f7.3,1x))   
-  107 format( 10(f9.5,1x))   
 C
       DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
 C
@@ -491,177 +469,157 @@ C
       allocate (land_frac(IM,JM),lake_frac(IM,JM))
 
 !--- reading grid file.
-      grid_from_file = .false.
       is_south_pole = .false.
       is_north_pole = .false.
       i_south_pole = 0
       j_south_pole = 0
       i_north_pole = 0
       j_north_pole = 0
-      if( trim(OUTGRID) .NE. "none" ) then
-         grid_from_file = .true.
-         inquire(file=trim(OUTGRID), exist=fexist)
-         if(.not. fexist) then
-            print*, "FATAL ERROR: file "//trim(OUTGRID)
-            print*, "does not exist."
-            CALL ERREXIT(4)
-         endif
-         do ncid = 103, 512
-           inquire( ncid,OPENED=opened )
-           if( .NOT.opened )exit
-         end do
 
-         print*, "outgrid=", trim(outgrid)
-         error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
-         call netcdf_err(error, 'Open file '//trim(OUTGRID) )
-         error=nf_inq_dimid(ncid, 'nx', id_dim)
-         call netcdf_err(error, 'inquire dimension nx from file '//
+      grid_from_file = .true.
+      inquire(file=trim(OUTGRID), exist=fexist)
+      if(.not. fexist) then
+         print*, "FATAL ERROR: file "//trim(OUTGRID)
+         print*, "does not exist."
+         CALL ERREXIT(4)
+      endif
+      do ncid = 103, 512
+        inquire( ncid,OPENED=opened )
+        if( .NOT.opened )exit
+      end do
+
+      print*, "outgrid=", trim(outgrid)
+      error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file '//trim(OUTGRID) )
+      error=nf_inq_dimid(ncid, 'nx', id_dim)
+      call netcdf_err(error, 'inquire dimension nx from file '//
      &                   trim(OUTGRID) )
-         nx = 2*IM
-         ny = 2*JM
-         print*, "Read the grid from file "//trim(OUTGRID)
+      nx = 2*IM
+      ny = 2*JM
+      print*, "Read the grid from file "//trim(OUTGRID)
 
-         allocate(tmpvar(nx+1,ny+1))
+      allocate(tmpvar(nx+1,ny+1))
 
-         error=nf_inq_varid(ncid, 'x', id_var)
-         call netcdf_err(error, 'inquire varid of x from file '
+      error=nf_inq_varid(ncid, 'x', id_var)
+      call netcdf_err(error, 'inquire varid of x from file '
      &                   //trim(OUTGRID) )
-         error=nf_get_var_double(ncid, id_var, tmpvar)
-         call netcdf_err(error, 'inquire data of x from file '
+      error=nf_get_var_double(ncid, id_var, tmpvar)
+      call netcdf_err(error, 'inquire data of x from file '
      &                   //trim(OUTGRID) )
-         !--- adjust lontitude to be between 0 and 360.
-         do j = 1,ny+1; do i = 1,nx+1
-            if(tmpvar(i,j) .NE. MISSING_VALUE) then
-              if(tmpvar(i,j) .GT. 360) tmpvar(i,j) = tmpvar(i,j) - 360
-              if(tmpvar(i,j) .LT. 0) tmpvar(i,j) = tmpvar(i,j) + 360
-            endif
-         enddo; enddo
+      !--- adjust lontitude to be between 0 and 360.
+      do j = 1,ny+1; do i = 1,nx+1
+         if(tmpvar(i,j) .NE. MISSING_VALUE) then
+            if(tmpvar(i,j) .GT. 360) tmpvar(i,j) = tmpvar(i,j) - 360
+            if(tmpvar(i,j) .LT. 0) tmpvar(i,j) = tmpvar(i,j) + 360
+         endif
+      enddo; enddo
 
-         geolon(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
-         geolon_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
+      geolon(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
+      geolon_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
          
-         error=nf_inq_varid(ncid, 'y', id_var)
-         call netcdf_err(error, 'inquire varid of y from file '
+      error=nf_inq_varid(ncid, 'y', id_var)
+      call netcdf_err(error, 'inquire varid of y from file '
      &                   //trim(OUTGRID) )
-         error=nf_get_var_double(ncid, id_var, tmpvar)
-         call netcdf_err(error, 'inquire data of y from file '
+      error=nf_get_var_double(ncid, id_var, tmpvar)
+      call netcdf_err(error, 'inquire data of y from file '
      &                   //trim(OUTGRID) )
-         geolat(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
-         geolat_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
+      geolat(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
+      geolat_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
 
-         !--- figure out pole location.
-         maxlat = -90
-         minlat = 90
+    !--- figure out pole location.
+      maxlat = -90
+      minlat = 90
+      i_north_pole = 0
+      j_north_pole = 0
+      i_south_pole = 0
+      j_south_pole = 0
+      do j = 1, ny+1; do i = 1, nx+1
+         if( tmpvar(i,j) > maxlat ) then
+            i_north_pole=i
+            j_north_pole=j
+            maxlat = tmpvar(i,j)
+         endif
+         if( tmpvar(i,j) < minlat ) then
+            i_south_pole=i
+            j_south_pole=j
+            minlat = tmpvar(i,j)
+         endif
+      enddo ; enddo
+    !--- only when maxlat is close to 90. the point is north pole
+      if(maxlat < 89.9 ) then
          i_north_pole = 0
          j_north_pole = 0
+      endif
+      if(minlat > -89.9 ) then
          i_south_pole = 0
          j_south_pole = 0
-         do j = 1, ny+1; do i = 1, nx+1
-            if( tmpvar(i,j) > maxlat ) then
-               i_north_pole=i
-               j_north_pole=j
-               maxlat = tmpvar(i,j)
-            endif
-            if( tmpvar(i,j) < minlat ) then
-               i_south_pole=i
-               j_south_pole=j
-               minlat = tmpvar(i,j)
-            endif
-         enddo ; enddo
-         !--- only when maxlat is close to 90. the point is north pole
-         if(maxlat < 89.9 ) then
-            i_north_pole = 0
-            j_north_pole = 0
-         endif
-         if(minlat > -89.9 ) then
-            i_south_pole = 0
-            j_south_pole = 0
-         endif
-         print*, "minlat=", minlat, "maxlat=", maxlat
-         print*, "north pole supergrid index is ",
+      endif
+      print*, "minlat=", minlat, "maxlat=", maxlat
+      print*, "north pole supergrid index is ",
      &           i_north_pole, j_north_pole
-         print*, "south pole supergrid index is ",
+      print*, "south pole supergrid index is ",
      &           i_south_pole, j_south_pole
-         deallocate(tmpvar)
+      deallocate(tmpvar)
 
-         if(i_south_pole >0 .and. j_south_pole > 0) then
-           if(mod(i_south_pole,2)==0) then ! stretched grid
-             do j = 1, JM; do i = 1, IM
-               if(i==i_south_pole/2 .and. (j==j_south_pole/2 
+      if(i_south_pole >0 .and. j_south_pole > 0) then
+        if(mod(i_south_pole,2)==0) then ! stretched grid
+           do j = 1, JM; do i = 1, IM
+             if(i==i_south_pole/2 .and. (j==j_south_pole/2 
      &              .or. j==j_south_pole/2+1) ) then
+               is_south_pole(i,j) = .true.
+               print*, "south pole at i,j=", i, j
+             endif
+           enddo; enddo      
+        else
+           do j = 1, JM; do i = 1, IM
+              if((i==i_south_pole/2 .or. i==i_south_pole/2+1)
+     &             .and. (j==j_south_pole/2 .or.
+     &              j==j_south_pole/2+1) ) then
                  is_south_pole(i,j) = .true.
                  print*, "south pole at i,j=", i, j
-               endif
-             enddo; enddo      
-            else
-               do j = 1, JM; do i = 1, IM
-                  if((i==i_south_pole/2 .or. i==i_south_pole/2+1)
-     &             .and. (j==j_south_pole/2 .or.
-     &                j==j_south_pole/2+1) ) then
-                    is_south_pole(i,j) = .true.
-                    print*, "south pole at i,j=", i, j
-                  endif
-               enddo; enddo
-            endif            
-         endif
-         if(i_north_pole >0 .and. j_north_pole > 0) then
-            if(mod(i_north_pole,2)==0) then ! stretched grid
-               do j = 1, JM; do i = 1, IM
-                  if(i==i_north_pole/2 .and. (j==j_north_pole/2 .or.
+              endif
+           enddo; enddo
+        endif            
+      endif
+
+      if(i_north_pole >0 .and. j_north_pole > 0) then
+        if(mod(i_north_pole,2)==0) then ! stretched grid
+           do j = 1, JM; do i = 1, IM
+              if(i==i_north_pole/2 .and. (j==j_north_pole/2 .or.
      &                j==j_north_pole/2+1) ) then
-                    is_north_pole(i,j) = .true.
-                    print*, "north pole at i,j=", i, j
-                  endif
-               enddo; enddo      
-            else
-               do j = 1, JM; do i = 1, IM
-                  if((i==i_north_pole/2 .or. i==i_north_pole/2+1)
+                is_north_pole(i,j) = .true.
+                print*, "north pole at i,j=", i, j
+              endif
+           enddo; enddo      
+        else
+           do j = 1, JM; do i = 1, IM
+              if((i==i_north_pole/2 .or. i==i_north_pole/2+1)
      &             .and. (j==j_north_pole/2 .or.
      &                j==j_north_pole/2+1) ) then
-                    is_north_pole(i,j) = .true.
-                    print*, "north pole at i,j=", i, j
-                  endif
-               enddo; enddo
-            endif            
-         endif
-         
-         
-         allocate(tmpvar(nx,ny))
-         error=nf_inq_varid(ncid, 'area', id_var)
-         call netcdf_err(error, 'inquire varid of area from file '
-     &                   //trim(OUTGRID) )
-         error=nf_get_var_double(ncid, id_var, tmpvar)
-         call netcdf_err(error, 'inquire data of area from file '
-     &                   //trim(OUTGRID) )
-
-         do j = 1, jm
-            do i = 1, im
-               dx(i,j) = sqrt(tmpvar(2*i-1,2*j-1)+tmpvar(2*i,2*j-1)
-     &                       +tmpvar(2*i-1,2*j  )+tmpvar(2*i,2*j  ))
-               dy(i,j) = dx(i,j)
-            enddo
-         enddo
-!         allocate(tmpvar(nx,ny+1))
-
-!         error=nf_inq_varid(ncid, 'dx', id_var)
-!         call netcdf_err(error, 'inquire varid of dx from file '
-!     &                   //trim(OUTGRID) )
-!         error=nf_get_var_double(ncid, id_var, tmpvar)
-!         call netcdf_err(error, 'inquire data of dx from file '
-!     &                   //trim(OUTGRID) )
-!         dx(1:IM,1:JM+1) = tmpvar(2:nx:2,1:ny+1:2)
-!         deallocate(tmpvar)
-
-!          allocate(tmpvar(nx+1,ny))
-!         error=nf_inq_varid(ncid, 'dy', id_var)
-!         call netcdf_err(error, 'inquire varid of dy from file '
-!     &                   //trim(OUTGRID) )
-!         error=nf_get_var_double(ncid, id_var, tmpvar)
-!         call netcdf_err(error, 'inquire data of dy from file '
-!     &                   //trim(OUTGRID) )
-!         dy(1:IM+1,1:JM) = tmpvar(1:nx+1:2,2:ny:2)
-         deallocate(tmpvar)         
+                is_north_pole(i,j) = .true.
+                print*, "north pole at i,j=", i, j
+              endif
+           enddo; enddo
+         endif            
       endif
+         
+      allocate(tmpvar(nx,ny))
+      error=nf_inq_varid(ncid, 'area', id_var)
+      call netcdf_err(error, 'inquire varid of area from file '
+     &                   //trim(OUTGRID) )
+      error=nf_get_var_double(ncid, id_var, tmpvar)
+      call netcdf_err(error, 'inquire data of area from file '
+     &                   //trim(OUTGRID) )
+
+      do j = 1, jm
+         do i = 1, im
+            dx(i,j) = sqrt(tmpvar(2*i-1,2*j-1)+tmpvar(2*i,2*j-1)
+     &                     +tmpvar(2*i-1,2*j  )+tmpvar(2*i,2*j  ))
+            dy(i,j) = dx(i,j)
+         enddo
+      enddo
+      deallocate(tmpvar)         
+
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
                                 !
@@ -1173,24 +1131,13 @@ C   check antarctic pole
       write(6,*)' Timer 5 time= ',tend-tbeg
 C
       DELXN = 360./IM
-      do i=1,im
-        xlon(i) = DELXN*(i-1)
+
+      do j = 1, jm
+         xlat(j) = geolat(1,j)
       enddo
-      IF(trim(OUTGRID) == "none") THEN
-        do j=1,jm
-         do i=1,im
-           geolon(i,j) = xlon(i)
-           geolat(i,j) = xlat(j)
-         enddo
-        enddo
-      else
-        do j = 1, jm
-           xlat(j) = geolat(1,j)
-        enddo
-        do i = 1, im
-           xlon(i) = geolon(i,1)
-        enddo
-      endif
+      do i = 1, im
+         xlon(i) = geolon(i,1)
+      enddo
 
       tbeg=timef()
       CALL WRITE_NETCDF(IM,JM,SLM,land_frac,ORO,HPRIME,1,1,
@@ -1203,7 +1150,7 @@ C
 
 !     Deallocate 1d vars
       deallocate(JST,JEN,numi)
-      deallocate(COSCLT,WGTCLT,RCLT,XLAT,DIFFX,XLON,oaa,ola,GLAT)
+      deallocate(COSCLT,WGTCLT,RCLT,XLAT,XLON,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
       deallocate (OCLSM)
