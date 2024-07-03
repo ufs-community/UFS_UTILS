@@ -41,15 +41,6 @@ load(pathJoin("w3emc", w3emc_ver))
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
 
-hdf5_ver=os.getenv("hdf5_ver") or "1.14.3_gnu9.2.0"
-load(pathJoin("hdf5", hdf5_ver))
-
-netcdf_c_ver=os.getenv("netcdf_c_ver") or "4.9.2"
-load(pathJoin("netcdf-c", netcdf_c_ver))
-
-netcdf_fortran_ver=os.getenv("netcdf_fortran_ver") or "4.6.1"
-load(pathJoin("netcdf-fortran", netcdf_fortran_ver))
-
 nccmp_ver=os.getenv("nccmp_ver") or "1.9.1"
 load(pathJoin("nccmp", nccmp_ver))
 
