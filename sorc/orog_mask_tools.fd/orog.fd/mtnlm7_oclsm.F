@@ -2360,33 +2360,6 @@ C
 
       END SUBROUTINE MAKEOA2
  
-!> Compute a great circle distance between two points.
-!!
-!! @param[in] theta1 Longitude of point 1.
-!! @param[in] phi1 Latitude of point 1.
-!! @param[in] theta2 Longitude of point 2.
-!! @param[in] phi2 Latitude of point2.
-!! @return spherical_distance Great circle distance.
-!! @author GFDL programmer
-      function spherical_distance(theta1,phi1,theta2,phi2)
-
-      real, intent(in) :: theta1, phi1, theta2, phi2
-      real :: spherical_distance, dot
-
-      if(theta1 == theta2 .and. phi1 == phi2) then
-        spherical_distance = 0.0
-        return
-      endif
-  
-      dot = cos(phi1)*cos(phi2)*cos(theta1-theta2) + sin(phi1)*sin(phi2)
-      if(dot > 1. ) dot = 1.
-      if(dot < -1.) dot = -1.
-      spherical_distance = acos(dot)
-
-      return
-
-      end function spherical_distance
-      
 !> Print out the maximum and minimum values of
 !! an array.
 !!
