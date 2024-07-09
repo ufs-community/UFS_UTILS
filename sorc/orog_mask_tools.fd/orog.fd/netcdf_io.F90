@@ -208,7 +208,7 @@
     error = nf_close(ncid) 
     call netcdf_err(error, 'close file='//trim(outfile) )  
       
-  end subroutine
+  end subroutine write_netcdf
 
 !> Check NetCDF error code and output the error message.
 !!
@@ -319,8 +319,7 @@
     error = nf_close(ncid) 
     call netcdf_err(error, 'close file='//trim(outfile) )  
       
-  end subroutine
-
+  end subroutine write_mask_netcdf
  
 !> Read the land mask file
 !!
@@ -377,4 +376,4 @@
   error = nf_close(ncid) 
   print*,'bot of read_mask'
 
-  end subroutine
+  end subroutine read_mask

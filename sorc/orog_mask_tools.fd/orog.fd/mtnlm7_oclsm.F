@@ -1201,7 +1201,7 @@ C=== degub testing
 C
 
       RETURN
-      END
+      END SUBROUTINE MAKEMT
 
 !> Determine the location of a cubed-sphere point within
 !! the high-resolution orography data.  The location is
@@ -1294,7 +1294,7 @@ C
             enddo
          endif
 
-      END   
+      END SUBROUTINE get_index
       
 !> Create the land-mask, land fraction.
 !! This routine is used for the FV3GFS model.
@@ -1651,7 +1651,7 @@ C
       deallocate(hgt_1d)
       deallocate(hgt_1d_all)
       RETURN
-      END
+      END SUBROUTINE MAKEMT2
 
 !> Make the principle coordinates - slope of orography, 
 !! anisotropy, angle of mountain range with respect to east.
@@ -2390,7 +2390,7 @@ csela....................................................
 150   format('rmin=',e13.4,2x,'rmax=',e13.4,2x,a8,' ')
 C
       RETURN
-      END
+      END SUBROUTINE minmxj
 
 !> Print out the maximum and minimum values of
 !! an array. Pass back the i/j location of the
@@ -2429,7 +2429,7 @@ csela....................................................
 150   format('rmin=',e13.4,2x,'rmax=',e13.4,2x,a8,' ')
 C
       RETURN
-      END
+      END SUBROUTINE mnmxja
 
 !> Read input global 30-arc second orography data.
 !!
@@ -2515,7 +2515,7 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
       print*,tile,' mean=',mean,' std.dev=',std,
      &       ' ko9s=',kount,kount_9,kount+kount_9 
       return
-      end
+      end subroutine maxmin
 
 !> Convert from latitude and longitude to x,y,z coordinates.
 !!
@@ -2539,7 +2539,7 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
         y(n) = cos(lat(n))*sin(lon(n))
         z(n) = sin(lat(n))
       enddo
-      end
+      end subroutine latlon2xyz
 
 !> Compute spherical angle.
 !!
@@ -2586,7 +2586,7 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
         endif  
 
         return
-      END  
+      END FUNCTION spherical_angle
       
 !> Check if a point is inside a polygon.
 !!
@@ -2668,7 +2668,7 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
 
         return
         
-      end
+      end function inside_a_polygon
 
 !> Count the number of high-resolution orography points that
 !! are higher than the model grid box average orography height.
@@ -2954,4 +2954,4 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
       elapsed=float(total) + (1.0e-3*float(values(8)))
       timef=elapsed
       return
-      end
+      end function timef
