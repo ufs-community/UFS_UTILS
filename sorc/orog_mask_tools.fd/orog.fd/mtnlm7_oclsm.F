@@ -2544,58 +2544,6 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
       return
       end
 
-!> Print out the maximum and minimum values of
-!! an array and their i/j location. Also print out
-!! the number of undefined points.
-!!
-!! @param[in] im The 'i' dimension of the array.
-!! @param[in] jm The 'i' dimension of the array.
-!! @param[in] a The array to check.
-!! @param[in] title Name of the data to be checked.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE minmaxj(IM,JM,A,title)
-      implicit none
-
-      real(kind=4) A(IM,JM),rmin,rmax,undef
-      integer i,j,IM,JM,imax,jmax,imin,jmin,iundef
-      character*8 title,chara
-      data chara/'        '/
-      chara=title
-      rmin=1.e+10
-      rmax=-rmin
-      imax=0
-      imin=0
-      jmax=0
-      jmin=0
-      iundef=0
-      undef=-9999.
-csela....................................................
-csela if(rmin.eq.1.e+10)return
-csela....................................................
-      DO j=1,JM
-      DO i=1,IM
-        if(A(i,j).ge.rmax)then
-                        rmax=A(i,j)
-                       imax=i
-                       jmax=j
-        endif
-         if(A(i,j).le.rmin)then
-            if ( A(i,j) .eq. undef ) then
-                iundef = iundef + 1
-            else
-                        rmin=A(i,j)
-                       imin=i
-                       jmin=j
-            endif
-        endif
-      ENDDO
-      ENDDO
-      write(6,150)chara,rmin,imin,jmin,rmax,imax,jmax,iundef
-150   format(1x,a8,2x,'rmin=',e13.4,2i6,2x,'rmax=',e13.4,3i6)
-C
-      RETURN
-      END
-      
 !> Convert from latitude and longitude to x,y,z coordinates.
 !!
 !! @param[in] siz Number of points to convert.
