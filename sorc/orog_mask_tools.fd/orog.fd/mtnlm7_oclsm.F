@@ -165,7 +165,7 @@ C
       integer(1) :: i3save
       integer(2) :: i2save
 
-      integer, allocatable :: JST(:),JEN(:),numi(:)
+      integer, allocatable :: JST(:),JEN(:)
 
       integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
       integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
@@ -193,14 +193,14 @@ C
 
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
 
-      logical :: grid_from_file,fexist,opened
+      logical :: fexist,opened
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
 
       tbeg1=timef()
       tbeg=timef()
       fsize = 65536
 ! integers
-      allocate (JST(JM),JEN(JM),numi(jm))
+      allocate (JST(JM),JEN(JM))
       allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
       allocate (glob(IMN,JMN))
 
@@ -324,11 +324,6 @@ C
 ! --- The center of pixel (1,1) is 89.9958333N/179.9958333W with dx/dy 
 ! --- spacing of 1/120 degrees. 
 !
-!  When the gaussian grid routines makemt, makepc and makeoa are
-!  removed, numi can be removed.
-       do j=1,jm
-         numi(j)=im
-       enddo
 !  When the gaussian grid routines makemt, makepc and makeoa are
 !  removed, xlat can be removed.
        CALL SPLAT(0,JM,COSCLT,WGTCLT)
@@ -470,7 +465,6 @@ C
       i_north_pole = 0
       j_north_pole = 0
 
-      grid_from_file = .true.
       inquire(file=trim(OUTGRID), exist=fexist)
       if(.not. fexist) then
          print*, "FATAL ERROR: file "//trim(OUTGRID)
@@ -617,7 +611,6 @@ C
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
                                 !
-      if(grid_from_file) then
        tbeg=timef()
 
          IF (MERGE_FILE == 'none') then
@@ -643,10 +636,6 @@ C
 
       tend=timef()
       write(6,*)' MAKEMT2 time= ',tend-tbeg
-      else
-        CALL MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
-     &   IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-      endif
 
        call minmxj(IM,JM,ORO,'     ORO')
        call minmxj(IM,JM,SLM,'     SLM')
@@ -1017,7 +1006,7 @@ C
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
 !     Deallocate 1d vars
-      deallocate(JST,JEN,numi)
+      deallocate(JST,JEN)
       deallocate(COSCLT,WGTCLT,RCLT,XLAT,XLON,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
@@ -1031,177 +1020,6 @@ C
       write(6,*)' Total runtime time= ',tend-tbeg1
       RETURN
       END SUBROUTINE TERSUB
-
-!> Create the orography, land-mask, standard deviation of
-!! orography and the convexity on a model gaussian grid.
-!! This routine was used for the spectral GFS model.
-!!
-!! @param[in] zavg The high-resolution input orography dataset.
-!! @param[in] zslm The high-resolution input land-mask dataset.
-!! @param[out] oro Orography on the model grid.
-!! @param[out] slm Land-mask on the model grid.
-!! @param[out] var Standard deviation of orography on the model grid.
-!! @param[out] var4 Convexity on the model grid.
-!! @param[out] glat Latitude of each row of the high-resolution 
-!! orography and land-mask datasets.
-!! @param[out] ist This is the 'i' index of high-resolution data set
-!! at the east edge of the model grid cell.
-!! the high-resolution dataset with respect to the 'east' edge
-!! @param[out] ien This is the 'i' index of high-resolution data set
-!! at the west edge of the model grid cell.
-!! @param[out] jst  This is the 'j' index of high-resolution data set
-!! at the south edge of the model grid cell.
-!! @param[out] jen This is the 'j' index of high-resolution data set
-!! at the north edge of the model grid cell.
-!! @param[in] im "i" dimension of the model grid.
-!! @param[in] jm "j" dimension of the model grid.
-!! @param[in] imn "i" dimension of the hi-res input orog/mask dataset.
-!! @param[in] jmn "j" dimension of the hi-res input orog/mask dataset.
-!! @param[in] xlat The latitude of each row of the model grid.
-!! @param[in] numi For reduced gaussian grids, the number of 'i' points
-!! for each 'j' row.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE MAKEMT(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
-     1 GLAT,IST,IEN,JST,JEN,IM,JM,IMN,JMN,XLAT,numi)
-      DIMENSION GLAT(JMN),XLAT(JM)
-!     REAL*4 OCLSM
-      INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
-      DIMENSION ORO(IM,JM),SLM(IM,JM),VAR(IM,JM),VAR4(IM,JM)
-      DIMENSION IST(IM,jm),IEN(IM,jm),JST(JM),JEN(JM),numi(jm)
-      LOGICAL FLAG
-C
-! ---- OCLSM holds the ocean (im,jm) grid
-      print *,' _____ SUBROUTINE MAKEMT '
-C---- GLOBAL XLAT AND XLON ( DEGREE )
-C
-      JM1 = JM - 1
-      DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
-C
-      DO J=1,JMN
-         GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-      ENDDO
-C
-C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
-C
-C  (*j*)  for hard wired zero offset (lambda s =0) for terr05 
-      DO J=1,JM
-       DO I=1,numi(j)
-         IM1 = numi(j) - 1
-         DELX  = 360./numi(j)       ! GAUSSIAN GRID RESOLUTION
-         FACLON  = DELX / DELXN
-         IST(I,j) = FACLON * FLOAT(I-1) - FACLON * 0.5 + 1
-         IEN(I,j) = FACLON * FLOAT(I) - FACLON * 0.5 + 1
-!        IST(I,j) = FACLON * FLOAT(I-1) + 1.0001
-!        IEN(I,j) = FACLON * FLOAT(I)   + 0.0001
-C
-         IF (IST(I,j) .LE. 0)      IST(I,j) = IST(I,j) + IMN
-         IF (IEN(I,j) .LT. IST(I,j)) IEN(I,j) = IEN(I,j) + IMN
-!
-!          if ( I .lt. 10  .and. J .ge. JM-1 )
-!    1   PRINT*,' MAKEMT: I j IST IEN ',I,j,IST(I,j),IEN(I,j)
-       ENDDO
-!          if ( J .ge. JM-1 ) then
-!     print *,' *** FACLON=',FACLON, 'numi(j=',j,')=',numi(j)
-!          endif
-      ENDDO
-      print *,' DELX=',DELX,' DELXN=',DELXN
-      DO J=1,JM-1
-         FLAG=.TRUE.
-         DO J1=1,JMN
-            XXLAT = (XLAT(J)+XLAT(J+1))/2.
-            IF(FLAG.AND.GLAT(J1).GT.XXLAT) THEN
-              JST(J) = J1
-              JEN(J+1) = J1 - 1
-              FLAG = .FALSE.
-            ENDIF
-         ENDDO
-CX     PRINT*, ' J JST JEN ',J,JST(J),JEN(J),XLAT(J),GLAT(J1)
-      ENDDO
-      JST(JM) = MAX(JST(JM-1) - (JEN(JM-1)-JST(JM-1)),1)
-      JEN(1)  = MIN(JEN(2) + (JEN(2)-JST(2)),JMN)      
-!      PRINT*, ' JM JST JEN=',JST(JM),JEN(JM),XLAT(JM),GLAT(JMN)
-C
-C...FIRST, AVERAGED HEIGHT
-C
-      DO J=1,JM
-        DO I=1,numi(j)
-            ORO(I,J)  = 0.0
-            VAR(I,J)  = 0.0
-            VAR4(I,J) = 0.0
-            XNSUM = 0.0
-            XLAND = 0.0
-            XWATR = 0.0
-            XL1 = 0.0
-            XS1 = 0.0
-            XW1 = 0.0
-            XW2 = 0.0
-            XW4 = 0.0
-            DO II1 = 1, IEN(I,J) - IST(I,J) + 1
-               I1 = IST(I,J) + II1 - 1
-               IF(I1.LE.0.)  I1 = I1 + IMN
-               IF(I1.GT.IMN) I1 = I1 - IMN
-!        if ( i .le. 10 .and. i .ge. 1 ) then 
-!             if (j .eq. JM )
-!    &print *,' J,JST,JEN,IST,IEN,I1=',
-!    &J,JST(j),JEN(J),IST(I,j),IEN(I,j),I1
-!        endif
-               DO J1=JST(J),JEN(J)
-                  XLAND = XLAND + FLOAT(ZSLM(I1,J1))
-                  XWATR = XWATR + FLOAT(1-ZSLM(I1,J1))
-                  XNSUM = XNSUM + 1.
-                  HEIGHT = FLOAT(ZAVG(I1,J1)) 
-C.........
-                  IF(HEIGHT.LT.-990.) HEIGHT = 0.0
-                  XL1 = XL1 + HEIGHT * FLOAT(ZSLM(I1,J1))
-                  XS1 = XS1 + HEIGHT * FLOAT(1-ZSLM(I1,J1))
-                  XW1 = XW1 + HEIGHT
-                  XW2 = XW2 + HEIGHT ** 2
-C   check antarctic pole 
-!        if ( i .le. 10 .and. i .ge. 1 )then
-!           if (j .ge. JM-1 )then
-C=== degub testing
-!     print *," I,J,I1,J1,XL1,XS1,XW1,XW2:",I,J,I1,J1,XL1,XS1,XW1,XW2
-! 153 format(1x,' ORO,ELVMAX(i=',i4,' j=',i4,')=',2E14.5,3f5.1)
-!          endif
-!        endif
-               ENDDO
-            ENDDO
-            IF(XNSUM.GT.1.) THEN
-! --- SLM initialized with OCLSM calc from all land points except ....
-! ---  0 is ocean and 1 is land for slm
-! ---  Step 1 is to only change SLM after GFS SLM is applied
-                 
-               SLM(I,J) = FLOAT(NINT(XLAND/XNSUM))
-               IF(SLM(I,J).NE.0.) THEN
-                  ORO(I,J)= XL1 / XLAND
-               ELSE
-                  ORO(I,J)= XS1 / XWATR
-               ENDIF
-               VAR(I,J)=SQRT(MAX(XW2/XNSUM-(XW1/XNSUM)**2,0.))
-            DO II1 = 1, IEN(I,j) - IST(I,J) + 1
-               I1 = IST(I,J) + II1 - 1
-                  IF(I1.LE.0.) I1 = I1 + IMN
-                  IF(I1.GT.IMN) I1 = I1 - IMN
-                  DO J1=JST(J),JEN(J)
-                     HEIGHT = FLOAT(ZAVG(I1,J1)) 
-                     IF(HEIGHT.LT.-990.) HEIGHT = 0.0
-                     XW4 = XW4 + (HEIGHT-ORO(I,J)) ** 4
-                  ENDDO
-               ENDDO
-               IF(VAR(I,J).GT.1.) THEN
-!          if ( I .lt. 20  .and. J .ge. JM-19 ) then
-!     print *,'I,J,XW4,XNSUM,VAR(I,J)',I,J,XW4,XNSUM,VAR(I,J)
-!          endif
-                  VAR4(I,J) = MIN(XW4/XNSUM/VAR(I,J) **4,10.)
-               ENDIF
-            ENDIF
-         ENDDO
-      ENDDO
-      WRITE(6,*) "! MAKEMT ORO SLM VAR VAR4 DONE"
-C
-
-      RETURN
-      END SUBROUTINE MAKEMT
 
 !> Determine the location of a cubed-sphere point within
 !! the high-resolution orography data.  The location is
