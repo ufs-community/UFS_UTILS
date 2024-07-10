@@ -41,7 +41,6 @@ C>                  RESPECTIVELY READ IN FREE FORMAT.
 C>  -   NCID       - GMTED2010 USGS orography (NetCDF)
 C>  -   NCID       - 30" UMD land cover mask. (NetCDF)
 C>  -   NCID       - GICE Grumbine 30" RAMP Antarctica orog IMNx3601. (NetCDF)
-C>  -   UNIT25     - Ocean land-sea mask on gaussian grid         
 C>
 C>   OUTPUT FILES:
 C>  -   UNIT51     - SEA-LAND MASK (IM,JM)
@@ -56,7 +55,6 @@ C>  -   TERSUB     - MAIN SUBPROGRAM
 C>  -   SPLAT      - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES
 C>  -   LIBRARY:
 C>  -   SPTEZ      - SPHERICAL TRANSFORM
-C>  -   GBYTES     - UNPACK BITS
 C>
 C> @return 0 for success, error code otherwise.
       implicit none
@@ -67,7 +65,7 @@ C> @return 0 for success, error code otherwise.
       character(len=256) :: OUTGRID = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
-      integer :: MTNRES,IM,JM,EFAC
+      integer :: IM,JM,EFAC
       fsize=65536
       READ(5,*) OUTGRID
       READ(5,*) mask_only
@@ -75,16 +73,9 @@ C> @return 0 for success, error code otherwise.
       EFAC=0
       print*, "MASK_ONLY", mask_only
       print*, "MERGE_FILE ", trim(merge_file)
-! --- MTNRES defines the input (highest) elev resolution
-! --- =1 is topo30 30" in units of 1/2 minute.
-!     so MTNRES for old values must be *2.
-!     =16 is now Song Yu's 8' orog the old ops standard
-! --- other possibilities are =8 for 4' and =4 for 2' see
-!     HJ for T1000 test. Must set to 1 for now.
-      MTNRES=1
-      print*, MTNRES,EFAC
-      IMN = 360*120/MTNRES
-      JMN = 180*120/MTNRES
+      print*, EFAC
+      IMN = 360*120
+      JMN = 180*120
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
 
 ! --- read the grid resolution from OUTGRID.
@@ -156,10 +147,9 @@ C
       integer, PARAMETER :: NMT=14
 
       integer :: efac,zsave1,zsave2
-      integer :: mskocn,notocn
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
       integer :: id_var,fsize,wgta,IN,INW,INE,IS,ISW,ISE
-      integer :: ios,istat,itest,jtest
+      integer :: itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
@@ -185,11 +175,11 @@ C
       real, allocatable :: SLM(:,:),ORO(:,:),VAR(:,:)
       real, allocatable :: land_frac(:,:),lake_frac(:,:)
       real, allocatable :: THETA(:,:),GAMMA(:,:),SIGMA(:,:),ELVMAX(:,:)
-      real, allocatable :: VAR4(:,:),SLMI(:,:)
+      real, allocatable :: VAR4(:,:)
       real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
       real, allocatable :: WORK5(:,:),WORK6(:,:)
       real, allocatable :: tmpvar(:,:)
-      real(4), allocatable::  GICE(:,:),OCLSM(:,:)
+      real(4), allocatable::  GICE(:,:)
 
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
 
@@ -216,20 +206,8 @@ C
 !  SET CONSTANTS AND ZERO FIELDS
 !
       DEGRAD = 180./PI
-      MSKOCN = 1             ! Ocean land sea mask =1, =0 if not present
-      NOTOCN = 1             ! =1 Ocean lsm input reverse: Ocean=1, land=0 
-! --- The LSM Gaussian file from the ocean model sometimes arrives with 
-! --- 0=Ocean and 1=Land or it arrives with 1=Ocean and 0=land without 
-! --- metadata to distinguish its disposition.  The AI below mitigates this.
 
       print *,' In TERSUB'
-                      if (mskocn .eq. 1)then
-      print *,' Ocean Model LSM Present and '
-      print *, ' Overrides OCEAN POINTS in LSM: mskocn=',mskocn
-                    if (notocn .eq. 1)then
-      print *,' Ocean LSM Reversed:  NOTOCN=',notocn
-                    endif
-                      endif
 
       print *,' Attempt to open/read UMD 30sec slmsk.'
 
@@ -276,7 +254,6 @@ C
        print *,' UBOUND glob=',UBOUND(glob)
        print *,' UBOUND ZSLM=',UBOUND(ZSLM)
        print *,' UBOUND GICE=',IMN+1,3601
-       print *,' UBOUND OCLSM=',IM,JM
 !
 ! ---  0 is ocean and 1 is land for slm
 !
@@ -386,72 +363,9 @@ C
       enddo
 
       deallocate (GICE)
-
-      allocate (OCLSM(IM,JM),SLMI(IM,JM))
-!C
+C
 C     COMPUTE MOUNTAIN DATA : ORO SLM VAR (Std Dev) OC
 C
-! --- The coupled ocean model is already on a Guasian grid if (IM,JM)
-! --- Attempt to Open the file if mskocn=1
-      istat=0
-          if (mskocn .eq. 1) then
-!     open(25,form='unformatted',iostat=istat)
-!     open(25,form='binary',iostat=istat)
-! --- open to fort.25 with link to file in script
-      open(25,form='formatted',iostat=istat)
-                  if (istat.ne.0) then
-                  mskocn = 0
-      print *,' Ocean lsm file Open failure: mskocn,istat=',mskocn,istat
-                  else
-                  mskocn = 1
-      print *,' Ocean lsm file Opened OK: mskocn,istat=',mskocn,istat
-                  endif
-! --- Read it in
-      ios=0
-      OCLSM=0.
-!      read(25,iostat=ios)OCLSM
-       read(25,*,iostat=ios)OCLSM
-         if (ios.ne.0) then 
-         mskocn = 0
-! --- did not properly read Gaussian grid ocean land-sea mask, but
-!     continue using ZSLMX 
-      print *,' Rd fail: Ocean lsm - continue, mskocn,ios=',mskocn,ios
-         else
-         mskocn = 1
-      print *,' Rd OK: ocean lsm:  mskocn,ios=',mskocn,ios
-! --- LSM initialized to ocean mask especially for case where Ocean
-! --- changed by ocean model to land to cope with its problems
-! --- remember, that lake mask is in zslm to be assigned in MAKEMT.
-          if ( mskocn .eq. 1 ) then
-      DO J = 1,JM
-      DO I = 1,IM
-            if ( notocn .eq. 0 ) then
-            slmi(i,j) = float(NINT(OCLSM(i,j)))
-            else
-                     if ( NINT(OCLSM(i,j)) .eq. 0) then
-                     slmi(i,j) = 1
-                     else 
-                     slmi(i,j) = 0
-                     endif
-            endif
-      enddo
-      enddo
-      print *,' OCLSM',OCLSM(1,1),OCLSM(50,50),OCLSM(75,75),OCLSM(IM,JM)
-      print *,' SLMI:',SLMI(1,1),SLMI(50,50),SLMI(75,75),SLMI(IM,JM)
-! --- Diag
-!        WRITE(27,iostat=ios) REAL(SLMI,4)
-!        print *,' write SLMI/OCLSM diag input:',ios
-          endif
-         endif
-
-          else
-          print *,' Not using Ocean model land sea mask'
-          endif
-
-      if (mskocn .eq. 1)then
-      print *,' LSM:',OCLSM(1,1),OCLSM(50,50),OCLSM(75,75),OCLSM(IM,JM)
-      endif
-
       allocate (GEOLON(IM,JM),GEOLON_C(IM+1,JM+1),DX(IM,JM))
       allocate (GEOLAT(IM,JM),GEOLAT_C(IM+1,JM+1),DY(IM,JM))
       allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM))
@@ -785,37 +699,6 @@ C           ELVMAX(I,J)=0.
        ENDDO
       ENDDO
 C
-! --- if mskocn=1 ocean land sea mask given, =0 if not present
-! ---  OCLSM is real(*4)  array with fractional values possible
-! ---  0 is ocean and 1 is land for slm
-! ---  Step 1: Only change SLM after GFS SLM is applied
-! ---  SLM is only field that will be altered by OCLSM
-! ---  Ocean land sea mask ocean points made ocean in atm model
-! ---  Land and Lakes and all other atm elv moments remain unchanged.  
-
-      IF (MERGE_FILE == 'none') then
-
-      MSK_OCN :      if ( mskocn .eq. 1 ) then
-
-      DO j = 1,jm
-        DO i = 1,im
-              if (abs (oro(i,j)) .lt. 1. ) then 
-              slm(i,j) = slmi(i,j)
-              else
-      if ( slmi(i,j) .eq. 1. .and. slm(i,j) .eq. 1) slm(i,j) = 1
-      if ( slmi(i,j) .eq. 0. .and. slm(i,j) .eq. 0) slm(i,j) = 0
-      if ( slmi(i,j) .eq. 0. .and. slm(i,j) .eq. 1) slm(i,j) = 0
-      if ( slmi(i,j) .eq. 0. .and. slm(i,j) .eq. 0) slm(i,j) = 0
-              endif
-        enddo
-      enddo
-            endif MSK_OCN
-      endif
-      print *,' SLM(itest,jtest)=',slm(itest,jtest),itest,jtest
-      print *,' ORO(itest,jtest)=',oro(itest,jtest),itest,jtest
-
-      deallocate(SLMI)
-
       IF (MERGE_FILE == 'none') then
 
 C  REMOVE ISOLATED POINTS
@@ -1010,11 +893,9 @@ C
       deallocate(COSCLT,WGTCLT,RCLT,XLAT,XLON,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
-      deallocate (OCLSM)
       deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
       deallocate (SLM,ORO,VAR,land_frac)
       deallocate (THETA,GAMMA,SIGMA,ELVMAX)
-
 
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
@@ -1147,7 +1028,6 @@ C
       real    XNSUM_ALL,XLAND_ALL,XWATR_ALL
       logical inside_a_polygon
 C
-! ---- OCLSM holds the ocean (im,jm) grid
       print *,' _____ SUBROUTINE MAKE_MASK '
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
@@ -1224,9 +1104,6 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 
          
          IF(XNSUM.GT.1.) THEN
-! --- SLM initialized with OCLSM calc from all land points except ....
-! ---  0 is ocean and 1 is land for slm
-! ---  Step 1 is to only change SLM after GFS SLM is applied
                land_frac(i,j) = XLAND/XNSUM  
                SLM(I,J) = FLOAT(NINT(XLAND/XNSUM))
          ELSEIF(XNSUM_ALL.GT.1.) THEN
@@ -1286,9 +1163,6 @@ C
       real    XL1_ALL,XS1_ALL,XW1_ALL,XW2_ALL,XW4_ALL
       logical inside_a_polygon
 C
-! ---- OCLSM holds the ocean (im,jm) grid
-! ---  mskocn=1 Use ocean model sea land mask, OK and present,
-! ---  mskocn=0 dont use Ocean model sea land mask, not OK, not present
       print *,' _____ SUBROUTINE MAKEMT2 '
       allocate(hgt_1d(MAXSUM))
       allocate(hgt_1d_all(MAXSUM))
@@ -1395,11 +1269,6 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
          enddo ; enddo
          
          IF(XNSUM.GT.1.) THEN
-! --- SLM initialized with OCLSM calc from all land points except ....
-! ---  0 is ocean and 1 is land for slm
-! ---  Step 1 is to only change SLM after GFS SLM is applied
-
-               !IF(SLM(I,J).NE.0.) THEN
                IF(SLM(I,J) .NE. 0. .OR. LAND_FRAC(I,J) > 0.) THEN
                   IF (XLAND > 0) THEN
                     ORO(I,J)= XL1 / XLAND
