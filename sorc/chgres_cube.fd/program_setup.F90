@@ -296,7 +296,7 @@
      print*,'- INPUT DATA FROM SPECTRAL GFS GAUSSIAN NEMSIO FILE.'
    case ("gfs_sigio")
      print*,'- INPUT DATA FROM SPECTRAL GFS SIGIO/SFCIO FILE.'
-#endif()
+#endif
    case ("gaussian_netcdf")
      print*,'- INPUT DATA FROM FV3 GAUSSIAN NETCDF FILE.'
    case ("grib2")

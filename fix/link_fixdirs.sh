@@ -55,7 +55,7 @@ elif [ $machine = "wcoss2" ]; then
 elif [ $machine = "s4" ]; then
     FIX_DIR="/data/prod/glopara/fix"
 elif [ $machine = "gaea" ]; then
-    FIX_DIR="/gpfs/f5/epic/proj-shared/global/glopara/data/fix"
+    FIX_DIR="/gpfs/f5/ufs-ard/world-shared/global/glopara/data/fix"
 fi
 
 am_ver=${am_ver:-20220805}
