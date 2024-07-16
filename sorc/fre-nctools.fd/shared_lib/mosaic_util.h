@@ -63,6 +63,8 @@ void initNode(struct Node *node);
 void addEnd(struct Node *list, double x, double y, double z, int intersect, double u, int inbound, int inside);
 int addIntersect(struct Node *list, double x, double y, double z, int intersect, double u1, double u2, 
                 int inbound, int is1, int ie1, int is2, int ie2);
+void insertIntersect(struct Node *list, double x, double y, double z, double u1, double u2, int inbound,
+                 double x2, double y2, double z2);
 int length(struct Node *list);
 int samePoint(double x1, double y1, double z1, double x2, double y2, double z2);
 int sameNode(struct Node node1, struct Node node2);
