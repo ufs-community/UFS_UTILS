@@ -131,8 +131,7 @@ C
       real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
       real :: DELXN,slma,oroa,vara,var4a,xn,XS
 
-      real, allocatable :: COSCLT(:),WGTCLT(:),RCLT(:),XLAT(:)
-      real, allocatable :: XLON(:),oaa(:),ola(:),GLAT(:)
+      real, allocatable :: XLAT(:),XLON(:),oaa(:),ola(:),GLAT(:)
 
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
       real, allocatable :: GEOLAT(:,:),GEOLAT_C(:,:),DY(:,:)
@@ -159,8 +158,7 @@ C
       allocate (glob(IMN,JMN))
 
 ! reals
-      allocate (COSCLT(JM),WGTCLT(JM),RCLT(JM),XLAT(JM))
-      allocate (XLON(IM),oaa(4),ola(4),GLAT(JMN))
+      allocate (oaa(4),ola(4),GLAT(JMN))
 
       allocate (ZAVG(IMN,JMN))
       allocate (ZSLM(IMN,JMN))
@@ -260,25 +258,8 @@ C
             ZSLM(i,JMN)=1
             enddo
 !
-!      print *,' kount1,2,ZAVG(1,1),ZAVG(imn,jmn),ZAVG(500,500)',
-!     & kount,kount2,ZAVG(1,1),ZAVG(imn,jmn),ZAVG(500,500)
-! --- The center of pixel (1,1) is 89.9958333N/179.9958333W with dx/dy 
-! --- spacing of 1/120 degrees. 
-!
-!  When the gaussian grid routines makemt, makepc and makeoa are
-!  removed, xlat can be removed.
-       CALL SPLAT(0,JM,COSCLT,WGTCLT)
-       DO J=1,JM
-         RCLT(J) = ACOS(COSCLT(J))
-         XLAT(J) = 90.0 - RCLT(J) * DEGRAD
-       ENDDO
-
       allocate (GICE(IMN+1,3601))
 !
-       print *,' XLAT='
-       write (6,106) (xlat(J),J=JM,1,-1)
-  106 format( 10(f7.3,1x))   
-C
       DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
 C
       DO J=1,JMN
@@ -836,6 +817,7 @@ C   check antarctic pole
 C
       DELXN = 360./IM
 
+      allocate(xlat(jm), xlon(im))
       do j = 1, jm
          xlat(j) = geolat(1,j)
       enddo
@@ -854,7 +836,7 @@ C
 
 !     Deallocate 1d vars
       deallocate(JST,JEN)
-      deallocate(COSCLT,WGTCLT,RCLT,XLAT,XLON,oaa,ola,GLAT)
+      deallocate(XLAT,XLON,oaa,ola,GLAT)
 
 !     Deallocate 2d vars
       deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
