@@ -1,4 +1,4 @@
-& grid_nml
+&grid_nml
 ni=NI_GLB
 nj=NJ_GLB
 dirsrc='FIXDIR'
