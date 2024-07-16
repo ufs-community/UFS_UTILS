@@ -377,3 +377,46 @@
   print*,'bot of read_mask'
 
   end subroutine read_mask
+
+!> Read the grid dimensions from the model 'grid' file
+!!
+!! @param[in] mdl_grid_file path/name of model 'grid' file.
+!! @param[out] im 'i' dimension of a model grid tile.
+!! @param[out] jm 'j' dimension of a model grid tile.
+!! @author George Gayno NOAA/EMC
+  subroutine read_mdl_dims(mdl_grid_file, im, jm)
+
+  implicit none
+  include "netcdf.inc"
+
+  character(len=*), intent(in) :: mdl_grid_file
+
+  integer, intent(out)         :: im, jm
+
+  integer ncid, error, fsize, id_dim, nx, ny
+
+  fsize = 66536
+
+  print*, "- OPEN AND READ= ", trim(mdl_grid_file)
+
+  error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
+  call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )
+
+  error=nf_inq_dimid(ncid, 'nx', id_dim)
+  call netcdf_err(error, 'inquire dimension nx from file '// trim(mdl_grid_file) )
+  error=nf_inq_dimlen(ncid,id_dim,nx)
+  call netcdf_err(error, 'inquire nx from file '//trim(mdl_grid_file) )
+
+  error=nf_inq_dimid(ncid, 'ny', id_dim)
+  call netcdf_err(error, 'inquire dimension ny from file '// trim(mdl_grid_file) )
+  error=nf_inq_dimlen(ncid,id_dim,ny)
+  call netcdf_err(error, 'inquire ny from file '//trim(mdl_grid_file) )
+
+  error=nf_close(ncid)
+
+  IM = nx/2
+  JM = ny/2
+
+  print*,"- MDL GRID DIMENSIONS ", im, jm
+
+  end subroutine read_mdl_dims

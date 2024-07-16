@@ -58,16 +58,12 @@ C>  -   SPTEZ      - SPHERICAL TRANSFORM
 C>
 C> @return 0 for success, error code otherwise.
       implicit none
-      include 'netcdf.inc'
-      logical fexist, opened
       integer imn, jmn
-      integer fsize, ncid, error, id_dim, nx, ny
-      character(len=256) :: OUTGRID = "none"
+      character(len=256) :: MDL_GRID_FILE = "none"
       character(len=256) :: merge_file = "none"
       logical :: mask_only = .false.
       integer :: IM,JM,EFAC
-      fsize=65536
-      READ(5,*) OUTGRID
+      READ(5,*) MDL_GRID_FILE
       READ(5,*) mask_only
       READ(5,*) merge_file
       EFAC=0
@@ -78,42 +74,10 @@ C> @return 0 for success, error code otherwise.
       JMN = 180*120
       print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
 
-! --- read the grid resolution from OUTGRID.
-      inquire(file=trim(OUTGRID), exist=fexist)
-      if(.not. fexist) then
-        print*, "FATAL ERROR: file "//trim(OUTGRID)
-        print*, " does not exist."
-        CALL ERREXIT(4)
-      endif
-      do ncid = 103, 512
-         inquire( ncid,OPENED=opened )
-         if( .NOT.opened )exit
-      end do
-
-      print*, "READ outgrid=", trim(outgrid)
-      error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
-      call netcdf_err(error, 'Open file '//trim(OUTGRID) )
-      error=nf_inq_dimid(ncid, 'nx', id_dim)
-      call netcdf_err(error, 'inquire dimension nx from file '//
-     &                   trim(OUTGRID) )
-      error=nf_inq_dimlen(ncid,id_dim,nx)
-      call netcdf_err(error, 'inquire dimension nx length '//
-     &       'from file '//trim(OUTGRID) )
-         
-      error=nf_inq_dimid(ncid, 'ny', id_dim)
-      call netcdf_err(error, 'inquire dimension ny from file '//
-     &                   trim(OUTGRID) )
-      error=nf_inq_dimlen(ncid,id_dim,ny)
-      call netcdf_err(error, 'inquire dimension ny length '//
-     &       'from file '//trim(OUTGRID) )
-      IM = nx/2
-      JM = ny/2
-      print*, "nx, ny, im, jm = ", nx, ny, im, jm
-      error=nf_close(ncid)
-      call netcdf_err(error, 'close file '//trim(OUTGRID) )
+      call read_mdl_dims(mdl_grid_file, im, jm)
          
       CALL TERSUB(IMN,JMN,IM,JM,EFAC,
-     &            OUTGRID,MASK_ONLY,MERGE_FILE)
+     &            MDL_GRID_FILE,MASK_ONLY,MERGE_FILE)
       STOP
       END
 
