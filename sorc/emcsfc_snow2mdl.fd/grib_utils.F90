@@ -1,37 +1,26 @@
+!> @file
+!! @brief Determine whether file is grib or not.
+!! @author gayno org: w/np2 @date 2007-nov-28
+
+!> Determine whether file is grib or not.
+!!
+!! program history log:
+!! - 2007-nov-28  gayno    - initial version
+!! - 2011-apr-26  gayno    - replace my simple-minded logic
+!!                         with call to w3lib routin skgb.
+!! - 2014-feb-07  gayno    - determine whether file is
+!!                         grib1 or grib2.
+!!
+!! @param[in] file_name - file to be checked
+!! @param[out] isgrib - '1' or '2' if grib1/2 file '0' if not grib
+!!
+!! input files: 
+!!     - file to be checked, fort.11
+!!
+!! condition codes:  all fatal
+!!     - bad file open, fort.11
+!!          
  subroutine grib_check(file_name, isgrib)
-!$$$  subprogram documentation block
-!
-! subprogram:    grib_check
-!   prgmmr: gayno          org: w/np2     date: 2007-nov-28
-!
-! abstract:  determine whether file is grib or not.
-!  
-! program history log:
-! 2007-nov-28  gayno    - initial version
-! 2011-apr-26  gayno    - replace my simple-minded logic
-!                         with call to w3lib routin skgb.
-! 2014-feb-07  gayno    - determine whether file is
-!                         grib1 or grib2.
-!
-! usage: call grib_check(file_name, isgrib)
-!
-!   input argument list:  file_name - file to be checked
-!
-!   output argument list: isgrib - '1' or '2' if grib1/2 file
-!                                  '0' if not grib
-!
-! files: 
-!   input:
-!     - file to be checked, fort.11
-!
-!   output: none
-!
-! condition codes:  all fatal
-!     - bad file open, fort.11
-! 
-! remarks: none.
-!          
-!$$$
 
  implicit none
 
@@ -68,44 +57,22 @@
 
  end subroutine grib_check
 
+!> Determine whether file is grib or not.
+!!
+!! Based on w3nco library routine skgb.
+!!  
+!! @param[in] lugb file unit number
+!! @param[in] iseek number of bits to skip before search.
+!! @param[in] mseek max number of bytes to search.
+!! @param[out] lskip number of bytes to skip before message
+!! @param[out] lgrib number of bytes in message. '0' if not grib.
+!! @param[out] i1 '1' or '2' if grib1/2 file. '0' if not grib.
+!!
+!! input file:
+!! - file to be checked, unit=lugb
+!!
+!! @author George Gayno org: w/np2 @date 2014-Feb-07
  SUBROUTINE SKGB2(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
-!$$$  subprogram documentation block
-!
-! subprogram:   skgb2
-!   prgmmr: gayno          org: w/np2     date: 2014-feb-07
-!
-! abstract:  determine whether file is grib or not.
-!            based on w3nco library routine skgb.
-!  
-! program history log:
-! 2014-feb-07  gayno    - initial version
-!
-! usage: call SKGB2(LUGB,ISEEK,MSEEK,LSKIP,LGRIB,I1)
-!
-!   input argument list:  lugb  - file unit number
-!                         iseek - number of bits to skip
-!                                 before search.
-!                         mseek - max number of bytes 
-!                                 to search.
-!
-!   output argument list:  lskip  - number of bytes to skip 
-!                                   before message
-!                          lgrib  - number of bytes in message.
-!                                   '0' if not grib.
-!                          i1     - '1' or '2' if grib1/2 file.
-!                                   '0' if not grib.
-!
-! files:
-!    input:
-!      - file to be checked, unit=lugb
-!
-!    output: none
-!
-! condition codes: none
-!
-! remarks: none.
-!
-!$$$
  implicit none
  INTEGER, INTENT( IN)     :: LUGB, ISEEK, MSEEK
  INTEGER, INTENT(OUT)     :: LSKIP, LGRIB, I1
@@ -153,40 +120,23 @@
  RETURN
  END subroutine skgb2
 
+!> Convert from the grib2 grid description template array
+!! used by the ncep grib2 library, to the grib1 grid
+!! description section array used by ncep ipolates library.
+!!
+!! @param[in] igdtnum grib2 grid desc template number
+!! @param[in] igdstmpl grib2 grid desc template array
+!! @param[in] igdtlen grib2 grid desc template array size
+!! @param[out] kgds grib1 grid description section array used by ncep ipolates library.
+!! @param[out] ni i grid dimensions
+!! @param[out] nj j grid dimensions
+!! @param[out] res grid resolution in km
+!!
+!! condition codes:
+!!   50 - unrecognized model grid type; fatal
+!!
+!! @author George Gayno org: w/np2 @date 2014-Sep-26
  subroutine gdt_to_gds(igdtnum, igdstmpl, igdtlen, kgds, ni, nj, res)
-!$$$  subprogram documentation block
-!
-! subprogram:    gdt_to_gds
-!   prgmmr: gayno          org: w/np2     date: 2014-sep-26
-!
-! abstract:  convert from the grib2 grid description template array
-!            used by the ncep grib2 library, to the grib1 grid
-!            description section array used by ncep ipolates library.
-!  
-! program history log:
-! 2014-sep-26  gayno    - initial version
-!
-! usage: call gds_to_gds(igdtnum,igdstmpl,igdtlen,kgds,ni,nj,res)
-!
-!   input argument list:  
-!     igdtnum  - grib2 grid desc template number
-!     igdstmpl - grib2 grid desc template array
-!     igdtlen  - grib2 grid desc template array size
-!
-!   output argument list: 
-!     kgds     - grib1 grid description section array 
-!                used by ncep ipolates library.
-!     ni,nj    - i/j grid dimensions
-!     res      - grid resolution in km
-!                        
-! files: none
-!
-! condition codes:
-!   50 - unrecognized model grid type; fatal
-!
-! remarks: none.
-!
-!$$$
 
  implicit none
 
@@ -385,34 +335,19 @@
  
  end subroutine gdt_to_gds
 
+!> Determine length of grib2 gds template array, which is a function of
+!! the map projection.
+!!      
+!! @note call this routine before init_grib2.  
+!!
+!! @param[in] kgds grib1 gds array
+!! @param[in] igdstmplen length of gds template array.
+!!
+!! condition codes:
+!!   47 - unrecognized grid type; fatal
+!!
+!! @author George Gayno org: w/np2 @date 2014-Sep-28
  subroutine grib2_check (kgds, igdstmplen)
-!$$$  subprogram documentation block
-!
-! subprogram:    grib2_check
-!   prgmmr: gayno          org: w/np2     date: 2014-sep-28
-!
-! abstract:  determine length of grib2 gds template array,
-!            which is a function of the map projection.
-!  
-! program history log:
-! 2014-sep-28  gayno    - initial version
-!
-! usage: call grib2_check (kgds, igdstmplen)
-!
-!   input argument list:  kgds - grib1 gds array
-!
-!   output argument list: igdstmplen - length of gds template
-!                                      array.
-!
-! files: none
-!
-! condition codes:
-!   47 - unrecognized grid type; fatal
-!
-! remarks: call this routine before init_grib2.  
-!          
-!$$$
-
  implicit none
 
  integer, intent(in)         :: kgds(200)
@@ -432,58 +367,37 @@
 
  end subroutine grib2_check
 
+!> Initialize grib2 arrays required by the ncep g2 library according to
+!! grib1 gds information. The grib1 gds is held in the kgds array, which
+!! is used by the ncep ipolates and w3nco (grib 1) libraries.
+!!
+!! Call routine grib2_check first to determine igdstmplen.
+!!
+!! @param[in] century current date/time info
+!! @param[in] year current date/time info
+!! @param[in] month current date/time info
+!! @param[in] day current date/time info
+!! @param[in] hour current date/time info
+!! @param[in] kgds grib1 gds information
+!! @param[in] igdstmplen length of grib2 gdt template.
+!! @param[in] lat11 lat of first grid point
+!! @param[in] lon11 lon of first grid point
+!! @param[in] latlast lat of last grid point
+!! @param[in] lonlast lon of last grid point
+!! @param[out] igds grib2 section 3 information.
+!! @param[out] listsec0 grib2 section 0 information.
+!! @param[out] listsec1 grib2 section 1 information.
+!! @param[out] ipdsnum grib2 pds template number
+!! @param[out] ipdstmpl grib2 pds template array
+!! @param[out] igdstmpl grib2 gds template array
+!! @param[out] idefnum information for non-reg grid, grid points in each row. 
+!! @param[out] ideflist information for non-reg grid, grid points in each row. 
+!! @param[out] ngrdpts number of model grid points.
+!! @author George Gayno org: w/np2 @date 2014-Sep-28
  subroutine init_grib2(century, year, month, day, hour, kgds, &
                        lat11, latlast, lon11, lonlast, &
                        listsec0, listsec1, igds, ipdstmpl, ipdsnum, igdstmpl,  &
                        igdstmplen, idefnum, ideflist, ngrdpts)
-!$$$  subprogram documentation block
-!
-! subprogram:    init_grib2
-!   prgmmr: gayno          org: w/np2     date: 2014-sep-28
-!
-! abstract:  initialize grib2 arrays required by the ncep g2 library
-!            according to grib1 gds information.  the grib1 gds is
-!            held in the kgds array, which is used by the ncep ipolates
-!            and w3nco (grib 1) libraries.
-!  
-! program history log:
-! 2014-sep-28  gayno    - initial version
-!
-! usage: init_grib2(century, year, month, day, hour, kgds, &
-!                   lat11, latlast, lon11, lonlast, &
-!                   listsec0, listsec1, igds, ipdstmpl, ipdsnum, igdstmpl,  &
-!                   igdstmplen, idefnum, ideflist, ngrdpts)
-!
-!   input argument list:  
-!      century/year/month/day/hour  - current date/time info
-!      kgds                         - grib1 gds information
-!      igdstmplen                   - length of grib2 gdt
-!                                     template.
-!      lat11, lon11                 - lat/lon of first grid point
-!      latlast, lonlast             - lat/lon of last grid point
-!
-!   output argument list: 
-!      igds                         - grib2 section 3 information.
-!      listsec0                     - grib2 section 0 information.
-!      listsec1                     - grib2 section 1 information.
-!      ipdsnum                      - grib2 pds template number
-!      ipdstmpl                     - grib2 pds template array
-!      igdstmpl                     - grib2 gds template array
-!      idefnum/ideflist             - information for non-reg grid,
-!                                     # grid points in each row. 
-!      ngrdpts                      - number of model grid points.
-!
-! files:
-!    input: none
-!
-!    output: none
-!
-! condition codes: none
-!
-! remarks: call routine grib2_check first to determine igdstmplen.
-!          
-!$$$
-
  implicit none
 
  integer, intent(in   )        :: century, year, month, day, hour
@@ -688,32 +602,12 @@
 
  end subroutine init_grib2
 
+!> Nullify the grib2 gribfield pointers.
+!!
+!! @param[in] gfld a gribfield data structure
+!!
+!! @author George Gayno org: w/np2 @date 2014-Sep-28
  subroutine grib2_null(gfld)
-!$$$  subprogram documentation block
-!
-! subprogram:    grib2_null
-!   prgmmr: gayno          org: w/np2     date: 2014-sep-28
-!
-! abstract:  nullify the grib2 gribfield pointers.
-!
-! program history log:
-! 2014-sep-28  gayno    - initial version
-!
-! usage: call grib2_null with a gribfield data structure
-!
-!   input argument list:
-!     gfld - a gribfield data structure
-!
-!   output argument list:
-!     gfld - a gribfield data structure
-!
-! files: none
-!
-! condition codes: none
-!
-! remarks: none
-!
-!$$$
 
  use grib_mod
 
@@ -733,32 +627,12 @@
 
  end subroutine grib2_null
 
+!> Deallocate the grib2 gribfield pointers.
+!!
+!! @param[in] gfld a gribfield data structure
+!!
+!! @author George Gayno org: w/np2 @date 2014-Sep-28
  subroutine grib2_free(gfld)
-!$$$  subprogram documentation block
-!
-! subprogram:    grib2_free
-!   prgmmr: gayno          org: w/np2     date: 2014-sep-28
-!
-! abstract:  deallocate the grib2 gribfield pointers.
-!
-! program history log:
-! 2014-sep-28  gayno    - initial version
-!
-! usage: call grib2_free with a gribfield data structure
-!
-!   input argument list:
-!     gfld - a gribfield data structure
-!
-!   output argument list:
-!     gfld - a gribfield data structure
-!
-! files: none
-!
-! condition codes: none
-!
-! remarks: none
-!
-!$$$
 
  use grib_mod
 

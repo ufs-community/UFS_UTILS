@@ -1,124 +1,92 @@
+!> @file
+!! @brief Read in data defining the model grid.
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16        
+
+!> Read in data defining the model grid.
+!!      
+!! program history log:
+!! -  2005-dec-16  gayno   - initial version
+!! -  2007-nov-30  gayno   - improved method for thinning gfs grids.
+!!                          added nam b-grids.
+!! -  2014-sep-29  gayno   - add option to read model lat, lon and
+!!                          landmask data in grib2.
+!!
+!! variable definitions:
+!! -  lonsperlat     - for global grids, the number of i points
+!!                    in each row (decrease toward pole)
+!!
+!! @author George Gayno  org: w/np2 @date 2005-Dec-16  
  module model_grid
-!$$$  module documentation block
-!            
-! module:    model_grid
-!   prgmmr: gayno         org: w/np2     date: 2005-dec-16
-!
-! abstract: read in data defining the model grid.
-!     
-! program history log:
-!   2005-dec-16  gayno   - initial version
-!   2007-nov-30  gayno   - improved method for thinning gfs grids.
-!                          added nam b-grids.
-!   2014-sep-29  gayno   - add option to read model lat, lon and
-!                          landmask data in grib2.
-!
-! usage: use model_grid
-!
-! remarks: some variable definitions
-!   grid_id_mdl    - grib id of model grid, 4-gaussian, 203-egrid
-!   i/jpts_mdl     - i/j index of point on full grid
-!   imdl           - i-dimension of model grid
-!   jmdl           - j-dimension of model grid
-!   ijmdl          - total number of model land points
-!   kgds_mdl       - holds grib gds info of model grid
-!   lats_mdl       - latitudes of model grid points
-!   lons_mdl       - longitudes of model grid points
-!   lonsperlat     - for global grids, the number of i points
-!                    in each row (decrease toward pole)
-!   lsmask_mdl     - land mask of model grid (0 - non land, 1-land)
-!                    for global grids run thinned, will contain
-!                    a modified version of the original mask
-!                    that has land at all points encompassed by a 
-!                    thinned point
-!   lsmask_mdl_sav - saved copy of land mask of model grid (0 - non land, 1-land)
-!                    only used for global thinned grids.
-!   resol_mdl      - approximate model resolution in km.
-!   thinned        - when true, global grids will run thinned
-!                    (# i points decrease toward pole)
-!
-!$$$
 
  use program_setup, only         : model_lsmask_file, &
                                    model_lon_file, &
                                    model_lat_file, &
                                    gfs_lpl_file
 
- integer                        :: grid_id_mdl
- integer                        :: imdl
- integer                        :: jmdl
- integer                        :: ijmdl ! only land points
- integer, allocatable           :: ipts_mdl(:), jpts_mdl(:) 
+ integer                        :: grid_id_mdl !< grib id of model grid, 4-gaussian, 203-egrid
+ integer                        :: imdl !< i-dimension of model grid
+ integer                        :: jmdl !< j-dimension of model grid
+ integer                        :: ijmdl !< total number of model land points
+ integer, allocatable           :: ipts_mdl(:) !< i index of point on full grid
+ integer, allocatable           :: jpts_mdl(:) !< j index of point on full grid
 
- integer                        :: kgds_mdl(200)
- integer, allocatable           :: lonsperlat_mdl (:)
+ integer                        :: kgds_mdl(200) !< holds grib gds info of model grid
+ integer, allocatable           :: lonsperlat_mdl (:) !< Number of longitudes (i-points)
+                                                      !! for each latitude (row).  Used
+                                                      !! for global thinned (reduced) grids.
  
- logical                        :: thinned
+ logical                        :: thinned !< When true, global grids will run thinned
+                                           !! (number of i points decrease toward pole)
 
- real, allocatable              :: lats_mdl    (:)
- real                           :: lat11, latlast
- real                           :: lon11, lonlast
- real, allocatable              :: lons_mdl    (:)
- real, allocatable              :: lsmask_mdl  (:,:)
- real, allocatable              :: lsmask_mdl_sav (:,:)
- real                           :: resol_mdl  ! in km
+ real, allocatable              :: lats_mdl(:) !< Latitudes of model grid points
+ real                           :: lat11 !< Corner point latitude (1,1) of model grid.
+ real                           :: latlast !< Corner point latitude (imdl,jmdl) of model grid.
+ real                           :: lon11 !< Corner point longitude (1,1) of model grid.
+ real                           :: lonlast !< Corner point longitude (imdl,jmdl) of model grid.
+ real, allocatable              :: lons_mdl(:) !<  longitudes of model grid points
+ real, allocatable              :: lsmask_mdl(:,:) !<  land mask of model grid (0 - non land, 1-land) for global
+                                                   !! grids run thinned, will contain a modified version of the original
+                                                   !! mask that has land at all points encompassed by a thinned point
+ real, allocatable              :: lsmask_mdl_sav(:,:) !< saved copy of land mask of model grid (0 - non land, 1-land)
+                                                       !! only used for global thinned grids.
+ real                           :: resol_mdl  !< approximate model resolution in km.
 
  contains
-
+!>  Read mdl grid.
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!! 2007-nov-30  gayno    - Improved method for thinning gfs grids.
+!!                         Added nam b-grids.
+!! 2014-sep-29  gayno    - Add option to read lat,lon and mask
+!!                         data in grib2.
+!! files:
+!!   inputs:
+!!     - model latitudes (grib 1 or grib 2)
+!!     - model longitudes (grib 1 or grib 2)
+!!     - model landmask (grib 1 or grib 2)
+!!     - number  pts per row, gfs grid (the "lonsperlat" file, ascii)
+!!    condition codes: all fatal
+!!   76 - bad open/read gfs "lonsperlat" file
+!!   79 - unrecognized model grid
+!!   80 - bad open model latitude file
+!!   81 - bad read of model latitude grib 1 header
+!!   82 - bad read of model latitude data
+!!   83 - bad open model longitude file
+!!   82 - bad read of model longitude data
+!!   85 - bad open model landmask file
+!!   86 - bad read of model landmask data
+!!   90 - model latitude file not grib 1 or grib 2
+!!   91 - model longitude file not grib 1 or grib 2
+!!   92 - model landmask file not grib 1 or grib 2
+!!
+!! @author George Gayno org: w/np2 @date 2005-dec-16
  subroutine read_mdl_grid_info
-!$$$  subprogram documentation block
-!              
-! subprogram:    read_mdl_grid_info
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract: read latitude, longitude, land/sea mask on the
-!   model grid.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-! 2007-nov-30  gayno    - improved method for thinning gfs grids
-!                         added nam b-grids
-! 2014-sep-29  gayno    - add option to read lat,lon and mask
-!                         data in grib2.
-!
-! usage: call read_mdl_grid_info
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files:
-!   inputs:
-!     - model latitudes (grib 1 or grib 2)
-!     - model longitudes (grib 1 or grib 2)
-!     - model landmask (grib 1 or grib 2)
-!     - # pts per row, gfs grid (the "lonsperlat" file, ascii)
-!
-!  outputs: none
-!
-! condition codes: all fatal
-!   76 - bad open/read gfs "lonsperlat" file
-!   79 - unrecognized model grid
-!   80 - bad open model latitude file
-!   81 - bad read of model latitude grib 1 header
-!   82 - bad read of model latitude data
-!   83 - bad open model longitude file
-!   82 - bad read of model longitude data
-!   85 - bad open model landmask file
-!   86 - bad read of model landmask data
-!   90 - model latitude file not grib 1 or grib 2
-!   91 - model longitude file not grib 1 or grib 2
-!   92 - model landmask file not grib 1 or grib 2
-!
-! remarks: none.
-!
-!$$$
-
  use grib_mod  ! grib 2 library
 
  implicit none
 
- character*150           :: fngrib
+ character*256           :: fngrib
 
  integer                 :: i, j, ij, jj
  integer                 :: ii, iii, istart, iend, imid
@@ -595,33 +563,18 @@
  deallocate (lats_mdl_temp, lons_mdl_temp)
 
  return
-
  end subroutine read_mdl_grid_info
 
+
+!> Clean up allocatable arrays. 
+!!
+!! This deallocate this module's allocatable array.
+!!
+!! program history log:
+!! 2005-dec-16  gayno    - initial version
+!!
+!! @author George Gayno org: w/np2 @date Dec 16, 2005
  subroutine model_grid_cleanup
-!$$$  subprogram documentation block
-!              
-! subprogram:    model_grid_cleanup
-!   prgmmr: gayno          org: w/np2     date: 2005-dec-16
-!
-! abstract: this deallocate this module's allocatable array.
-!
-! program history log:
-! 2005-dec-16  gayno    - initial version
-!
-! usage: call model_grid_cleanup
-!
-!   input argument list:  n/a
-!
-!   output argument list: n/a
-!
-! files: none
-!
-! condition codes: none
-!
-! remarks: none.
-!
-!$$$
 
  implicit none
 
