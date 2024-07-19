@@ -1,4 +1,4 @@
-#!/bin/ksh
+#!/bin/bash
 
 ####  UNIX Script Documentation Block ###################################
 #                      .                                             .
@@ -24,6 +24,7 @@
 #    $MODEL_LONGITUDE_FILE - model longitude (grib 1 or 2)
 #    $AFWA_NH_FILE         - nh afwa snow data (grib 1)
 #    $AFWA_SH_FILE         - sh afwa snow data (grib 1)
+#    $AFWA_GLOBAL_FILE     - global afwa snow data (grib 2)
 #    $IMS_FILE             - nh ims snow cover data (grib 2)
 #    $CLIMO_QC             - nh climatological snow cover (grib 2)
 #    fort.41               - program configuration namelist
@@ -104,8 +105,9 @@ GFS_LONSPERLAT_FILE=${GFS_LONSPERLAT_FILE:-global_lonsperlat.t1534.3072.1536.txt
 # unreliable to use on its own.  ims is grib2.  afwa is grib1.
 #------------------------------------------------------------------------
 
-AFWA_NH_FILE=${AFWA_NH_FILE:-"NPR.SNWN.SP.S1200.MESH16"}
-AFWA_SH_FILE=${AFWA_SH_FILE:-"NPR.SNWS.SP.S1200.MESH16"}
+AFWA_NH_FILE=${AFWA_NH_FILE:-""}
+AFWA_SH_FILE=${AFWA_SH_FILE:-""}
+AFWA_GLOBAL_FILE=${AFWA_GLOBAL_FILE:-""}
 IMS_FILE=${IMS_FILE:-"imssnow96.grb.grib2"}
 
 #------------------------------------------------------------------------
@@ -157,17 +159,18 @@ $WGRIB2 -Sec0 ${IMS_FILE} 2>&1 | grep "grib1 message"
 status=$?
 if (( status == 0 )); then   # grib 1 file
   tempdate=$($WGRIB -v $IMS_FILE | head -1)
-  typeset -L10 IMSDATE10
-  IMSDATE10=${tempdate#*D=}
+  IMSDATE=${tempdate#*D=}
 else # grib 2 file
   tempdate=$($WGRIB2 -t $IMS_FILE | head -1)
-  typeset -L10 IMSDATE10
-  IMSDATE10=${tempdate#*d=}
+  IMSDATE=${tempdate#*d=}
 fi
+IMSDATE10=$(echo $IMSDATE|cut -c1-10)
 IMSYEAR=$(echo $IMSDATE10 | cut -c1-4)
 IMSMONTH=$(echo $IMSDATE10 | cut -c5-6)
 IMSDAY=$(echo $IMSDATE10 | cut -c7-8)
 IMSHOUR=0   # emc convention is to use 00Z.
+
+pgmout=${pgmout:-OUTPUT}
 
 if test "$use_prod_util" = "true" ; then
   . prep_step
@@ -179,7 +182,7 @@ cat > ./fort.41 << !
   autosnow_file=""
   nesdis_snow_file="${IMS_FILE}"
   nesdis_lsmask_file=""
-  afwa_snow_global_file=""
+  afwa_snow_global_file="${AFWA_GLOBAL_FILE}"
   afwa_snow_nh_file="${AFWA_NH_FILE}"
   afwa_snow_sh_file="${AFWA_SH_FILE}"
   afwa_lsmask_nh_file=""
@@ -210,8 +213,6 @@ cat > ./fort.41 << !
   snow_cvr_threshold=50.0
  /
 !
-
-pgmout=${pgmout:-OUTPUT}
 
 eval $SNOW2MDLEXEC  >> $pgmout 2> errfile
 rc2=$?
