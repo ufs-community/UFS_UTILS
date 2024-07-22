@@ -317,8 +317,6 @@ C
       allocate (land_frac(IM,JM),lake_frac(IM,JM))
 
 !--- reading grid file.
-      is_south_pole = .false.
-      is_north_pole = .false.
 
       inquire(file=trim(OUTGRID), exist=fexist)
       if(.not. fexist) then
@@ -373,49 +371,11 @@ C
      &                     i_south_pole, j_south_pole)
 
       deallocate(tmpvar)
-
-      if(i_south_pole >0 .and. j_south_pole > 0) then
-        if(mod(i_south_pole,2)==0) then ! stretched grid
-           do j = 1, JM; do i = 1, IM
-             if(i==i_south_pole/2 .and. (j==j_south_pole/2 
-     &              .or. j==j_south_pole/2+1) ) then
-               is_south_pole(i,j) = .true.
-               print*, "south pole at i,j=", i, j
-             endif
-           enddo; enddo      
-        else
-           do j = 1, JM; do i = 1, IM
-              if((i==i_south_pole/2 .or. i==i_south_pole/2+1)
-     &             .and. (j==j_south_pole/2 .or.
-     &              j==j_south_pole/2+1) ) then
-                 is_south_pole(i,j) = .true.
-                 print*, "south pole at i,j=", i, j
-              endif
-           enddo; enddo
-        endif            
-      endif
-
-      if(i_north_pole >0 .and. j_north_pole > 0) then
-        if(mod(i_north_pole,2)==0) then ! stretched grid
-           do j = 1, JM; do i = 1, IM
-              if(i==i_north_pole/2 .and. (j==j_north_pole/2 .or.
-     &                j==j_north_pole/2+1) ) then
-                is_north_pole(i,j) = .true.
-                print*, "north pole at i,j=", i, j
-              endif
-           enddo; enddo      
-        else
-           do j = 1, JM; do i = 1, IM
-              if((i==i_north_pole/2 .or. i==i_north_pole/2+1)
-     &             .and. (j==j_north_pole/2 .or.
-     &                j==j_north_pole/2+1) ) then
-                is_north_pole(i,j) = .true.
-                print*, "north pole at i,j=", i, j
-              endif
-           enddo; enddo
-         endif            
-      endif
          
+      call find_nearest_pole_points(i_north_pole, j_north_pole,
+     &  i_south_pole, j_south_pole, im, jm, is_north_pole,
+     &  is_south_pole)
+
       allocate(tmpvar(nx,ny))
       error=nf_inq_varid(ncid, 'area', id_var)
       call netcdf_err(error, 'inquire varid of area from file '
@@ -2555,10 +2515,10 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
       return
       end function timef
 
-!> Find the i/j indices of the north/south poles on
-!! a model grid tile.
+!> Find the point on the model grid tile closest to the
+!! north and south pole.
 !!
-!! @param[in] tmpvar Latitude on the supergrid.
+!! @param[in] geolat Latitude on the supergrid.
 !! @param[in] nx i-dimension of the supergrid.
 !! @param[in] ny j-dimension of the supergrid.
 !! @param[out] i_north_pole 'i' index of north pole. '0' if
@@ -2570,14 +2530,14 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
 !! @param[out] j_south_pole 'j' index of south pole. '0' if
 !! pole is outside of grid.
 !! @author GFDL Programmer
-      subroutine find_poles(tmpvar, nx, ny, i_north_pole, j_north_pole,
+      subroutine find_poles(geolat, nx, ny, i_north_pole, j_north_pole,
      &                     i_south_pole, j_south_pole)
 
       implicit none
       
       integer, intent(in)  :: nx, ny
 
-      real, intent(in)     :: tmpvar(nx+1,ny+1)
+      real, intent(in)     :: geolat(nx+1,ny+1)
 
       integer, intent(out) :: i_north_pole, j_north_pole
       integer, intent(out) :: i_south_pole, j_south_pole
@@ -2586,6 +2546,7 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
 
       real                 :: maxlat, minlat
 
+      print*,'- CHECK IF THE TILE CONTAINS A POLE.'
     !--- figure out pole location.
       maxlat = -90
       minlat = 90
@@ -2594,15 +2555,15 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
       i_south_pole = 0
       j_south_pole = 0
       do j = 1, ny+1; do i = 1, nx+1
-         if( tmpvar(i,j) > maxlat ) then
+         if( geolat(i,j) > maxlat ) then
             i_north_pole=i
             j_north_pole=j
-            maxlat = tmpvar(i,j)
+            maxlat = geolat(i,j)
          endif
-         if( tmpvar(i,j) < minlat ) then
+         if( geolat(i,j) < minlat ) then
             i_south_pole=i
             j_south_pole=j
-            minlat = tmpvar(i,j)
+            minlat = geolat(i,j)
          endif
       enddo ; enddo
     !--- only when maxlat is close to 90. the point is north pole
@@ -2614,10 +2575,90 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
          i_south_pole = 0
          j_south_pole = 0
       endif
-      print*, "minlat=", minlat, "maxlat=", maxlat
-      print*, "north pole supergrid index is ",
+      print*, "- MINLAT=", minlat, "MAXLAT=", maxlat
+      print*, "- NORTH POLE SUPERGRID INDEX IS ",
      &           i_north_pole, j_north_pole
-      print*, "south pole supergrid index is ",
+      print*, "- SOUTH POLE SUPERGRID INDEX IS ",
      &           i_south_pole, j_south_pole
 
       end subroutine find_poles
+
+!> Find the point on the model grid tile closest to the
+!! north and south pole.
+!!
+!! @param[in] i_north_pole 'i' index of north pole. '0' if
+!! pole is outside of grid.
+!! @param[in] j_north_pole 'j' index of north pole. '0' if
+!! pole is outside of grid.
+!! @param[in] i_south_pole 'i' index of south pole. '0' if
+!! pole is outside of grid.
+!! @param[in] j_south_pole 'j' index of south pole. '0' if
+!! pole is outside of grid.
+!! @param[in] im i-dimension of model tile
+!! @param[in] jm j-dimension of model tile
+!! @param[out] is_north_pole 'true' for points surrounding the north pole.
+!! @param[out] is_south_pole 'true' for points surrounding the south pole.
+!! @author GFDL Programmer
+      subroutine find_nearest_pole_points(i_north_pole, j_north_pole,
+     &  i_south_pole, j_south_pole, im, jm, is_north_pole,
+     &  is_south_pole)
+
+      implicit none
+
+      integer, intent(in)     :: im, jm
+      integer, intent(in)     :: i_north_pole, j_north_pole
+      integer, intent(in)     :: i_south_pole, j_south_pole
+
+      logical, intent(out)    :: is_north_pole(im,jm)
+      logical, intent(out)    :: is_south_pole(im,jm)
+
+      integer                 :: i, j
+
+      print*,'- FIND NEAREST POLE POINTS.'
+
+      is_north_pole=.false.
+      is_south_pole=.false.
+
+      if(i_south_pole >0 .and. j_south_pole > 0) then
+        if(mod(i_south_pole,2)==0) then ! stretched grid
+           do j = 1, JM; do i = 1, IM
+             if(i==i_south_pole/2 .and. (j==j_south_pole/2 
+     &              .or. j==j_south_pole/2+1) ) then
+               is_south_pole(i,j) = .true.
+               print*, "- SOUTH POLE AT I,J= ", i, j
+             endif
+           enddo; enddo
+        else
+           do j = 1, JM; do i = 1, IM
+              if((i==i_south_pole/2 .or. i==i_south_pole/2+1)
+     &             .and. (j==j_south_pole/2 .or.
+     &              j==j_south_pole/2+1) ) then
+                 is_south_pole(i,j) = .true.
+                 print*, "- SOUTH POLE AT I,J= ", i, j
+              endif
+           enddo; enddo
+        endif            
+      endif
+
+      if(i_north_pole >0 .and. j_north_pole > 0) then
+        if(mod(i_north_pole,2)==0) then ! stretched grid
+           do j = 1, JM; do i = 1, IM
+              if(i==i_north_pole/2 .and. (j==j_north_pole/2 .or.
+     &                j==j_north_pole/2+1) ) then
+                is_north_pole(i,j) = .true.
+                print*, "- NORTH POLE AT I,J= ", i, j
+              endif
+           enddo; enddo
+        else
+           do j = 1, JM; do i = 1, IM
+              if((i==i_north_pole/2 .or. i==i_north_pole/2+1)
+     &             .and. (j==j_north_pole/2 .or.
+     &                j==j_north_pole/2+1) ) then
+                is_north_pole(i,j) = .true.
+                print*, "- NORTH POLE AT I,J= ", i, j
+              endif
+           enddo; enddo
+         endif            
+      endif
+
+      end subroutine find_nearest_pole_points
