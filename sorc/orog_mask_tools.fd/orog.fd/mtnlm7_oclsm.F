@@ -128,7 +128,7 @@ C
 
       integer, allocatable :: IWORK(:,:,:)
 
-      real :: DEGRAD,maxlat, minlat,timef,tbeg,tend,tbeg1
+      real :: DEGRAD,timef,tbeg,tend,tbeg1
       real :: DELXN,slma,oroa,vara,var4a,xn,XS
 
       real, allocatable :: XLAT(:),XLON(:),oaa(:),ola(:),GLAT(:)
@@ -319,10 +319,6 @@ C
 !--- reading grid file.
       is_south_pole = .false.
       is_north_pole = .false.
-      i_south_pole = 0
-      j_south_pole = 0
-      i_north_pole = 0
-      j_north_pole = 0
 
       inquire(file=trim(OUTGRID), exist=fexist)
       if(.not. fexist) then
@@ -373,39 +369,9 @@ C
       geolat(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
       geolat_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
 
-    !--- figure out pole location.
-      maxlat = -90
-      minlat = 90
-      i_north_pole = 0
-      j_north_pole = 0
-      i_south_pole = 0
-      j_south_pole = 0
-      do j = 1, ny+1; do i = 1, nx+1
-         if( tmpvar(i,j) > maxlat ) then
-            i_north_pole=i
-            j_north_pole=j
-            maxlat = tmpvar(i,j)
-         endif
-         if( tmpvar(i,j) < minlat ) then
-            i_south_pole=i
-            j_south_pole=j
-            minlat = tmpvar(i,j)
-         endif
-      enddo ; enddo
-    !--- only when maxlat is close to 90. the point is north pole
-      if(maxlat < 89.9 ) then
-         i_north_pole = 0
-         j_north_pole = 0
-      endif
-      if(minlat > -89.9 ) then
-         i_south_pole = 0
-         j_south_pole = 0
-      endif
-      print*, "minlat=", minlat, "maxlat=", maxlat
-      print*, "north pole supergrid index is ",
-     &           i_north_pole, j_north_pole
-      print*, "south pole supergrid index is ",
-     &           i_south_pole, j_south_pole
+      call find_poles(tmpvar, nx, ny, i_north_pole, j_north_pole,
+     &                     i_south_pole, j_south_pole)
+
       deallocate(tmpvar)
 
       if(i_south_pole >0 .and. j_south_pole > 0) then
@@ -2588,3 +2554,70 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
       timef=elapsed
       return
       end function timef
+
+!> Find the i/j indices of the north/south poles on
+!! a model grid tile.
+!!
+!! @param[in] tmpvar Latitude on the supergrid.
+!! @param[in] nx i-dimension of the supergrid.
+!! @param[in] ny j-dimension of the supergrid.
+!! @param[out] i_north_pole 'i' index of north pole. '0' if
+!! pole is outside of grid.
+!! @param[out] j_north_pole 'j' index of north pole. '0' if
+!! pole is outside of grid.
+!! @param[out] i_south_pole 'i' index of south pole. '0' if
+!! pole is outside of grid.
+!! @param[out] j_south_pole 'j' index of south pole. '0' if
+!! pole is outside of grid.
+!! @author GFDL Programmer
+      subroutine find_poles(tmpvar, nx, ny, i_north_pole, j_north_pole,
+     &                     i_south_pole, j_south_pole)
+
+      implicit none
+      
+      integer, intent(in)  :: nx, ny
+
+      real, intent(in)     :: tmpvar(nx+1,ny+1)
+
+      integer, intent(out) :: i_north_pole, j_north_pole
+      integer, intent(out) :: i_south_pole, j_south_pole
+
+      integer              :: i, j
+
+      real                 :: maxlat, minlat
+
+    !--- figure out pole location.
+      maxlat = -90
+      minlat = 90
+      i_north_pole = 0
+      j_north_pole = 0
+      i_south_pole = 0
+      j_south_pole = 0
+      do j = 1, ny+1; do i = 1, nx+1
+         if( tmpvar(i,j) > maxlat ) then
+            i_north_pole=i
+            j_north_pole=j
+            maxlat = tmpvar(i,j)
+         endif
+         if( tmpvar(i,j) < minlat ) then
+            i_south_pole=i
+            j_south_pole=j
+            minlat = tmpvar(i,j)
+         endif
+      enddo ; enddo
+    !--- only when maxlat is close to 90. the point is north pole
+      if(maxlat < 89.9 ) then
+         i_north_pole = 0
+         j_north_pole = 0
+      endif
+      if(minlat > -89.9 ) then
+         i_south_pole = 0
+         j_south_pole = 0
+      endif
+      print*, "minlat=", minlat, "maxlat=", maxlat
+      print*, "north pole supergrid index is ",
+     &           i_north_pole, j_north_pole
+      print*, "south pole supergrid index is ",
+     &           i_south_pole, j_south_pole
+
+      end subroutine find_poles
