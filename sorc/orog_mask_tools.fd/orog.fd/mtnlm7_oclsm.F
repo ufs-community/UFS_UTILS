@@ -111,15 +111,14 @@ C
       integer, PARAMETER :: NMT=14
 
       integer :: efac,zsave1,zsave2
-      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,it,jt,error,id_dim
+      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,error,id_dim
       integer :: id_var,fsize,wgta,IN,INW,INE,IS,ISW,ISE
       integer :: itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
-      integer(1) :: i3save
 
       integer, allocatable :: JST(:),JEN(:)
 
-      integer, allocatable :: IST(:,:),IEN(:,:),ZSLMX(:,:)
+      integer, allocatable :: IST(:,:),IEN(:,:)
       integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
       integer(1), allocatable :: UMD(:,:)
       integer(2), allocatable :: glob(:,:)
@@ -152,7 +151,7 @@ C
       fsize = 65536
 ! integers
       allocate (JST(JM),JEN(JM))
-      allocate (IST(IM,jm),IEN(IM,jm),ZSLMX(2700,1350))
+      allocate (IST(IM,jm),IEN(IM,jm))
       allocate (glob(IMN,JMN))
 
 ! reals
@@ -169,17 +168,7 @@ C
 
       print *,' In TERSUB'
 
-      print *,' Attempt to open/read UMD 30sec slmsk.'
-
-      error=NF__OPEN("./landcover.umd.30s.nc",NF_NOWRITE,fsize,ncid)
-      call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
-      error=nf_inq_varid(ncid, 'land_mask', id_var)
-      call netcdf_err(error, 'Inquire varid of land_mask')
-      error=nf_get_var_int1(ncid, id_var, UMD)
-      call netcdf_err(error, 'Inquire data of land_mask')
-      error = nf_close(ncid)
-
-      print *,' UMD lake, UMD(50,50)=',UMD(50,50)
+      call read_global_mask(imn,jmn,umd)
 C
 C- READ_G for global 30" terrain 
 C
@@ -202,24 +191,6 @@ C
 ! --- ZAVG initialize from glob
       ZAVG=glob
 
-! --- transpose mask even though glob 30" is from N to S and NCEP std is S to N
-      do j=1,jmn/2
-      do I=1,imn
-        jt=jmn - j + 1
-        i3save = UMD(I,j)
-        UMD(I,j)=UMD(I,jt)
-        UMD(I,jt) = i3save
-      enddo
-      enddo 
-! --- transpose UMD as USGS 30" is from dateline and NCEP std is 0
-      do j=1,jmn
-      do i=1,imn/2
-        it=imn/2 + i 
-        i3save = UMD(i,J)
-        UMD(i,J)=UMD(it,J)
-        UMD(it,J) = i3save
-      enddo
-      enddo
 ! ---  Non-land is 0.
       do j=1,jmn
       do i=1,imn
@@ -227,7 +198,7 @@ C
       enddo
       enddo
 
-      deallocate (ZSLMX,UMD,glob)
+      deallocate (UMD,glob)
 ! ---
 ! ---  Fixing an error in the topo 30" data set at pole (-9999).  
             do i=1,imn
@@ -2570,3 +2541,79 @@ C
       enddo
 
       end subroutine transpose_orog
+ 
+!> Read input global 30-arc second land mask data.
+!!
+!! @param[in] imn i-dimension of orography data.
+!! @param[in] jmn j-dimension of orography data.
+!! @param[out] mask The land mask data.
+!! @author G. Gayno NOAA/EMC
+      subroutine read_global_mask(imn, jmn, mask)
+
+      implicit none
+
+      include 'netcdf.inc'
+
+      integer, intent(in)        :: imn, jmn
+
+      integer(1), intent(out)    :: mask(imn,jmn)
+
+      integer   :: ncid, fsize, id_var, error
+
+      fsize = 65536
+
+      print*,"- OPEN AND READ ./landcover.umd.30s.nc"
+
+      error=NF__OPEN("./landcover.umd.30s.nc",NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
+      error=nf_inq_varid(ncid, 'land_mask', id_var)
+      call netcdf_err(error, 'Inquire varid of land_mask')
+      error=nf_get_var_int1(ncid, id_var, mask)
+      call netcdf_err(error, 'Inquire data of land_mask')
+      error = nf_close(ncid)
+
+      call transpose_mask(imn,jmn,mask)
+
+      end subroutine read_global_mask
+
+!> Transpose the global landmask by flipping
+!! the poles and moving the starting longitude to
+!! Greenwich.
+!!
+!! @param[in] imn i-dimension of landmask data.
+!! @param[in] jmn j-dimension of landmask data.
+!! @param[inout] mask The global landmask data.
+!! @author G. Gayno
+      subroutine transpose_mask(imn, jmn, mask)
+
+      implicit none
+
+      integer, intent(in)       :: imn, jmn
+      integer(1), intent(inout) :: mask(imn,jmn)
+
+      integer    :: i, j, it, jt
+      integer(1) :: isave
+
+! Transpose from S to N to the NCEP standard N to S.
+
+      do j=1,jmn/2
+      do I=1,imn
+        jt=jmn - j + 1
+        isave = mask(I,j)
+        mask(I,j)=mask(I,jt)
+        mask(I,jt) = isave
+      enddo
+      enddo
+
+! Data begins at dateline. NCEP standard is Greenwich.
+
+      do j=1,jmn
+      do I=1,imn/2
+        it=imn/2 + i
+        isave = mask(i,J)
+        mask(i,J)=mask(it,J)
+        mask(it,J) = isave
+      enddo
+      enddo
+
+      end subroutine transpose_mask
