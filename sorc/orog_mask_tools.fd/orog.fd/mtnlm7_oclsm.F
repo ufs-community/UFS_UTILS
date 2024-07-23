@@ -116,7 +116,6 @@ C
       integer :: itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
       integer(1) :: i3save
-      integer(2) :: i2save
 
       integer, allocatable :: JST(:),JEN(:)
 
@@ -184,28 +183,7 @@ C
 C
 C- READ_G for global 30" terrain 
 C
-       print *,' Call read_g to read global topography'
-       call read_g(glob)
-! --- transpose even though glob 30" is from S to N and NCEP std is N to S
-       do j=1,jmn/2
-       do I=1,imn
-        jt=jmn - j + 1
-        i2save = glob(I,j)
-        glob(I,j)=glob(I,jt)
-        glob(I,jt) = i2save
-       enddo
-       enddo 
-! --- transpose glob as USGS 30" is from dateline and NCEP std is 0
-       do j=1,jmn
-       do I=1,imn/2
-        it=imn/2 + i 
-        i2save = glob(i,J)
-        glob(i,J)=glob(it,J)
-        glob(it,J) = i2save
-       enddo
-       enddo 
-       print *,' After read_g, glob(500,500)=',glob(500,500)
-!
+      call read_global_orog(imn,jmn,glob)
 
 !  --- IMN,JMN
       print*, ' IM, JM, EFAC'
@@ -1930,18 +1908,23 @@ C
 
 !> Read input global 30-arc second orography data.
 !!
+!! @param[in] imn i-dimension of orography data.
+!! @param[in] jmn j-dimension of orography data.
 !! @param[out] glob The orography data.
 !! @author Jordan Alpert NOAA/EMC
-      subroutine read_g(glob)
+      subroutine read_global_orog(imn,jmn,glob)
       implicit none
 
       include 'netcdf.inc'
 
-      integer*2, intent(out) :: glob(360*120,180*120)
+      integer, intent(in)    :: imn, jmn
+      integer*2, intent(out) :: glob(imn,jmn)
 
       integer :: ncid, error, id_var, fsize
 
       fsize=65536
+
+      print*,"- OPEN AND READ ./topography.gmted2010.30s.nc"
 
       error=NF__OPEN("./topography.gmted2010.30s.nc",
      &               NF_NOWRITE,fsize,ncid)
@@ -1952,67 +1935,12 @@ C
       call netcdf_err(error, 'Read topo')
       error = nf_close(ncid)
 
-      print*,' '
-      call maxmin     (glob,360*120*180*120,'global0')
+      print*,"- MAX/MIN OF OROGRAPHY DATA ",maxval(glob),minval(glob)
+
+      call transpose_orog(imn,jmn,glob)
 
       return
-      end subroutine read_g
-
-!> Print the maximum, mininum, mean and
-!! standard deviation of an array.
-!! 
-!! @param [in] ia The array to be checked.
-!! @param [in] len The number of points to be checked.
-!! @param [in] tile A name associated with the array.
-!! @author Jordan Alpert NOAA/EMC
-      subroutine maxmin(ia,len,tile)
-ccmr
-      implicit none
-ccmr
-      integer*2 ia(len)
-      character*7 tile
-      integer iaamax, iaamin, len, m, ja, kount
-      integer(8) sum2,std,mean,isum
-      integer i_count_notset,kount_9
-! --- missing is -9999
-c
-      isum = 0
-      sum2 = 0
-      kount = 0
-      kount_9 = 0
-      iaamax = -9999999
-ccmr  iaamin = 1
-      iaamin =  9999999
-      i_count_notset=0
-           do 10 m=1,len
-      ja=ia(m)
-ccmr  if ( ja .lt. 0 ) print *,' ja < 0:',ja
-ccmr  if ( ja .eq. -9999 ) goto 10
-      if ( ja .eq. -9999 ) then
-           kount_9=kount_9+1
-           goto 10
-      endif
-      if ( ja .eq. -12345 ) i_count_notset=i_count_notset+1
-ccmr  if ( ja .eq. 0 ) goto 11
-      iaamax = max0( iaamax, ja )
-      iaamin = min0( iaamin, ja )
-!     iaamax = max0( iaamax, ia(m,j) )
-!     iaamin = min0( iaamin, ia(m,j) )
-  11  continue
-      kount = kount + 1
-      isum = isum + ja
-ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
-      sum2 = sum2 + ja*ja
-  10  continue
-!
-      mean = isum/kount
-      std = ifix(sqrt(float((sum2/(kount))-mean**2)))
-      print*,tile,' max=',iaamax,' min=',iaamin,' sum=',isum,
-     &       ' i_count_notset=',i_count_notset
-      print*,tile,' mean=',mean,' std.dev=',std,
-     &       ' ko9s=',kount,kount_9,kount+kount_9 
-      return
-      end subroutine maxmin
+      end subroutine read_global_orog
 
 !> Convert from latitude and longitude to x,y,z coordinates.
 !!
@@ -2600,3 +2528,45 @@ ccmr  sum2 = sum2 + ifix( float(ja) * float(ja) )
       endif
 
       end subroutine find_nearest_pole_points
+
+!> Transpose the global orography data by flipping
+!! the poles and moving the starting longitude to
+!! Greenwich.
+!!
+!! @param[in] imn i-dimension of orography data.
+!! @param[in] jmn j-dimension of orography data.
+!! @param[inout] glob The global orography data.
+!! @author G. Gayno
+      subroutine transpose_orog(imn, jmn, glob)
+
+      implicit none
+
+      integer, intent(in)       :: imn, jmn
+      integer(2), intent(inout) :: glob(imn,jmn)
+
+      integer    :: i, j, it, jt
+      integer(2) :: i2save
+
+! Transpose from S to N to the NCEP standard N to S.
+
+      do j=1,jmn/2
+      do I=1,imn
+        jt=jmn - j + 1
+        i2save = glob(I,j)
+        glob(I,j)=glob(I,jt)
+        glob(I,jt) = i2save
+      enddo
+      enddo
+
+! Data begins at dateline. NCEP standard is Greenwich.
+
+      do j=1,jmn
+      do I=1,imn/2
+        it=imn/2 + i
+        i2save = glob(i,J)
+        glob(i,J)=glob(it,J)
+        glob(it,J) = i2save
+      enddo
+      enddo
+
+      end subroutine transpose_orog
