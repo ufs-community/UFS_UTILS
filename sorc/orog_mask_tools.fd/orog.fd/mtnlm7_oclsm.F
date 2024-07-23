@@ -107,10 +107,9 @@ C
       logical, intent(in) :: mask_only
 
       real, parameter :: MISSING_VALUE=-9999.
-      real, PARAMETER :: PI=3.1415926535897931
       integer, PARAMETER :: NMT=14
 
-      integer :: efac,zsave1,zsave2
+      integer :: efac
       integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,error,id_dim
       integer :: id_var,fsize,wgta,IN,INW,INE,IS,ISW,ISE
       integer :: itest,jtest
@@ -139,7 +138,6 @@ C
       real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
       real, allocatable :: WORK5(:,:),WORK6(:,:)
       real, allocatable :: tmpvar(:,:)
-      real(4), allocatable::  GICE(:,:)
 
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
 
@@ -191,40 +189,11 @@ C
         ZSLM(i,JMN)=1
       enddo
  
-      allocate (GICE(IMN+1,3601))
+! Quality control the global topography data over Antarctica
+! using RAMP data.
 
-! Read 30-sec Antarctica RAMP data. Points scan from South
-! to North, and from Greenwich to Greenwich.
+      call qc_orog_by_ramp(imn, jmn, zavg, zslm)
 
-      error=NF__OPEN("./topography.antarctica.ramp.30s.nc",
-     &               NF_NOWRITE,fsize,ncid)
-      call netcdf_err(error, 'Opening RAMP topo file' )
-      error=nf_inq_varid(ncid, 'topo', id_var)
-      call netcdf_err(error, 'Inquire varid of RAMP topo')
-      error=nf_get_var_real(ncid, id_var, GICE)
-      call netcdf_err(error, 'Inquire data of RAMP topo')
-      error = nf_close(ncid)
-      
-      print *,' GICE 30" Antarctica RAMP orog 43201x3601 read OK'
-      print *,' Processing! '
-      print *,' Processing! '
-      print *,' Processing! '
-      do j = 1, 3601 
-      do i = 1, IMN
-         zsave1 = ZAVG(i,j)
-         zsave2 = ZSLM(i,j)
-       if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
-         if ( GICE(i,j) .gt. 0.) then 
-              ZAVG(i,j) = int( GICE(i,j) + 0.5 )
-!! --- for GICE values less than or equal to 0 (0, -1, or -99) then
-!! --- radar-sat (RAMP) values are not valid and revert back to old orog 
-                ZSLM(i,j) = 1
-         endif
-       endif
-      enddo
-      enddo
-
-      deallocate (GICE)
 C
 C     COMPUTE MOUNTAIN DATA : ORO SLM VAR (Std Dev) OC
 C
@@ -2577,3 +2546,63 @@ C
       enddo
 
       end subroutine transpose_mask
+
+!> Quality control the global orography and landmask
+!! data over Antarctica using RAMP data.
+!!
+!! @param[in] imn i-dimension of the global data.
+!! @param[in] jmn j-dimension of the global data.
+!! @param[inout] zavg The global orography data.
+!! @param[inout] zslm The global landmask data.
+!! @author G. Gayno
+      subroutine qc_orog_by_ramp(imn, jmn, zavg, zslm)
+
+      implicit none
+
+      include 'netcdf.inc'
+
+      integer, intent(in)      :: imn, jmn
+      integer, intent(inout)   :: zavg(imn,jmn)
+      integer, intent(inout)   :: zslm(imn,jmn)
+
+      integer                  :: i, j, error, ncid, id_var, fsize
+
+      real(4), allocatable     :: gice(:,:)
+
+      fsize = 65536
+
+      allocate (GICE(IMN+1,3601))
+
+! Read 30-sec Antarctica RAMP data. Points scan from South
+! to North, and from Greenwich to Greenwich.
+
+      print*,"- OPEN/READ RAMP DATA ./topography.antarctica.ramp.30s.nc"
+
+      error=NF__OPEN("./topography.antarctica.ramp.30s.nc",
+     &               NF_NOWRITE,fsize,ncid)
+      call netcdf_err(error, 'Opening RAMP topo file' )
+      error=nf_inq_varid(ncid, 'topo', id_var)
+      call netcdf_err(error, 'Inquire varid of RAMP topo')
+      error=nf_get_var_real(ncid, id_var, GICE)
+      call netcdf_err(error, 'Inquire data of RAMP topo')
+      error = nf_close(ncid)
+
+      print*,"- QC GLOBAL OROGRAPHY DATA WITH RAMP."
+
+! If RAMP values are valid, replace the global value with the RAMP
+! value. Invalid values are less than or equal to 0 (0, -1, or -99).
+
+      do j = 1, 3601
+      do i = 1, IMN
+       if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
+         if ( GICE(i,j) .gt. 0.) then
+            ZAVG(i,j) = int( GICE(i,j) + 0.5 )
+            ZSLM(i,j) = 1
+         endif
+       endif
+      enddo
+      enddo
+
+      deallocate (GICE)
+
+      end subroutine qc_orog_by_ramp
