@@ -125,10 +125,10 @@ C
 
       integer, allocatable :: IWORK(:,:,:)
 
-      real :: DEGRAD,timef,tbeg,tend,tbeg1
-      real :: DELXN,slma,oroa,vara,var4a,xn,XS
+      real :: timef,tbeg,tend,tbeg1
+      real :: slma,oroa,vara,var4a,xn,XS
 
-      real, allocatable :: XLAT(:),XLON(:),oaa(:),ola(:),GLAT(:)
+      real, allocatable :: XLAT(:),XLON(:),oaa(:),ola(:)
 
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
       real, allocatable :: GEOLAT(:,:),GEOLAT_C(:,:),DY(:,:)
@@ -146,52 +146,36 @@ C
       logical :: fexist,opened
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
 
+      print *,' In TERSUB'
+
       tbeg1=timef()
       tbeg=timef()
       fsize = 65536
-! integers
+
       allocate (JST(JM),JEN(JM))
       allocate (IST(IM,jm),IEN(IM,jm))
       allocate (glob(IMN,JMN))
-
-! reals
-      allocate (oaa(4),ola(4),GLAT(JMN))
-
+      allocate (oaa(4),ola(4))
       allocate (ZAVG(IMN,JMN))
       allocate (ZSLM(IMN,JMN))
       allocate (UMD(IMN,JMN))
 
-!
-!  SET CONSTANTS AND ZERO FIELDS
-!
-      DEGRAD = 180./PI
-
-      print *,' In TERSUB'
+! Read global mask data.
 
       call read_global_mask(imn,jmn,umd)
-C
-C- READ_G for global 30" terrain 
-C
+ 
+! Read global orography data.
+ 
       call read_global_orog(imn,jmn,glob)
 
-!  --- IMN,JMN
-      print*, ' IM, JM, EFAC'
-      print*, IM,JM,EFAC
-       print *,'  imn,jmn,glob(imn,jmn)=',imn,jmn,glob(imn,jmn)
-       print *,' UBOUND ZAVG=',UBOUND(ZAVG)
-       print *,' UBOUND glob=',UBOUND(glob)
-       print *,' UBOUND ZSLM=',UBOUND(ZSLM)
-       print *,' UBOUND GICE=',IMN+1,3601
-!
-! ---  0 is ocean and 1 is land for slm
-!
-C
-! --- ZSLM initialize with all land 1, ocean 0
+! ZSLM initialize with all land (1). Ocean is '0'.
+
       ZSLM=1
-! --- ZAVG initialize from glob
+
+! ZAVG initialize from glob
+
       ZAVG=glob
 
-! ---  Non-land is 0.
       do j=1,jmn
       do i=1,imn
          if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
@@ -199,28 +183,15 @@ C
       enddo
 
       deallocate (UMD,glob)
-! ---
-! ---  Fixing an error in the topo 30" data set at pole (-9999).  
-            do i=1,imn
-            ZSLM(i,1)=0
-            ZSLM(i,JMN)=1
-            enddo
-!
+
+! Fixing an error in the topo 30" data set at pole (-9999).  
+
+      do i=1,imn
+        ZSLM(i,1)=0
+        ZSLM(i,JMN)=1
+      enddo
+ 
       allocate (GICE(IMN+1,3601))
-!
-      DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
-C
-      DO J=1,JMN
-         GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
-      ENDDO
-      print *,
-     & ' Before GICE ZAVG(1,2)=',ZAVG(1,2),ZSLM(1,2)
-      print *,
-     & ' Before GICE ZAVG(1,12)=',ZAVG(1,12),ZSLM(1,12)
-      print *,
-     & ' Before GICE ZAVG(1,52)=',ZAVG(1,52),ZSLM(1,52)
-      print *,
-     & ' Before GICE ZAVG(1,112)=',ZAVG(1,JMN-112),ZSLM(1,112)
 
 ! Read 30-sec Antarctica RAMP data. Points scan from South
 ! to North, and from Greenwich to Greenwich.
@@ -250,8 +221,6 @@ C
                 ZSLM(i,j) = 1
          endif
        endif
-  152 format(1x,' ZAVG(i=',i4,' j=',i4,')=',i5,i3,
-     &' orig:',i5,i4,' Lat=',f7.3,f8.2,'E',' GICE=',f8.1)
       enddo
       enddo
 
@@ -347,7 +316,7 @@ C
        tbeg=timef()
 
          IF (MERGE_FILE == 'none') then
-           CALL MAKE_MASK(ZSLM,SLM,land_frac,GLAT,
+           CALL MAKE_MASK(ZSLM,SLM,land_frac,
      &      IM,JM,IMN,JMN,geolon_c,geolat_c)
             lake_frac=9999.9
          ELSE
@@ -364,7 +333,7 @@ C
            STOP
          END IF
 
-         CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,GLAT,
+         CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
      & IM,JM,IMN,JMN,geolon_c,geolat_c,lake_frac,land_frac)
 
       tend=timef()
@@ -379,7 +348,7 @@ C ===  Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
 C
       allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
       tbeg=timef()
-      CALL MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,GLAT,
+      CALL MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1            IM,JM,IMN,JMN,geolon_c,geolat_c,SLM)
       tend=timef()
       write(6,*)' MAKEPC2 time= ',tend-tbeg
@@ -399,7 +368,7 @@ C
 
        print*, "calling MAKEOA2 to compute OA, OL"
        tbeg=timef()
-       CALL MAKEOA2(ZAVG,zslm,VAR,GLAT,OA,OL,IWORK,ELVMAX,ORO,
+       CALL MAKEOA2(ZAVG,zslm,VAR,OA,OL,IWORK,ELVMAX,ORO,
      1            WORK1,WORK2,WORK3,WORK4,WORK5,WORK6,
      2            IM,JM,IMN,JMN,geolon_c,geolat_c,
      3            geolon,geolat,dx,dy,is_south_pole,is_north_pole)
@@ -627,8 +596,6 @@ C
 
       tend=timef()
       write(6,*)' Timer 5 time= ',tend-tbeg
-C
-      DELXN = 360./IM
 
       allocate(xlat(jm), xlon(im))
       do j = 1, jm
@@ -649,7 +616,7 @@ C
 
 !     Deallocate 1d vars
       deallocate(JST,JEN)
-      deallocate(XLAT,XLON,oaa,ola,GLAT)
+      deallocate(XLAT,XLON,oaa,ola)
 
 !     Deallocate 2d vars
       deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
@@ -760,8 +727,6 @@ C
 !! @param[in] zslm The high-resolution input land-mask dataset.
 !! @param[out] slm Land-mask on the model tile.
 !! @param[out] land_frac Land fraction on the model tile.
-!! @param[out] glat Latitude of each row of the high-resolution 
-!! orography and land-mask datasets.
 !! @param[in] im "i" dimension of the model grid.
 !! @param[in] jm "j" dimension of the model grid.
 !! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
@@ -770,7 +735,7 @@ C
 !! @param[in] lat_c Latitude on the model grid corner points.
 !! @author GFDL Programmer
       SUBROUTINE MAKE_MASK(zslm,SLM,land_frac,
-     1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c)
+     1 IM,JM,IMN,JMN,lon_c,lat_c)
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
@@ -889,8 +854,6 @@ C
 !! @param[in] slm Land-mask on the model tile.
 !! @param[out] var Standard deviation of orography on the model tile.
 !! @param[out] var4 Convexity on the model tile.
-!! @param[out] glat Latitude of each row of the high-resolution 
-!! orography and land-mask datasets.
 !! @param[in] im "i" dimension of the model grid.
 !! @param[in] jm "j" dimension of the model grid.
 !! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
@@ -901,7 +864,7 @@ C
 !! @param[in] land_frac Fractional land within the grid
 !! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
-     1 GLAT,IM,JM,IMN,JMN,lon_c,lat_c,lake_frac,land_frac)
+     1 IM,JM,IMN,JMN,lon_c,lat_c,lake_frac,land_frac)
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
@@ -1109,8 +1072,6 @@ C
 !! east for each model point.
 !! @param[out] gamma Anisotropy for each model point.
 !! @param[out] sigma Slope of orography for each model point.
-!! @param[out] glat Latitude of each row of the high-resolution 
-!! orography and land-mask datasets.
 !! @param[in] im "i" dimension of the model grid tile.
 !! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn "i" dimension of the hi-res input orog/mask datasets.
@@ -1120,7 +1081,7 @@ C
 !! @param[in] SLM mask
 !! @author GFDL Programmer
       SUBROUTINE MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
-     1           GLAT,IM,JM,IMN,JMN,lon_c,lat_c,SLM)
+     1           IM,JM,IMN,JMN,lon_c,lat_c,SLM)
 C
 C===  PC: principal coordinates of each Z avg orog box for L&M
 C
@@ -1392,7 +1353,6 @@ C
 !! @param[in] zavg High-resolution orography data.
 !! @param[in] zslm High-resolution land-mask data.
 !! @param[in] var Standard deviation of orography on the model grid.
-!! @param[out] glat Latitude of each row of input terrain dataset.
 !! @param[out] oa4 Orographic asymmetry on the model grid. Four
 !! directional components - W/S/SW/NW
 !! @param[out] ol Orographic length scale on the model grid. Four
@@ -1421,7 +1381,7 @@ C
 !! @param[in] is_south_pole Is the model point at the south pole?
 !! @param[in] is_north_pole is the model point at the north pole?
 !! @author GFDL Programmer
-      SUBROUTINE MAKEOA2(ZAVG,zslm,VAR,GLAT,OA4,OL,IOA4,ELVMAX,
+      SUBROUTINE MAKEOA2(ZAVG,zslm,VAR,OA4,OL,IOA4,ELVMAX,
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy,
      3           is_south_pole,is_north_pole )
