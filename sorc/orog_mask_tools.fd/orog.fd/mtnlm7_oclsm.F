@@ -115,7 +115,6 @@ C
       integer :: id_var,fsize,wgta,IN,INW,INE,IS,ISW,ISE
       integer :: itest,jtest
       integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
-      integer :: maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
       integer(1) :: i3save
       integer(2) :: i2save
 
@@ -426,18 +425,6 @@ C
        call minmxj(IM,JM,SLM,'     SLM')
        call minmxj(IM,JM,VAR,'     VAR')
        call minmxj(IM,JM,VAR4,'    VAR4')
-!
-C   check antarctic pole 
-!     DO J = 1,JM
-!     DO I = 1,IM
-!        if ( i .le. 100 .and. i .ge. 1 )then
-!           if (j .ge. JM-1 )then
-!      if (height .eq. 0.) print *,'I,J,SLM:',I,J,SLM(I,J)
-!      write(6,153)i,j,ORO(i,j),HEIGHT,SLM(i,j)
-!             endif
-!        endif    
-!     ENDDO
-!     ENDDO
 C
 C ===  Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
 C
@@ -451,7 +438,6 @@ C
        call minmxj(IM,JM,THETA,'   THETA')
        call minmxj(IM,JM,GAMMA,'   GAMMA')
        call minmxj(IM,JM,SIGMA,'   SIGMA')
-
 C
 C     COMPUTE MOUNTAIN DATA : OA OL
 C
@@ -486,27 +472,6 @@ C
        call minmxj(IM,JM,ELVMAX,'  ELVMAX')
        call minmxj(IM,JM,ORO,'     ORO')
 
-        maxc3 = 0
-        maxc4 = 0
-        maxc5 = 0
-        maxc6 = 0
-        maxc7 = 0
-        maxc8 = 0
-      DO J = 1,JM
-      DO I = 1,IM
-         if (ELVMAX(I,J) .gt. 3000.) maxc3 = maxc3 +1
-         if (ELVMAX(I,J) .gt. 4000.) maxc4 = maxc4 +1
-         if (ELVMAX(I,J) .gt. 5000.) maxc5 = maxc5 +1
-         if (ELVMAX(I,J) .gt. 6000.) maxc6 = maxc6 +1
-         if (ELVMAX(I,J) .gt. 7000.) maxc7 = maxc7 +1
-         if (ELVMAX(I,J) .gt. 8000.) maxc8 = maxc8 +1
-      ENDDO
-      ENDDO
-      print *,' MAXC3:',maxc3,maxc4,maxc5,maxc6,maxc7,maxc8
-!
-c      itest=151
-c      jtest=56
-C      
        print *,' ===> Replacing ELVMAX with ELVMAX-ORO <=== ' 
        print *,' ===> if ELVMAX<=ORO replace with proxy <=== ' 
        print *,' ===> the sum of mean orog (ORO) and std dev <=== ' 
@@ -520,26 +485,8 @@ C---  subtracting off ORO leaves std dev (this should never happen)
         endif
       ENDDO
       ENDDO
-        maxc3 = 0
-        maxc4 = 0
-        maxc5 = 0
-        maxc6 = 0
-        maxc7 = 0
-        maxc8 = 0
-      DO J = 1,JM
-      DO I = 1,IM
-         if (ELVMAX(I,J) .gt. 3000.) maxc3 = maxc3 +1
-         if (ELVMAX(I,J) .gt. 4000.) maxc4 = maxc4 +1
-         if (ELVMAX(I,J) .gt. 5000.) maxc5 = maxc5 +1
-         if (ELVMAX(I,J) .gt. 6000.) maxc6 = maxc6 +1
-         if (ELVMAX(I,J) .gt. 7000.) maxc7 = maxc7 +1
-         if (ELVMAX(I,J) .gt. 8000.) maxc8 = maxc8 +1
-      ENDDO
-      ENDDO
-      print *,' after MAXC 3-6 km:',maxc3,maxc4,maxc5,maxc6
 c
        call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
-!     if (JM .gt. 0) stop
 C
 C     ZERO OVER OCEAN
 C
@@ -729,15 +676,6 @@ C
      &          ORO(itest,jtest),itest,jtest
       print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
 
-C   check antarctic pole 
-      DO J = 1,JM
-      DO I = 1,IM
-         if ( i .le. 21 .and. i .ge. 1 )then
-         if (j .eq. JM )write(6,153)i,j,ORO(i,j),ELVMAX(i,j),SLM(i,j)
-  153 format(1x,' ORO,ELVMAX(i=',i4,' j=',i4,')=',2E14.5,f5.1)
-         endif
-      ENDDO
-      ENDDO
       tend=timef()
       write(6,*)' Timer 5 time= ',tend-tbeg
 C
