@@ -106,17 +106,11 @@ C
 
       logical, intent(in) :: mask_only
 
-      real, parameter :: MISSING_VALUE=-9999.
-      integer, PARAMETER :: NMT=14
-
       integer :: efac
       integer :: i,j,js,jn,iw,ie,k
-      integer :: fsize,wgta,IN,INW,INE,IS,ISW,ISE
+      integer :: wgta,IN,INW,INE,IS,ISW,ISE
       integer :: itest,jtest
 
-      integer, allocatable :: JST(:),JEN(:)
-
-      integer, allocatable :: IST(:,:),IEN(:,:)
       integer, allocatable :: ZAVG(:,:),ZSLM(:,:)
       integer(1), allocatable :: UMD(:,:)
       integer(2), allocatable :: glob(:,:)
@@ -145,12 +139,8 @@ C
 
       tbeg1=timef()
       tbeg=timef()
-      fsize = 65536
 
-      allocate (JST(JM),JEN(JM))
-      allocate (IST(IM,jm),IEN(IM,jm))
       allocate (glob(IMN,JMN))
-      allocate (oaa(4),ola(4))
       allocate (ZAVG(IMN,JMN))
       allocate (ZSLM(IMN,JMN))
       allocate (UMD(IMN,JMN))
@@ -173,7 +163,7 @@ C
 
       do j=1,jmn
       do i=1,imn
-         if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
+        if ( UMD(i,j) .eq. 0 ) ZSLM(i,j) = 0
       enddo
       enddo
 
@@ -191,12 +181,9 @@ C
 
       call qc_orog_by_ramp(imn, jmn, zavg, zslm)
 
-C
-C     COMPUTE MOUNTAIN DATA : ORO SLM VAR (Std Dev) OC
-C
       allocate (GEOLON(IM,JM),GEOLON_C(IM+1,JM+1),DX(IM,JM))
       allocate (GEOLAT(IM,JM),GEOLAT_C(IM+1,JM+1),DY(IM,JM))
-      allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM))
+      allocate (SLM(IM,JM))
       allocate (land_frac(IM,JM),lake_frac(IM,JM))
 
 ! Reading grid file.
@@ -207,58 +194,62 @@ C
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg
                                 !
-       tbeg=timef()
+      tbeg=timef()
 
-         IF (MERGE_FILE == 'none') then
-           CALL MAKE_MASK(ZSLM,SLM,land_frac,
-     &      IM,JM,IMN,JMN,geolon_c,geolat_c)
-            lake_frac=9999.9
-         ELSE
-           print*,'Read in external mask ',merge_file
-           CALL READ_MASK(MERGE_FILE,SLM,land_frac,lake_frac,im,jm)
-         ENDIF
+      IF (MERGE_FILE == 'none') then
+        CALL MAKE_MASK(ZSLM,SLM,land_frac,
+     &       IM,JM,IMN,JMN,geolon_c,geolat_c)
+        lake_frac=9999.9
+      ELSE
+        print*,'- READ IN EXTERNAL LANDMASK FILE: ',trim(merge_file)
+        CALL READ_MASK(MERGE_FILE,SLM,land_frac,lake_frac,im,jm)
+      ENDIF
 
-         IF (MASK_ONLY) THEN
-           print*,'Computing mask only.'
-           CALL WRITE_MASK_NETCDF(IM,JM,SLM,land_frac,
-     1                  1,1,GEOLON,GEOLAT)
+      IF (MASK_ONLY) THEN
+        print*,'- WILL COMPUTE LANDMASK ONLY.'
+        CALL WRITE_MASK_NETCDF(IM,JM,SLM,land_frac,
+     &                         1,1,GEOLON,GEOLAT)
 
-           print*,' DONE.'
-           STOP
-         END IF
+        DEALLOCATE(ZAVG, ZSLM, SLM, LAND_FRAC, LAKE_FRAC)
+        DEALLOCATE(GEOLON, GEOLON_C, GEOLAT, GEOLAT_C)
+        print*,' DONE.'
+        STOP
+      END IF
 
-         CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
-     & IM,JM,IMN,JMN,geolon_c,geolat_c,lake_frac,land_frac)
+      allocate (VAR(IM,JM),VAR4(IM,JM),ORO(IM,JM))
+
+      CALL MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
+     &     IM,JM,IMN,JMN,geolon_c,geolat_c,lake_frac,land_frac)
 
       tend=timef()
       write(6,*)' MAKEMT2 time= ',tend-tbeg
 
-       call minmxj(IM,JM,ORO,'     ORO')
-       call minmxj(IM,JM,SLM,'     SLM')
-       call minmxj(IM,JM,VAR,'     VAR')
-       call minmxj(IM,JM,VAR4,'    VAR4')
-C
-C ===  Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
-C
+      call minmxj(IM,JM,ORO,'     ORO')
+      call minmxj(IM,JM,SLM,'     SLM')
+      call minmxj(IM,JM,VAR,'     VAR')
+      call minmxj(IM,JM,VAR4,'    VAR4')
+ 
+! Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
+ 
       allocate (THETA(IM,JM),GAMMA(IM,JM),SIGMA(IM,JM),ELVMAX(IM,JM))
+
       tbeg=timef()
       CALL MAKEPC2(ZAVG,ZSLM,THETA,GAMMA,SIGMA,
      1            IM,JM,IMN,JMN,geolon_c,geolat_c,SLM)
       tend=timef()
+
       write(6,*)' MAKEPC2 time= ',tend-tbeg
 
-       call minmxj(IM,JM,THETA,'   THETA')
-       call minmxj(IM,JM,GAMMA,'   GAMMA')
-       call minmxj(IM,JM,SIGMA,'   SIGMA')
-C
-C     COMPUTE MOUNTAIN DATA : OA OL
-C
+      call minmxj(IM,JM,THETA,'   THETA')
+      call minmxj(IM,JM,GAMMA,'   GAMMA')
+      call minmxj(IM,JM,SIGMA,'   SIGMA')
+ 
+! COMPUTE MOUNTAIN DATA : OA OL
+ 
        allocate (IWORK(IM,JM,4))
-       allocate (OA(IM,JM,4),OL(IM,JM,4),HPRIME(IM,JM,14))
+       allocate (OA(IM,JM,4),OL(IM,JM,4))
        allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
        allocate (WORK5(IM,JM),WORK6(IM,JM))
-
-       call minmxj(IM,JM,ORO,'     ORO')
 
        print*, "calling MAKEOA2 to compute OA, OL"
        tbeg=timef()
@@ -270,7 +261,6 @@ C
        write(6,*)' MAKEOA2 time= ',tend-tbeg
 
 !      Deallocate 2d vars
-       deallocate(IST,IEN)
        deallocate (ZSLM,ZAVG)
        deallocate (dx,dy)
        deallocate (WORK2,WORK3,WORK4,WORK5,WORK6)
@@ -297,14 +287,11 @@ C---  subtracting off ORO leaves std dev (this should never happen)
         endif
       ENDDO
       ENDDO
-c
-       call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
-C
-C     ZERO OVER OCEAN
-C
-      print *,' Testing at point (itest,jtest)=',itest,jtest
-      print *,' SLM(itest,jtest)=',slm(itest,jtest),itest,jtest
-      print *,' ORO(itest,jtest)=',oro(itest,jtest),itest,jtest
+ 
+      call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
+ 
+! ZERO FIELDS OVER OCEAN
+ 
       DO J = 1,JM
         DO I = 1,IM
           IF(SLM(I,J).EQ.0.) THEN
@@ -331,6 +318,7 @@ C           ELVMAX(I,J)=0.
 C
       IF (MERGE_FILE == 'none') then
 
+      allocate (oaa(4),ola(4))
 C  REMOVE ISOLATED POINTS
       iso_loop : DO J=2,JM-1
         JN=J-1
@@ -434,6 +422,9 @@ C  REMOVE ISOLATED POINTS
           ENDIF
         ENDDO
       ENDDO iso_loop
+
+      deallocate (oaa,ola)
+
 C--- print for testing after isolated points removed
       print *,' after isolated points removed'
        call minmxj(IM,JM,ORO,'     ORO')
@@ -458,6 +449,8 @@ C--- print for testing after isolated points removed
       endif
 
 C
+      allocate(hprime(im,jm,14))
+
       DO J=1,JM
         DO I=1,IM
           ORO(I,J) = ORO(I,J) + EFAC*VAR(I,J)
@@ -504,18 +497,13 @@ C
      1                  GEOLON(1:IM,1:JM),GEOLAT(1:IM,1:JM), XLON,XLAT)
       tend=timef()
       write(6,*)' WRITE_NETCDF time= ',tend-tbeg
-      print *,' wrote netcdf file out.oro.tile?.nc'
 
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
-!     Deallocate 1d vars
-      deallocate(JST,JEN)
-      deallocate(XLAT,XLON,oaa,ola)
-
-!     Deallocate 2d vars
+      deallocate(XLAT,XLON)
       deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
       deallocate (SLM,ORO,VAR,land_frac)
-      deallocate (THETA,GAMMA,SIGMA,ELVMAX)
+      deallocate (THETA,GAMMA,SIGMA,ELVMAX,HPRIME)
 
       tend=timef()
       write(6,*)' Total runtime time= ',tend-tbeg1
@@ -1699,8 +1687,8 @@ csela....................................................
       ENDDO
       ENDDO
       write(6,150)rmin,rmax,title
-150   format('rmin=',e13.4,2x,'rmax=',e13.4,2x,a8,' ')
-C
+150   format('- MIN=',e13.4,2x,'MAX=',e13.4,2x,a8,' ')
+ 
       RETURN
       END SUBROUTINE minmxj
 
