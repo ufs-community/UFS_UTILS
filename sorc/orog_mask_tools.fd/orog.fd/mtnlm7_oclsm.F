@@ -110,10 +110,9 @@ C
       integer, PARAMETER :: NMT=14
 
       integer :: efac
-      integer :: i,j,nx,ny,ncid,js,jn,iw,ie,k,error,id_dim
-      integer :: id_var,fsize,wgta,IN,INW,INE,IS,ISW,ISE
+      integer :: i,j,js,jn,iw,ie,k
+      integer :: fsize,wgta,IN,INW,INE,IS,ISW,ISE
       integer :: itest,jtest
-      integer :: i_south_pole,j_south_pole,i_north_pole,j_north_pole
 
       integer, allocatable :: JST(:),JEN(:)
 
@@ -137,11 +136,9 @@ C
       real, allocatable :: VAR4(:,:)
       real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
       real, allocatable :: WORK5(:,:),WORK6(:,:)
-      real, allocatable :: tmpvar(:,:)
 
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
 
-      logical :: fexist,opened
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
 
       print *,' In TERSUB'
@@ -202,82 +199,10 @@ C
       allocate (SLM(IM,JM),ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM))
       allocate (land_frac(IM,JM),lake_frac(IM,JM))
 
-!--- reading grid file.
+! Reading grid file.
 
-      inquire(file=trim(OUTGRID), exist=fexist)
-      if(.not. fexist) then
-         print*, "FATAL ERROR: file "//trim(OUTGRID)
-         print*, "does not exist."
-         CALL ERREXIT(4)
-      endif
-      do ncid = 103, 512
-        inquire( ncid,OPENED=opened )
-        if( .NOT.opened )exit
-      end do
-
-      print*, "outgrid=", trim(outgrid)
-      error=NF__OPEN(trim(OUTGRID),NF_NOWRITE,fsize,ncid)
-      call netcdf_err(error, 'Open file '//trim(OUTGRID) )
-      error=nf_inq_dimid(ncid, 'nx', id_dim)
-      call netcdf_err(error, 'inquire dimension nx from file '//
-     &                   trim(OUTGRID) )
-      nx = 2*IM
-      ny = 2*JM
-      print*, "Read the grid from file "//trim(OUTGRID)
-
-      allocate(tmpvar(nx+1,ny+1))
-
-      error=nf_inq_varid(ncid, 'x', id_var)
-      call netcdf_err(error, 'inquire varid of x from file '
-     &                   //trim(OUTGRID) )
-      error=nf_get_var_double(ncid, id_var, tmpvar)
-      call netcdf_err(error, 'inquire data of x from file '
-     &                   //trim(OUTGRID) )
-      !--- adjust lontitude to be between 0 and 360.
-      do j = 1,ny+1; do i = 1,nx+1
-         if(tmpvar(i,j) .NE. MISSING_VALUE) then
-            if(tmpvar(i,j) .GT. 360) tmpvar(i,j) = tmpvar(i,j) - 360
-            if(tmpvar(i,j) .LT. 0) tmpvar(i,j) = tmpvar(i,j) + 360
-         endif
-      enddo; enddo
-
-      geolon(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
-      geolon_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
-         
-      error=nf_inq_varid(ncid, 'y', id_var)
-      call netcdf_err(error, 'inquire varid of y from file '
-     &                   //trim(OUTGRID) )
-      error=nf_get_var_double(ncid, id_var, tmpvar)
-      call netcdf_err(error, 'inquire data of y from file '
-     &                   //trim(OUTGRID) )
-      geolat(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
-      geolat_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
-
-      call find_poles(tmpvar, nx, ny, i_north_pole, j_north_pole,
-     &                     i_south_pole, j_south_pole)
-
-      deallocate(tmpvar)
-         
-      call find_nearest_pole_points(i_north_pole, j_north_pole,
-     &  i_south_pole, j_south_pole, im, jm, is_north_pole,
-     &  is_south_pole)
-
-      allocate(tmpvar(nx,ny))
-      error=nf_inq_varid(ncid, 'area', id_var)
-      call netcdf_err(error, 'inquire varid of area from file '
-     &                   //trim(OUTGRID) )
-      error=nf_get_var_double(ncid, id_var, tmpvar)
-      call netcdf_err(error, 'inquire data of area from file '
-     &                   //trim(OUTGRID) )
-
-      do j = 1, jm
-         do i = 1, im
-            dx(i,j) = sqrt(tmpvar(2*i-1,2*j-1)+tmpvar(2*i,2*j-1)
-     &                     +tmpvar(2*i-1,2*j  )+tmpvar(2*i,2*j  ))
-            dy(i,j) = dx(i,j)
-         enddo
-      enddo
-      deallocate(tmpvar)         
+      call read_mdl_grid_file(outgrid,im,jm,geolon,geolon_c,
+     &     geolat,geolat_c,dx,dy,is_north_pole,is_south_pole)
 
       tend=timef()
       write(6,*)' Timer 1 time= ',tend-tbeg

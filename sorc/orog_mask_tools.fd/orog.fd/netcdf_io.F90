@@ -420,3 +420,109 @@
   print*,"- MDL GRID DIMENSIONS ", im, jm
 
   end subroutine read_mdl_dims
+
+!> Read the grid dimensions from the model 'grid' file
+!!
+!! @param[in] mdl_grid_file Path/name of model 'grid' file.
+!! @param[in] im 'i' Dimension of a model grid tile.
+!! @param[in] jm 'j' Dimension of a model grid tile.
+!! @param[out] geolon Longitude at the grid point centers.
+!! @param[out] geolon_c Longitude at the grid point corners.
+!! @param[out] geolat Latitude at the grid point centers.
+!! @param[out] geolat_c Latitude at the grid point corners.
+!! @param[out] dx Length of model grid points in the 'x' direction.
+!! @param[out] dy Length of model grid points in the 'y' direction.
+!! @param[out] is_north_pole 'true' for points surrounding the north pole.
+!! @param[out] is_south_pole 'true' for points surrounding the south pole.
+!! @author George Gayno NOAA/EMC
+  subroutine read_mdl_grid_file(mdl_grid_file, im, jm, &
+             geolon, geolon_c, geolat, geolat_c, dx, dy, &
+             is_north_pole, is_south_pole)
+
+  implicit none
+  include "netcdf.inc"
+
+  character(len=*), intent(in) :: mdl_grid_file
+
+  integer, intent(in)          :: im, jm
+
+  logical, intent(out)         :: is_north_pole(im,jm)
+  logical, intent(out)         :: is_south_pole(im,jm)
+
+  real, intent(out)            :: geolat(im,jm)
+  real, intent(out)            :: geolat_c(im+1,jm+1)
+  real, intent(out)            :: geolon(im,jm)
+  real, intent(out)            :: geolon_c(im+1,jm+1)
+  real, intent(out)            :: dx(im,jm), dy(im,jm)
+
+  integer                      :: i, j
+  integer                      :: ncid, error, fsize, id_var, nx, ny
+  integer                      :: i_south_pole,j_south_pole
+  integer                      :: i_north_pole,j_north_pole
+
+  real, allocatable     :: tmpvar(:,:)
+  fsize = 66536
+
+  nx = 2*im
+  ny = 2*jm
+
+  allocate(tmpvar(nx+1,ny+1))
+
+  print*, "- OPEN AND READ= ", trim(mdl_grid_file)
+
+  error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
+  call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )
+
+  error=nf_inq_varid(ncid, 'x', id_var)
+  call netcdf_err(error, 'inquire varid of x from file ' // trim(mdl_grid_file))
+  error=nf_get_var_double(ncid, id_var, tmpvar)
+  call netcdf_err(error, 'inquire data of x from file ' // trim(mdl_grid_file))
+
+! Adjust lontitude to be between 0 and 360.
+  do j = 1,ny+1
+  do i = 1,nx+1
+    if(tmpvar(i,j) .GT. 360) tmpvar(i,j) = tmpvar(i,j) - 360
+    if(tmpvar(i,j) .LT. 0) tmpvar(i,j) = tmpvar(i,j) + 360
+  enddo
+  enddo
+
+  geolon(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
+  geolon_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
+
+  error=nf_inq_varid(ncid, 'y', id_var)
+  call netcdf_err(error, 'inquire varid of y from file ' // trim(mdl_grid_file))
+  error=nf_get_var_double(ncid, id_var, tmpvar)
+  call netcdf_err(error, 'inquire data of y from file ' // trim(mdl_grid_file))
+
+  geolat(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
+  geolat_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
+
+  call find_poles(tmpvar, nx, ny, i_north_pole, j_north_pole, &
+                  i_south_pole, j_south_pole)
+
+  deallocate(tmpvar)
+
+  call find_nearest_pole_points(i_north_pole, j_north_pole, &
+       i_south_pole, j_south_pole, im, jm, is_north_pole, &
+       is_south_pole)
+
+  allocate(tmpvar(nx,ny))
+
+  error=nf_inq_varid(ncid, 'area', id_var)
+  call netcdf_err(error, 'inquire varid of area from file ' // trim(mdl_grid_file))
+  error=nf_get_var_double(ncid, id_var, tmpvar)
+  call netcdf_err(error, 'inquire data of area from file ' // trim(mdl_grid_file))
+
+  error = nf_close(ncid)
+
+  do j = 1, jm
+    do i = 1, im
+      dx(i,j) = sqrt(tmpvar(2*i-1,2*j-1)+tmpvar(2*i,2*j-1)   &
+                + tmpvar(2*i-1,2*j  )+tmpvar(2*i,2*j  ))
+      dy(i,j) = dx(i,j)
+    enddo
+  enddo
+
+  deallocate(tmpvar)
+
+  end subroutine read_mdl_grid_file
