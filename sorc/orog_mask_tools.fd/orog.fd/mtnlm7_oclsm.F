@@ -640,6 +640,7 @@ C
       real SLM(IM,JM)
       real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
       real    LONO(4),LATO(4),LONI,LATI
+      real    LONO_RAD(4), LATO_RAD(4)
       integer JM1,i,j,nsum,nsum_all,ii,jj,numx,i2
       integer ilist(IMN)
       real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1
@@ -666,7 +667,7 @@ C
 C  (*j*)  for hard wired zero offset (lambda s =0) for terr05 
 !$omp parallel do
 !$omp* private (j,i,xnsum,xland,xwatr,nsum,xl1,xs1,xw1,lono,
-!$omp*          lato,jst,jen,ilist,numx,jj,i2,ii,loni,lati,
+!$omp*          lato,lono_rad,lato_rad,jst,jen,ilist,numx,jj,i2,ii,loni,lati,
 !$omp*          xnsum_all,xland_all,xwatr_all,nsum_all)
 !$omp*          
       DO J=1,JM
@@ -689,6 +690,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
          LATO(2) = lat_c(i+1,j) 
          LATO(3) = lat_c(i+1,j+1) 
          LATO(4) = lat_c(i,j+1) 
+         LONO_RAD=LONO*D2R
+         LATO_RAD=LATO*D2R
          call get_index(IMN,JMN,4,LONO,LATO,DELXN,jst,jen,ilist,numx)
          do jj = jst, jen; do i2 = 1, numx
             ii = ilist(i2)
@@ -706,7 +709,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
             endif
 
             if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
-     &          LONO*D2R,LATO*D2R))then
+     &          LONO_RAD,LATO_RAD))then
 
                XLAND = XLAND + FLOAT(ZSLM(ii,jj))
                XWATR = XWATR + FLOAT(1-ZSLM(ii,jj))
@@ -771,6 +774,7 @@ C
       integer JST, JEN
       real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
       real    LONO(4),LATO(4),LONI,LATI
+      real    LONO_RAD(4), LATO_RAD(4)
       real    HEIGHT
       integer JM1,i,j,nsum,nsum_all,ii,jj,i1,numx,i2
       integer ilist(IMN)
@@ -802,7 +806,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 !$omp parallel do
 !$omp* private (j,i,xnsum,xland,xwatr,nsum,xl1,xs1,xw1,xw2,xw4,lono,
 !$omp*          lato,jst,jen,ilist,numx,jj,i2,ii,loni,lati,height,
-!$omp*          hgt_1d,
+!$omp*          lato_rad,lono_rad,hgt_1d,
 !$omp*          xnsum_all,xland_all,xwatr_all,nsum_all,
 !$omp*          xl1_all,xs1_all,xw1_all,xw2_all,xw4_all,
 !$omp*          height_all,hgt_1d_all)
@@ -839,6 +843,8 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
          LATO(2) = lat_c(i+1,j) 
          LATO(3) = lat_c(i+1,j+1) 
          LATO(4) = lat_c(i,j+1) 
+         LONO_RAD = LONO*D2R
+         LATO_RAD = LATO*D2R
          call get_index(IMN,JMN,4,LONO,LATO,DELXN,jst,jen,ilist,numx)
          do jj = jst, jen; do i2 = 1, numx
             ii = ilist(i2)
@@ -863,7 +869,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
             XW2_ALL = XW2_ALL + HEIGHT_ALL ** 2
 
             if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
-     &          LONO*D2R,LATO*D2R))then
+     &          LONO_RAD,LATO_RAD))then
 
                XLAND = XLAND + FLOAT(ZSLM(ii,jj))
                XWATR = XWATR + FLOAT(1-ZSLM(ii,jj))
@@ -994,6 +1000,7 @@ C
       real xfp,yfp,xfpyfp,xfp2,yfp2
       real hi0,hip1,hj0,hjp1,hijax,hi1j1
       real LONO(4),LATO(4),LONI,LATI
+      real LONO_RAD(4), LATO_RAD(4)
       integer i,j,i1,j1,i2,jst,jen,numx,i0,ip1,ijax
       integer ilist(IMN)
       logical inside_a_polygon
@@ -1023,7 +1030,7 @@ C
 !$omp* private (j,i,xnsum,xland,xfp,yfp,xfpyfp,
 !$omp*          xfp2,yfp2,lono,lato,jst,jen,ilist,numx,j1,i2,i1,
 !$omp*          loni,lati,i0,ip1,hi0,hip1,hj0,hjp1,ijax,
-!$omp*          hijax,hi1j1)
+!$omp*          hijax,hi1j1,lono_rad,lato_rad)
       JLOOP : DO J=1,JM
 !        print*, "J=", J
         ILOOP : DO I=1,IM
@@ -1053,6 +1060,8 @@ C
             LATO(2) = lat_c(i+1,j) 
             LATO(3) = lat_c(i+1,j+1) 
             LATO(4) = lat_c(i,j+1) 
+            LATO_RAD = LATO *D2R
+            LONO_RAD = LONO *D2R
             call get_index(IMN,JMN,4,LONO,LATO,DELXN,jst,jen,ilist,numx)
 
             do j1 = jst, jen; do i2 = 1, numx
@@ -1060,7 +1069,7 @@ C
               LONI = i1*DELXN
               LATI = -90 + j1*DELXN
               INSIDE : if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
-     &           LONO*D2R,LATO*D2R))then
+     &           LONO_RAD,LATO_RAD))then
 
 C===  set the rest of the indexs for ave: 2pt staggered derivitive
 C
@@ -1299,6 +1308,7 @@ C
       integer i,j,ilist(IMN),numx,i1,j1,ii1
       integer KWD
       real    LONO(4),LATO(4),LONI,LATI
+      real    LONO_RAD(4), LATO_RAD(4)
       real    DELXN,HC,HEIGHT,XNPU,XNPD,T
       integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
       logical inside_a_polygon
@@ -1343,7 +1353,7 @@ C     IN A GRID BOX
 ! ---  to JM or to JM1
 !$omp parallel do
 !$omp* private (j,i,hc,lono,lato,jst,jen,ilist,numx,j1,ii1,i1,loni,
-!$omp*          lati,height)
+!$omp*          lati,height,lono_rad,lato_rad)
       DO J=1,JM
 !        print*, "J=", J 
         DO I=1,IM
@@ -1356,13 +1366,15 @@ C     IN A GRID BOX
           LATO(2) = lat_c(i+1,j) 
           LATO(3) = lat_c(i+1,j+1) 
           LATO(4) = lat_c(i,j+1) 
+          LONO_RAD = LONO * D2R
+          LATO_RAD = LATO * D2R
           call get_index(IMN,JMN,4,LONO,LATO,DELXN,jst,jen,ilist,numx)
           do j1 = jst, jen; do ii1 = 1, numx          
             i1 = ilist(ii1)
             LONI = i1*DELXN
             LATI = -90 + j1*DELXN
             if(inside_a_polygon(LONI*D2R,LATI*D2R,4,
-     &          LONO*D2R,LATO*D2R))then
+     &          LONO_RAD,LATO_RAD))then
 
               HEIGHT = FLOAT(ZAVG(I1,J1))
               IF(HEIGHT.LT.-990.) HEIGHT = 0.0
