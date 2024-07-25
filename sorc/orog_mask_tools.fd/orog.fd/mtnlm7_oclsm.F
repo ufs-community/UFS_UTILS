@@ -58,28 +58,40 @@ C>  -   SPTEZ      - SPHERICAL TRANSFORM
 C>
 C> @return 0 for success, error code otherwise.
       implicit none
-      integer imn, jmn
-      character(len=256) :: MDL_GRID_FILE = "none"
-      character(len=256) :: merge_file = "none"
-      logical :: mask_only = .false.
-      integer :: IM,JM,EFAC
-      READ(5,*) MDL_GRID_FILE
-      READ(5,*) mask_only
-      READ(5,*) merge_file
-      EFAC=0
-      print*, "MASK_ONLY", mask_only
-      print*, "MERGE_FILE ", trim(merge_file)
-      print*, EFAC
-      IMN = 360*120
-      JMN = 180*120
-      print *, ' Starting terr12 mtnlm7_slm30.f  IMN,JMN:',IMN,JMN
+
+      character(len=256)    :: mdl_grid_file = "none"
+      character(len=256)    :: merge_file = "none"
+      integer               :: imn, jmn, im, jm, efac
+      logical               :: mask_only = .false.
+
+      print*,"- BEGIN OROGRAPHY PROGRAM."
+
+      read(5,*) mdl_grid_file
+      read(5,*) mask_only
+      read(5,*) merge_file
+
+      efac = 0
+      imn  = 360*120
+      jmn  = 180*120
+
+      if (mask_only) then
+        print*,"- WILL COMPUTE LANDMASK ONLY."
+      endif
+
+      if (trim(merge_file) /= "none") then
+        print*,"- WILL USE EXTERNAL LANDMASK FROM FILE: ", 
+     &          trim(merge_file)
+      endif
 
       call read_mdl_dims(mdl_grid_file, im, jm)
          
-      CALL TERSUB(IMN,JMN,IM,JM,EFAC,
-     &            MDL_GRID_FILE,MASK_ONLY,MERGE_FILE)
-      STOP
-      END
+      call tersub(imn,jmn,im,jm,efac,
+     &            mdl_grid_file,mask_only,merge_file)
+
+      print*,"- NORMAL TERMINATION."
+
+      stop
+      end
 
 !> Driver routine to compute terrain.
 !!
@@ -130,8 +142,6 @@ C
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
-
-      print *,' In TERSUB'
 
       tbeg1=timef()
       tbeg=timef()
@@ -188,7 +198,7 @@ C
      &     geolat,geolat_c,dx,dy,is_north_pole,is_south_pole)
 
       tend=timef()
-      write(6,*)' Timer 1 time= ',tend-tbeg
+      print*,"- TIMING: READING INPUT DATA ",tend-tbeg
                                 !
       tbeg=timef()
 
@@ -208,7 +218,7 @@ C
 
         DEALLOCATE(ZAVG, ZSLM, SLM, LAND_FRAC, LAKE_FRAC)
         DEALLOCATE(GEOLON, GEOLON_C, GEOLAT, GEOLAT_C)
-        print*,' DONE.'
+        print*,' NORMAL TERMINATION.'
         STOP
       END IF
 
@@ -218,12 +228,12 @@ C
      &     IM,JM,IMN,JMN,geolon_c,geolat_c,lake_frac,land_frac)
 
       tend=timef()
-      write(6,*)' MAKEMT2 time= ',tend-tbeg
+      print*,"- TIMING: MASK AND OROG CREATION ", tend-tbeg
 
-      call minmxj(IM,JM,ORO,'     ORO')
-      call minmxj(IM,JM,SLM,'     SLM')
-      call minmxj(IM,JM,VAR,'     VAR')
-      call minmxj(IM,JM,VAR4,'    VAR4')
+      call minmxj(IM,JM,ORO,'ORO     ')
+      call minmxj(IM,JM,SLM,'SLM     ')
+      call minmxj(IM,JM,VAR,'VAR     ')
+      call minmxj(IM,JM,VAR4,'VAR4    ')
  
 ! Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
  
@@ -234,11 +244,11 @@ C
      1            IM,JM,IMN,JMN,geolon_c,geolat_c,SLM)
       tend=timef()
 
-      write(6,*)' MAKEPC2 time= ',tend-tbeg
+      print*,"- TIMING: CREATE PRINCIPLE COORDINATE ",tend-tbeg
 
-      call minmxj(IM,JM,THETA,'   THETA')
-      call minmxj(IM,JM,GAMMA,'   GAMMA')
-      call minmxj(IM,JM,SIGMA,'   SIGMA')
+      call minmxj(IM,JM,THETA,'THETA   ')
+      call minmxj(IM,JM,GAMMA,'GAMMA   ')
+      call minmxj(IM,JM,SIGMA,'SIGMA   ')
  
 ! COMPUTE MOUNTAIN DATA : OA OL
  
@@ -247,14 +257,14 @@ C
        allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
        allocate (WORK5(IM,JM),WORK6(IM,JM))
 
-       print*, "calling MAKEOA2 to compute OA, OL"
        tbeg=timef()
        CALL MAKEOA2(ZAVG,zslm,VAR,OA,OL,IWORK,ELVMAX,ORO,
      1            WORK1,WORK2,WORK3,WORK4,WORK5,WORK6,
      2            IM,JM,IMN,JMN,geolon_c,geolat_c,
      3            geolon,geolat,dx,dy,is_south_pole,is_north_pole)
        tend=timef()
-       write(6,*)' MAKEOA2 time= ',tend-tbeg
+
+       print*,"- TIMING: CREATE ASYMETRY AND LENGTH SCALE ",tend-tbeg
 
 !      Deallocate 2d vars
        deallocate (ZSLM,ZAVG)
@@ -265,10 +275,10 @@ C
        deallocate(IWORK)
 
        tbeg=timef()
-       call minmxj(IM,JM,OA,'      OA')
-       call minmxj(IM,JM,OL,'      OL')
-       call minmxj(IM,JM,ELVMAX,'  ELVMAX')
-       call minmxj(IM,JM,ORO,'     ORO')
+       call minmxj(IM,JM,OA,'OA      ')
+       call minmxj(IM,JM,OL,'OL      ')
+       call minmxj(IM,JM,ELVMAX,'ELVMAX  ')
+       call minmxj(IM,JM,ORO,'ORO     ')
 
        print *,' ===> Replacing ELVMAX with ELVMAX-ORO <=== ' 
        print *,' ===> if ELVMAX<=ORO replace with proxy <=== ' 
@@ -284,7 +294,7 @@ C---  subtracting off ORO leaves std dev (this should never happen)
       ENDDO
       ENDDO
  
-      call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
+      call mnmxja(IM,JM,ELVMAX,itest,jtest,'ELVMAX  ')
  
 ! ZERO FIELDS OVER OCEAN
  
@@ -311,36 +321,13 @@ C           ELVMAX(I,J)=0.
           ENDIF
        ENDDO
       ENDDO
-C
+ 
       IF (MERGE_FILE == 'none') then
 
-
-      call remove_isolated_pts(im,jm,slm,oro,var,var4,oa,ol)
-
-C--- print for testing after isolated points removed
-      print *,' after isolated points removed'
-       call minmxj(IM,JM,ORO,'     ORO')
-      print *,' ORO(itest,jtest)=',oro(itest,jtest)
-      print *,' VAR(itest,jtest)=',var(itest,jtest)
-      print *,' VAR4(itest,jtest)=',var4(itest,jtest)
-      print *,' OA(itest,jtest,1)=',oa(itest,jtest,1)
-      print *,' OA(itest,jtest,2)=',oa(itest,jtest,2)
-      print *,' OA(itest,jtest,3)=',oa(itest,jtest,3)
-      print *,' OA(itest,jtest,4)=',oa(itest,jtest,4)
-      print *,' OL(itest,jtest,1)=',ol(itest,jtest,1)
-      print *,' OL(itest,jtest,2)=',ol(itest,jtest,2)
-      print *,' OL(itest,jtest,3)=',ol(itest,jtest,3)
-      print *,' OL(itest,jtest,4)=',ol(itest,jtest,4)
-      print *,' Testing at point (itest,jtest)=',itest,jtest
-      print *,' THETA(itest,jtest)=',theta(itest,jtest)
-      print *,' GAMMA(itest,jtest)=',GAMMA(itest,jtest)
-      print *,' SIGMA(itest,jtest)=',SIGMA(itest,jtest)
-      print *,' ELVMAX(itest,jtest)=',ELVMAX(itest,jtest)
-      print *,' EFAC=',EFAC
+        call remove_isolated_pts(im,jm,slm,oro,var,var4,oa,ol)
 
       endif
 
-C
       allocate(hprime(im,jm,14))
 
       DO J=1,JM
@@ -362,19 +349,19 @@ C
           HPRIME(I,J,14)= ELVMAX(I,J)
         ENDDO
       ENDDO
-!
+ 
       deallocate(VAR4)
       deallocate (WORK1)
 
-      call mnmxja(IM,JM,ELVMAX,itest,jtest,'  ELVMAX')
-      call minmxj(IM,JM,ORO,'     ORO')
+      call mnmxja(IM,JM,ELVMAX,itest,jtest,'ELVMAX  ')
+      call minmxj(IM,JM,ORO,'ORO     ')
 
       print *,' ORO(itest,jtest),itest,jtest:',
      &          ORO(itest,jtest),itest,jtest
       print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
 
       tend=timef()
-      write(6,*)' Timer 5 time= ',tend-tbeg
+      print*,"- TIMING: FINAL QUALITY CONTROL ", tend-tbeg
 
       allocate(xlat(jm), xlon(im))
       do j = 1, jm
@@ -388,7 +375,7 @@ C
       CALL WRITE_NETCDF(IM,JM,SLM,land_frac,ORO,HPRIME,1,1,
      1                  GEOLON(1:IM,1:JM),GEOLAT(1:IM,1:JM), XLON,XLAT)
       tend=timef()
-      write(6,*)' WRITE_NETCDF time= ',tend-tbeg
+      print*,"- TIMING: WRITE OUTPUT FILE ", tend-tbeg
 
       print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
@@ -398,8 +385,9 @@ C
       deallocate (THETA,GAMMA,SIGMA,ELVMAX,HPRIME)
 
       tend=timef()
-      write(6,*)' Total runtime time= ',tend-tbeg1
-      RETURN
+      print*,"- TIMING: TOTAL RUNTIME ", tend-tbeg1
+
+      return
       END SUBROUTINE TERSUB
 
 !> Determine the location of a cubed-sphere point within
@@ -527,7 +515,7 @@ C
       real    XNSUM_ALL,XLAND_ALL,XWATR_ALL
       logical inside_a_polygon
 C
-      print *,' _____ SUBROUTINE MAKE_MASK '
+      print *,'- CREATE LANDMASK AND LAND FRACTION.'
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
       JM1 = JM - 1
@@ -617,13 +605,11 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
        ENDDO
       ENDDO
 !$omp end parallel do
-      WRITE(6,*) "! MAKE_MASK DONE"
-C
+ 
       RETURN
       END SUBROUTINE MAKE_MASK
-!> Create the orography, land-mask, land fraction, standard 
-!! deviation of orography and the convexity on a model 
-!! cubed-sphere tile. This routine is used for the FV3GFS model.
+!> Create the orography, standard deviation of orography
+!! and the convexity on a model tile.
 !!
 !! @param[in] zavg The high-resolution input orography dataset.
 !! @param[in] zslm The high-resolution input land-mask dataset.
@@ -663,7 +649,7 @@ C
       real    XL1_ALL,XS1_ALL,XW1_ALL,XW2_ALL,XW4_ALL
       logical inside_a_polygon
 C
-      print *,' _____ SUBROUTINE MAKEMT2 '
+      print*,'- CREATE OROGRAPHY AND CONVEXITY.'
       allocate(hgt_1d(MAXSUM))
       allocate(hgt_1d_all(MAXSUM))
 C---- GLOBAL XLAT AND XLON ( DEGREE )
@@ -835,8 +821,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
        ENDDO
       ENDDO
 !$omp end parallel do
-      WRITE(6,*) "! MAKEMT2 ORO SLM VAR VAR4 DONE"
-C
+ 
       deallocate(hgt_1d)
       deallocate(hgt_1d_all)
       RETURN
@@ -888,13 +873,13 @@ C
 C===  DATA DEBUG/.TRUE./
       DATA DEBUG/.FALSE./
 C
+      print*,"- CREATE PRINCIPLE COORDINATES."
       PI = 4.0 * ATAN(1.0)
       CERTH = PI * REARTH
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
       DELXN = 360./IMN      ! MOUNTAIN DATA RESOLUTION
       DELTAY =  CERTH / FLOAT(JMN)
-      print *, 'MAKEPC2: DELTAY=',DELTAY
 C
       DO J=1,JMN
          GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
@@ -1085,8 +1070,7 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
         ENDDO ILOOP
       ENDDO JLOOP
 !$omp end parallel do
-      WRITE(6,*) "! MAKE Principal Coord  DONE"
-C
+ 
       RETURN
       END SUBROUTINE MAKEPC2
       
@@ -1200,6 +1184,8 @@ C
       real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
       real    get_lon_angle, get_lat_angle, get_xnsum
       integer jst, jen
+
+      print*,"- CREATE ASYMETRY AND LENGTH SCALE."
 C   
 C---- GLOBAL XLAT AND XLON ( DEGREE )
 C
@@ -1208,7 +1194,7 @@ C
       DO J=1,JMN
          GLAT(J) = -90. + (J-1) * DELXN + DELXN * 0.5
       ENDDO
-      print *,' IM=',IM,' JM=',JM,' IMN=',IMN,' JMN=',JMN
+      print*,'- IM=',IM,' JM=',JM,' IMN=',IMN,' JMN=',JMN
 C
 C---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
 C
@@ -1545,9 +1531,7 @@ C
       ENDDO
       ENDDO
       ENDDO
-C
-      WRITE(6,*) "! MAKEOA2 EXIT"
-C
+ 
       RETURN
 
       END SUBROUTINE MAKEOA2
@@ -1578,8 +1562,8 @@ csela....................................................
         if(A(i,j).le.rmin)rmin=A(i,j)
       ENDDO
       ENDDO
-      write(6,150)rmin,rmax,title
-150   format('- MIN=',e13.4,2x,'MAX=',e13.4,2x,a8,' ')
+      write(6,150) title,rmin,rmax
+150   format(' - ',a8,' MIN=',e13.4,2x,'MAX=',e13.4)
  
       RETURN
       END SUBROUTINE minmxj
@@ -1617,8 +1601,8 @@ csela....................................................
         if(A(i,j).le.rmin)rmin=A(i,j)
       ENDDO
       ENDDO
-      write(6,150)rmin,rmax,title
-150   format('rmin=',e13.4,2x,'rmax=',e13.4,2x,a8,' ')
+      write(6,150) title,rmin,rmax
+150   format(' - ',a8,' MIN=',e13.4,2x,'MAX=',e13.4)
 C
       RETURN
       END SUBROUTINE mnmxja
