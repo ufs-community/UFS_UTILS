@@ -45,7 +45,6 @@
 
     dim1=size(lon,1)
     dim2=size(lat,1)
-    write(6,*) ' netcdf dims are: ',dim1, dim2
       
     !--- open the file
     error = NF__CREATE(outfile, IOR(NF_NETCDF4,NF_CLASSIC_MODEL), inital, fsize, ncid)
@@ -263,7 +262,6 @@
 
     dim1=im
     dim2=jm
-    write(6,*) ' netcdf dims are: ',dim1, dim2
       
     !--- open the file
     error = NF__CREATE(outfile, IOR(NF_NETCDF4,NF_CLASSIC_MODEL), inital, fsize, ncid)
@@ -348,7 +346,7 @@
 
   fsize = 66536
 
-  print*, "merge_file=", trim(merge_file)
+  print*,'- READ IN EXTERNAL LANDMASK FILE: ',trim(merge_file)
   error=NF__OPEN(merge_file,NF_NOWRITE,fsize,ncid)
   call netcdf_err(error, 'Open file '//trim(merge_file) )
 
@@ -357,24 +355,17 @@
   error=nf_get_var_double(ncid, id_var, land_frac)
   call netcdf_err(error, 'inquire data of land_frac')
 
-  print*,'land_frac ',maxval(land_frac),minval(land_frac)
-
   error=nf_inq_varid(ncid, 'slmsk', id_var)
   call netcdf_err(error, 'inquire varid of slmsk')
   error=nf_get_var_double(ncid, id_var, slm)
   call netcdf_err(error, 'inquire data of slmsk')
-
-  print*,'slmsk ',maxval(slm),minval(slm)
 
   error=nf_inq_varid(ncid, 'lake_frac', id_var)
   call netcdf_err(error, 'inquire varid of lake_frac')
   error=nf_get_var_double(ncid, id_var, lake_frac)
   call netcdf_err(error, 'inquire data of lake_frac')
 
-  print*,'lake_frac ',maxval(lake_frac),minval(lake_frac)
-
   error = nf_close(ncid) 
-  print*,'bot of read_mask'
 
   end subroutine read_mask
 
@@ -397,7 +388,7 @@
 
   fsize = 66536
 
-  print*, "- OPEN AND READ= ", trim(mdl_grid_file)
+  print*, "- READ MDL GRID DIMENSIONS FROM= ", trim(mdl_grid_file)
 
   error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
   call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )

@@ -207,7 +207,6 @@ C
      &       IM,JM,IMN,JMN,geolon_c,geolat_c)
         lake_frac=9999.9
       ELSE
-        print*,'- READ IN EXTERNAL LANDMASK FILE: ',trim(merge_file)
         CALL READ_MASK(MERGE_FILE,SLM,land_frac,lake_frac,im,jm)
       ENDIF
 
@@ -218,7 +217,7 @@ C
 
         DEALLOCATE(ZAVG, ZSLM, SLM, LAND_FRAC, LAKE_FRAC)
         DEALLOCATE(GEOLON, GEOLON_C, GEOLAT, GEOLAT_C)
-        print*,' NORMAL TERMINATION.'
+        print*,'- NORMAL TERMINATION.'
         STOP
       END IF
 
@@ -280,23 +279,24 @@ C
        call minmxj(IM,JM,ELVMAX,'ELVMAX  ')
        call minmxj(IM,JM,ORO,'ORO     ')
 
-       print *,' ===> Replacing ELVMAX with ELVMAX-ORO <=== ' 
-       print *,' ===> if ELVMAX<=ORO replace with proxy <=== ' 
-       print *,' ===> the sum of mean orog (ORO) and std dev <=== ' 
+!  Replace maximum elevation with max elevation minus orography.
+!  If maximum elevation is less than the orography, replace with
+!  a proxy.
+
+      print*,"- QC MAXIMUM ELEVATION."
       DO J = 1,JM
       DO I = 1,IM
         if (ELVMAX(I,J) .lt. ORO(I,J) ) then
-C---  subtracting off ORO leaves std dev (this should never happen)
-       ELVMAX(I,J) = MAX(  3. * VAR(I,J),0.)
+          ELVMAX(I,J) = MAX(  3. * VAR(I,J),0.)
         else
-       ELVMAX(I,J) = MAX( ELVMAX(I,J) - ORO(I,J),0.)
+          ELVMAX(I,J) = MAX( ELVMAX(I,J) - ORO(I,J),0.)
         endif
       ENDDO
       ENDDO
  
       call mnmxja(IM,JM,ELVMAX,itest,jtest,'ELVMAX  ')
  
-! ZERO FIELDS OVER OCEAN
+      print*,"- ZERO FIELDS OVER OCEAN."
  
       DO J = 1,JM
         DO I = 1,IM
@@ -356,9 +356,9 @@ C           ELVMAX(I,J)=0.
       call mnmxja(IM,JM,ELVMAX,itest,jtest,'ELVMAX  ')
       call minmxj(IM,JM,ORO,'ORO     ')
 
-      print *,' ORO(itest,jtest),itest,jtest:',
+      print *,'- ORO(itest,jtest),itest,jtest:',
      &          ORO(itest,jtest),itest,jtest
-      print *,' ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
+      print *,'- ELVMAX(',itest,jtest,')=',ELVMAX(itest,jtest)
 
       tend=timef()
       print*,"- TIMING: FINAL QUALITY CONTROL ", tend-tbeg
@@ -376,8 +376,6 @@ C           ELVMAX(I,J)=0.
      1                  GEOLON(1:IM,1:JM),GEOLAT(1:IM,1:JM), XLON,XLAT)
       tend=timef()
       print*,"- TIMING: WRITE OUTPUT FILE ", tend-tbeg
-
-      print *,' ===== Deallocate Arrays and ENDING MTN VAR OROG program'
 
       deallocate(XLAT,XLON)
       deallocate (GEOLON,GEOLON_C,GEOLAT,GEOLAT_C)
@@ -450,7 +448,9 @@ C           ELVMAX(I,J)=0.
             ien = IMN+1
             do i2 = 1, npts
                ii = LONO(i2)/DELXN+1
-               if(ii <0 .or. ii>IMN) print*,"ii=",ii,IMN,LONO(i2),DELXN
+               if(ii <0 .or. ii>IMN) then
+                 print*,"- II=",ii,IMN,LONO(i2),DELXN
+               endif
                if( ii < IMN/2 ) then
                   ist = max(ist,ii)
                else if( ii > IMN/2 ) then
@@ -539,7 +539,6 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 !$omp*          xnsum_all,xland_all,xwatr_all,nsum_all)
 !$omp*          
       DO J=1,JM
-!       print*, "J=", J
        DO I=1,IM
          XNSUM = 0.0
          XLAND = 0.0
@@ -677,7 +676,6 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 !$omp*          xl1_all,xs1_all,xw1_all,xw2_all,xw4_all,
 !$omp*          height_all,hgt_1d_all)
       DO J=1,JM
-!       print*, "J=", J
        DO I=1,IM
          ORO(I,J)  = 0.0
          VAR(I,J)  = 0.0
@@ -897,7 +895,6 @@ C
 !$omp*          loni,lati,i0,ip1,hi0,hip1,hj0,hjp1,ijax,
 !$omp*          hijax,hi1j1,lono_rad,lato_rad)
       JLOOP : DO J=1,JM
-!        print*, "J=", J
         ILOOP : DO I=1,IM
           HX2(I,J) = 0.0
           HY2(I,J) = 0.0
@@ -989,7 +986,6 @@ C.......        yfp = yfp + 0.5 * ( ( 0.5 * ( hijax + hi1j1) ) - hi1j1 )/DELTAY
 C
 C ===     the SH pole: NB J1 goes from High at NP to Low toward SP
 C
-!RAB                 elseif ( J1 .eq. JEN(JM) ) then
                  elseif ( J1 .eq. JMN ) then
 		  ijax = i1 + imn/2 
                   if (ijax .le. 0 )   ijax = ijax + imn
@@ -998,8 +994,6 @@ C
                   hi1j1 = float(zavg(i1,j1))
                   if(hijax  .lt. -990.)  hijax = 0.0
                   if(hi1j1  .lt. -990.)  hi1j1 = 0.0
-                  if ( i1 .lt. 5 )print *,' S.Pole i1,j1 :',i1,j1,
-     &                      hijax,hi1j1
 C.....        yfp = yfp + 0.5 *  (0.5 * ( hijax - hi1j1) )/DELTAY  
         yfp = 0.5 *  (0.5 * ( hijax - hi1j1) )/DELTAY  
         yfp2 = yfp2 + 0.25 * (  (0.5 * (hijax - hi1j1) )
@@ -1221,7 +1215,6 @@ C     IN A GRID BOX
 !$omp* private (j,i,hc,lono,lato,jst,jen,ilist,numx,j1,ii1,i1,loni,
 !$omp*          lati,height,lono_rad,lato_rad)
       DO J=1,JM
-!        print*, "J=", J 
         DO I=1,IM
           HC = 1116.2 - 0.878 * VAR(I,J) 
           LONO(1) = lon_c(i,j) 
@@ -1287,20 +1280,19 @@ C
 !$omp*          hc_12,xnsum1_21,xnsum2_21,hc_21, xnsum1_22,
 !$omp*          xnsum2_22,hc_22)
       DO J=1,JM
-!       print*, "j = ", j
         DO I=1,IM
           lon = lon_t(i,j)
           lat = lat_t(i,j)
           !--- for around north pole, oa and ol are all 0
           
           if(is_north_pole(i,j)) then
-             print*, "set oa1 = 0 and ol=0 at i,j=", i,j
+             print*, "- SET OA1 = 0 AND OL=0 AT I,J=", i,j
              do kwd = 1, 4
                   oa4(i,j,kwd) = 0.
                   ol(i,j,kwd) = 0.
              enddo
           else if(is_south_pole(i,j)) then
-             print*, "set oa1 = 0 and ol=1 at i,j=", i,j
+             print*, "- SET OA1 = 0 AND OL=1 AT I,J=", i,j
              do kwd = 1, 4
                 oa4(i,j,kwd) = 0.
                 ol(i,j,kwd) = 1.
@@ -1312,15 +1304,15 @@ C
           dlat = get_lat_angle(dy(i,j), R2D)
           !--- adjust dlat if the points are close to pole.
           if( lat-dlat*0.5<-90.) then
-             print*, "at i,j =", i,j, lat, dlat, lat-dlat*0.5
+             print*, "- AT I,J =", i,j, lat, dlat, lat-dlat*0.5
              print*, "FATAL ERROR: lat-dlat*0.5<-90."
              call ERREXIT(4)
           endif
           if( lat+dlat*2 > 90.) then
              dlat_old = dlat
              dlat = (90-lat)*0.5
-             print*, "at i,j=",i,j," adjust dlat from ",
-     &              dlat_old, " to ", dlat
+             print*, "- AT I,J=",i,j," ADJUST DLAT FROM ",
+     &              dlat_old, " TO ", dlat
           endif   
           !--- lower left 
           lon1 = lon-dlon*1.5
@@ -1329,7 +1321,7 @@ C
           lat2 = lat+dlat*0.5
 
           if(lat1<-90 .or. lat2>90) then
-             print*, "at upper left i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT UPPER LEFT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           xnsum11 = get_xnsum(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,zslm,delxn)          
@@ -1340,7 +1332,7 @@ C
           lat1 = lat+dlat*0.5
           lat2 = lat+dlat*1.5
           if(lat1<-90 .or. lat2>90) then
-             print*, "at lower left i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT LOWER LEFT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           xnsum12 = get_xnsum(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,zslm,delxn)          
@@ -1351,7 +1343,7 @@ C
           lat1 = lat-dlat*0.5
           lat2 = lat+dlat*0.5
           if(lat1<-90 .or. lat2>90) then
-             print*, "at upper right i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT UPPER RIGHT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           xnsum21 = get_xnsum(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,zslm,delxn)          
@@ -1362,7 +1354,7 @@ C
           lat1 = lat+dlat*0.5
           lat2 = lat+dlat*1.5
           if(lat1<-90 .or. lat2>90) then
-             print*, "at lower right i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT LOWER RIGHT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           
           xnsum22 = get_xnsum(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
@@ -1392,7 +1384,7 @@ C
           lat1 = lat-dlat*0.5
           lat2 = lat+dlat*0.5
           if(lat1<-90 .or. lat2>90) then
-             print*, "at upper left i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT UPPER LEFT I=,J=", i, j, lat, dlat,lat1,lat2
           endif          
           call get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,delxn, xnsum1_11, xnsum2_11, HC_11)          
@@ -1403,7 +1395,7 @@ C
           lat1 = lat+dlat*0.5
           lat2 = lat+dlat*1.5
           if(lat1<-90 .or. lat2>90) then
-             print*, "at lower left i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT LOWER LEFT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           call get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,delxn, xnsum1_12, xnsum2_12, HC_12)          
@@ -1414,7 +1406,7 @@ C
           lat1 = lat-dlat*0.5
           lat2 = lat+dlat*0.5
           if(lat1<-90 .or. lat2>90) then
-             print*, "at upper right i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT UPPER RIGHT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           call get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,delxn, xnsum1_21, xnsum2_21, HC_21)          
@@ -1425,7 +1417,7 @@ C
           lat1 = lat+dlat*0.5
           lat2 = lat+dlat*1.5
           if(lat1<-90 .or. lat2>90) then
-             print*, "at lower right i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT LOWER RIGHT I=,J=", i, j, lat, dlat,lat1,lat2
           endif          
           call get_xnsum2(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,delxn, xnsum1_22, xnsum2_22, HC_22)           
@@ -1440,7 +1432,7 @@ C
           lat1 = lat
           lat2 = lat+dlat
           if(lat1<-90 .or. lat2>90) then
-             print*, "at upper left i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT UPPER LEFT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           call get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,delxn, xnsum1_11, xnsum2_11, HC_11)          
@@ -1451,7 +1443,7 @@ C
           lat1 = lat+dlat
           lat2 = lat+dlat*2.0
           if(lat1<-90 .or. lat2>90) then
-             print*, "at lower left i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT LOWER LEFT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           
           call get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
@@ -1463,7 +1455,7 @@ C
           lat1 = lat
           lat2 = lat+dlat
           if(lat1<-90 .or. lat2>90) then
-             print*, "at upper right i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT UPPER RIGHT I=,J=", i, j, lat, dlat,lat1,lat2
           endif          
           call get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
      &     zavg,delxn, xnsum1_21, xnsum2_21, HC_21)          
@@ -1474,7 +1466,7 @@ C
           lat1 = lat+dlat
           lat2 = lat+dlat*2.0
           if(lat1<-90 .or. lat2>90) then
-             print*, "at lower right i=,j=", i, j, lat, dlat,lat1,lat2
+             print*, "- AT LOWER RIGHT I=,J=", i, j, lat, dlat,lat1,lat2
           endif
           
           call get_xnsum3(lon1,lat1,lon2,lat2,IMN,JMN,GLAt,
@@ -2439,9 +2431,12 @@ C
       real                      :: slma, oroa, vara, var4a, xn, xs
       real, allocatable         :: oaa(:), ola(:)
 
+!  REMOVE ISOLATED POINTS
+
+      print*,"- REMOVE ISOLATED POINTS."
+
       allocate (oaa(4),ola(4))
 
-C  REMOVE ISOLATED POINTS
       iso_loop : DO J=2,JM-1
         JN=J-1
         JS=J+1
@@ -2520,8 +2515,8 @@ C  REMOVE ISOLATED POINTS
             OLA(K)=OLA(K)/WGTA
           ENDDO
           IF(SLM(I,J).EQ.0..AND.SLMA.EQ.WGTA) THEN
-            PRINT '("SEA ",2F8.0," MODIFIED TO LAND",2F8.0," AT ",2I8)',
-     &       ORO(I,J),VAR(I,J),OROA,VARA,I,J
+            PRINT '(" - SEA ",2F8.0," MODIFIED TO LAND",2F8.0,
+     &              " AT ",2I8)',ORO(I,J),VAR(I,J),OROA,VARA,I,J
             SLM(I,J)=1.
             ORO(I,J)=OROA
             VAR(I,J)=VARA
@@ -2531,8 +2526,8 @@ C  REMOVE ISOLATED POINTS
               OL(I,J,K)=OLA(K)
             ENDDO
           ELSEIF(SLM(I,J).EQ.1..AND.SLMA.EQ.0.) THEN
-            PRINT '("LAND",2F8.0," MODIFIED TO SEA ",2F8.0," AT ",2I8)',
-     &       ORO(I,J),VAR(I,J),OROA,VARA,I,J
+            PRINT '(" - LAND",2F8.0," MODIFIED TO SEA ",2F8.0,
+     &              " AT ",2I8)',ORO(I,J),VAR(I,J),OROA,VARA,I,J
             SLM(I,J)=0.
             ORO(I,J)=OROA
             VAR(I,J)=VARA
