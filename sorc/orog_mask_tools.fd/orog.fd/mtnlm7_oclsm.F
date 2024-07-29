@@ -1635,30 +1635,6 @@ C
       return
       end subroutine read_global_orog
 
-!> Convert from latitude and longitude to x,y,z coordinates.
-!!
-!! @param[in] siz Number of points to convert.
-!! @param[in] lon Longitude of points to convert.
-!! @param[in] lat Latitude of points to convert.
-!! @param[out] x 'x' coordinate of the converted points.
-!! @param[out] y 'y' coordinate of the converted points.
-!! @param[out] z 'z' coordinate of the converted points.
-!! @author GFDL programmer
-      subroutine latlon2xyz(siz,lon, lat, x, y, z)
-      implicit none
-      integer, intent(in) :: siz
-      real, intent(in) :: lon(siz), lat(siz)
-      real, intent(out) :: x(siz), y(siz), z(siz)
-      
-      integer n
-
-      do n = 1, siz
-        x(n) = cos(lat(n))*cos(lon(n))
-        y(n) = cos(lat(n))*sin(lon(n))
-        z(n) = sin(lat(n))
-      enddo
-      end subroutine latlon2xyz
-
 !> Compute spherical angle.
 !!
 !! @param[in] v1 Vector 1.
@@ -1717,6 +1693,7 @@ C
 !! the polygon.
 !! @author GFDL programmer
       FUNCTION inside_a_polygon(lon1, lat1, npts, lon2, lat2)
+        use orog_utils, only : latlon2xyz
         implicit none
         real, parameter :: EPSLN10 = 1.e-10
         real, parameter :: EPSLN8 = 1.e-8
