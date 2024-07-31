@@ -121,6 +121,9 @@ C> @return 0 for success, error code otherwise.
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,EFAC,
      &     OUTGRID,MASK_ONLY,EXTERNAL_MASK_FILE)
+
+      use orog_utils, only : minmax
+
       implicit none
       include 'netcdf.inc'
 C
@@ -242,10 +245,10 @@ C
       tend=timef()
       print*,"- TIMING: MASK AND OROG CREATION ", tend-tbeg
 
-      call minmxj(IM,JM,ORO,'ORO     ')
-      call minmxj(IM,JM,SLM,'SLM     ')
-      call minmxj(IM,JM,VAR,'VAR     ')
-      call minmxj(IM,JM,VAR4,'VAR4    ')
+      call minmax(IM,JM,ORO,'ORO     ')
+      call minmax(IM,JM,SLM,'SLM     ')
+      call minmax(IM,JM,VAR,'VAR     ')
+      call minmax(IM,JM,VAR4,'VAR4    ')
  
 ! Compute mtn principal coord HTENSR: THETA,GAMMA,SIGMA
  
@@ -258,9 +261,9 @@ C
 
       print*,"- TIMING: CREATE PRINCIPLE COORDINATE ",tend-tbeg
 
-      call minmxj(IM,JM,THETA,'THETA   ')
-      call minmxj(IM,JM,GAMMA,'GAMMA   ')
-      call minmxj(IM,JM,SIGMA,'SIGMA   ')
+      call minmax(IM,JM,THETA,'THETA   ')
+      call minmax(IM,JM,GAMMA,'GAMMA   ')
+      call minmax(IM,JM,SIGMA,'SIGMA   ')
  
 ! COMPUTE MOUNTAIN DATA : OA OL
  
@@ -287,10 +290,10 @@ C
        deallocate(IWORK)
 
        tbeg=timef()
-       call minmxj(IM,JM,OA,'OA      ')
-       call minmxj(IM,JM,OL,'OL      ')
-       call minmxj(IM,JM,ELVMAX,'ELVMAX  ')
-       call minmxj(IM,JM,ORO,'ORO     ')
+       call minmax(IM,JM,OA,'OA      ')
+       call minmax(IM,JM,OL,'OL      ')
+       call minmax(IM,JM,ELVMAX,'ELVMAX  ')
+       call minmax(IM,JM,ORO,'ORO     ')
 
 !  Replace maximum elevation with max elevation minus orography.
 !  If maximum elevation is less than the orography, replace with
@@ -307,7 +310,7 @@ C
       ENDDO
       ENDDO
  
-      call mnmxja(IM,JM,ELVMAX,itest,jtest,'ELVMAX  ')
+      call minmax(IM,JM,ELVMAX,'ELVMAX  ',itest,jtest)
  
       print*,"- ZERO FIELDS OVER OCEAN."
  
@@ -366,8 +369,8 @@ C           ELVMAX(I,J)=0.
       deallocate(VAR4)
       deallocate (WORK1)
 
-      call mnmxja(IM,JM,ELVMAX,itest,jtest,'ELVMAX  ')
-      call minmxj(IM,JM,ORO,'ORO     ')
+      call minmax(IM,JM,ELVMAX,'ELVMAX  ',itest,jtest)
+      call minmax(IM,JM,ORO,'ORO     ')
 
       print *,'- ORO(itest,jtest),itest,jtest:',
      &          ORO(itest,jtest),itest,jtest
@@ -1541,77 +1544,6 @@ C
 
       END SUBROUTINE MAKEOA2
  
-!> Print out the maximum and minimum values of
-!! an array.
-!!
-!! @param[in] im The 'i' dimension of the array.
-!! @param[in] jm The 'i' dimension of the array.
-!! @param[in] a The array to check.
-!! @param[in] title Name of the data to be checked.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE minmxj(IM,JM,A,title)
-      implicit none
-
-      real A(IM,JM),rmin,rmax
-      integer i,j,IM,JM
-      character*8 title
-
-      rmin=1.e+10
-      rmax=-rmin
-csela....................................................
-csela if(rmin.eq.1.e+10)return
-csela....................................................
-      DO j=1,JM
-      DO i=1,IM
-        if(A(i,j).ge.rmax)rmax=A(i,j)
-        if(A(i,j).le.rmin)rmin=A(i,j)
-      ENDDO
-      ENDDO
-      write(6,150) title,rmin,rmax
-150   format(' - ',a8,' MIN=',e13.4,2x,'MAX=',e13.4)
- 
-      RETURN
-      END SUBROUTINE minmxj
-
-!> Print out the maximum and minimum values of
-!! an array. Pass back the i/j location of the
-!! maximum value.
-!!
-!! @param[in] im The 'i' dimension of the array.
-!! @param[in] jm The 'i' dimension of the array.
-!! @param[in] a The array to check.
-!! @param[out] imax 'i' location of maximum
-!! @param[out] jmax 'j' location of maximum
-!! @param[in] title Name of the data to be checked.
-!! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE mnmxja(IM,JM,A,imax,jmax,title)
-      implicit none
-
-      real A(IM,JM),rmin,rmax
-      integer i,j,IM,JM,imax,jmax
-      character*8 title
-
-      rmin=1.e+10
-      rmax=-rmin
-csela....................................................
-csela if(rmin.eq.1.e+10)return
-csela....................................................
-      DO j=1,JM
-      DO i=1,IM
-        if(A(i,j).ge.rmax)then
-                         rmax=A(i,j)
-                        imax=i
-                        jmax=j
-        endif
-        if(A(i,j).le.rmin)rmin=A(i,j)
-      ENDDO
-      ENDDO
-      write(6,150) title,rmin,rmax
-150   format(' - ',a8,' MIN=',e13.4,2x,'MAX=',e13.4)
-C
-      RETURN
-      END SUBROUTINE mnmxja
-
 !> Read input global 30-arc second orography data.
 !!
 !! @param[in] imn i-dimension of orography data.
