@@ -1,20 +1,38 @@
 C> @file
-C> Terrain maker for global spectral model.
+C> Terrain maker for the ufs weather model.
 C> @author Mark Iredell @date 92-04-16
   
-C> This program creates 7 terrain-related files computed from the
-C> GMTED2010 terrain dataset. The model physics grid parameters and
-C> spectral truncation and filter parameters are read by this program as
-C> input.
+C> This program creates landmask, land fraction, terrain and
+C> and fields required for the model's gravity wave drag 
+C> (GWD) scheme.
+C>
+C> Specifically:
+C>
+C> - Land mask (yes/no flag)
+C> - Land fraction
+C> - Terrain (orography)
+C> - Maximum elevation
+C> - Standard deviation of terrain
+C> - Convexity
+C> - Orographic Asymetry - W/S/SW/NW directional components.
+C> - Orographic Length Scale - W/S/SW/NW directional components.
+C> - Anisotropy
+C> - Slope of terrain
+C> - Angle of mountain range with respect to East.
 C>      
-C> The 7 files produced are:
-C> 1. sea-land mask on model physics grid
-C> 2. gridded orography on model physics grid
-C> 3. mountain std dev on model physics grid
-C> 4. spectral orography in spectral domain
-C> 5. unfiltered gridded orography on model physics grid
-C> 6. grib sea-land mask on model physics grid
-C> 7. grib gridded orography on model physics grid
+C> This program operates on a single cubed-sphere tile.
+C>
+C> Optionally, the program can compute and output only the
+C> land mask and land fraction. Or, it can read in the mask
+C> and fraction from an external file, then compute the 
+C> terrain and GWD fields using that mask. These options
+C> are used to support coupled (atm/oceann) runs of the UFS.
+C> The process is:
+C>   - Run this program and output the mask/fraction only.
+C>   - Adjust or merge the mask/fraction with the ocean
+C>     mask (using another program).
+C>   - Read in this 'merged' mask/fraction and compute the
+C>     terrain and GWD fields.
 C>
 C> PROGRAM HISTORY LOG:
 C> -  92-04-16  IREDELL
@@ -32,35 +50,28 @@ C>  - 04-09-04   minus sign here in MAKEOA IST and IEN as in MAKEMT!
 C>  - 05-09-05   if test on HK and HLPRIM for GAMMA SQRT
 C>  - 07-08-07   replace 8' with 30" incl GICE, conintue w/ S-Y. lake slm
 C>  - 08-08-07  All input 30", UMD option, and filter as described below
+C>  - 24-08-15  Remove old code used by spectral GFS.
 C>       
 C>   INPUT FILES:
-C>  -   UNIT5      - PHYSICS LONGITUDES (IM), PHYSICS LATITUDES (JM),
-C>                  SPECTRAL TRUNCATION (NM), RHOMBOIDAL FLAG (NR),
-C>                  AND FIRST AND SECOND FILTER PARAMETERS (NF0,NF1).
-C>                  RESPECTIVELY READ IN FREE FORMAT.
+C>  -   UNIT5      - PROGRAM CONTROL NAMELIST.
+C>  -   NCID       - MODEL 'GRID' FILE
 C>  -   NCID       - GMTED2010 USGS orography (NetCDF)
 C>  -   NCID       - 30" UMD land cover mask. (NetCDF)
-C>  -   NCID       - GICE Grumbine 30" RAMP Antarctica orog IMNx3601. (NetCDF)
+C>  -   NCID       - GICE Grumbine 30" RAMP Antarctica orog. (NetCDF)
+C>  -   NCID       - MERGE FILE. CONTAINS LAND MASK, FRACTION AND
+C>                   LAKE FRACTION THAT HAS BEEN MERGED WITH AN
+C>                   OCEAN GRID. (NetCDF)
 C>
-C>   OUTPUT FILES:
-C>  -   UNIT51     - SEA-LAND MASK (IM,JM)
-C>  -   UNIT52     - GRIDDED OROGRAPHY (IM,JM)
-C>  -   UNIT54     - SPECTRAL OROGRAPHY ((NM+1)*((NR+1)*NM+2))
-C>  -   UNIT55     - UNFILTERED GRIDDED OROGRAPHY (IM,JM)
-C>  -   UNIT57     - GRIB GRIDDED OROGRAPHY (IM,JM)
-C>
-C>   SUBPROGRAMS CALLED:
-C>  -   UNIQUE:
-C>  -   TERSUB     - MAIN SUBPROGRAM
-C>  -   SPLAT      - COMPUTE GAUSSIAN LATITUDES OR EQUALLY-SPACED LATITUDES
-C>  -   LIBRARY:
-C>  -   SPTEZ      - SPHERICAL TRANSFORM
+C>   OUTPUT FILES (ALL ON A SINGLE CUBED-SPHERE TILE) :
+C>  -   NCID       - OROGRAPHY FILE (NetCDF) IF MASK_ONLY=FALSE
+C>  -   NCID       - MASK FILE (NetCDF) IF MASK_ONLY=TRUE
+C>  -                CONTAINS ONLY LAND MASK AND FRACTION.
 C>
 C> @return 0 for success, error code otherwise.
       implicit none
 
       character(len=256)    :: mdl_grid_file = "none"
-      character(len=256)    :: merge_file = "none"
+      character(len=256)    :: external_mask_file = "none"
       integer               :: imn, jmn, im, jm, efac
       logical               :: mask_only = .false.
 
@@ -68,7 +79,7 @@ C> @return 0 for success, error code otherwise.
 
       read(5,*) mdl_grid_file
       read(5,*) mask_only
-      read(5,*) merge_file
+      read(5,*) external_mask_file
 
       efac = 0
       imn  = 360*120
@@ -78,15 +89,15 @@ C> @return 0 for success, error code otherwise.
         print*,"- WILL COMPUTE LANDMASK ONLY."
       endif
 
-      if (trim(merge_file) /= "none") then
+      if (trim(external_mask_file) /= "none") then
         print*,"- WILL USE EXTERNAL LANDMASK FROM FILE: ", 
-     &          trim(merge_file)
+     &          trim(external_mask_file)
       endif
 
       call read_mdl_dims(mdl_grid_file, im, jm)
          
       call tersub(imn,jmn,im,jm,efac,
-     &            mdl_grid_file,mask_only,merge_file)
+     &            mdl_grid_file,mask_only,external_mask_file)
 
       print*,"- NORMAL TERMINATION."
 
@@ -105,16 +116,17 @@ C> @return 0 for success, error code otherwise.
 !! When not specified, program will create fields from
 !! raw high-resolution topography data.
 !! @param[in] MASK_ONLY Flag to generate the Land Mask only
-!! @param[in] MERGE_FILE Ocean merge file 
+!! @param[in] EXTERNAL_MASK_FILE File containing an externally
+!! generated land mask/fraction.
 !! @author Jordan Alpert NOAA/EMC
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,EFAC,
-     &     OUTGRID,MASK_ONLY,MERGE_FILE)
+     &     OUTGRID,MASK_ONLY,EXTERNAL_MASK_FILE)
       implicit none
       include 'netcdf.inc'
 C
       integer                      :: IMN,JMN,IM,JM
       character(len=*), intent(in) :: OUTGRID
-      character(len=*), intent(in) :: MERGE_FILE
+      character(len=*), intent(in) :: EXTERNAL_MASK_FILE
 
       logical, intent(in) :: mask_only
 
@@ -202,12 +214,13 @@ C
                                 !
       tbeg=timef()
 
-      IF (MERGE_FILE == 'none') then
+      IF (EXTERNAL_MASK_FILE == 'none') then
         CALL MAKE_MASK(ZSLM,SLM,land_frac,
      &       IM,JM,IMN,JMN,geolon_c,geolat_c)
         lake_frac=9999.9
       ELSE
-        CALL READ_MASK(MERGE_FILE,SLM,land_frac,lake_frac,im,jm)
+        CALL READ_MASK(EXTERNAL_MASK_FILE,SLM,land_frac,
+     &       lake_frac,im,jm)
       ENDIF
 
       IF (MASK_ONLY) THEN
@@ -322,7 +335,7 @@ C           ELVMAX(I,J)=0.
        ENDDO
       ENDDO
  
-      IF (MERGE_FILE == 'none') then
+      IF (EXTERNAL_MASK_FILE == 'none') then
 
         call remove_isolated_pts(im,jm,slm,oro,var,var4,oa,ol)
 
