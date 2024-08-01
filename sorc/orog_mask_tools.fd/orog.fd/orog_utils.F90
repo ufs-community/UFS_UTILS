@@ -13,6 +13,7 @@
 
  public :: latlon2xyz
  public :: minmax
+ public :: get_lat_angle
 
  contains
 
@@ -96,5 +97,28 @@
  enddo
 
  end subroutine latlon2xyz
+
+!> Convert the 'y' direction distance of a cubed-sphere grid
+!! point to the corresponding distance in latitude.
+!!
+!! @param[in] dy Distance along the 'y' direction of a cubed-sphere
+!! point in meters.
+!! @return get_lat_angle Corresponding latitudinal distance in degrees.
+!!
+!! @author GFDL programmer
+
+ function get_lat_angle(dy)
+
+ implicit none
+
+ real, intent(in)   :: dy
+
+ real               :: get_lat_angle
+ real, parameter    :: earth_radius = 6371200 ! meters
+ real, parameter    :: rad2deg = 180./3.14159265358979
+
+ get_lat_angle = dy/earth_radius*rad2deg
+
+ end function get_lat_angle
 
  end module orog_utils

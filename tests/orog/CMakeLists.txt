@@ -17,3 +17,7 @@ target_link_libraries(ftst_ll2xyz orog_lib)
 add_executable(ftst_minmax ftst_minmax.F90)
 add_test(NAME orog-ftst_minmax COMMAND ftst_minmax)
 target_link_libraries(ftst_minmax orog_lib)
+
+add_executable(ftst_get_ll_angle ftst_get_ll_angle.F90)
+add_test(NAME orog-ftst_get_ll_angle COMMAND ftst_get_ll_angle)
+target_link_libraries(ftst_get_ll_angle orog_lib)

@@ -1103,25 +1103,6 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
          get_lon_angle = 2*asin( sin(dx/RADIUS*0.5)/cos(lat) )*DEGRAD
          
       end function get_lon_angle
-
-!> Convert the 'y' direction distance of a cubed-sphere grid
-!! point to the corresponding distance in latitude.
-!!
-!! @param[in] dy Distance along the 'y' direction of a cubed-sphere
-!! point.
-!! @param[in] degrad Conversion from radians to degrees.
-!! @return get_lat_angle Corresponding distance in latitude.
-!! @author GFDL programmer
-      function get_lat_angle(dy, DEGRAD)
-      implicit none
-      real dy, DEGRAD
-      
-      real get_lat_angle
-         real, parameter :: RADIUS = 6371200
-
-         get_lat_angle = dy/RADIUS*DEGRAD
-         
-      end function get_lat_angle
       
 !> Create orographic asymmetry and orographic length scale on
 !! the model grid.  This routine is used for the cubed-sphere
@@ -1162,6 +1143,7 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy,
      3           is_south_pole,is_north_pole )
+      use orog_utils, only : get_lat_angle
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.
@@ -1192,7 +1174,7 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
       real    HC_11, HC_12, HC_21, HC_22
       real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
       real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
-      real    get_lon_angle, get_lat_angle, get_xnsum
+      real    get_lon_angle, get_xnsum
       integer jst, jen
 
       print*,"- CREATE ASYMETRY AND LENGTH SCALE."
@@ -1317,7 +1299,7 @@ C
              
           !--- for each point, find a lat-lon grid box with same dx and dy as the cubic grid box
           dlon = get_lon_angle(dx(i,j), lat*D2R, R2D  )
-          dlat = get_lat_angle(dy(i,j), R2D)
+          dlat = get_lat_angle(dy(i,j))
           !--- adjust dlat if the points are close to pole.
           if( lat-dlat*0.5<-90.) then
              print*, "- AT I,J =", i,j, lat, dlat, lat-dlat*0.5
