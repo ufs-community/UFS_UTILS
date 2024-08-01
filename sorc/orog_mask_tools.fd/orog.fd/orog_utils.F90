@@ -11,9 +11,14 @@
 
  private
 
+ real, parameter    :: earth_radius = 6371200. ! meters
+ real, parameter    :: rad2deg = 180./3.14159265358979
+ real, parameter    :: deg2rad = 3.14159265358979/180.
+
  public :: latlon2xyz
  public :: minmax
  public :: get_lat_angle
+ public :: get_lon_angle
 
  contains
 
@@ -114,11 +119,37 @@
  real, intent(in)   :: dy
 
  real               :: get_lat_angle
- real, parameter    :: earth_radius = 6371200 ! meters
- real, parameter    :: rad2deg = 180./3.14159265358979
 
  get_lat_angle = dy/earth_radius*rad2deg
 
  end function get_lat_angle
+
+!> Convert the 'x' direction distance of a cubed-sphere grid
+!! point to the corresponding distance in longitude.
+!!
+!! @param[in] dx Distance along the 'x' direction of a
+!! cubed-sphere grid point in meters.
+!! @param[in] lat_in Latitude of the cubed-sphere point in
+!! degrees.
+!! @return get_lon_angle Corresponding distance in longitude
+!! in degrees.
+!!
+!! @author GFDL programmer
+
+ function get_lon_angle(dx,lat_in)
+
+ implicit none
+
+ real, intent(in)     :: dx, lat_in
+
+ real                 :: get_lon_angle, lat
+
+ lat = lat_in
+ if (lat > 89.5) lat = 89.5
+ if (lat < -89.5) lat = -89.5
+
+ get_lon_angle = 2*asin( sin(dx/earth_radius*0.5)/cos(lat*deg2rad) )*rad2deg
+
+ end function get_lon_angle
 
  end module orog_utils
