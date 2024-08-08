@@ -163,7 +163,7 @@ TEST10=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log11
 export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
 TEST11=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c96.fv3.netcdf2wam -l select=1:ncpus=12:ompthreads=1:mem=75GB $PWD/c96.fv3.netcdf2wam.sh)
+        -N c96.fv3.netcdf2wam -l select=1:ncpus=12:ompthreads=1:mem=80GB $PWD/c96.fv3.netcdf2wam.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 25-KM USING  GFS PGRIB2+BGRIB2 files.
