@@ -57,13 +57,15 @@ load(pathJoin("ip", ip_ver))
 g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
--- for mpiexec command
+-- Needed for mpiexec command.
 cray_pals_ver=os.getenv("cray_pals_ver") or "1.2.2"
 load(pathJoin("cray-pals", cray_pals_ver))
 
+-- Needed at runtime for nco utilities.
 udunits_ver=os.getenv("udunits_ver") or "2.2.28"
 load(pathJoin("udunits", udunits_ver))
 
+-- Needed at runtime for nco utilities.
 gsl_ver=os.getenv("gsl_ver") or "2.7"
 load(pathJoin("gsl", gsl_ver))
 
