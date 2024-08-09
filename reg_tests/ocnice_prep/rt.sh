@@ -130,8 +130,8 @@ if [[ $target = wcoss2 ]]; then
     ACCOUNT=${ACCOUNT:-GFS-DEV}
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
     QUEUE=${QUEUE:-dev}
+    NCCMP=nccmp
     SBATCH_COMMAND="./ocnice_prep.sh"
-    NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
@@ -221,6 +221,10 @@ fi
 
 module use $PATHTR/modulefiles
 module load build.$target.$compiler
+if [[ $target = wcoss2 ]]; then
+  module load netcdf
+  module load nccmp/1.8.9.0
+fi
 module list
 
 if [[ $CREATE_BASELINE = true ]]; then
