@@ -51,7 +51,7 @@ load(pathJoin("sigio", sigio_ver))
 sp_ver=os.getenv("sp_ver") or "2.4.0"
 load(pathJoin("sp", sp_ver))
 
-ip_ver=os.getenv("ip_ver") or "4.1.0"
+ip_ver=os.getenv("ip_ver") or "4.0.0"
 load(pathJoin("ip", ip_ver))
 
 g2_ver=os.getenv("g2_ver") or "3.4.5"
