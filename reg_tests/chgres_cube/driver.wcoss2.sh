@@ -29,6 +29,9 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+# load nccmp
+module load netcdf
+module load nccmp
 module list
 
 export OUTDIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
@@ -60,8 +63,6 @@ rm -f $LOG_FILE* $SUM_FILE
 
 export OMP_STACKSIZE=1024M
 
-export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
-#export NCCMP=${NCCMP:-nccmp}
 rm -fr $OUTDIR
 
 this_dir=$PWD
