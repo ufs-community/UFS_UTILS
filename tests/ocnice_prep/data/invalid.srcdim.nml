@@ -1,0 +1,8 @@
+&ocniceprep_nml
+ftype='ocean'
+wgtsdir='/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data'
+griddir='/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data'
+srcdims=2280,1080
+dstdims=360,320
+debug=.true.
+/

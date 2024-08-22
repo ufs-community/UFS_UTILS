@@ -32,6 +32,8 @@ set -x
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intel
+module load grib-util/1.3.0
+module load wgrib2/2.0.8
 module list
 
 ulimit -s unlimited
@@ -49,12 +51,6 @@ export UPDATE_BASELINE="FALSE"
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
-
-export WGRIB=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/wgrib
-export WGRIB2=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/wgrib2
-export COPYGB=/apps/contrib/NCEPLIBS/lib/NCEPLIBS-grib_util/v1.1.1/exec/copygb
-export COPYGB2=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/copygb2
-export CNVGRIB=/apps/contrib/NCEPLIBS/orion/utils/grib_util.v1.2.0/exec/cnvgrib
 
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..

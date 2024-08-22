@@ -10,7 +10,7 @@ copy_data()
 
   MEM=$1
 
-  SAVEDIR_MODEL_DATA=$SUBDIR/model_data/atmos/input
+  SAVEDIR_MODEL_DATA=$SUBDIR/model/atmos/input
   mkdir -p $SAVEDIR_MODEL_DATA
   cp gfs_ctrl.nc $SAVEDIR_MODEL_DATA
 

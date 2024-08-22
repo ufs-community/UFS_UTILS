@@ -1,0 +1,8 @@
+&ocniceprep_nml
+ftype='FILETYPE'
+wgtsdir='WTSDIR'
+griddir='GRDDIR'
+srcdims=SRCDIMS
+dstdims=DSTDIMS
+debug=DO_DEBUG
+/

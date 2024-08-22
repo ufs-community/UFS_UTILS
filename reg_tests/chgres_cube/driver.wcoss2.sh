@@ -29,6 +29,9 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+# load nccmp
+module load netcdf
+module load nccmp
 module list
 
 export OUTDIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
@@ -60,8 +63,6 @@ rm -f $LOG_FILE* $SUM_FILE
 
 export OMP_STACKSIZE=1024M
 
-export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
-#export NCCMP=${NCCMP:-nccmp}
 rm -fr $OUTDIR
 
 this_dir=$PWD
@@ -163,7 +164,7 @@ TEST10=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log11
 export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
 TEST11=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c96.fv3.netcdf2wam -l select=1:ncpus=12:ompthreads=1:mem=75GB $PWD/c96.fv3.netcdf2wam.sh)
+        -N c96.fv3.netcdf2wam -l select=1:ncpus=12:ompthreads=1:mem=80GB $PWD/c96.fv3.netcdf2wam.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 25-KM USING  GFS PGRIB2+BGRIB2 files.
