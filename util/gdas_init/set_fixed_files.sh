@@ -36,7 +36,7 @@ if [ "$machine" = 'hera' ] ; then
 elif [ "$machine" = 'wcoss2' ] ; then
   FIX_ORO_INPUT=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/orog/20230615
 elif [ "$machine" = 'jet' ] ; then
-  FIX_ORO_INPUT=/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/orog/20230615
+  FIX_ORO_INPUT=/lfs5/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/orog/20230615
 elif [ "$machine" = 's4' ] ; then
   FIX_ORO_INPUT=/data/prod/glopara/fix/orog/20230615
 else

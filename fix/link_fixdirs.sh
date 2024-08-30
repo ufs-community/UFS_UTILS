@@ -47,7 +47,7 @@ pwd=$(pwd -P)
 if [ $machine = "hera" ]; then
     FIX_DIR="/scratch1/NCEPDEV/global/glopara/fix"
 elif [ $machine = "jet" ]; then
-    FIX_DIR="/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix"
+    FIX_DIR="/lfs5/HFIP/hfv3gfs/glopara/git/fv3gfs/fix"
 elif [ $machine = "orion" -o $machine = "hercules" ]; then
     FIX_DIR="/work/noaa/global/glopara/fix"
 elif [ $machine = "wcoss2" ]; then

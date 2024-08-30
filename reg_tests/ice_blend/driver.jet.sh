@@ -36,7 +36,7 @@ set +x
 module list
 set -x
 
-export DATA="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export DATA="${WORK_DIR:-/lfs5/HFIP/emcda/$LOGNAME/stmp}"
 export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
@@ -51,11 +51,11 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
 fi
 
 export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
-export COPYGB=/lfs4/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/copygb
-export COPYGB2=/lfs4/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/copygb2
-export CNVGRIB=/mnt/lfs4/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/cnvgrib
+export COPYGB=/lfs5/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/copygb
+export COPYGB2=/lfs5/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/copygb2
+export CNVGRIB=/mnt/lfs5/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-hrqavdi/bin/cnvgrib
 
-export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ice_blend
+export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ice_blend
 
 export HOMEgfs=$PWD/../..
 

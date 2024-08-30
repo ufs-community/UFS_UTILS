@@ -162,9 +162,9 @@ elif [[ $target = hercules ]]; then
     ulimit -s unlimited
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
-    STMP=${STMP:-/lfs4/HFIP/h-nems/$USER}
-    export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/mom6/20220805
-    BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
+    export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/mom6/20220805
+    BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
