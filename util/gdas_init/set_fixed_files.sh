@@ -10,7 +10,7 @@ if [ ${CTAR} == 'C48' ] ; then
 elif [ ${CTAR} == 'C96' ]; then
   OCNRES='500'
 elif [ ${CTAR} == 'C192' ]; then
-  OCNRES='050'
+  OCNRES='025'
 elif [ ${CTAR} == 'C384' ]; then
   OCNRES='025'
 elif [ ${CTAR} == 'C768' ]; then
