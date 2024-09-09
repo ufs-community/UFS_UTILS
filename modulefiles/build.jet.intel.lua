@@ -5,7 +5,7 @@ Load environment to compile UFS_UTILS on Jet using Intel
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
-prepend_path("MODULEPATH", "/mnt/lfs4/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2021.5.0"
 load(pathJoin("stack-intel", stack_intel_ver))

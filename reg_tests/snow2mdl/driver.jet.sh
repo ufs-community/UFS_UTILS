@@ -29,7 +29,7 @@ set +x
 module list
 set -x
 
-DATA_ROOT="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+DATA_ROOT="${WORK_DIR:-/lfs5/HFIP/emcda/$LOGNAME/stmp}"
 DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
 
 PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
@@ -46,7 +46,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/snow2mdl
+export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
 
