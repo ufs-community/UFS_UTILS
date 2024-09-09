@@ -379,7 +379,7 @@ cat << EOF > fort.36
  &NAMCYC
   idim=$CRES, jdim=$CRES, lsoil=$LSOIL,
   iy=$iy, im=$im, id=$id, ih=$ih, fh=$FHOUR,
-  deltsfc=$DELTSFC,ialb=$IALB,use_ufo=$use_ufo,donst=$DONST,
+  deltsfc=$DELTSFC,ialb=$IALB,use_ufo=$use_ufo,donst="$DONST",
   do_sfccycle=$DO_SFCCYCLE,do_lndinc=$DO_LNDINC,isot=$ISOT,ivegsrc=$IVEGSRC,
   zsea1_mm=$zsea1,zsea2_mm=$zsea2,MAX_TASKS=$MAX_TASKS_CY,
   frac_grid=$FRAC_GRID
