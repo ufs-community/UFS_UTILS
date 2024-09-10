@@ -32,6 +32,7 @@ source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intel
 module load wgrib2/2.0.8
+module load grib-util/1.3.0
 set +x
 module list
 set -x
@@ -51,9 +52,6 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
 fi
 
 export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
-export COPYGB=/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-74mdurc/bin/copygb
-export COPYGB2=/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-74mdurc/bin/copygb2
-export CNVGRIB=/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/intel/2021.5.0/grib-util-1.3.0-74mdurc/bin/cnvgrib
 
 export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ice_blend
 
