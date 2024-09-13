@@ -37,7 +37,7 @@ module load build.$target.$compiler
 module load grib-util
 # Because of a bug in the grib-util module, the wgrib2 module
 # must be loaded last.
-module load wgrib2/2.0.8
+module load wgrib2/3.1.1
 module list
 
 export DATA="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
