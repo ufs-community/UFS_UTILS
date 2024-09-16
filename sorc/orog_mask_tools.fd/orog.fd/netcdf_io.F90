@@ -430,6 +430,8 @@
              geolon, geolon_c, geolat, geolat_c, dx, dy, &
              is_north_pole, is_south_pole)
 
+  use orog_utils, only : find_poles, find_nearest_pole_points
+
   implicit none
   include "netcdf.inc"
 
