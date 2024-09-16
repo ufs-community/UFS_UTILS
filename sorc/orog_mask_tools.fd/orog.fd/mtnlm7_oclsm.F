@@ -122,7 +122,7 @@ C> @return 0 for success, error code otherwise.
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,EFAC,
      &     OUTGRID,MASK_ONLY,EXTERNAL_MASK_FILE)
 
-      use orog_utils, only : minmax
+      use orog_utils, only : minmax, timef
 
       implicit none
       include 'netcdf.inc'
@@ -143,7 +143,7 @@ C
 
       integer, allocatable :: IWORK(:,:,:)
 
-      real :: timef,tbeg,tend,tbeg1
+      real :: tbeg,tend,tbeg1
 
       real, allocatable :: XLAT(:),XLON(:)
       real, allocatable :: GEOLON(:,:),GEOLON_C(:,:),DX(:,:)
@@ -1540,53 +1540,6 @@ C
 
       return
       end subroutine read_global_orog
-
-!> Compute spherical angle.
-!!
-!! @param[in] v1 Vector 1.
-!! @param[in] v2 Vector 2.
-!! @param[in] v3 Vector 3.
-!! @return spherical_angle Spherical Angle.
-!! @author GFDL programmer
-      FUNCTION spherical_angle(v1, v2, v3)
-        implicit none
-        real, parameter :: EPSLN30 = 1.e-30
-        real, parameter :: PI=3.1415926535897931
-        real v1(3), v2(3), v3(3)
-        real  spherical_angle
- 
-        real px, py, pz, qx, qy, qz, ddd;
-  
-        ! vector product between v1 and v2 
-        px = v1(2)*v2(3) - v1(3)*v2(2)
-        py = v1(3)*v2(1) - v1(1)*v2(3)
-        pz = v1(1)*v2(2) - v1(2)*v2(1)
-        ! vector product between v1 and v3 
-        qx = v1(2)*v3(3) - v1(3)*v3(2);
-        qy = v1(3)*v3(1) - v1(1)*v3(3);
-        qz = v1(1)*v3(2) - v1(2)*v3(1);
-
-        ddd = (px*px+py*py+pz*pz)*(qx*qx+qy*qy+qz*qz);
-        if ( ddd <= 0.0 ) then
-          spherical_angle = 0. 
-        else 
-          ddd = (px*qx+py*qy+pz*qz) / sqrt(ddd);
-          if( abs(ddd-1) < EPSLN30 ) ddd = 1;
-          if( abs(ddd+1) < EPSLN30 ) ddd = -1;
-          if ( ddd>1. .or. ddd<-1. ) then
-            !FIX to correctly handle co-linear points (angle near pi or 0) */
-            if (ddd < 0.) then
-              spherical_angle = PI
-            else
-              spherical_angle = 0.
-            endif
-          else
-            spherical_angle = acos( ddd )
-          endif
-        endif  
-
-        return
-      END FUNCTION spherical_angle
       
 !> Check if a point is inside a polygon.
 !!
@@ -1599,13 +1552,13 @@ C
 !! the polygon.
 !! @author GFDL programmer
       FUNCTION inside_a_polygon(lon1, lat1, npts, lon2, lat2)
-        use orog_utils, only : latlon2xyz
+        use orog_utils, only : latlon2xyz, spherical_angle
         implicit none
         real, parameter :: EPSLN10 = 1.e-10
         real, parameter :: EPSLN8 = 1.e-8
         real, parameter :: PI=3.1415926535897931
         real, parameter :: RANGE_CHECK_CRITERIA=0.05
-        real :: anglesum, angle, spherical_angle
+        real :: anglesum, angle
         integer i, ip1
         real lon1, lat1
         integer npts
@@ -1657,7 +1610,6 @@ C
            pnt2(3) = z2(ip1)
 
            angle = spherical_angle(pnt0, pnt2, pnt1);
-!           anglesum = anglesum + spherical_angle(pnt0, pnt2, pnt1);
            anglesum = anglesum + angle
         enddo
 
@@ -1938,24 +1890,6 @@ C
          enddo
          
       end subroutine get_xnsum3
-!> Get the date/time for the system clock.
-!!
-!! @author Mark Iredell
-!! @return timef
-      real function timef()
-      character(8) :: date
-      character(10) :: time
-      character(5) :: zone
-      integer,dimension(8) :: values
-      integer :: total
-      real :: elapsed
-      call date_and_time(date,time,zone,values)
-      total=(3600*values(5))+(60*values(6))
-     *      +values(7)
-      elapsed=float(total) + (1.0e-3*float(values(8)))
-      timef=elapsed
-      return
-      end function timef
 
 !> Find the point on the model grid tile closest to the
 !! north and south pole.
@@ -2155,6 +2089,8 @@ C
 !! @author G. Gayno NOAA/EMC
       subroutine read_global_mask(imn, jmn, mask)
 
+      use orog_utils, only : transpose_mask
+
       implicit none
 
       include 'netcdf.inc'
@@ -2180,48 +2116,6 @@ C
       call transpose_mask(imn,jmn,mask)
 
       end subroutine read_global_mask
-
-!> Transpose the global landmask by flipping
-!! the poles and moving the starting longitude to
-!! Greenwich.
-!!
-!! @param[in] imn i-dimension of landmask data.
-!! @param[in] jmn j-dimension of landmask data.
-!! @param[inout] mask The global landmask data.
-!! @author G. Gayno
-      subroutine transpose_mask(imn, jmn, mask)
-
-      implicit none
-
-      integer, intent(in)       :: imn, jmn
-      integer(1), intent(inout) :: mask(imn,jmn)
-
-      integer    :: i, j, it, jt
-      integer(1) :: isave
-
-! Transpose from S to N to the NCEP standard N to S.
-
-      do j=1,jmn/2
-      do I=1,imn
-        jt=jmn - j + 1
-        isave = mask(I,j)
-        mask(I,j)=mask(I,jt)
-        mask(I,jt) = isave
-      enddo
-      enddo
-
-! Data begins at dateline. NCEP standard is Greenwich.
-
-      do j=1,jmn
-      do I=1,imn/2
-        it=imn/2 + i
-        isave = mask(i,J)
-        mask(i,J)=mask(it,J)
-        mask(it,J) = isave
-      enddo
-      enddo
-
-      end subroutine transpose_mask
 
 !> Quality control the global orography and landmask
 !! data over Antarctica using RAMP data.
