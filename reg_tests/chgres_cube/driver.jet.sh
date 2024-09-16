@@ -30,7 +30,7 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export OUTDIR="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export OUTDIR="${WORK_DIR:-/lfs5/HFIP/emcda/$LOGNAME/stmp}"
 export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
 
 PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
@@ -54,7 +54,7 @@ fi
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/chgres_cube
+export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
