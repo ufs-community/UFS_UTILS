@@ -16,13 +16,13 @@
  real, parameter    :: rad2deg = 180./3.14159265358979
  real, parameter    :: deg2rad = 3.14159265358979/180.
 
- public :: latlon2xyz
  public :: minmax
  public :: get_lat_angle
  public :: get_lon_angle
  public :: timef
+ public :: transpose_orog
  public :: transpose_mask
- public :: spherical_angle
+ public :: inside_a_polygon
 
  contains
 
@@ -199,6 +199,49 @@
 
  end subroutine transpose_mask
 
+!> Transpose the global orography data by flipping
+!! the poles and moving the starting longitude to
+!! Greenwich.
+!!
+!! @param[in] imn i-dimension of orography data.
+!! @param[in] jmn j-dimension of orography data.
+!! @param[inout] glob The global orography data.
+!! @author G. Gayno
+
+ subroutine transpose_orog(imn, jmn, glob)
+
+ implicit none
+
+ integer, intent(in)       :: imn, jmn
+ integer(2), intent(inout) :: glob(imn,jmn)
+
+ integer    :: i, j, it, jt
+ integer(2) :: i2save
+
+! Transpose from S to N to the NCEP standard N to S.
+
+ do j=1,jmn/2
+ do I=1,imn
+   jt=jmn - j + 1
+   i2save = glob(I,j)
+   glob(I,j)=glob(I,jt)
+   glob(I,jt) = i2save
+ enddo
+ enddo
+
+! Data begins at dateline. NCEP standard is Greenwich.
+
+ do j=1,jmn
+ do I=1,imn/2
+   it=imn/2 + i
+   i2save = glob(i,J)
+   glob(i,J)=glob(it,J)
+   glob(it,J) = i2save
+ enddo
+ enddo
+
+ end subroutine transpose_orog
+
 !> Compute spherical angle.
 !!
 !! @param[in] v1 Vector 1.
@@ -251,6 +294,94 @@
  endif
 
  end function spherical_angle
+
+!> Check if a point is inside a polygon.
+!!
+!! @param[in] lon1 Longitude of the point to check.
+!! @param[in] lat1 Latitude of the point to check.
+!! @param[in] npts Number of polygon vertices.
+!! @param[in] lon2 Longitude of the polygon vertices.
+!! @param[in] lat2 Latitude of the polygon vertices.
+!! @return inside_a_polygon When true, point is within
+!! the polygon.
+!! @author GFDL programmer
+
+ function inside_a_polygon(lon1, lat1, npts, lon2, lat2)
+
+ implicit none
+
+ logical inside_a_polygon
+
+ real, parameter          :: EPSLN10 = 1.e-10
+ real, parameter          :: EPSLN8 = 1.e-8
+ real, parameter          :: RANGE_CHECK_CRITERIA=0.05
+
+ integer, intent(in)      :: npts
+
+ real, intent(in)         :: lon1, lat1
+ real, intent(in)         :: lon2(npts), lat2(npts)
+
+ integer                  :: i, ip1
+
+ real                     :: anglesum, angle
+ real                     :: x2(npts), y2(npts), z2(npts)
+ real                     :: lon1_1d(1), lat1_1d(1)
+ real                     :: x1(1), y1(1), z1(1)
+ real                     :: pnt0(3),pnt1(3),pnt2(3)
+ real                     :: max_x2,min_x2,max_y2,min_y2,max_z2,min_z2
+
+! first convert to cartesian grid.
+
+ call latlon2xyz(npts,lon2, lat2, x2, y2, z2);
+ lon1_1d(1) = lon1
+ lat1_1d(1) = lat1
+ call latlon2xyz(1,lon1_1d, lat1_1d, x1, y1, z1);
+ inside_a_polygon = .false.
+ max_x2 = maxval(x2)
+ if( x1(1) > max_x2+RANGE_CHECK_CRITERIA ) return
+ min_x2 = minval(x2)
+ if( x1(1)+RANGE_CHECK_CRITERIA < min_x2 ) return
+ max_y2 = maxval(y2)
+ if( y1(1) > max_y2+RANGE_CHECK_CRITERIA ) return
+ min_y2 = minval(y2)
+ if( y1(1)+RANGE_CHECK_CRITERIA < min_y2 ) return
+ max_z2 = maxval(z2)
+ if( z1(1) > max_z2+RANGE_CHECK_CRITERIA ) return
+ min_z2 = minval(z2)
+ if( z1(1)+RANGE_CHECK_CRITERIA < min_z2 ) return
+
+ pnt0(1) = x1(1)
+ pnt0(2) = y1(1)
+ pnt0(3) = z1(1)
+
+ anglesum = 0
+
+ do i = 1, npts
+   if(abs(x1(1)-x2(i)) < EPSLN10 .and.  &
+      abs(y1(1)-y2(i)) < EPSLN10 .and.  &
+      abs(z1(1)-z2(i)) < EPSLN10 ) then ! same as the corner point
+     inside_a_polygon = .true.
+     return
+   endif
+   ip1 = i+1
+   if(ip1>npts) ip1 = 1
+   pnt1(1) = x2(i)
+   pnt1(2) = y2(i)
+   pnt1(3) = z2(i)
+   pnt2(1) = x2(ip1)
+   pnt2(2) = y2(ip1)
+   pnt2(3) = z2(ip1)
+   angle = spherical_angle(pnt0, pnt2, pnt1);
+   anglesum = anglesum + angle
+ enddo
+
+ if(abs(anglesum-2*PI) < EPSLN8) then
+   inside_a_polygon = .true.
+ else
+   inside_a_polygon = .false.
+ endif
+
+ end function inside_a_polygon
 
 !> Get the date/time from the system clock.
 !!

@@ -514,6 +514,7 @@ C           ELVMAX(I,J)=0.
 !! @author GFDL Programmer
       SUBROUTINE MAKE_MASK(zslm,SLM,land_frac,
      1 IM,JM,IMN,JMN,lon_c,lat_c)
+      use orog_utils, only : inside_a_polygon
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
@@ -529,7 +530,6 @@ C           ELVMAX(I,J)=0.
       integer ilist(IMN)
       real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1
       real    XNSUM_ALL,XLAND_ALL,XWATR_ALL
-      logical inside_a_polygon
 C
       print *,'- CREATE LANDMASK AND LAND FRACTION.'
 C---- GLOBAL XLAT AND XLON ( DEGREE )
@@ -643,6 +643,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 !! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
      1 IM,JM,IMN,JMN,lon_c,lat_c,lake_frac,land_frac)
+      use orog_utils, only : inside_a_polygon
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
@@ -662,7 +663,6 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
       real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1,XW2,XW4
       real    XNSUM_ALL,XLAND_ALL,XWATR_ALL,HEIGHT_ALL
       real    XL1_ALL,XS1_ALL,XW1_ALL,XW2_ALL,XW4_ALL
-      logical inside_a_polygon
 C
       print*,'- CREATE OROGRAPHY AND CONVEXITY.'
       allocate(hgt_1d(MAXSUM))
@@ -864,6 +864,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 C
 C===  PC: principal coordinates of each Z avg orog box for L&M
 C
+      use orog_utils, only : inside_a_polygon
       implicit none
       real, parameter :: REARTH=6.3712E+6
       real, parameter :: D2R = 3.14159265358979/180. 
@@ -882,7 +883,6 @@ C
       real LONO_RAD(4), LATO_RAD(4)
       integer i,j,i1,j1,i2,jst,jen,numx,i0,ip1,ijax
       integer ilist(IMN)
-      logical inside_a_polygon
       LOGICAL DEBUG
 C===  DATA DEBUG/.TRUE./
       DATA DEBUG/.FALSE./
@@ -1123,7 +1123,8 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
      1           ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4,
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy,
      3           is_south_pole,is_north_pole )
-      use orog_utils, only : get_lat_angle, get_lon_angle
+      use orog_utils, only : get_lat_angle, get_lon_angle,
+     &                       inside_a_polygon
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.
@@ -1146,7 +1147,6 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
       real    LONO_RAD(4), LATO_RAD(4)
       real    DELXN,HC,HEIGHT,XNPU,XNPD,T
       integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
-      logical inside_a_polygon
       real    lon,lat,dlon,dlat,dlat_old
       real    lon1,lat1,lon2,lat2
       real    xnsum11,xnsum12,xnsum21,xnsum22
@@ -1512,6 +1512,9 @@ C
 !! @param[out] glob The orography data.
 !! @author Jordan Alpert NOAA/EMC
       subroutine read_global_orog(imn,jmn,glob)
+
+      use orog_utils, only : transpose_orog
+
       implicit none
 
       include 'netcdf.inc'
@@ -1541,88 +1544,6 @@ C
       return
       end subroutine read_global_orog
       
-!> Check if a point is inside a polygon.
-!!
-!! @param[in] lon1 Longitude of the point to check.
-!! @param[in] lat1 Latitude of the point to check.
-!! @param[in] npts Number of polygon vertices.
-!! @param[in] lon2 Longitude of the polygon vertices.
-!! @param[in] lat2 Latitude of the polygon vertices.
-!! @return inside_a_polygon When true, point is within
-!! the polygon.
-!! @author GFDL programmer
-      FUNCTION inside_a_polygon(lon1, lat1, npts, lon2, lat2)
-        use orog_utils, only : latlon2xyz, spherical_angle
-        implicit none
-        real, parameter :: EPSLN10 = 1.e-10
-        real, parameter :: EPSLN8 = 1.e-8
-        real, parameter :: PI=3.1415926535897931
-        real, parameter :: RANGE_CHECK_CRITERIA=0.05
-        real :: anglesum, angle
-        integer i, ip1
-        real lon1, lat1
-        integer npts
-        real lon2(npts), lat2(npts)
-        real x2(npts), y2(npts), z2(npts)
-        real lon1_1d(1), lat1_1d(1)
-        real x1(1), y1(1), z1(1)
-        real pnt0(3),pnt1(3),pnt2(3)
-        logical inside_a_polygon
-        real max_x2,min_x2,max_y2,min_y2,max_z2,min_z2
-        !first convert to cartesian grid */
-        call latlon2xyz(npts,lon2, lat2, x2, y2, z2);
-        lon1_1d(1) = lon1
-        lat1_1d(1) = lat1
-        call latlon2xyz(1,lon1_1d, lat1_1d, x1, y1, z1);
-        inside_a_polygon = .false.
-        max_x2 = maxval(x2)
-        if( x1(1) > max_x2+RANGE_CHECK_CRITERIA ) return
-        min_x2 = minval(x2)
-        if( x1(1)+RANGE_CHECK_CRITERIA < min_x2 ) return
-        max_y2 = maxval(y2)
-        if( y1(1) > max_y2+RANGE_CHECK_CRITERIA ) return
-        min_y2 = minval(y2)
-        if( y1(1)+RANGE_CHECK_CRITERIA < min_y2 ) return
-        max_z2 = maxval(z2)
-        if( z1(1) > max_z2+RANGE_CHECK_CRITERIA ) return
-        min_z2 = minval(z2)
-        if( z1(1)+RANGE_CHECK_CRITERIA < min_z2 ) return
-
-        pnt0(1) = x1(1)
-        pnt0(2) = y1(1)
-        pnt0(3) = z1(1)
-        
-        anglesum = 0;
-        do i = 1, npts
-           if(abs(x1(1)-x2(i)) < EPSLN10 .and.
-     &          abs(y1(1)-y2(i)) < EPSLN10 .and.
-     &         abs(z1(1)-z2(i)) < EPSLN10 ) then ! same as the corner point
-              inside_a_polygon = .true.
-              return
-           endif
-           ip1 = i+1
-           if(ip1>npts) ip1 = 1
-           pnt1(1) = x2(i)
-           pnt1(2) = y2(i)
-           pnt1(3) = z2(i)
-           pnt2(1) = x2(ip1)
-           pnt2(2) = y2(ip1)
-           pnt2(3) = z2(ip1)
-
-           angle = spherical_angle(pnt0, pnt2, pnt1);
-           anglesum = anglesum + angle
-        enddo
-
-        if(abs(anglesum-2*PI) < EPSLN8) then
-           inside_a_polygon = .true.
-        else
-           inside_a_polygon = .false.
-        endif
-
-        return
-        
-      end function inside_a_polygon
-
 !> Count the number of high-resolution orography points that
 !! are higher than the model grid box average orography height.
 !!
@@ -2039,48 +1960,6 @@ C
 
       end subroutine find_nearest_pole_points
 
-!> Transpose the global orography data by flipping
-!! the poles and moving the starting longitude to
-!! Greenwich.
-!!
-!! @param[in] imn i-dimension of orography data.
-!! @param[in] jmn j-dimension of orography data.
-!! @param[inout] glob The global orography data.
-!! @author G. Gayno
-      subroutine transpose_orog(imn, jmn, glob)
-
-      implicit none
-
-      integer, intent(in)       :: imn, jmn
-      integer(2), intent(inout) :: glob(imn,jmn)
-
-      integer    :: i, j, it, jt
-      integer(2) :: i2save
-
-! Transpose from S to N to the NCEP standard N to S.
-
-      do j=1,jmn/2
-      do I=1,imn
-        jt=jmn - j + 1
-        i2save = glob(I,j)
-        glob(I,j)=glob(I,jt)
-        glob(I,jt) = i2save
-      enddo
-      enddo
-
-! Data begins at dateline. NCEP standard is Greenwich.
-
-      do j=1,jmn
-      do I=1,imn/2
-        it=imn/2 + i
-        i2save = glob(i,J)
-        glob(i,J)=glob(it,J)
-        glob(it,J) = i2save
-      enddo
-      enddo
-
-      end subroutine transpose_orog
- 
 !> Read input global 30-arc second land mask data.
 !!
 !! @param[in] imn i-dimension of orography data.
