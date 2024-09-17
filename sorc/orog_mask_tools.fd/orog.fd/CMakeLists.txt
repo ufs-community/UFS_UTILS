@@ -1,4 +1,4 @@
-set(lib_src netcdf_io.F90 orog_utils.F90)
+set(lib_src io_utils.F90 orog_utils.F90)
 set(exe_src mtnlm7_oclsm.F)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
