@@ -18,13 +18,14 @@
 
  public :: find_nearest_pole_points
  public :: find_poles
- public :: minmax
  public :: get_lat_angle
  public :: get_lon_angle
+ public :: inside_a_polygon
+ public :: latlon2xyz
+ public :: minmax
  public :: timef
  public :: transpose_orog
  public :: transpose_mask
- public :: inside_a_polygon
 
  contains
 
