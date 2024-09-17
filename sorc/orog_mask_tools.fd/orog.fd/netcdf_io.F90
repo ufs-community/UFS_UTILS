@@ -519,3 +519,138 @@
   deallocate(tmpvar)
 
   end subroutine read_mdl_grid_file
+
+!> Read input global 30-arc second orography data.
+!!
+!! @param[in] imn i-dimension of orography data.
+!! @param[in] jmn j-dimension of orography data.
+!! @param[out] glob The orography data.
+!! @author Jordan Alpert NOAA/EMC
+ subroutine read_global_orog(imn,jmn,glob)
+
+ use orog_utils, only : transpose_orog
+
+ implicit none
+
+ include 'netcdf.inc'
+
+ integer, intent(in)    :: imn, jmn
+ integer*2, intent(out) :: glob(imn,jmn)
+
+ integer :: ncid, error, id_var, fsize
+
+ fsize=65536
+
+ print*,"- OPEN AND READ ./topography.gmted2010.30s.nc"
+
+ error=NF__OPEN("./topography.gmted2010.30s.nc", &
+                NF_NOWRITE,fsize,ncid)
+ call netcdf_err(error, 'Open file topography.gmted2010.30s.nc' )
+ error=nf_inq_varid(ncid, 'topo', id_var)
+ call netcdf_err(error, 'Inquire varid of topo')
+ error=nf_get_var_int2(ncid, id_var, glob)
+ call netcdf_err(error, 'Read topo')
+ error = nf_close(ncid)
+
+ print*,"- MAX/MIN OF OROGRAPHY DATA ",maxval(glob),minval(glob)
+
+ call transpose_orog(imn,jmn,glob)
+
+ return
+ end subroutine read_global_orog
+
+!> Read input global 30-arc second land mask data.
+!!
+!! @param[in] imn i-dimension of orography data.
+!! @param[in] jmn j-dimension of orography data.
+!! @param[out] mask The land mask data.
+!! @author G. Gayno NOAA/EMC
+ subroutine read_global_mask(imn, jmn, mask)
+
+ use orog_utils, only : transpose_mask
+
+ implicit none
+
+ include 'netcdf.inc'
+
+ integer, intent(in)        :: imn, jmn
+
+ integer(1), intent(out)    :: mask(imn,jmn)
+
+ integer   :: ncid, fsize, id_var, error
+
+ fsize = 65536
+
+ print*,"- OPEN AND READ ./landcover.umd.30s.nc"
+
+ error=NF__OPEN("./landcover.umd.30s.nc",NF_NOWRITE,fsize,ncid)
+ call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
+ error=nf_inq_varid(ncid, 'land_mask', id_var)
+ call netcdf_err(error, 'Inquire varid of land_mask')
+ error=nf_get_var_int1(ncid, id_var, mask)
+ call netcdf_err(error, 'Inquire data of land_mask')
+ error = nf_close(ncid)
+
+ call transpose_mask(imn,jmn,mask)
+
+ end subroutine read_global_mask
+
+!> Quality control the global orography and landmask
+!! data over Antarctica using RAMP data.
+!!
+!! @param[in] imn i-dimension of the global data.
+!! @param[in] jmn j-dimension of the global data.
+!! @param[inout] zavg The global orography data.
+!! @param[inout] zslm The global landmask data.
+!! @author G. Gayno
+ subroutine qc_orog_by_ramp(imn, jmn, zavg, zslm)
+
+ implicit none
+
+ include 'netcdf.inc'
+
+ integer, intent(in)      :: imn, jmn
+ integer, intent(inout)   :: zavg(imn,jmn)
+ integer, intent(inout)   :: zslm(imn,jmn)
+
+ integer                  :: i, j, error, ncid, id_var, fsize
+
+ real(4), allocatable     :: gice(:,:)
+
+ fsize = 65536
+
+ allocate (GICE(IMN+1,3601))
+
+! Read 30-sec Antarctica RAMP data. Points scan from South
+! to North, and from Greenwich to Greenwich.
+
+ print*,"- OPEN/READ RAMP DATA ./topography.antarctica.ramp.30s.nc"
+
+ error=NF__OPEN("./topography.antarctica.ramp.30s.nc", &
+                 NF_NOWRITE,fsize,ncid)
+ call netcdf_err(error, 'Opening RAMP topo file' )
+ error=nf_inq_varid(ncid, 'topo', id_var)
+ call netcdf_err(error, 'Inquire varid of RAMP topo')
+ error=nf_get_var_real(ncid, id_var, GICE)
+ call netcdf_err(error, 'Inquire data of RAMP topo')
+ error = nf_close(ncid)
+
+ print*,"- QC GLOBAL OROGRAPHY DATA WITH RAMP."
+
+! If RAMP values are valid, replace the global value with the RAMP
+! value. Invalid values are less than or equal to 0 (0, -1, or -99).
+
+ do j = 1, 3601
+ do i = 1, IMN
+   if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
+     if ( GICE(i,j) .gt. 0.) then
+       ZAVG(i,j) = int( GICE(i,j) + 0.5 )
+       ZSLM(i,j) = 1
+     endif
+   endif
+ enddo
+ enddo
+
+ deallocate (GICE)
+
+ end subroutine qc_orog_by_ramp
