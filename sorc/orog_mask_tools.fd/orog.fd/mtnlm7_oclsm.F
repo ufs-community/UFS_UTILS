@@ -404,101 +404,6 @@ C           ELVMAX(I,J)=0.
       return
       END SUBROUTINE TERSUB
 
-!> Determine the location of a cubed-sphere point within
-!! the high-resolution orography data.  The location is
-!! described by the range of i/j indices on the high-res grid.
-!!
-!! @param[in] imn 'i' dimension of the high-resolution orography
-!! data set.
-!! @param[in] jmn 'j' dimension of the high-resolution orography
-!! data set.
-!! @param[in] npts Number of vertices to describe the cubed-sphere point.
-!! @param[in] lonO The longitudes of the cubed-sphere vertices.
-!! @param[in] latO The latitudes of the cubed-sphere vertices.
-!! @param[in] delxn Resolution of the high-resolution orography
-!! data set.
-!! @param[out] jst Starting 'j' index on the high-resolution grid.
-!! @param[out] jen Ending 'j' index on the high-resolution grid.
-!! @param[out] ilist List of 'i' indices on the high-resolution grid.
-!! @param[out] numx The number of 'i' indices on the high-resolution
-!! grid.
-!! @author GFDL programmer
-      SUBROUTINE get_index(IMN,JMN,npts,lonO,latO,DELXN,
-     &           jst,jen,ilist,numx)
-        implicit none
-        integer, intent(in)  :: IMN,JMN
-        integer              :: npts
-        real,    intent(in)  :: LONO(npts), LATO(npts)
-        real,    intent(in)  :: DELXN
-        integer, intent(out) :: jst,jen
-        integer, intent(out) :: ilist(IMN)
-        integer, intent(out) :: numx
-        real    minlat,maxlat,minlon,maxlon
-        integer i2, ii, ist, ien
-        
-         minlat = minval(LATO)
-         maxlat = maxval(LATO)
-         minlon = minval(LONO)
-         maxlon = maxval(LONO)
-         ist = minlon/DELXN+1
-         ien = maxlon/DELXN+1
-         jst = (minlat+90)/DELXN+1 
-         jen = (maxlat+90)/DELXN 
-         !--- add a few points to both ends of j-direction
-         jst = jst - 5
-         if(jst<1) jst = 1
-         jen = jen + 5
-         if(jen>JMN) jen = JMN
-
-         !--- when around the pole, just search through all the points.
-         if((jst == 1 .OR. jen == JMN) .and. 
-     &            (ien-ist+1 > IMN/2) )then
-            numx = IMN
-            do i2 = 1, IMN
-               ilist(i2) = i2
-            enddo
-         else if( ien-ist+1 > IMN/2 ) then  ! cross longitude = 0
-            !--- find the minimum that greater than IMN/2 
-            !--- and maximum that less than IMN/2
-            ist = 0
-            ien = IMN+1
-            do i2 = 1, npts
-               ii = LONO(i2)/DELXN+1
-               if(ii <0 .or. ii>IMN) then
-                 print*,"- II=",ii,IMN,LONO(i2),DELXN
-               endif
-               if( ii < IMN/2 ) then
-                  ist = max(ist,ii)
-               else if( ii > IMN/2 ) then
-                  ien = min(ien,ii)
-               endif
-            enddo 
-            if(ist<1 .OR. ist>IMN) then
-               print*, "FATAL ERROR: ist<1 .or. ist>IMN"
-               call ABORT()
-            endif
-           if(ien<1 .OR. ien>IMN) then
-               print*, "FATAL ERROR: iend<1 .or. iend>IMN"
-               call ABORT()
-            endif
-
-            numx = IMN - ien + 1
-            do i2 = 1, numx
-               ilist(i2) = ien + (i2-1)           
-            enddo
-            do i2 = 1, ist
-               ilist(numx+i2) = i2
-            enddo
-            numx = numx+ist
-         else
-            numx = ien-ist+1
-            do i2 = 1, numx
-               ilist(i2) = ist + (i2-1)
-            enddo
-         endif
-
-      END SUBROUTINE get_index
-      
 !> Create the land-mask, land fraction.
 !! This routine is used for the FV3GFS model.
 !!
@@ -514,7 +419,7 @@ C           ELVMAX(I,J)=0.
 !! @author GFDL Programmer
       SUBROUTINE MAKE_MASK(zslm,SLM,land_frac,
      1 IM,JM,IMN,JMN,lon_c,lat_c)
-      use orog_utils, only : inside_a_polygon
+      use orog_utils, only : inside_a_polygon, get_index
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
@@ -643,7 +548,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 !! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4,
      1 IM,JM,IMN,JMN,lon_c,lat_c,lake_frac,land_frac)
-      use orog_utils, only : inside_a_polygon
+      use orog_utils, only : inside_a_polygon, get_index
       implicit none
       real, parameter :: D2R = 3.14159265358979/180.
       integer, parameter :: MAXSUM=20000000
@@ -864,7 +769,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
 C
 C===  PC: principal coordinates of each Z avg orog box for L&M
 C
-      use orog_utils, only : inside_a_polygon
+      use orog_utils, only : get_index, inside_a_polygon
       implicit none
       real, parameter :: REARTH=6.3712E+6
       real, parameter :: D2R = 3.14159265358979/180. 
@@ -1124,7 +1029,7 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy,
      3           is_south_pole,is_north_pole )
       use orog_utils, only : get_lat_angle, get_lon_angle,
-     &                       inside_a_polygon
+     &                       get_index, inside_a_polygon
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.

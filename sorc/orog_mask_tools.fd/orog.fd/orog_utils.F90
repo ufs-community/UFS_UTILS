@@ -18,6 +18,7 @@
 
  public :: find_nearest_pole_points
  public :: find_poles
+ public :: get_index
  public :: get_lat_angle
  public :: get_lon_angle
  public :: inside_a_polygon
@@ -685,6 +686,103 @@
  deallocate (oaa,ola)
 
  end subroutine remove_isolated_pts
+
+!> Determine the location of a cubed-sphere point within
+!! the high-resolution orography data.  The location is
+!! described by the range of i/j indices on the high-res grid.
+!!
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data set.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data set.
+!! @param[in] npts Number of vertices to describe the cubed-sphere point.
+!! @param[in] lonO The longitudes of the cubed-sphere vertices.
+!! @param[in] latO The latitudes of the cubed-sphere vertices.
+!! @param[in] delxn Resolution of the high-resolution orography
+!! data set.
+!! @param[out] jst Starting 'j' index on the high-resolution grid.
+!! @param[out] jen Ending 'j' index on the high-resolution grid.
+!! @param[out] ilist List of 'i' indices on the high-resolution grid.
+!! @param[out] numx The number of 'i' indices on the high-resolution
+!! grid.
+!! @author GFDL programmer
+ subroutine get_index(imn,jmn,npts,lonO,latO,delxn,  &
+                jst,jen,ilist,numx)
+
+ implicit none
+ integer, intent(in)  :: IMN,JMN
+ integer, intent(in)  :: npts
+ real,    intent(in)  :: LONO(npts), LATO(npts)
+ real,    intent(in)  :: DELXN
+ integer, intent(out) :: jst,jen
+ integer, intent(out) :: ilist(IMN)
+ integer, intent(out) :: numx
+
+ integer              :: i2, ii, ist, ien
+ real                 :: minlat,maxlat,minlon,maxlon
+        
+ minlat = minval(LATO)
+ maxlat = maxval(LATO)
+ minlon = minval(LONO)
+ maxlon = maxval(LONO)
+ ist = minlon/DELXN+1
+ ien = maxlon/DELXN+1
+ jst = (minlat+90)/DELXN+1 
+ jen = (maxlat+90)/DELXN 
+!--- add a few points to both ends of j-direction
+ jst = jst - 5
+ if(jst<1) jst = 1
+ jen = jen + 5
+ if(jen>JMN) jen = JMN
+
+!--- when around the pole, just search through all the points.
+ if((jst == 1 .OR. jen == JMN) .and. &
+    (ien-ist+1 > IMN/2) )then
+   numx = IMN
+   do i2 = 1, IMN
+     ilist(i2) = i2
+   enddo
+ else if( ien-ist+1 > IMN/2 ) then  ! cross longitude = 0
+!--- find the minimum that greater than IMN/2 
+!--- and maximum that less than IMN/2
+   ist = 0
+   ien = IMN+1
+   do i2 = 1, npts
+     ii = LONO(i2)/DELXN+1
+     if(ii <0 .or. ii>IMN) then
+        print*,"- II=",ii,IMN,LONO(i2),DELXN
+     endif
+     if( ii < IMN/2 ) then
+       ist = max(ist,ii)
+     else if( ii > IMN/2 ) then
+       ien = min(ien,ii)
+     endif
+   enddo 
+   if(ist<1 .OR. ist>IMN) then
+     print*, "FATAL ERROR: ist<1 .or. ist>IMN"
+     call ABORT()
+   endif
+   if(ien<1 .OR. ien>IMN) then
+     print*, "FATAL ERROR: iend<1 .or. iend>IMN"
+     call ABORT()
+   endif
+
+   numx = IMN - ien + 1
+   do i2 = 1, numx
+     ilist(i2) = ien + (i2-1)           
+   enddo
+   do i2 = 1, ist
+     ilist(numx+i2) = i2
+   enddo
+   numx = numx+ist
+ else
+   numx = ien-ist+1
+   do i2 = 1, numx
+     ilist(i2) = ist + (i2-1)
+   enddo
+ endif
+
+ end subroutine get_index
 
 !> Get the date/time from the system clock.
 !!
