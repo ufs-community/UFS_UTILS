@@ -1029,7 +1029,8 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
      2           IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy,
      3           is_south_pole,is_north_pole )
       use orog_utils, only : get_lat_angle, get_lon_angle,
-     &                       get_index, inside_a_polygon
+     &                       get_index, inside_a_polygon,
+     &                       get_xnsum
       implicit none
       real, parameter :: MISSING_VALUE = -9999.
       real, parameter :: D2R = 3.14159265358979/180.
@@ -1058,7 +1059,6 @@ C            THETA(I,J) = 0.5 * ATAN2(HXY(I,J),HL(I,J))
       real    HC_11, HC_12, HC_21, HC_22
       real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
       real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
-      real    get_xnsum
       integer jst, jen
 
       print*,"- CREATE ASYMETRY AND LENGTH SCALE."
@@ -1410,105 +1410,6 @@ C
 
       END SUBROUTINE MAKEOA2
  
-!> Count the number of high-resolution orography points that
-!! are higher than the model grid box average orography height.
-!!
-!! @param[in] lon1 Longitude of corner point 1 of the model 
-!! grid box.
-!! @param[in] lat1 Latitude of corner point 1 of the model
-!! grid box.
-!! @param[in] lon2 Longitude of corner point 2 of the model
-!! grid box.
-!! @param[in] lat2 Latitude of corner point 2 of the model
-!! grid box.
-!! @param[in] imn 'i' dimension of the high-resolution orography
-!! data.
-!! @param[in] jmn 'j' dimension of the high-resolution orography
-!! data.
-!! @param[in] glat Latitude of each row of the high-resolution
-!! orography data.
-!! @param[in] zavg The high-resolution orography.
-!! @param[in] zslm  The high-resolution land mask.
-!! @param[in] delxn Resolution of the high-res orography data.
-!! @return get_xnsum The number of high-res points above the
-!! mean orography.
-!! @author GFDL Programmer
-      function get_xnsum(lon1,lat1,lon2,lat2,IMN,JMN,
-     &                   glat,zavg,zslm,delxn)
-        implicit none
-
-        real get_xnsum
-        real, intent(in) :: lon1,lat1,lon2,lat2,delxn
-        integer, intent(in) ::  IMN,JMN
-        real, intent(in) :: glat(JMN)
-        integer, intent(in) ::  zavg(IMN,JMN),zslm(IMN,JMN)
-        integer i, j, ist, ien, jst, jen, i1
-        real    oro, HEIGHT
-        real    xland,xwatr,xl1,xs1,slm,xnsum
-        !---figure out ist,ien,jst,jen
-        do j = 1, JMN
-           if( GLAT(J) .GT. lat1 ) then
-              jst = j
-              exit
-           endif
-        enddo
-        do j = 1, JMN
-           if( GLAT(J) .GT. lat2 ) then
-              jen = j
-              exit
-           endif
-        enddo
-
-        
-        ist = lon1/delxn + 1
-        ien = lon2/delxn
-        if(ist .le.0) ist = ist + IMN
-        if(ien < ist) ien = ien + IMN
-
-        !--- compute average oro
-          oro = 0.0
-          xnsum = 0
-          xland = 0
-          xwatr = 0
-          xl1 = 0
-          xs1 = 0
-          do j = jst,jen
-             do i1 = 1, ien - ist + 1
-                i = ist + i1 -1
-                if( i .LE. 0) i = i + imn
-                if( i .GT. IMN) i = i - imn
-                XLAND = XLAND + FLOAT(ZSLM(I,J))
-                XWATR = XWATR + FLOAT(1-ZSLM(I,J))
-                XNSUM = XNSUM + 1.
-                HEIGHT = FLOAT(ZAVG(I,J)) 
-                IF(HEIGHT.LT.-990.) HEIGHT = 0.0
-                XL1 = XL1 + HEIGHT * FLOAT(ZSLM(I,J))
-                XS1 = XS1 + HEIGHT * FLOAT(1-ZSLM(I,J))
-             enddo
-          enddo
-          if( XNSUM > 1.) THEN
-             SLM = FLOAT(NINT(XLAND/XNSUM))
-               IF(SLM.NE.0.) THEN
-                  ORO= XL1 / XLAND
-               ELSE
-                  ORO = XS1 / XWATR
-               ENDIF
-          ENDIF
-          
-         get_xnsum = 0
-         do j = jst, jen
-            do i1= 1, ien-ist+1
-               i = ist + i1 -1
-               if( i .LE. 0) i = i + imn
-               if( i .GT. IMN) i = i - imn
-               HEIGHT = FLOAT(ZAVG(I,J))
-               IF(HEIGHT.LT.-990.) HEIGHT = 0.0
-               IF ( HEIGHT .gt. ORO ) get_xnsum = get_xnsum + 1
-            enddo       
-         enddo
-         
-      end function get_xnsum  
-      
 !> Count the number of high-resolution orography points that
 !! are higher than a critical value inside a model grid box
 !! (or a portion of a model grid box). The critical value is a 

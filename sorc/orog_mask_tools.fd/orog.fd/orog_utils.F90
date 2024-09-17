@@ -21,6 +21,7 @@
  public :: get_index
  public :: get_lat_angle
  public :: get_lon_angle
+ public :: get_xnsum
  public :: inside_a_polygon
  public :: latlon2xyz
  public :: minmax
@@ -783,6 +784,113 @@
  endif
 
  end subroutine get_index
+
+!> Count the number of high-resolution orography points that
+!! are higher than the model grid box average orography height.
+!!
+!! @param[in] lon1 Longitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] zslm  The high-resolution land mask.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @return get_xnsum The number of high-res points above the
+!! mean orography.
+!! @author GFDL Programmer
+
+ function get_xnsum(lon1,lat1,lon2,lat2,imn,jmn, &
+                    glat,zavg,zslm,delxn)
+
+ implicit none
+
+ real                    :: get_xnsum
+
+ integer, intent(in)     :: imn,jmn
+ integer, intent(in)     :: zavg(imn,jmn),zslm(imn,jmn)
+ real, intent(in)        :: lon1,lat1,lon2,lat2,delxn
+ real, intent(in)        :: glat(jmn)
+
+ integer                 :: i, j, ist, ien, jst, jen, i1
+ real                    :: oro, height
+ real                    :: xland,xwatr,xl1,xs1,slm,xnsum
+
+!-- Figure out ist,ien,jst,jen
+
+ do j = 1, jmn
+   if( glat(j) .gt. lat1 ) then
+     jst = j
+     exit
+   endif
+ enddo
+
+ do j = 1, jmn
+   if( glat(j) .gt. lat2 ) then
+     jen = j
+     exit
+   endif
+ enddo
+
+ ist = lon1/delxn + 1
+ ien = lon2/delxn
+ if(ist .le.0) ist = ist + imn
+ if(ien < ist) ien = ien + imn
+
+!--- Compute average oro
+
+ oro = 0.0
+ xnsum = 0
+ xland = 0
+ xwatr = 0
+ xl1 = 0
+ xs1 = 0
+ do j = jst,jen
+   do i1 = 1, ien - ist + 1
+     i = ist + i1 -1
+     if( i .le. 0) i = i + imn
+     if( i .gt. imn) i = i - imn
+     xland = xland + float(zslm(i,j))
+     xwatr = xwatr + float(1-zslm(i,j))
+     xnsum = xnsum + 1.
+     height = float(zavg(i,j))
+     if(height.lt.-990.) height = 0.0
+     xl1 = xl1 + height * float(zslm(i,j))
+     xs1 = xs1 + height * float(1-zslm(i,j))
+   enddo
+ enddo
+
+ if( xnsum > 1.) then
+   slm = float(nint(xland/xnsum))
+   if(slm.ne.0.) then
+     oro= xl1 / xland
+   else
+     oro = xs1 / xwatr
+   endif
+ endif
+
+ get_xnsum = 0
+ do j = jst, jen
+ do i1= 1, ien-ist+1
+   i = ist + i1 -1
+   if( i .le. 0) i = i + imn
+   if( i .gt. IMN) i = i - imn
+   height = float(zavg(i,j))
+   if(height.lt.-990.) height = 0.0
+   if ( height .gt. oro ) get_xnsum = get_xnsum + 1
+ enddo
+ enddo
+
+ end function get_xnsum
 
 !> Get the date/time from the system clock.
 !!
