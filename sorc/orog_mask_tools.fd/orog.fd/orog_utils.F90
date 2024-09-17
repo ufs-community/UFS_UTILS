@@ -22,6 +22,8 @@
  public :: get_lat_angle
  public :: get_lon_angle
  public :: get_xnsum
+ public :: get_xnsum2
+ public :: get_xnsum3
  public :: inside_a_polygon
  public :: latlon2xyz
  public :: minmax
@@ -892,6 +894,190 @@
 
  end function get_xnsum
 
+!> Count the number of high-resolution orography points that
+!! are higher than a critical value inside a model grid box
+!! (or a portion of a model grid box). The critical value is a
+!! function of the standard deviation of orography.
+!!
+!! @param[in] lon1 Longitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @param[out] xnsum1 The number of high-resolution orography
+!! above the critical value inside a model grid box.
+!! @param[out] xnsum2 The number of high-resolution orography
+!! points inside a model grid box.
+!! @param[out] hc Critical height.
+!! @author GFDL Programmer
+
+ subroutine get_xnsum2(lon1,lat1,lon2,lat2,imn,jmn, &
+                   glat,zavg,delxn,xnsum1,xnsum2,hc)
+
+ implicit none
+
+ integer, intent(in) :: imn,jmn
+ integer, intent(in) :: zavg(imn,jmn)
+
+ real, intent(in)    :: lon1,lat1,lon2,lat2,delxn
+ real, intent(in)    :: glat(jmn)
+ real, intent(out)   :: xnsum1,xnsum2,hc
+
+ integer             :: i, j, ist, ien, jst, jen, i1
+
+ real                :: height, var
+ real                :: xw1,xw2,xnsum
+
+!-- Figure out ist,ien,jst,jen
+
+ do j = 1, jmn
+   if( glat(j) .gt. lat1 ) then
+     jst = j
+     exit
+   endif
+ enddo
+
+ do j = 1, jmn
+   if( glat(j) .gt. lat2 ) then
+     jen = j
+     exit
+   endif
+ enddo
+
+ ist = lon1/delxn + 1
+ ien = lon2/delxn
+ if(ist .le.0) ist = ist + imn
+ if(ien < ist) ien = ien + imn
+
+!--- Compute average oro
+
+ xnsum = 0
+ xw1 = 0
+ xw2 = 0
+ do j = jst,jen
+   do i1 = 1, ien - ist + 1
+     i = ist + i1 -1
+     if( i .le. 0) i = i + imn
+     if( i .gt. imn) i = i - imn
+     xnsum = xnsum + 1.
+     height = float(zavg(i,j))
+     if(height.lt.-990.) height = 0.0
+     xw1 = xw1 + height
+     xw2 = xw2 + height ** 2
+   enddo
+ enddo
+
+ var = sqrt(max(xw2/xnsum-(xw1/xnsum)**2,0.))
+ hc = 1116.2 - 0.878 * var
+ xnsum1 = 0
+ xnsum2 = 0
+ do j = jst, jen
+   do i1= 1, ien-ist+1
+     i = ist + i1 -1
+     if( i .le. 0) i = i + imn
+     if( i .gt. imn) i = i - imn
+     height = float(zavg(i,j))
+     if ( height .gt. hc ) xnsum1 = xnsum1 + 1
+     xnsum2 = xnsum2 + 1
+   enddo
+ enddo
+
+ end subroutine get_xnsum2
+
+!> Count the number of high-resolution orography points that
+!! are higher than a critical value inside a model grid box
+!! (or a portion of a model grid box). Unlike routine
+!! get_xnsum2(), this routine does not compute the critical
+!! value. Rather, it is passed in.
+!!
+!! @param[in] lon1 Longitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lat1 Latitude of corner point 1 of the model
+!! grid box.
+!! @param[in] lon2 Longitude of corner point 2 of the model
+!! grid box.
+!! @param[in] lat2 Latitude of corner point 2 of the model
+!! grid box.
+!! @param[in] imn 'i' dimension of the high-resolution orography
+!! data.
+!! @param[in] jmn 'j' dimension of the high-resolution orography
+!! data.
+!! @param[in] glat Latitude of each row of the high-resolution
+!! orography data.
+!! @param[in] zavg The high-resolution orography.
+!! @param[in] delxn Resolution of the high-res orography data.
+!! @param[out] xnsum1 The number of high-resolution orography
+!! above the critical value inside a model grid box.
+!! @param[out] xnsum2 The number of high-resolution orography
+!! points inside a model grid box.
+!! @param[in] hc Critical height.
+!! @author GFDL Programmer
+
+ subroutine get_xnsum3(lon1,lat1,lon2,lat2,imn,jmn, &
+                      glat,zavg,delxn,xnsum1,xnsum2,HC)
+ implicit none
+
+ integer, intent(in) :: imn,jmn
+ integer, intent(in) :: zavg(imn,jmn)
+
+ real, intent(in)    :: glat(jmn)
+ real, intent(in)    :: lon1,lat1,lon2,lat2,delxn
+ real, intent(out)   :: xnsum1,xnsum2,hc
+
+ integer             :: i, j, ist, ien, jst, jen, i1
+
+ real                :: height
+
+!-- Figure out ist,ien,jst,jen
+
+! if lat1 or lat 2 is 90 degree. set jst = JMN
+
+ jst = jmn
+ jen = jmn
+ do j = 1, jmn
+   if( glat(j) .gt. lat1 ) then
+     jst = j
+     exit
+   endif
+ enddo
+
+ do j = 1, jmn
+   if( glat(j) .gt. lat2 ) then
+     jen = j
+     exit
+   endif
+ enddo
+
+ ist = lon1/delxn + 1
+ ien = lon2/delxn
+ if(ist .le.0) ist = ist + imn
+ if(ien < ist) ien = ien + imn
+
+ xnsum1 = 0
+ xnsum2 = 0
+ do j = jst, jen
+   do i1= 1, ien-ist+1
+     i = ist + i1 -1
+     if( i .le. 0) i = i + imn
+     if( i .gt. imn) i = i - imn
+     height = float(zavg(i,j))
+     if ( height .gt. hc ) xnsum1 = xnsum1 + 1
+     xnsum2 = xnsum2 + 1
+   enddo
+ enddo
+
+ end subroutine get_xnsum3
 !> Get the date/time from the system clock.
 !!
 !! @return timef
