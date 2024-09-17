@@ -23,6 +23,7 @@
  public :: inside_a_polygon
  public :: latlon2xyz
  public :: minmax
+ public :: remove_isolated_pts
  public :: timef
  public :: transpose_orog
  public :: transpose_mask
@@ -539,6 +540,152 @@
  endif
 
  end subroutine find_nearest_pole_points
+
+!> Remove isolated model points.
+!!
+!! @param[in] im 'i' dimension of a model grid tile.
+!! @param[in] jm 'j' dimension of a model grid tile.
+!! @param[inout] slm Land-mask on the model tile.
+!! @param[inout] oro Orography on the model tile.
+!! @param[inout] var Standard deviation of orography on the model tile.
+!! @param[inout] var4 Convexity on the model tile.
+!! @param[inout] oa Orographic asymmetry on the model tile.
+!! @param[inout] ol Orographic length scale on the model tile.
+!! @author Jordan Alpert NOAA/EMC
+
+ subroutine remove_isolated_pts(im,jm,slm,oro,var,var4,oa,ol)
+
+ implicit none
+
+ integer, intent(in)       :: im, jm
+
+ real, intent(inout)       :: slm(im,jm)
+ real, intent(inout)       :: oro(im,jm)
+ real, intent(inout)       :: var(im,jm)
+ real, intent(inout)       :: var4(im,jm)
+ real, intent(inout)       :: oa(im,jm,4)
+ real, intent(inout)       :: ol(im,jm,4)
+
+ integer                   :: i, j, jn, js, k
+ integer                   :: iw, ie, wgta, is, ise
+ integer                   :: in, ine, inw, isw
+
+ real                      :: slma, oroa, vara, var4a, xn, xs
+ real, allocatable         :: oaa(:), ola(:)
+
+!  REMOVE ISOLATED POINTS
+
+ print*,"- REMOVE ISOLATED POINTS."
+
+ allocate (oaa(4),ola(4))
+
+ iso_loop : DO J=2,JM-1
+   JN=J-1
+   JS=J+1
+   i_loop : DO I=1,IM
+     IW=MOD(I+IM-2,IM)+1
+     IE=MOD(I,IM)+1
+     SLMA=SLM(IW,J)+SLM(IE,J)
+     OROA=ORO(IW,J)+ORO(IE,J)
+     VARA=VAR(IW,J)+VAR(IE,J)
+     VAR4A=VAR4(IW,J)+VAR4(IE,J)
+     DO K=1,4
+       OAA(K)=OA(IW,J,K)+OA(IE,J,K)
+! --- (*j*) fix typo:
+       OLA(K)=OL(IW,J,K)+OL(IE,J,K)
+     ENDDO
+     WGTA=2
+     XN=(I-1)+1
+     IF(ABS(XN-NINT(XN)).LT.1.E-2) THEN
+       IN=MOD(NINT(XN)-1,IM)+1
+       INW=MOD(IN+IM-2,IM)+1
+       INE=MOD(IN,IM)+1
+       SLMA=SLMA+SLM(INW,JN)+SLM(IN,JN)+SLM(INE,JN)
+       OROA=OROA+ORO(INW,JN)+ORO(IN,JN)+ORO(INE,JN)
+       VARA=VARA+VAR(INW,JN)+VAR(IN,JN)+VAR(INE,JN)
+       VAR4A=VAR4A+VAR4(INW,JN)+VAR4(IN,JN)+VAR4(INE,JN)
+       DO K=1,4
+         OAA(K)=OAA(K)+OA(INW,JN,K)+OA(IN,JN,K)+OA(INE,JN,K)
+         OLA(K)=OLA(K)+OL(INW,JN,K)+OL(IN,JN,K)+OL(INE,JN,K)
+       ENDDO
+       WGTA=WGTA+3
+     ELSE
+       INW=INT(XN)
+       INE=MOD(INW,IM)+1
+       SLMA=SLMA+SLM(INW,JN)+SLM(INE,JN)
+       OROA=OROA+ORO(INW,JN)+ORO(INE,JN)
+       VARA=VARA+VAR(INW,JN)+VAR(INE,JN)
+       VAR4A=VAR4A+VAR4(INW,JN)+VAR4(INE,JN)
+       DO K=1,4
+         OAA(K)=OAA(K)+OA(INW,JN,K)+OA(INE,JN,K)
+         OLA(K)=OLA(K)+OL(INW,JN,K)+OL(INE,JN,K)
+       ENDDO
+       WGTA=WGTA+2
+     ENDIF
+     XS=(I-1)+1
+     IF(ABS(XS-NINT(XS)).LT.1.E-2) THEN
+       IS=MOD(NINT(XS)-1,IM)+1
+       ISW=MOD(IS+IM-2,IM)+1
+       ISE=MOD(IS,IM)+1
+       SLMA=SLMA+SLM(ISW,JS)+SLM(IS,JS)+SLM(ISE,JS)
+       OROA=OROA+ORO(ISW,JS)+ORO(IS,JS)+ORO(ISE,JS)
+       VARA=VARA+VAR(ISW,JS)+VAR(IS,JS)+VAR(ISE,JS)
+       VAR4A=VAR4A+VAR4(ISW,JS)+VAR4(IS,JS)+VAR4(ISE,JS)
+       DO K=1,4
+         OAA(K)=OAA(K)+OA(ISW,JS,K)+OA(IS,JS,K)+OA(ISE,JS,K)
+         OLA(K)=OLA(K)+OL(ISW,JS,K)+OL(IS,JS,K)+OL(ISE,JS,K)
+       ENDDO
+       WGTA=WGTA+3
+     ELSE
+       ISW=INT(XS)
+       ISE=MOD(ISW,IM)+1
+       SLMA=SLMA+SLM(ISW,JS)+SLM(ISE,JS)
+       OROA=OROA+ORO(ISW,JS)+ORO(ISE,JS)
+       VARA=VARA+VAR(ISW,JS)+VAR(ISE,JS)
+       VAR4A=VAR4A+VAR4(ISW,JS)+VAR4(ISE,JS)
+       DO K=1,4
+         OAA(K)=OAA(K)+OA(ISW,JS,K)+OA(ISE,JS,K)
+         OLA(K)=OLA(K)+OL(ISW,JS,K)+OL(ISE,JS,K)
+       ENDDO
+       WGTA=WGTA+2
+     ENDIF
+     OROA=OROA/WGTA
+     VARA=VARA/WGTA
+     VAR4A=VAR4A/WGTA
+     DO K=1,4
+       OAA(K)=OAA(K)/WGTA
+       OLA(K)=OLA(K)/WGTA
+     ENDDO
+     IF(SLM(I,J).EQ.0..AND.SLMA.EQ.WGTA) THEN
+       PRINT '(" - SEA ",2F8.0," MODIFIED TO LAND",2F8.0,  &
+               " AT ",2I8)',ORO(I,J),VAR(I,J),OROA,VARA,I,J
+       SLM(I,J)=1.
+       ORO(I,J)=OROA
+       VAR(I,J)=VARA
+       VAR4(I,J)=VAR4A
+       DO K=1,4
+         OA(I,J,K)=OAA(K)
+         OL(I,J,K)=OLA(K)
+       ENDDO
+     ELSEIF(SLM(I,J).EQ.1..AND.SLMA.EQ.0.) THEN
+       PRINT '(" - LAND",2F8.0," MODIFIED TO SEA ",2F8.0,  &
+               " AT ",2I8)',ORO(I,J),VAR(I,J),OROA,VARA,I,J
+       SLM(I,J)=0.
+       ORO(I,J)=OROA
+       VAR(I,J)=VARA
+       VAR4(I,J)=VAR4A
+       DO K=1,4
+         OA(I,J,K)=OAA(K)
+         OL(I,J,K)=OLA(K)
+       ENDDO
+     ENDIF
+   ENDDO i_loop
+ ENDDO iso_loop
+
+ deallocate (oaa,ola)
+
+ end subroutine remove_isolated_pts
+
 !> Get the date/time from the system clock.
 !!
 !! @return timef
