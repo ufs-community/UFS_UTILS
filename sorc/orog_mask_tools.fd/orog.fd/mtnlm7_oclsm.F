@@ -68,6 +68,7 @@ C>  -   NCID       - MASK FILE (NetCDF) IF MASK_ONLY=TRUE
 C>  -                CONTAINS ONLY LAND MASK AND FRACTION.
 C>
 C> @return 0 for success, error code otherwise.
+      use io_utils, only     : read_mdl_dims
       implicit none
 
       character(len=256)    :: mdl_grid_file = "none"
@@ -122,6 +123,10 @@ C> @return 0 for success, error code otherwise.
       SUBROUTINE TERSUB(IMN,JMN,IM,JM,EFAC,
      &     OUTGRID,MASK_ONLY,EXTERNAL_MASK_FILE)
 
+      use io_utils, only   : qc_orog_by_ramp, write_mask_netcdf, 
+     &                       read_global_mask, read_global_orog,
+     &                       read_mask, write_netcdf,
+     &                       read_mdl_grid_file
       use orog_utils, only : minmax, timef, remove_isolated_pts
 
       implicit none

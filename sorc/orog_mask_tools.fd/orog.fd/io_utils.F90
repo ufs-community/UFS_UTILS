@@ -1,6 +1,27 @@
 !> @file
-!! @brief Write out data in netcdf format
-!! @author Jordan Alpert NOAA/EMC
+!! @brief i/o utilities
+!! @author George Gayno NOAA/EMC
+
+!> Module containing utilities that read and write data.
+!!
+!! @author George Gayno NOAA/EMC
+
+ module io_utils
+
+ implicit none
+
+ private
+
+ public :: qc_orog_by_ramp
+ public :: read_global_mask
+ public :: read_global_orog
+ public :: read_mask
+ public :: read_mdl_dims
+ public :: read_mdl_grid_file
+ public :: write_mask_netcdf
+ public :: write_netcdf
+
+ contains
 
 !> Write out orography file in netcdf format.
 !!
@@ -654,3 +675,5 @@
  deallocate (GICE)
 
  end subroutine qc_orog_by_ramp
+
+ end module io_utils
