@@ -1031,9 +1031,9 @@
  integer, intent(in) :: imn,jmn
  integer, intent(in) :: zavg(imn,jmn)
 
- real, intent(in)    :: glat(jmn)
+ real, intent(in)    :: hc, glat(jmn)
  real, intent(in)    :: lon1,lat1,lon2,lat2,delxn
- real, intent(out)   :: xnsum1,xnsum2,hc
+ real, intent(out)   :: xnsum1,xnsum2
 
  integer             :: i, j, ist, ien, jst, jen, i1
 
