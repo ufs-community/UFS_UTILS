@@ -45,8 +45,7 @@ pwd=$(pwd -P)
 #--model fix fields
 #------------------------------
 if [ $machine = "hera" ]; then
-#   FIX_DIR="/scratch1/NCEPDEV/global/glopara/fix"
-    FIX_DIR="/scratch1/NCEPDEV/global/glopara/TEST_FIX"
+    FIX_DIR="/scratch1/NCEPDEV/global/glopara/fix"
 elif [ $machine = "jet" ]; then
     FIX_DIR="/lfs5/HFIP/hfv3gfs/glopara/git_lfs4/fv3gfs/fix"
 elif [ $machine = "orion" -o $machine = "hercules" ]; then
@@ -60,7 +59,7 @@ elif [ $machine = "gaea" ]; then
 fi
 
 am_ver=${am_ver:-20220805}
-orog_ver=${orog_ver:-20231027}
+orog_ver=${orog_ver:-20240917}
 sfc_climo_ver=${sfc_climo_ver:-20230925}
 
 for dir in am orog sfc_climo; do
