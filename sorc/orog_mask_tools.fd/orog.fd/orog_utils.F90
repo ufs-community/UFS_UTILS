@@ -11,10 +11,10 @@
 
  private
 
- real, parameter    :: earth_radius = 6371200. ! meters
- real, parameter    :: pi=3.1415926535897931
- real, parameter    :: rad2deg = 180./3.14159265358979
- real, parameter    :: deg2rad = 3.14159265358979/180.
+ real, parameter    :: earth_radius = 6371200.          !< earth radius in meters.
+ real, parameter    :: pi=3.1415926535897931            !< pi.
+ real, parameter    :: rad2deg = 180./3.14159265358979  !< radians per degrees.
+ real, parameter    :: deg2rad = 3.14159265358979/180.  !< degrees per radians.
 
  public :: find_nearest_pole_points
  public :: find_poles
