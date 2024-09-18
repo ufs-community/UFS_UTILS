@@ -68,45 +68,42 @@
 !!  -                CONTAINS ONLY LAND MASK AND FRACTION.
 !!
 !! @return 0 for success, error code otherwise.
-      use io_utils, only     : read_mdl_dims
-      implicit none
 
-      character(len=256)    :: mdl_grid_file = "none"
-      character(len=256)    :: external_mask_file = "none"
-      integer               :: imn, jmn, im, jm, efac
-      logical               :: mask_only = .false.
+ use io_utils, only     : read_mdl_dims
+ implicit none
 
-      print*,"- BEGIN OROGRAPHY PROGRAM."
+ character(len=256)    :: mdl_grid_file = "none"
+ character(len=256)    :: external_mask_file = "none"
+ integer               :: im, jm, efac
+ logical               :: mask_only = .false.
 
-      read(5,*) mdl_grid_file
-      read(5,*) mask_only
-      read(5,*) external_mask_file
+ print*,"- BEGIN OROGRAPHY PROGRAM."
 
-      efac = 0
-      imn  = 360*120
-      jmn  = 180*120
+ read(5,*) mdl_grid_file
+ read(5,*) mask_only
+ read(5,*) external_mask_file
 
-      if (mask_only) then
-        print*,"- WILL COMPUTE LANDMASK ONLY."
-      endif
+ efac = 0
 
-      if (trim(external_mask_file) /= "none") then
-        print*,"- WILL USE EXTERNAL LANDMASK FROM FILE: ", trim(external_mask_file)
-      endif
+ if (mask_only) then
+   print*,"- WILL COMPUTE LANDMASK ONLY."
+ endif
 
-      call read_mdl_dims(mdl_grid_file, im, jm)
+ if (trim(external_mask_file) /= "none") then
+   print*,"- WILL USE EXTERNAL LANDMASK FROM FILE: ", trim(external_mask_file)
+ endif
+
+ call read_mdl_dims(mdl_grid_file, im, jm)
          
-      call tersub(imn,jmn,im,jm,efac,mdl_grid_file,mask_only,external_mask_file)
+ call tersub(im,jm,efac,mdl_grid_file,mask_only,external_mask_file)
 
-      print*,"- NORMAL TERMINATION."
+ print*,"- NORMAL TERMINATION."
 
-      stop
-      end
+ stop
+ end
 
 !> Driver routine to compute terrain.
 !!
-!! @param[in] IMN "i" dimension of the input terrain dataset.
-!! @param[in] JMN "j" dimension of the input terrain dataset.
 !! @param[in] IM "i" dimension of the model grid tile.
 !! @param[in] JM "j" dimension of the model grid tile.
 !! @param[in] EFAC Factor to adjust orography by its variance.
@@ -118,8 +115,7 @@
 !! @param[in] EXTERNAL_MASK_FILE File containing an externally
 !! generated land mask/fraction.
 !! @author Jordan Alpert NOAA/EMC
-      SUBROUTINE TERSUB(IMN,JMN,IM,JM,EFAC,  &
-           OUTGRID,MASK_ONLY,EXTERNAL_MASK_FILE)
+      SUBROUTINE TERSUB(IM,JM,EFAC,OUTGRID,MASK_ONLY,EXTERNAL_MASK_FILE)
 
       use io_utils, only   : qc_orog_by_ramp, write_mask_netcdf, &
                              read_global_mask, read_global_orog, &
@@ -128,15 +124,16 @@
       use orog_utils, only : minmax, timef, remove_isolated_pts
 
       implicit none
-      include 'netcdf.inc'
 
-      integer                      :: IMN,JMN,IM,JM
+      integer, parameter           :: imn  = 360*120
+      integer, parameter           :: jmn  = 180*120
+
+      integer, intent(in)          :: IM,JM,efac
       character(len=*), intent(in) :: OUTGRID
       character(len=*), intent(in) :: EXTERNAL_MASK_FILE
 
-      logical, intent(in) :: mask_only
+      logical, intent(in)          :: mask_only
 
-      integer :: efac
       integer :: i,j
       integer :: itest,jtest
 
@@ -420,18 +417,27 @@
 !! @param[in] lon_c Longitude of the model grid corner points.
 !! @param[in] lat_c Latitude on the model grid corner points.
 !! @author GFDL Programmer
-      SUBROUTINE MAKE_MASK(zslm,SLM,land_frac, &
-       IM,JM,IMN,JMN,lon_c,lat_c)
+      SUBROUTINE MAKE_MASK(zslm,slm,land_frac, &
+       im,jm,imn,jmn,lon_c,lat_c)
+
       use orog_utils, only : inside_a_polygon, get_index
+
       implicit none
-      real, parameter :: D2R = 3.14159265358979/180.
-      integer, parameter :: MAXSUM=20000000
-      integer IM, JM, IMN, JMN, jst, jen
+
+      integer, intent(in)       :: zslm(imn,jmn)
+      integer, intent(in)       :: im, jm, imn, jmn
+
+      real,    intent(in)       :: lon_c(im+1,jm+1), lat_c(im+1,jm+1)
+
+      real,    intent(out)      :: slm(im,jm)
+      real,    intent(out)      :: land_frac(im,jm)
+
+      integer, parameter        :: MAXSUM=20000000
+
+      real, parameter           :: D2R = 3.14159265358979/180.
+
+      integer  jst, jen
       real GLAT(JMN), GLON(IMN)
-      INTEGER ZSLM(IMN,JMN)
-      real land_frac(IM,JM)
-      real SLM(IM,JM)
-      real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
       real    LONO(4),LATO(4),LONI,LATI
       real    LONO_RAD(4), LATO_RAD(4)
       integer JM1,i,j,nsum,nsum_all,ii,jj,numx,i2
@@ -551,18 +557,28 @@
 !! @author GFDL Programmer
       SUBROUTINE MAKEMT2(ZAVG,ZSLM,ORO,SLM,VAR,VAR4, &
        IM,JM,IMN,JMN,lon_c,lat_c,lake_frac,land_frac)
+
       use orog_utils, only : inside_a_polygon, get_index
+
       implicit none
-      real, parameter :: D2R = 3.14159265358979/180.
-      integer, parameter :: MAXSUM=20000000
+
+      integer, intent(in)       :: zavg(imn,jmn),zslm(imn,jmn)
+      integer, intent(in)       :: im, jm, imn, jmn
+
+      real, intent(in)          :: slm(im,jm)
+      real, intent(in)          :: lake_frac(im,jm),land_frac(im,jm)
+      real, intent(in)          :: lon_c(im+1,jm+1), lat_c(im+1,jm+1)
+
+      real, intent(out)         :: oro(im,jm)
+      real, intent(out)         :: var(im,jm),var4(im,jm)
+
+      integer, parameter        :: MAXSUM=20000000
+      real, parameter           :: D2R = 3.14159265358979/180.
+ 
       real, dimension(:), allocatable ::  hgt_1d, hgt_1d_all
-      integer IM, JM, IMN, JMN
+
       real GLAT(JMN), GLON(IMN)
-      INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
-      real ORO(IM,JM),VAR(IM,JM),VAR4(IM,JM)
-      real, intent(in) :: SLM(IM,JM), lake_frac(im,jm),land_frac(im,jm)
       integer JST, JEN
-      real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
       real    LONO(4),LATO(4),LONI,LATI
       real    LONO_RAD(4), LATO_RAD(4)
       real    HEIGHT
@@ -770,17 +786,24 @@
 !===  PC: principal coordinates of each Z avg orog box for L&M
 !
       use orog_utils, only : get_index, inside_a_polygon
+
       implicit none
-      real, parameter :: REARTH=6.3712E+6
-      real, parameter :: D2R = 3.14159265358979/180. 
-      integer :: IM,JM,IMN,JMN
-      real  :: GLAT(JMN),DELTAX(JMN)
-      INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
-      real lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
-      real, intent(in) :: SLM(IM,JM)
+
+      integer, intent(in)          :: zavg(imn,jmn),zslm(imn,jmn)
+      integer, intent(in)          :: im,jm,imn,jmn
+
+      real, intent(in)             :: lon_c(im+1,jm+1), lat_c(im+1,jm+1)
+      real, intent(in)             :: slm(im,jm)
+
+      real, intent(out)            :: theta(im,jm), gamma(im,jm), sigma(im,jm)
+
+      real, parameter              :: REARTH=6.3712E+6
+      real, parameter              :: D2R = 3.14159265358979/180. 
+
+      real GLAT(JMN),DELTAX(JMN)
       real HL(IM,JM),HK(IM,JM)
       real HX2(IM,JM),HY2(IM,JM),HXY(IM,JM),HLPRIM(IM,JM)
-      real THETA(IM,JM),GAMMA(IM,JM),SIGMA2(IM,JM),SIGMA(IM,JM)
+      real SIGMA2(IM,JM)
       real PI,CERTH,DELXN,DELTAY,XNSUM,XLAND
       real xfp,yfp,xfpyfp,xfp2,yfp2
       real hi0,hip1,hj0,hjp1,hijax,hi1j1
@@ -1023,39 +1046,49 @@
                  ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4, &
                  IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy, &
                  is_south_pole,is_north_pole )
+
       use orog_utils, only : get_lat_angle, get_lon_angle, &
                              get_index, inside_a_polygon,  &
                              get_xnsum, get_xnsum2,        &
                              get_xnsum3
+
       implicit none
-      real, parameter :: MISSING_VALUE = -9999.
-      real, parameter :: D2R = 3.14159265358979/180.
-      integer IM,JM,IMN,JMN
-      real    GLAT(JMN)
-      INTEGER ZAVG(IMN,JMN),ZSLM(IMN,JMN)
-      real    ORO(IM,JM),ORO1(IM,JM),ELVMAX(IM,JM),ZMAX(IM,JM)
-      real    OA4(IM,JM,4)
-      integer IOA4(IM,JM,4)
-      real    lon_c(IM+1,JM+1), lat_c(IM+1,JM+1)
-      real    lon_t(IM,JM), lat_t(IM,JM)
-      real    dx(IM,JM), dy(IM,JM)
-      logical is_south_pole(IM,JM), is_north_pole(IM,JM)
-      real    XNSUM(IM,JM),XNSUM1(IM,JM),XNSUM2(IM,JM)
-      real    XNSUM3(IM,JM),XNSUM4(IM,JM)
-      real    VAR(IM,JM),OL(IM,JM,4)
+
+      integer, intent(in)        :: im,jm,imn,jmn
+      integer, intent(in)        :: zavg(imn,jmn),zslm(imn,jmn)
+
+      logical, intent(in)        :: is_south_pole(im,jm), is_north_pole(im,jm)
+
+      real, intent(in)           :: dx(im,jm), dy(im,jm)
+      real, intent(in)           :: lon_c(im+1,jm+1), lat_c(im+1,jm+1)
+      real, intent(in)           :: lon_t(im,jm), lat_t(im,jm)
+
+      integer, intent(out)       :: ioa4(im,jm,4)
+
+      real, intent(out)          :: var(im,jm),ol(im,jm,4),oa4(im,jm,4)
+      real, intent(out)          :: oro(im,jm),oro1(im,jm),elvmax(im,jm)
+      real, intent(out)          :: xnsum(im,jm),xnsum1(im,jm),xnsum2(im,jm)
+      real, intent(out)          :: xnsum3(im,jm),xnsum4(im,jm)
+
+      real, parameter            :: MISSING_VALUE = -9999.
+      real, parameter            :: D2R = 3.14159265358979/180.
+
       integer i,j,ilist(IMN),numx,i1,j1,ii1
       integer KWD
+      integer jst, jen
+      integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
+
+      real    GLAT(JMN)
+      real    ZMAX(IM,JM)
       real    LONO(4),LATO(4),LONI,LATI
       real    LONO_RAD(4), LATO_RAD(4)
       real    DELXN,HC,HEIGHT,XNPU,XNPD,T
-      integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
       real    lon,lat,dlon,dlat,dlat_old
       real    lon1,lat1,lon2,lat2
       real    xnsum11,xnsum12,xnsum21,xnsum22
       real    HC_11, HC_12, HC_21, HC_22
       real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
       real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
-      integer jst, jen
 
       print*,"- CREATE ASYMETRY AND LENGTH SCALE."
 !   
