@@ -521,7 +521,7 @@ C  (*j*)  for hard wired zero offset (lambda s =0) for terr05
                land_frac(i,j) = XLAND/XNSUM  
                SLM(I,J) = FLOAT(NINT(XLAND/XNSUM))
          ELSEIF(XNSUM_ALL.GT.1.) THEN
-               land_frac(i,j) = XLAND_ALL/XNSUM _ALL 
+               land_frac(i,j) = XLAND_ALL/XNSUM_ALL 
                SLM(I,J) = FLOAT(NINT(XLAND_ALL/XNSUM_ALL))
          ELSE
                print*, "FATAL ERROR: no source points in MAKE_MASK."
