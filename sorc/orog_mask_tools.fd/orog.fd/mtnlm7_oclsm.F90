@@ -141,8 +141,6 @@
       integer(1), allocatable :: UMD(:,:)
       integer(2), allocatable :: glob(:,:)
 
-      integer, allocatable :: IWORK(:,:,:)
-
       real :: tbeg,tend,tbeg1
 
       real, allocatable :: XLAT(:),XLON(:)
@@ -152,8 +150,6 @@
       real, allocatable :: land_frac(:,:),lake_frac(:,:)
       real, allocatable :: THETA(:,:),GAMMA(:,:),SIGMA(:,:),ELVMAX(:,:)
       real, allocatable :: VAR4(:,:)
-      real, allocatable :: WORK1(:,:),WORK2(:,:),WORK3(:,:),WORK4(:,:)
-      real, allocatable :: WORK5(:,:),WORK6(:,:)
       real, allocatable :: OA(:,:,:),OL(:,:,:),HPRIME(:,:,:)
 
       logical :: is_south_pole(IM,JM), is_north_pole(IM,JM)
@@ -267,27 +263,19 @@
  
 ! COMPUTE MOUNTAIN DATA : OA OL
  
-       allocate (IWORK(IM,JM,4))
        allocate (OA(IM,JM,4),OL(IM,JM,4))
-       allocate (WORK1(IM,JM),WORK2(IM,JM),WORK3(IM,JM),WORK4(IM,JM))
-       allocate (WORK5(IM,JM),WORK6(IM,JM))
 
        tbeg=timef()
-       CALL MAKEOA2(ZAVG,zslm,VAR,OA,OL,IWORK,ELVMAX,ORO, &
-                  WORK1,WORK2,WORK3,WORK4,WORK5,WORK6,    &
+       CALL MAKEOA2(ZAVG,zslm,VAR,OA,OL,ELVMAX,ORO, &
                   IM,JM,IMN,JMN,geolon_c,geolat_c,        &
                   geolon,geolat,dx,dy,is_south_pole,is_north_pole)
+
        tend=timef()
 
        print*,"- TIMING: CREATE ASYMETRY AND LENGTH SCALE ",tend-tbeg
 
-!      Deallocate 2d vars
        deallocate (ZSLM,ZAVG)
        deallocate (dx,dy)
-       deallocate (WORK2,WORK3,WORK4,WORK5,WORK6)
-
-!      Deallocate 3d vars
-       deallocate(IWORK)
 
        tbeg=timef()
        call minmax(IM,JM,OA,'OA      ')
@@ -367,7 +355,6 @@
       ENDDO
  
       deallocate(VAR4)
-      deallocate (WORK1)
 
       call minmax(IM,JM,ELVMAX,'ELVMAX  ',itest,jtest)
       call minmax(IM,JM,ORO,'ORO     ')
@@ -1018,15 +1005,8 @@
 !! directional components - W/S/SW/NW
 !! @param[out] ol Orographic length scale on the model grid. Four
 !! directional components - W/S/SW/NW
-!! @param[out] ioa4 Count of oa4 values between certain thresholds.
 !! @param[out] elvmax Maximum elevation within a model grid box.
 !! @param[in] oro Orography on the model grid.
-!! @param[out] oro1 Save array for model grid orography.
-!! @param[out] xnsum Not used.
-!! @param[out] xnsum1 Not used.
-!! @param[out] xnsum2 Not used.
-!! @param[out] xnsum3 Not used.
-!! @param[out] xnsum4 Not used.
 !! @param[in] im "i" dimension of the model grid tile.
 !! @param[in] jm "j" dimension of the model grid tile.
 !! @param[in] imn "i" dimension of the high-resolution orography and
@@ -1042,8 +1022,7 @@
 !! @param[in] is_south_pole Is the model point at the south pole?
 !! @param[in] is_north_pole is the model point at the north pole?
 !! @author GFDL Programmer
-      SUBROUTINE MAKEOA2(ZAVG,zslm,VAR,OA4,OL,IOA4,ELVMAX, &
-                 ORO,oro1,XNSUM,XNSUM1,XNSUM2,XNSUM3,XNSUM4, &
+      SUBROUTINE MAKEOA2(ZAVG,zslm,VAR,OA4,OL,ELVMAX,ORO,&
                  IM,JM,IMN,JMN,lon_c,lat_c,lon_t,lat_t,dx,dy, &
                  is_south_pole,is_north_pole )
 
@@ -1062,16 +1041,15 @@
       real, intent(in)           :: dx(im,jm), dy(im,jm)
       real, intent(in)           :: lon_c(im+1,jm+1), lat_c(im+1,jm+1)
       real, intent(in)           :: lon_t(im,jm), lat_t(im,jm)
+      real, intent(in)           :: oro(im,jm), var(im,jm)
 
-      integer, intent(out)       :: ioa4(im,jm,4)
-
-      real, intent(out)          :: var(im,jm),ol(im,jm,4),oa4(im,jm,4)
-      real, intent(out)          :: oro(im,jm),oro1(im,jm),elvmax(im,jm)
-      real, intent(out)          :: xnsum(im,jm),xnsum1(im,jm),xnsum2(im,jm)
-      real, intent(out)          :: xnsum3(im,jm),xnsum4(im,jm)
+      real, intent(out)          :: ol(im,jm,4),oa4(im,jm,4)
+      real, intent(out)          :: elvmax(im,jm)
 
       real, parameter            :: MISSING_VALUE = -9999.
       real, parameter            :: D2R = 3.14159265358979/180.
+
+      integer, allocatable       :: ioa4(:,:,:)
 
       integer i,j,ilist(IMN),numx,i1,j1,ii1
       integer KWD
@@ -1105,16 +1083,10 @@
 !
       DO J=1,JM
         DO I=1,IM
-          XNSUM(I,J) = 0.0
           ELVMAX(I,J) = ORO(I,J)
           ZMAX(I,J)   = 0.0
 !---- COUNT NUMBER OF MODE. HIGHER THAN THE HC, CRITICAL HEIGHT
 !     IN A GRID BOX
-          XNSUM1(I,J) = 0.0
-          XNSUM2(I,J) = 0.0
-          XNSUM3(I,J) = 0.0
-          XNSUM4(I,J) = 0.0
-          ORO1(I,J) = ORO(I,J)
           ELVMAX(I,J) = ZMAX(I,J) 
         ENDDO
       ENDDO
@@ -1156,11 +1128,8 @@
       ENDDO
 !$omp end parallel do      
 
-! ---  this will make work1 array take on oro's values on return
-! ---  this will make work1 array take on oro's values on return
       DO J=1,JM
         DO I=1,IM
-          ORO1(I,J) = ORO(I,J)
           ELVMAX(I,J) = ZMAX(I,J) 
         ENDDO
       ENDDO
@@ -1395,6 +1364,8 @@
         ENDDO
       ENDDO
 
+      ALLOCATE(IOA4(IM,JM,4))
+
       NS0 = 0
       NS1 = 0
       NS2 = 0
@@ -1431,6 +1402,8 @@
       ENDDO
       ENDDO
       ENDDO
+
+      DEALLOCATE(IOA4)
  
       RETURN
 
