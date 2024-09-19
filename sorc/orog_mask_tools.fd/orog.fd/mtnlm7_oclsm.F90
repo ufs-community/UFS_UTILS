@@ -1049,24 +1049,20 @@
       real, parameter            :: MISSING_VALUE = -9999.
       real, parameter            :: D2R = 3.14159265358979/180.
 
-      integer, allocatable       :: ioa4(:,:,:)
+      integer                    :: i,j,ilist(imn),numx,i1,j1,ii1
+      integer                    :: jst, jen, kwd
 
-      integer i,j,ilist(IMN),numx,i1,j1,ii1
-      integer KWD
-      integer jst, jen
-      integer NS0,NS1,NS2,NS3,NS4,NS5,NS6
-
-      real    GLAT(JMN)
-      real    ZMAX(IM,JM)
-      real    LONO(4),LATO(4),LONI,LATI
-      real    LONO_RAD(4), LATO_RAD(4)
-      real    DELXN,HC,HEIGHT,XNPU,XNPD,T
-      real    lon,lat,dlon,dlat,dlat_old
-      real    lon1,lat1,lon2,lat2
-      real    xnsum11,xnsum12,xnsum21,xnsum22
-      real    HC_11, HC_12, HC_21, HC_22
-      real    xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
-      real    xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
+      real                       :: glat(jmn)
+      real                       :: zmax(im,jm)
+      real                       :: lono(4),lato(4),loni,lati
+      real                       :: lono_rad(4), lato_rad(4)
+      real                       :: delxn,hc,height,xnpu,xnpd,t
+      real                       :: lon,lat,dlon,dlat,dlat_old
+      real                       :: lon1,lat1,lon2,lat2
+      real                       :: xnsum11,xnsum12,xnsum21,xnsum22
+      real                       :: hc_11, hc_12, hc_21, hc_22
+      real                       :: xnsum1_11,xnsum1_12,xnsum1_21,xnsum1_22
+      real                       :: xnsum2_11,xnsum2_12,xnsum2_21,xnsum2_22
 
       print*,"- CREATE ASYMETRY AND LENGTH SCALE."
 !   
@@ -1364,47 +1360,6 @@
         ENDDO
       ENDDO
 
-      ALLOCATE(IOA4(IM,JM,4))
-
-      NS0 = 0
-      NS1 = 0
-      NS2 = 0
-      NS3 = 0
-      NS4 = 0
-      NS5 = 0
-      NS6 = 0
-      DO KWD=1,4
-      DO J=1,JM
-      DO I=1,IM
-         T = ABS( OA4(I,J,KWD) )
-         IF(T .EQ. 0.) THEN
-            IOA4(I,J,KWD) = 0
-            NS0 = NS0 + 1
-         ELSE IF(T .GT. 0. .AND. T .LE. 1.) THEN
-            IOA4(I,J,KWD) = 1
-            NS1 = NS1 + 1
-         ELSE IF(T .GT. 1. .AND. T .LE. 10.) THEN
-            IOA4(I,J,KWD) = 2
-            NS2 = NS2 + 1
-         ELSE IF(T .GT. 10. .AND. T .LE. 100.) THEN
-            IOA4(I,J,KWD) = 3
-            NS3 = NS3 + 1
-         ELSE IF(T .GT. 100. .AND. T .LE. 1000.) THEN
-            IOA4(I,J,KWD) = 4
-            NS4 = NS4 + 1
-         ELSE IF(T .GT. 1000. .AND. T .LE. 10000.) THEN
-            IOA4(I,J,KWD) = 5
-            NS5 = NS5 + 1
-         ELSE IF(T .GT. 10000.) THEN
-            IOA4(I,J,KWD) = 6
-            NS6 = NS6 + 1
-         ENDIF
-      ENDDO
-      ENDDO
-      ENDDO
-
-      DEALLOCATE(IOA4)
- 
       RETURN
 
       END SUBROUTINE MAKEOA2
