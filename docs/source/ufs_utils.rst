@@ -375,11 +375,11 @@ Program inputs and outputs
 
       * grid file - the "grid" file from the make_hgrid or regional_esg programs  - CRES_grid.tile#.nc - (NetCDF)
       * orography file - the orography file including the 'inland' flag record from the inland program - oro.CRES.tile#.nc (NetCDF)
-      * lake status code file - One of the following files. (located in `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_). See GlobalLakeStatus.txt for a description of the file format.
+      * lake status code file - One of the following files. (located in `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_).
           * GlobalLakeStatus_MOSISp.dat
           * GlobalLakeStatus_GLDBv3release.dat
           * GlobalLakeStatus_VIIRS.dat
-      * lake depth file - One of the following files. (located in `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_). See GlobalLakeDepth.txt for a description of this file.
+      * lake depth file - One of the following files. (located in `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_).
           * GlobalLakeDepth_GLDBv3release.dat
           * GlobalLakeDepth_GLOBathy.dat
 
