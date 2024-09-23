@@ -240,11 +240,11 @@ Program inputs and outputs
 
       * The "grid" files (CRES_grid.tile#.nc) containing the geo-reference records for the grid - (NetCDF).  Created by the make_hgrid or regional_esg_grid programs.
       * Global 30-arc-second University of Maryland land cover data.  Used to create the land-sea mask.
-             * landcover.umd.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_.
+             * landcover.umd.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
       * Global 30-arc-second USGS GMTED2010 orography data.
-             * topography.gmted2010.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_.
+             * topography.gmted2010.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
       * 30-arc-second RAMP Antarctic terrain data (Radarsat Antarctic Mapping Project)
-             * topography.antarctica.ramp.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_.
+             * topography.antarctica.ramp.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
 
 **Output data:**  
 
@@ -288,8 +288,8 @@ The program reads the tile number (1-6 for global, 7 for stand-alone regional) a
 All in NetCDF.
 
       * The tiled "grid" files (CRES_grid.tile#.nc) created by the make_hgrid or regional_esg_grid programs.
-      * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data). `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/am/20220805/>`_.
-      * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004)). `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/am/20220805/>`_.
+      * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data). `Located here <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
+      * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004)). `Located here <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
 
 **Output data:**
 
@@ -375,11 +375,11 @@ Program inputs and outputs
 
       * grid file - the "grid" file from the make_hgrid or regional_esg programs  - CRES_grid.tile#.nc - (NetCDF)
       * orography file - the orography file including the 'inland' flag record from the inland program - oro.CRES.tile#.nc (NetCDF)
-      * lake status code file - One of the following files. (located in `./fix/orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_). See GlobalLakeStatus.txt for a description of the file format.
+      * lake status code file - One of the following files. (located in `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_). See GlobalLakeStatus.txt for a description of the file format.
           * GlobalLakeStatus_MOSISp.dat
           * GlobalLakeStatus_GLDBv3release.dat
           * GlobalLakeStatus_VIIRS.dat
-      * lake depth file - One of the following files. (located in `./fix/orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/orog/20231027/>`_). See GlobalLakeDepth.txt for a description of this file.
+      * lake depth file - One of the following files. (located in `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_). See GlobalLakeDepth.txt for a description of this file.
           * GlobalLakeDepth_GLDBv3release.dat
           * GlobalLakeDepth_GLOBathy.dat
 
@@ -529,7 +529,7 @@ Program inputs and outputs
 
 **Input data:** 
 
-The surface climatological data is located here `./fix/sfc_climo <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/sfc_climo/20230925/>`_.  All NetCDF.
+The surface climatological data is located here `./fix/sfc_climo <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/sfc_climo/20230925/>`_.  All NetCDF.
 
       * Global 1-degree fractional coverage strong/weak zenith angle albedo - facsf.1.0.nc
       * Global 0.05-degree maximum snow albedo - maximum_snow_albedo.0.05.nc

@@ -86,7 +86,7 @@ Users may create their own global grids, or use the pre-defined files located in
 	      * CRES.mxRES.vegetation_greenness.tileX.nc (vegetation greenness)
 	      * CRES.mxRES.vegetation_type.tileX.nc (vegetation type)
 
-      * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/am/20220805/>`_.
+      * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/am/20220805/>`_.
 	      * global_hyblev.l$LEVS.txt
 
       * Input data files.  GRIB2, NEMSIO or NetCDF.  See the next section for how to find this data.
@@ -257,7 +257,7 @@ The following four sets of files/directories should all be located in the same d
 	      * CRES.vegetation_greenness.tile7.halo4.nc (vegetation greenness)
 	      * CRES.vegetation_type.tile7.halo4.nc (vegetation type)
 
-      * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/am/20220805/>`_.
+      * FV3 vertical coordinate file.  Text file.  `Located here <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/am/20220805/>`_.
 	      * global_hyblev.l$LEVS.txt
 
       * Input data files. GRIB2 only.  See the next section for how to find this data.
