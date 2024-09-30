@@ -1,5 +1,5 @@
-set(lib_src netcdf_io.F90)
-set(exe_src mtnlm7_oclsm.F)
+set(lib_src io_utils.F90 orog_utils.F90)
+set(exe_src mtnlm7_oclsm.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -convert big_endian -assume byterecl")
@@ -9,14 +9,11 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-invalid-boz")
   endif()
 endif()
-if(ip_VERSION GREATER_EQUAL 4.0.0)
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DIP_V4")
-endif()
 
 set(exe_name orog)
 
 add_library(orog_lib STATIC ${lib_src})
-add_executable(${exe_name} mtnlm7_oclsm.F)
+add_executable(${exe_name} mtnlm7_oclsm.F90)
 
 set(mod_dir "${CMAKE_CURRENT_BINARY_DIR}/mod")
 set_target_properties(orog_lib PROPERTIES Fortran_MODULE_DIRECTORY ${mod_dir})
@@ -27,12 +24,7 @@ target_link_libraries(
   PUBLIC
   bacio::bacio_4
   w3emc::w3emc_d
-  ip::ip_d
   NetCDF::NetCDF_Fortran)
-
-if(sp_FOUND)
-  target_link_libraries(orog_lib PUBLIC sp::sp_d)
-endif()
 
 if(OpenMP_Fortran_FOUND)
   target_link_libraries(orog_lib PUBLIC OpenMP::OpenMP_Fortran)
