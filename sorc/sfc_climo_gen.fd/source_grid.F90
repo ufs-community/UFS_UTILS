@@ -214,8 +214,10 @@ module source_grid
  call netcdf_err(status, "READING FIELD 1 ID")
  status=nf90_get_att(ncid, varid, 'missing_value', missing)
  call netcdf_err(status, "READING MISSING VALUE")
-
  status = nf90_close(ncid)
+
+
+
 
 !--------------------------------------------------------------------------
 ! Create ESMF grid object for the source data grid.  Check if 
