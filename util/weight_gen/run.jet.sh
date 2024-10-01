@@ -38,7 +38,7 @@ module list
 
 export CRES="C48"
 
-export WORK_DIR=/lfs4/HFIP/emcda/$USER/stmp/weight_gen
+export WORK_DIR=/lfs5/HFIP/emcda/$USER/stmp/weight_gen
 
 ${UFS_DIR}/util/weight_gen/weight_gen.sh
 
