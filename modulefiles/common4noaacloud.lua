@@ -2,19 +2,10 @@ help([[
 Load environment to compile UFS_UTILS on NOAA CSPs using Intel
 ]])
 
-cmake_ver=os.getenv("cmake_ver") or "3.28.1"
-load(pathJoin("cmake", cmake_ver))
-
-hpc_intel_ver=os.getenv("hpc_intel_ver") or "2021.3.0"
-load(pathJoin("intel", hpc_intel_ver))
-
-impi_ver=os.getenv("impi_ver") or "2021.3.0"
-load(pathJoin("impi", impi_ver))
-
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.5.1"
+g2_ver=os.getenv("g2_ver") or "3.4.5"
 load(pathJoin("g2", g2_ver))
 
 ip_ver=os.getenv("ip_ver") or "4.3.0"
@@ -38,7 +29,6 @@ load(pathJoin("sigio", sigio_ver))
 
 zlib_ver=os.getenv("zlib_ver") or "1.2.13"
 load(pathJoin("zlib", zlib_ver))
-
 png_ver=os.getenv("png_ver") or "1.6.37"
 load(pathJoin("libpng", png_ver))
 
