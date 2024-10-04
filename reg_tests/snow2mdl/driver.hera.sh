@@ -26,7 +26,7 @@ source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
 module load grib-util
-module load wgrib2/2.0.8
+module load wgrib2/3.1.1
 module list
 
 # Because of a bug in the grib-util module, need to construct this
