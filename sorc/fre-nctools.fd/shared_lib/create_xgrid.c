@@ -21,7 +21,8 @@ double dist_between_boxes(const double *x1, const double *y1, const double *z1, 
 int inside_edge(double x0, double y0, double x1, double y1, double x, double y);
 int line_intersect_2D_3D(double *a1, double *a2, double *q1, double *q2, double *q3,
 		         double *intersect, double *u_a, double *u_q, int *inbound);
-
+void insertIntersect(struct Node*, double, double, double, double, double, int,
+                     double, double, double);
 
 /**
   int get_maxxgrid
