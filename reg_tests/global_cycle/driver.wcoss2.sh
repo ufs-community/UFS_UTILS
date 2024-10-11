@@ -25,6 +25,8 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+module load netcdf
+module load nccmp
 module list
 
 WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
@@ -56,8 +58,6 @@ export NWPROD=$PWD/../..
 
 reg_dir=$PWD
 
-export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
-
 LOG_FILE=consistency.log
 rm -f ${LOG_FILE}*
 
@@ -69,7 +69,7 @@ TEST1=$(qsub -V -o ${LOG_FILE}01 -e ${LOG_FILE}01 -q $QUEUE -A $PROJECT_CODE -l 
 export DATA="${DATA_DIR}/test2"
 export COMOUT=$DATA
 TEST2=$(qsub -V -o ${LOG_FILE}02 -e ${LOG_FILE}02 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c192.lndincsoilnoahmp -l select=1:ncpus=12:mem=8GB $PWD/C192.lndincsoilnoahmp.sh)
+        -N c192.gsi_lndincsoilnoahmp -l select=1:ncpus=12:mem=8GB $PWD/C192.gsi_lndincsoilnoahmp.sh)
 
 export DATA="${DATA_DIR}/test3"
 export COMOUT=$DATA
@@ -81,8 +81,13 @@ export COMOUT=$DATA
 TEST4=$(qsub -V -o ${LOG_FILE}04 -e ${LOG_FILE}04 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
         -N c48.noahmp.frac -l select=1:ncpus=12:mem=8GB $PWD/C48.noahmp.fracgrid.sh)
 
+export DATA="${DATA_DIR}/test5"
+export COMOUT=$DATA
+TEST5=$(qsub -V -o ${LOG_FILE}05 -e ${LOG_FILE}05 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
+        -N c192.jedi_lndincsoilnoahmp -l select=1:ncpus=12:mem=8GB $PWD/C192.jedi_lndincsoilnoahmp.sh)
+
 qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
-        -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4 << EOF
+        -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5 << EOF
 #!/bin/bash
 cd $reg_dir
 grep -a '<<<' ${LOG_FILE}?? | grep -v echo > summary.log

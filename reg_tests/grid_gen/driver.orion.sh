@@ -62,7 +62,7 @@ rm -fr $WORK_DIR
 #-----------------------------------------------------------------------------
 
 LOG_FILE1=${LOG_FILE}01
-TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
+TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:20:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
       -o $LOG_FILE1 -e $LOG_FILE1 ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
@@ -99,19 +99,26 @@ TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_
       -o $LOG_FILE5 -e $LOG_FILE5 ./esg.regional.pct.cat.sh)
 
 #-----------------------------------------------------------------------------
-# Regional grid with GSL gravity wave drag fields.
+# Regional grid with GSL gravity wave drag fields. Run with varying
+# thread counts.
 #-----------------------------------------------------------------------------
 
+export nthreads=12
 LOG_FILE6=${LOG_FILE}06
-TEST6=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd \
+TEST6=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd.12 \
       -o $LOG_FILE6 -e $LOG_FILE6 ./regional.gsl.gwd.sh)
+
+export nthreads=24
+LOG_FILE7=${LOG_FILE}07
+TEST7=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd.24 \
+      -o $LOG_FILE7 -e $LOG_FILE7 ./regional.gsl.gwd.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       -q $QUEUE -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6 << EOF
+       -q $QUEUE -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF

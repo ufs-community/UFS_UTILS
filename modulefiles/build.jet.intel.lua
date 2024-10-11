@@ -5,7 +5,7 @@ Load environment to compile UFS_UTILS on Jet using Intel
 hpss_ver=os.getenv("hpss_ver") or ""
 load(pathJoin("hpss", hpss_ver))
 
-prepend_path("MODULEPATH", "/mnt/lfs4/HFIP/hfv3gfs/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/contrib/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2021.5.0"
 load(pathJoin("stack-intel", stack_intel_ver))
@@ -34,8 +34,9 @@ load(pathJoin("sp", sp_ver))
 w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
 load(pathJoin("w3emc", w3emc_ver))
 
-sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
-load(pathJoin("sfcio", sfcio_ver))
+-- Uncomment when CHGRES_ALL is ON.
+--sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
+--load(pathJoin("sfcio", sfcio_ver))
 
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))

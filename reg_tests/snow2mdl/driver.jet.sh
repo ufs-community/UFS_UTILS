@@ -24,13 +24,12 @@ set -x
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intel
-module load gnu/9.2.0
-module load wgrib2/3.1.1_ncep
+module load wgrib2/2.0.8
 set +x
 module list
 set -x
 
-DATA_ROOT="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+DATA_ROOT="${WORK_DIR:-/lfs5/HFIP/emcda/$LOGNAME/stmp}"
 DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
 
 PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
@@ -47,10 +46,9 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/snow2mdl
+export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
-export WGRIB2=${WGRIB2_ROOT}/bin/wgrib2
 
 rm -fr $DATA_ROOT
 

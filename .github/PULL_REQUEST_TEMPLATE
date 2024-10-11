@@ -20,7 +20,11 @@ If there are changes to the build or source code, the tests below must be conduc
 - [ ] Compile branch on Hera using GNU.
 - [ ] Compile branch in 'Debug' mode on WCOSS2.
 - [ ] Run unit tests locally on any Tier 1 machine.
-- [ ] Run relevant consistency tests locally on all Tier 1 machine.
+- [ ] Run relevant consistency tests locally on all Tier 1 machines.
+
+Optional test.
+
+- [ ] Run full set of chgres_cube consistency tests on Hera.
 
 Describe any additional tests performed.
 

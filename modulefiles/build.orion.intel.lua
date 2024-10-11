@@ -2,12 +2,12 @@ help([[
 Load environment to compile UFS_UTILS on Orion using Intel
 ]])
 
-prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/unified-env-rocky9/install/modulefiles/Core")
 
-stack_intel_ver=os.getenv("stack_intel_ver") or "2022.0.2"
+stack_intel_ver=os.getenv("stack_intel_ver") or "2021.9.0"
 load(pathJoin("stack-intel", stack_intel_ver))
 
-stack_impi_ver=os.getenv("stack_impi_ver") or "2021.5.1"
+stack_impi_ver=os.getenv("stack_impi_ver") or "2021.9.0"
 load(pathJoin("stack-intel-oneapi-mpi", stack_impi_ver))
 
 cmake_ver=os.getenv("cmake_ver") or "3.23.1"
@@ -31,8 +31,9 @@ load(pathJoin("sp", sp_ver))
 w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
 load(pathJoin("w3emc", w3emc_ver))
 
-sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
-load(pathJoin("sfcio", sfcio_ver))
+-- Uncomment when CHGRES_ALL is ON
+--sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
+--load(pathJoin("sfcio", sfcio_ver))
 
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))

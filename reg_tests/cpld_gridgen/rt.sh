@@ -108,9 +108,9 @@ TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=20
+WLCLK_dflt=35
 export WLCLK=$WLCLK_dflt
-MEM_dflt="--mem=12g"
+MEM_dflt="--mem=16g"
 export MEM=$MEM_dflt
 
 cd $PATHRT
@@ -131,7 +131,7 @@ if [[ $target = wcoss2 ]]; then
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
     QUEUE=${QUEUE:-dev}
     SBATCH_COMMAND="./cpld_gridgen.sh"
-    NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
+    NCCMP=nccmp
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
     export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805
@@ -152,7 +152,7 @@ elif [[ $target = orion ]]; then
     ulimit -s unlimited
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = hercules ]]; then
-    STMP=${STMP:-/work/noaa/stmp/$USER}
+    STMP=${STMP:-/work2/noaa/stmp/$USER}
     export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
@@ -162,15 +162,14 @@ elif [[ $target = hercules ]]; then
     ulimit -s unlimited
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
-    STMP=${STMP:-/lfs4/HFIP/h-nems/$USER}
-    export MOM6_FIXDIR=/lfs4/HFIP/hfv3gfs/glopara/git/fv3gfs/fix/mom6/20220805
-    BASELINE_ROOT=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
+    export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/20220805
+    BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
-    WLCLK=25
     SBATCH_COMMAND="./cpld_gridgen.sh"
 fi
 NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
@@ -218,6 +217,10 @@ fi
 
 module use $PATHTR/modulefiles
 module load build.$target.$compiler
+if [[ $target = wcoss2 ]]; then
+  module load netcdf
+  module load nccmp
+fi
 module list
 
 if [[ $CREATE_BASELINE = true ]]; then
@@ -236,29 +239,19 @@ while read -r line || [ "$line" ]; do
     [[ $line =~ \# ]] && continue
 
     TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
-    DEP_NAME=$(echo $line | cut -d'|' -f2 | sed -e 's/^ *//' -e 's/ *$//')
     MOSAICRES=${TEST_NAME%_*}
     TEST_NAME=${TEST_NAME##*_}
-    DEP_NAME=${DEP_NAME##*_}
 
     cd $PATHRT
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
     BASELINE=$BASELINE_ROOT/$TEST_NAME
     NEW_BASELINE=$NEW_BASELINE_ROOT/$TEST_NAME
-    DEPDIR=$RUNDIR_ROOT/$DEP_NAME
     mkdir -p $RUNDIR
 
     # OUTDIR_PATH is passed down to $PATHTR/ush/cpld_gridgen.sh
     # It MUST be set
     export OUTDIR_PATH=$RUNDIR
     export MOSAICRES=$MOSAICRES
-
-    if [[ -n $DEP_NAME ]]; then
-	cp $DEPDIR/Ct.mx025_SCRIP.nc $RUNDIR >/dev/null 2>&1 && d=$? || d=$?
-	if [[ $d -eq 1 ]]; then
-	    error "DEPDIR $DEPDIR does not exist. Dependency not met"
-	fi
-    fi
 
     cp $PATHTR/exec/cpld_gridgen $RUNDIR
     cp $PATHTR/ush/cpld_gridgen.sh $RUNDIR

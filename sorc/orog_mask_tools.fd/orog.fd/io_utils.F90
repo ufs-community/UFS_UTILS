@@ -1,6 +1,27 @@
 !> @file
-!! @brief Write out data in netcdf format
-!! @author Jordan Alpert NOAA/EMC
+!! @brief i/o utilities
+!! @author George Gayno NOAA/EMC
+
+!> Module containing utilities that read and write data.
+!!
+!! @author George Gayno NOAA/EMC
+
+ module io_utils
+
+ implicit none
+
+ private
+
+ public :: qc_orog_by_ramp
+ public :: read_global_mask
+ public :: read_global_orog
+ public :: read_mask
+ public :: read_mdl_dims
+ public :: read_mdl_grid_file
+ public :: write_mask_netcdf
+ public :: write_netcdf
+
+ contains
 
 !> Write out orography file in netcdf format.
 !!
@@ -9,7 +30,6 @@
 !! @param[in] slm Land-sea mask.
 !! @param[in] land_frac Land fraction.
 !! @param[in] oro Orography
-!! @param[in] orf Filtered orography. Currently the same as 'oro'.
 !! @param[in] hprime The gravity wave drag fields on the model grid tile.
 !! @param[in] ntiles Number of tiles to output.
 !! @param[in] tile Tile number to output.
@@ -18,11 +38,11 @@
 !! @param[in] lon Longitude of the first row of the model grid tile.
 !! @param[in] lat Latitude of the first column of the model grid tile.
 !! @author Jordan Alpert NOAA/EMC GFDL Programmer
-  subroutine write_netcdf(im, jm, slm, land_frac, oro, orf, hprime, ntiles, tile, geolon, geolat, lon, lat)
+  subroutine write_netcdf(im, jm, slm, land_frac, oro, hprime, ntiles, tile, geolon, geolat, lon, lat)
     implicit none
     integer, intent(in):: im, jm, ntiles, tile
     real, intent(in) :: lon(im), lat(jm)
-    real, intent(in), dimension(im,jm)  :: slm, oro, orf, geolon, geolat, land_frac
+    real, intent(in), dimension(im,jm)  :: slm, oro, geolon, geolat, land_frac
     real, intent(in), dimension(im,jm,14):: hprime
     character(len=128) :: outfile
     integer            :: error, ncid
@@ -46,7 +66,6 @@
 
     dim1=size(lon,1)
     dim2=size(lat,1)
-    write(6,*) ' netcdf dims are: ',dim1, dim2
       
     !--- open the file
     error = NF__CREATE(outfile, IOR(NF_NETCDF4,NF_CLASSIC_MODEL), inital, fsize, ncid)
@@ -170,7 +189,8 @@
 
     error = nf_put_var_double( ncid, id_orog_raw, oro(:dim1,:dim2))
     call netcdf_err(error, 'write var orog_raw for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_orog_filt, orf(:dim1,:dim2))
+! We no longer filter the orog, so the raw and filtered records are the same.
+    error = nf_put_var_double( ncid, id_orog_filt, oro(:dim1,:dim2))
     call netcdf_err(error, 'write var orog_filt for file='//trim(outfile) )
 
     error = nf_put_var_double( ncid, id_stddev, hprime(:dim1,:dim2,1))
@@ -208,7 +228,7 @@
     error = nf_close(ncid) 
     call netcdf_err(error, 'close file='//trim(outfile) )  
       
-  end subroutine
+  end subroutine write_netcdf
 
 !> Check NetCDF error code and output the error message.
 !!
@@ -223,7 +243,8 @@
 
       if( err.EQ.NF_NOERR )return
       errmsg = NF_STRERROR(err)
-      print*, trim(string), ': ', trim(errmsg)
+      print*, 'FATAL ERROR: ', trim(string), ': ', trim(errmsg)
+      call abort
 
       return
     end subroutine netcdf_err
@@ -262,7 +283,6 @@
 
     dim1=im
     dim2=jm
-    write(6,*) ' netcdf dims are: ',dim1, dim2
       
     !--- open the file
     error = NF__CREATE(outfile, IOR(NF_NETCDF4,NF_CLASSIC_MODEL), inital, fsize, ncid)
@@ -318,8 +338,7 @@
     error = nf_close(ncid) 
     call netcdf_err(error, 'close file='//trim(outfile) )  
       
-  end subroutine
-
+  end subroutine write_mask_netcdf
  
 !> Read the land mask file
 !!
@@ -348,7 +367,7 @@
 
   fsize = 66536
 
-  print*, "merge_file=", trim(merge_file)
+  print*,'- READ IN EXTERNAL LANDMASK FILE: ',trim(merge_file)
   error=NF__OPEN(merge_file,NF_NOWRITE,fsize,ncid)
   call netcdf_err(error, 'Open file '//trim(merge_file) )
 
@@ -357,23 +376,304 @@
   error=nf_get_var_double(ncid, id_var, land_frac)
   call netcdf_err(error, 'inquire data of land_frac')
 
-  print*,'land_frac ',maxval(land_frac),minval(land_frac)
-
   error=nf_inq_varid(ncid, 'slmsk', id_var)
   call netcdf_err(error, 'inquire varid of slmsk')
   error=nf_get_var_double(ncid, id_var, slm)
   call netcdf_err(error, 'inquire data of slmsk')
-
-  print*,'slmsk ',maxval(slm),minval(slm)
 
   error=nf_inq_varid(ncid, 'lake_frac', id_var)
   call netcdf_err(error, 'inquire varid of lake_frac')
   error=nf_get_var_double(ncid, id_var, lake_frac)
   call netcdf_err(error, 'inquire data of lake_frac')
 
-  print*,'lake_frac ',maxval(lake_frac),minval(lake_frac)
-
   error = nf_close(ncid) 
-  print*,'bot of read_mask'
 
-  end subroutine
+  end subroutine read_mask
+
+!> Read the grid dimensions from the model 'grid' file
+!!
+!! @param[in] mdl_grid_file path/name of model 'grid' file.
+!! @param[out] im 'i' dimension of a model grid tile.
+!! @param[out] jm 'j' dimension of a model grid tile.
+!! @author George Gayno NOAA/EMC
+  subroutine read_mdl_dims(mdl_grid_file, im, jm)
+
+  implicit none
+  include "netcdf.inc"
+
+  character(len=*), intent(in) :: mdl_grid_file
+
+  integer, intent(out)         :: im, jm
+
+  integer ncid, error, fsize, id_dim, nx, ny
+
+  fsize = 66536
+
+  print*, "- READ MDL GRID DIMENSIONS FROM= ", trim(mdl_grid_file)
+
+  error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
+  call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )
+
+  error=nf_inq_dimid(ncid, 'nx', id_dim)
+  call netcdf_err(error, 'inquire dimension nx from file '// trim(mdl_grid_file) )
+  error=nf_inq_dimlen(ncid,id_dim,nx)
+  call netcdf_err(error, 'inquire nx from file '//trim(mdl_grid_file) )
+
+  error=nf_inq_dimid(ncid, 'ny', id_dim)
+  call netcdf_err(error, 'inquire dimension ny from file '// trim(mdl_grid_file) )
+  error=nf_inq_dimlen(ncid,id_dim,ny)
+  call netcdf_err(error, 'inquire ny from file '//trim(mdl_grid_file) )
+
+  error=nf_close(ncid)
+
+  IM = nx/2
+  JM = ny/2
+
+  print*,"- MDL GRID DIMENSIONS ", im, jm
+
+  end subroutine read_mdl_dims
+
+!> Read the grid dimensions from the model 'grid' file
+!!
+!! @param[in] mdl_grid_file Path/name of model 'grid' file.
+!! @param[in] im 'i' Dimension of a model grid tile.
+!! @param[in] jm 'j' Dimension of a model grid tile.
+!! @param[out] geolon Longitude at the grid point centers.
+!! @param[out] geolon_c Longitude at the grid point corners.
+!! @param[out] geolat Latitude at the grid point centers.
+!! @param[out] geolat_c Latitude at the grid point corners.
+!! @param[out] dx Length of model grid points in the 'x' direction.
+!! @param[out] dy Length of model grid points in the 'y' direction.
+!! @param[out] is_north_pole 'true' for points surrounding the north pole.
+!! @param[out] is_south_pole 'true' for points surrounding the south pole.
+!! @author George Gayno NOAA/EMC
+  subroutine read_mdl_grid_file(mdl_grid_file, im, jm, &
+             geolon, geolon_c, geolat, geolat_c, dx, dy, &
+             is_north_pole, is_south_pole)
+
+  use orog_utils, only : find_poles, find_nearest_pole_points
+
+  implicit none
+  include "netcdf.inc"
+
+  character(len=*), intent(in) :: mdl_grid_file
+
+  integer, intent(in)          :: im, jm
+
+  logical, intent(out)         :: is_north_pole(im,jm)
+  logical, intent(out)         :: is_south_pole(im,jm)
+
+  real, intent(out)            :: geolat(im,jm)
+  real, intent(out)            :: geolat_c(im+1,jm+1)
+  real, intent(out)            :: geolon(im,jm)
+  real, intent(out)            :: geolon_c(im+1,jm+1)
+  real, intent(out)            :: dx(im,jm), dy(im,jm)
+
+  integer                      :: i, j
+  integer                      :: ncid, error, fsize, id_var, nx, ny
+  integer                      :: i_south_pole,j_south_pole
+  integer                      :: i_north_pole,j_north_pole
+
+  real, allocatable     :: tmpvar(:,:)
+  fsize = 66536
+
+  nx = 2*im
+  ny = 2*jm
+
+  allocate(tmpvar(nx+1,ny+1))
+
+  print*, "- OPEN AND READ= ", trim(mdl_grid_file)
+
+  error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
+  call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )
+
+  error=nf_inq_varid(ncid, 'x', id_var)
+  call netcdf_err(error, 'inquire varid of x from file ' // trim(mdl_grid_file))
+  error=nf_get_var_double(ncid, id_var, tmpvar)
+  call netcdf_err(error, 'inquire data of x from file ' // trim(mdl_grid_file))
+
+! Adjust lontitude to be between 0 and 360.
+  do j = 1,ny+1
+  do i = 1,nx+1
+    if(tmpvar(i,j) .GT. 360) tmpvar(i,j) = tmpvar(i,j) - 360
+    if(tmpvar(i,j) .LT. 0) tmpvar(i,j) = tmpvar(i,j) + 360
+  enddo
+  enddo
+
+  geolon(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
+  geolon_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
+
+  error=nf_inq_varid(ncid, 'y', id_var)
+  call netcdf_err(error, 'inquire varid of y from file ' // trim(mdl_grid_file))
+  error=nf_get_var_double(ncid, id_var, tmpvar)
+  call netcdf_err(error, 'inquire data of y from file ' // trim(mdl_grid_file))
+
+  geolat(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
+  geolat_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
+
+  call find_poles(tmpvar, nx, ny, i_north_pole, j_north_pole, &
+                  i_south_pole, j_south_pole)
+
+  deallocate(tmpvar)
+
+  call find_nearest_pole_points(i_north_pole, j_north_pole, &
+       i_south_pole, j_south_pole, im, jm, is_north_pole, &
+       is_south_pole)
+
+  allocate(tmpvar(nx,ny))
+
+  error=nf_inq_varid(ncid, 'area', id_var)
+  call netcdf_err(error, 'inquire varid of area from file ' // trim(mdl_grid_file))
+  error=nf_get_var_double(ncid, id_var, tmpvar)
+  call netcdf_err(error, 'inquire data of area from file ' // trim(mdl_grid_file))
+
+  error = nf_close(ncid)
+
+  do j = 1, jm
+    do i = 1, im
+      dx(i,j) = sqrt(tmpvar(2*i-1,2*j-1)+tmpvar(2*i,2*j-1)   &
+                + tmpvar(2*i-1,2*j  )+tmpvar(2*i,2*j  ))
+      dy(i,j) = dx(i,j)
+    enddo
+  enddo
+
+  deallocate(tmpvar)
+
+  end subroutine read_mdl_grid_file
+
+!> Read input global 30-arc second orography data.
+!!
+!! @param[in] imn i-dimension of orography data.
+!! @param[in] jmn j-dimension of orography data.
+!! @param[out] glob The orography data.
+!! @author Jordan Alpert NOAA/EMC
+ subroutine read_global_orog(imn,jmn,glob)
+
+ use orog_utils, only : transpose_orog
+
+ implicit none
+
+ include 'netcdf.inc'
+
+ integer, intent(in)    :: imn, jmn
+ integer*2, intent(out) :: glob(imn,jmn)
+
+ integer :: ncid, error, id_var, fsize
+
+ fsize=65536
+
+ print*,"- OPEN AND READ ./topography.gmted2010.30s.nc"
+
+ error=NF__OPEN("./topography.gmted2010.30s.nc", &
+                NF_NOWRITE,fsize,ncid)
+ call netcdf_err(error, 'Open file topography.gmted2010.30s.nc' )
+ error=nf_inq_varid(ncid, 'topo', id_var)
+ call netcdf_err(error, 'Inquire varid of topo')
+ error=nf_get_var_int2(ncid, id_var, glob)
+ call netcdf_err(error, 'Read topo')
+ error = nf_close(ncid)
+
+ print*,"- MAX/MIN OF OROGRAPHY DATA ",maxval(glob),minval(glob)
+
+ call transpose_orog(imn,jmn,glob)
+
+ return
+ end subroutine read_global_orog
+
+!> Read input global 30-arc second land mask data.
+!!
+!! @param[in] imn i-dimension of orography data.
+!! @param[in] jmn j-dimension of orography data.
+!! @param[out] mask The land mask data.
+!! @author G. Gayno NOAA/EMC
+ subroutine read_global_mask(imn, jmn, mask)
+
+ use orog_utils, only : transpose_mask
+
+ implicit none
+
+ include 'netcdf.inc'
+
+ integer, intent(in)        :: imn, jmn
+
+ integer(1), intent(out)    :: mask(imn,jmn)
+
+ integer   :: ncid, fsize, id_var, error
+
+ fsize = 65536
+
+ print*,"- OPEN AND READ ./landcover.umd.30s.nc"
+
+ error=NF__OPEN("./landcover.umd.30s.nc",NF_NOWRITE,fsize,ncid)
+ call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
+ error=nf_inq_varid(ncid, 'land_mask', id_var)
+ call netcdf_err(error, 'Inquire varid of land_mask')
+ error=nf_get_var_int1(ncid, id_var, mask)
+ call netcdf_err(error, 'Inquire data of land_mask')
+ error = nf_close(ncid)
+
+ call transpose_mask(imn,jmn,mask)
+
+ end subroutine read_global_mask
+
+!> Quality control the global orography and landmask
+!! data over Antarctica using RAMP data.
+!!
+!! @param[in] imn i-dimension of the global data.
+!! @param[in] jmn j-dimension of the global data.
+!! @param[inout] zavg The global orography data.
+!! @param[inout] zslm The global landmask data.
+!! @author G. Gayno
+ subroutine qc_orog_by_ramp(imn, jmn, zavg, zslm)
+
+ implicit none
+
+ include 'netcdf.inc'
+
+ integer, intent(in)      :: imn, jmn
+ integer, intent(inout)   :: zavg(imn,jmn)
+ integer, intent(inout)   :: zslm(imn,jmn)
+
+ integer                  :: i, j, error, ncid, id_var, fsize
+
+ real(4), allocatable     :: gice(:,:)
+
+ fsize = 65536
+
+ allocate (GICE(IMN+1,3601))
+
+! Read 30-sec Antarctica RAMP data. Points scan from South
+! to North, and from Greenwich to Greenwich.
+
+ print*,"- OPEN/READ RAMP DATA ./topography.antarctica.ramp.30s.nc"
+
+ error=NF__OPEN("./topography.antarctica.ramp.30s.nc", &
+                 NF_NOWRITE,fsize,ncid)
+ call netcdf_err(error, 'Opening RAMP topo file' )
+ error=nf_inq_varid(ncid, 'topo', id_var)
+ call netcdf_err(error, 'Inquire varid of RAMP topo')
+ error=nf_get_var_real(ncid, id_var, GICE)
+ call netcdf_err(error, 'Inquire data of RAMP topo')
+ error = nf_close(ncid)
+
+ print*,"- QC GLOBAL OROGRAPHY DATA WITH RAMP."
+
+! If RAMP values are valid, replace the global value with the RAMP
+! value. Invalid values are less than or equal to 0 (0, -1, or -99).
+
+ do j = 1, 3601
+ do i = 1, IMN
+   if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
+     if ( GICE(i,j) .gt. 0.) then
+       ZAVG(i,j) = int( GICE(i,j) + 0.5 )
+       ZSLM(i,j) = 1
+     endif
+   endif
+ enddo
+ enddo
+
+ deallocate (GICE)
+
+ end subroutine qc_orog_by_ramp
+
+ end module io_utils

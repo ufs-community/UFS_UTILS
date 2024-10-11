@@ -111,7 +111,7 @@ export out_dir=${out_dir:?}
 export home_dir=${home_dir:-"$PWD/../"}
 export script_dir=$home_dir/ush
 export exec_dir=${exec_dir:-"$home_dir/exec"}
-export topo=$home_dir/fix/orog_raw
+export topo=$home_dir/fix/orog
 export NCDUMP=${NCDUMP:-ncdump}
 
 
@@ -197,7 +197,7 @@ if [ $gtype = uniform ] || [ $gtype = stretch ] || [ $gtype = nest ];  then
     echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
     echo
     set -x
-    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
+    $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $topo
     err=$?
     if [ $err != 0 ]; then
       exit $err
@@ -399,7 +399,7 @@ elif [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
   echo "............ Execute fv3gfs_make_orog.sh for tile $tile .................."
   echo
   set -x
-  $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $script_dir $topo
+  $script_dir/fv3gfs_make_orog.sh $res $tile $grid_dir $orog_dir $topo
   err=$?
   if [ $err != 0 ]; then
     exit $err

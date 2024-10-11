@@ -1,0 +1,34 @@
+Fri Sep  6 17:46:10 UTC 2024
+Start Regression test
+
+Working dir = /lfs5/NESDIS/nesdis-rdo2/Innocent.Souopgui/stmp/OCNICE_PREP/rt_353922/050_ocean
+Baseline dir = /lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/050_ocean
+
+Checking test 050_ocean results ....
+Comparing ocean.mx050.nc........OK
+
+
+Working dir = /lfs5/NESDIS/nesdis-rdo2/Innocent.Souopgui/stmp/OCNICE_PREP/rt_353922/050_ice
+Baseline dir = /lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/050_ice
+
+Checking test 050_ice results ....
+Comparing ice.mx050.nc........OK
+
+
+Working dir = /lfs5/NESDIS/nesdis-rdo2/Innocent.Souopgui/stmp/OCNICE_PREP/rt_353922/100_ocean
+Baseline dir = /lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/100_ocean
+
+Checking test 100_ocean results ....
+Comparing ocean.mx100.nc........OK
+
+
+Working dir = /lfs5/NESDIS/nesdis-rdo2/Innocent.Souopgui/stmp/OCNICE_PREP/rt_353922/100_ice
+Baseline dir = /lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data/100_ice
+
+Checking test 100_ice results ....
+Comparing ice.mx100.nc........OK
+
+
+REGRESSION TEST WAS SUCCESSFUL
+Fri Sep  6 17:56:44 UTC 2024
+Elapsed time: 00h:11m:52s. Have a nice day!

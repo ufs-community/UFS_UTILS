@@ -22,7 +22,7 @@ YMDH=${yy}${mm}${dd}.${hh}0000
 
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}
 
-if [ ${MEMBER} == 'gdas' ]; then
+if [ "${MEMBER}" == "gdas" ] || [ "${MEMBER}" == "gfs" ] ; then
   CINP=${CINP:-"C768"}
   CTAR=${CRES_HIRES}
   INPUT_DATA_DIR="${EXTRACT_DIR}/gdas.${yy_d}${mm_d}${dd_d}/${hh_d}/RESTART"

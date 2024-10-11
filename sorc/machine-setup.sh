@@ -19,7 +19,7 @@ fi
 target=""
 USERNAME=`echo $LOGNAME | awk '{ print tolower($0)'}`
 
-if [[ -d /lfs4 ]] ; then
+if [[ -d /lfs5 ]] ; then
     # We are on NOAA Jet
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         echo load the module command 1>&2
@@ -38,45 +38,22 @@ elif [[ -d /scratch1 ]] ; then
     fi
     target=hera
     module purge
-elif [[ -d /lustre && -d /ncrc ]] ; then
+elif [[ "$(hostname)" == "gaea5"* && -d /gpfs/f5 ]] ; then
     # We are on GAEA.
     if ( ! eval module help > /dev/null 2>&1 ) ; then
-        # We cannot simply load the module command.  The GAEA
-        # /etc/profile modifies a number of module-related variables
-        # before loading the module command.  Without those variables,
-        # the module command fails.  Hence we actually have to source
-        # /etc/profile here.
-        source /etc/profile
-        __ms_source_etc_profile=yes
-    else
-        __ms_source_etc_profile=no
-    fi
-    module purge > /dev/null 2>&1
-    module purge
-# clean up after purge
-    unset _LMFILES_
-    unset _LMFILES_000
-    unset _LMFILES_001
-    unset LOADEDMODULES
-    module load modules
-    if [[ -d /opt/cray/ari/modulefiles ]] ; then
-        module use -a /opt/cray/ari/modulefiles
-    fi
-    if [[ -d /opt/cray/pe/ari/modulefiles ]] ; then
-        module use -a /opt/cray/pe/ari/modulefiles
-    fi
-    if [[ -d /opt/cray/pe/craype/default/modulefiles ]] ; then
-        module use -a /opt/cray/pe/craype/default/modulefiles
-    fi
-    if [[ -s /etc/opt/cray/pe/admin-pe/site-config ]] ; then
-        source /etc/opt/cray/pe/admin-pe/site-config
-    fi
-    if [[ "$__ms_source_etc_profile" == yes ]] ; then
+      # We cannot simply load the module command.  The GAEA
+      # /etc/profile modifies a number of module-related variables
+      # before loading the module command.  Without those variables,
+      # the module command fails.  Hence we actually have to source
+      # /etc/profile here.
       source /etc/profile
-      unset __ms_source_etc_profile
     fi
+    module reset
     target=gaea
-elif [[ "$(hostname)" =~ "Orion" ]]; then
+elif [[ "$(hostname)" == "gaea6"* && -d /gpfs/f6 ]] ; then
+    target=gaeaC6
+    source /opt/cray/pe/lmod/8.7.31/init/$__ms_shell
+elif [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then
     target="orion"
     module purge
 elif [[ "$(hostname)" =~ "hercules" || "$(hostname)" =~ "Hercules" ]]; then
@@ -93,16 +70,19 @@ elif [[ -d /data/prod ]] ; then
     fi
     target=s4
     module purge
-elif [[ "$(dnsdomainname)" =~ "pw" ]]; then
-    if [[ "${PW_CSP}" == "aws" ]]; then # TODO: Add other CSPs here.
-	target=noaacloud
-        module purge
-    else
-        echo WARNING: UNSUPPORTED CSP PLATFORM 1>&2; exit 99
-    fi
 else
-
-    echo WARNING: UNKNOWN PLATFORM 1>&2
+    if [[ ! -v PW_CSP ]]; then
+        echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+    elif [[ -z "${PW_CSP}" ]]; then
+        echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+    else
+        if [[ "${PW_CSP}" == "aws" || "${PW_CSP}" == "azure" || "${PW_CSP}" == "google" ]]; then
+            target=noaacloud
+            module purge
+        else
+            echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+        fi
+    fi
 fi
 
 unset __ms_shell

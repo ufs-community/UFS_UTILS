@@ -240,11 +240,11 @@ Program inputs and outputs
 
       * The "grid" files (CRES_grid.tile#.nc) containing the geo-reference records for the grid - (NetCDF).  Created by the make_hgrid or regional_esg_grid programs.
       * Global 30-arc-second University of Maryland land cover data.  Used to create the land-sea mask.
-             * landcover.umd.30s.nc (NetCDF). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
+             * landcover.umd.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
       * Global 30-arc-second USGS GMTED2010 orography data.
-             * topography.gmted2010.30s.nc (NetCDF). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
+             * topography.gmted2010.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
       * 30-arc-second RAMP Antarctic terrain data (Radarsat Antarctic Mapping Project)
-             * topography.antarctica.ramp.30s.nc (NetCDF). Located here `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_.
+             * topography.antarctica.ramp.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
 
 **Output data:**  
 
@@ -288,8 +288,8 @@ The program reads the tile number (1-6 for global, 7 for stand-alone regional) a
 All in NetCDF.
 
       * The tiled "grid" files (CRES_grid.tile#.nc) created by the make_hgrid or regional_esg_grid programs.
-      * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data). `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
-      * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004)). `Located here <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_am/>`_.
+      * geo_em.d01.lat-lon.2.5m.HGT_M.nc - global topographic data on 2.5-minute lat-lon grid (interpolated from GMTED2010 30-second topographic data). `Located here <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
+      * HGT.Beljaars_filtered.lat-lon.30s_res.nc - global topographic data on 30-second lat-lon grid (GMTED2010 data smoothed according to Beljaars et al. (QJRMS, 2004)). `Located here <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
 
 **Output data:**
 
@@ -375,11 +375,11 @@ Program inputs and outputs
 
       * grid file - the "grid" file from the make_hgrid or regional_esg programs  - CRES_grid.tile#.nc - (NetCDF)
       * orography file - the orography file including the 'inland' flag record from the inland program - oro.CRES.tile#.nc (NetCDF)
-      * lake status code file - One of the following files. (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_). See GlobalLakeStatus.txt for a description of the file format.
+      * lake status code file - One of the following files. (located in `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_).
           * GlobalLakeStatus_MOSISp.dat
           * GlobalLakeStatus_GLDBv3release.dat
           * GlobalLakeStatus_VIIRS.dat
-      * lake depth file - One of the following files. (located in `./fix/fix_orog <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_orog/>`_). See GlobalLakeDepth.txt for a description of this file.
+      * lake depth file - One of the following files. (located in `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_).
           * GlobalLakeDepth_GLDBv3release.dat
           * GlobalLakeDepth_GLOBathy.dat
 
@@ -529,7 +529,7 @@ Program inputs and outputs
 
 **Input data:** 
 
-The surface climatological data is located here `./fix/fix_sfc_climo <https://noaa-ufs-srw-pds.s3.amazonaws.com/index.html#fix/fix_sfc_climo/>`_.  All NetCDF.
+The surface climatological data is located here `./fix/sfc_climo <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/sfc_climo/20230925/>`_.  All NetCDF.
 
       * Global 1-degree fractional coverage strong/weak zenith angle albedo - facsf.1.0.nc
       * Global 0.05-degree maximum snow albedo - maximum_snow_albedo.0.05.nc
@@ -697,7 +697,7 @@ Invoke the build script from the root directory:
 
   ./build_all.sh
 
-Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is 'hera', 'jet', 'wcoss2', or 's4'):
+Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is 'hera', 'jet', 'orion', 'hercules', 'gaea', 'wcoss2', or 's4'):
 
 ::
 
@@ -711,7 +711,7 @@ Edit the variables in the 'config' file for your experiment:
      * **EXTRACT_DIR**  - Directory where data extracted from HPSS is stored.
      * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'. On 's4' this step can't be run. Instead, the data must be pulled from another machine.
      * **RUN_CHGRES**   - To run chgres, set to 'yes'.  To extract data only, set to 'no'.
-     * **yy/mm/dd/hh**  - The year/month/day/hour of your desired experiment.  Currently, does not support pre-ENKF GFS data, prior to 2012 May 21 00z.  Use two digits.
+     * **yy/mm/dd/hh**  - The year/month/day/hour of your desired experiment. Use a four digit year and two digits for month/day/hour. **NOTE:** *The standard build of chgres_cube does NOT support experiments prior to June 12, 2019. To coldstart an experiment prior to these dates, contact a repository manager for assistance.*
      * **LEVS**         - Number of hybrid levels plus 1.  To run with 127 levels, set LEVS to 128.
      * **CRES_HIRES**   - Resolution of the hires component of your experiment. Example: C768.
      * **CRES_ENKF**    - Resolution of the enkf component of the experiments.
