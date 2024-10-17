@@ -239,8 +239,7 @@ while read -r line || [ "$line" ]; do
     [[ $line =~ \# ]] && continue
 
     TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
-    MOSAICRES=${TEST_NAME%_*}
-    TEST_NAME=${TEST_NAME##*_}
+    TEST_NAME=${TEST_NAME##mx}
 
     cd $PATHRT
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
@@ -251,7 +250,6 @@ while read -r line || [ "$line" ]; do
     # OUTDIR_PATH is passed down to $PATHTR/ush/cpld_gridgen.sh
     # It MUST be set
     export OUTDIR_PATH=$RUNDIR
-    export MOSAICRES=$MOSAICRES
 
     cp $PATHTR/exec/cpld_gridgen $RUNDIR
     cp $PATHTR/ush/cpld_gridgen.sh $RUNDIR
