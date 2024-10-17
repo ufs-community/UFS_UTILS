@@ -239,7 +239,7 @@ the source tripole grid.
 <tr><td row=2>grid_cice_NEMS_mx025.nc  <td>the CICE grid file                       <td>used at runtime by CICE6
 <tr><td row=3>kmtu_cice_NEMS_mx025.nc  <td>the CICE mask file                       <td>used at runtime by CICE6
 <tr><td row=4>mesh.mx025.nc            <td>the ocean and ice mesh file              <td>used at runtime by CICE6, MOM6, and CMEPS
-<tr><td row=5>C384.mx025.tile[1-6].nc  <td>the mapped ocean mask on the ATM tiles   <td>used to create ATM ICs consistent with the <br>                                                                                           fractional grid
+<tr><td row=5>C[XXX].mx025.tile[1-6].nc  <td>the mapped ocean mask on the ATM tiles   <td>used to create ATM ICs consistent with the <br>                                                                                           fractional grid for a given ATM resolution, where C[XXX]=C48,C96,C192,C384,C768 or C1152
 </table>
 
 <br>

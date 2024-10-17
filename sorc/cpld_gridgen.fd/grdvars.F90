@@ -28,10 +28,6 @@ module grdvars
                                                                    !! grid should be generated. Default is false.
   logical :: roottask                                              !< flag indicating whether this is the roottask
 
-  integer, parameter :: nar = 6                                    !< the number of possible ATM resolutions
-  integer, parameter, dimension(nar) :: catm = &                   !< the ATM resolutions for mapped ocean masks
-       (/48, 96, 192, 384, 768, 1152/)                             !!
-
   integer, parameter :: nv = 4.                                    !< the number of vertices for each stagger location
   integer, parameter :: ncoord = 2*4.                              !< the number of coord pairs (lat,lon) for each of
                                                                    !! 4 stagger locations
@@ -166,6 +162,9 @@ module grdvars
                                                                    !! minimum_depth but deeper than masking_depth are
                                                                    !! rounded to minimum_depth
   real(kind=real_kind), parameter :: maximum_lat = 88.0            !< The maximum latitude for water points for WW3
+
+  integer, parameter :: nar = 6                                                !< the number of possible ATM resolutions
+  integer, parameter, dimension(nar) :: catm = (/48, 96, 192, 384, 768, 1152/) !< the ATM resolutions for mapped ocean masks
 
 contains
   !> Allocate grid variables
