@@ -28,7 +28,7 @@ program gen_fixgrid
   use cicegrid,          only: write_cicegrid
   use scripgrid,         only: write_scripgrid
   use topoedits,         only: add_topoedits, apply_topoedits
-  use charstrings,       only: logmsg, res, dirsrc, dirout, atmres, fv3dir, editsfile
+  use charstrings,       only: logmsg, res, atmres, dirsrc, dirout, fv3dir, editsfile
   use charstrings,       only: maskfile, maskname, topofile, toponame, editsfile, staggerlocs, cdate, history
   use debugprint,        only: checkseam, checkxlatlon, checkpoint
   use netcdf
@@ -48,7 +48,7 @@ program gen_fixgrid
   character(len= 2) :: cstagger
 
   integer :: rc,ncid,id,xtype
-  integer :: i,j,k,i2,j2
+  integer :: i,j,k,n,i2,j2
   integer :: ii
   integer :: localPet, nPet
   logical :: fexist = .false.
@@ -89,8 +89,6 @@ program gen_fixgrid
   print '(a)',' output grid tag '//trim(res)
   print '(a)',' supergrid source directory '//trim(dirsrc)
   print '(a)',' output grid directory '//trim(dirout)
-  print '(a)',' atm resolution '//trim(atmres)
-  print '(a,i6)',' fv3 tile grid size ',npx
   print '(a)',' atm mosaic directory '//trim(fv3dir)
   print '(a)',' MOM6 topography file '//trim(topofile)
   print '(a)',' MOM6 edits file '//trim(editsfile)
@@ -486,23 +484,34 @@ program gen_fixgrid
   ! tiled files containing the mapped ocean mask
   !---------------------------------------------------------------------
 
-  method=ESMF_REGRIDMETHOD_CONSERVE
-  fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP_land.nc'
-  fdst = trim(fv3dir)//'/'//trim(atmres)//'/'//trim(atmres)//'_mosaic.nc'
-  fwgt = trim(dirout)//'/'//'Ct.mx'//trim(res)//'.to.'//trim(atmres)//'.nc'
-  logmsg = 'creating weight file '//trim(fwgt)
-  print '(a)',trim(logmsg)
+  do n = 1,nar
+     npx = catm(n)
+     if (npx < 100) then
+        write(atmres,'(a,i2)')'C',npx
+     elseif (npx < 1000) then
+        write(atmres,'(a,i3)')'C',npx
+     else
+        write(atmres,'(a,i4)')'C',npx
+     end if
 
-  call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst),         &
-       weightFile=trim(fwgt), regridmethod=method,                         &
-       unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, ignoreDegenerate=.true., &
-       netcdf4fileFlag=.true., tileFilePath=trim(fv3dir)//'/'//trim(atmres)//'/', rc=rc)
-  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-       line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
+     method=ESMF_REGRIDMETHOD_CONSERVE
+     fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP_land.nc'
+     fdst = trim(fv3dir)//'/'//trim(atmres)//'/'//trim(atmres)//'_mosaic.nc'
+     fwgt = trim(dirout)//'/'//'Ct.mx'//trim(res)//'.to.'//trim(atmres)//'.nc'
+     logmsg = 'creating weight file '//trim(fwgt)
+     print '(a)',trim(logmsg)
 
-  logmsg = 'creating mapped ocean mask for '//trim(atmres)
-  print '(a)',trim(logmsg)
-  call make_frac_land(trim(fsrc), trim(fwgt))
+     call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst),         &
+          weightFile=trim(fwgt), regridmethod=method,                         &
+          unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, ignoreDegenerate=.true., &
+          netcdf4fileFlag=.true., tileFilePath=trim(fv3dir)//'/'//trim(atmres)//'/', rc=rc)
+     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+          line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
+
+     logmsg = 'creating mapped ocean mask for '//trim(atmres)
+     print '(a)',trim(logmsg)
+     call make_frac_land(trim(fsrc), trim(fwgt))
+  end do
 
   !---------------------------------------------------------------------
   ! use ESMF to create positional weights for mapping a field from its
