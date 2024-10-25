@@ -31,10 +31,8 @@ else
   set +x
   module use "${DIR_ROOT}/modulefiles"
   if [[ "$compiler" == "intelllvm" ]]; then
-    if [[ ! -f ${DIR_ROOT}/modulefiles/build.$target.$compiler ]];then
-      set +x
+    if [[ ! -f ${DIR_ROOT}/modulefiles/build.$target.$compiler.lua ]];then
       echo "IntelLLVM not available. Will use Intel Classic."
-      set -x
       compiler=intel
     fi
   fi
