@@ -117,7 +117,11 @@ ulimit -s unlimited
 
 source ${BASE_DIR}/sorc/machine-setup.sh > /dev/null 2>&1
 module use ${BASE_DIR}/modulefiles
-module load build.$target.intel
+if [[ -f ${BASE_DIR}/modulefiles/build.$target.intelllvm.lua ]]; then
+  module load build.$target.intelllvm
+else
+  module load build.$target.intel
+fi
 module list
 
 rm -fr $WORK_DIR $SAVE_DIR
