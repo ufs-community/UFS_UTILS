@@ -22,8 +22,6 @@
 #    $MODEL_SLMASK_FILE    - model landmask  (grib 1 or 2)
 #    $MODEL_LATITUDE_FILE  - model latitude  (grib 1 or 2)
 #    $MODEL_LONGITUDE_FILE - model longitude (grib 1 or 2)
-#    $AFWA_NH_FILE         - nh afwa snow data (grib 1)
-#    $AFWA_SH_FILE         - sh afwa snow data (grib 1)
 #    $AFWA_GLOBAL_FILE     - global afwa snow data (grib 2)
 #    $IMS_FILE             - nh ims snow cover data (grib 2)
 #    $CLIMO_QC             - nh climatological snow cover (grib 2)
@@ -33,9 +31,8 @@
 #
 # Condition codes:
 #  0       - normal termination
-#  $rc1    - non-zero status indicates corrupt ims data.
-#  $rc2    - non-zero status indicates a problem in emcsfc_snow2mdl execution.
-#            see source code for details - /nwprod/gfs.vX.Y.Z/sorc/emcsfc_snow2mdl.fd
+#  non 0   - indicates missing or corrupt input data
+#            or a problem in emcsfc_snow2mdl execution.
 #
 # If a non-zero status occurs, no model snow analysis will be created.
 # This is not fatal to the model executation.  But any problems should
@@ -101,12 +98,9 @@ GFS_LONSPERLAT_FILE=${GFS_LONSPERLAT_FILE:-global_lonsperlat.t1534.3072.1536.txt
 
 #------------------------------------------------------------------------
 # Input snow data.  ims snow cover and afwa snow depth. ims is NH only.
-# In OPS, we run with ims only, or ims and afwa.  afwa data is too
-# unreliable to use on its own.  ims is grib2.  afwa is grib1.
+# AFWA is global.
 #------------------------------------------------------------------------
 
-AFWA_NH_FILE=${AFWA_NH_FILE:-""}
-AFWA_SH_FILE=${AFWA_SH_FILE:-""}
 AFWA_GLOBAL_FILE=${AFWA_GLOBAL_FILE:-""}
 IMS_FILE=${IMS_FILE:-"imssnow96.grb.grib2"}
 
@@ -136,18 +130,15 @@ fi
 cd $DATA
 
 #------------------------------------------------------------------------
-# Do a quick check of the ims data to ensure it is not corrupt.
-# WGRIB2 works for a grib 1 or grib 2 file.  If IMS is bad,
-# don't run emcsfc_snow2mdl program because afwa data alone is
-# unreliable.
+# Do a quick check of the ims data to ensure it exists and is
+# not corrupt.
 #------------------------------------------------------------------------
 
-$WGRIB2 ${IMS_FILE}
-rc1=$?
-
-if ((rc1 != 0));then 
-  echo "WARNING: ${pgm} detects corrupt IMS data. Can not run."
-  exit $rc1
+if [[ ! -f $IMS_FILE ]]; then
+  set +x
+  echo "WARNING: ${pgm} detects missing ims data. Will not run."
+  set -x
+  exit 7
 fi
 
 #------------------------------------------------------------------------
@@ -155,12 +146,14 @@ fi
 # ims data has highest priority of all input data.
 #------------------------------------------------------------------------
 
-$WGRIB2 -Sec0 ${IMS_FILE} 2>&1 | grep "grib1 message"
+$WGRIB2 -d 1 ${IMS_FILE}
 status=$?
-if (( status == 0 )); then   # grib 1 file
-  tempdate=$($WGRIB -v $IMS_FILE | head -1)
-  IMSDATE=${tempdate#*D=}
-else # grib 2 file
+if (( status != 0 )); then
+  set +x
+  echo "WARNING: ${pgm} detects corrupt ims data. Will not run."
+  set -x
+  exit 9
+else
   tempdate=$($WGRIB2 -t $IMS_FILE | head -1)
   IMSDATE=${tempdate#*d=}
 fi
@@ -169,6 +162,36 @@ IMSYEAR=$(echo $IMSDATE10 | cut -c1-4)
 IMSMONTH=$(echo $IMSDATE10 | cut -c5-6)
 IMSDAY=$(echo $IMSDATE10 | cut -c7-8)
 IMSHOUR=0   # emc convention is to use 00Z.
+
+#------------------------------------------------------------------------
+# Ensure AFWA data exists and is not too old.
+#------------------------------------------------------------------------
+
+if [[ ! -f $AFWA_GLOBAL_FILE ]]; then
+  set +x
+  echo "WARNING: ${pgm} detects missing afwa data. Will not run."
+  set -x
+  exit 3
+else
+  $WGRIB2 -d 1 $AFWA_GLOBAL_FILE
+  status=$?
+  if ((status != 0));then 
+    set +x
+    echo "WARNING: ${pgm} detects corrupt afwa data. Will not run."
+    set -x
+    exit $status
+  else
+    tempdate=$($WGRIB2 -d 1 -t $AFWA_GLOBAL_FILE)
+    AFWADATE=${tempdate#*d=}
+    two_days_ago=$($NDATE -48 $IMSDATE10)
+    if ((AFWADATE < two_days_ago)); then
+      set +x
+      echo "WARNING: ${pgm} detects old afwa data. Will not run."
+      set -x
+      exit 4
+    fi
+  fi
+fi
 
 pgmout=${pgmout:-OUTPUT}
 
@@ -183,8 +206,8 @@ cat > ./fort.41 << !
   nesdis_snow_file="${IMS_FILE}"
   nesdis_lsmask_file=""
   afwa_snow_global_file="${AFWA_GLOBAL_FILE}"
-  afwa_snow_nh_file="${AFWA_NH_FILE}"
-  afwa_snow_sh_file="${AFWA_SH_FILE}"
+  afwa_snow_nh_file=""
+  afwa_snow_sh_file=""
   afwa_lsmask_nh_file=""
   afwa_lsmask_sh_file=""
  /
@@ -217,7 +240,7 @@ cat > ./fort.41 << !
 eval $SNOW2MDLEXEC  >> $pgmout 2> errfile
 rc2=$?
 
-if ((rc2!= 0));then 
+if ((rc2 != 0));then 
   echo "WARNING: ${pgm} completed abnormally."
   exit $rc2
 else

@@ -25,8 +25,7 @@
 #    /nwprod/gfs.vX.Y.Z/ush/emcsfc_ice_blend.sh (create global ice blend)
 #    /nwprod/gfs.vX.Y.Z/ush/emcsfc_snow.sh (create model snow analysis)
 #  Input Files:
-#    $AFWA_NH_FILE           - nh afwa snow data (grib 1)
-#    $AFWA_SH_FILE           - sh afwa snow data (grib 1)
+#    $AFWA_GLOBAL_FILE       - afwa snow data (grib 2)
 #    $IMS_FILE               - nh ims snow cover and ice data (grib 2)
 #    $FIVE_MIN_ICE_FILE      - global 5-minute ice concentration (grib 2)
 #    $FIVE_MIN_ICE_MASK_FILE - corresponding land/sea mask for $FIVE_MIN_ICE_FILE 
@@ -77,7 +76,7 @@ export EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 
 # output com directory.
 export COMOUT=${COMOUT:-$PWD}
-export COMINgfs_m6hrs=${COMINgfs_m6hrs:-$PWD}
+export COMIN_m6hrs=${COMIN_m6hrs:-$PWD}
 
 # working directory
 export DATA=${DATA:-$PWD}
@@ -105,9 +104,8 @@ fi
 # the input data for emcsfc_ice_blend and emcsfc_snow2mdl programs.
 #-----------------------------------------------------------------------
 
-# afwa snow depth data (grib 1)
-export AFWA_NH_FILE=${AFWA_NH_FILE:-"NPR.SNWN.SP.S1200.MESH16"}
-export AFWA_SH_FILE=${AFWA_SH_FILE:-"NPR.SNWS.SP.S1200.MESH16"}
+# afwa snow depth data (grib 2)
+export AFWA_GLOBAL_FILE=${AFWA_GLOBAL_FILE:-"snow.usaf.grib2"}
 
 # ims snow cover and ice cover data (grib 1 or grib 2)
 export IMS_FILE=${IMS_FILE:-"ims.grib2"} 
@@ -187,7 +185,7 @@ export MODEL_LATITUDE_FILE=${MDL_LATS:-$FIXgfs_am/global_latitudes.t${resolution
 export MODEL_LONGITUDE_FILE=${MDL_LONS:-$FIXgfs_am/global_longitudes.t${resolution}.grb}
 export GFS_LONSPERLAT_FILE=${LONSPERLAT:-$FIXgfs_am/global_lonsperlat.t${resolution}.txt}
 export MODEL_SNOW_FILE=${FNSNOAJCAP:-${RUN}.${cycle}.snogrb_t${resolution}}
-export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP:-${COMINgfs_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
+export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP:-${COMIN_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
 
 echo "Create ${JCAP} snow data."
 
@@ -245,7 +243,7 @@ export MODEL_LATITUDE_FILE=${MDL_LATS_ENKF:-$FIXgfs_am/global_latitudes.t${resol
 export MODEL_LONGITUDE_FILE=${MDL_LONS_ENKF:-$FIXgfs_am/global_longitudes.t${resolution}.grb}
 export GFS_LONSPERLAT_FILE=${LONSPERLAT_ENKF:-$FIXgfs_am/global_lonsperlat.t${resolution}.txt}
 export MODEL_SNOW_FILE=${FNSNOAJCAP_ENKF:-${RUN}.${cycle}.snogrb_t${resolution}}
-export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP_ENKF:-${COMINgfs_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
+export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP_ENKF:-${COMIN_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
 
 echo "Create enkf snow data."
 
