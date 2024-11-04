@@ -417,10 +417,7 @@ Column 1: Name the code searches for in the table. Do not change.  Some definiti
       * hice - sea/lake ice thickness
       * weasd - snow liquid equivalent
       * snod - physical snow depth
-
-      --Optional--
-
-      * massden - smoke mass mixing ratio (only available in RAP/HRRR-Smoke and use of the GSDphys_smoke_var_map.txt varmap)
+      * massden - smoke mass mixing ratio
 
 Column 2: Name of the variable in the output “coldstart” files. Unimplemented.
 
