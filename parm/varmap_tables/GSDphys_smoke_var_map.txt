@@ -25,3 +25,4 @@ icetk               icetk     set_to_fill   265.0     S
 weasd               weasd     set_to_fill   0.0       S
 snod                snod      set_to_fill   0.0       S
 tprcp               tprcp     set_to_fill   0.0       S
+massden             smoke     set_to_fill   1E-12     T	

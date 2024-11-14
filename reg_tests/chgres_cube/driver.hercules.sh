@@ -189,12 +189,21 @@ TEST13=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=75G -t 0:05:00 -A
       --open-mode=append -o $LOG_FILE13 -e $LOG_FILE13 ./c96.gefs.grib2.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize CONUS 13-KM USING RAP-SMOKE GRIB2 file WITH GSD PHYSICS.
+#-----------------------------------------------------------------------------
+
+LOG_FILE14=${LOG_FILE}14
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST14=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=75G -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.rap-smoke.grib2 \
+      --open-mode=append -o $LOG_FILE14 -e $LOG_FILE14 ./13km.conus.rap-smoke.grib2.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE \
-       -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13 << EOF
+       -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF

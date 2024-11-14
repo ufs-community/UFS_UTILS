@@ -389,7 +389,7 @@ Namelist variables with “input” in their name refer to data input to chgres_
 Variable Mapping (VARMAP) table
 -------------------------------
 
-The VARMAP table, set in the chgres_cube namelist (variable varmap_file), controls how chgres_cube handles variables that might be missing from the GRIB2 files. Since there are so many different versions of GRIB2 files, it's often uncertain what fields are available even if you know what source model the data is coming from.  Each file contains the following:  (Note, only the GFS physics suite is currently supported.)
+The VARMAP table, set in the chgres_cube namelist (variable varmap_file), controls how chgres_cube handles variables that might be missing from the GRIB2 files. Since there are so many different versions of GRIB2 files, it's often uncertain what fields are available even if you know what source model the data is coming from.  Each file contains the following columns:
 
 Column 1: Name the code searches for in the table. Do not change.  Some definitions:
 
@@ -417,6 +417,7 @@ Column 1: Name the code searches for in the table. Do not change.  Some definiti
       * hice - sea/lake ice thickness
       * weasd - snow liquid equivalent
       * snod - physical snow depth
+      * massden - smoke mass mixing ratio
 
 Column 2: Name of the variable in the output “coldstart” files. Unimplemented.
 
