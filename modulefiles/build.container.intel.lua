@@ -2,9 +2,6 @@ help([[
 Load environment to compile UFS_UTILS in a container using Intel
 ]])
 
-hpss_ver=os.getenv("hpss_ver") or ""
---load(pathJoin("hpss", hpss_ver))
-
 prepend_path("MODULEPATH", "/opt/spack-stack/spack-stack-1.8.0/envs/unified-env/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2021.10.0"
@@ -33,9 +30,6 @@ load(pathJoin("sp", sp_ver))
 
 w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
 load(pathJoin("w3emc", w3emc_ver))
-
-sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
-load(pathJoin("sfcio", sfcio_ver))
 
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
