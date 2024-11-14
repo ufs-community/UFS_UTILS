@@ -15,7 +15,6 @@
 !! @author Rahul Mahajan
 !! @author Sanath Kumar
 program merge_lake_ocnmsk
-  use netcdf
 
   implicit none
 
@@ -28,8 +27,7 @@ program merge_lake_ocnmsk
  ! all instances of int_lake was changed to binary_lake  
   integer :: binary_lake
 
-  character(len=250) :: flnm
-  integer :: ncid,lat,lon,v1id,start(2),count(2),tile
+  integer :: lat,lon,tile
   real, allocatable :: lake_frac(:,:),lake_depth(:,:),land_frac(:,:),ocn_frac(:,:),slmsk(:,:),lat2d(:,:)
 
   call read_nml(pth1, pth2, atmres, ocnres, pth3,binary_lake)
@@ -37,18 +35,16 @@ program merge_lake_ocnmsk
   print *, pth1
 
   do tile=1,6
+
     call read_grid_dims(pth1, atmres, ocnres, tile, lon, lat)
 
-    write(flnm,'(5a,i1,a)') trim(pth1),trim(atmres),'.',trim(ocnres),'.tile',tile,'.nc'
-    call handle_err (nf90_open (flnm, NF90_NOWRITE, ncid))
     if (tile==1) then
       write(6,*) 'lat=',lat,'lon=',lon
-      allocate (lake_frac(lon,lat),lake_depth(lon,lat),land_frac(lon,lat),ocn_frac(lon,lat),slmsk(lon,lat),lat2d(lon,lat))
-      start(1:2) = (/1,1/)
-      count(1:2) = (/lon,lat/)
-    end if
-    call handle_err (nf90_inq_varid(ncid, 'land_frac', v1id))
-    call handle_err (nf90_get_var (ncid, v1id, ocn_frac, start=start, count=count))
+      allocate (lake_frac(lon,lat),lake_depth(lon,lat),land_frac(lon,lat), &
+                ocn_frac(lon,lat),slmsk(lon,lat),lat2d(lon,lat))
+    endif
+
+    call read_ocean_frac(pth1,atmres,ocnres,tile,lon,lat,ocn_frac)
 
     call read_lake_mask(pth2,atmres,tile,lon,lat,lake_frac, &
                         lake_depth,lat2d)
@@ -59,5 +55,7 @@ program merge_lake_ocnmsk
                     lake_frac,lake_depth,slmsk)
 
   end do ! tile
+
+  deallocate (lake_frac,lake_depth,land_frac,ocn_frac,slmsk,lat2d)
 
 end program merge_lake_ocnmsk

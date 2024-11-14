@@ -32,6 +32,43 @@
 
  end subroutine read_grid_dims
 
+ subroutine read_ocean_frac(pth1,atmres,ocnres,tile,lon,lat,ocn_frac)
+
+ use netcdf
+
+ implicit none
+
+ character(len=*), intent(in)   :: pth1
+ character(len=*), intent(in)   :: atmres
+ character(len=*), intent(in)   :: ocnres
+ 
+ integer,          intent(in)   :: lat
+ integer,          intent(in)   :: lon
+ integer,          intent(in)   :: tile
+
+ real, intent(out)              :: ocn_frac(lon,lat)
+
+ character(len=300)             :: flnm
+
+ integer                        :: ncid, v1id, start(2), count(2)
+
+ write(flnm,'(5a,i1,a)') trim(pth1),trim(atmres),'.',trim(ocnres),'.tile',tile,'.nc'
+
+ print*,'in new routine ',trim(flnm)
+
+ start(1:2) = (/1,1/)
+ count(1:2) = (/lon,lat/)
+
+ call handle_err (nf90_open (flnm, NF90_NOWRITE, ncid))
+
+! The file record is named 'land_frac', but the data is ocean fraction.
+
+ call handle_err (nf90_inq_varid(ncid, 'land_frac', v1id))
+ call handle_err (nf90_get_var (ncid, v1id, ocn_frac, start=start, count=count))
+ call handle_err (nf90_close (ncid))
+
+ end subroutine read_ocean_frac
+
  subroutine read_lake_mask(pth2,atmres,tile,lon,lat,lake_frac, &
                            lake_depth,lat2d)
 
