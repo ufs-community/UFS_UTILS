@@ -1,3 +1,14 @@
+!> Read the grid dimensions from a NetCDF file.
+!!
+!! @param[in] pth1 Directory path to file.
+!! @param[in] atmres Atmospheric resolution.
+!! @param[in] ocnres Ocean resolution.
+!! @param[in] tile Tile number.
+!! @param[out] lon E/W dimension of tile.
+!! @param[out] lat N/S dimension of tile.
+!!
+!! @author Shan Sun
+!! @author Rahul Mahajan
  subroutine read_grid_dims(pth1, atmres, ocnres, tile, lon, lat)
 
  use netcdf
@@ -18,20 +29,33 @@
 
  write(flnm,'(5a,i1,a)') trim(pth1),trim(atmres),'.',trim(ocnres),'.tile',tile,'.nc'
 
+ print*,'- READ GRID DIMESIONS FROM: ',trim(flnm)
+
  call handle_err (nf90_open (flnm, NF90_NOWRITE, ncid))
  call handle_err (nf90_inquire (ncid, ndimensions=ndims, nvariables=nvars, nattributes=natts))
  call handle_err (nf90_inquire (ncid, ndimensions=ndims, nvariables=nvars, nattributes=natts))
- write(6,*) 'flnm_ocn=',flnm,' ncid=',ncid, ' ndims=',ndims, 'nvars=',nvars,' natts=',natts
  call handle_err (nf90_inq_dimid (ncid, 'grid_xt', latid))  ! RM: lon is no longer in this file; try grid_xt
  call handle_err (nf90_inq_dimid (ncid, 'grid_yt', lonid))  ! RM: lat is no longer in this file; try grid_yt
  call handle_err (nf90_inquire_dimension (ncid, latid, len=lat))
  call handle_err (nf90_inquire_dimension (ncid, lonid, len=lon))
  call handle_err (nf90_close (ncid))
 
- print*,'- in new routine ',lon, lat
+ print*,'- DIMENSIONS ARE: ',lon, lat
 
  end subroutine read_grid_dims
 
+!> Read the ocean fraction from a NetCDF file.
+!!
+!! @param[in] pth1 Directory path to file.
+!! @param[in] atmres Atmospheric resolution.
+!! @param[in] ocnres Ocean resolution.
+!! @param[in] tile Tile number.
+!! @param[in] lon E/W dimension of tile.
+!! @param[in] lat N/S dimension of tile.
+!! @param[out] ocn_frac ocean fraction
+!!
+!! @author Shan Sun
+!! @author Rahul Mahajan
  subroutine read_ocean_frac(pth1,atmres,ocnres,tile,lon,lat,ocn_frac)
 
  use netcdf
@@ -54,7 +78,7 @@
 
  write(flnm,'(5a,i1,a)') trim(pth1),trim(atmres),'.',trim(ocnres),'.tile',tile,'.nc'
 
- print*,'in new routine ',trim(flnm)
+ print*,'-READ OCEAN FRACTION FROM: ',trim(flnm)
 
  start(1:2) = (/1,1/)
  count(1:2) = (/lon,lat/)
@@ -69,6 +93,19 @@
 
  end subroutine read_ocean_frac
 
+!> Read lake fraction, lake depth and latitude from a NetCDF file.
+!!
+!! @param[in] pth2 Directory path to file.
+!! @param[in] atmres Atmospheric resolution.
+!! @param[in] tile Tile number.
+!! @param[in] lon E/W dimension of tile.
+!! @param[in] lat N/S dimension of tile.
+!! @param[out] lake_frac Lake fraction
+!! @param[out] lake_depth Lake depth
+!! @param[out] lat2d Latitude
+!!
+!! @author Shan Sun
+!! @author Rahul Mahajan
  subroutine read_lake_mask(pth2,atmres,tile,lon,lat,lake_frac, &
                            lake_depth,lat2d)
 
@@ -91,10 +128,9 @@
  integer                      :: start(2), count(2)
 
  write(flnm,'(4a,i1,a)') trim(pth2),'oro.',trim(atmres),'.tile',tile,'.nc'
- print *,' flnm2=',trim(flnm)
+ print *,'- READ LAKE DEPTH, FRACTION AND LATITUDE FROM: ',trim(flnm)
  call handle_err (nf90_open (flnm, NF90_NOWRITE, ncid))
  call handle_err (nf90_inquire (ncid, ndimensions=ndims, nvariables=nvars, nattributes=natts))
- write(6,*) 'flnm_lake=',flnm,' ncid=',ncid, ' ndims=',ndims, 'nvars=',nvars,' natts=',natts
  call handle_err (nf90_inq_varid(ncid, 'lake_frac', v2id))
  call handle_err (nf90_inq_varid(ncid, 'lake_depth',v3id))
  call handle_err (nf90_inq_varid(ncid, 'geolat'    ,vlat))
@@ -111,7 +147,7 @@
 !!
 !! @param[in] atmres Atmospheric resolution.
 !! @param[in] ocnres Ocean resolution.
-!! @param[in] pth3 Diretory path to output file.
+!! @param[in] pth3 Directory path to output file.
 !! @param[in] tile Tile number.
 !! @param[in] lon E/W dimension of tile.
 !! @param[in] lat N/S dimension of tile.
@@ -142,7 +178,7 @@
  integer            :: ncid4, dims(2), v1id, v2id, v3id, v4id
  
  write(flnm,'(4a,i1,a)') trim(atmres),'.',trim(ocnres),'.tile',tile,'.nc'
- print *,'output data to file= ',trim(flnm)
+ print *,'- OUTPUT DATA TO FILE: ',trim(flnm)
  call handle_err (nf90_create (path=trim(pth3)//trim(flnm), &
     cmode=or(NF90_CLOBBER, NF90_64BIT_OFFSET), ncid=ncid4))   ! netcdf3
 
