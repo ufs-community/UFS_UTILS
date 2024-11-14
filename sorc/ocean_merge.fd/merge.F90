@@ -9,9 +9,9 @@
 !! @param[in] lat2d Latitude of the model grid points.
 !! @param[in] ocn_frac Fraction of the grid point that is ocean.
 !! @param[inout] lake_frac Fraction of the grid point that is lake.
-!! @param[inout] lake_depth Lake depth.
+!! @param[inout] lake_depth Lake depth in meters.
 !! @param[out] land_frac Fraction of the grid point that is land.
-!! @param[out] slmsk Land/sea mask. '1' if less than 50% land. Otherwise, '1'.
+!! @param[out] slmsk Land/sea mask. '0' if less than 50% land. Otherwise, '1'.
 !!
 !! @author Shan Sun
 !! @author Rahul Mahajan

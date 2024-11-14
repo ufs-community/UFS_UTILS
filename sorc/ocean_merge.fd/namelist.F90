@@ -5,10 +5,12 @@
 !! @param[out] out_dir Directory where output file will be written.
 !! @param[out] atmres Atmosphere grid resolution.
 !! @param[out] ocnres Ocean grid resolution.
-!! @param[out] binary_lake or fractional lake 
+!! @param[out] binary_lake or fractional lake.
 !! @author Rahul Mahajan
 !! @author Sanath Kumar
 subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres,ocnres,out_dir,binary_lake)
+
+  implicit none
 
   integer :: unit=7, io_status
 

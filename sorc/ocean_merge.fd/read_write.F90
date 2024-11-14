@@ -2,7 +2,7 @@
 !!
 !! @param[in] pth1 Directory path to file.
 !! @param[in] atmres Atmospheric resolution.
-!! @param[in] ocnres Ocean resolution.
+!! @param[in] ocnres Ocean resolution in decimal percent.
 !! @param[in] tile Tile number.
 !! @param[out] lon E/W dimension of tile.
 !! @param[out] lat N/S dimension of tile.
@@ -52,7 +52,7 @@
 !! @param[in] tile Tile number.
 !! @param[in] lon E/W dimension of tile.
 !! @param[in] lat N/S dimension of tile.
-!! @param[out] ocn_frac ocean fraction
+!! @param[out] ocn_frac ocean fraction in decimal percent.
 !!
 !! @author Shan Sun
 !! @author Rahul Mahajan
@@ -100,9 +100,9 @@
 !! @param[in] tile Tile number.
 !! @param[in] lon E/W dimension of tile.
 !! @param[in] lat N/S dimension of tile.
-!! @param[out] lake_frac Lake fraction
-!! @param[out] lake_depth Lake depth
-!! @param[out] lat2d Latitude
+!! @param[out] lake_frac Lake fraction in decimal percent.
+!! @param[out] lake_depth Lake depth in meters.
+!! @param[out] lat2d Latitude in degrees.
 !!
 !! @author Shan Sun
 !! @author Rahul Mahajan
@@ -151,10 +151,10 @@
 !! @param[in] tile Tile number.
 !! @param[in] lon E/W dimension of tile.
 !! @param[in] lat N/S dimension of tile.
-!! @param[in] land_frac Land fraction.
-!! @param[in] lake_frac Lake fraction.
-!! @param[in] lake_depth Lake depth.
-!! @param[in] slmsk Land/sea mask.
+!! @param[in] land_frac Land fraction in decimal percent.
+!! @param[in] lake_frac Lake fraction in decimal percent.
+!! @param[in] lake_depth Lake depth in meters.
+!! @param[in] slmsk Land/sea mask - 0-non-land; 1-land.
 !!
 !! @author Shan Sun
 !! @author Rahul Mahajan

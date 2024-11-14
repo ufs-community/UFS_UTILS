@@ -4,6 +4,7 @@
 !! @author Shan Sun
 subroutine handle_err (ret)
   use netcdf
+  implicit none
   integer, intent(in) :: ret
 
   if (ret /= NF90_NOERR) then
