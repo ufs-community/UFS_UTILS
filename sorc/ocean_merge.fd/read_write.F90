@@ -1,4 +1,4 @@
-!> Read the grid dimensions from a NetCDF file.
+!> Read the grid dimensions from the MOM6 ocean mask NetCDF file.
 !!
 !! @param[in] pth1 Directory path to file.
 !! @param[in] atmres Atmospheric resolution.
@@ -44,7 +44,7 @@
 
  end subroutine read_grid_dims
 
-!> Read the ocean fraction from a NetCDF file.
+!> Read the ocean fraction from the MOM6 ocean NetCDF file.
 !!
 !! @param[in] pth1 Directory path to file.
 !! @param[in] atmres Atmospheric resolution.
@@ -95,7 +95,7 @@
 
 !> Read lake fraction, lake depth and latitude from a NetCDF file.
 !!
-!! @param[in] pth2 Directory path to file.
+!! @param[in] pth2 Directory path to the file.
 !! @param[in] atmres Atmospheric resolution.
 !! @param[in] tile Tile number.
 !! @param[in] lon E/W dimension of tile.
@@ -152,7 +152,7 @@
 !! @param[in] lon E/W dimension of tile.
 !! @param[in] lat N/S dimension of tile.
 !! @param[in] land_frac Land fraction in decimal percent.
-!! @param[in] lake_frac Lake fraction in decimal percent.
+!! @param[in] lake_frac Lake fraction.
 !! @param[in] lake_depth Lake depth in meters.
 !! @param[in] slmsk Land/sea mask - 0-non-land; 1-land.
 !!

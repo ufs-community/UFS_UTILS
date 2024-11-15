@@ -64,6 +64,6 @@
  end do
  end do
 
- write(*,'(a,i8,a,i8,a)') 'total lake point ',lake_pt,' where ',nodp_pt,' has no depth'
+ write(*,'(a,i8,a,i8,a)') 'Total lake point ',lake_pt,' where ',nodp_pt,' has no depth'
 
  end subroutine merge

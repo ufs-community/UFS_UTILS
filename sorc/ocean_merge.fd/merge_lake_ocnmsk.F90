@@ -21,18 +21,15 @@ program merge_lake_ocnmsk
   character(len=120) :: pth1
   character(len=120) :: pth2,pth3
   character(len=10)  :: atmres,ocnres
- ! this variable is now renamed as binary_lake and is passed in from the name
- ! list
- ! logical, parameter :: int_lake=.true.  
- ! all instances of int_lake was changed to binary_lake  
-  integer :: binary_lake
 
+  integer :: binary_lake
   integer :: lat,lon,tile
+
   real, allocatable :: lake_frac(:,:),lake_depth(:,:),land_frac(:,:),ocn_frac(:,:),slmsk(:,:),lat2d(:,:)
 
+  print*,"- BEGIN OCEAN MERGE PROGRAM."
+
   call read_nml(pth1, pth2, atmres, ocnres, pth3,binary_lake)
-  
-  print *, pth1
 
   do tile=1,6
 
@@ -57,5 +54,7 @@ program merge_lake_ocnmsk
   end do ! tile
 
   deallocate (lake_frac,lake_depth,land_frac,ocn_frac,slmsk,lat2d)
+
+  print*,"- NORMAL TERMINATION."
 
 end program merge_lake_ocnmsk
