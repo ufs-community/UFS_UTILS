@@ -1,5 +1,8 @@
 ! Unit test for the read_nml routine.
-
+!
+! Read a sample namelist and check the data in each
+! variable against expected values.
+!
  program read_namelist
 
  implicit none
@@ -19,8 +22,8 @@
  if (trim(lake_mask_dir) /= "/lake/mask/dir") stop 4
  if (trim(atmres) /= "C96") stop 6
  if (trim(ocnres) /= "mx025") stop 8
- if (trim(out_dir) /= "/out/dir") stop 8
- if (binary_lake /= 1) stop 10
+ if (trim(out_dir) /= "/out/dir") stop 10
+ if (binary_lake /= 1) stop 12
 
  print*, "OK"
 

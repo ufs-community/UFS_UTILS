@@ -1,5 +1,7 @@
 ! Unit test for the merge routine.
-
+! 
+! Test several combinations of lake and ocean attributes
+! and check the 'merged' value for correctness.
  program ftst_merge
 
  implicit none

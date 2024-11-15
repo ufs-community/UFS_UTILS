@@ -1,6 +1,6 @@
 ! Unit test for the read_lake_mask routine.
 !
-! Reads a 6x4 version of the lake mask file and
+! Reads a 6x4 version of the lake mask NetCDF file and
 ! checks values from the lake fraction, lake depth
 ! and latitude records. If differences exceed a
 ! threshold, then the test fails.

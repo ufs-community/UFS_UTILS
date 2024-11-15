@@ -1,6 +1,6 @@
 ! Unit test for the read_ocean_frac routine.
 !
-! Reads a 6x5 version of the ocean mask file and
+! Reads a 6x5 version of the MOM6 ocean mask file and
 ! checks values from the ocean fraction record.
 ! If differences exceed a threshold, then the test fails.
 !
