@@ -1,14 +1,17 @@
 help([[
-Load environment to compile UFS_UTILS on Orion using Intel classic
+Load environment to compile UFS_UTILS on Gaea C6 using Intel
 ]])
 
-prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/unified-env-rocky9/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/sw/rdtn/modulefiles")
+load("hsi")
 
-stack_intel_ver=os.getenv("stack_intel_ver") or "2021.9.0"
+prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/c6/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
+
+stack_intel_ver=os.getenv("stack_intel_ver") or "2023.2.0"
 load(pathJoin("stack-intel", stack_intel_ver))
 
-stack_impi_ver=os.getenv("stack_impi_ver") or "2021.9.0"
-load(pathJoin("stack-intel-oneapi-mpi", stack_impi_ver))
+stack_cray_mpich_ver=os.getenv("stack_cray_mpich_ver") or "8.1.29"
+load(pathJoin("stack-cray-mpich", stack_cray_mpich_ver))
 
 cmake_ver=os.getenv("cmake_ver") or "3.23.1"
 load(pathJoin("cmake", cmake_ver))
@@ -60,3 +63,4 @@ nco_ver=os.getenv("nco_ver") or "5.0.6"
 load(pathJoin("nco", nco_ver))
 
 whatis("Description: UFS_UTILS build environment")
+

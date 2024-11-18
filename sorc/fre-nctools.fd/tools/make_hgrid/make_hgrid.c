@@ -1037,7 +1037,7 @@ int main(int argc, char* argv[])
     }
     }
     
-    if (verbose) fprintf(stderr, "[INFO] Allocating arrays of size %d for x, y based on nxp: %d nyp: %d ntiles: %d\n", size1, nxp, nyp, ntiles);
+    if (verbose) fprintf(stderr, "[INFO] Allocating arrays of size %lu for x, y based on nxp: %d nyp: %d ntiles: %d\n", size1, nxp, nyp, ntiles);
     x        = (double *) malloc(size1*sizeof(double));
     y        = (double *) malloc(size1*sizeof(double));
     area     = (double *) malloc(size4*sizeof(double));
@@ -1198,7 +1198,7 @@ int main(int argc, char* argv[])
 
       if(out_halo ==0) {
         if (verbose) {
-          fprintf(stderr, "[INFO] START NC XARRAY write out_halo=0 tile number = n: %d offset = pos_c: %d\n", n, pos_c);
+          fprintf(stderr, "[INFO] START NC XARRAY write out_halo=0 tile number = n: %d offset = pos_c: %ld\n", n, pos_c);
           fprintf(stderr, "[INFO] XARRAY: n: %d x[0]: %f x[1]: %f x[2]: %f x[3]: %f x[4]: %f x[5]: %f x[10]: %f\n",
                   n, x[pos_c], x[pos_c+1], x[pos_c+2], x[pos_c+3], x[pos_c+4], x[pos_c+5], x[pos_c+10]);
           if (n > 0) fprintf(stderr, "[INFO] XARRAY: n: %d x[0]: %f x[-1]: %f x[-2]: %f x[-3]: %f x[-4]: %f x[-5]: %f x[-10]: %f\n",
@@ -1259,9 +1259,9 @@ int main(int argc, char* argv[])
       nxp = nx + 1;
       nyp = ny + 1;
 
-      if (verbose) fprintf(stderr, "[INFO] INDEX Before increment n: %d pos_c %d nxp %d nyp %d nxp*nyp %d\n", n, pos_c, nxp, nyp, nxp*nyp);
+      if (verbose) fprintf(stderr, "[INFO] INDEX Before increment n: %d pos_c %ld nxp %d nyp %d nxp*nyp %d\n", n, pos_c, nxp, nyp, nxp*nyp);
       pos_c += nxp*nyp;
-      if (verbose) fprintf(stderr, "[INFO] INDEX After increment n: %d pos_c %d.\n", n, pos_c);
+      if (verbose) fprintf(stderr, "[INFO] INDEX After increment n: %d pos_c %ld.\n", n, pos_c);
       pos_e += nxp*ny;
       pos_n += nx*nyp;
       pos_t += nx*ny;

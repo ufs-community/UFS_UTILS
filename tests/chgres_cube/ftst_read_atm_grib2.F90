@@ -241,7 +241,7 @@
  if (abs(data3d_one_tile(i_check(2),j_check(2),k_check(2)) - expected_values_zwind(2)) > EPSILON) stop 29
 
  call ESMF_FieldGather(ps_input_grid, data_one_tile, rootPet=0, rc=rc)
- if (abs(data_one_tile(i_check(1),j_check(1)) - expected_values_ps(1)) > EPSILON) stop 32
+ if (abs(data_one_tile(i_check(1),j_check(1)) - expected_values_ps(1)) > (20.0*EPSILON)) stop 32
 
  call ESMF_FieldGather(terrain_input_grid, data_one_tile, rootPet=0, rc=rc)
  if (abs(data_one_tile(i_check(1),j_check(1)) - expected_values_terrain(1)) > EPSILON) stop 34

@@ -34,7 +34,7 @@ set -x
 UFS_DIR=$PWD/../..
 source $UFS_DIR/sorc/machine-setup.sh > /dev/null 2>&1
 module use $UFS_DIR/modulefiles
-module load build.$target.intel
+module load build.$target.intelllvm
 module list
 
 export CRES="C48"

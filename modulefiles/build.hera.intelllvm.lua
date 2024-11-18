@@ -1,14 +1,20 @@
 help([[
-Load environment to compile UFS_UTILS on Orion using Intel classic
+Load environment to compile UFS_UTILS on Hera using Intel
 ]])
 
-prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/unified-env-rocky9/install/modulefiles/Core")
+hpss_ver=os.getenv("hpss_ver") or ""
+load(pathJoin("hpss", hpss_ver))
 
-stack_intel_ver=os.getenv("stack_intel_ver") or "2021.9.0"
+prepend_path("MODULEPATH", "/scratch1/NCEPDEV/nems/role.epic/spack-stack/spack-stack-1.6.0/envs/unified-env-rocky8/install/modulefiles/Core")
+
+stack_intel_ver=os.getenv("stack_intel_ver") or "2021.5.0"
 load(pathJoin("stack-intel", stack_intel_ver))
 
-stack_impi_ver=os.getenv("stack_impi_ver") or "2021.9.0"
+stack_impi_ver=os.getenv("stack_impi_ver") or "2021.5.1"
 load(pathJoin("stack-intel-oneapi-mpi", stack_impi_ver))
+
+load("gnu")
+load("intel/2024.2.1")
 
 cmake_ver=os.getenv("cmake_ver") or "3.23.1"
 load(pathJoin("cmake", cmake_ver))
@@ -58,5 +64,11 @@ load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.0.6"
 load(pathJoin("nco", nco_ver))
+
+setenv("I_MPI_CC", "icx")
+setenv("I_MPI_FC", "ifx")
+
+setenv("CC", "mpicc")
+setenv("FC", "mpifc")
 
 whatis("Description: UFS_UTILS build environment")

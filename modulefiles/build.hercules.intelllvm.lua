@@ -1,17 +1,14 @@
 help([[
-Load environment to compile UFS_UTILS on Gaea using Intel
+Load environment to compile UFS_UTILS on Hercules using IntelLLVM
 ]])
 
-prepend_path("MODULEPATH", "/sw/rdtn/modulefiles")
-load("hsi")
+prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
 
-prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
-
-stack_intel_ver=os.getenv("stack_intel_ver") or "2023.1.0"
+stack_intel_ver=os.getenv("stack_intel_ver") or "2021.9.0"
 load(pathJoin("stack-intel", stack_intel_ver))
 
-stack_cray_mpich_ver=os.getenv("stack_cray_mpich_ver") or "8.1.25"
-load(pathJoin("stack-cray-mpich", stack_cray_mpich_ver))
+stack_impi_ver=os.getenv("stack_impi_ver") or "2021.9.0"
+load(pathJoin("stack-intel-oneapi-mpi", stack_impi_ver))
 
 cmake_ver=os.getenv("cmake_ver") or "3.23.1"
 load(pathJoin("cmake", cmake_ver))
@@ -62,5 +59,10 @@ load(pathJoin("esmf", esmf_ver))
 nco_ver=os.getenv("nco_ver") or "5.0.6"
 load(pathJoin("nco", nco_ver))
 
-whatis("Description: UFS_UTILS build environment")
+setenv("I_MPI_CC", "icx")
+setenv("I_MPI_F90", "ifx")
 
+setenv("CC", "mpiicc")
+setenv("FC", "mpiifort")
+
+whatis("Description: UFS_UTILS build environment")

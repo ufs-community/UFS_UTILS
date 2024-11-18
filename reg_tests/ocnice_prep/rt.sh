@@ -112,11 +112,18 @@ export WLCLK=$WLCLK_dflt
 MEM_dflt="--mem=24g"
 export MEM=$MEM_dflt
 
-cd $PATHRT
-export compiler=${compiler:-intel}
+set -x
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
+export compiler=${compiler:-intelllvm}
+if [[ "$compiler" == "intelllvm" ]]; then
+  if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
+     echo "IntelLLVM not available. Will use Intel Classic."
+    compiler=intel
+  fi
+fi
 echo "Machine: $target"
 echo "Compiler: $compiler"
+cd $PATHRT
 
 COMPILE_LOG=compile.log
 REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
@@ -158,8 +165,8 @@ elif [[ $target = hercules ]]; then
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/baseline_data
     WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
     INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/input_data
-    ACCOUNT=${ACCOUNT:-nems}
-    QUEUE=${QUEUE:-batch}
+    ACCOUNT=${ACCOUNT:-fv3-cpu}
+    QUEUE=${QUEUE:-debug}
     NCCMP=nccmp
     PARTITION=hercules
     ulimit -s unlimited
