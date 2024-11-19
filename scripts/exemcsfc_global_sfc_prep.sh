@@ -73,7 +73,7 @@ export EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 
 # output com directory.
 export COMOUT=${COMOUT:-$PWD}
-export COMINgfs_m6hrs=${COMINgfs_m6hrs:-$PWD}
+export COMIN_m6hrs=${COMIN_m6hrs:-$PWD}
 
 # working directory
 export DATA=${DATA:-$PWD}
@@ -183,7 +183,7 @@ export MODEL_LATITUDE_FILE=${MDL_LATS:-${FIXgfs}/am/global_latitudes.t${resoluti
 export MODEL_LONGITUDE_FILE=${MDL_LONS:-${FIXgfs}/am/global_longitudes.t${resolution}.grb}
 export GFS_LONSPERLAT_FILE=${LONSPERLAT:-${FIXgfs}/am/global_lonsperlat.t${resolution}.txt}
 export MODEL_SNOW_FILE=${FNSNOAJCAP:-${RUN}.${cycle}.snogrb_t${resolution}}
-export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP:-${COMINgfs_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
+export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP:-${COMIN_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
 
 echo "Create ${JCAP} snow data."
 
@@ -241,7 +241,7 @@ export MODEL_LATITUDE_FILE=${MDL_LATS_ENKF:-${FIXgfs}/am/global_latitudes.t${res
 export MODEL_LONGITUDE_FILE=${MDL_LONS_ENKF:-${FIXgfs}/am/global_longitudes.t${resolution}.grb}
 export GFS_LONSPERLAT_FILE=${LONSPERLAT_ENKF:-${FIXgfs}/am/global_lonsperlat.t${resolution}.txt}
 export MODEL_SNOW_FILE=${FNSNOAJCAP_ENKF:-${RUN}.${cycle}.snogrb_t${resolution}}
-export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP_ENKF:-${COMINgfs_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
+export MODEL_SNOW_FILE_m6hrs=${FNSNOGJCAP_ENKF:-${COMIN_m6hrs}/${RUN}.${cycle_m6hrs}.snogrb_t${resolution}}
 
 echo "Create enkf snow data."
 
