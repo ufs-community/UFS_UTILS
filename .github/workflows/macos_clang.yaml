@@ -47,7 +47,7 @@ jobs:
         run: |
           git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git
           source spack/share/spack/setup-env.sh
-          sed "s/\[intel, gcc@10:10, apple-clang@14\]/\[apple-clang@14\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
+          sed "s/\[oneapi, gcc@10:10, apple-clang@14\]/\[apple-clang@14\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
           spack env create ufs_utils-env spack_ci.yaml
           spack env activate ufs_utils-env
           spack external find

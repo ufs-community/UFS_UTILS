@@ -20,7 +20,7 @@ PULL_DATA(${SFCGEN2_URL} ${VEG_FILE})
 # Include cmake to allow parallel I/O tests.
 include (LibMPI)
 
-if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
+if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")

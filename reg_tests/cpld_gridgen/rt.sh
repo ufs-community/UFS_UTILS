@@ -108,14 +108,20 @@ TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=35
+WLCLK_dflt=50
 export WLCLK=$WLCLK_dflt
 MEM_dflt="--mem=16g"
 export MEM=$MEM_dflt
 
 cd $PATHRT
-export compiler=${compiler:-intel}
+export compiler=${compiler:-intelllvm}
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
+if [[ "$compiler" == "intelllvm" ]]; then
+  if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
+     echo "IntelLLVM not available. Will use Intel Classic."
+    compiler=intel
+  fi
+fi
 echo "Machine: $target"
 echo "Compiler: $compiler"
 

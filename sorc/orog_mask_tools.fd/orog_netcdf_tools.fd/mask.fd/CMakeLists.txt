@@ -2,7 +2,7 @@ list(APPEND fortran_src
   mask.f90
 )
 
-if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
+if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -i4 -convert big_endian")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8")

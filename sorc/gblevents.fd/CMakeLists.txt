@@ -1,5 +1,5 @@
 
-if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
+if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")

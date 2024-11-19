@@ -1,7 +1,7 @@
 set(lib_src nb.F90)
 set(exe_src inland.F90)
 
-if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
+if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -assume byterecl")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-range-check")

@@ -26,7 +26,7 @@ option(CHGRES "Enable building chgres_cube.fd" ON)
 option(CHGRES_ALL "Build chgres with all input data options." OFF)
 option(OROG_MASK_TOOLS "Enable building orog_mask_tools.fd" ON)
 # OROG_MASK_TOOLS must be ON for OROG_NETCDF_TOOLS to build.
-option(OROG_NETCDF_TOOLS "Enable building orog_netcdf_tools.fd" OFF)
+option(OROG_NETCDF_TOOLS "Enable building orog_netcdf_tools.fd" ON)
 option(SFC_CLIMO_GEN "Enable building sfc_climo_gen.fd" ON)
 option(VCOORD_GEN "Enable building vcoord_gen.fd" ON)
 option(FVCOMTOOLS "Enable building fvcom_tools.fd" ON)
@@ -67,10 +67,15 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "^(Debug|Release|RelWithDebInfo|MinSizeRel)$")
 endif()
 
 # Set compiler flags.
-if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel)$")
+if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -g -traceback")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
   set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -check all -ftrapuv")
+# On some machines (Hera), using -check all results in an error
+# at the linking step. The uninit check is the culprit.
+  if(CMAKE_Fortran_COMPILER_ID MATCHES "^(IntelLLVM)$")
+    set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -check nouninit")
+  endif()
   if(APPLE)
     # The linker on macOS does not include `common symbols` by default.
     # Passing the -c flag includes them and fixes an error with undefined symbols.
@@ -86,10 +91,14 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -ggdb -Wall -fcheck=all")
 endif()
 
-if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
+if(CMAKE_C_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -traceback")
-  set(CMAKE_C_FLAGS_RELEASE "-O2")
   set(CMAKE_C_FLAGS_DEBUG "-O0")
+  if(CMAKE_C_COMPILER_ID MATCHES "^(Intel)$")
+    set(CMAKE_C_FLAGS_RELEASE "-O2")
+  else()
+    set(CMAKE_C_FLAGS_RELEASE "-O1")
+  endif()
 endif()
 
 # Find packages.

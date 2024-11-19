@@ -19,7 +19,8 @@ source "${DIR_ROOT}/sorc/machine-setup.sh"
 
 # User Options
 target=${target:-"NULL"}
-compiler=${compiler:-"intel"}
+compiler=${compiler:-"intelllvm"} # If IntelLLVM is not available on the machine, will
+                                  # default to Intel classic.
 
 if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
   unset -f module
@@ -29,6 +30,12 @@ if [[ "$target" == "linux.*" || "$target" == "macosx.*" ]]; then
 else
   set +x
   module use "${DIR_ROOT}/modulefiles"
+  if [[ "$compiler" == "intelllvm" ]]; then
+    if [[ ! -f ${DIR_ROOT}/modulefiles/build.$target.$compiler.lua ]];then
+      echo "IntelLLVM not available. Will use Intel Classic."
+      compiler=intel
+    fi
+  fi
   module load "build.$target.$compiler" > /dev/null
   module list
   set -x

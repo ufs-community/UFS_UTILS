@@ -1,5 +1,5 @@
 help([[
-Load environment to compile UFS_UTILS on Hercules using Intel
+Load environment to compile UFS_UTILS on Hercules using Intel Classic
 ]])
 
 prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
