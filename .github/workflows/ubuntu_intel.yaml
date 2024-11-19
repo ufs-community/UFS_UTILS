@@ -10,11 +10,12 @@ defaults:
 # Set I_MPI_CC/F90 so IntelLLVM is used.
 env:
   cache_key: intel
-  CC: mpiicc
-  FC: mpiifort
-  CXX: mpiicpc
+  CC: mpiicx
+  FC: mpiifx
+  CXX: mpiicpx
   I_MPI_CC: icx
   I_MPI_F90: ifx
+  I_MPI_CXX: icpx
 
 # The jobs are split into:
 # 1. a dependency build step (setup), and
@@ -50,7 +51,7 @@ jobs:
           sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB
           echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
           sudo apt-get update
-          sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran-2023.2.1 intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic-2023.2.1
+          sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran intel-oneapi-compiler-dpcpp-cpp
           echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
 
       # Install dependencies using Spack
@@ -65,9 +66,14 @@ jobs:
           spack compiler find
           sudo apt install cmake
           spack external find
-          spack add intel-oneapi-mpi
+          spack config add "packages:all:prefer:'%oneapi'"
+          spack config add "packages:mpi:require:intel-oneapi-mpi"
+          intel_mpi_version=$(basename $(realpath /opt/intel/oneapi/mpi/latest))
+          sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${intel_mpi_version}\n        prefix: /opt/intel/oneapi|" $SPACK_ENV/spack.yaml
+          spack config add "packages:python:require:'@3.11'"
+          cat $SPACK_ENV/spack.yaml
           spack concretize
-          spack install --dirty -v --fail-fast
+          spack install --dirty --show-log-on-error --fail-fast
           spack clean --all
 
   ufs_utils:
