@@ -1,26 +1,56 @@
 #!/bin/bash
 
 #--------------------------------------------------------------------------
-# Mimic GFS OPS.  This script is run from its machine-specific
-# driver.
+# Mimic v16 and prior GFS OPS.  This script is run from its
+# machine-specific driver.
 #--------------------------------------------------------------------------
+
+echo "BEGIN SNOW2MDL OPS TEST."
 
 set -x
 
-export IMS_FILE=$HOMEreg/input_data/imssnow96.grb
-export AFWA_NH_FILE=$HOMEreg/input_data/NPR.SNWN.SP.S1200.MESH16
-export AFWA_SH_FILE=$HOMEreg/input_data/NPR.SNWS.SP.S1200.MESH16
+rm -fr $DATA
+mkdir -p $DATA
+cd $DATA
 
-export MODEL_LATITUDE_FILE=$HOMEgfs/fix/am/global_latitudes.t1534.3072.1536.grb
-export MODEL_LONGITUDE_FILE=$HOMEgfs/fix/am/global_longitudes.t1534.3072.1536.grb
-export MODEL_SLMASK_FILE=$HOMEgfs/fix/am/global_slmask.t1534.3072.1536.grb
-export GFS_LONSPERLAT_FILE=$HOMEgfs/fix/am/global_lonsperlat.t1534.3072.1536.txt
+cat << EOF > ./fort.41
+ &source_data
+  autosnow_file=""
+  nesdis_snow_file="$HOMEreg/input_data/imssnow96.grb"
+  nesdis_lsmask_file=""
+  afwa_snow_global_file=""
+  afwa_snow_nh_file="$HOMEreg/input_data/NPR.SNWN.SP.S1200.MESH16"
+  afwa_snow_sh_file="$HOMEreg/input_data/NPR.SNWS.SP.S1200.MESH16"
+  afwa_lsmask_nh_file=""
+  afwa_lsmask_sh_file=""
+ /
+ &qc
+  climo_qc_file="$HOMEgfs/fix/am/emcsfc_snow_cover_climo.grib2"
+ /
+ &model_specs
+  model_lat_file="$HOMEgfs/fix/am/global_latitudes.t1534.3072.1536.grb"
+  model_lon_file="$HOMEgfs/fix/am/global_longitudes.t1534.3072.1536.grb"
+  model_lsmask_file="$HOMEgfs/fix/am/global_slmask.t1534.3072.1536.grb"
+  gfs_lpl_file="$HOMEgfs/fix/am/global_lonsperlat.t1534.3072.1536.txt"
+  /
+ &output_data
+  model_snow_file="./snogrb_model"
+  output_grib2=.false.
+ /
+ &output_grib_time
+  grib_year=2012
+  grib_month=10
+  grib_day=29
+  grib_hour=0
+ /
+ &parameters
+  lat_threshold=55.0
+  min_snow_depth=0.05
+  snow_cvr_threshold=50.0
+ /
+EOF
 
-export OMP_NUM_THREADS=1
-export OUTPUT_GRIB2=.false.
-
-${HOMEgfs}/ush/emcsfc_snow.sh
-
+eval $HOMEgfs/exec/emcsfc_snow2mdl >> OUTPUT 2> errfile
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
