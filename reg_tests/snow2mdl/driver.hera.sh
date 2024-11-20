@@ -27,6 +27,7 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module load grib-util
 module load wgrib2/2.0.8
+module load prod_util/2.1.1
 module list
 
 # Because of a bug in the grib-util module, need to construct this

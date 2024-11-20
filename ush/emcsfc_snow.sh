@@ -129,18 +129,15 @@ fi
 cd $DATA
 
 #------------------------------------------------------------------------
-# Do a quick check of the ims data to ensure it is not corrupt.
-# WGRIB2 works for a grib 1 or grib 2 file.  If IMS is bad,
-# don't run emcsfc_snow2mdl program because afwa data alone is
-# unreliable.
+# Do a quick check of the ims data to ensure it exists and is
+# not corrupt.
 #------------------------------------------------------------------------
 
-$WGRIB2 ${IMS_FILE}
-rc1=$?
-
-if ((rc1 != 0));then 
-  echo "WARNING: ${pgm} detects corrupt IMS data. Can not run."
-  exit $rc1
+if [[ ! -f $IMS_FILE ]]; then
+  set +x
+  echo "WARNING: ${pgm} detects missing ims data. Will not run."
+  set -x
+  exit 7
 fi
 
 #------------------------------------------------------------------------
@@ -148,12 +145,14 @@ fi
 # ims data has highest priority of all input data.
 #------------------------------------------------------------------------
 
-$WGRIB2 -Sec0 ${IMS_FILE} 2>&1 | grep "grib1 message"
+$WGRIB2 -d 1 ${IMS_FILE}
 status=$?
-if (( status == 0 )); then   # grib 1 file
-  tempdate=$($WGRIB -v $IMS_FILE | head -1)
-  IMSDATE=${tempdate#*D=}
-else # grib 2 file
+if (( status != 0 )); then
+  set +x
+  echo "WARNING: ${pgm} detects corrupt ims data. Will not run."
+  set -x
+  exit 9
+else
   tempdate=$($WGRIB2 -t $IMS_FILE | head -1)
   IMSDATE=${tempdate#*d=}
 fi
@@ -162,6 +161,36 @@ IMSYEAR=$(echo $IMSDATE10 | cut -c1-4)
 IMSMONTH=$(echo $IMSDATE10 | cut -c5-6)
 IMSDAY=$(echo $IMSDATE10 | cut -c7-8)
 IMSHOUR=0   # emc convention is to use 00Z.
+
+#------------------------------------------------------------------------
+# Ensure AFWA data exists and is not too old.
+#------------------------------------------------------------------------
+
+if [[ ! -f $AFWA_GLOBAL_FILE ]]; then
+  set +x
+  echo "WARNING: ${pgm} detects missing afwa data. Will not run."
+  set -x
+  exit 3
+else
+  $WGRIB2 -d 1 $AFWA_GLOBAL_FILE
+  status=$?
+  if ((status != 0));then
+    set +x
+    echo "WARNING: ${pgm} detects corrupt afwa data. Will not run."
+    set -x
+    exit $status
+  else
+    tempdate=$($WGRIB2 -d 1 -t $AFWA_GLOBAL_FILE)
+    AFWADATE=${tempdate#*d=}
+    two_days_ago=$($NDATE -48 $IMSDATE10)
+    if ((AFWADATE < two_days_ago)); then
+      set +x
+      echo "WARNING: ${pgm} detects old afwa data. Will not run."
+      set -x
+      exit 4
+    fi
+  fi
+fi
 
 pgmout=${pgmout:-OUTPUT}
 

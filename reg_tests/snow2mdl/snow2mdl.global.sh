@@ -7,7 +7,7 @@
 
 set -x
 
-export IMS_FILE=$HOMEreg/input_data/imssnow96.afwa.global.grb
+export IMS_FILE=$HOMEreg/input_data/imssnow96.afwa.global.grb2
 export AFWA_GLOBAL_FILE="$HOMEreg/input_data/afwa.global.grb2"
 
 export MODEL_LATITUDE_FILE=$HOMEgfs/fix/am/global_latitudes.t1534.3072.1536.grb
