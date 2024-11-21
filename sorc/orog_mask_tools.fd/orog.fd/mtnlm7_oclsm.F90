@@ -419,8 +419,6 @@
       real,    intent(out)      :: slm(im,jm)
       real,    intent(out)      :: land_frac(im,jm)
 
-      integer, parameter        :: MAXSUM=20000000
-
       real, parameter           :: D2R = 3.14159265358979/180.
 
       integer  jst, jen
@@ -486,11 +484,6 @@
             XWATR_ALL = XWATR_ALL + FLOAT(1-ZSLM(ii,jj))
             XNSUM_ALL = XNSUM_ALL + 1.
             nsum_all = nsum_all+1
-            if(nsum_all > MAXSUM) then
-              print*, "FATAL ERROR: nsum_all is greater than MAXSUM,"  
-              print*, "increase MAXSUM."
-              call ABORT()
-            endif
 
             if(inside_a_polygon(LONI*D2R,LATI*D2R,4, &
                 LONO_RAD,LATO_RAD))then
@@ -499,11 +492,6 @@
                XWATR = XWATR + FLOAT(1-ZSLM(ii,jj))
                XNSUM = XNSUM + 1.
                nsum = nsum+1
-               if(nsum > MAXSUM) then
-                 print*, "FATAL ERROR: nsum is greater than MAXSUM,"
-                 print*, "increase MAXSUM."
-                 call ABORT()
-               endif
             endif
          enddo ; enddo
 
