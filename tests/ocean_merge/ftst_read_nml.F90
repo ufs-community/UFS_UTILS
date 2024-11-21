@@ -21,7 +21,7 @@
  if (trim(ocean_mask_dir) /= "/ocean/mask/dir") stop 2
  if (trim(lake_mask_dir) /= "/lake/mask/dir") stop 4
  if (trim(atmres) /= "C96") stop 6
- if (trim(ocnres) /= "mx025") stop 8
+ if (trim(ocnres) /= "mx500") stop 8
  if (trim(out_dir) /= "/out/dir") stop 10
  if (binary_lake /= 1) stop 12
 
