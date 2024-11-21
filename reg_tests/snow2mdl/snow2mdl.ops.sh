@@ -16,11 +16,11 @@ cd $DATA
 cat << EOF > ./fort.41
  &source_data
   autosnow_file=""
-  nesdis_snow_file="$HOMEreg/input_data/imssnow96.grb"
+  nesdis_snow_file="$HOMEreg/input_data.test.issue.973/imssnow96.grb"
   nesdis_lsmask_file=""
   afwa_snow_global_file=""
-  afwa_snow_nh_file="$HOMEreg/input_data/NPR.SNWN.SP.S1200.MESH16"
-  afwa_snow_sh_file="$HOMEreg/input_data/NPR.SNWS.SP.S1200.MESH16"
+  afwa_snow_nh_file="$HOMEreg/input_data.test.issue.973/NPR.SNWN.SP.S1200.MESH16"
+  afwa_snow_sh_file="$HOMEreg/input_data.test.issue.973/NPR.SNWS.SP.S1200.MESH16"
   afwa_lsmask_nh_file=""
   afwa_lsmask_sh_file=""
  /
