@@ -547,7 +547,8 @@
       real, intent(out)         :: oro(im,jm)
       real, intent(out)         :: var(im,jm),var4(im,jm)
 
-      integer, parameter        :: MAXSUM=65000000
+!     integer, parameter        :: MAXSUM=65000000
+      integer       :: MAXSUM
       real, parameter           :: D2R = 3.14159265358979/180.
  
       real, dimension(:), allocatable ::  hgt_1d, hgt_1d_all
@@ -564,8 +565,6 @@
       real    XL1_ALL,XS1_ALL,XW1_ALL,XW2_ALL,XW4_ALL
 
       print*,'- CREATE OROGRAPHY AND CONVEXITY.'
-      allocate(hgt_1d(MAXSUM))
-      allocate(hgt_1d_all(MAXSUM))
 !---- GLOBAL XLAT AND XLON ( DEGREE )
 !
       JM1 = JM - 1
@@ -578,7 +577,24 @@
          GLON(I) = 0. + (I-1) * DELXN + DELXN * 0.5
       ENDDO
  
-!     land_frac(:,:) = 0.0     
+      MAXSUM=0
+      DO J=1,JM
+      DO I=1,IM
+         LONO(1) = lon_c(i,j) 
+         LONO(2) = lon_c(i+1,j) 
+         LONO(3) = lon_c(i+1,j+1) 
+         LONO(4) = lon_c(i,j+1) 
+         LATO(1) = lat_c(i,j) 
+         LATO(2) = lat_c(i+1,j) 
+         LATO(3) = lat_c(i+1,j+1) 
+         LATO(4) = lat_c(i,j+1) 
+         call get_index(IMN,JMN,4,LONO,LATO,DELXN,jst,jen,ilist,numx)
+         MAXSUM=MAX(MAXSUM,(JEN-JST+1)*IMN)
+        print*,'test point ',i,j,jst,jen,imn,((JEN-JST+1)*IMN),maxsum
+      ENDDO
+      ENDDO
+      allocate(hgt_1d(MAXSUM))
+      allocate(hgt_1d_all(MAXSUM))
 !
 !---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
 !
