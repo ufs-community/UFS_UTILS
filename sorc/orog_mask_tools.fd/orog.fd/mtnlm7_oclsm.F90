@@ -547,7 +547,7 @@
       real, intent(out)         :: oro(im,jm)
       real, intent(out)         :: var(im,jm),var4(im,jm)
 
-      integer, parameter        :: MAXSUM=20000000
+      integer, parameter        :: MAXSUM=65000000
       real, parameter           :: D2R = 3.14159265358979/180.
  
       real, dimension(:), allocatable ::  hgt_1d, hgt_1d_all
@@ -637,7 +637,7 @@
             nsum_all = nsum_all+1
             if(nsum_all > MAXSUM) then
               print*, "FATAL ERROR: nsum_all is greater than MAXSUM,"
-              print*, "increase MAXSUM."
+              print*, "increase MAXSUM.", jst,jen
               call ABORT()
             endif
             hgt_1d_all(nsum_all) = HEIGHT_ALL
@@ -656,7 +656,7 @@
                nsum = nsum+1
                if(nsum > MAXSUM) then
                  print*, "FATAL ERROR: nsum is greater than MAXSUM,"
-                 print*, "increase MAXSUM."
+                 print*, "increase MAXSUM.", jst,jen
                  call ABORT()
                endif
                hgt_1d(nsum) = HEIGHT
