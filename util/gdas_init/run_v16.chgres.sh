@@ -13,7 +13,7 @@ set -x
 MEMBER=$1
 
 FIX_FV3=$UFS_DIR/fix
-FIX_ORO=${FIX_FV3}/orog
+FIX_ORO=${FIX_FV3}/orog.lowres
 FIX_AM=${FIX_FV3}/am
 
 WORKDIR=${WORKDIR:-$OUTDIR/work.${MEMBER}}

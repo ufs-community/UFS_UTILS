@@ -51,14 +51,14 @@
 #
 #-----------------------------------------------------------
 
-EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DIR=/scratch2/NCEPDEV/stmp1/George.Gayno/gdas.init/input
+EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
-yy=2020
-mm=01
-dd=01
+yy=2024
+mm=11
+dd=16
 hh=06
 
 use_v16retro=no
@@ -67,12 +67,12 @@ LEVS=65
 
 CDUMP=gfs
 
-CRES_HIRES=C192
+CRES_HIRES=C12
 CRES_ENKF=C96
 
 UFS_DIR=$PWD/../..
 
-OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
+OUTDIR=/scratch2/NCEPDEV/stmp1/George.Gayno/gdas.init/output
 
 #---------------------------------------------------------
 # Dont touch anything below here.
