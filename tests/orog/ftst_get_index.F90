@@ -38,11 +38,11 @@
 
  call get_index(imn,jmn,npts,lono,lato,delxn,jst,jen,ilist,numx)
 
- if (jst /= 10676) stop 2
- if (jen /= 10925) stop 4
- if (numx /= 121)  stop 6
+ if (jst /= 10676) stop 2  ! Starting 'j' index on hi-res grid.
+ if (jen /= 10925) stop 4  ! Ending 'j' index on hi-res grid.
+ if (numx /= 121)  stop 6  ! Number of 'i' indices on the hi-res grid.
  do i = 1, numx
-   if (ilist(i) /= i) stop 8
+   if (ilist(i) /= i) stop 8  ! List of 'i' indices on the hi-res grid.
  enddo
 
 ! Point 2 - At equator. Grid cell crosses Greenwich.
@@ -59,12 +59,12 @@
 
  call get_index(imn,jmn,npts,lono,lato,delxn,jst,jen,ilist,numx)
 
- if (jst /= 10676) stop 12
- if (jen /= 10925) stop 14
- if (numx /= 121)  stop 16
+ if (jst /= 10676) stop 12  ! Starting 'j' index on hi-res grid.
+ if (jen /= 10925) stop 14  ! Ending 'j' index on hi-res grid.
+ if (numx /= 121)  stop 16  ! Number of 'i' indices on the hi-res grid.
  ii = 1
  do i = 43141, 43200  ! East of greenwich
-   if (ilist(ii) /= i) stop 18
+   if (ilist(ii) /= i) stop 18  ! List of 'i' indices on the hi-res grid.
    ii = ii + 1
  enddo
  do i = 1, 61  ! West of greenwich
@@ -86,12 +86,12 @@
 
  call get_index(imn,jmn,npts,lono,lato,delxn,jst,jen,ilist,numx)
 
- if (jst /= 10676) stop 22
- if (jen /= 10925) stop 24
- if (numx /= 241)  stop 26
+ if (jst /= 10676) stop 22  ! Starting 'j' index on hi-res grid.
+ if (jen /= 10925) stop 24  ! Ending 'j' index on hi-res grid.
+ if (numx /= 241)  stop 26  ! Number of 'i' indices on the hi-res grid.
  ii = 1
  do i = 21481, 21721
-   if (ilist(ii) /= i) stop 28
+   if (ilist(ii) /= i) stop 28 ! List of 'i' indices on the hi-res grid.
    ii = ii + 1
  enddo
 
@@ -109,11 +109,11 @@
 
  call get_index(imn,jmn,npts,lono,lato,delxn,jst,jen,ilist,numx)
 
- if (jst /= 21476) stop 32
- if (jen /= 21600) stop 34
- if (numx /= 43200)  stop 36
+ if (jst /= 21476) stop 32  ! Starting 'j' index on hi-res grid.
+ if (jen /= 21600) stop 34  ! Ending 'j' index on hi-res grid.
+ if (numx /= 43200)  stop 36  ! Number of 'i' indices on the hi-res grid.
  do i = 1, numx
-   if (ilist(i) /= i) stop 38
+   if (ilist(i) /= i) stop 38 ! List of 'i' indices on the hi-res grid.
  enddo
 
  print*,"OK"
