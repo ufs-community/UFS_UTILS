@@ -699,7 +699,8 @@
 !! @param[in] jmn 'j' dimension of the high-resolution orography
 !! data set.
 !! @param[in] npts Number of vertices to describe the cubed-sphere point.
-!! @param[in] lonO The longitudes of the cubed-sphere vertices.
+!! @param[in] lonO The longitudes of the cubed-sphere vertices. Must
+!! range from 0 - 360.
 !! @param[in] latO The latitudes of the cubed-sphere vertices.
 !! @param[in] delxn Resolution of the high-resolution orography
 !! data set.
