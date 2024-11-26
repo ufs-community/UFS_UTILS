@@ -1,0 +1,8 @@
+     &mask_nml
+     ocean_mask_dir="/ocean/mask/dir"
+     ocnres="mx500"
+     lake_mask_dir="/lake/mask/dir"
+     atmres="C96"
+     out_dir="/out/dir"
+     binary_lake=1
+    /

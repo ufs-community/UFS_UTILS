@@ -17,6 +17,7 @@ export add_lake=true
 export lake_data_srce=MODISP_GLDBV3
 export lake_cutoff=0.50
 export binary_lake=1
+export ocn=500
 
 NCCMP=${NCCMP:-$(which nccmp)}
 
@@ -41,7 +42,7 @@ echo "Ending at: " `date`
 # Compare output to baseline set of data.
 #-----------------------------------------------------------------------------
 
-cd $out_dir/C96
+cd $out_dir/C96.mx500
 
 test_failed=0
 for files in *tile*.nc ./sfc/*tile*.nc

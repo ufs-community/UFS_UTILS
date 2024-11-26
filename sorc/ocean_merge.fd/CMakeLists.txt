@@ -1,6 +1,5 @@
-list(APPEND fortran_src
-  merge_lake_ocnmsk.f90
-)
+set(lib_src read_write.F90 merge.F90 utils.F90 namelist.F90)
+set(exe_src merge_lake_ocnmsk.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -i4 -convert big_endian")
@@ -12,11 +11,16 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
 endif()
 
 set(exe_name ocean_merge)
-add_executable(${exe_name} ${fortran_src})
+
+add_library(om_lib STATIC ${lib_src})
+add_executable(${exe_name} ${exe_src})
+
 target_link_libraries(
-  ${exe_name}
-  
+  om_lib
+  PUBLIC
   NetCDF::NetCDF_Fortran)
+
+target_link_libraries(${exe_name} PRIVATE om_lib)
 
 install(TARGETS ${exe_name})
 
