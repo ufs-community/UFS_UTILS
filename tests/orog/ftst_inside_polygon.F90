@@ -164,7 +164,30 @@
 
  inside=inside_a_polygon(lon1, lat1, npts, lon2, lat2)
 
- if (.not.inside) stop 14  ! Test point should be inside polygon.
+ if (.not.inside) stop 14 ! Test point should be inside polygon.
+
+! Test the case when the test point is inside the polygon.
+! Here, the test point is exactly in the middle of a square
+! polygon. That means the computed angle to each corner
+! is 90 degrees.
+
+ print*, "Test point 8"
+
+ lon1 = 90.5 * D2R      ! Test point.
+ lat1 = 0.5 * D2R
+
+ lon2(1) = 90.0 * D2R   ! Polygon.
+ lat2(1) =  0.0 * D2R
+ lon2(2) = 90.0 * D2R
+ lat2(2) =  1.0 * D2R
+ lon2(3) = 91.0 * D2R
+ lat2(3) =  1.0 * D2R
+ lon2(4) = 91.0 * D2R
+ lat2(4) =  0.0 * D2R
+
+ inside=inside_a_polygon(lon1, lat1, npts, lon2, lat2)
+
+ if (.not.inside) stop 16  ! Test point should be inside polygon.
 
  print*,"OK"
  print*,"SUCCSSS"
