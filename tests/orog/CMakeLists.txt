@@ -37,3 +37,7 @@ target_link_libraries(ftst_transpose orog_lib)
 add_executable(ftst_find_poles ftst_find_poles.F90)
 add_test(NAME orog-ftst_find_poles COMMAND ftst_find_poles)
 target_link_libraries(ftst_find_poles orog_lib)
+
+add_executable(ftst_find_nearest_pole_pts ftst_find_nearest_pole_pts.F90)
+add_test(NAME orog-ftst_find_nearest_pole_pts COMMAND ftst_find_nearest_pole_pts)
+target_link_libraries(ftst_find_nearest_pole_pts orog_lib)
