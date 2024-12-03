@@ -29,3 +29,7 @@ target_link_libraries(ftst_get_index orog_lib)
 add_executable(ftst_inside_polygon ftst_inside_polygon.F90)
 add_test(NAME orog-ftst_inside_polygon COMMAND ftst_inside_polygon)
 target_link_libraries(ftst_inside_polygon orog_lib)
+
+add_executable(ftst_transpose ftst_transpose.F90)
+add_test(NAME orog-ftst_transpose COMMAND ftst_transpose)
+target_link_libraries(ftst_transpose orog_lib)
