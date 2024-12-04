@@ -7,9 +7,9 @@
 
  implicit none
 
- character(len=120) :: ocean_mask_dir
- character(len=120) :: lake_mask_dir
- character(len=120) :: out_dir
+ character(len=200) :: ocean_mask_dir
+ character(len=200) :: lake_mask_dir
+ character(len=200) :: out_dir
  character(len=10)  :: atmres,ocnres
  
  integer            :: binary_lake
