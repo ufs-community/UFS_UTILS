@@ -112,6 +112,7 @@ WLCLK_dflt=50
 export WLCLK=$WLCLK_dflt
 MEM_dflt="--mem=16g"
 export MEM=$MEM_dflt
+export MOM6_version=20240416
 
 cd $PATHRT
 export compiler=${compiler:-intelllvm}
@@ -131,7 +132,7 @@ rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
 if [[ $target = wcoss2 ]]; then
     STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
-    export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/20220805
+    export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-GFS-DEV}
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
@@ -140,7 +141,7 @@ if [[ $target = wcoss2 ]]; then
     NCCMP=nccmp
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
-    export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805
+    export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
@@ -149,7 +150,7 @@ elif [[ $target = hera ]]; then
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = orion ]]; then
     STMP=${STMP:-/work/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
+    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
@@ -159,7 +160,7 @@ elif [[ $target = orion ]]; then
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = hercules ]]; then
     STMP=${STMP:-/work2/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
+    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
@@ -169,7 +170,7 @@ elif [[ $target = hercules ]]; then
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
     STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
-    export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/20220805
+    export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}

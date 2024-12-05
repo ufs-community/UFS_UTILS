@@ -15,15 +15,26 @@ function edit_namelist {
 	-e "s/DO_DEBUG/$DEBUG/g" \
 	-e "s/DO_POSTWGTS/$DO_POSTWGTS/g"
 }
-
 export RESNAME=${RESNAME:-$1}
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.true.
-export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
+export MOSAICDIR_PATH=/work2/noaa/stmp/dworthen/orog.lowres
+#export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
 export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
 
 APRUN=${APRUN:-"srun"}
+
+if [ $RESNAME = 900 ]; then
+    export NI=40
+    export NJ=20
+    export TOPOGFILE=topog.nc
+    export EDITSFILE='none'
+    if [ $DO_POSTWGTS == .true. ]; then
+        #pre-generate SCRIP files for dst rectilinear grids using NCO
+        $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
+    fi
+fi
 
 if [ $RESNAME = 500 ]; then
     export NI=72
@@ -44,6 +55,7 @@ if [ $RESNAME = 100 ]; then
     export EDITSFILE=topo_edits_011818.nc
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
     fi
@@ -56,6 +68,7 @@ if [ $RESNAME = 050 ]; then
     export EDITSFILE='none'
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p50_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
@@ -69,6 +82,7 @@ if [ $RESNAME = 025 ]; then
     export EDITSFILE=All_edits.nc
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
+	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p50_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
