@@ -18,8 +18,8 @@ program merge_lake_ocnmsk
 
   implicit none
 
-  character(len=120) :: pth1
-  character(len=120) :: pth2,pth3
+  character(len=200) :: pth1
+  character(len=200) :: pth2,pth3
   character(len=10)  :: atmres,ocnres
 
   integer :: binary_lake
