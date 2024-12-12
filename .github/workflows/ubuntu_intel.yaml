@@ -26,7 +26,7 @@ env:
 
 jobs:
   setup:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: checkout  # this is to get the ci/spack.yaml file
@@ -78,7 +78,7 @@ jobs:
 
   ufs_utils:
     needs: setup
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: install-intel
