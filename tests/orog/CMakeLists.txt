@@ -41,3 +41,7 @@ target_link_libraries(ftst_find_poles orog_lib)
 add_executable(ftst_find_nearest_pole_pts ftst_find_nearest_pole_pts.F90)
 add_test(NAME orog-ftst_find_nearest_pole_pts COMMAND ftst_find_nearest_pole_pts)
 target_link_libraries(ftst_find_nearest_pole_pts orog_lib)
+
+add_executable(ftst_get_xnsum ftst_get_xnsum.F90)
+add_test(NAME orog-ftst_get_xnsum COMMAND ftst_get_xnsum)
+target_link_libraries(ftst_get_xnsum orog_lib)
