@@ -81,6 +81,47 @@
 
  if (nint(xnsum) /= 1) stop 6
 
+ print*,"Test point 4."
+
+ zslm = 0    ! all water
+ zavg = -999   ! set to sea level.
+ zavg(2,93) = 20 ! this represents an inland lake above sea level.
+
+! Bounds of model grid box - straddles greenwich.
+
+ lon1 = -2.5
+ lon2 = 2.5
+ lat1 = -1.5
+ lat2 = 1.5
+
+ xnsum = get_xnsum(lon1,lat1,lon2,lat2,imn,jmn, &
+                   glat, zavg, zslm, delxn)
+
+ if (nint(xnsum) /= 1) stop 8
+
+ print*,"Test point 5."
+
+ zslm = 0      ! all water
+ zavg = -999   ! set to sea level.
+ zslm(1:2,90:93) = 1 ! half points in grid box land
+ zavg(1,90:93) = 25 ! land points above sea level
+ zavg(2,90) = 100 ! land points above sea level
+ zavg(2,91) = 110 ! land points above sea level
+ zavg(2,92) = 107 ! land points above sea level
+ zavg(2,93) = 207 ! land points above sea level
+
+! Bounds of model grid box - straddles greenwich.
+
+ lon1 = -2.5
+ lon2 = 2.5
+ lat1 = -1.5
+ lat2 = 1.5
+
+ xnsum = get_xnsum(lon1,lat1,lon2,lat2,imn,jmn, &
+                   glat, zavg, zslm, delxn)
+
+ if (nint(xnsum) /= 4) stop 10
+
  print*,"OK"
 
  print*,"SUCCESS"
