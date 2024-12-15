@@ -8,7 +8,7 @@ module land_increments
 
     public gaussian_to_fv3_interp
     public add_increment_soil
-    public add_jedi_increment_snow
+    public add_increment_snow
     public calculate_landinc_mask
     public apply_land_da_adjustments_soil
     public apply_land_da_adjustments_snd
@@ -441,7 +441,7 @@ end subroutine add_increment_soil
  !! 
  !! @author Clara Draper. @date August 2021
 
-subroutine add_jedi_increment_snow(snd_inc,mask,lensfc,snd)
+subroutine add_increment_snow(snd_inc,mask,lensfc,snd)
 
     implicit none
 
@@ -459,7 +459,7 @@ subroutine add_jedi_increment_snow(snd_inc,mask,lensfc,snd)
         endif
     enddo
 
-end subroutine add_jedi_increment_snow
+end subroutine add_increment_snow
 
 !> Calculate soil mask for land on model grid.
 !! Output is 1  - soil, 2 - snow-covered, 0 - land ice, -1  not land.

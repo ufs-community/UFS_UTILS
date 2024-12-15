@@ -141,9 +141,11 @@
 #     DONST         Process NST records when using NST model.  Default is 'no'.
 #     DO_SFCCYCLE   Call sfcsub routine 
 #     DO_LNDINC     Call routine to update snow/soil states with increment files
-#     DO_SOI_INC_GSI    Call routine to update soil states with gsi(gaussian) increment files
-#     DO_SNO_INC_JEDI   Call routine to update snow states with jedi increment files
-#     DO_SOI_INC_JEDI   Call routine to update soil states with jedi increment files
+#     DO_SOI_INC    Call routine to update soil states 
+#     DO_SNO_INC    Call routine to update snow states
+#     INTERP_LNDIC  Flag to regrid input land increment from Gaus to native model 
+#                   grid
+#                   
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
 #                   of depth of sea temperature.  In whole mm.
 #     MAX_TASKS_CY  Normally, program should be run with a number of mpi tasks
@@ -267,9 +269,9 @@ use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
 DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
 DO_LNDINC=${DO_LNDINC:-.false.}
-DO_SOI_INC_GSI=${DO_SOI_INC_GSI:-.false.}
-DO_SNO_INC_JEDI=${DO_SNO_INC_JEDI:-.false.}
-DO_SOI_INC_JEDI=${DO_SOI_INC_JEDI:-.false.}
+DO_SOI_INC=${DO_SOI_INC:-.false.}
+DO_SNO_INC=${DO_SNO_INC:-.false.}
+INTERP_LNDINC=${INTERP_LNDINC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
@@ -389,10 +391,10 @@ EOF
 cat << EOF > fort.37
  &NAMSFCD
   NST_FILE="$NST_FILE",
-  DO_SOI_INC_GSI=$DO_SOI_INC_GSI,
-  DO_SNO_INC_JEDI=$DO_SNO_INC_JEDI,
-  DO_SOI_INC_JEDI=$DO_SOI_INC_JEDI,
-  lsoil_incr=3,
+  DO_SOI_INC=$DO_SOI_INC,
+  DO_SNO_INC=$DO_SNO_INC,
+  INTERP_LNDINC=$INTERP_LNDINC,
+  lsoil_incr=2,
  /
 EOF
 
