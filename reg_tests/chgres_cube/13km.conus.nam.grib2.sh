@@ -34,6 +34,8 @@ export TRACERS_INPUT=""
 
 export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
 
+NCCMP=${NCCMP:-$(which nccmp)}
+
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
 #-----------------------------------------------------------------------------

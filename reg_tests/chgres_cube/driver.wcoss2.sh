@@ -29,6 +29,9 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+# load nccmp
+module load netcdf
+module load nccmp
 module list
 
 export OUTDIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
@@ -60,8 +63,6 @@ rm -f $LOG_FILE* $SUM_FILE
 
 export OMP_STACKSIZE=1024M
 
-export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
-#export NCCMP=${NCCMP:-nccmp}
 rm -fr $OUTDIR
 
 this_dir=$PWD
@@ -163,7 +164,7 @@ TEST10=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
 LOG_FILE=consistency.log11
 export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
 TEST11=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c96.fv3.netcdf2wam -l select=1:ncpus=12:ompthreads=1:mem=75GB $PWD/c96.fv3.netcdf2wam.sh)
+        -N c96.fv3.netcdf2wam -l select=1:ncpus=12:ompthreads=1:mem=80GB $PWD/c96.fv3.netcdf2wam.sh)
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 25-KM USING  GFS PGRIB2+BGRIB2 files.
@@ -184,13 +185,22 @@ TEST13=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltim
         -N c96.gefs.grib2 -l select=1:ncpus=6:ompthreads=1:mem=15GB $PWD/c96.gefs.grib2.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize CONUS 13-KM USING RAP-SMOKE GRIB2 file WITH GSD PHYSICS.
+#-----------------------------------------------------------------------------
+
+LOG_FILE=consistency.log14
+export APRUN="mpiexec -n 6 -ppn 6 --cpu-bind core"
+TEST14=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
+        -N 13km.conus.rap-smoke.grib2.conus -l select=1:ncpus=6:ompthreads=1:mem=15GB $PWD/13km.conus.rap-smoke.grib2.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 LOG_FILE=consistency.log
 qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
         -N chgres_summary -l select=1:ncpus=1:mem=100MB \
-        -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13 << EOF
+        -W depend=afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14 << EOF
 #!/bin/bash
 cd ${this_dir}
 grep -a '<<<' ${LOG_FILE}?? | grep -v echo > $SUM_FILE

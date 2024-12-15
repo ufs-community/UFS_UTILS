@@ -24,6 +24,8 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+module load netcdf
+module load nccmp
 module list
 
 set -x
@@ -43,8 +45,6 @@ export UPDATE_BASELINE="FALSE"
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
-
-export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 
 LOG_FILE=consistency.log
 rm -f ${LOG_FILE}

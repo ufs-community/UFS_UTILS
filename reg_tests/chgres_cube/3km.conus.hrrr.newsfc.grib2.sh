@@ -42,6 +42,8 @@ export GEOGRID_FILE_INPUT=${HOMEufs}/fix/am/geo_em.d01.nc_HRRRX
 
 export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
 
+NCCMP=${NCCMP:-$(which nccmp)}
+
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
 #-----------------------------------------------------------------------------

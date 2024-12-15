@@ -25,6 +25,8 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+module load netcdf
+module load nccmp
 module list
 
 WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
@@ -55,8 +57,6 @@ export APRUNCY="mpiexec -n 6 -ppn 6 --cpu-bind core --depth ${OMP_NUM_THREADS_CY
 export NWPROD=$PWD/../..
 
 reg_dir=$PWD
-
-export NCCMP=/lfs/h2/emc/global/noscrub/George.Gayno/util/nccmp/nccmp-1.8.5.0/src/nccmp
 
 LOG_FILE=consistency.log
 rm -f ${LOG_FILE}*

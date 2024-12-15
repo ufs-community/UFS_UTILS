@@ -1,8 +1,8 @@
-Mon Apr  8 19:07:01 UTC 2024
+Fri Sep  6 19:25:15 UTC 2024
 Start Regression test
 
-Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/CPLD_GRIDGEN/rt_2966831/025
-Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/025
+Working dir = /lfs5/NESDIS/nesdis-rdo2/Innocent.Souopgui/stmp/CPLD_GRIDGEN/rt_1869989/025
+Baseline dir = /lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/025
 
 Checking test 025 results ....
 Comparing Bu.mx025_SCRIP.nc........OK
@@ -25,7 +25,6 @@ Comparing rect.0p50_SCRIP.nc........OK
 Comparing rect.1p00_SCRIP.nc........OK
 Comparing rect.5p00_SCRIP.nc........OK
 Comparing tripole.mx025.Bu.to.Ct.bilinear.nc........OK
-Comparing tripole.mx025.Ct.to.Bu.bilinear.nc........OK
 Comparing tripole.mx025.Ct.to.rect.0p25.bilinear.nc........OK
 Comparing tripole.mx025.Ct.to.rect.0p25.conserve.nc........OK
 Comparing tripole.mx025.Ct.to.rect.0p50.bilinear.nc........OK
@@ -39,8 +38,8 @@ Comparing tripole.mx025.Cv.to.Ct.bilinear.nc........OK
 Comparing tripole.mx025.nc........OK
 
 
-Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/CPLD_GRIDGEN/rt_2966831/050
-Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/050
+Working dir = /lfs5/NESDIS/nesdis-rdo2/Innocent.Souopgui/stmp/CPLD_GRIDGEN/rt_1869989/050
+Baseline dir = /lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/050
 
 Checking test 050 results ....
 Comparing Bu.mx050_SCRIP.nc........OK
@@ -50,7 +49,6 @@ Comparing C192.mx050.tile3.nc........OK
 Comparing C192.mx050.tile4.nc........OK
 Comparing C192.mx050.tile5.nc........OK
 Comparing C192.mx050.tile6.nc........OK
-Comparing Ct.mx025_SCRIP.nc........OK
 Comparing Ct.mx050_SCRIP_land.nc........OK
 Comparing Ct.mx050_SCRIP.nc........OK
 Comparing Ct.mx050.to.C192.nc........OK
@@ -62,10 +60,10 @@ Comparing mesh.mx050.nc........OK
 Comparing rect.0p50_SCRIP.nc........OK
 Comparing rect.1p00_SCRIP.nc........OK
 Comparing rect.5p00_SCRIP.nc........OK
-Comparing tripole.mx025.Ct.to.mx050.Ct.bilinear.nc........OK
-Comparing tripole.mx025.Ct.to.mx050.Ct.neareststod.nc........OK
 Comparing tripole.mx050.Bu.to.Ct.bilinear.nc........OK
 Comparing tripole.mx050.Ct.to.Bu.bilinear.nc........OK
+Comparing tripole.mx050.Ct.to.Cu.bilinear.nc........OK
+Comparing tripole.mx050.Ct.to.Cv.bilinear.nc........OK
 Comparing tripole.mx050.Ct.to.rect.0p50.bilinear.nc........OK
 Comparing tripole.mx050.Ct.to.rect.0p50.conserve.nc........OK
 Comparing tripole.mx050.Ct.to.rect.1p00.bilinear.nc........OK
@@ -77,8 +75,8 @@ Comparing tripole.mx050.Cv.to.Ct.bilinear.nc........OK
 Comparing tripole.mx050.nc........OK
 
 
-Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/CPLD_GRIDGEN/rt_2966831/100
-Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/100
+Working dir = /lfs5/NESDIS/nesdis-rdo2/Innocent.Souopgui/stmp/CPLD_GRIDGEN/rt_1869989/100
+Baseline dir = /lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/100
 
 Checking test 100 results ....
 Comparing Bu.mx100_SCRIP.nc........OK
@@ -88,7 +86,6 @@ Comparing C96.mx100.tile3.nc........OK
 Comparing C96.mx100.tile4.nc........OK
 Comparing C96.mx100.tile5.nc........OK
 Comparing C96.mx100.tile6.nc........OK
-Comparing Ct.mx025_SCRIP.nc........OK
 Comparing Ct.mx100_SCRIP_land.nc........OK
 Comparing Ct.mx100_SCRIP.nc........OK
 Comparing Ct.mx100.to.C96.nc........OK
@@ -99,10 +96,10 @@ Comparing kmtu_cice_NEMS_mx100.nc........OK
 Comparing mesh.mx100.nc........OK
 Comparing rect.1p00_SCRIP.nc........OK
 Comparing rect.5p00_SCRIP.nc........OK
-Comparing tripole.mx025.Ct.to.mx100.Ct.bilinear.nc........OK
-Comparing tripole.mx025.Ct.to.mx100.Ct.neareststod.nc........OK
 Comparing tripole.mx100.Bu.to.Ct.bilinear.nc........OK
 Comparing tripole.mx100.Ct.to.Bu.bilinear.nc........OK
+Comparing tripole.mx100.Ct.to.Cu.bilinear.nc........OK
+Comparing tripole.mx100.Ct.to.Cv.bilinear.nc........OK
 Comparing tripole.mx100.Ct.to.rect.1p00.bilinear.nc........OK
 Comparing tripole.mx100.Ct.to.rect.1p00.conserve.nc........OK
 Comparing tripole.mx100.Ct.to.rect.5p00.bilinear.nc........OK
@@ -113,8 +110,8 @@ Comparing tripole.mx100.nc........OK
 Comparing ufs.topo_edits_011818.nc........OK
 
 
-Working dir = /lfs4/HFIP/h-nems/Denise.Worthen/CPLD_GRIDGEN/rt_2966831/500
-Baseline dir = /lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/500
+Working dir = /lfs5/NESDIS/nesdis-rdo2/Innocent.Souopgui/stmp/CPLD_GRIDGEN/rt_1869989/500
+Baseline dir = /lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data/500
 
 Checking test 500 results ....
 Comparing Bu.mx500_SCRIP.nc........OK
@@ -124,7 +121,6 @@ Comparing C48.mx500.tile3.nc........OK
 Comparing C48.mx500.tile4.nc........OK
 Comparing C48.mx500.tile5.nc........OK
 Comparing C48.mx500.tile6.nc........OK
-Comparing Ct.mx025_SCRIP.nc........OK
 Comparing Ct.mx500_SCRIP_land.nc........OK
 Comparing Ct.mx500_SCRIP.nc........OK
 Comparing Ct.mx500.to.C48.nc........OK
@@ -134,8 +130,6 @@ Comparing grid_cice_NEMS_mx500.nc........OK
 Comparing kmtu_cice_NEMS_mx500.nc........OK
 Comparing mesh.mx500.nc........OK
 Comparing rect.5p00_SCRIP.nc........OK
-Comparing tripole.mx025.Ct.to.mx500.Ct.bilinear.nc........OK
-Comparing tripole.mx025.Ct.to.mx500.Ct.neareststod.nc........OK
 Comparing tripole.mx500.Bu.to.Ct.bilinear.nc........OK
 Comparing tripole.mx500.Ct.to.Bu.bilinear.nc........OK
 Comparing tripole.mx500.Ct.to.rect.5p00.bilinear.nc........OK
@@ -146,5 +140,5 @@ Comparing tripole.mx500.nc........OK
 
 
 REGRESSION TEST WAS SUCCESSFUL
-Mon Apr  8 19:38:29 UTC 2024
-Elapsed time: 00h:33m:11s. Have a nice day!
+Fri Sep  6 19:53:17 UTC 2024
+Elapsed time: 00h:29m:20s. Have a nice day!

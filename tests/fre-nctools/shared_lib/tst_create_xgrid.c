@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "mosaic_util.h"
+#include "create_xgrid.h"
+
 #define D2R (M_PI/180)
 #define R2D (180/M_PI)
 #define MAXPOINT 1000
@@ -495,7 +498,7 @@ int main(int argc, char* argv[])
                 }
 
                 area1 = (double *)malloc((nlon1)*(nlat1)*sizeof(double));
-                get_grid_great_circle_area_(&nlon1, &nlat1, lon1_in, lat1_in, area1);
+                get_grid_great_circle_area(&nlon1, &nlat1, lon1_in, lat1_in, area1);
 
                 printf("xgrid area sum is %g, grid 1 area is %g\n", area_sum, area1[0]);
             }

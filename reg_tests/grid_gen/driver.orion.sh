@@ -23,7 +23,7 @@
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
-module load build.$target.intel
+module load build.$target.intelllvm
 module list
 
 set -x
@@ -62,7 +62,7 @@ rm -fr $WORK_DIR
 #-----------------------------------------------------------------------------
 
 LOG_FILE1=${LOG_FILE}01
-TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
+TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:20:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
       -o $LOG_FILE1 -e $LOG_FILE1 ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------

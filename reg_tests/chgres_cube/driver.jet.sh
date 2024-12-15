@@ -30,7 +30,7 @@ module use ../../modulefiles
 module load build.$target.intel
 module list
 
-export OUTDIR="${WORK_DIR:-/lfs4/HFIP/emcda/$LOGNAME/stmp}"
+export OUTDIR="${WORK_DIR:-/lfs5/HFIP/emcda/$LOGNAME/stmp}"
 export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
 
 PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
@@ -54,7 +54,7 @@ fi
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/lfs4/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/chgres_cube
+export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/chgres_cube
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
@@ -184,13 +184,22 @@ TEST13=$(sbatch --parsable --partition=xjet --nodes=1 --ntasks-per-node=6 -t 0:0
       --exclusive -o $LOG_FILE -e $LOG_FILE ./c96.gefs.grib2.sh)
 
 #-----------------------------------------------------------------------------
+# Initialize CONUS 13-KM USING RAP-SMOKE GRIB2 file WITH GSD PHYSICS .
+#-----------------------------------------------------------------------------
+
+LOG_FILE=consistency.log14
+export OMP_NUM_THREADS=1   # should match cpus-per-task
+TEST14=$(sbatch --parsable --partition=xjet --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.rap-smoke.grib2.conus \
+      --exclusive -o $LOG_FILE -e $LOG_FILE ./13km.conus.rap-smoke.grib2.sh)
+
+#-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 LOG_FILE=consistency.log
 sbatch --partition=xjet --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d\
-       afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13 << EOF
+       afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14 << EOF
 #!/bin/bash
 grep -a '<<<' $LOG_FILE*  > $SUM_FILE
 EOF

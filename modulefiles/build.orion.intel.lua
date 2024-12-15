@@ -1,5 +1,5 @@
 help([[
-Load environment to compile UFS_UTILS on Orion using Intel
+Load environment to compile UFS_UTILS on Orion using Intel classic
 ]])
 
 prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/unified-env-rocky9/install/modulefiles/Core")
