@@ -1,5 +1,5 @@
 help([[
-Load environment to compile UFS_UTILS on Jet using Intel
+Load environment to compile UFS_UTILS on Jet using Intel LLVM
 ]])
 
 hpss_ver=os.getenv("hpss_ver") or ""
