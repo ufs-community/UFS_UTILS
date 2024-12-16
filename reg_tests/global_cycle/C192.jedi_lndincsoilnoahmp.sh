@@ -40,7 +40,8 @@ export use_ufo=.true.
 
 export DO_SFCCYCLE=".FALSE." 
 export DO_LNDINC=".TRUE." 
-export DO_SOI_INC_JEDI=".true."
+export DO_SOI_INC=".true."
+export INTERP_LNDINC=".false."
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
