@@ -42,6 +42,7 @@ export DO_SFCCYCLE=".FALSE."
 export DO_LNDINC=".TRUE." 
 export DO_SOI_INC=".true."
 export INTERP_LNDINC=".false."
+export LSOIL_INCR=3
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
