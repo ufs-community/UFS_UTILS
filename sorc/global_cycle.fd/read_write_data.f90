@@ -1161,12 +1161,10 @@ MODULE READ_WRITE_DATA
 ! Use the coordinate names to test whether this is
 ! a JEDI increment file
  
- print *, 'CSD - testing' 
  TEST=NF90_INQ_DIMID(NCID, 'xaxis_1', ID_DIM)
  
  IF ( TEST == NF90_NOERR ) THEN
      JEDI_INCR_FILE=.FALSE.   
-     print *, 'CSD - gsi file' 
 
      ERROR=NF90_INQ_DIMID(NCID, 'xaxis_1', ID_DIM)
      CALL NETCDF_ERR(ERROR, 'READING xaxis_1' )
@@ -1179,7 +1177,6 @@ MODULE READ_WRITE_DATA
      CALL NETCDF_ERR(ERROR, 'READING yaxis_1' )
 
  ELSE
-     print *, 'CSD - jedi file'
      JEDI_INCR_FILE=.TRUE.   
 
      ERROR=NF90_INQ_DIMID(NCID, 'grid_xt', ID_DIM)
