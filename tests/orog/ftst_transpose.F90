@@ -16,7 +16,7 @@
 
  integer(1)         :: mask(imn,jmn)
  integer(2)         :: mask2(imn,jmn)
- integer            :: i, ii, j, jj
+ integer            :: i, j, jj
 
  print*,"Starting test of transpose routines."
 
