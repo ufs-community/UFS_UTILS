@@ -2,7 +2,7 @@
 spack:
   packages:
     all:
-      compiler: [oneapi, gcc@10:10, apple-clang@14]
+      compiler: [oneapi, gcc@13:13, apple-clang@14]
   specs:
   - netcdf-c@4.9.2
   - netcdf-fortran@4.6.1
