@@ -3,7 +3,7 @@
 # George Gayno, Ed Hartnett
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -warn unused")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")
 endif()
@@ -49,3 +49,7 @@ target_link_libraries(ftst_get_xnsum orog_lib)
 add_executable(ftst_get_xnsum2 ftst_get_xnsum2.F90)
 add_test(NAME orog-ftst_get_xnsum2 COMMAND ftst_get_xnsum2)
 target_link_libraries(ftst_get_xnsum2 orog_lib)
+
+add_executable(ftst_get_xnsum3 ftst_get_xnsum3.F90)
+add_test(NAME orog-ftst_get_xnsum3 COMMAND ftst_get_xnsum3)
+target_link_libraries(ftst_get_xnsum3 orog_lib)
