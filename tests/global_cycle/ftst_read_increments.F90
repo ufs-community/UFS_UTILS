@@ -94,7 +94,7 @@ end module chdir_mod
  call rename("soil_sfcincr_jedi.005", "soil_xainc.005")
  call rename("soil_sfcincr_jedi.006", "soil_xainc.006")
 
- call read_data(lsoil,lensfc,.false.,.false.,.true.,.true.,STCINC=STCINC,SLCINC=SLCINC)
+ call read_data(lsoil,lensfc,.false.,STCINC=STCINC,SLCINC=SLCINC)
 
  if (my_rank .eq. 0) then
    do l = 1,4
