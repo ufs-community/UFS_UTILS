@@ -53,3 +53,7 @@ target_link_libraries(ftst_get_xnsum2 orog_lib)
 add_executable(ftst_get_xnsum3 ftst_get_xnsum3.F90)
 add_test(NAME orog-ftst_get_xnsum3 COMMAND ftst_get_xnsum3)
 target_link_libraries(ftst_get_xnsum3 orog_lib)
+
+add_executable(ftst_rm_isolated_pts ftst_rm_isolated_pts.F90)
+add_test(NAME orog-ftst_rm_isolated_pts COMMAND ftst_rm_isolated_pts)
+target_link_libraries(ftst_rm_isolated_pts orog_lib)
