@@ -20,8 +20,8 @@
 
  print*,"Starting test of remove_isolated_pts."
 
- im = 3
- jm = 3
+ im = 4
+ jm = 4
  
  allocate (slm(im,jm))
  allocate (oro(im,jm))
@@ -97,11 +97,24 @@
  enddo
  enddo
 
+ deallocate (slm, oro, var, var4, oa, ol)
+ deallocate (slm_expected, oro_expected, var_expected, var4_expected, oa_expected, ol_expected)
+
 ! Test Point 2
 
 ! Now remove an isolated water point.
 
  print*,'-Test point 2.'
+
+ im = 3
+ jm = 3
+ 
+ allocate (slm(im,jm))
+ allocate (oro(im,jm))
+ allocate (var(im,jm))
+ allocate (var4(im,jm))
+ allocate (oa(im,jm,4))
+ allocate (ol(im,jm,4))
 
  slm = 1.0
  slm(2,2) = 0.0 ! water point
@@ -143,6 +156,13 @@
 ! point should have values that are the average of the
 ! surrounding land points. All other points should remain
 ! unchanged.
+
+ allocate (slm_expected(im,jm))
+ allocate (oro_expected(im,jm))
+ allocate (var_expected(im,jm))
+ allocate (var4_expected(im,jm))
+ allocate (oa_expected(im,jm,4))
+ allocate (ol_expected(im,jm,4))
 
  slm_expected = slm
  oro_expected = oro
