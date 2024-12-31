@@ -25,7 +25,7 @@
  allocate (oa(im,jm,4))
  allocate (ol(im,jm,4))
 
-! Initialize grid to all water.
+! Initialize grid to all ocean.
 
  slm = 0.0
  oro = 0.0
@@ -39,12 +39,20 @@
 ! should be the average of the surrounding points (which
 ! for this test case is zero.
 
- slm(2,2) = 1.
- oro(2,2) = 50.
- var(2,2) = 10.
- var4(2,2) = 5.
- oa(2,2,:) = -1.
- ol(2,2,:) = 1.
+ slm(2,2) = 1.0
+ oro(2,2) = 50.0
+ var(2,2) = 10.0
+ var4(2,2) = 5.0
+
+ oa(2,2,1) = -1.0
+ oa(2,2,2) = -0.5
+ oa(2,2,3) = 0.5
+ oa(2,2,4) = 1.0
+
+ ol(2,2,1) = 0.1
+ ol(2,2,2) = 0.25
+ ol(2,2,3) = 0.5
+ ol(2,2,4) = 1.0
 
  call remove_isolated_pts(im,jm,slm,oro,var,var4,oa,ol)
 
