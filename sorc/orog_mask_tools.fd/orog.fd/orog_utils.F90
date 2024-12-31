@@ -586,7 +586,7 @@
  iso_loop : DO J=2,JM-1
    JN=J-1
    JS=J+1
-   i_loop : DO I=1,IM
+   i_loop : DO I=2,IM-1
      print*,'check point ',i,j
      IW=MOD(I+IM-2,IM)+1
      IE=MOD(I,IM)+1
