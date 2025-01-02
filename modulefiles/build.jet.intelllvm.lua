@@ -1,5 +1,5 @@
 help([[
-Load environment to compile UFS_UTILS on Jet using Intel Classic
+Load environment to compile UFS_UTILS on Jet using Intel LLVM
 ]])
 
 hpss_ver=os.getenv("hpss_ver") or ""
@@ -61,5 +61,11 @@ load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.0.6"
 load(pathJoin("nco", nco_ver))
+
+setenv("I_MPI_CC", "icx")
+setenv("I_MPI_F90", "ifx")
+
+setenv("CC", "mpiicc")
+setenv("FC", "mpiifort")
 
 whatis("Description: UFS_UTILS build environment")

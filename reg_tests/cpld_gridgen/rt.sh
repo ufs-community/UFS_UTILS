@@ -108,7 +108,7 @@ TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=50
+WLCLK_dflt=60
 export WLCLK=$WLCLK_dflt
 MEM_dflt="--mem=16g"
 export MEM=$MEM_dflt
@@ -227,7 +227,9 @@ if [[ $target = wcoss2 ]]; then
   module load netcdf
   module load nccmp
 fi
+set +x
 module list
+set -x
 
 if [[ $CREATE_BASELINE = true ]]; then
     rm -rf $NEW_BASELINE_ROOT

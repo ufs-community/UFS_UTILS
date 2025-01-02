@@ -30,7 +30,7 @@ set -x
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
-module load build.$target.intel
+module load build.$target.intelllvm
 module load wgrib2/2.0.8
 module load grib-util/1.3.0
 set +x
