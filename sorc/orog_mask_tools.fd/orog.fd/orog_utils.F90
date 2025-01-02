@@ -574,7 +574,7 @@
  integer                   :: iw, ie, wgta, is, ise
  integer                   :: in, ine, inw, isw
 
- real                      :: slma, oroa, vara, var4a, xn, xs
+ real                      :: slma, oroa, vara, var4a
  real, allocatable         :: oaa(:), ola(:)
 
 !  REMOVE ISOLATED POINTS
@@ -587,12 +587,10 @@
    JN=J-1
    JS=J+1
    i_loop : DO I=2,IM-1
-     print*,'check point ',i,j
-     IW=MOD(I+IM-2,IM)+1
-     IE=MOD(I,IM)+1
+! Check the points to the 'west' and 'east'.
+     IW=I-1
+     IE=I+1
      SLMA=SLM(IW,J)+SLM(IE,J)
-     print*,'check points to the w ',iw,j
-     print*,'check points to the e ',ie,j
      OROA=ORO(IW,J)+ORO(IE,J)
      VARA=VAR(IW,J)+VAR(IE,J)
      VAR4A=VAR4(IW,J)+VAR4(IE,J)
@@ -602,70 +600,33 @@
        OLA(K)=OL(IW,J,K)+OL(IE,J,K)
      ENDDO
      WGTA=2
-     XN=(I-1)+1
-     IF(ABS(XN-NINT(XN)).LT.1.E-2) THEN
-       IN=MOD(NINT(XN)-1,IM)+1
-       INW=MOD(IN+IM-2,IM)+1
-       INE=MOD(IN,IM)+1
-       SLMA=SLMA+SLM(INW,JN)+SLM(IN,JN)+SLM(INE,JN)
-       print*,'check points to the nw ',inw,jn
-       print*,'check points to the n  ',in,jn
-       print*,'check points to the ne ',ine,jn
-       OROA=OROA+ORO(INW,JN)+ORO(IN,JN)+ORO(INE,JN)
-       VARA=VARA+VAR(INW,JN)+VAR(IN,JN)+VAR(INE,JN)
-       VAR4A=VAR4A+VAR4(INW,JN)+VAR4(IN,JN)+VAR4(INE,JN)
-       DO K=1,4
-         OAA(K)=OAA(K)+OA(INW,JN,K)+OA(IN,JN,K)+OA(INE,JN,K)
-         OLA(K)=OLA(K)+OL(INW,JN,K)+OL(IN,JN,K)+OL(INE,JN,K)
-       ENDDO
-       WGTA=WGTA+3
-     ELSE
-       print*,'got here 2'
-       INW=INT(XN)
-       INE=MOD(INW,IM)+1
-       SLMA=SLMA+SLM(INW,JN)+SLM(INE,JN)
-       OROA=OROA+ORO(INW,JN)+ORO(INE,JN)
-       VARA=VARA+VAR(INW,JN)+VAR(INE,JN)
-       VAR4A=VAR4A+VAR4(INW,JN)+VAR4(INE,JN)
-       DO K=1,4
-         OAA(K)=OAA(K)+OA(INW,JN,K)+OA(INE,JN,K)
-         OLA(K)=OLA(K)+OL(INW,JN,K)+OL(INE,JN,K)
-       ENDDO
-       WGTA=WGTA+2
-     ENDIF
-     XS=(I-1)+1
-     IF(ABS(XS-NINT(XS)).LT.1.E-2) THEN
-!      print*,'got here 3'
-       IS=MOD(NINT(XS)-1,IM)+1
-       ISW=MOD(IS+IM-2,IM)+1
-       ISE=MOD(IS,IM)+1
-       print*,'check points to the sw ',isw,js
-       print*,'check points to the s  ',is,js
-       print*,'check points to the se ',ise,js
-       SLMA=SLMA+SLM(ISW,JS)+SLM(IS,JS)+SLM(ISE,JS)
-       OROA=OROA+ORO(ISW,JS)+ORO(IS,JS)+ORO(ISE,JS)
-       VARA=VARA+VAR(ISW,JS)+VAR(IS,JS)+VAR(ISE,JS)
-       VAR4A=VAR4A+VAR4(ISW,JS)+VAR4(IS,JS)+VAR4(ISE,JS)
-       DO K=1,4
-         OAA(K)=OAA(K)+OA(ISW,JS,K)+OA(IS,JS,K)+OA(ISE,JS,K)
-         OLA(K)=OLA(K)+OL(ISW,JS,K)+OL(IS,JS,K)+OL(ISE,JS,K)
-       ENDDO
-       WGTA=WGTA+3
-!      print*,'slm/wgta ',SLM(ISW,JS),SLM(IS,JS),SLM(ISE,JS),slma,wgta
-     ELSE
-       print*,'got here 4'
-       ISW=INT(XS)
-       ISE=MOD(ISW,IM)+1
-       SLMA=SLMA+SLM(ISW,JS)+SLM(ISE,JS)
-       OROA=OROA+ORO(ISW,JS)+ORO(ISE,JS)
-       VARA=VARA+VAR(ISW,JS)+VAR(ISE,JS)
-       VAR4A=VAR4A+VAR4(ISW,JS)+VAR4(ISE,JS)
-       DO K=1,4
-         OAA(K)=OAA(K)+OA(ISW,JS,K)+OA(ISE,JS,K)
-         OLA(K)=OLA(K)+OL(ISW,JS,K)+OL(ISE,JS,K)
-       ENDDO
-       WGTA=WGTA+2
-     ENDIF
+! Check the points to the 'northwest', 'north' and 'northeast'
+     IN=I
+     INW=I-1
+     INE=I+1
+     SLMA=SLMA+SLM(INW,JN)+SLM(IN,JN)+SLM(INE,JN)
+     OROA=OROA+ORO(INW,JN)+ORO(IN,JN)+ORO(INE,JN)
+     VARA=VARA+VAR(INW,JN)+VAR(IN,JN)+VAR(INE,JN)
+     VAR4A=VAR4A+VAR4(INW,JN)+VAR4(IN,JN)+VAR4(INE,JN)
+     DO K=1,4
+       OAA(K)=OAA(K)+OA(INW,JN,K)+OA(IN,JN,K)+OA(INE,JN,K)
+       OLA(K)=OLA(K)+OL(INW,JN,K)+OL(IN,JN,K)+OL(INE,JN,K)
+     ENDDO
+     WGTA=WGTA+3
+! Check the points to the 'southwest', 'south' and 'southeast'  
+     IS=I
+     ISW=I-1
+     ISE=I+1
+     SLMA=SLMA+SLM(ISW,JS)+SLM(IS,JS)+SLM(ISE,JS)
+     OROA=OROA+ORO(ISW,JS)+ORO(IS,JS)+ORO(ISE,JS)
+     VARA=VARA+VAR(ISW,JS)+VAR(IS,JS)+VAR(ISE,JS)
+     VAR4A=VAR4A+VAR4(ISW,JS)+VAR4(IS,JS)+VAR4(ISE,JS)
+     DO K=1,4
+       OAA(K)=OAA(K)+OA(ISW,JS,K)+OA(IS,JS,K)+OA(ISE,JS,K)
+       OLA(K)=OLA(K)+OL(ISW,JS,K)+OL(IS,JS,K)+OL(ISE,JS,K)
+     ENDDO
+     WGTA=WGTA+3
+! Take the average of the surrounding the points.
      OROA=OROA/WGTA
      VARA=VARA/WGTA
      VAR4A=VAR4A/WGTA
@@ -673,7 +634,7 @@
        OAA(K)=OAA(K)/WGTA
        OLA(K)=OLA(K)/WGTA
      ENDDO
-!    print*,'before if - i/j/slm/slma/wgta ',i,j,SLM(I,J),slma,wgta
+! Isolated water point.
      IF(SLM(I,J).EQ.0..AND.SLMA.EQ.WGTA) THEN
        PRINT '(" - SEA ",2F8.0," MODIFIED TO LAND",2F8.0,  &
                " AT ",2I8)',ORO(I,J),VAR(I,J),OROA,VARA,I,J
@@ -685,6 +646,7 @@
          OA(I,J,K)=OAA(K)
          OL(I,J,K)=OLA(K)
        ENDDO
+! Isolated land point.
      ELSEIF(SLM(I,J).EQ.1..AND.SLMA.EQ.0.) THEN
        PRINT '(" - LAND",2F8.0," MODIFIED TO SEA ",2F8.0,  &
                " AT ",2I8)',ORO(I,J),VAR(I,J),OROA,VARA,I,J
