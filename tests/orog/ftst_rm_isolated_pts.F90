@@ -18,9 +18,11 @@
  real, allocatable      :: slm_expected(:,:), oro_expected(:,:), var_expected(:,:), &
                            var4_expected(:,:), oa_expected(:,:,:), ol_expected(:,:,:)      
 
- print*,"Starting test of remove_isolated_pts."
+ print*,"- Starting test of remove_isolated_pts."
 
- im = 4
+! A 5x4 grid.
+
+ im = 5
  jm = 4
  
  allocate (slm(im,jm))
@@ -38,16 +40,16 @@
 ! for this test case is zero). All surrounding points
 ! should be unchanged.
 
+ print*,'- Test point 1.'
+
 ! Initialize grid to all ocean.
 
- print*,'-Test point 1.'
-
- slm = 0.0
- oro = 0.0
- var = 0.0
- var4 = 0.0
- oa = 0.0
- ol = 0.0
+ slm = 0.0    ! land/sea mask
+ oro = 0.0    ! orography
+ var = 0.0    ! standard deviation of orography
+ var4 = 0.0   ! convexity
+ oa = 0.0     ! orographic asymetry
+ ol = 0.0     ! orographic length scale
 
 ! Initialize an island in the middle of the grid.
 
@@ -102,9 +104,13 @@
 
 ! Test Point 2
 
-! Now remove an isolated water point.
+! Now remove an isolated water point. The point should be changed
+! to land (slm=1.0) and all other fields should be the average
+! of the eight surrounding points.
 
- print*,'-Test point 2.'
+ print*,'- Test point 2.'
+
+! A 3x3 grid.
 
  im = 3
  jm = 3
@@ -116,8 +122,8 @@
  allocate (oa(im,jm,4))
  allocate (ol(im,jm,4))
 
- slm = 1.0
- slm(2,2) = 0.0 ! water point
+ slm = 1.0      ! Initialize grid to all land.
+ slm(2,2) = 0.0 ! Set interior point to water.
 
  oro(1,1) = 5.0
  oro(2,1) = 10.0
