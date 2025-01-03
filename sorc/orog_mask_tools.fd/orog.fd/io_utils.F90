@@ -597,16 +597,39 @@
 
  integer(1), intent(out)    :: mask(imn,jmn)
 
- integer   :: ncid, id_var, error
+ integer   :: ncid, id_var, id_dim, error, idim, jdim
 
  print*,"- OPEN AND READ ./landcover.umd.30s.nc"
 
  error=nf90_open("./landcover.umd.30s.nc",nf90_nowrite,ncid)
- call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
+ call netcdf_err(error, 'Opening file landcover.umd.30s.nc' )
+
+ error=nf90_inq_dimid(ncid, 'idim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of idim' )
+
+ error=nf90_inquire_dimension(ncid,id_dim,len=idim)
+ call netcdf_err(error, 'Reading idim' )
+
+ if (imn /= idim) then
+   print*,"FATAL ERROR: i-dimensions do not match."
+ endif
+
+ error=nf90_inq_dimid(ncid, 'jdim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of jdim' )
+
+ error=nf90_inquire_dimension(ncid,id_dim,len=jdim)
+ call netcdf_err(error, 'Reading jdim' )
+
+ if (jmn /= jdim) then
+   print*,"FATAL ERROR: j-dimensions do not match."
+ endif
+
  error=nf90_inq_varid(ncid, 'land_mask', id_var)
  call netcdf_err(error, 'Inquire varid of land_mask')
+
  error=nf90_get_var(ncid, id_var, mask)
  call netcdf_err(error, 'Inquire data of land_mask')
+
  error = nf90_close(ncid)
 
  call transpose_mask(imn,jmn,mask)
