@@ -15,6 +15,10 @@ endif()
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/landcover.umd.lowres.nc ${CMAKE_CURRENT_BINARY_DIR}/landcover.umd.30s.nc)
 
+# Note, the "read_global_mask" routine expects the filename "topography.gmted2010.30s.nc".
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/topography.gmted2010.lowres.nc ${CMAKE_CURRENT_BINARY_DIR}/topography.gmted2010.30s.nc)
+
 add_executable(ftst_ll2xyz ftst_ll2xyz.F90)
 add_test(NAME orog-ftst_ll2xyz COMMAND ftst_ll2xyz)
 target_link_libraries(ftst_ll2xyz orog_lib)
@@ -66,3 +70,7 @@ target_link_libraries(ftst_rm_isolated_pts orog_lib)
 add_executable(ftst_read_global_mask ftst_read_global_mask.F90)
 add_test(NAME orog-ftst_read_global_mask COMMAND ftst_read_global_mask)
 target_link_libraries(ftst_read_global_mask orog_lib)
+
+add_executable(ftst_read_global_orog ftst_read_global_orog.F90)
+add_test(NAME orog-ftst_read_global_orog COMMAND ftst_read_global_orog)
+target_link_libraries(ftst_read_global_orog orog_lib)
