@@ -589,28 +589,25 @@
  subroutine read_global_mask(imn, jmn, mask)
 
  use orog_utils, only : transpose_mask
+ use netcdf
 
  implicit none
-
- include 'netcdf.inc'
 
  integer, intent(in)        :: imn, jmn
 
  integer(1), intent(out)    :: mask(imn,jmn)
 
- integer   :: ncid, fsize, id_var, error
-
- fsize = 65536
+ integer   :: ncid, id_var, error
 
  print*,"- OPEN AND READ ./landcover.umd.30s.nc"
 
- error=NF__OPEN("./landcover.umd.30s.nc",NF_NOWRITE,fsize,ncid)
+ error=nf90_open("./landcover.umd.30s.nc",nf90_nowrite,ncid)
  call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
- error=nf_inq_varid(ncid, 'land_mask', id_var)
+ error=nf90_inq_varid(ncid, 'land_mask', id_var)
  call netcdf_err(error, 'Inquire varid of land_mask')
- error=nf_get_var_int1(ncid, id_var, mask)
+ error=nf90_get_var(ncid, id_var, mask)
  call netcdf_err(error, 'Inquire data of land_mask')
- error = nf_close(ncid)
+ error = nf90_close(ncid)
 
  call transpose_mask(imn,jmn,mask)
 
