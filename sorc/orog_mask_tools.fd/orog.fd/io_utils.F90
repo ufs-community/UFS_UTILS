@@ -550,28 +550,48 @@
  subroutine read_global_orog(imn,jmn,glob)
 
  use orog_utils, only : transpose_orog
+ use netcdf
 
  implicit none
-
- include 'netcdf.inc'
 
  integer, intent(in)    :: imn, jmn
  integer*2, intent(out) :: glob(imn,jmn)
 
- integer :: ncid, error, id_var, fsize
-
- fsize=65536
+ integer :: ncid, error, id_dim, id_var, idim, jdim
 
  print*,"- OPEN AND READ ./topography.gmted2010.30s.nc"
 
- error=NF__OPEN("./topography.gmted2010.30s.nc", &
-                NF_NOWRITE,fsize,ncid)
- call netcdf_err(error, 'Open file topography.gmted2010.30s.nc' )
- error=nf_inq_varid(ncid, 'topo', id_var)
+ error=nf90_open("./topography.gmted2010.30s.nc", &
+                nf90_nowrite, ncid)
+ call netcdf_err(error, 'Opening file topography.gmted2010.30s.nc' )
+
+ error=nf90_inq_dimid(ncid, 'idim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of idim' )
+
+ error=nf90_inquire_dimension(ncid,id_dim,len=idim)
+ call netcdf_err(error, 'Reading idim' )
+
+ if (imn /= idim) then
+   print*,"FATAL ERROR: i-dimensions do not match."
+ endif
+
+ error=nf90_inq_dimid(ncid, 'jdim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of jdim' )
+
+ error=nf90_inquire_dimension(ncid,id_dim,len=jdim)
+ call netcdf_err(error, 'Reading jdim' )
+
+ if (jmn /= jdim) then
+   print*,"FATAL ERROR: j-dimensions do not match."
+ endif
+
+ error=nf90_inq_varid(ncid, 'topo', id_var)
  call netcdf_err(error, 'Inquire varid of topo')
- error=nf_get_var_int2(ncid, id_var, glob)
- call netcdf_err(error, 'Read topo')
- error = nf_close(ncid)
+
+ error=nf90_get_var(ncid, id_var, glob)
+ call netcdf_err(error, 'Reading topo')
+
+ error = nf90_close(ncid)
 
  print*,"- MAX/MIN OF OROGRAPHY DATA ",maxval(glob),minval(glob)
 
