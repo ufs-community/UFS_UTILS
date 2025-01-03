@@ -8,7 +8,7 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")
 endif()
 
-include_directories(${PROJECT_SOURCE_DIR})
+#include_directories(${PROJECT_SOURCE_DIR})
 
 add_executable(ftst_ll2xyz ftst_ll2xyz.F90)
 add_test(NAME orog-ftst_ll2xyz COMMAND ftst_ll2xyz)
