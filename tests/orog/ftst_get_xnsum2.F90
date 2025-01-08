@@ -5,6 +5,8 @@
 ! model grid box, and counts the number of high-resolution
 ! points higher than a critical height. The critical
 ! height is a function of the standard deviation of height.
+!
+! Author George Gayno NCEP/EMC
 
  use orog_utils, only : get_xnsum2
 

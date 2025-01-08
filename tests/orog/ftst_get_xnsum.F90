@@ -4,6 +4,8 @@
 ! the number of high-resolution orography data points
 ! within a model grid box that are above the average
 ! terrain height.
+!
+! Author George Gayno NCEP/EMC
 
  use orog_utils, only : get_xnsum
 

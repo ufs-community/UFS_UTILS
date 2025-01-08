@@ -6,6 +6,8 @@
 ! points higher than a critical height. The critical
 ! height is passed into routine get_xnsum3, whereas in
 ! get_xnsum2 it is computed.
+!
+! Author George Gayno NCEP/EMC
 
  use orog_utils, only : get_xnsum3
 

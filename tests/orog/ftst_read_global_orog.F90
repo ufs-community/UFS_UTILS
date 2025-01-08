@@ -2,6 +2,8 @@
 
 ! Test routine "read_global_orog" using a reduced-size
 ! version (6 x 3 vs 43200 x 21600) of the gmted 2010 orog file.
+!
+! Author George Gayno NCEP/EMC
 
  use io_utils, only : read_global_orog
 
