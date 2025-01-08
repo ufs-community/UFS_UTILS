@@ -398,33 +398,32 @@
 !! @author George Gayno NOAA/EMC
   subroutine read_mdl_dims(mdl_grid_file, im, jm)
 
+  use netcdf
+
   implicit none
-  include "netcdf.inc"
 
   character(len=*), intent(in) :: mdl_grid_file
 
   integer, intent(out)         :: im, jm
 
-  integer ncid, error, fsize, id_dim, nx, ny
-
-  fsize = 66536
+  integer ncid, error, id_dim, nx, ny
 
   print*, "- READ MDL GRID DIMENSIONS FROM= ", trim(mdl_grid_file)
 
-  error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
+  error=nf90_open(mdl_grid_file, nf90_nowrite, ncid)
   call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )
 
-  error=nf_inq_dimid(ncid, 'nx', id_dim)
+  error=nf90_inq_dimid(ncid, 'nx', id_dim)
   call netcdf_err(error, 'inquire dimension nx from file '// trim(mdl_grid_file) )
-  error=nf_inq_dimlen(ncid,id_dim,nx)
+  error=nf90_inquire_dimension(ncid, id_dim, len=nx)
   call netcdf_err(error, 'inquire nx from file '//trim(mdl_grid_file) )
 
-  error=nf_inq_dimid(ncid, 'ny', id_dim)
+  error=nf90_inq_dimid(ncid, 'ny', id_dim)
   call netcdf_err(error, 'inquire dimension ny from file '// trim(mdl_grid_file) )
-  error=nf_inq_dimlen(ncid,id_dim,ny)
+  error=nf90_inquire_dimension(ncid, id_dim, len=ny)
   call netcdf_err(error, 'inquire ny from file '//trim(mdl_grid_file) )
 
-  error=nf_close(ncid)
+  error=nf90_close(ncid)
 
   IM = nx/2
   JM = ny/2
