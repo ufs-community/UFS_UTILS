@@ -450,10 +450,11 @@
              geolon, geolon_c, geolat, geolat_c, dx, dy, &
              is_north_pole, is_south_pole)
 
+  use netcdf
+
   use orog_utils, only : find_poles, find_nearest_pole_points
 
   implicit none
-  include "netcdf.inc"
 
   character(len=*), intent(in) :: mdl_grid_file
 
@@ -469,12 +470,11 @@
   real, intent(out)            :: dx(im,jm), dy(im,jm)
 
   integer                      :: i, j
-  integer                      :: ncid, error, fsize, id_var, nx, ny
+  integer                      :: ncid, error, id_var, nx, ny
   integer                      :: i_south_pole,j_south_pole
   integer                      :: i_north_pole,j_north_pole
 
   real, allocatable     :: tmpvar(:,:)
-  fsize = 66536
 
   nx = 2*im
   ny = 2*jm
@@ -483,12 +483,12 @@
 
   print*, "- OPEN AND READ= ", trim(mdl_grid_file)
 
-  error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
+  error=nf90_open(mdl_grid_file, nf90_nowrite, ncid)
   call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )
 
-  error=nf_inq_varid(ncid, 'x', id_var)
+  error=nf90_inq_varid(ncid, 'x', id_var)
   call netcdf_err(error, 'inquire varid of x from file ' // trim(mdl_grid_file))
-  error=nf_get_var_double(ncid, id_var, tmpvar)
+  error=nf90_get_var(ncid, id_var, tmpvar)
   call netcdf_err(error, 'inquire data of x from file ' // trim(mdl_grid_file))
 
 ! Adjust lontitude to be between 0 and 360.
@@ -502,9 +502,9 @@
   geolon(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
   geolon_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
 
-  error=nf_inq_varid(ncid, 'y', id_var)
+  error=nf90_inq_varid(ncid, 'y', id_var)
   call netcdf_err(error, 'inquire varid of y from file ' // trim(mdl_grid_file))
-  error=nf_get_var_double(ncid, id_var, tmpvar)
+  error=nf90_get_var(ncid, id_var, tmpvar)
   call netcdf_err(error, 'inquire data of y from file ' // trim(mdl_grid_file))
 
   geolat(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
@@ -521,12 +521,12 @@
 
   allocate(tmpvar(nx,ny))
 
-  error=nf_inq_varid(ncid, 'area', id_var)
+  error=nf90_inq_varid(ncid, 'area', id_var)
   call netcdf_err(error, 'inquire varid of area from file ' // trim(mdl_grid_file))
-  error=nf_get_var_double(ncid, id_var, tmpvar)
+  error=nf90_get_var(ncid, id_var, tmpvar)
   call netcdf_err(error, 'inquire data of area from file ' // trim(mdl_grid_file))
 
-  error = nf_close(ncid)
+  error = nf90_close(ncid)
 
   do j = 1, jm
     do i = 1, im
