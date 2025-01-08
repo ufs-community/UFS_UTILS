@@ -19,7 +19,7 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/topography.gmted2010.lowres.nc ${CMAKE_CURRENT_BINARY_DIR}/topography.gmted2010.30s.nc)
 
-# Note, the "read_mdl_dims" test expects this file
+# Note, the "read_mdl_dims" and "read_mdl_grid_file" tests expects this file
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/C12_grid.tile1.nc ${CMAKE_CURRENT_BINARY_DIR}/C12_grid.tile1.nc)
 
@@ -82,3 +82,7 @@ target_link_libraries(ftst_read_global_orog orog_lib)
 add_executable(ftst_read_mdl_dims ftst_read_mdl_dims.F90)
 add_test(NAME orog-ftst_read_mdl_dims COMMAND ftst_read_mdl_dims)
 target_link_libraries(ftst_read_mdl_dims orog_lib)
+
+add_executable(ftst_read_mdl_grid_file ftst_read_mdl_grid_file.F90)
+add_test(NAME orog-ftst_read_mdl_grid_file COMMAND ftst_read_mdl_grid_file)
+target_link_libraries(ftst_read_mdl_grid_file orog_lib)
