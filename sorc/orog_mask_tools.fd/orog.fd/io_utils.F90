@@ -664,42 +664,49 @@
 !! @author G. Gayno
  subroutine qc_orog_by_ramp(imn, jmn, zavg, zslm)
 
- implicit none
+ use netcdf
 
- include 'netcdf.inc'
+ implicit none
 
  integer, intent(in)      :: imn, jmn
  integer, intent(inout)   :: zavg(imn,jmn)
  integer, intent(inout)   :: zslm(imn,jmn)
 
- integer                  :: i, j, error, ncid, id_var, fsize
+ integer                  :: i, j, error, ncid, id_var, id_dim, jramp
 
  real(4), allocatable     :: gice(:,:)
-
- fsize = 65536
-
- allocate (GICE(IMN+1,3601))
 
 ! Read 30-sec Antarctica RAMP data. Points scan from South
 ! to North, and from Greenwich to Greenwich.
 
  print*,"- OPEN/READ RAMP DATA ./topography.antarctica.ramp.30s.nc"
 
- error=NF__OPEN("./topography.antarctica.ramp.30s.nc", &
-                 NF_NOWRITE,fsize,ncid)
+ error=nf90_open("./topography.antarctica.ramp.30s.nc", &
+                 nf90_nowrite, ncid)
  call netcdf_err(error, 'Opening RAMP topo file' )
- error=nf_inq_varid(ncid, 'topo', id_var)
+
+ error=nf90_inq_dimid(ncid, 'jdim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of jdim' )
+
+ error=nf90_inquire_dimension(ncid, id_dim, len=jramp)
+ call netcdf_err(error, 'Reading jdim' )
+
+ allocate (GICE(IMN+1,jramp))
+
+ error=nf90_inq_varid(ncid, 'topo', id_var)
  call netcdf_err(error, 'Inquire varid of RAMP topo')
- error=nf_get_var_real(ncid, id_var, GICE)
+
+ error=nf90_get_var(ncid, id_var, GICE)
  call netcdf_err(error, 'Inquire data of RAMP topo')
- error = nf_close(ncid)
+
+ error = nf90_close(ncid)
 
  print*,"- QC GLOBAL OROGRAPHY DATA WITH RAMP."
 
 ! If RAMP values are valid, replace the global value with the RAMP
 ! value. Invalid values are less than or equal to 0 (0, -1, or -99).
 
- do j = 1, 3601
+ do j = 1, jramp
  do i = 1, IMN
    if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
      if ( GICE(i,j) .gt. 0.) then
