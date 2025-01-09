@@ -352,8 +352,9 @@
 
   subroutine read_mask(merge_file,slm,land_frac,lake_frac,im,jm)
 
+  use netcdf
+
   implicit none
-  include "netcdf.inc"
 
   character(len=*), intent(in) :: merge_file
 
@@ -363,30 +364,28 @@
   real, intent(out) :: lake_frac(im,jm)
   real, intent(out) :: slm(im,jm)
 
-  integer ncid, error, fsize, id_var
-
-  fsize = 66536
+  integer ncid, error, id_var
 
   print*,'- READ IN EXTERNAL LANDMASK FILE: ',trim(merge_file)
-  error=NF__OPEN(merge_file,NF_NOWRITE,fsize,ncid)
+  error=nf90_open(merge_file,nf90_nowrite,ncid)
   call netcdf_err(error, 'Open file '//trim(merge_file) )
 
-  error=nf_inq_varid(ncid, 'land_frac', id_var)
+  error=nf90_inq_varid(ncid, 'land_frac', id_var)
   call netcdf_err(error, 'inquire varid of land_frac')
-  error=nf_get_var_double(ncid, id_var, land_frac)
+  error=nf90_get_var(ncid, id_var, land_frac)
   call netcdf_err(error, 'inquire data of land_frac')
 
-  error=nf_inq_varid(ncid, 'slmsk', id_var)
+  error=nf90_inq_varid(ncid, 'slmsk', id_var)
   call netcdf_err(error, 'inquire varid of slmsk')
-  error=nf_get_var_double(ncid, id_var, slm)
+  error=nf90_get_var(ncid, id_var, slm)
   call netcdf_err(error, 'inquire data of slmsk')
 
-  error=nf_inq_varid(ncid, 'lake_frac', id_var)
+  error=nf90_inq_varid(ncid, 'lake_frac', id_var)
   call netcdf_err(error, 'inquire varid of lake_frac')
-  error=nf_get_var_double(ncid, id_var, lake_frac)
+  error=nf90_get_var(ncid, id_var, lake_frac)
   call netcdf_err(error, 'inquire data of lake_frac')
 
-  error = nf_close(ncid) 
+  error = nf90_close(ncid) 
 
   end subroutine read_mask
 
