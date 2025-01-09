@@ -23,6 +23,10 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/C12_grid.tile1.nc ${CMAKE_CURRENT_BINARY_DIR}/C12_grid.tile1.nc)
 
+# Note, the "read_mask" test expects this file.
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/C48.mx500.tile1.nc ${CMAKE_CURRENT_BINARY_DIR}/C48.mx500.tile1.nc)
+
 add_executable(ftst_ll2xyz ftst_ll2xyz.F90)
 add_test(NAME orog-ftst_ll2xyz COMMAND ftst_ll2xyz)
 target_link_libraries(ftst_ll2xyz orog_lib)
@@ -86,3 +90,7 @@ target_link_libraries(ftst_read_mdl_dims orog_lib)
 add_executable(ftst_read_mdl_grid_file ftst_read_mdl_grid_file.F90)
 add_test(NAME orog-ftst_read_mdl_grid_file COMMAND ftst_read_mdl_grid_file)
 target_link_libraries(ftst_read_mdl_grid_file orog_lib)
+
+add_executable(ftst_read_mask ftst_read_mask.F90)
+add_test(NAME orog-ftst_read_mask COMMAND ftst_read_mask)
+target_link_libraries(ftst_read_mask orog_lib)

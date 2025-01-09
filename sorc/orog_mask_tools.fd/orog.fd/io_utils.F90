@@ -343,9 +343,9 @@
 !> Read the land mask file
 !!
 !! @param[in] merge_file path 
-!! @param[in] slm Land-sea mask.
-!! @param[in] land_frac Land fraction.
-!! @param[in] lake_frac Lake fraction
+!! @param[out] slm Land-sea mask.
+!! @param[out] land_frac Land fraction.
+!! @param[out] lake_frac Lake fraction
 !! @param[in] im 'i' dimension of a model grid tile.
 !! @param[in] jm 'j' dimension of a model grid tile.
 !! @author George Gayno NOAA/EMC
