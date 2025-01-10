@@ -708,11 +708,9 @@
 
  do j = 1, jramp
  do i = 1, IMN
-   if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
-     if ( GICE(i,j) .gt. 0.) then
-       ZAVG(i,j) = int( GICE(i,j) + 0.5 )
-       ZSLM(i,j) = 1
-     endif
+   if ( GICE(i,j) .gt. 0.) then
+     ZAVG(i,j) = int( GICE(i,j) + 0.5 )
+     ZSLM(i,j) = 1
    endif
  enddo
  enddo
