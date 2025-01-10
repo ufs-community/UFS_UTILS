@@ -262,6 +262,7 @@
 !! @author George Gayno NOAA/EMC
 
   subroutine write_mask_netcdf(im, jm, slm, land_frac, ntiles, tile, geolon, geolat)
+    use netcdf
     implicit none
     integer, intent(in):: im, jm, ntiles, tile
     real, intent(in), dimension(im,jm)  :: slm, geolon, geolat, land_frac
@@ -273,7 +274,6 @@
     integer            :: dim_lon, dim_lat
     integer            :: id_geolon,id_geolat
     integer            :: id_slmsk,id_land_frac
-    include "netcdf.inc"
 
     if(ntiles > 1) then
       write(outfile, '(a,i4.4,a)') 'out.oro.tile', tile, '.nc'
@@ -285,57 +285,58 @@
     dim2=jm
       
     !--- open the file
-    error = NF__CREATE(outfile, IOR(NF_NETCDF4,NF_CLASSIC_MODEL), inital, fsize, ncid)
+    error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid, &
+            initialsize=inital, chunksize=fsize)
     call netcdf_err(error, 'Creating file '//trim(outfile) )
     !--- define dimension
-    error = nf_def_dim(ncid, 'lon', dim1, dim_lon)
+    error = nf90_def_dim(ncid, 'lon', dim1, dim_lon)
     call netcdf_err(error, 'define dimension lon for file='//trim(outfile) )
-    error = nf_def_dim(ncid, 'lat', dim2, dim_lat)
+    error = nf90_def_dim(ncid, 'lat', dim2, dim_lat)
     call netcdf_err(error, 'define dimension lat for file='//trim(outfile) )  
 
     !--- define field
 !---geolon
-    error = nf_def_var(ncid, 'geolon', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolon)
+    error = nf90_def_var(ncid, 'geolon', NF90_FLOAT, (/dim_lon,dim_lat/), id_geolon)
     call netcdf_err(error, 'define var geolon for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolon, "long_name", 9, "Longitude")
+    error = nf90_put_att(ncid, id_geolon, "long_name", "Longitude")
     call netcdf_err(error, 'define geolon name for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolon, "units", 12, "degrees_east")
+    error = nf90_put_att(ncid, id_geolon, "units", "degrees_east")
     call netcdf_err(error, 'define geolon units for file='//trim(outfile) )
 !---geolat
-    error = nf_def_var(ncid, 'geolat', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolat)
+    error = nf90_def_var(ncid, 'geolat', NF90_FLOAT, (/dim_lon,dim_lat/), id_geolat)
     call netcdf_err(error, 'define var geolat for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolat, "long_name", 8, "Latitude")
+    error = nf90_put_att(ncid, id_geolat, "long_name", "Latitude")
     call netcdf_err(error, 'define geolat name for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolat, "units", 13, "degrees_north")
+    error = nf90_put_att(ncid, id_geolat, "units", "degrees_north")
     call netcdf_err(error, 'define geolat units for file='//trim(outfile) )
 !---slmsk
-    error = nf_def_var(ncid, 'slmsk', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_slmsk)
+    error = nf90_def_var(ncid, 'slmsk', NF90_FLOAT, (/dim_lon,dim_lat/), id_slmsk)
     call netcdf_err(error, 'define var slmsk for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_slmsk, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_slmsk, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define slmsk coordinates for file='//trim(outfile) )
 !--- land_frac
-    error = nf_def_var(ncid, 'land_frac', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_land_frac)
+    error = nf90_def_var(ncid, 'land_frac', NF90_FLOAT, (/dim_lon,dim_lat/), id_land_frac)
     call netcdf_err(error, 'define var land_frac for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_land_frac, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_land_frac, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define land_frac coordinates for file='//trim(outfile) )
 
-    error = nf__enddef(ncid, header_buffer_val,4,0,4)
+    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
     call netcdf_err(error, 'end meta define for file='//trim(outfile) )
       
     !--- write out data
-    error = nf_put_var_double( ncid, id_geolon, geolon(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_geolon, geolon(:dim1,:dim2))
     call netcdf_err(error, 'write var geolon for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_geolat, geolat(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_geolat, geolat(:dim1,:dim2))
     call netcdf_err(error, 'write var geolat for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_slmsk, slm(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_slmsk, slm(:dim1,:dim2))
     call netcdf_err(error, 'write var slmsk for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_land_frac, land_frac(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_land_frac, land_frac(:dim1,:dim2))
     call netcdf_err(error, 'write var land_frac for file='//trim(outfile) )
 
-    error = nf_close(ncid) 
+    error = nf90_close(ncid) 
     call netcdf_err(error, 'close file='//trim(outfile) )  
       
   end subroutine write_mask_netcdf
