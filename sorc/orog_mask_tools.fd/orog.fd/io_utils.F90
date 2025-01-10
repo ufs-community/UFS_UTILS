@@ -237,18 +237,19 @@
 !! @param[in] string The NetCDF error message
 !! @author Jordan Alpert NOAA/EMC
   subroutine netcdf_err( err, string )
+      use netcdf
+      implicit none
       integer, intent(in) :: err
       character(len=*), intent(in) :: string
       character(len=256) :: errmsg
-      include "netcdf.inc"
 
-      if( err.EQ.NF_NOERR )return
-      errmsg = NF_STRERROR(err)
+      if( err.EQ.NF90_NOERR )return
+      errmsg = NF90_STRERROR(err)
       print*, 'FATAL ERROR: ', trim(string), ': ', trim(errmsg)
       call abort
 
       return
-    end subroutine netcdf_err
+  end subroutine netcdf_err
 
 !> Write the land mask file
 !!
