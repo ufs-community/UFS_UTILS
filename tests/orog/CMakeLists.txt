@@ -27,6 +27,10 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/C48.mx500.tile1.nc ${CMAKE_CURRENT_BINARY_DIR}/C48.mx500.tile1.nc)
 
+# Note, the "qc_orog_by_ramp" test expects this file.
+execute_process( COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_CURRENT_SOURCE_DIR}/data/topography.antarctica.ramp.lowres.nc ${CMAKE_CURRENT_BINARY_DIR}/topography.antarctica.ramp.30s.nc)
+
 add_executable(ftst_ll2xyz ftst_ll2xyz.F90)
 add_test(NAME orog-ftst_ll2xyz COMMAND ftst_ll2xyz)
 target_link_libraries(ftst_ll2xyz orog_lib)
@@ -94,3 +98,7 @@ target_link_libraries(ftst_read_mdl_grid_file orog_lib)
 add_executable(ftst_read_mask ftst_read_mask.F90)
 add_test(NAME orog-ftst_read_mask COMMAND ftst_read_mask)
 target_link_libraries(ftst_read_mask orog_lib)
+
+add_executable(ftst_qc_orog_by_ramp ftst_qc_orog_by_ramp.F90)
+add_test(NAME orog-ftst_qc_orog_by_ramp COMMAND ftst_qc_orog_by_ramp)
+target_link_libraries(ftst_qc_orog_by_ramp orog_lib)
