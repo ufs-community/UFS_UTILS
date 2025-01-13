@@ -2,6 +2,9 @@
 
 ! Unit test for routine find_poles.
 !
+! Checks if a model tile contains a 'pole'
+! point based on the latitude of each point.
+!
 ! Author George Gayno NCEP/EMC
 
  use orog_utils, only    : find_poles
