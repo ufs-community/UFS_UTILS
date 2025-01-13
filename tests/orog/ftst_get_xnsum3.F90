@@ -32,7 +32,7 @@
                             ! grid box that are above the critical height.
  data expected_xnsum2 /16/  ! Expected total number of high-res pts in model grid box.
 
- print*,"Begin test of routine get_xnsum2."
+ print*,"Begin test of routine get_xnsum3."
 
 ! The high-res grid is a global one-degree lat/lon grid. Point (1,1)
 ! is the south pole/greenwich.
