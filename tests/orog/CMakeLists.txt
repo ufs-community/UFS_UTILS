@@ -3,31 +3,34 @@
 # George Gayno, Ed Hartnett
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -warn unused")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -ffree-line-length-0 -fdefault-real-8")
 endif()
 
 # Copy necessary test files from the source data directory to the
-# build data directory.
+# build test directory.
 
-# Note, the "read_global_mask" routine expects the filename "landcover.umd.30s.nc".
+# The "read_global_mask" test needs this file. Note that the copy command changes the
+# file name to "landcover.umd.30s.nc", which is the name expected by the "read_global_mask" routine.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/landcover.umd.lowres.nc ${CMAKE_CURRENT_BINARY_DIR}/landcover.umd.30s.nc)
 
-# Note, the "read_global_mask" routine expects the filename "topography.gmted2010.30s.nc".
+# The "read_global_orog" test needs this file. Note that the copy command changes the
+# file name to "topography.gmted2010.30s.nc", which is the name expected by the "read_global_orog" routine.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/topography.gmted2010.lowres.nc ${CMAKE_CURRENT_BINARY_DIR}/topography.gmted2010.30s.nc)
 
-# Note, the "read_mdl_dims" and "read_mdl_grid_file" tests expects this file
+# The "read_mdl_dims" and "read_mdl_grid_file" tests expects this file.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/C12_grid.tile1.nc ${CMAKE_CURRENT_BINARY_DIR}/C12_grid.tile1.nc)
 
-# Note, the "read_mask" test expects this file.
+# The "read_mask" test expects this file.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/C48.mx500.tile1.nc ${CMAKE_CURRENT_BINARY_DIR}/C48.mx500.tile1.nc)
 
-# Note, the "qc_orog_by_ramp" test expects this file.
+# The "qc_orog_by_ramp" test needs this file. Note that the copy command changes the
+# file name to "topography.antarctica.ramp.30s.nc", which is the name expected by the "qc_orog_by_ramp" routine.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
     ${CMAKE_CURRENT_SOURCE_DIR}/data/topography.antarctica.ramp.lowres.nc ${CMAKE_CURRENT_BINARY_DIR}/topography.antarctica.ramp.30s.nc)
 
