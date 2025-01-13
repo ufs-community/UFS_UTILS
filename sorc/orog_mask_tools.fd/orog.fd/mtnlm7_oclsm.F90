@@ -547,14 +547,12 @@
       real, intent(out)         :: oro(im,jm)
       real, intent(out)         :: var(im,jm),var4(im,jm)
 
-!     integer, parameter        :: MAXSUM=65000000
-      integer       :: MAXSUM
       real, parameter           :: D2R = 3.14159265358979/180.
  
       real, dimension(:), allocatable ::  hgt_1d, hgt_1d_all
 
       real GLAT(JMN), GLON(IMN)
-      integer JST, JEN
+      integer JST, JEN, maxsum
       real    LONO(4),LATO(4),LONI,LATI
       real    LONO_RAD(4), LATO_RAD(4)
       real    HEIGHT
@@ -590,9 +588,9 @@
          LATO(4) = lat_c(i,j+1) 
          call get_index(IMN,JMN,4,LONO,LATO,DELXN,jst,jen,ilist,numx)
          MAXSUM=MAX(MAXSUM,(JEN-JST+1)*IMN)
-        print*,'test point ',i,j,jst,jen,imn,((JEN-JST+1)*IMN),maxsum
       ENDDO
       ENDDO
+      print*,"- MAXSUM IS ", maxsum
       allocate(hgt_1d(MAXSUM))
       allocate(hgt_1d_all(MAXSUM))
 !
