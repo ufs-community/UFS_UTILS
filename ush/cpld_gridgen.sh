@@ -20,7 +20,7 @@ export RESNAME=${RESNAME:-$1}
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.true.
-export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog.lowres}
+export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
 export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
 
 APRUN=${APRUN:-"srun"}
