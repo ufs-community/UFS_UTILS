@@ -1,6 +1,6 @@
  program test_get_index
 
-! Unit test for routine get_index, which finds the
+! Unit test for routine "get_index", which finds the
 ! i/j location of the model point on the high-resolution
 ! mask and orography grids.
 !
@@ -21,11 +21,11 @@
 
  print*,"Starting test of get_index."
 
-! The get_index routine contains three 'if' blocks. The test
-! points are designed to check each block.
+! The get_index routine contains a main 'if/elseif/else' statement. The test
+! points are designed to check each branch.
 
 ! Point 1 - At equator. Western edge of grid cell at
-! Greenwich. This tests the third 'if' block of the routine.
+! Greenwich. This tests the 'else' branch.
 
  print*,"Test point 1."
 
@@ -46,7 +46,7 @@
  enddo
 
 ! Point 2 - At equator. Grid cell crosses Greenwich.
-! This tests the second 'if' block of the routine.
+! This tests the 'elseif' branch.
 
  print*,"Test point 2."
 
@@ -73,7 +73,7 @@
  enddo
 
 ! Point 3 - At equator. Grid cell centered at
-! the dateline. This tests the third 'if' block.
+! the dateline. This tests the 'else' branch.
 
  print*,"Test point 3."
 
@@ -96,7 +96,7 @@
  enddo
 
 ! Point 4 - At North Pole. Grid cell centered at
-! Greenwich. This tests the first 'if' block.
+! Greenwich. This tests the 'if' branch.
 
  print*,"Test point 4."
 
