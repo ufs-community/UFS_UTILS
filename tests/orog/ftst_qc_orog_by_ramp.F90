@@ -6,8 +6,9 @@
 !
 ! In OPS, the global data is 30-sec with dimensions
 ! 43200 x 21600. The RAMP data is 30-sec with dimension
-! 43201 x 3601. For this test, reduced versions of
-! both grids are used: global - 9x7; RAMP 10x5.
+! 43201 x 3601 and only covers Antarctica. For this test, 
+! reduced versions of both grids are used:
+! global - 9x7; RAMP 10x5.
 !
 ! Author George Gayno NCEP/EMC
 
@@ -79,7 +80,7 @@
  zavg_expected(9,2)   = 0 ! Note: this 'ramp' point has non-zero terrain of
                           ! 0.14, which rounds down to zero.
 
-! Note: The location of the RAMP data is set in the routine.
+! Note: The path/name of the RAMP data is set in the routine.
 
  call qc_orog_by_ramp(imn, jmn, zavg, zslm)
 
