@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 #---------------------------------------------------------------------------
 # Run chgres using v16 netcdf history data as input.  These history
