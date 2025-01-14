@@ -425,7 +425,7 @@
       real GLAT(JMN), GLON(IMN)
       real    LONO(4),LATO(4),LONI,LATI
       real    LONO_RAD(4), LATO_RAD(4)
-      integer JM1,i,j,nsum,nsum_all,ii,jj,numx,i2
+      integer JM1,i,j,ii,jj,numx,i2
       integer ilist(IMN)
       real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1
       real    XNSUM_ALL,XLAND_ALL,XWATR_ALL
@@ -449,20 +449,18 @@
 !
 !  (*j*)  for hard wired zero offset (lambda s =0) for terr05 
 !$omp parallel do  &
-!$omp  private (j,i,xnsum,xland,xwatr,nsum,xl1,xs1,xw1,lono, &
+!$omp  private (j,i,xnsum,xland,xwatr,xl1,xs1,xw1,lono, &
 !$omp           lato,lono_rad,lato_rad,jst,jen,ilist,numx,jj,i2,ii,loni,lati, &
-!$omp           xnsum_all,xland_all,xwatr_all,nsum_all)
+!$omp           xnsum_all,xland_all,xwatr_all)
 !
       DO J=1,JM
        DO I=1,IM
          XNSUM = 0.0
          XLAND = 0.0
          XWATR = 0.0
-         nsum = 0
          XNSUM_ALL = 0.0
          XLAND_ALL = 0.0
          XWATR_ALL = 0.0
-         nsum_all = 0
          
          LONO(1) = lon_c(i,j) 
          LONO(2) = lon_c(i+1,j) 
@@ -483,7 +481,6 @@
             XLAND_ALL = XLAND_ALL + FLOAT(ZSLM(ii,jj))
             XWATR_ALL = XWATR_ALL + FLOAT(1-ZSLM(ii,jj))
             XNSUM_ALL = XNSUM_ALL + 1.
-            nsum_all = nsum_all+1
 
             if(inside_a_polygon(LONI*D2R,LATI*D2R,4, &
                 LONO_RAD,LATO_RAD))then
@@ -491,7 +488,6 @@
                XLAND = XLAND + FLOAT(ZSLM(ii,jj))
                XWATR = XWATR + FLOAT(1-ZSLM(ii,jj))
                XNSUM = XNSUM + 1.
-               nsum = nsum+1
             endif
          enddo ; enddo
 
