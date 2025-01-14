@@ -16,9 +16,9 @@ subroutine read_nml(ocean_mask_dir, lake_mask_dir, atmres,ocnres,out_dir,binary_
 
   integer :: unit=7, io_status
 
-  character(len=120), intent(out) :: ocean_mask_dir
-  character(len=120), intent(out) :: lake_mask_dir
-  character(len=120), intent(out) :: out_dir
+  character(len=200), intent(out) :: ocean_mask_dir
+  character(len=200), intent(out) :: lake_mask_dir
+  character(len=200), intent(out) :: out_dir
   character(len=10),  intent(out) :: atmres,ocnres
   integer, intent(out):: binary_lake
 

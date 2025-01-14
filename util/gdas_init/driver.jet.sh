@@ -10,11 +10,13 @@
 
 set -x
 
-compiler=${compiler:-"intel"}
+compiler=${compiler:-"intelllvm"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+set +x
 module list
+set -x
 
 PROJECT_CODE=hfv3gfs
 QUEUE=batch
