@@ -218,6 +218,6 @@
  if (inside) stop 18 ! Test point should be outside polygon.
 
  print*,"OK"
- print*,"SUCCSSS"
+ print*,"SUCCESS"
 
  end program inside_polygon

@@ -212,6 +212,6 @@
  deallocate (slm_expected, oro_expected, var_expected, var4_expected, oa_expected, ol_expected)
 
  print*,"OK"
- print*,"SUCCSSS"
+ print*,"SUCCESS"
 
  end program rm_isolated_pts

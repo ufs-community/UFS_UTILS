@@ -33,6 +33,6 @@
  enddo
 
  print*,"OK"
- print*,"SUCCSSS"
+ print*,"SUCCESS"
 
  end program read_gbl_mask
