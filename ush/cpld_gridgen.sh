@@ -21,8 +21,8 @@ export ATMLIST=${ATMLIST:-$2}
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.true.
-#export MOSAICDIR_PATH=/work2/noaa/stmp/dworthen/orog.lowres
-export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
+export MOSAICDIR_PATH=/work2/noaa/stmp/dworthen/orog.lowres
+#export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
 export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
 if [[ ${ATMLIST} -eq -1 ]]; then
    #export ATMRESLIST=12,24,48,96,192,384,768,1152,3072

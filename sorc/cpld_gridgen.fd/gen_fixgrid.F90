@@ -512,7 +512,7 @@ program gen_fixgrid
      print '(a)',trim(logmsg)
      call make_frac_land(trim(fsrc), trim(fwgt))
   end do
-#ifdef test
+
   !---------------------------------------------------------------------
   ! use ESMF to create positional weights for mapping a field from its
   ! native stagger location (Cu,Cv,Bu) onto the center (Ct) grid location
@@ -565,7 +565,7 @@ program gen_fixgrid
   !---------------------------------------------------------------------
 
   if(do_postwgts)call make_postwgts
-#endif
+
   !---------------------------------------------------------------------
   ! clean up
   !---------------------------------------------------------------------
