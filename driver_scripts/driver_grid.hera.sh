@@ -7,8 +7,8 @@
 #SBATCH -e log.fv3_grid_driver
 #SBATCH --nodes=6 --ntasks-per-node=12
 #SBATCH --partition=bigmem
-#SBATCH -q debug
-#SBATCH -t 00:30:00
+#SBATCH -q batch
+#SBATCH -t 04:30:00
 
 #-----------------------------------------------------------------------
 # Driver script to create a cubic-sphere based model grid on Hera.
@@ -80,7 +80,7 @@ export gtype=uniform           # 'uniform', 'stretch', 'nest',
 export make_gsl_orog=false     # When 'true' will output 'oro' files for
                                # the GSL orographic drag suite.
 
-export vegsoilt_frac='.false.' # When .false., output dominant soil and 
+export vegsoilt_frac='.true.' # When .false., output dominant soil and 
                                # vegetation type category. When .true.,
                                # output fraction of each category and
                                # the dominant category. A Fortran logical,
@@ -159,8 +159,12 @@ fi
 
 export home_dir=$SLURM_SUBMIT_DIR/..
 export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids
+export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids/sai/frac
 
+export input_leaf_area_index_file=/scratch2/NCEPDEV/land/Sanath.Kumar/ufs/lai/data2/LAI_climo_umd.nc
+export input_leaf_area_index_file=/scratch2/NCEPDEV/land/Sanath.Kumar/ufs/lai/LAI_climo_pnnl_wrf1.nc
+export input_leaf_area_index_file=/scratch2/NCEPDEV/land/Sanath.Kumar/approved/UFS_UTILS/fix/sfc_climo/LAI_climo_pnnl.nc
+export input_stem_area_index_file=/scratch2/NCEPDEV/land/Sanath.Kumar/ufs/data/SAI_climo_pnnl_compressed_varnamfix.nc
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.
 #-----------------------------------------------------------------------
