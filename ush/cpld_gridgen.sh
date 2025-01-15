@@ -17,16 +17,18 @@ function edit_namelist {
 	-e "s/ATMRESLIST/$ATMRESLIST/g"
 }
 export RESNAME=${RESNAME:-$1}
+export ATMLIST=${ATMLIST:-$2}
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.true.
-export MOSAICDIR_PATH=/work2/noaa/stmp/dworthen/orog.lowres
-#export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
+#export MOSAICDIR_PATH=/work2/noaa/stmp/dworthen/orog.lowres
+export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
 export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
-if [[ $2 -eq -1 ]]; then
-    export ATMRESLIST=12,24,48,96,192,384,768,1152,3072
+if [[ ${ATMLIST} -eq -1 ]]; then
+   #export ATMRESLIST=12,24,48,96,192,384,768,1152,3072
+   export ATMRESLIST=48,96,192,384,768,1152,3072
 else
-    export ATMRESLIST=$2
+   export ATMRESLIST=${ATMLIST}
 fi
 
 APRUN=${APRUN:-"srun"}
