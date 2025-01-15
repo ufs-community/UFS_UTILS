@@ -10,4 +10,5 @@ res=RESNAME
 editmask=DO_MASKEDIT
 debug=DO_DEBUG
 do_postwgts=DO_POSTWGTS
+atmreslist=ATMRESLIST
 /
