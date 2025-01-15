@@ -20,9 +20,10 @@ export RESNAME=${RESNAME:-$1}
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.true.
-export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
+export MOSAICDIR_PATH=/work2/noaa/stmp/dworthen/orog.lowres
+#export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
 export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
-if [[ $2 -eq 0 ]]; then
+if [[ $2 -eq -1 ]]; then
     export ATMRESLIST=12,24,48,96,192,384,768,1152,3072
 else
     export ATMRESLIST=$2

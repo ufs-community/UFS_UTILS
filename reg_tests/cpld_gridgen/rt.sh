@@ -106,6 +106,7 @@ readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
 TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
+export ATMLIST=-1
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
 WLCLK_dflt=60
@@ -249,6 +250,10 @@ while read -r line || [ "$line" ]; do
 
     TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
     TEST_NAME=${TEST_NAME##mx}
+    ATMLIST=$(echo $line | cut -d'|' -f2 | sed -e 's/^ *//' -e 's/ *$//')
+    if [[ -z ${ATMLIST} ]];then
+	ATMLIST=-1
+    fi
 
     cd $PATHRT
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
@@ -284,7 +289,7 @@ while read -r line || [ "$line" ]; do
     else
 	sbatch --wait --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
 	    --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-	    --wrap "time $SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
+	    --wrap "time $SBATCH_COMMAND $TEST_NAME $ATMLIST" && d=$? || d=$?
 
 	if [[ d -ne 0 ]]; then
 	    error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
