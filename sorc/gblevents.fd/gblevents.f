@@ -6,15 +6,35 @@ C> @brief Pre/Post processing of of prepbufr events
 
       SAVE
 
-      INTEGER IMAX,JMAX,KMAX,KMAXS
-      INTEGER*4 IDVC,IDSL,NVCOORD,SFCPRESS_ID,THERMODYN_ID
-      REAL (KIND=8), ALLOCATABLE :: IAR14T(:,:,:), IAR15U(:,:,:),
-     $                              IAR16V(:,:,:), IAR17Q(:,:,:),
-     $                              IAR12Z(:,:),   IAR13P(:,:),
-     $                              IARPSI(:,:,:), IARPSL(:,:,:),
-     $                              IARPSD(:,:,:)
-      REAL (KIND=4), ALLOCATABLE :: VCOORD(:,:)
-      REAL DLAT,DLON
+      INTEGER                    :: IMAX   !< I-DIMENSION OF GRID.
+      INTEGER                    :: JMAX   !< J-DIMENSION OF GRID.
+      INTEGER                    :: KMAX   !< NUMBER OF VERTICAL LAYERS.
+      INTEGER                    :: KMAXS  !< NUMBER OF FIELDS TO TRANSFORM.
+      INTEGER*4                  :: IDVC   !< VERTICAL COORDINATE ID.
+                                           !< 1-SIGMA; 2-EC-HYBRID; 3-NCEP HYBRID.
+      INTEGER*4                  :: IDSL   !< TYPE OF SIGMA STRUCTURE.
+                                           !< 1-PHILLIPS; 2-MEAN.
+      INTEGER*4                  :: NVCOORD  !< NUMBER OF VERTICAL COORDINATES
+      INTEGER*4                  :: SFCPRESS_ID  !< SURFACE PRESSURE ID.
+                                                 !< 0/1 - LOG PRESSURE Pa/1000
+                                                 !< 2   - PRESSURE Pa/1000
+                                                 !< ELSE - PRESSURE IN Pa.
+      INTEGER*4                  :: THERMODYN_ID !< THERMODYNAMIC ID.
+      REAL (KIND=8), ALLOCATABLE :: IAR14T(:,:,:) !< VIRTUAL TEMPERATURE.
+      REAL (KIND=8), ALLOCATABLE :: IAR15U(:,:,:) !< U-COMPONENT WIND.
+      REAL (KIND=8), ALLOCATABLE :: IAR16V(:,:,:) !< V-COMPONENT WIND.
+      REAL (KIND=8), ALLOCATABLE :: IAR17Q(:,:,:) !< SPECIFIC HUMIDITY.
+      REAL (KIND=8), ALLOCATABLE :: IAR12Z(:,:) !< OROGRAPHY.
+      REAL (KIND=8), ALLOCATABLE :: IAR13P(:,:) !< SURFACE PRESSURE.
+      REAL (KIND=8), ALLOCATABLE :: IARPSI(:,:,:) !< 3-D INTERFACE PRESSURE.
+      REAL (KIND=8), ALLOCATABLE :: IARPSL(:,:,:) !< 3-D LAYER PRESSURE.
+      REAL (KIND=8), ALLOCATABLE :: IARPSD(:,:,:) !< NOT USED.
+      REAL (KIND=4), ALLOCATABLE :: VCOORD(:,:)  !< VERTICAL COORDINATE VALUES - (KMAX+1,NVCOORD)
+                                                 !< FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE
+                                                 !< FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B
+                                                 !< FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE
+      REAL                       :: DLAT  !< LATITUDINAL GRID SPACING IN DEGREES.
+      REAL                       :: DLON  !< LONGITUDINAL GRID SPACING IN DEGREES.
 
       END MODULE GBLEVN_MODULE
 
