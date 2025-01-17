@@ -17,6 +17,12 @@ elif [ ${CTAR} == 'C768' ]; then
   OCNRES='025'
 elif [ ${CTAR} == 'C1152' ]; then
   OCNRES='025'
+elif [ ${CTAR} == 'C12' ]; then
+  OCNRES='900'
+elif [ ${CTAR} == 'C18' ]; then
+  OCNRES='900'
+elif [ ${CTAR} == 'C24' ]; then
+  OCNRES='900'
 else
   OCNRES='025'
 fi
