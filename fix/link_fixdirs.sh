@@ -49,8 +49,7 @@ if [ $machine = "hera" ]; then
 elif [ $machine = "jet" ]; then
     FIX_DIR="/lfs5/HFIP/hfv3gfs/glopara/FIX/fix"
 elif [ $machine = "orion" -o $machine = "hercules" ]; then
-    #    FIX_DIR="/work/noaa/global/glopara/fix"
-    FIX_DIR="/work2/noaa/stmp/dworthen/orog.lowres"
+    FIX_DIR="/work/noaa/global/glopara/fix"
 elif [ $machine = "wcoss2" ]; then
     FIX_DIR="/lfs/h2/emc/global/noscrub/emc.global/FIX/fix"
 elif [ $machine = "s4" ]; then
