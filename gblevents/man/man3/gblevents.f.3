@@ -1,4 +1,4 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/gblevents.fd/gblevents.f" 3 "Thu Jun 20 2024" "Version 1.13.0" "gblevents" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/gblevents.fd/gblevents.f" 3 "Tue Jan 21 2025" "Version 1.13.0" "gblevents" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -73,66 +73,87 @@
 .ti -1c
 .RI "real \fBgblevn_module::dlat\fP"
 .br
+.RI "LATITUDINAL GRID SPACING IN DEGREES\&. "
 .ti -1c
 .RI "real \fBgblevn_module::dlon\fP"
 .br
+.RI "LONGITUDINAL GRID SPACING IN DEGREES\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:), allocatable \fBgblevn_module::iar12z\fP"
 .br
+.RI "OROGRAPHY\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:), allocatable \fBgblevn_module::iar13p\fP"
 .br
+.RI "SURFACE PRESSURE\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:,:), allocatable \fBgblevn_module::iar14t\fP"
 .br
+.RI "VIRTUAL TEMPERATURE\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:,:), allocatable \fBgblevn_module::iar15u\fP"
 .br
+.RI "U-COMPONENT WIND\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:,:), allocatable \fBgblevn_module::iar16v\fP"
 .br
+.RI "V-COMPONENT WIND\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:,:), allocatable \fBgblevn_module::iar17q\fP"
 .br
+.RI "SPECIFIC HUMIDITY\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:,:), allocatable \fBgblevn_module::iarpsd\fP"
 .br
+.RI "NOT USED\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:,:), allocatable \fBgblevn_module::iarpsi\fP"
 .br
+.RI "3-D INTERFACE PRESSURE\&. "
 .ti -1c
 .RI "real(kind=8), dimension(:,:,:), allocatable \fBgblevn_module::iarpsl\fP"
 .br
+.RI "3-D LAYER PRESSURE\&. "
 .ti -1c
 .RI "integer *4 \fBgblevn_module::idsl\fP"
 .br
+.RI "TYPE OF SIGMA STRUCTURE\&. "
 .ti -1c
 .RI "integer *4 \fBgblevn_module::idvc\fP"
 .br
+.RI "VERTICAL COORDINATE ID\&. "
 .ti -1c
 .RI "integer \fBgblevn_module::imax\fP"
 .br
+.RI "I-DIMENSION OF GRID\&. "
 .ti -1c
 .RI "integer \fBgblevn_module::jmax\fP"
 .br
+.RI "J-DIMENSION OF GRID\&. "
 .ti -1c
 .RI "integer \fBgblevn_module::kmax\fP"
 .br
+.RI "NUMBER OF VERTICAL LAYERS\&. "
 .ti -1c
 .RI "integer \fBgblevn_module::kmaxs\fP"
 .br
+.RI "NUMBER OF FIELDS TO TRANSFORM\&. "
 .ti -1c
 .RI "integer *4 \fBgblevn_module::nvcoord\fP"
 .br
+.RI "NUMBER OF VERTICAL COORDINATES\&. "
 .ti -1c
 .RI "integer *4 \fBgblevn_module::sfcpress_id\fP"
 .br
+.RI "SURFACE PRESSURE ID\&. "
 .ti -1c
 .RI "integer *4 \fBgblevn_module::thermodyn_id\fP"
 .br
+.RI "THERMODYNAMIC ID\&. "
 .ti -1c
 .RI "real(kind=4), dimension(:,:), allocatable \fBgblevn_module::vcoord\fP"
 .br
+.RI "VERTICAL COORDINATE VALUES - (KMAX+1,NVCOORD) FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE\&. "
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -275,7 +296,7 @@ DOPMSL - ENCODE DERIVED PMSL ('PMO') FOR ALL SURFACE REPORTS WHEN REPORTED PMSL 
 .PP
 
 .PP
-Definition at line 533 of file gblevents\&.f\&.
+Definition at line 553 of file gblevents\&.f\&.
 .PP
 References gblevn01(), gblevn02(), gblevn03(), gblevn04(), gblevn08(), gblevn10(), gblevn12(), and gblevn13()\&.
 .SS "subroutine gblevn01 ( IUNITE)"
@@ -290,7 +311,7 @@ Read observation error table\&.
 .PP
 
 .PP
-Definition at line 901 of file gblevents\&.f\&.
+Definition at line 921 of file gblevents\&.f\&.
 .PP
 Referenced by gblevents()\&.
 .SS "subroutine gblevn02 ( IUNITP,  IUNITS,  NEWTYP, character*8 subset)"
@@ -324,7 +345,7 @@ CHANGED FROM THAT OF THE PREVIOUS REPORT (=0 - NO,
 .PP
 
 .PP
-Definition at line 943 of file gblevents\&.f\&.
+Definition at line 963 of file gblevents\&.f\&.
 .PP
 References oefg01()\&.
 .PP
@@ -341,7 +362,7 @@ GBLEVN03 - INTERPOLATE MODEL DATA (FIRST GUESS OR ANALYSIS) TO OB LOCATIONS\&.
 .PP
 
 .PP
-Definition at line 1661 of file gblevents\&.f\&.
+Definition at line 1681 of file gblevents\&.f\&.
 .PP
 References gblevn06()\&.
 .PP
@@ -351,7 +372,7 @@ Referenced by gblevents()\&.
 .PP
 Get observation error\&. 
 .PP
-Definition at line 1838 of file gblevents\&.f\&.
+Definition at line 1858 of file gblevents\&.f\&.
 .PP
 References oefg01()\&.
 .PP
@@ -361,7 +382,7 @@ Referenced by gblevents()\&.
 .PP
 SUBROUTINE GBLEVN06 - 2D LINEAR HORIZONTAL INTERPOLATION\&. 
 .PP
-Definition at line 1891 of file gblevents\&.f\&.
+Definition at line 1911 of file gblevents\&.f\&.
 .PP
 Referenced by gblevn03()\&.
 .SS "subroutine gblevn08 ( IUNITP, character*8 SUBSET)"
@@ -389,7 +410,7 @@ REMARKS: WILL IMMEDIATELY RETURN TO CALLING PROGRAM IF ANY OF THE FOLLOWING COND
 .PP
 ATTRIBUTES: LANGUAGE: FORTRAN 90 MACHINE: NCEP WCOSS 
 .PP
-Definition at line 2208 of file gblevents\&.f\&.
+Definition at line 2228 of file gblevents\&.f\&.
 .PP
 Referenced by gblevents()\&.
 .SS "subroutine gblevn10 (integer, dimension(2) IUNITF, integer IDATEP, integer IM, integer JM, integer IDRT)"
@@ -421,7 +442,7 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 2480 of file gblevents\&.f\&.
+Definition at line 2500 of file gblevents\&.f\&.
 .PP
 References gblevn11()\&.
 .PP
@@ -431,7 +452,7 @@ Referenced by gblevents()\&.
 .PP
 North-south swap\&. 
 .PP
-Definition at line 2929 of file gblevents\&.f\&.
+Definition at line 2949 of file gblevents\&.f\&.
 .PP
 Referenced by gblevn10()\&.
 .SS "subroutine gblevn11d (integer imax, integer jmax, real(kind=8), dimension(imax,jmax) grid)"
@@ -439,7 +460,7 @@ Referenced by gblevn10()\&.
 .PP
 Does something\&. 
 .PP
-Definition at line 2949 of file gblevents\&.f\&.
+Definition at line 2969 of file gblevents\&.f\&.
 .PP
 Referenced by gblevn12(), and gblevn13()\&.
 .SS "subroutine gblevn12 (integer, dimension(2) IUNITF, integer IDATEP, integer IM, integer JM, integer IDRT)"
@@ -480,7 +501,7 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 2999 of file gblevents\&.f\&.
+Definition at line 3019 of file gblevents\&.f\&.
 .PP
 References gblevn11d(), and getlats()\&.
 .PP
@@ -515,7 +536,7 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 3415 of file gblevents\&.f\&.
+Definition at line 3435 of file gblevents\&.f\&.
 .PP
 References gblevn11d(), and getlats()\&.
 .PP
@@ -532,7 +553,7 @@ get latitudes
 .PP
 
 .PP
-Definition at line 3753 of file gblevents\&.f\&.
+Definition at line 3773 of file gblevents\&.f\&.
 .PP
 Referenced by gblevn12(), and gblevn13()\&.
 .SS "function oefg01 ( P,  TYP,  IE,  OEMIN)"
@@ -576,9 +597,137 @@ REMARKS: 'OEFG01' RETURNED IS OBSERVATION ERROR FOR VARIABLE 'IE' IN REPORT TYPE
 .PP
 ATTRIBUTES: LANGUAGE: FORTRAN 90 MACHINE: NCEP WCOSS 
 .PP
-Definition at line 2061 of file gblevents\&.f\&.
+Definition at line 2081 of file gblevents\&.f\&.
 .PP
 Referenced by gblevn02(), and gblevn04()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "real gblevn_module::dlat"
+
+.PP
+LATITUDINAL GRID SPACING IN DEGREES\&. 
+.PP
+Definition at line 36 of file gblevents\&.f\&.
+.SS "real gblevn_module::dlon"
+
+.PP
+LONGITUDINAL GRID SPACING IN DEGREES\&. 
+.PP
+Definition at line 37 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:), allocatable gblevn_module::iar12z"
+
+.PP
+OROGRAPHY\&. 
+.PP
+Definition at line 27 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:), allocatable gblevn_module::iar13p"
+
+.PP
+SURFACE PRESSURE\&. 
+.PP
+Definition at line 28 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iar14t"
+
+.PP
+VIRTUAL TEMPERATURE\&. 
+.PP
+Definition at line 23 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iar15u"
+
+.PP
+U-COMPONENT WIND\&. 
+.PP
+Definition at line 24 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iar16v"
+
+.PP
+V-COMPONENT WIND\&. 
+.PP
+Definition at line 25 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iar17q"
+
+.PP
+SPECIFIC HUMIDITY\&. 
+.PP
+Definition at line 26 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iarpsd"
+
+.PP
+NOT USED\&. 
+.PP
+Definition at line 31 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iarpsi"
+
+.PP
+3-D INTERFACE PRESSURE\&. 
+.PP
+Definition at line 29 of file gblevents\&.f\&.
+.SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iarpsl"
+
+.PP
+3-D LAYER PRESSURE\&. 
+.PP
+Definition at line 30 of file gblevents\&.f\&.
+.SS "integer*4 gblevn_module::idsl"
+
+.PP
+TYPE OF SIGMA STRUCTURE\&. 1-PHILLIPS; 2-MEAN\&. 
+.PP
+Definition at line 15 of file gblevents\&.f\&.
+.SS "integer*4 gblevn_module::idvc"
+
+.PP
+VERTICAL COORDINATE ID\&. 1-SIGMA; 2-EC-HYBRID; 3-NCEP HYBRID\&. 
+.PP
+Definition at line 13 of file gblevents\&.f\&.
+.SS "integer gblevn_module::imax"
+
+.PP
+I-DIMENSION OF GRID\&. 
+.PP
+Definition at line 9 of file gblevents\&.f\&.
+.SS "integer gblevn_module::jmax"
+
+.PP
+J-DIMENSION OF GRID\&. 
+.PP
+Definition at line 10 of file gblevents\&.f\&.
+.SS "integer gblevn_module::kmax"
+
+.PP
+NUMBER OF VERTICAL LAYERS\&. 
+.PP
+Definition at line 11 of file gblevents\&.f\&.
+.SS "integer gblevn_module::kmaxs"
+
+.PP
+NUMBER OF FIELDS TO TRANSFORM\&. 
+.PP
+Definition at line 12 of file gblevents\&.f\&.
+.SS "integer*4 gblevn_module::nvcoord"
+
+.PP
+NUMBER OF VERTICAL COORDINATES\&. 
+.PP
+Definition at line 17 of file gblevents\&.f\&.
+.SS "integer*4 gblevn_module::sfcpress_id"
+
+.PP
+SURFACE PRESSURE ID\&. 0/1 - LOG PRESSURE Pa/1000 2 - PRESSURE Pa/1000 ELSE - PRESSURE IN Pa\&. 
+.PP
+Definition at line 18 of file gblevents\&.f\&.
+.SS "integer*4 gblevn_module::thermodyn_id"
+
+.PP
+THERMODYNAMIC ID\&. 
+.PP
+Definition at line 22 of file gblevents\&.f\&.
+.SS "real (kind=4), dimension(:,:), allocatable gblevn_module::vcoord"
+
+.PP
+VERTICAL COORDINATE VALUES - (KMAX+1,NVCOORD) FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE\&. 
+.PP
+Definition at line 32 of file gblevents\&.f\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for gblevents from the source code\&.

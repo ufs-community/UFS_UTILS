@@ -26,6 +26,14 @@ var NAVTREE =
   [ "orog_mask_tools", "index.html", [
     [ "Introduction", "index.html#autotoc_md1", null ],
     [ "README", "md__scratch1_NCEPDEV_da_George_8Gayno_ufs_utils_8git_UFS_UTILS_8upstream_sorc_orog_mask_tools_8fd_docs_README.html", null ],
+    [ "Modules", "namespaces.html", [
+      [ "Modules List", "namespaces.html", "namespaces_dup" ],
+      [ "Module Members", "namespacemembers.html", [
+        [ "All", "namespacemembers.html", null ],
+        [ "Functions/Subroutines", "namespacemembers_func.html", null ],
+        [ "Variables", "namespacemembers_vars.html", null ]
+      ] ]
+    ] ],
     [ "Data Types List", "annotated.html", [
       [ "Data Types List", "annotated.html", "annotated_dup" ],
       [ "Data Fields", "functions.html", [

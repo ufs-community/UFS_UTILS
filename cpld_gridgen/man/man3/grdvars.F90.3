@@ -1,4 +1,4 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/grdvars.F90" 3 "Thu Jun 20 2024" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/grdvars.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -34,6 +34,10 @@
 .RI "real(dbl_kind), dimension(:,:), allocatable \fBgrdvars::areact\fP"
 .br
 .RI "The grid areas of the Ct grid cell in m2\&. "
+.ti -1c
+.RI "integer, dimension(nar), parameter \fBgrdvars::catm\fP = (/48, 96, 192, 384, 768, 1152/)"
+.br
+.RI "the ATM resolutions for mapped ocean masks "
 .ti -1c
 .RI "logical \fBgrdvars::debug\fP"
 .br
@@ -195,6 +199,10 @@
 .br
 .RI "The minimum depth for MOM6\&. "
 .ti -1c
+.RI "integer, parameter \fBgrdvars::nar\fP = 6"
+.br
+.RI "the number of possible ATM resolutions "
+.ti -1c
 .RI "integer, parameter \fBgrdvars::ncoord\fP = 2*4\&."
 .br
 .RI "the number of coord pairs (lat,lon) for each of 4 stagger locations "
@@ -318,7 +326,7 @@ Denise Worthen
 .PP
 
 .PP
-Definition at line 172 of file grdvars\&.F90\&.
+Definition at line 175 of file grdvars\&.F90\&.
 .SH "Variable Documentation"
 .PP 
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::angchk"
@@ -345,6 +353,12 @@ Definition at line 96 of file grdvars\&.F90\&.
 The grid areas of the Ct grid cell in m2\&. 
 .PP
 Definition at line 95 of file grdvars\&.F90\&.
+.SS "integer, dimension(nar), parameter grdvars::catm = (/48, 96, 192, 384, 768, 1152/)"
+
+.PP
+the ATM resolutions for mapped ocean masks 
+.PP
+Definition at line 167 of file grdvars\&.F90\&.
 .SS "logical grdvars::debug"
 
 .PP
@@ -585,6 +599,12 @@ Definition at line 164 of file grdvars\&.F90\&.
 The minimum depth for MOM6\&. 
 .PP
 Definition at line 159 of file grdvars\&.F90\&.
+.SS "integer, parameter grdvars::nar = 6"
+
+.PP
+the number of possible ATM resolutions 
+.PP
+Definition at line 166 of file grdvars\&.F90\&.
 .SS "integer, parameter grdvars::ncoord = 2*4\&."
 
 .PP

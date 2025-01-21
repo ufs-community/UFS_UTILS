@@ -119,6 +119,9 @@ Variables</h2></td></tr>
 <tr class="memitem:ac01f4dfee093500cd43338df47f31a81"><td class="memItemLeft" align="right" valign="top">real(dbl_kind), dimension(:,:), allocatable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#ac01f4dfee093500cd43338df47f31a81">grdvars::areact</a></td></tr>
 <tr class="memdesc:ac01f4dfee093500cd43338df47f31a81"><td class="mdescLeft">&#160;</td><td class="mdescRight">The grid areas of the Ct grid cell in m2.  <a href="grdvars_8F90.html#ac01f4dfee093500cd43338df47f31a81">More...</a><br /></td></tr>
 <tr class="separator:ac01f4dfee093500cd43338df47f31a81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfbac6ff5b02563116f1275046645838"><td class="memItemLeft" align="right" valign="top">integer, dimension(nar), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#abfbac6ff5b02563116f1275046645838">grdvars::catm</a> = (/48, 96, 192, 384, 768, 1152/)</td></tr>
+<tr class="memdesc:abfbac6ff5b02563116f1275046645838"><td class="mdescLeft">&#160;</td><td class="mdescRight">the ATM resolutions for mapped ocean masks  <a href="grdvars_8F90.html#abfbac6ff5b02563116f1275046645838">More...</a><br /></td></tr>
+<tr class="separator:abfbac6ff5b02563116f1275046645838"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b1584b2eabaddbccac20a7e092b5945"><td class="memItemLeft" align="right" valign="top">logical&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a8b1584b2eabaddbccac20a7e092b5945">grdvars::debug</a></td></tr>
 <tr class="memdesc:a8b1584b2eabaddbccac20a7e092b5945"><td class="mdescLeft">&#160;</td><td class="mdescRight">flag indicating whether grid information should be printed for debugging purposes Default is false  <a href="grdvars_8F90.html#a8b1584b2eabaddbccac20a7e092b5945">More...</a><br /></td></tr>
 <tr class="separator:a8b1584b2eabaddbccac20a7e092b5945"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,6 +242,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a905b13bcf0b7c85412837facaac0d46e"><td class="memItemLeft" align="right" valign="top">real(kind=real_kind), parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a905b13bcf0b7c85412837facaac0d46e">grdvars::minimum_depth</a> = 9.5</td></tr>
 <tr class="memdesc:a905b13bcf0b7c85412837facaac0d46e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The minimum depth for MOM6.  <a href="grdvars_8F90.html#a905b13bcf0b7c85412837facaac0d46e">More...</a><br /></td></tr>
 <tr class="separator:a905b13bcf0b7c85412837facaac0d46e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f94c347660edf0d37bc6a5da3f03094"><td class="memItemLeft" align="right" valign="top">integer, parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#a0f94c347660edf0d37bc6a5da3f03094">grdvars::nar</a> = 6</td></tr>
+<tr class="memdesc:a0f94c347660edf0d37bc6a5da3f03094"><td class="mdescLeft">&#160;</td><td class="mdescRight">the number of possible ATM resolutions  <a href="grdvars_8F90.html#a0f94c347660edf0d37bc6a5da3f03094">More...</a><br /></td></tr>
+<tr class="separator:a0f94c347660edf0d37bc6a5da3f03094"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5d1f52f0ef1e3ca9e73a34423a841c3"><td class="memItemLeft" align="right" valign="top">integer, parameter&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="grdvars_8F90.html#aa5d1f52f0ef1e3ca9e73a34423a841c3">grdvars::ncoord</a> = 2*4.</td></tr>
 <tr class="memdesc:aa5d1f52f0ef1e3ca9e73a34423a841c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">the number of coord pairs (lat,lon) for each of 4 stagger locations  <a href="grdvars_8F90.html#aa5d1f52f0ef1e3ca9e73a34423a841c3">More...</a><br /></td></tr>
 <tr class="separator:aa5d1f52f0ef1e3ca9e73a34423a841c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -331,7 +337,7 @@ Variables</h2></td></tr>
 <p>Allocate grid variables. </p>
 <dl class="section author"><dt>Author</dt><dd>Denise Worthen </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00172">172</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
+<p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00175">175</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
 
 </div>
 </div>
@@ -405,6 +411,24 @@ Variables</h2></td></tr>
 <p>The grid areas of the Ct grid cell in m2. </p>
 
 <p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00095">95</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
+
+</div>
+</div>
+<a id="file_abfbac6ff5b02563116f1275046645838"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_abfbac6ff5b02563116f1275046645838">&#9670;&nbsp;</a></span>catm</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer, dimension(nar), parameter grdvars::catm = (/48, 96, 192, 384, 768, 1152/)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>the ATM resolutions for mapped ocean masks </p>
+
+<p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00167">167</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
 
 </div>
 </div>
@@ -1130,6 +1154,24 @@ Variables</h2></td></tr>
 <p>The minimum depth for MOM6. </p>
 
 <p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00159">159</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
+
+</div>
+</div>
+<a id="file_a0f94c347660edf0d37bc6a5da3f03094"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a0f94c347660edf0d37bc6a5da3f03094">&#9670;&nbsp;</a></span>nar</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">integer, parameter grdvars::nar = 6</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>the number of possible ATM resolutions </p>
+
+<p class="definition">Definition at line <a class="el" href="grdvars_8F90_source.html#l00166">166</a> of file <a class="el" href="grdvars_8F90_source.html">grdvars.F90</a>.</p>
 
 </div>
 </div>

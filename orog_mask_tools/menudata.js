@@ -24,6 +24,12 @@ for the JavaScript code in this file
 var menudata={children:[
 {text:"Main Page",url:"index.html"},
 {text:"Related Pages",url:"pages.html"},
+{text:"Modules",url:"namespaces.html",children:[
+{text:"Modules List",url:"namespaces.html"},
+{text:"Module Members",url:"namespacemembers.html",children:[
+{text:"All",url:"namespacemembers.html"},
+{text:"Functions/Subroutines",url:"namespacemembers_func.html"},
+{text:"Variables",url:"namespacemembers_vars.html"}]}]},
 {text:"Data Types List",url:"annotated.html",children:[
 {text:"Data Types List",url:"annotated.html"},
 {text:"Data Fields",url:"functions.html",children:[
@@ -43,7 +49,6 @@ var menudata={children:[
 {text:"m",url:"globals.html#index_m"},
 {text:"n",url:"globals.html#index_n"},
 {text:"r",url:"globals.html#index_r"},
-{text:"s",url:"globals.html#index_s"},
 {text:"t",url:"globals.html#index_t"},
 {text:"w",url:"globals.html#index_w"}]},
 {text:"Functions/Subroutines",url:"globals_func.html",children:[
@@ -57,6 +62,5 @@ var menudata={children:[
 {text:"m",url:"globals_func.html#index_m"},
 {text:"n",url:"globals_func.html#index_n"},
 {text:"r",url:"globals_func.html#index_r"},
-{text:"s",url:"globals_func.html#index_s"},
 {text:"t",url:"globals_func.html#index_t"},
 {text:"w",url:"globals_func.html#index_w"}]}]}]}]}

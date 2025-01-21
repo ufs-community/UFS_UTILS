@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['nar',['nar',['../grdvars_8F90.html#a0f94c347660edf0d37bc6a5da3f03094',1,'grdvars']]],
   ['ncoord',['ncoord',['../grdvars_8F90.html#aa5d1f52f0ef1e3ca9e73a34423a841c3',1,'grdvars']]],
   ['ni',['ni',['../grdvars_8F90.html#ab4e40ea0e4d4c14fae837b09470a3e57',1,'grdvars']]],
   ['nj',['nj',['../grdvars_8F90.html#ad12d0c225bbf6584c432de0f864246ca',1,'grdvars']]],

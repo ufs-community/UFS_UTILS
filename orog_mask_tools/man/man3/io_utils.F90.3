@@ -1,0 +1,74 @@
+.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/io_utils.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/io_utils.F90 \- i/o utilities  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBio_utils\fP"
+.br
+.RI "Module containing utilities that read and write data\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBio_utils::netcdf_err\fP (err, string)"
+.br
+.RI "Check NetCDF error code and output the error message\&. "
+.ti -1c
+.RI "subroutine, public \fBio_utils::qc_orog_by_ramp\fP (imn, jmn, zavg, zslm)"
+.br
+.RI "Quality control the global orography and landmask data over Antarctica using RAMP data\&. "
+.ti -1c
+.RI "subroutine, public \fBio_utils::read_global_mask\fP (imn, jmn, mask)"
+.br
+.RI "Read input global 30-arc second land mask data\&. "
+.ti -1c
+.RI "subroutine, public \fBio_utils::read_global_orog\fP (imn, jmn, glob)"
+.br
+.RI "Read input global 30-arc second orography data\&. "
+.ti -1c
+.RI "subroutine, public \fBio_utils::read_mask\fP (merge_file, slm, land_frac, \fBlake_frac\fP, im, jm)"
+.br
+.RI "Read the land mask file\&. "
+.ti -1c
+.RI "subroutine, public \fBio_utils::read_mdl_dims\fP (mdl_grid_file, im, jm)"
+.br
+.RI "Read the grid dimensions from the model 'grid' file\&. "
+.ti -1c
+.RI "subroutine, public \fBio_utils::read_mdl_grid_file\fP (mdl_grid_file, im, jm, geolon, geolon_c, geolat, geolat_c, dx, dy, is_north_pole, is_south_pole)"
+.br
+.RI "Read the grid dimensions from the model 'grid' file\&. "
+.ti -1c
+.RI "subroutine, public \fBio_utils::write_mask_netcdf\fP (im, jm, slm, land_frac, ntiles, tile, geolon, geolat)"
+.br
+.RI "Write the land mask file\&. "
+.ti -1c
+.RI "subroutine, public \fBio_utils::write_netcdf\fP (im, jm, slm, land_frac, oro, hprime, ntiles, tile, geolon, geolat, lon, lat)"
+.br
+.RI "Write out orography file in netcdf format\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+i/o utilities 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBio_utils\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.
