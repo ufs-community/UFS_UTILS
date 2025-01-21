@@ -10,9 +10,9 @@ defaults:
 
 env:
   cache_key: gcc
-  CC: gcc-10
-  FC: gfortran-10
-  CXX: g++-10
+  CC: gcc-13
+  FC: gfortran-13
+  CXX: g++-13
 
 # The jobs are split into:
 # 1. a dependency build step (setup), and
@@ -23,7 +23,7 @@ env:
 
 jobs:
   setup:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: checkout  # this is to get the ci/spack.yaml file
@@ -47,7 +47,7 @@ jobs:
         run: |
           git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git
           source spack/share/spack/setup-env.sh
-          sed "s/\[oneapi, gcc@10:10, apple-clang@14\]/\[gcc@10:10\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
+          sed "s/\[oneapi, gcc@13:13, apple-clang@14\]/\[gcc@13:13\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
           spack env create ufs_utils-env spack_ci.yaml
           spack env activate ufs_utils-env
           sudo apt install cmake
@@ -59,7 +59,7 @@ jobs:
 
   ufs_utils:
     needs: setup
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: checkout

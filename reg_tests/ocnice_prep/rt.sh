@@ -232,7 +232,9 @@ if [[ $target = wcoss2 ]]; then
   module load netcdf
   module load nccmp/1.8.9.0
 fi
+set +x
 module list
+set -x
 
 if [[ $CREATE_BASELINE = true ]]; then
     rm -rf $NEW_BASELINE_ROOT
