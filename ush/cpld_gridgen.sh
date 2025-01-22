@@ -16,7 +16,74 @@ function edit_namelist {
 	-e "s/DO_POSTWGTS/$DO_POSTWGTS/g"
 }
 
+check_results() {
+
+    [ -o xtrace ] && set_x='set -x' || set_x='set +x'
+    set +x
+
+    local test_status=PASS
+    # verification run
+    if [[ $CREATE_BASELINE = false ]]; then
+
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Baseline dir = $BASELINE" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Checking test $TEST_NAME results ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+        for file in $BASELINE/*.nc; do
+            printf %s "Comparing " $(basename ${file}) "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+            if [[ ! -f $RUNDIR/$(basename ${file}) ]]; then
+                echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                test_status=FAIL
+            else
+                $NCCMP -dmfqS -w format $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
+                if [[ $d -ne 0 ]]; then
+                    echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                    test_status=FAIL
+                else
+                    echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                fi
+            fi
+        done
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        # baseline creation run
+    else
+
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Moving baseline files to $NEW_BASELINE ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+        mkdir -p $NEW_BASELINE
+
+        for file in *.nc; do
+            printf %s "Moving " $file "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+            cp $file $NEW_BASELINE/$file && d=$? || d=$?
+            if [[ $d -ne 0 ]]; then
+                echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                test_status=FAIL
+            else
+                echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+            fi
+        done
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+    fi
+
+    if [[ $test_status == FAIL ]]; then
+        echo "$TEST_NAME failed" >> $PATHRT/fail_test_$TEST_NAME
+    fi
+}
+
+echo top of cpld_gridgen.sh
+
+cd $RUNDIR
+
 export RESNAME=${RESNAME:-$1}
+TEST_NAME=$RESNAME
 export DEBUG=.false.
 export MASKEDIT=.false.
 export DO_POSTWGTS=.true.
@@ -76,12 +143,6 @@ if [ $RESNAME = 025 ]; then
     fi
 fi
 
-if [ ! -d ${OUTDIR_PATH} ]; then
-    mkdir -p ${OUTDIR_PATH}
-fi
-
-cd ${OUTDIR_PATH}
-
 edit_namelist < grid.nml.IN > grid.nml
 $APRUN ./cpld_gridgen
 
@@ -94,3 +155,5 @@ $APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
 export FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
 export FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
 ncks -O -v kmt ${FSRC} ${FDST}
+
+check_results
