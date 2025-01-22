@@ -109,11 +109,10 @@ export TEST_NAME=
 export ATMLIST=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=90
+WLCLK_dflt=60
 export WLCLK=$WLCLK_dflt
-#MEM_dflt="--mem=16g"
-#export MEM=$MEM_dflt
-export MEM="--exclusive"
+MEM_dflt="--mem=16g"
+export MEM=$MEM_dflt
 export MOM6_version=20240416
 
 cd $PATHRT
