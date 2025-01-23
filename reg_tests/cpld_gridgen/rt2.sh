@@ -64,14 +64,15 @@ while read -r line || [ "$line" ]; do
   export OUTDIR_PATH=$RUNDIR
   export BASELINE=$BASELINE_ROOT/$TEST_NAME
   export REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.${TEST_NAME}.log
+  rm -f $REGRESSIONTEST_LOG
+  rm -f nccmp_*log
+  rm -f run_${TEST_NAME}.log
 
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cp $PATHTR/exec/cpld_gridgen $RUNDIR
   
   tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 0:10:00 -A fv3-cpu -q batch -J "test${i}" \
-            -o log${i} -e log${i} $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME")
-
-  exit
+            -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME")
 
   all_tests=${all_tests}":"${tests[$i]}
 
