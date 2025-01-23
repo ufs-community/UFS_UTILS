@@ -79,10 +79,9 @@ while read -r line || [ "$line" ]; do
   ((i=i+1))
 done < ./rt.conf
 
+export target
+
 sbatch --nodes=1 -t 0:01:00 -A fv3-cpu -J summary -o logx -e logx \
-       --open-mode=append -q batch -d afterok${all_tests} << EOF
-#!/bin/bash
-grep -a 'finished test' log*  > summary.log
-EOF
+       --open-mode=append -q batch -d afterok${all_tests} ./rt.summary.sh
 
 exit
