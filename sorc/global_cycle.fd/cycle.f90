@@ -66,7 +66,7 @@
 !!                 relevant states.
 !!                 NOTE: We do not have a GSI snow analysis
 !!  -DO_SOI_INC    Do land increments to soil states
-!!  -INTERP_LNDINC Land increment us from GSI and needs to be regridded
+!!  -INTERP_LNDINC Land increment is from GSI and needs to be regridded
 !!  -DO_SNO_INC    Do land increments to snow states on cubed-sphere tiles
 !!                      (No longer used: Noah and increments on model grid only)
 !!  -LSOIL_INCR    Number of soil layers (from top) to apply soil increments to.
