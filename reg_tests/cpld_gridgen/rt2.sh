@@ -74,7 +74,12 @@ while getopts :bcmh opt; do
             ;;
     esac
 done
+
 export CREATE_BASELINE
+if [[ $CREATE_BASELINE = true ]]; then
+    rm -rf $NEW_BASELINE_ROOT
+    mkdir -p $NEW_BASELINE_ROOT
+fi
 
 export compiler=${compiler:-intelllvm}
 if [[ "$compiler" == "intelllvm" ]]; then
@@ -124,6 +129,7 @@ while read -r line || [ "$line" ]; do
   TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
   TEST_NAME=${TEST_NAME##mx}
 
+  export NEW_BASELINE=${NEW_BASELINE_ROOT}/$TEST_NAME
   RUNDIR=$RUNDIR_ROOT/$TEST_NAME
   rm -fr $RUNDIR
   mkdir -p $RUNDIR
