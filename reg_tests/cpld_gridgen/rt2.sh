@@ -1,6 +1,37 @@
 #!/bin/bash
 
-set -x
+set -ux
+
+error() {
+    echo
+    echo "$@" 1>&2
+    exit 1
+}
+
+usage() {
+    echo
+    echo "Usage: $program [-c] [-m] [-h] [-b]"
+    echo
+    echo "  -b build the executable"
+    echo
+    echo "  -c create a new baseline"
+    echo
+    echo "  -m compare against the new baseline"
+    echo
+    echo "  -h display this help and exit"
+    echo
+    echo "  Examples"
+    echo
+    echo "    './rt.sh -b'  build exe file. compare against the existing baseline"
+    echo "    './rt.sh -bc' build exe file. create a new baseline"
+    echo "    './rt.sh -m'  do not build exe file. compare against the new baseline"
+    echo
+}
+
+usage_and_exit() {
+    usage
+    exit $1
+}
 
 readonly program=$(basename $0)
 # PATHRT - Path to regression tests directory
@@ -10,16 +41,63 @@ export PATHRT
 readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
 
-export compiler=${compiler:-intelllvm}
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
+echo "Machine: $target"
+
+if [[ $target = hera ]]; then
+  export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805
+  STMP=${STMP:-/scratch2/NCEPDEV/stmp1/$USER}
+  export NCCMP=nccmp
+  BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+fi
+
+NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
+
+BUILD_EXE=false
+CREATE_BASELINE=false
+while getopts :bcmh opt; do
+    case $opt in
+        b)
+            BUILD_EXE=true
+            ;;
+        c)
+            CREATE_BASELINE=true
+            ;;
+        m)
+            BASELINE_ROOT=$NEW_BASELINE_ROOT
+            ;;
+        h)
+            usage_and_exit 0
+            ;;
+        '?')
+            error "$program: invalid option"
+            ;;
+    esac
+done
+export CREATE_BASELINE
+
+export compiler=${compiler:-intelllvm}
 if [[ "$compiler" == "intelllvm" ]]; then
   if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
      echo "IntelLLVM not available. Will use Intel Classic."
     compiler=intel
   fi
 fi
-echo "Machine: $target"
 echo "Compiler: $compiler"
+
+# Build the executable file
+if [[ $BUILD_EXE = true ]]; then
+    COMPILE_LOG=compile.log
+    cd $PATHTR
+    rm -rf $COMPILE_LOG $PATHTR/build $PATHTR/exec $PATHTR/lib
+    ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
+    if [[ d -ne 0 ]]; then
+        error "Build did not finish successfully. Check $COMPILE_LOG"
+    else
+        echo "Build was successful"
+        cd $PATHRT
+    fi
+fi
 
 module use $PATHTR/modulefiles
 module load build.$target.$compiler
@@ -31,18 +109,7 @@ set +x
 module list
 set -x
 
-export CREATE_BASELINE=false
-if [[ $target = hera ]]; then
-  export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805
-  STMP=${STMP:-/scratch2/NCEPDEV/stmp1/$USER}
-  export NCCMP=nccmp
-  BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-fi
-
-
 RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/
-
-
 
 declare -A tests
 all_tests=""
@@ -81,7 +148,7 @@ done < ./rt.conf
 
 export target
 
-sbatch --nodes=1 -t 0:01:00 -A fv3-cpu -J summary -o logx -e logx \
+sbatch --nodes=1 -t 0:01:00 -A fv3-cpu -J summary -o temp -e temp \
        --open-mode=append -q batch -d afterok${all_tests} ./rt.summary.sh
 
 exit
