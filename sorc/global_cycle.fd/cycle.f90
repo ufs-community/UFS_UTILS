@@ -60,15 +60,15 @@
 !!  - USE_UFO      Adjust sst and soil substrate temperature for
 !!                 differences between the filtered and unfiltered
 !!                 terrain.
-!!  -DONST         Process NSST records.
+!!  -DONST         Call routines to process NSST records.
 !!  -DO_SFCCYCLE   Call sfccycle routine to update surface fields
-!!  -DO_LNDINC     Read in land increment files, and add increments to
-!!                 relevant states.
-!!                 NOTE: We do not have a GSI snow analysis
-!!  -DO_SOI_INC    Do land increments to soil states
-!!  -INTERP_LNDINC Land increment is from GSI and needs to be regridded
-!!  -DO_SNO_INC    Do land increments to snow states on cubed-sphere tiles
-!!                      (No longer used: Noah and increments on model grid only)
+!!  -DO_LNDINC     Call routines to add land increments to sfc restarts
+!!                 (includes do_soi_inc and/or do_sno_inc)
+!!  -DO_SOI_INC    Apply increments to soil states. Requires DO_LNDINC=.true.
+!!  -DO_SNO_INC    Apply increments to snow states. Requires DO_LNDINC=.true.
+!!                 (NOTE: oudated, coded here for Noah LSM only).
+!!  -INTERP_LNDINC Land increment is on Gaussian grid (from GSI)  and should
+!!                 be regridded to the native model grid
 !!  -LSOIL_INCR    Number of soil layers (from top) to apply soil increments to.
 !!                 LSOIL_INCR is currently set to 3 by default.
 !!                 Extra cautions are needed on layer#3 across permafrost regions due to

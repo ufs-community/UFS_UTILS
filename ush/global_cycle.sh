@@ -140,11 +140,11 @@
 #                   between the filtered and unfiltered terrain.  Default is true.
 #     DONST         Process NST records when using NST model.  Default is 'no'.
 #     DO_SFCCYCLE   Call sfcsub routine 
-#     DO_LNDINC     Call routine to update snow/soil states with increment files
-#     DO_SOI_INC    Call routine to update soil states 
-#     DO_SNO_INC    Call routine to update snow states
+#     DO_LNDINC     Call routines to add snow and /or soil increments
+#     DO_SOI_INC    Call routine to add soil increments
+#     DO_SNO_INC    Call routine to add snow inrcements
 #     INTERP_LNDIC  Flag to regrid input land increment from Gaus to native model 
-#                   grid
+#                   grid inside gcycle
 #                   
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
 #                   of depth of sea temperature.  In whole mm.
@@ -272,6 +272,9 @@ DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
 DO_LNDINC=${DO_LNDINC:-.false.}
 DO_SOI_INC=${DO_SOI_INC:-.false.}
 DO_SNO_INC=${DO_SNO_INC:-.false.}
+if [ "$DO_SOI_INC" == ".true." ] || [ "$DO_SNO_INC" == ".true." ] ; then
+        DO_LNDINC=".true."
+fi
 INTERP_LNDINC=${INTERP_LNDINC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
