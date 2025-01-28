@@ -33,7 +33,7 @@ export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
 export DO_SNO_INC=.true. # must be lower-case.
 export DO_SOI_INC=.false.
-export INTERP_LNDINC=.false.
+export GCYCLE_INTERP_LNDINC=.false.
 export JCAP=1534
 export LONB=3072
 export LATB=1536

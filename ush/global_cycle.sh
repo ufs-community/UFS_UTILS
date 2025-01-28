@@ -143,7 +143,7 @@
 #     DO_LNDINC     Call routines to add snow and /or soil increments
 #     DO_SOI_INC    Call routine to add soil increments
 #     DO_SNO_INC    Call routine to add snow inrcements
-#     INTERP_LNDIC  Flag to regrid input land increment from Gaus to native model 
+#     GCYCLE_INTERP_LNDIC  Flag to regrid input land increment from Gaus to native model 
 #                   grid inside gcycle
 #                   
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
@@ -275,7 +275,7 @@ DO_SNO_INC=${DO_SNO_INC:-.false.}
 if [ "$DO_SOI_INC" == ".true." ] || [ "$DO_SNO_INC" == ".true." ] ; then
         DO_LNDINC=".true."
 fi
-INTERP_LNDINC=${INTERP_LNDINC:-.false.}
+GCYCLE_INTERP_LNDINC=${GCYCLE_INTERP_LNDINC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
@@ -398,7 +398,7 @@ cat << EOF > fort.37
   NST_FILE="$NST_FILE",
   DO_SOI_INC=$DO_SOI_INC,
   DO_SNO_INC=$DO_SNO_INC,
-  INTERP_LNDINC=$INTERP_LNDINC,
+  INTERP_LNDINC=$GCYCLE_INTERP_LNDINC,
   lsoil_incr=$LSOIL_INCR, 
  /
 EOF
