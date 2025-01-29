@@ -113,7 +113,7 @@ WLCLK_dflt=60
 export WLCLK=$WLCLK_dflt
 MEM_dflt="--mem=16g"
 export MEM=$MEM_dflt
-export MOM6_version=20240416
+export MOM6_version=20250128
 
 cd $PATHRT
 export compiler=${compiler:-intelllvm}
