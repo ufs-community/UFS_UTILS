@@ -42,6 +42,7 @@ export DO_SFCCYCLE=".FALSE."
 export DO_LNDINC=".TRUE." 
 export DO_SOI_INC=".true."
 export GCYCLE_INTERP_LNDINC=".false."
+export SOI_INC_FNAME="soil_sfcincr_jedi"
 export LSOIL_INCR=3
 
 export VERBOSE=YES

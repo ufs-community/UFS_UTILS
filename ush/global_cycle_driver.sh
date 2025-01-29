@@ -56,6 +56,7 @@ export DO_LNDINC=${DO_LNDINC:-".false."}
 export DO_SOI_INC=${DO_SOI_INC:-".false."}
 export DO_SNO_INC=${DO_SNO_INC:-".false."}
 export GCYCLE_INTERP_LNDINC=${GCYCLE_INTERP_LNDINC:-".false."}
+SOI_INC_FNAME=${SOI_INC_FNAME:-"soil_xainc"}
 export FRAC_GRID=${FRAC_GRID:-".false."}
 
 CRES=$(echo $CASE | cut -c 2-)
@@ -100,7 +101,7 @@ for n in $(seq 1 $ntiles); do
   fi
 
   if [ "$DO_SOI_INC" == ".true." ] && [ "$GCYCLE_INTERP_LNDINC" == ".false." ] ; then
-        ln -fs $COMIN/soil_sfcincr_jedi.00$n $DATA/soil_xainc.00$n
+        ln -fs $COMIN/${SOI_INC_FNAME}.00${n} $DATA/soil_xainc.00$n
   fi
 
   if [ "$DO_SOI_INC" == ".true." ] && [ "$GCYCLE_INTERP_LNDINC" == ".true." ] ; then

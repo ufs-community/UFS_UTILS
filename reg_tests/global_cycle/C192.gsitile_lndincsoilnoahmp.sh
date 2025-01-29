@@ -61,7 +61,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.gsi_lndincsoilnoahmp/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.gsitile_lndincsoilnoahmp/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -76,7 +76,7 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< C192 GSI-TILE based LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
   echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c192.lndincsoilnoahmp" $commit_num
+    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c192.gsitile_lndincsoilnoahmp" $commit_num
   fi
 else
   echo
