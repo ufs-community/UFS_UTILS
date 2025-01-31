@@ -46,7 +46,7 @@ elif [[ -d /scratch1 ]] ; then
     fi
     target=hera
     module purge
-elif [[ "$(hostname)" == "gaea5"* && -d /gpfs/f5 ]] ; then
+elif [[ "$(hostname)" == "gaea5"* || "$(hostname)" =~ c5n[0-9]+ ]] && [[ -d /gpfs/f5 ]] ; then
     # We are on GAEAC5.
     if ( ! eval module help > /dev/null 2>&1 ) ; then
       # We cannot simply load the module command.  The GAEA
@@ -58,7 +58,7 @@ elif [[ "$(hostname)" == "gaea5"* && -d /gpfs/f5 ]] ; then
     fi
     module reset
     target=gaeac5
-elif [[ "$(hostname)" == "gaea6"* && -d /gpfs/f6 ]] ; then
+elif [[ "$(hostname)" == "gaea6"* || "$(hostname)" =~ c6n[0-9]+ ]] && [[ -d /gpfs/f6 ]] ; then
     target=gaeac6
     source /opt/cray/pe/lmod/8.7.31/init/$__ms_shell
 elif [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then
