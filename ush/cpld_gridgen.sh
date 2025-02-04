@@ -49,6 +49,7 @@ if [ $RESNAME = 500 ]; then
     export EDITSFILE='none'
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
+        $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
     fi
 fi
