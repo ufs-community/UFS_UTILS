@@ -43,9 +43,9 @@ contains
        destgrds = (/'9p00'/)
     end if
     if(trim(res) .eq. '500')then
-       ndest = 1
+       ndest = 2
        allocate(destgrds(ndest))
-       destgrds = (/'5p00'/)
+       destgrds = (/'9p00', '5p00'/)
     end if
     if(trim(res) .eq. '100')then
        ndest = 3
