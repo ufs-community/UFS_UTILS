@@ -3,9 +3,7 @@
 #------------------------------------------------------------------
 # Run global_cycle for a C192 case to test the ingest and
 # application of soil moisture and temperature increments
-# on the cubed-sphere grid into Noah-MP restarts, which
-# yields (almost) identical results as compared with the GSI case 
-# given the same day of increments on two different grids.
+# from the GSI, into Noah-MP restarts.
 # Compare output to a baseline set of files using the 'nccmp' 
 # utility.
 #------------------------------------------------------------------
@@ -42,7 +40,6 @@ export DO_SFCCYCLE=".FALSE."
 export DO_LNDINC=".TRUE." 
 export DO_SOI_INC=".true."
 export GCYCLE_INTERP_LNDINC=".false."
-export SOI_INC_FNAME="soil_sfcincr_jedi"
 export LSOIL_INCR=3
 
 export VERBOSE=YES
@@ -53,7 +50,7 @@ $HOMEgfs/ush/global_cycle_driver.sh
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< C192 JEDI based LANDINC SOIL NOAHMP CYCLE TEST FAILED. >>>"
+  echo "<<< C192 GSI-TILE based LANDINC SOIL NOAHMP CYCLE TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -64,7 +61,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.jedi_lndincsoilnoahmp/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c192.gsitile_lndincsoilnoahmp/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -76,15 +73,15 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo
   echo "**********************************************"
-  echo "<<< C192 JEDI based LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
+  echo "<<< C192 GSI-TILE based LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
   echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c192.jedi_lndincsoilnoahmp" $commit_num
+    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c192.gsitile_lndincsoilnoahmp" $commit_num
   fi
 else
   echo
   echo "*****************************************"
-  echo "<<< C192 JEDI based LANDINC SOIL-NOAHMP CYCLE TEST PASSED. >>>"
+  echo "<<< C192 GSI-TILE based LANDINC SOIL-NOAHMP CYCLE TEST PASSED. >>>"
   echo "*****************************************"
 fi
 

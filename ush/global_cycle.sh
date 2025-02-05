@@ -140,10 +140,12 @@
 #                   between the filtered and unfiltered terrain.  Default is true.
 #     DONST         Process NST records when using NST model.  Default is 'no'.
 #     DO_SFCCYCLE   Call sfcsub routine 
-#     DO_LNDINC     Call routine to update snow/soil states with increment files
-#     DO_SOI_INC_GSI    Call routine to update soil states with gsi(gaussian) increment files
-#     DO_SNO_INC_JEDI   Call routine to update snow states with jedi increment files
-#     DO_SOI_INC_JEDI   Call routine to update soil states with jedi increment files
+#     DO_LNDINC     Call routines to add snow and /or soil increments
+#     DO_SOI_INC    Call routine to add soil increments
+#     DO_SNO_INC    Call routine to add snow inrcements
+#     GCYCLE_INTERP_LNDIC  Flag to regrid input land increment from Gaus to native model 
+#                   grid inside gcycle
+#                   
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
 #                   of depth of sea temperature.  In whole mm.
 #     MAX_TASKS_CY  Normally, program should be run with a number of mpi tasks
@@ -255,6 +257,7 @@ LATB_CASE=$((2*CRES))
 DELTSFC=${DELTSFC:-0}
 
 LSOIL=${LSOIL:-4}
+LSOIL_INCR=${LSOIL_INCR:-2}
 FSMCL2=${FSMCL2:-60}
 FSLPL=${FSLPL:-99999.}
 FSOTL=${FSOTL:-99999.}
@@ -267,9 +270,12 @@ use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
 DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
 DO_LNDINC=${DO_LNDINC:-.false.}
-DO_SOI_INC_GSI=${DO_SOI_INC_GSI:-.false.}
-DO_SNO_INC_JEDI=${DO_SNO_INC_JEDI:-.false.}
-DO_SOI_INC_JEDI=${DO_SOI_INC_JEDI:-.false.}
+DO_SOI_INC=${DO_SOI_INC:-.false.}
+DO_SNO_INC=${DO_SNO_INC:-.false.}
+if [ "$DO_SOI_INC" == ".true." ] || [ "$DO_SNO_INC" == ".true." ] ; then
+        DO_LNDINC=".true."
+fi
+GCYCLE_INTERP_LNDINC=${GCYCLE_INTERP_LNDINC:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
@@ -386,13 +392,14 @@ cat << EOF > fort.36
  /
 EOF
 
+
 cat << EOF > fort.37
  &NAMSFCD
   NST_FILE="$NST_FILE",
-  DO_SOI_INC_GSI=$DO_SOI_INC_GSI,
-  DO_SNO_INC_JEDI=$DO_SNO_INC_JEDI,
-  DO_SOI_INC_JEDI=$DO_SOI_INC_JEDI,
-  lsoil_incr=3,
+  DO_SOI_INC=$DO_SOI_INC,
+  DO_SNO_INC=$DO_SNO_INC,
+  INTERP_LNDINC=$GCYCLE_INTERP_LNDINC,
+  lsoil_incr=$LSOIL_INCR, 
  /
 EOF
 

@@ -38,7 +38,9 @@ export use_ufo=.true.
 
 export DO_SFCCYCLE=".FALSE." 
 export DO_LNDINC=".TRUE." 
-export DO_SOI_INC_GSI=".true."
+export DO_SOI_INC=".true."
+export GCYCLE_INTERP_LNDINC=".true."
+export LSOIL_INCR=3
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
@@ -86,7 +88,7 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< C192 GSI based LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
   echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c192.lndincsoilnoahmp" $commit_num
+    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c192.gsi_lndincsoilnoahmp" $commit_num
   fi
 else
   echo
