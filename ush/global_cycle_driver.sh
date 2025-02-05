@@ -52,11 +52,10 @@ else
 fi
 
 export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
-export DO_LNDINC=${DO_LNDINC:-".false."}
-export DO_SOI_INC=${DO_SOI_INC:-".false."}
-export DO_SNO_INC=${DO_SNO_INC:-".false."}
-export GCYCLE_INTERP_LNDINC=${GCYCLE_INTERP_LNDINC:-".false."}
-SOI_INC_FNAME=${SOI_INC_FNAME:-"soil_xainc"}
+export GCYCLE_DO_SOILINCR=${GCYCLE_DO_SOILINCR:-".false."}
+export GCYCLE_DO_SNOWINCR=${GCYCLE_DO_SNOWINCR:-".false."}
+export GCYCLE_INTERP_LANDINCR=${GCYCLE_INTERP_LANDINCR:-".false."}
+SOILINCR_FNAME=${SOILINCR_FNAME:-"soil_xainc"}
 export FRAC_GRID=${FRAC_GRID:-".false."}
 
 CRES=$(echo $CASE | cut -c 2-)
@@ -96,15 +95,15 @@ for n in $(seq 1 $ntiles); do
     ln -fs $FIXorog/${CASE}/C${CRES}.mx${OCNRES}_oro_data.tile${n}.nc   $DATA/fnorog.00$n
   fi
 
-  if [[ "$DO_SNO_INC" == ".true." ]] ; then  
+  if [[ "$GCYCLE_DO_SNOWINCR" == ".true." ]] ; then  
         ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/snow_xainc.00$n
   fi
 
-  if [ "$DO_SOI_INC" == ".true." ] && [ "$GCYCLE_INTERP_LNDINC" == ".false." ] ; then
-        ln -fs $COMIN/${SOI_INC_FNAME}.00${n} $DATA/soil_xainc.00$n
+  if [ "$GCYCLE_DO_SOILINCR" == ".true." ] && [ "$GCYCLE_INTERP_LANDINCR" == ".false." ] ; then
+        ln -fs $COMIN/${SOILINCR_FNAME}.00${n} $DATA/soil_xainc.00$n
   fi
 
-  if [ "$DO_SOI_INC" == ".true." ] && [ "$GCYCLE_INTERP_LNDINC" == ".true." ] ; then
+  if [ "$GCYCLE_DO_SOILINCR" == ".true." ] && [ "$GCYCLE_INTERP_LANDINCR" == ".true." ] ; then
         ln -fs $COMIN/sfcincr_gsi.00$n $DATA/sfcincr_gsi.00$n
   fi
 done

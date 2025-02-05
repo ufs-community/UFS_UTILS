@@ -37,9 +37,8 @@ export DONST="NO"
 export use_ufo=.true.
 
 export DO_SFCCYCLE=".FALSE." 
-export DO_LNDINC=".TRUE." 
-export DO_SOI_INC=".true."
-export GCYCLE_INTERP_LNDINC=".true."
+export GCYCLE_DO_SOILINCR=".true."
+export GCYCLE_INTERP_LANDINCR=".true."
 export LSOIL_INCR=3
 
 export VERBOSE=YES
