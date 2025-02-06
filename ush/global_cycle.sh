@@ -268,11 +268,12 @@ CYCLVARS=${CYCLVARS:-""}
 use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
 DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
-DO_LANDINCR=${DO_LANDINCR:-.false.}
 GCYCLE_DO_SOILINCR=${GCYCLE_DO_SOILINCR:-.false.}
 GCYCLE_DO_SNOWINCR=${GCYCLE_DO_SNOWINCR:-.false.}
 if [ "$GCYCLE_DO_SOILINCR" == ".true." ] || [ "$GCYCLE_DO_SNOWINCR" == ".true." ] ; then
         DO_LANDINCR=".true."
+else
+        DO_LANDINCR=".false."
 fi
 GCYCLE_INTERP_LANDINCR=${GCYCLE_INTERP_LANDINCR:-.false.}
 zsea1=${zsea1:-0}
