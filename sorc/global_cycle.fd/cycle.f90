@@ -10,16 +10,9 @@
 !!  There are three main options (which can be called in combination):
 !!  1. Update the surface fields with sfccylce (do_sfccycle = .true.)
 !!  2. Update the land states with increments read in from file (do_lndinc = .true.)
-!!     Designed to work with either: 
-!!   2a. A land increment file  created by the GSI on the Gaussian
-!!     grid. The increments are interpolated here to the model grid, using the
-!!     same method as for the NST increments. This is currently implemented for
-!!     applying soil temperature increments calculated from the EnKF
-!!     assimilation of T2m (but this is not a requirement -  any
-!!     GSI-generated soil temperature increment file can be applied here).
-!!   2b. A land increment file created by JEDI, on the native model grid 
-!!      (cube sphere tiles). This is currently implemented for snow depth 
-!!      updates for the Noah model. 
+!!     Can read in either a GSI-output increment file and regrid it,
+!!     or (preferred) a file on the native model grid ( either produced
+!!     by JEDI, or pre- regridded from a GSI-output file)
 !!  3. Update the NSST field, several options:
 !!
 !!  3a. Update the NSST TREF field using
@@ -44,12 +37,10 @@
 !!                     TREF increments
 !!  - $sfcincr_gsi.$NNN    Gaussian GSI file which contains soil state
 !!                     increments
-!!  - snow_xainc.$NNN       The cubed-sphere snow increment file (contains 
-!!                     increments calculated by JEDI on the native 
-!!                     model grid). 
-!!  - soil_xainc.$NNN  The cubed-sphere soil increment file (contains
-!!                     soil temperature and soil moisture increments 
-!!                     calculated by JEDI on the native model grid).
+!!  - snow_xainc.$NNN       The cubed-sphere snow increment file (on
+!!                     the native model grid). 
+!!  - soil_xainc.$NNN  The cubed-sphere soil increment file (on the 
+!!                     native model grid). 
 !!  
 !!  OUTPUT FILES:
 !!  - fnbgso.$NNN        The updated sfc/nsst restart file.
@@ -69,15 +60,15 @@
 !!  - USE_UFO      Adjust sst and soil substrate temperature for
 !!                 differences between the filtered and unfiltered
 !!                 terrain.
-!!  -DONST         Process NSST records.
+!!  -DONST         Call routines to process NSST records.
 !!  -DO_SFCCYCLE   Call sfccycle routine to update surface fields
-!!  -DO_LNDINC     Read in land increment files, and add increments to
-!!                 relevant states.
-!!                 NOTE: We do not have a GSI snow analysis
-!!  -DO_SOI_INC_GSI     Do land increments to soil states on Gaussian grids.
-!!  -DO_SOI_INC_JEDI    Do land increments to soil states on cubed-sphere tiles.
-!!  -DO_SNO_INC_JEDI    Do land increments to snow states on cubed-sphere tiles
-!!                      (Noah land model only).
+!!  -DO_LNDINC     Call routines to add land increments to sfc restarts
+!!                 (includes do_soi_inc and/or do_sno_inc)
+!!  -DO_SOI_INC    Apply increments to soil states. Requires DO_LNDINC=.true.
+!!  -DO_SNO_INC    Apply increments to snow states. Requires DO_LNDINC=.true.
+!!                 (NOTE: oudated, coded here for Noah LSM only).
+!!  -INTERP_LNDINC Land increment is on Gaussian grid (from GSI)  and should
+!!                 be regridded to the native model grid
 !!  -LSOIL_INCR    Number of soil layers (from top) to apply soil increments to.
 !!                 LSOIL_INCR is currently set to 3 by default.
 !!                 Extra cautions are needed on layer#3 across permafrost regions due to
@@ -324,7 +315,7 @@
  USE MPI
  USE LAND_INCREMENTS, ONLY: GAUSSIAN_TO_FV3_INTERP,     &
                             ADD_INCREMENT_SOIL,    &
-                            ADD_JEDI_INCREMENT_SNOW,     &
+                            ADD_INCREMENT_SNOW,     &
                             CALCULATE_LANDINC_MASK, &
                             APPLY_LAND_DA_ADJUSTMENTS_SOIL, &
                             APPLY_LAND_DA_ADJUSTMENTS_SND, &
@@ -346,7 +337,7 @@
 
  CHARACTER(LEN=5)    :: TILE_NUM
  CHARACTER(LEN=500)  :: NST_FILE
- CHARACTER(LEN=500)  :: GSI_SOI_FILE,JEDI_SOI_FILE,JEDI_SNO_FILE
+ CHARACTER(LEN=50)   :: FNAME_INC
  CHARACTER(LEN=4)    :: INPUT_NML_FILE(SZ_NML)
 
  INTEGER             :: I, IERR
@@ -394,9 +385,9 @@
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
  INTEGER             :: veg_type_landice
  INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
- REAL, DIMENSION(LENSFC,LSOIL) :: STCINC, SLCINC
+ REAL, DIMENSION(LENSFC,LSOIL) :: STCINC, SLCINC 
 
- LOGICAL :: FILE_EXISTS, DO_SOI_INC_GSI, DO_SOI_INC_JEDI, DO_SNO_INC_JEDI
+ LOGICAL :: FILE_EXISTS, DO_SOI_INC, INTERP_LNDINC, DO_SNO_INC
  CHARACTER(LEN=3)       :: RANKCH
  INTEGER :: lsoil_incr
 
@@ -405,13 +396,13 @@
 ! increments.
 !--------------------------------------------------------------------------------
  
- NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNO_INC_JEDI, DO_SOI_INC_JEDI, DO_SOI_INC_GSI
+ NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNO_INC, DO_SOI_INC, INTERP_LNDINC
 
  DATA NST_FILE/'NULL'/
 
- DO_SNO_INC_JEDI = .FALSE.
- DO_SOI_INC_GSI = .FALSE.
- DO_SOI_INC_JEDI = .FALSE.
+ DO_SNO_INC = .FALSE.
+ DO_SOI_INC      = .FALSE.
+ INTERP_LNDINC   = .FALSE.
  lsoil_incr = 3 !default
 
  
@@ -486,24 +477,19 @@
 
 IF (DO_LNDINC) THEN
    ! identify variables to be updated, and allocate arrays.
-   IF  (DO_SOI_INC_GSI .and. DO_SOI_INC_JEDI) THEN
+   IF  (DO_SOI_INC ) THEN
        PRINT*
-       PRINT*, 'FATAL ERROR: Can not do gsi and jedi soil updates at the same time, choose one!'
-       CALL MPI_ABORT(MPI_COMM_WORLD, 15, IERR) 
-   ENDIF
-   IF  (DO_SOI_INC_GSI .or. DO_SOI_INC_JEDI) THEN
-       PRINT*
-       PRINT*," APPLYING SOIL INCREMENTS FROM GSI OR JEDI"
+       PRINT*," APPLYING SOIL INCREMENTS"
        ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
        ALLOCATE(LANDINC_MASK_FG(LENSFC))
    ENDIF
    ! FOR NOW, CODE SO CAN DO BOTH, BUT MIGHT NEED TO THINK ABOUT THIS SOME MORE.
-   IF  (DO_SNO_INC_JEDI) THEN
+   IF  (DO_SNO_INC) THEN
        ! ideally, would check here that sfcsub snow DA update is not also requested
        ! but latter is controlled by fnsol, which is read in within that routine.
        ! should be done at script level.
        PRINT*
-       PRINT*," APPLYING SNOW INCREMENTS FROM JEDI"
+       PRINT*," APPLYING SNOW INCREMENTS"
        ALLOCATE(SND_BCK(LENSFC), SND_INC(LENSFC), SWE_BCK(LENSFC))
    ENDIF
    ! set-up land mask info
@@ -519,7 +505,7 @@ ENDIF
 ! READ THE INPUT SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- CALL READ_DATA(LSOIL,LENSFC,DO_NSST,DO_SNO_INC_JEDI,DO_SOI_INC_JEDI,.false.,IS_NOAHMP=IS_NOAHMP, &
+ CALL READ_DATA(LSOIL,LENSFC,DO_NSST,IS_NOAHMP=IS_NOAHMP, &
                 TSFFCS=TSFFCS,SMCFCS=SMCFCS,   &
                 SWEFCS=SWEFCS,STCFCS=STCFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS,  &
                 CVFCS=CVFCS,  CVBFCS=CVBFCS,CVTFCS=CVTFCS,ALBFCS=ALBFCS,  &
@@ -536,8 +522,8 @@ ENDIF
    call MPI_ABORT(MPI_COMM_WORLD, 18, IERR)
  ENDIF
 
- IF (IS_NOAHMP .AND. DO_SNO_INC_JEDI) THEN
-   print *, 'FATAL ERROR: Snow increment update does not work with NOAH_MP.'
+ IF ( (IS_NOAHMP .OR. INTERP_LNDINC) .AND. DO_SNO_INC) THEN
+   print *, 'FATAL ERROR: Snow increment update does not work with NOAH_MP/with interp'
    call MPI_ABORT(MPI_COMM_WORLD, 29, IERR)
  ENDIF
 
@@ -697,26 +683,26 @@ ENDIF
  ENDIF
 
 !--------------------------------------------------------------------------------
-! READ IN AND APPLY LAND INCREMENTS FROM THE GSI/JEDI
+! READ IN AND APPLY LAND INCREMENTS
 !--------------------------------------------------------------------------------
 
  IF (DO_LNDINC) THEN
 
     ! SNOW INCREMENTS
     ! do snow first, as temperature updates will use snow analaysis
-    IF (DO_SNO_INC_JEDI) THEN
+    IF (DO_SNO_INC) THEN
     ! updates are made to snow depth only over land (and not-land ice).
     ! SWE is then updated from the snow depth analysis, using the model
     ! forecast density
 
     ! make sure incr. files exist
     WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-    JEDI_SNO_FILE = "snow_xainc." //  RANKCH
+    FNAME_INC = "snow_xainc." //  RANKCH
 
-    INQUIRE(FILE=trim(JEDI_SNO_FILE), EXIST=file_exists)
+    INQUIRE(FILE=trim(FNAME_INC), EXIST=file_exists)
     IF (.not. file_exists) then
        print *, 'FATAL ERROR: snow increment (fv3 grid) update requested, &
-                but file does not exist : ', trim(jedi_sno_file)
+                but file does not exist : ', trim(FNAME_INC)
     call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
     ENDIF 
 
@@ -724,8 +710,7 @@ ENDIF
        ! read increments in
        !--------------------------------------------------------------------------------
 
-       ! Only coded for DA on native model grid (would always be the case for cycling DA)
-       CALL READ_DATA(LSOIL,LENSFC,.false.,.true.,.false.,.true.,SNDFCS=SND_INC)
+       CALL READ_DATA(LSOIL,LENSFC,.false.,FNAME_INC=FNAME_INC,SNDFCS=SND_INC)
 
        !--------------------------------------------------------------------------------
        ! add increments to state vars
@@ -735,7 +720,7 @@ ENDIF
        SND_BCK = SNDFCS
        SWE_BCK = SWEFCS
 
-       CALL ADD_JEDI_INCREMENT_SNOW(SND_INC,LANDINC_MASK,LENSFC,SNDFCS)
+       CALL ADD_INCREMENT_SNOW(SND_INC,LANDINC_MASK,LENSFC,SNDFCS)
 
        !--------------------------------------------------------------------------------
        ! make any necessary adjustments to dependent variables
@@ -744,12 +729,12 @@ ENDIF
        CALL APPLY_LAND_DA_ADJUSTMENTS_SND(LSM, LENSFC, LANDINC_MASK, SWE_BCK, SND_BCK, &
                         SNDFCS, SWEFCS)
 
-    ENDIF ! jedi snow increments
+    ENDIF ! snow increments
 
     !re-calculate soilsnow mask if snow has been updated.
     LANDINC_MASK_FG = LANDINC_MASK
 
-    IF (DO_SFCCYCLE .OR. DO_SNO_INC_JEDI)  THEN
+    IF (DO_SFCCYCLE .OR. DO_SNO_INC)  THEN
         CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, LENSFC, &
                                     VEG_TYPE_LANDICE, LANDINC_MASK)
     ENDIF
@@ -760,62 +745,59 @@ ENDIF
     SLC_BCK = SLCFCS
 
     ! SOIL INCREMENTS
-    IF (DO_SOI_INC_GSI) THEN
+    IF ( DO_SOI_INC ) THEN
+        IF ( INTERP_LNDINC ) THEN
 
-       !--------------------------------------------------------------------------------
-       ! read increments in
-       !--------------------------------------------------------------------------------
-       ! make sure incr. files exist
-       WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-       GSI_SOI_FILE = "sfcincr_gsi." //  RANKCH
+           !--------------------------------------------------------------------------------
+           ! read increments in
+           !--------------------------------------------------------------------------------
+           ! make sure incr. files exist
+           WRITE(RANKCH, '(I3.3)') (MYRANK+1)
+           FNAME_INC = "sfcincr_gsi." //  RANKCH
 
-       INQUIRE(FILE=trim(GSI_SOI_FILE), EXIST=file_exists)
-       IF (.not. file_exists) then
-          print *, 'FATAL ERROR: gsi soil increment (gaussian grid) update requested, &
-                    but file does not exist : ', trim(gsi_soi_file)
-          call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-       ENDIF
+           INQUIRE(FILE=trim(FNAME_INC), EXIST=file_exists)
+           IF (.not. file_exists) then
+              print *, 'FATAL ERROR: gsi soil increment (gaussian grid) update requested, &
+                        but file does not exist : ', trim(FNAME_INC)
+              call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+           ENDIF
 
-        CALL READ_GSI_DATA(GSI_SOI_FILE, 'LND', LSOIL=LSOIL)
+            CALL READ_GSI_DATA(FNAME_INC, 'LND', LSOIL=LSOIL)
 
-        !--------------------------------------------------------------------------------
-        ! interpolate increments to cubed sphere tiles
-        !--------------------------------------------------------------------------------
+            !--------------------------------------------------------------------------------
+            ! interpolate increments to cubed sphere tiles
+            !--------------------------------------------------------------------------------
 
-        CALL GAUSSIAN_TO_FV3_INTERP(LSOIL_INCR,RLA,RLO,&
-                STCINC,SLCINC,LANDINC_MASK,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
+            CALL GAUSSIAN_TO_FV3_INTERP(LSOIL_INCR,RLA,RLO,&
+                    STCINC,SLCINC,LANDINC_MASK,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
 
-        !--------------------------------------------------------------------------------
-        ! save interpolated increments
-        !-------------------------------------------------------------------------------- 
-        CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
-                        STCINC=STCINC,SLCINC=SLCINC)
+            !--------------------------------------------------------------------------------
+            ! save interpolated increments
+            !-------------------------------------------------------------------------------- 
+            CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
+                            STCINC=STCINC,SLCINC=SLCINC)
 
-   ENDIF ! end reading and interpolating gsi soil increments
+        ELSE  ! if interp_lndinc
 
-   IF (DO_SOI_INC_JEDI) THEN
+           !--------------------------------------------------------------------------------
+           ! read increments in
+           !--------------------------------------------------------------------------------
+           ! make sure incr. files exist
+            WRITE(RANKCH, '(I3.3)') (MYRANK+1)
+            FNAME_INC = "soil_xainc." //  RANKCH
 
-       !--------------------------------------------------------------------------------
-       ! read increments in
-       !--------------------------------------------------------------------------------
-       ! make sure incr. files exist
-        WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-        JEDI_SOI_FILE = "soil_xainc." //  RANKCH
+            INQUIRE(FILE=trim(FNAME_INC), EXIST=file_exists)
+            IF (.not. file_exists) then
+                print *, 'FATAL ERROR: soil increment (fv3 grid) update requested, but file &
+                         does not exist: ', trim(FNAME_INC)
+                call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+            ENDIF
 
-        INQUIRE(FILE=trim(JEDI_SOI_FILE), EXIST=file_exists)
-        IF (.not. file_exists) then
-            print *, 'FATAL ERROR: soil increment (fv3 grid) update requested, but file &
-                     does not exist: ', trim(jedi_soi_file)
-            call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-        ENDIF
+            CALL READ_DATA(LSOIL,LENSFC,.false.,FNAME_INC=FNAME_INC, &
+                          LSOIL_INCR=LSOIL_INCR, IS_NOAHMP=IS_NOAHMP,  &
+                          STCINC=STCINC,SLCINC=SLCINC)
 
-        CALL READ_DATA(LSOIL,LENSFC,.false.,.false.,.true., &
-                      .true.,IS_NOAHMP=IS_NOAHMP,           &
-                      STCINC=STCINC,SLCINC=SLCINC)
-
-    ENDIF ! end reading jedi soil increments
-
-    IF (DO_SOI_INC_GSI .or. DO_SOI_INC_JEDI) THEN
+        ENDIF ! end reading soil increments
 
         !--------------------------------------------------------------------------------
         ! add increments to state vars
