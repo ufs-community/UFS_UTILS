@@ -1036,6 +1036,7 @@ MODULE READ_WRITE_DATA
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
  !! @param[out] IS_NOAHMP When true, process for the Noah-MP LSM.
+ !! @param[in] FNAME_INC Name of the increment file.
  !! @param[out] TSFFCS Skin Temperature.
  !! @param[out] SMCFCS Total volumetric soil moisture.
  !! @param[out] SWEFCS Snow water equivalent.
@@ -1076,6 +1077,7 @@ MODULE READ_WRITE_DATA
  !! @param[out] NSST Data structure containing nsst fields.
  !! @param[in] SLCINC Liquid soil moisture increments on the cubed-sphere tiles
  !! @param[in] STCINC Soil temperature increments on the cubed-sphere tiles
+ !! @param[in] LSOIL_INCR -  Number of soil layers (from top) to apply soil increments to
  !! @author George Gayno NOAA/EMC
  !! @author Yuan Xue: add capability to read soil related increments on the
  !! cubed-sphere tiles directly
