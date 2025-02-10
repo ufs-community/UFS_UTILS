@@ -117,6 +117,12 @@ from their orientation along model dimensions (IJ) to eastward-northward (EN) di
 4. Vector fields are re-rotated back to model index direction (EN->IJ) and remapped back to their native stagger locations.
 5. Fields are written into a warm-start file.
 
+For CICE6, an additional 2-step QC is performed on the source restart files. This procedure accounts for possible inconsistent fields
+that may have been generated as part of the marine DA process. The QC process affects 4 fields only: ``aicen``, ``vicen``,
+``vsnon`` and ``Tsfcn``. The first step of the QC is to remove any values of the 4 fields which are located where the CICE grid has
+land. The second step is to remove any ice or snow volume where there is no associated ice coverage. The QC process does not impact
+source files which do not contain these physical inconsistencies.
+
 ## Note on rotation angles
 
 The rotation angle retrieved from the master grid file is ``anglet``, which is defined in the same sense as used MOM6. This

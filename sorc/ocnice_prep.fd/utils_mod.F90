@@ -703,7 +703,7 @@ contains
 
   !> Reset field values to zero on land
   !!
-  !! @param[in]     fin    the land mask
+  !! @param[in]     mask   the land mask
   !! @param[inout]  fout   the field value
   !! @param[out]    icnt   the number spatial points reset
   !!
