@@ -1077,7 +1077,7 @@ MODULE READ_WRITE_DATA
  !! @param[out] NSST Data structure containing nsst fields.
  !! @param[in] SLCINC Liquid soil moisture increments on the cubed-sphere tiles
  !! @param[in] STCINC Soil temperature increments on the cubed-sphere tiles
- !! @param[in] LSOIL_INCR -  Number of soil layers (from top) to apply soil increments to
+ !! @param[in] LSOIL_INCR Number of soil layers (from top) to apply soil increments to
  !! @author George Gayno NOAA/EMC
  !! @author Yuan Xue: add capability to read soil related increments on the
  !! cubed-sphere tiles directly
