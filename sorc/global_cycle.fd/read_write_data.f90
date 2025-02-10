@@ -1619,7 +1619,11 @@ MODULE READ_WRITE_DATA
  ELSE
      ! THIS IS A REGRIDDED GSI FILE
      IF (PRESENT(STCINC)) THEN
-     DO K = 1, LSOIL_INCR
+       IF (.NOT.PRESENT(LSOIL_INCR)) THEN
+         write(6,*)'FATAL ERROR variable lsoil_incr not declared.'
+         CALL MPI_ABORT(MPI_COMM_WORLD, 134, ERROR)
+       END IF
+       DO K = 1, LSOIL_INCR
          WRITE(K_CH, '(I1)') K
 
          INCVAR = "soilt"//K_CH//"_inc"
@@ -1630,10 +1634,14 @@ MODULE READ_WRITE_DATA
          CALL NETCDF_ERR(ERROR, 'READING soilt*_inc increments') 
 
          STCINC(:,K) = RESHAPE(dummy, (/LENSFC/))
-     ENDDO
+       ENDDO
      ENDIF
      IF (PRESENT(SLCINC)) THEN
-     DO K = 1, LSOIL_INCR
+       IF (.NOT.PRESENT(LSOIL_INCR)) THEN
+         write(6,*)'FATAL ERROR variable lsoil_incr not declared.'
+         CALL MPI_ABORT(MPI_COMM_WORLD, 136, ERROR)
+       END IF
+       DO K = 1, LSOIL_INCR
          WRITE(K_CH, '(I1)') K
 
          INCVAR = "slc"//K_CH//"_inc"
@@ -1644,7 +1652,7 @@ MODULE READ_WRITE_DATA
          CALL NETCDF_ERR(ERROR, 'READING slc*_inc increments') 
 
          SLCINC(:,K) = RESHAPE(dummy, (/LENSFC/))
-     ENDDO
+       ENDDO
      ENDIF
  ENDIF 
 
