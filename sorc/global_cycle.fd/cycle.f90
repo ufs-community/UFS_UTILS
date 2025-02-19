@@ -9,7 +9,7 @@
 !!
 !!  There are three main options (which can be called in combination):
 !!  1. Update the surface fields with sfccylce (do_sfccycle = .true.)
-!!  2. Update the land states with increments read in from file (do_lndinc = .true.)
+!!  2. Update the land states with increments read in from file (do_landincr = .true.)
 !!     Can read in either a GSI-output increment file and regrid it,
 !!     or (preferred) a file on the native model grid ( either produced
 !!     by JEDI, or pre- regridded from a GSI-output file)
@@ -62,12 +62,12 @@
 !!                 terrain.
 !!  -DONST         Call routines to process NSST records.
 !!  -DO_SFCCYCLE   Call sfccycle routine to update surface fields
-!!  -DO_LNDINC     Call routines to add land increments to sfc restarts
-!!                 (includes do_soi_inc and/or do_sno_inc)
-!!  -DO_SOI_INC    Apply increments to soil states. Requires DO_LNDINC=.true.
-!!  -DO_SNO_INC    Apply increments to snow states. Requires DO_LNDINC=.true.
+!!  -DO_LANDINCR   Call routines to add land increments to sfc restarts
+!!                 (includes do_soilincr and/or do_snowincr)
+!!  -DO_SOILINCR    Apply increments to soil states. Requires DO_LANDINCR=.true.
+!!  -DO_SNOWINCR    Apply increments to snow states. Requires DO_LANDINCR=.true.
 !!                 (NOTE: oudated, coded here for Noah LSM only).
-!!  -INTERP_LNDINC Land increment is on Gaussian grid (from GSI)  and should
+!!  -INTERP_LANDINCR Land increment is on Gaussian grid (from GSI)  and should
 !!                 be regridded to the native model grid
 !!  -LSOIL_INCR    Number of soil layers (from top) to apply soil increments to.
 !!                 LSOIL_INCR is currently set to 3 by default.
@@ -110,12 +110,12 @@
  INTEGER :: ISOT, IVEGSRC, LENSFC, ZSEA1_MM, ZSEA2_MM, IERR
  INTEGER :: NPROCS, MYRANK, NUM_THREADS, NUM_PARTHDS, MAX_TASKS
  REAL    :: FH, DELTSFC, ZSEA1, ZSEA2
- LOGICAL :: USE_UFO, DO_NSST, DO_LNDINC, DO_SFCCYCLE, FRAC_GRID
+ LOGICAL :: USE_UFO, DO_NSST, DO_LANDINCR, DO_SFCCYCLE, FRAC_GRID
 !
  NAMELIST/NAMCYC/ IDIM,JDIM,LSOIL,LUGB,IY,IM,ID,IH,FH,&
                   DELTSFC,IALB,USE_UFO,DONST,             &
                   DO_SFCCYCLE,ISOT,IVEGSRC,ZSEA1_MM,      &
-                  ZSEA2_MM, MAX_TASKS, DO_LNDINC, FRAC_GRID
+                  ZSEA2_MM, MAX_TASKS, DO_LANDINCR, FRAC_GRID
 !
  DATA IDIM,JDIM,LSOIL/96,96,4/
  DATA IY,IM,ID,IH,FH/1997,8,2,0,0./
@@ -137,7 +137,7 @@
 
  USE_UFO = .FALSE.
  DONST   = "NO"
- DO_LNDINC   = .FALSE.
+ DO_LANDINCR   = .FALSE.
  DO_SFCCYCLE = .TRUE.
  FRAC_GRID = .FALSE.
 
@@ -179,7 +179,7 @@
 
  CALL SFCDRV(LUGB,IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
              IY,IM,ID,IH,FH,IALB,                  &
-             USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LNDINC, &
+             USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LANDINCR, &
              FRAC_GRID,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
  
  PRINT*
@@ -294,7 +294,7 @@
  !!            differences between the filtered and unfiltered terrain.
  !! @param[in] DO_NSST When true, process NSST records.
  !! @param[in] DO_SFCCYCLE Call sfccycle routine to update surface fields
- !! @param[in] DO_LNDINC Read in land increment files, and add increments to
+ !! @param[in] DO_LANDINCR Read in land increment files, and add increments to
  !!            requested states.
  !! @param[in] FRAC_GRID When true, run with fractional grid.
  !! @param[in] ZSEA1 When running NSST model, this is the lower bound
@@ -307,7 +307,7 @@
  !! @author Mark Iredell, George Gayno
  SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
-                   USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LNDINC,&
+                   USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LANDINCR,&
                    FRAC_GRID,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
@@ -328,7 +328,7 @@
  INTEGER, INTENT(IN) :: ISOT, IVEGSRC, MYRANK
 
  LOGICAL, INTENT(IN) :: USE_UFO, DO_NSST,DO_SFCCYCLE
- LOGICAL, INTENT(IN) :: DO_LNDINC, FRAC_GRID
+ LOGICAL, INTENT(IN) :: DO_LANDINCR, FRAC_GRID
  
  REAL, INTENT(IN)    :: FH, DELTSFC, ZSEA1, ZSEA2
 
@@ -387,7 +387,7 @@
  INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
  REAL, DIMENSION(LENSFC,LSOIL) :: STCINC, SLCINC 
 
- LOGICAL :: FILE_EXISTS, DO_SOI_INC, INTERP_LNDINC, DO_SNO_INC
+ LOGICAL :: FILE_EXISTS, DO_SOILINCR, INTERP_LANDINCR, DO_SNOWINCR
  CHARACTER(LEN=3)       :: RANKCH
  INTEGER :: lsoil_incr
 
@@ -396,13 +396,13 @@
 ! increments.
 !--------------------------------------------------------------------------------
  
- NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNO_INC, DO_SOI_INC, INTERP_LNDINC
+ NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNOWINCR, DO_SOILINCR, INTERP_LANDINCR
 
  DATA NST_FILE/'NULL'/
 
- DO_SNO_INC = .FALSE.
- DO_SOI_INC      = .FALSE.
- INTERP_LNDINC   = .FALSE.
+ DO_SNOWINCR = .FALSE.
+ DO_SOILINCR      = .FALSE.
+ INTERP_LANDINCR   = .FALSE.
  lsoil_incr = 3 !default
 
  
@@ -475,16 +475,16 @@
    ALLOCATE(SICFCS_FG(LENSFC))
  ENDIF
 
-IF (DO_LNDINC) THEN
+IF (DO_LANDINCR) THEN
    ! identify variables to be updated, and allocate arrays.
-   IF  (DO_SOI_INC ) THEN
+   IF  (DO_SOILINCR ) THEN
        PRINT*
        PRINT*," APPLYING SOIL INCREMENTS"
        ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
        ALLOCATE(LANDINC_MASK_FG(LENSFC))
    ENDIF
    ! FOR NOW, CODE SO CAN DO BOTH, BUT MIGHT NEED TO THINK ABOUT THIS SOME MORE.
-   IF  (DO_SNO_INC) THEN
+   IF  (DO_SNOWINCR) THEN
        ! ideally, would check here that sfcsub snow DA update is not also requested
        ! but latter is controlled by fnsol, which is read in within that routine.
        ! should be done at script level.
@@ -522,7 +522,7 @@ ENDIF
    call MPI_ABORT(MPI_COMM_WORLD, 18, IERR)
  ENDIF
 
- IF ( (IS_NOAHMP .OR. INTERP_LNDINC) .AND. DO_SNO_INC) THEN
+ IF ( (IS_NOAHMP .OR. INTERP_LANDINCR) .AND. DO_SNOWINCR) THEN
    print *, 'FATAL ERROR: Snow increment update does not work with NOAH_MP/with interp'
    call MPI_ABORT(MPI_COMM_WORLD, 29, IERR)
  ENDIF
@@ -560,7 +560,7 @@ ENDIF
  ENDIF
  
  ! CALCULATE MASK FOR LAND INCREMENTS
- IF (DO_LNDINC)  &
+ IF (DO_LANDINCR)  &
     CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, &
                     LENSFC,VEG_TYPE_LANDICE,  LANDINC_MASK)
 
@@ -686,11 +686,11 @@ ENDIF
 ! READ IN AND APPLY LAND INCREMENTS
 !--------------------------------------------------------------------------------
 
- IF (DO_LNDINC) THEN
+ IF (DO_LANDINCR) THEN
 
     ! SNOW INCREMENTS
     ! do snow first, as temperature updates will use snow analaysis
-    IF (DO_SNO_INC) THEN
+    IF (DO_SNOWINCR) THEN
     ! updates are made to snow depth only over land (and not-land ice).
     ! SWE is then updated from the snow depth analysis, using the model
     ! forecast density
@@ -734,7 +734,7 @@ ENDIF
     !re-calculate soilsnow mask if snow has been updated.
     LANDINC_MASK_FG = LANDINC_MASK
 
-    IF (DO_SFCCYCLE .OR. DO_SNO_INC)  THEN
+    IF (DO_SFCCYCLE .OR. DO_SNOWINCR)  THEN
         CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, LENSFC, &
                                     VEG_TYPE_LANDICE, LANDINC_MASK)
     ENDIF
@@ -745,8 +745,8 @@ ENDIF
     SLC_BCK = SLCFCS
 
     ! SOIL INCREMENTS
-    IF ( DO_SOI_INC ) THEN
-        IF ( INTERP_LNDINC ) THEN
+    IF ( DO_SOILINCR ) THEN
+        IF ( INTERP_LANDINCR ) THEN
 
            !--------------------------------------------------------------------------------
            ! read increments in
@@ -777,7 +777,7 @@ ENDIF
             CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
                             STCINC=STCINC,SLCINC=SLCINC)
 
-        ELSE  ! if interp_lndinc
+        ELSE  ! if interp_landincr
 
            !--------------------------------------------------------------------------------
            ! read increments in
