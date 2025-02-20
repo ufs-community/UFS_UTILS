@@ -142,6 +142,7 @@ program ocniceprep
      call nf90_err(nf90_get_var(ncid, varid, a2d), 'get variable: '//trim(vname))
      call nf90_err(nf90_close(ncid), 'close: '//trim(gridfile))
      kmt(:) = reshape(a2d, (/nxt*nyt/))
+     deallocate(a2d)
   end if
 
   ! -----------------------------------------------------------------------------
@@ -303,6 +304,7 @@ program ocniceprep
         ! remove phantom-ice (vicen=0, aicen /=0);  do not QC vsnon=0, aicen /=0)
         call zero_out_phantom_ice(bilin3d(idx2,:,:), bilin3d(idx1,:,:), icnt)
         write(logunit, '(a,i8,a)')'removed ',icnt,' locations of phantom '//trim(b3d(idx1)%var_name)
+        deallocate(kmt)
      end if
 
      rgb3d = 0.0
