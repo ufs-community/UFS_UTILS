@@ -19,6 +19,7 @@ If there are changes to the build or source code, the tests below must be conduc
 - [ ] Compile branch on all Tier 1 machines using Intel (Orion, Jet, Hera, Hercules and WCOSS2).
 - [ ] Compile branch on Hera using GNU.
 - [ ] Compile branch in 'Debug' mode on WCOSS2.
+- [ ] Compile with Doxygen on any machine with no errors.
 - [ ] Run unit tests locally on any Tier 1 machine.
 - [ ] Run relevant consistency tests locally on all Tier 1 machines.
 
@@ -34,6 +35,10 @@ Add any links to pending PRs that are required prior to merging this PR. For exa
 ufs-community/UFS_UTILS/pull/<pr_number>
 
 ## DOCUMENTATION:
+All new and updated source code must be documented with Doxygen.
+
+- [ ] Doxygen is updated.
+
 If this PR is contributing new capabilities that need to be documented, please also include updates to the RST files in the docs/source directory as supporting material.
 
 ## ISSUE: 
