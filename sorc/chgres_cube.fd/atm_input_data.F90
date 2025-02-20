@@ -2077,8 +2077,8 @@ implicit none
    jpdtn   = -1     ! Search for any product definition template number.
    unpack  =.false.
 
-   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, iret)
+   call getgb2i2(lugb, lugi , j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, 2, k, gfld, iret)
 
 !----------------------------------------------------------------------
 ! Read first record and check if this is NCEP GEFS data. 

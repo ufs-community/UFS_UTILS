@@ -1818,7 +1818,7 @@ module sfc_input_data
 
    if (localpet == 0) then
 
-     lugb=12
+     lugb=16
      call baopenr(lugb,the_file,rc)
      if (rc /= 0) call error_handler("ERROR OPENING GRIB2 FILE.", rc)
 
@@ -1832,8 +1832,8 @@ module sfc_input_data
      jpdt    = -9999  ! array of values in product definition template, set to wildcard
      unpack  = .false. ! unpack data
 
-     call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
-             unpack, k, gfld, rc)
+     call getgb2i2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+             unpack, 2, k, gfld, rc)
 
      if (rc == 0) then
        if (gfld%idsect(1) == 7 .and. gfld%idsect(2) == 2) then

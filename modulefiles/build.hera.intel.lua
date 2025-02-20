@@ -41,8 +41,8 @@ load(pathJoin("w3emc", w3emc_ver))
 sigio_ver=os.getenv("sigio_ver") or "2.3.2"
 load(pathJoin("sigio", sigio_ver))
 
-zlib_ver=os.getenv("zlib_ver") or "1.2.13"
-load(pathJoin("zlib", zlib_ver))
+--zlib_ver=os.getenv("zlib_ver") or "1.2.13"
+--load(pathJoin("zlib", zlib_ver))
 
 png_ver=os.getenv("png_ver") or "1.6.37"
 load(pathJoin("libpng", png_ver))
