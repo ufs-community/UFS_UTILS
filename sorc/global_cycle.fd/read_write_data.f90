@@ -1036,6 +1036,7 @@ MODULE READ_WRITE_DATA
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
  !! @param[out] IS_NOAHMP When true, process for the Noah-MP LSM.
+ !! @param[in] FNAME_INC Name of the increment file.
  !! @param[out] TSFFCS Skin Temperature.
  !! @param[out] SMCFCS Total volumetric soil moisture.
  !! @param[out] SWEFCS Snow water equivalent.
@@ -1076,6 +1077,7 @@ MODULE READ_WRITE_DATA
  !! @param[out] NSST Data structure containing nsst fields.
  !! @param[in] SLCINC Liquid soil moisture increments on the cubed-sphere tiles
  !! @param[in] STCINC Soil temperature increments on the cubed-sphere tiles
+ !! @param[in] LSOIL_INCR Number of soil layers (from top) to apply soil increments to
  !! @author George Gayno NOAA/EMC
  !! @author Yuan Xue: add capability to read soil related increments on the
  !! cubed-sphere tiles directly
@@ -1617,7 +1619,11 @@ MODULE READ_WRITE_DATA
  ELSE
      ! THIS IS A REGRIDDED GSI FILE
      IF (PRESENT(STCINC)) THEN
-     DO K = 1, LSOIL_INCR
+       IF (.NOT.PRESENT(LSOIL_INCR)) THEN
+         write(6,*)'FATAL ERROR variable lsoil_incr not declared.'
+         CALL MPI_ABORT(MPI_COMM_WORLD, 134, ERROR)
+       END IF
+       DO K = 1, LSOIL_INCR
          WRITE(K_CH, '(I1)') K
 
          INCVAR = "soilt"//K_CH//"_inc"
@@ -1628,10 +1634,14 @@ MODULE READ_WRITE_DATA
          CALL NETCDF_ERR(ERROR, 'READING soilt*_inc increments') 
 
          STCINC(:,K) = RESHAPE(dummy, (/LENSFC/))
-     ENDDO
+       ENDDO
      ENDIF
      IF (PRESENT(SLCINC)) THEN
-     DO K = 1, LSOIL_INCR
+       IF (.NOT.PRESENT(LSOIL_INCR)) THEN
+         write(6,*)'FATAL ERROR variable lsoil_incr not declared.'
+         CALL MPI_ABORT(MPI_COMM_WORLD, 136, ERROR)
+       END IF
+       DO K = 1, LSOIL_INCR
          WRITE(K_CH, '(I1)') K
 
          INCVAR = "slc"//K_CH//"_inc"
@@ -1642,7 +1652,7 @@ MODULE READ_WRITE_DATA
          CALL NETCDF_ERR(ERROR, 'READING slc*_inc increments') 
 
          SLCINC(:,K) = RESHAPE(dummy, (/LENSFC/))
-     ENDDO
+       ENDDO
      ENDIF
  ENDIF 
 

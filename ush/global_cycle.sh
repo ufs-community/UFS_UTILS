@@ -140,10 +140,9 @@
 #                   between the filtered and unfiltered terrain.  Default is true.
 #     DONST         Process NST records when using NST model.  Default is 'no'.
 #     DO_SFCCYCLE   Call sfcsub routine 
-#     DO_LNDINC     Call routines to add snow and /or soil increments
-#     DO_SOI_INC    Call routine to add soil increments
-#     DO_SNO_INC    Call routine to add snow inrcements
-#     GCYCLE_INTERP_LNDIC  Flag to regrid input land increment from Gaus to native model 
+#     GCYCLE_DO_SOILINCR   Call routine to add soil increments
+#     GCYCLE_DO_SNOWINCR   Call routine to add snow inrcements
+#     GCYCLE_INTERP_LANDINCR  Flag to regrid input land increment from Gaus to native model 
 #                   grid inside gcycle
 #                   
 #     zsea1/zsea2   When running with NST model, this is the lower/upper bound
@@ -269,13 +268,14 @@ CYCLVARS=${CYCLVARS:-""}
 use_ufo=${use_ufo:-.true.}
 DONST=${DONST:-"NO"}
 DO_SFCCYCLE=${DO_SFCCYCLE:-.true.}
-DO_LNDINC=${DO_LNDINC:-.false.}
-DO_SOI_INC=${DO_SOI_INC:-.false.}
-DO_SNO_INC=${DO_SNO_INC:-.false.}
-if [ "$DO_SOI_INC" == ".true." ] || [ "$DO_SNO_INC" == ".true." ] ; then
-        DO_LNDINC=".true."
+GCYCLE_DO_SOILINCR=${GCYCLE_DO_SOILINCR:-.false.}
+GCYCLE_DO_SNOWINCR=${GCYCLE_DO_SNOWINCR:-.false.}
+if [ "$GCYCLE_DO_SOILINCR" == ".true." ] || [ "$GCYCLE_DO_SNOWINCR" == ".true." ] ; then
+        DO_LANDINCR=".true."
+else
+        DO_LANDINCR=".false."
 fi
-GCYCLE_INTERP_LNDINC=${GCYCLE_INTERP_LNDINC:-.false.}
+GCYCLE_INTERP_LANDINCR=${GCYCLE_INTERP_LANDINCR:-.false.}
 zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
@@ -386,7 +386,7 @@ cat << EOF > fort.36
   idim=$CRES, jdim=$CRES, lsoil=$LSOIL,
   iy=$iy, im=$im, id=$id, ih=$ih, fh=$FHOUR,
   deltsfc=$DELTSFC,ialb=$IALB,use_ufo=$use_ufo,donst="$DONST",
-  do_sfccycle=$DO_SFCCYCLE,do_lndinc=$DO_LNDINC,isot=$ISOT,ivegsrc=$IVEGSRC,
+  do_sfccycle=$DO_SFCCYCLE,do_landincr=$DO_LANDINCR,isot=$ISOT,ivegsrc=$IVEGSRC,
   zsea1_mm=$zsea1,zsea2_mm=$zsea2,MAX_TASKS=$MAX_TASKS_CY,
   frac_grid=$FRAC_GRID
  /
@@ -396,9 +396,9 @@ EOF
 cat << EOF > fort.37
  &NAMSFCD
   NST_FILE="$NST_FILE",
-  DO_SOI_INC=$DO_SOI_INC,
-  DO_SNO_INC=$DO_SNO_INC,
-  INTERP_LNDINC=$GCYCLE_INTERP_LNDINC,
+  DO_SOILINCR=$GCYCLE_DO_SOILINCR,
+  DO_SNOWINCR=$GCYCLE_DO_SNOWINCR,
+  INTERP_LANDINCR=$GCYCLE_INTERP_LANDINCR,
   lsoil_incr=$LSOIL_INCR, 
  /
 EOF
