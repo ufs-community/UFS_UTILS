@@ -36,5 +36,9 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
   ${CMAKE_CURRENT_SOURCE_DIR}/data/ocean.badvecgrid.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ocean.badvecgrid.csv)
 
 add_executable(ocnice_ftst_program_setup ftst_program_setup.F90)
-add_test(NAME ocnice-ftst_program_setup COMMAND ocnice_ftst_program_setup)
+add_test(NAME ocnice_ftst_program_setup COMMAND ocnice_ftst_program_setup)
 target_link_libraries(ocnice_ftst_program_setup ocnice_prep_lib)
+
+add_executable(ocnice_ftst_qcice ftst_qcice.F90)
+add_test(NAME ocnice_ftst_qcice COMMAND ocnice_ftst_qcice)
+target_link_libraries(ocnice_ftst_qcice ocnice_prep_lib)
