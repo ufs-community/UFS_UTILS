@@ -58,6 +58,9 @@ end module chdir_mod
  real:: slc_inc_expected_values_tile5(NUM_VALUES)
  real:: slc_inc_expected_values_tile6(NUM_VALUES)
 
+ CHARACTER(LEN=50)   :: FNAME_INC
+ CHARACTER(LEN=3)   :: RANKCH
+
  !expected values were extracted from MATLAB, which directly reads in xainc file
  !each tile is examined separately here
  data stc_inc_expected_values_tile1 / 3.1428, 2.9983, 2.9786, 2.9634 /
@@ -94,7 +97,10 @@ end module chdir_mod
  call rename("soil_sfcincr_jedi.005", "soil_xainc.005")
  call rename("soil_sfcincr_jedi.006", "soil_xainc.006")
 
- call read_data(lsoil,lensfc,.false.,.false.,.true.,.true.,STCINC=STCINC,SLCINC=SLCINC)
+ WRITE(RANKCH, '(I3.3)') (MY_RANK+1)
+ FNAME_INC = "soil_xainc." //  RANKCH
+
+ call read_data(lsoil,lensfc,.false.,FNAME_INC=FNAME_INC,STCINC=STCINC,SLCINC=SLCINC)
 
  if (my_rank .eq. 0) then
    do l = 1,4

@@ -66,11 +66,11 @@ contains
        enddo
     end if
     if (allocated(c2d)) then
-      do n = 1,nconsd2d
-         vname = trim(c2d(n)%var_name)
-         call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid/), varid),         &
-              'define variable: '// vname)
-      enddo
+       do n = 1,nconsd2d
+          vname = trim(c2d(n)%var_name)
+          call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid/), varid),         &
+               'define variable: '// vname)
+       enddo
     end if
     if (allocated(b3d)) then
        do n = 1,nbilin3d
@@ -174,7 +174,7 @@ contains
                'put variable attribute: long_name')
        enddo
     end if
-     if (allocated(c2d)) then
+    if (allocated(c2d)) then
        do n = 1,nconsd2d
           vname = trim(c2d(n)%var_name)
           vunit = trim(c2d(n)%units)

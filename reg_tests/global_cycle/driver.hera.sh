@@ -85,10 +85,16 @@ export COMOUT=$DATA
 TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.jedi_lndincsoilnoahmp \
      -o $LOG_FILE -e $LOG_FILE ./C192.jedi_lndincsoilnoahmp.sh)
 
+LOG_FILE=consistency.log06
+export DATA="${DATA_DIR}/test6"
+export COMOUT=$DATA
+TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J C192.gsitile_lndincsoilnoahmp \
+     -o $LOG_FILE -e $LOG_FILE ./C192.gsitile_lndincsoilnoahmp.sh)
+
 LOG_FILE=consistency.log
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
       --open-mode=append -q $QUEUE -d\
-      afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5 << EOF
+      afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > summary.log
 EOF

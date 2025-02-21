@@ -31,8 +31,8 @@ export FNSNOA=$COMIN/gdas.t00z.snogrb_t1534.3072.1536
 export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
 export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
-export DO_SNO_INC_JEDI=.true. # must be lower-case.
-export DO_SOI_INC_JEDI=.false.
+export GCYCLE_DO_SNOWINCR=.true. # must be lower-case.
+export GCYCLE_INTERP_LANDINCR=.false.
 export JCAP=1534
 export LONB=3072
 export LATB=1536
@@ -41,7 +41,6 @@ export DONST="NO"
 export use_ufo=.true.
 
 export DO_SFCCYCLE=".FALSE." 
-export DO_LNDINC=".TRUE." 
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=99999.,FSNOS=99999.,

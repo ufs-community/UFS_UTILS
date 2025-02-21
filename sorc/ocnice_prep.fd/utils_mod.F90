@@ -47,6 +47,8 @@ module utils_mod
   public :: remap
   public :: dumpnc
   public :: nf90_err
+  public :: zero_out_land_ice
+  public :: zero_out_phantom_ice
 
 contains
   !> Pack 2D fields into arrays by mapping type
@@ -699,6 +701,59 @@ contains
 
   end subroutine dumpnc1d
 
+  !> Reset field values to zero on land
+  !!
+  !! @param[in]     mask   the land mask
+  !! @param[inout]  fout   the field value
+  !! @param[out]    icnt   the number spatial points reset
+  !!
+  !! @author Denise.Worthen@noaa.gov
+  subroutine zero_out_land_ice(mask, fout, icnt)
+
+    integer(kind=4), intent(in)    :: mask(:)
+    real(kind=8),    intent(inout) :: fout(:,:)
+    integer,         intent(out)   :: icnt
+
+    !local variables
+    integer :: ij
+    !----------------------------------------------------------------------------
+
+    icnt = 0
+    do ij = 1,size(fout,2)
+       if ( mask(ij) .eq. 0 .and. sum(fout(:,ij)) .ne. 0.0)  then
+          icnt = icnt + 1
+          fout(:,ij) = 0.0
+       end if
+    end do
+  end subroutine zero_out_land_ice
+
+  !> Ensure that when fin contains zeros for all ncat, fout will also contain zeros
+  !! for all ncat
+  !!
+  !! @param[in]     fin    the field to test against
+  !! @param[inout]  fout   the field tested
+  !! @param[out]    icnt   the number spatial points reset
+  !!
+  !! @author Denise.Worthen@noaa.gov
+  subroutine zero_out_phantom_ice(fin, fout, icnt)
+
+    real(kind=8), intent(in)    :: fin(:,:)
+    real(kind=8), intent(inout) :: fout(:,:)
+    integer,      intent(out)   :: icnt
+
+    !local variables
+    integer :: ij
+    !----------------------------------------------------------------------------
+
+    icnt = 0
+    do ij = 1,size(fout,2)
+       if (sum(fin(:,ij)) .eq. 0.0 .and. sum(fout(:,ij)) .ne. 0.0 ) then
+          icnt = icnt + 1
+          fout(:,ij) = 0.0
+       end if
+    end do
+  end subroutine zero_out_phantom_ice
+
   !> Handle netcdf errors
   !!
   !! @param[in]  ierr        the error code
@@ -712,12 +767,13 @@ contains
     !----------------------------------------------------------------------------
 
     if (ierr /= nf90_noerr) then
-      write(0, '(a)') 'FATAL ERROR: ' // trim(string)// ' : ' // trim(nf90_strerror(ierr))
-      ! This fails on WCOSS2 with Intel 19 compiler. See
-      ! https://community.intel.com/t5/Intel-Fortran-Compiler/STOP-and-ERROR-STOP-with-variable-stop-codes/m-p/1182521#M149254
-      ! When WCOSS2 moves to Intel 2020+, uncomment the next line and remove stop 99
-      !stop ierr
-      stop 99
+       write(0, '(a)') 'FATAL ERROR: ' // trim(string)// ' : ' // trim(nf90_strerror(ierr))
+       ! This fails on WCOSS2 with Intel 19 compiler. See
+       ! https://community.intel.com/t5/Intel-Fortran-Compiler/STOP-and-ERROR-STOP-with-variable-stop-codes/m-p/1182521#M149254
+       ! When WCOSS2 moves to Intel 2020+, uncomment the next line and remove stop 99
+       !stop ierr
+       stop 99
     end if
   end subroutine nf90_err
+
 end module utils_mod
