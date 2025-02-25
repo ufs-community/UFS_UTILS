@@ -29,6 +29,7 @@ usage() {
 }
 
 usage_and_exit() {
+    set +x
     usage
     exit $1
 }
@@ -44,8 +45,10 @@ export PATHTR
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
 echo "Machine: $target"
 
+MOM6_version=20250128
+
 if [[ $target = hera ]]; then
-  export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805
+  export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/${MOM6_version}
   STMP=${STMP:-/scratch2/NCEPDEV/stmp1/$USER}
   export NCCMP=nccmp
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
@@ -119,6 +122,8 @@ RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/
 declare -A tests
 all_tests=""
 
+rm -f fail_test* summary.log
+
 i=0
 while read -r line || [ "$line" ]; do
 
@@ -128,6 +133,10 @@ while read -r line || [ "$line" ]; do
 
   TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
   TEST_NAME=${TEST_NAME##mx}
+  ATMLIST=$(echo $line | cut -d'|' -f2 | sed -e 's/^ *//' -e 's/ *$//')
+  if [[ -z ${ATMLIST} ]]; then
+      ATMLIST=-1
+  fi
 
   export NEW_BASELINE=${NEW_BASELINE_ROOT}/$TEST_NAME
   RUNDIR=$RUNDIR_ROOT/$TEST_NAME
@@ -145,7 +154,7 @@ while read -r line || [ "$line" ]; do
   cp $PATHTR/exec/cpld_gridgen $RUNDIR
   
   tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 0:10:00 -A fv3-cpu -q batch -J $TEST_NAME \
-            -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME")
+            -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
 
   all_tests=${all_tests}":"${tests[$i]}
 

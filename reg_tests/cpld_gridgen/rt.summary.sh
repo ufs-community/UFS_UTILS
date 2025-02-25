@@ -4,6 +4,7 @@ set -x
 
 cd $PATHRT
 
+rm -f fail_test
 FAIL_FILES="fail_test_*"
 for file in $FAIL_FILES; do
     if [[ -f "$file" ]]; then
@@ -11,6 +12,7 @@ for file in $FAIL_FILES; do
     fi
 done
 
+rm -f RegressionTests_$target.$compiler.log
 for file in RegressionTests_$target.${compiler}.*.log
 do
   if [[ -f "$file" ]]; then
