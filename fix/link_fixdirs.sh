@@ -1,8 +1,8 @@
 #!/bin/bash
 set -ex
 
-# Set up the 'fixed' directories. 
-# 
+# Set up the 'fixed' directories.
+#
 # This script takes two arguments:
 #
 #  $RUN_ENVIR - Either 'emc' (creates links) or

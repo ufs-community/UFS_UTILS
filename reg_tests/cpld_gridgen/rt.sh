@@ -43,57 +43,57 @@ check_results() {
     # verification run
     if [[ $CREATE_BASELINE = false ]]; then
 
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Baseline dir = $BASELINE" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Checking test $TEST_NAME results ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Baseline dir = $BASELINE" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Checking test $TEST_NAME results ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
-	for file in $BASELINE/*.nc; do
-	    printf %s "Comparing " $(basename ${file}) "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        for file in $BASELINE/*.nc; do
+            printf %s "Comparing " $(basename ${file}) "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
-	    if [[ ! -f $RUNDIR/$(basename ${file}) ]]; then
-		echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-		test_status=FAIL
-	    else
-		$NCCMP -dmfqS -w format $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
-		if [[ $d -ne 0 ]]; then
-		    echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-		    test_status=FAIL
-		else
-		    echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-		fi
-	    fi
-	done
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+            if [[ ! -f $RUNDIR/$(basename ${file}) ]]; then
+                echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                test_status=FAIL
+            else
+                $NCCMP -dmfqS -w format $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
+                if [[ $d -ne 0 ]]; then
+                    echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                    test_status=FAIL
+                else
+                    echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                fi
+            fi
+        done
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
-	# baseline creation run
+        # baseline creation run
     else
 
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Moving baseline files to $NEW_BASELINE ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Moving baseline files to $NEW_BASELINE ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
-	mkdir -p $NEW_BASELINE
+        mkdir -p $NEW_BASELINE
 
-	for file in *.nc; do
-	    printf %s "Moving " $file "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        for file in *.nc; do
+            printf %s "Moving " $file "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
-	    cp $file $NEW_BASELINE/$file && d=$? || d=$?
-	    if [[ $d -ne 0 ]]; then
-		echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-		test_status=FAIL
-	    else
-		echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	    fi
-	done
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+            cp $file $NEW_BASELINE/$file && d=$? || d=$?
+            if [[ $d -ne 0 ]]; then
+                echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                test_status=FAIL
+            else
+                echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+            fi
+        done
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
 
     fi
 
     if [[ $test_status == FAIL ]]; then
-	echo "$TEST_NAME failed" >> $PATHRT/fail_test_$TEST_NAME
+        echo "$TEST_NAME failed" >> $PATHRT/fail_test_$TEST_NAME
     fi
 }
 
@@ -106,12 +106,14 @@ readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
 TESTS_FILE="$PATHRT/rt.conf"
 export TEST_NAME=
+export ATMLIST=
 
 # for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
 WLCLK_dflt=60
 export WLCLK=$WLCLK_dflt
 MEM_dflt="--mem=16g"
 export MEM=$MEM_dflt
+export MOM6_version=20250128
 
 cd $PATHRT
 export compiler=${compiler:-intelllvm}
@@ -131,7 +133,7 @@ rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
 if [[ $target = wcoss2 ]]; then
     STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
-    export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/20220805
+    export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-GFS-DEV}
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
@@ -140,7 +142,7 @@ if [[ $target = wcoss2 ]]; then
     NCCMP=nccmp
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
-    export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/20220805
+    export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
@@ -149,7 +151,7 @@ elif [[ $target = hera ]]; then
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = orion ]]; then
     STMP=${STMP:-/work/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
+    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
@@ -159,7 +161,7 @@ elif [[ $target = orion ]]; then
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = hercules ]]; then
     STMP=${STMP:-/work2/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/20220805
+    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
@@ -169,7 +171,7 @@ elif [[ $target = hercules ]]; then
     SBATCH_COMMAND="./cpld_gridgen.sh"
 elif [[ $target = jet ]]; then
     STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
-    export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/20220805
+    export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
     BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}
@@ -185,21 +187,21 @@ BUILD_EXE=false
 CREATE_BASELINE=false
 while getopts :bcmh opt; do
     case $opt in
-	b)
-	    BUILD_EXE=true
-	    ;;
-	c)
-	    CREATE_BASELINE=true
-	    ;;
-	m)
-	    BASELINE_ROOT=$NEW_BASELINE_ROOT
-	    ;;
-	h)
-	    usage_and_exit 0
-	    ;;
-	'?')
-	    error "$program: invalid option"
-	    ;;
+        b)
+            BUILD_EXE=true
+            ;;
+        c)
+            CREATE_BASELINE=true
+            ;;
+        m)
+            BASELINE_ROOT=$NEW_BASELINE_ROOT
+            ;;
+        h)
+            usage_and_exit 0
+            ;;
+        '?')
+            error "$program: invalid option"
+            ;;
     esac
 done
 
@@ -209,9 +211,9 @@ if [[ $BUILD_EXE = true ]]; then
     rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
     ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
     if [[ d -ne 0 ]]; then
-	error "Build did not finish successfully. Check $COMPILE_LOG"
+        error "Build did not finish successfully. Check $COMPILE_LOG"
     else
-	echo "Build was successful"
+        echo "Build was successful"
     fi
 fi
 
@@ -248,6 +250,10 @@ while read -r line || [ "$line" ]; do
 
     TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
     TEST_NAME=${TEST_NAME##mx}
+    ATMLIST=$(echo $line | cut -d'|' -f2 | sed -e 's/^ *//' -e 's/ *$//')
+    if [[ -z ${ATMLIST} ]]; then
+        ATMLIST=-1
+    fi
 
     cd $PATHRT
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
@@ -266,28 +272,17 @@ while read -r line || [ "$line" ]; do
 
     if [[ $target = wcoss2 ]]; then
 
-	#   rm -f $RUNDIR/bad.${TEST_NAME}
-
-	TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-	    -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
-
-	#   qsub -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-	    # -Wblock=true -l walltime=00:01:00 -N chgres_summary -l select=1:ncpus=1:mem=100MB -W depend=afternotok:$TEST << EOF
-	#!/bin/bash
-	#   touch $RUNDIR/bad.${TEST_NAME}
-	#EOF
-	#   if [[ -f $RUNDIR/bad.${TEST_NAME} ]]; then
-	#     error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
-	#   fi
+        TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+             -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
 
     else
-	sbatch --wait --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-	    --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-	    --wrap "time $SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
+        sbatch --wait --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+            --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
+            --wrap "time $SBATCH_COMMAND $TEST_NAME $ATMLIST" && d=$? || d=$?
 
-	if [[ d -ne 0 ]]; then
-	    error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
-	fi
+        if [[ d -ne 0 ]]; then
+            error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
+        fi
 
     fi
 

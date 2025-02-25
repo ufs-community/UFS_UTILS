@@ -484,7 +484,7 @@ program gen_fixgrid
   ! tiled files containing the mapped ocean mask
   !---------------------------------------------------------------------
 
-  do n = 1,nar
+  do n = 1,size(catm)
      npx = catm(n)
      if (npx < 100) then
         write(atmres,'(a,i2)')'C',npx
