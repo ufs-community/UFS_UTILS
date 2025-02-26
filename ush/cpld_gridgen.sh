@@ -85,27 +85,27 @@ echo top of cpld_gridgen.sh
 
 cd $RUNDIR
 
-export RESNAME=${RESNAME:-$1}
+RESNAME=${RESNAME:-$1}
 TEST_NAME=$RESNAME
-export ATMLIST=${ATMLIST:-$2}
-export DEBUG=.false.
-export MASKEDIT=.false.
-export DO_POSTWGTS=.true.
-export MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
-export FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
+ATMLIST=${ATMLIST:-$2}
+DEBUG=.false.
+MASKEDIT=.false.
+DO_POSTWGTS=.true.
+MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}
+FIXDIR_PATH=${MOM6_FIXDIR}/${RESNAME}
 if [[ ${ATMLIST} -eq -1 ]]; then
-   export ATMRESLIST=12,24,48,96,192,384,768,1152,3072
+   ATMRESLIST=12,24,48,96,192,384,768,1152,3072
 else
-   export ATMRESLIST=${ATMLIST}
+   ATMRESLIST=${ATMLIST}
 fi
 
 APRUN=${APRUN:-"srun"}
 
 if [ $RESNAME = 900 ]; then
-    export NI=40
-    export NJ=20
-    export TOPOGFILE=topog.nc
-    export EDITSFILE='none'
+    NI=40
+    NJ=20
+    TOPOGFILE=topog.nc
+    EDITSFILE='none'
     if [ $DO_POSTWGTS == .true. ]; then
         #pre-generate SCRIP files for dst rectilinear grids using NCO
         $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
@@ -113,10 +113,10 @@ if [ $RESNAME = 900 ]; then
 fi
 
 if [ $RESNAME = 500 ]; then
-    export NI=72
-    export NJ=35
-    export TOPOGFILE=ocean_topog.nc
-    export EDITSFILE='none'
+    NI=72
+    NJ=35
+    TOPOGFILE=ocean_topog.nc
+    EDITSFILE='none'
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
         $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
@@ -125,11 +125,11 @@ if [ $RESNAME = 500 ]; then
 fi
 
 if [ $RESNAME = 100 ]; then
-    export NI=360
-    export NJ=320
-    export MASKEDIT=.T.
-    export TOPOGFILE=topog.nc
-    export EDITSFILE=topo_edits_011818.nc
+    NI=360
+    NJ=320
+    MASKEDIT=.T.
+    TOPOGFILE=topog.nc
+    EDITSFILE=topo_edits_011818.nc
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
@@ -139,10 +139,10 @@ if [ $RESNAME = 100 ]; then
 fi
 
 if [ $RESNAME = 050 ]; then
-    export NI=720
-    export NJ=576
-    export TOPOGFILE=ocean_topog.nc
-    export EDITSFILE='none'
+    NI=720
+    NJ=576
+    TOPOGFILE=ocean_topog.nc
+    EDITSFILE='none'
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
@@ -153,10 +153,10 @@ if [ $RESNAME = 050 ]; then
 fi
 
 if [ $RESNAME = 025 ]; then
-    export NI=1440
-    export NJ=1080
-    export TOPOGFILE=ocean_topog.nc
-    export EDITSFILE=All_edits.nc
+    NI=1440
+    NJ=1080
+    TOPOGFILE=ocean_topog.nc
+    EDITSFILE=All_edits.nc
     if [ $DO_POSTWGTS == .true. ]; then
 	#pre-generate SCRIP files for dst rectilinear grids using NCO
 	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
@@ -171,13 +171,13 @@ edit_namelist < grid.nml.IN > grid.nml
 $APRUN ./cpld_gridgen
 
 # generate ice mesh
-export FSRC=${OUTDIR_PATH}/Ct.mx${RESNAME}_SCRIP_land.nc
-export FDST=${OUTDIR_PATH}/mesh.mx${RESNAME}.nc
+FSRC=${OUTDIR_PATH}/Ct.mx${RESNAME}_SCRIP_land.nc
+FDST=${OUTDIR_PATH}/mesh.mx${RESNAME}.nc
 $APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
 
 # generate kmt file for CICE
-export FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
-export FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
+FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
+FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
 ncks -O -v kmt ${FSRC} ${FDST}
 
 check_results
