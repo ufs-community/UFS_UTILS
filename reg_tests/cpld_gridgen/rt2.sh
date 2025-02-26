@@ -45,6 +45,7 @@ export PATHTR
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
 echo "Machine: $target"
 
+WLCLK=10
 MOM6_version=20250128
 
 if [[ $target = hera ]]; then
@@ -52,6 +53,14 @@ if [[ $target = hera ]]; then
   STMP=${STMP:-/scratch2/NCEPDEV/stmp1/$USER}
   export NCCMP=nccmp
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+elif [[  $target = wcoss2 ]]; then
+  STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
+  export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
+  BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-GFS-DEV}
+  export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
+  QUEUE=${QUEUE:-dev}
+  export NCCMP=nccmp
 fi
 
 NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
@@ -108,6 +117,12 @@ if [[ $BUILD_EXE = true ]]; then
     fi
 fi
 
+if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
+    error "cpld_gridgen exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
+else
+    echo "cpld_gridgen exe file is found in $PATHTR/exec/"
+fi
+
 module use $PATHTR/modulefiles
 module load build.$target.$compiler
 if [[ $target = wcoss2 ]]; then
@@ -151,8 +166,15 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cp $PATHTR/exec/cpld_gridgen $RUNDIR
   
-  tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 0:10:00 -A fv3-cpu -q batch -J $TEST_NAME \
+  if [[ $target = wcoss2 ]]; then
+    tests[$i]=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+       -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" $PATHTR/ush/cpld_gridgen.sh)
+
+  else
+    tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 0:10:00 -A fv3-cpu -q batch -J $TEST_NAME \
             -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
+
+  fi
 
   all_tests=${all_tests}":"${tests[$i]}
 
@@ -161,7 +183,16 @@ done < ./rt.conf
 
 export target
 
-sbatch --nodes=1 -t 0:01:00 -A fv3-cpu -J summary -o /dev/null -e /dev/null \
+if [[  $target = wcoss2 ]]; then
+
+  qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
+        -N summary -l select=1:ncpus=1:mem=100MB \
+        -W depend=afterok${all_tests} ./rt.summary.sh
+else
+
+  sbatch --nodes=1 -t 0:01:00 -A fv3-cpu -J summary -o /dev/null -e /dev/null \
        --open-mode=append -q batch -d afterok${all_tests} ./rt.summary.sh
+
+fi
 
 exit
