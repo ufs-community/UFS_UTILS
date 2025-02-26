@@ -45,7 +45,7 @@ export PATHTR
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
 echo "Machine: $target"
 
-WLCLK=10
+WLCLK=20
 MOM6_version=20250128
 
 if [[ $target = hera ]]; then
@@ -53,6 +53,8 @@ if [[ $target = hera ]]; then
   STMP=${STMP:-/scratch2/NCEPDEV/stmp1/$USER}
   export NCCMP=nccmp
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-fv3-cpu}
+  QUEUE=${QUEUE:-batch}
 elif [[  $target = wcoss2 ]]; then
   STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
   export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
@@ -171,7 +173,7 @@ while read -r line || [ "$line" ]; do
        -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" $PATHTR/ush/cpld_gridgen.sh)
 
   else
-    tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 0:10:00 -A fv3-cpu -q batch -J $TEST_NAME \
+    tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
             -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
 
   fi
@@ -190,8 +192,8 @@ if [[  $target = wcoss2 ]]; then
         -W depend=afterok${all_tests} ./rt.summary.sh
 else
 
-  sbatch --nodes=1 -t 0:01:00 -A fv3-cpu -J summary -o /dev/null -e /dev/null \
-       --open-mode=append -q batch -d afterok${all_tests} ./rt.summary.sh
+  sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
+       --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
 
 fi
 
