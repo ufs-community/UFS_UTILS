@@ -123,7 +123,7 @@ RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/
 declare -A tests
 all_tests=""
 
-rm -f fail_test* summary.log
+rm -f fail_test* nccmp_*.log summary.log run_*log RegressionTests_$target.$compiler.*.log
 
 i=0
 while read -r line || [ "$line" ]; do
@@ -147,9 +147,6 @@ while read -r line || [ "$line" ]; do
   export OUTDIR_PATH=$RUNDIR
   export BASELINE=$BASELINE_ROOT/$TEST_NAME
   export REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.${TEST_NAME}.log
-  rm -f $REGRESSIONTEST_LOG
-  rm -f nccmp_*log
-  rm -f run_${TEST_NAME}.log
 
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cp $PATHTR/exec/cpld_gridgen $RUNDIR
