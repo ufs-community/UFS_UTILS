@@ -84,13 +84,14 @@ if [[ $CREATE_BASELINE = true ]]; then
     mkdir -p $NEW_BASELINE_ROOT
 fi
 
-export compiler=${compiler:-intelllvm}
+compiler=${compiler:-intelllvm}
 if [[ "$compiler" == "intelllvm" ]]; then
   if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
      echo "IntelLLVM not available. Will use Intel Classic."
     compiler=intel
   fi
 fi
+export compiler
 echo "Compiler: $compiler"
 
 # Build the executable file
@@ -163,7 +164,7 @@ done < ./rt.conf
 
 export target
 
-sbatch --nodes=1 -t 0:01:00 -A fv3-cpu -J summary -o temp -e temp \
+sbatch --nodes=1 -t 0:01:00 -A fv3-cpu -J summary -o /dev/null -e /dev/null \
        --open-mode=append -q batch -d afterok${all_tests} ./rt.summary.sh
 
 exit

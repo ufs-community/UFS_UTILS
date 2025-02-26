@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eux
 
+SECONDS=0
+
 function edit_namelist {
 
     sed -e "s/NI_GLB/$NI/g" \
@@ -179,3 +181,7 @@ export FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
 ncks -O -v kmt ${FSRC} ${FDST}
 
 check_results
+
+elapsed_time=$( printf '%02dh:%02dm:%02ds\n' $((SECONDS%86400/3600)) $((SECONDS%3600/60)) $((SECONDS%60)) )
+echo "Elapsed time: ${elapsed_time}. Have a nice day!" >> $PATHRT/${REGRESSIONTEST_LOG}
+echo "Elapsed time: ${elapsed_time}. Have a nice day!"
