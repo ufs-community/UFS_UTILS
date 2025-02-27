@@ -64,6 +64,15 @@ elif [[ $target = orion ]]; then
   QUEUE=${QUEUE:-batch}
   PARTITION=orion
   ulimit -s unlimited
+elif [[ $target = hercules ]]; then
+  export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
+  STMP=${STMP:-/work2/noaa/stmp/$USER}
+  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-fv3-cpu}
+  QUEUE=${QUEUE:-batch}
+  export NCCMP=nccmp
+  PARTITION=hercules
+  ulimit -s unlimited
 elif [[ $target = jet ]]; then
   STMP=${STMP:-/lfs5/HFIP/emcda/$USER/stmp}
   export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
