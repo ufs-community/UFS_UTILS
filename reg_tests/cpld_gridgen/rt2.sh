@@ -55,6 +55,15 @@ if [[ $target = hera ]]; then
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
+elif [[ $target = jet ]]; then
+  STMP=${STMP:-/lfs5/HFIP/emcda/$USER/stmp}
+  export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
+  BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-hfv3gfs}
+  QUEUE=${QUEUE:-batch}
+  export NCCMP=nccmp
+  PARTITION=xjet
+  ulimit -s unlimited
 elif [[  $target = wcoss2 ]]; then
   STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
   export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
@@ -174,7 +183,7 @@ while read -r line || [ "$line" ]; do
 
   else
     tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-            -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
+            --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
 
   fi
 
@@ -193,7 +202,7 @@ if [[  $target = wcoss2 ]]; then
 else
 
   sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
-       --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
+       --partition=$PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
 
 fi
 
