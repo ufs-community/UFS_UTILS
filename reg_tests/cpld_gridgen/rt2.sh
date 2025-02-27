@@ -55,6 +55,15 @@ if [[ $target = hera ]]; then
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
+elif [[ $target = orion ]]; then
+  export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
+  STMP=${STMP:-/work/noaa/stmp/$USER}
+  export NCCMP=nccmp
+  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  ACCOUNT=${ACCOUNT:-fv3-cpu}
+  QUEUE=${QUEUE:-batch}
+  PARTITION=orion
+  ulimit -s unlimited
 elif [[ $target = jet ]]; then
   STMP=${STMP:-/lfs5/HFIP/emcda/$USER/stmp}
   export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
