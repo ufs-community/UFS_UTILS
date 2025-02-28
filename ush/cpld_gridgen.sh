@@ -81,7 +81,9 @@ check_results() {
     fi
 }
 
-echo top of cpld_gridgen.sh
+set +x
+echo BEGIN cpld_gridgen.sh
+set -x
 
 cd $RUNDIR
 
@@ -184,4 +186,5 @@ check_results
 
 elapsed_time=$( printf '%02dh:%02dm:%02ds\n' $((SECONDS%86400/3600)) $((SECONDS%3600/60)) $((SECONDS%60)) )
 echo "Elapsed time: ${elapsed_time}. Have a nice day!" >> $PATHRT/${REGRESSIONTEST_LOG}
+set +x
 echo "Elapsed time: ${elapsed_time}. Have a nice day!"
