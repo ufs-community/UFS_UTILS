@@ -48,7 +48,6 @@ set +x
 echo "Machine: $target"
 set -x
 
-WLCLK=20
 MOM6_version=20250128
 
 # Adjust STMP, ACCOUNT and QUEUE as needed.
@@ -57,6 +56,7 @@ if [[ $target = hera ]]; then
   STMP=${STMP:-/scratch2/NCEPDEV/stmp1/$USER}
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
+  WLCLK=40
   export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/${MOM6_version}
   export NCCMP=nccmp
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
@@ -65,6 +65,7 @@ elif [[ $target = orion ]]; then
   STMP=${STMP:-/work/noaa/stmp/$USER}
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
+  WLCLK=80
   export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
   export NCCMP=nccmp
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
@@ -74,6 +75,7 @@ elif [[ $target = hercules ]]; then
   STMP=${STMP:-/work2/noaa/stmp/$USER}
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
+  WLCLK=40
   export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
   export NCCMP=nccmp
@@ -83,6 +85,7 @@ elif [[ $target = jet ]]; then
   STMP=${STMP:-/lfs5/HFIP/emcda/$USER/stmp}
   ACCOUNT=${ACCOUNT:-hfv3gfs}
   QUEUE=${QUEUE:-batch}
+  WLCLK=40
   export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
   BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   export NCCMP=nccmp
@@ -92,6 +95,7 @@ elif [[  $target = wcoss2 ]]; then
   STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
   ACCOUNT=${ACCOUNT:-GFS-DEV}
   QUEUE=${QUEUE:-dev}
+  WLCLK=40
   export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
   BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
   export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
