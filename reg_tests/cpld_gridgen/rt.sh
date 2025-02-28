@@ -3,6 +3,7 @@
 set -ux
 
 error() {
+    set +x
     echo
     echo "$@" 1>&2
     exit 1
@@ -43,53 +44,57 @@ readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
 
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
+set +x
 echo "Machine: $target"
+set -x
 
 WLCLK=20
 MOM6_version=20250128
 
+# Adjust STMP, ACCOUNT and QUEUE as needed.
+
 if [[ $target = hera ]]; then
-  export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/${MOM6_version}
   STMP=${STMP:-/scratch2/NCEPDEV/stmp1/$USER}
+  ACCOUNT=${ACCOUNT:-fv3-cpu}
+  QUEUE=${QUEUE:-batch}
+  export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/${MOM6_version}
   export NCCMP=nccmp
   BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-  ACCOUNT=${ACCOUNT:-fv3-cpu}
-  QUEUE=${QUEUE:-batch}
   PARTITION=hera
 elif [[ $target = orion ]]; then
-  export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
   STMP=${STMP:-/work/noaa/stmp/$USER}
-  export NCCMP=nccmp
-  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
+  export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
+  export NCCMP=nccmp
+  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   PARTITION=orion
   ulimit -s unlimited
 elif [[ $target = hercules ]]; then
-  export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
   STMP=${STMP:-/work2/noaa/stmp/$USER}
-  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
+  export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
+  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
   export NCCMP=nccmp
   PARTITION=hercules
   ulimit -s unlimited
 elif [[ $target = jet ]]; then
   STMP=${STMP:-/lfs5/HFIP/emcda/$USER/stmp}
-  export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
-  BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   ACCOUNT=${ACCOUNT:-hfv3gfs}
   QUEUE=${QUEUE:-batch}
+  export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
+  BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   export NCCMP=nccmp
   PARTITION=xjet
   ulimit -s unlimited
 elif [[  $target = wcoss2 ]]; then
   STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
+  ACCOUNT=${ACCOUNT:-GFS-DEV}
+  QUEUE=${QUEUE:-dev}
   export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
   BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
-  ACCOUNT=${ACCOUNT:-GFS-DEV}
   export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
-  QUEUE=${QUEUE:-dev}
   export NCCMP=nccmp
 fi
 
@@ -126,12 +131,16 @@ fi
 compiler=${compiler:-intelllvm}
 if [[ "$compiler" == "intelllvm" ]]; then
   if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
-     echo "IntelLLVM not available. Will use Intel Classic."
+    set +x
+    echo "IntelLLVM not available. Will use Intel Classic."
+    set -x
     compiler=intel
   fi
 fi
 export compiler
+set +x
 echo "Compiler: $compiler"
+set -x
 
 # Build the executable file
 if [[ $BUILD_EXE = true ]]; then
@@ -142,15 +151,15 @@ if [[ $BUILD_EXE = true ]]; then
     if [[ d -ne 0 ]]; then
         error "Build did not finish successfully. Check $COMPILE_LOG"
     else
+        set +x
         echo "Build was successful"
+        set -x
         cd $PATHRT
     fi
-fi
-
-if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
-    error "cpld_gridgen exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
 else
-    echo "cpld_gridgen exe file is found in $PATHTR/exec/"
+    if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
+       error "cpld_gridgen exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
+    fi
 fi
 
 module use $PATHTR/modulefiles
@@ -169,6 +178,8 @@ declare -A tests
 all_tests=""
 
 rm -f fail_test* nccmp_*.log summary.log run_*log RegressionTests_$target.$compiler.*.log
+
+# Kick off all tests.
 
 i=0
 while read -r line || [ "$line" ]; do
@@ -203,17 +214,19 @@ while read -r line || [ "$line" ]; do
   else
     tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
             --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
-
   fi
 
   all_tests=${all_tests}":"${tests[$i]}
 
   ((i=i+1))
+
 done < ./rt.conf
 
 export target
 
-if [[  $target = wcoss2 ]]; then
+# Once all the jobs are finished, this summary job will run.
+
+if [[ $target = wcoss2 ]]; then
 
   qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
         -N summary -l select=1:ncpus=1:mem=100MB \
