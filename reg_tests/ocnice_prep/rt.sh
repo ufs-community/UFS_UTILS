@@ -180,6 +180,8 @@ fi
 declare -A tests
 all_tests=""
 
+rm -f nccmp_*.log summary.log run_*log RegressionTests_$target.$compiler.*.log
+
 # Run tests specified in $TESTS_FILE
 i=0
 while read -r line || [ "$line" ]; do

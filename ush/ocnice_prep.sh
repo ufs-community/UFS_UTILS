@@ -1,7 +1,8 @@
 #!/bin/bash
-set -eux
 
 set -eux
+
+SECONDS=0
 
 function edit_namelist {
 
@@ -116,5 +117,10 @@ edit_namelist < ocniceprep.nml.IN > ocniceprep.nml
 $APRUN ./oiprep
 
 check_results
+
+elapsed_time=$( printf '%02dh:%02dm:%02ds\n' $((SECONDS%86400/3600)) $((SECONDS%3600/60)) $((SECONDS%60)) )
+echo "Elapsed time: ${elapsed_time}. Have a nice day!" >> $PATHRT/${REGRESSIONTEST_LOG}
+set +x
+echo "Elapsed time: ${elapsed_time}. Have a nice day!"
 
 exit
