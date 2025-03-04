@@ -4,6 +4,7 @@ set -eu
 SECONDS=0
 
 error() {
+    set +x
     echo
     echo "$@" 1>&2
     exit 1
@@ -30,6 +31,7 @@ usage() {
 }
 
 usage_and_exit() {
+    set +x
     usage
     exit $1
 }
@@ -61,8 +63,7 @@ echo "Machine: $target"
 echo "Compiler: $compiler"
 cd $PATHRT
 
-COMPILE_LOG=compile.log
-rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
+rm -f fail_test* run_*.log nccmp_*.log summary.log
 
 if [[ $target = wcoss2 ]]; then
     STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
@@ -145,20 +146,21 @@ done
 
 # Build the executable file
 if [[ $BUILD_EXE = true ]]; then
+    COMPILE_LOG=compile.log
     cd $PATHTR
-    rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
+    rm -rf $COMPILE_LOG $PATHTR/build $PATHTR/exec $PATHTR/lib
     ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
     if [[ d -ne 0 ]]; then
 	error "Build did not finish successfully. Check $COMPILE_LOG"
     else
+        set +x
 	echo "Build was successful"
+        set -x
     fi
-fi
-
-if [[ ! -f $PATHTR/exec/oiprep ]]; then
-    error "oiprep exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
 else
-    echo "oiprep exe file is found in $PATHTR/exec/"
+    if [[ ! -f $PATHTR/exec/oiprep ]]; then
+      error "oiprep exe file is not found in $PATHTR/exec/. Try -b to build or -h for help."
+    fi
 fi
 
 module use $PATHTR/modulefiles
