@@ -176,7 +176,7 @@ set +x
 module list
 set -x
 
-RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/
+RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/rt_$$
 
 declare -A tests
 all_tests=""
@@ -201,7 +201,6 @@ while read -r line || [ "$line" ]; do
 
   export NEW_BASELINE=${NEW_BASELINE_ROOT}/$TEST_NAME
   RUNDIR=$RUNDIR_ROOT/$TEST_NAME
-  rm -fr $RUNDIR
   mkdir -p $RUNDIR
   export RUNDIR
   export OUTDIR_PATH=$RUNDIR
