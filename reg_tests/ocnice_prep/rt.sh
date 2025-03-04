@@ -43,7 +43,7 @@ export PATHRT
 # PATHTR - Path to the UFS UTILS directory
 readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
-TESTS_FILE="$PATHRT/rt.conf"
+TESTS_FILE="./rt.conf"
 
 WLCLK_dflt=15
 export WLCLK=$WLCLK_dflt
@@ -61,7 +61,6 @@ if [[ "$compiler" == "intelllvm" ]]; then
 fi
 echo "Machine: $target"
 echo "Compiler: $compiler"
-cd $PATHRT
 
 rm -f fail_test* run_*.log nccmp_*.log summary.log
 
@@ -157,6 +156,7 @@ if [[ $BUILD_EXE = true ]]; then
 	echo "Build was successful"
         set -x
     fi
+    cd $PATHRT
 else
     if [[ ! -f $PATHTR/exec/oiprep ]]; then
       error "oiprep exe file is not found in $PATHTR/exec/. Try -b to build or -h for help."
@@ -196,7 +196,6 @@ while read -r line || [ "$line" ]; do
     TEST_FTYP=${TEST_NAME##*_}
     TEST_FRES=${TEST_NAME%_*}
 
-    cd $PATHRT
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
     BASELINE=$BASELINE_ROOT/$TEST_NAME
     export BASELINE
@@ -214,16 +213,15 @@ while read -r line || [ "$line" ]; do
 
     cp $PATHTR/exec/oiprep $RUNDIR
     cp $PATHTR/ush/ocnice_prep.sh $RUNDIR
-    cp $PATHRT/parm/ocniceprep.nml.IN $RUNDIR
-    cp $PATHRT/parm/$FTYPE.csv $RUNDIR
+    cp ./parm/ocniceprep.nml.IN $RUNDIR
+    cp ./parm/$FTYPE.csv $RUNDIR
     cp $INPUT_ROOT/$FTYPE.nc $RUNDIR
     export RUNDIR
-    export PATHRT
     export TEST_NAME
 
     if [[ $target = wcoss2 ]]; then
 
-	TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+	TEST=$(qsub -V -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
 	    -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
 
     else
