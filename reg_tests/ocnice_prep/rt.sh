@@ -34,69 +34,6 @@ usage_and_exit() {
     exit $1
 }
 
-check_results() {
-
-    [ -o xtrace ] && set_x='set -x' || set_x='set +x'
-    set +x
-
-    local test_status=PASS
-    # verification run
-    if [[ $CREATE_BASELINE = false ]]; then
-
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Baseline dir = $BASELINE" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Checking test $TEST_NAME results ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-	for file in $BASELINE/*.nc; do
-	    printf %s "Comparing " $(basename ${file}) "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-	    if [[ ! -f $RUNDIR/$(basename ${file}) ]]; then
-		echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-		test_status=FAIL
-	    else
-		$NCCMP -dmfqS -w format $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
-		if [[ $d -ne 0 ]]; then
-		    echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-		    test_status=FAIL
-		else
-		    echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-		fi
-	    fi
-	done
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-	# baseline creation run
-    else
-
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo "Moving baseline files to $NEW_BASELINE ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-	mkdir -p $NEW_BASELINE
-
-	for file in *mx*.nc; do
-	    printf %s "Moving " $file "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-	    cp $file $NEW_BASELINE/$file && d=$? || d=$?
-	    if [[ $d -ne 0 ]]; then
-		echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-		test_status=FAIL
-	    else
-		echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-	    fi
-	done
-	echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-    fi
-
-    if [[ $test_status == FAIL ]]; then
-	echo "$TEST_NAME failed" >> $PATHRT/fail_test_$TEST_NAME
-    fi
-}
-
 readonly program=$(basename $0)
 # PATHRT - Path to regression tests directory
 readonly PATHRT="$(cd $(dirname $0) && pwd -P)"
@@ -105,7 +42,6 @@ export PATHRT
 readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
 TESTS_FILE="$PATHRT/rt.conf"
-export TEST_NAME=
 
 WLCLK_dflt=15
 export WLCLK=$WLCLK_dflt
@@ -126,7 +62,6 @@ echo "Compiler: $compiler"
 cd $PATHRT
 
 COMPILE_LOG=compile.log
-REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
 rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
 
 if [[ $target = wcoss2 ]]; then
@@ -137,7 +72,7 @@ if [[ $target = wcoss2 ]]; then
     ACCOUNT=${ACCOUNT:-GFS-DEV}
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
     QUEUE=${QUEUE:-dev}
-    NCCMP=nccmp
+    export NCCMP=nccmp
     SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
@@ -146,7 +81,7 @@ elif [[ $target = hera ]]; then
     INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
-    NCCMP=nccmp
+    export NCCMP=nccmp
     PARTITION=hera
     SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = orion ]]; then
@@ -156,7 +91,7 @@ elif [[ $target = orion ]]; then
     INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
-    NCCMP=nccmp
+    export NCCMP=nccmp
     PARTITION=orion
     ulimit -s unlimited
     SBATCH_COMMAND="./ocnice_prep.sh"
@@ -167,7 +102,7 @@ elif [[ $target = hercules ]]; then
     INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-fv3-cpu}
     QUEUE=${QUEUE:-batch}
-    NCCMP=nccmp
+    export NCCMP=nccmp
     PARTITION=hercules
     ulimit -s unlimited
     SBATCH_COMMAND="./ocnice_prep.sh"
@@ -178,7 +113,7 @@ elif [[ $target = jet ]]; then
     INPUT_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}
-    NCCMP=nccmp
+    export NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
     SBATCH_COMMAND="./ocnice_prep.sh"
@@ -236,13 +171,11 @@ set +x
 module list
 set -x
 
+export CREATE_BASELINE
 if [[ $CREATE_BASELINE = true ]]; then
     rm -rf $NEW_BASELINE_ROOT
     mkdir -p $NEW_BASELINE_ROOT
 fi
-
-date > $PATHRT/$REGRESSIONTEST_LOG
-echo "Start Regression test" | tee -a  $PATHRT/$REGRESSIONTEST_LOG
 
 declare -A tests
 all_tests=""
@@ -262,7 +195,9 @@ while read -r line || [ "$line" ]; do
     cd $PATHRT
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
     BASELINE=$BASELINE_ROOT/$TEST_NAME
+    export BASELINE
     NEW_BASELINE=$NEW_BASELINE_ROOT/$TEST_NAME
+    export NEW_BASELINE
     mkdir -p $RUNDIR
 
     # OUTDIR_PATH is passed down to $PATHTR/ush/ocnice_prep.sh
@@ -271,6 +206,7 @@ while read -r line || [ "$line" ]; do
     export RESNAME=$TEST_FRES
     export FTYPE=$TEST_FTYP
     export WEIGHTS=$WEIGHTS_ROOT
+    export REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.${TEST_NAME}.log
 
     cp $PATHTR/exec/oiprep $RUNDIR
     cp $PATHTR/ush/ocnice_prep.sh $RUNDIR
@@ -278,6 +214,8 @@ while read -r line || [ "$line" ]; do
     cp $PATHRT/parm/$FTYPE.csv $RUNDIR
     cp $INPUT_ROOT/$FTYPE.nc $RUNDIR
     export RUNDIR
+    export PATHRT
+    export TEST_NAME
 
     if [[ $target = wcoss2 ]]; then
 

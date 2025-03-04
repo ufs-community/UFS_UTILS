@@ -13,6 +13,67 @@ function edit_namelist {
         -e "s/DO_DEBUG/$DO_DEBUG/g"
 }
 
+check_results() {
+
+    [ -o xtrace ] && set_x='set -x' || set_x='set +x'
+    set +x
+
+    local test_status=PASS
+    # verification run
+    if [[ $CREATE_BASELINE = false ]]; then
+
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Baseline dir = $BASELINE" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Checking test $TEST_NAME results ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+        for file in $BASELINE/*.nc; do
+            printf %s "Comparing " $(basename ${file}) "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+            if [[ ! -f $RUNDIR/$(basename ${file}) ]]; then
+                echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                test_status=FAIL
+            else
+                $NCCMP -dmfqS -w format $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
+                if [[ $d -ne 0 ]]; then
+                    echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                    test_status=FAIL
+                else
+                    echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                fi
+            fi
+        done
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+        # baseline creation run
+    else
+
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo "Moving baseline files to $NEW_BASELINE ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+        mkdir -p $NEW_BASELINE
+
+        for file in *mx*.nc; do
+            printf %s "Moving " $file "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+            cp $file $NEW_BASELINE/$file && d=$? || d=$?
+            if [[ $d -ne 0 ]]; then
+                echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+                test_status=FAIL
+            else
+                echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
+            fi
+        done
+        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
+
+    fi
+    if [[ $test_status == FAIL ]]; then
+        echo "$TEST_NAME failed" >> $PATHRT/fail_test_$TEST_NAME
+    fi
+}
+
 set +x
 echo BEGIN cpld_gridgen.sh
 set -x
@@ -53,3 +114,7 @@ cd ${OUTDIR_PATH}
 edit_namelist < ocniceprep.nml.IN > ocniceprep.nml
 
 $APRUN ./oiprep
+
+check_results
+
+exit
