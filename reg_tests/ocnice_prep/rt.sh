@@ -299,37 +299,19 @@ while read -r line || [ "$line" ]; do
 
 done <$TESTS_FILE
 
+export target
+
+if [[ $target = wcoss2 ]]; then
+
+  qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
+        -N summary -l select=1:ncpus=1:mem=100MB \
+        -W depend=afterok${all_tests} ./rt.summary.sh
+else
+
+# sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
+  sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o temp -e temp \
+       --partition=$PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
+
+fi
 
 exit
-
-if [[ $? -ne 0 ]]; then
-    error "Run test while loop did not finish properly"
-fi
-
-cd $PATHRT
-FAIL_FILES="fail_test_*"
-for file in $FAIL_FILES; do
-    if [[ -f "$file" ]]; then
-	cat "$file" >> fail_test
-    fi
-done
-
-if [[ -e fail_test ]]; then
-    echo | tee -a $REGRESSIONTEST_LOG
-    for file in fail_test_*; do
-	cat $file >>$REGRESSIONTEST_LOG
-	cat $file >>summary.log
-    done
-
-    echo | tee -a $REGRESSIONTEST_LOG
-    echo "REGRESSION TEST FAILED" | tee -a $REGRESSIONTEST_LOG
-else
-    echo | tee -a $REGRESSIONTEST_LOG
-    echo "REGRESSION TEST WAS SUCCESSFUL" | tee -a $REGRESSIONTEST_LOG
-    echo "All tests passed" >>summary.log
-fi
-date >> $REGRESSIONTEST_LOG
-
-elapsed_time=$( printf '%02dh:%02dm:%02ds\n' $((SECONDS%86400/3600)) $((SECONDS%3600/60)) $((SECONDS%60)) )
-echo "Elapsed time: ${elapsed_time}. Have a nice day!" >> ${REGRESSIONTEST_LOG}
-echo "Elapsed time: ${elapsed_time}. Have a nice day!"
