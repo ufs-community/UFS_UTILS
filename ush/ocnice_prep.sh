@@ -13,6 +13,12 @@ function edit_namelist {
         -e "s/DO_DEBUG/$DO_DEBUG/g"
 }
 
+set +x
+echo BEGIN cpld_gridgen.sh
+set -x
+
+cd $RUNDIR
+
 APRUN=${APRUN:-"srun --nodes=1 -A nems "}
 
 # Two possible input files: ocean.nc and ice.nc

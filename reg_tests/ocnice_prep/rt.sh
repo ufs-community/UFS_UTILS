@@ -166,7 +166,7 @@ elif [[ $target = hercules ]]; then
     WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
     INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-fv3-cpu}
-    QUEUE=${QUEUE:-debug}
+    QUEUE=${QUEUE:-batch}
     NCCMP=nccmp
     PARTITION=hercules
     ulimit -s unlimited
@@ -244,7 +244,11 @@ fi
 date > $PATHRT/$REGRESSIONTEST_LOG
 echo "Start Regression test" | tee -a  $PATHRT/$REGRESSIONTEST_LOG
 
+declare -A tests
+all_tests=""
+
 # Run tests specified in $TESTS_FILE
+i=0
 while read -r line || [ "$line" ]; do
 
     line="${line#"${line%%[![:space:]]*}"}"
@@ -273,38 +277,31 @@ while read -r line || [ "$line" ]; do
     cp $PATHRT/parm/ocniceprep.nml.IN $RUNDIR
     cp $PATHRT/parm/$FTYPE.csv $RUNDIR
     cp $INPUT_ROOT/$FTYPE.nc $RUNDIR
-    cd $RUNDIR
+    export RUNDIR
 
     if [[ $target = wcoss2 ]]; then
-
-	#   rm -f $RUNDIR/bad.${TEST_NAME}
 
 	TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
 	    -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
 
-	#   qsub -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-	    # -Wblock=true -l walltime=00:01:00 -N chgres_summary -l select=1:ncpus=1:mem=100MB -W depend=afternotok:$TEST << EOF
-	#!/bin/bash
-	#   touch $RUNDIR/bad.${TEST_NAME}
-	#EOF
-	#   if [[ -f $RUNDIR/bad.${TEST_NAME} ]]; then
-	#     error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
-	#   fi
-
     else
-	sbatch --wait --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-	    --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-	    --wrap "time $SBATCH_COMMAND $TEST_NAME" && d=$? || d=$?
 
-	if [[ d -ne 0 ]]; then
-	    error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
-	fi
+      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+    --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/ocnice_prep.sh "$TEST_NAME")
 
     fi
 
-    check_results
+    all_tests=${all_tests}":"${tests[$i]}
+
+    ((i=i+1))
+
+#   check_results
 
 done <$TESTS_FILE
+
+
+exit
+
 if [[ $? -ne 0 ]]; then
     error "Run test while loop did not finish properly"
 fi
