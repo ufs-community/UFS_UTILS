@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS on Gaea using Intel
 ]])
 
-prepend_path("MODULEPATH", "/sw/rdtn/modulefiles")
+prepend_path("MODULEPATH", "/usw/hpss/modulefiles")
 load("hsi")
 
 prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/spack-stack-1.6.0/envs/fms-2024.01/install/modulefiles/Core")
