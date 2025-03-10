@@ -1,8 +1,6 @@
 #!/bin/bash
 set -eu
 
-SECONDS=0
-
 error() {
     set +x
     echo
@@ -36,33 +34,27 @@ usage_and_exit() {
     exit $1
 }
 
+# Execution starts here.
+
+set -x
+
 readonly program=$(basename $0)
+
 # PATHRT - Path to regression tests directory
 readonly PATHRT="$(cd $(dirname $0) && pwd -P)"
 export PATHRT
+
 # PATHTR - Path to the UFS UTILS directory
 readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
-export PATHTR
+
 TESTS_FILE="./rt.conf"
 
-WLCLK_dflt=15
-export WLCLK=$WLCLK_dflt
-MEM_dflt="--mem=24g"
-export MEM=$MEM_dflt
-
-set -x
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
-export compiler=${compiler:-intelllvm}
-if [[ "$compiler" == "intelllvm" ]]; then
-  if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
-     echo "IntelLLVM not available. Will use Intel Classic."
-    compiler=intel
-  fi
-fi
+set +x
+echo
 echo "Machine: $target"
-echo "Compiler: $compiler"
-
-rm -f fail_test* run_*.log nccmp_*.log summary.log
+echo
+set -x
 
 if [[ $target = wcoss2 ]]; then
     STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
@@ -72,6 +64,7 @@ if [[ $target = wcoss2 ]]; then
     ACCOUNT=${ACCOUNT:-GFS-DEV}
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
     QUEUE=${QUEUE:-dev}
+    WLCLK=15
     export NCCMP=nccmp
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
@@ -80,6 +73,7 @@ elif [[ $target = hera ]]; then
     INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
+    WLCLK=15
     export NCCMP=nccmp
     PARTITION=hera
 elif [[ $target = orion ]]; then
@@ -89,6 +83,7 @@ elif [[ $target = orion ]]; then
     INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-nems}
     QUEUE=${QUEUE:-batch}
+    WLCLK=15
     export NCCMP=nccmp
     PARTITION=orion
     ulimit -s unlimited
@@ -99,6 +94,7 @@ elif [[ $target = hercules ]]; then
     INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-fv3-cpu}
     QUEUE=${QUEUE:-batch}
+    WLCLK=15
     export NCCMP=nccmp
     PARTITION=hercules
     ulimit -s unlimited
@@ -109,10 +105,12 @@ elif [[ $target = jet ]]; then
     INPUT_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}
+    WLCLK=15
     export NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
 fi
+
 NEW_BASELINE_ROOT=$STMP/OCNICE_PREP/BASELINE
 RUNDIR_ROOT=$STMP/OCNICE_PREP/rt_$$
 
@@ -133,10 +131,25 @@ while getopts :bcmh opt; do
 	    usage_and_exit 0
 	    ;;
 	'?')
+            set +x
 	    error "$program: invalid option"
 	    ;;
     esac
 done
+
+compiler=${compiler:-intelllvm}
+if [[ "$compiler" == "intelllvm" ]]; then
+  if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
+    set +x
+    echo "IntelLLVM not available. Will use Intel Classic."
+    set -x
+    compiler=intel
+  fi
+fi
+export compiler
+set +x
+echo "Compiler: $compiler"
+set -x
 
 # Build the executable file
 if [[ $BUILD_EXE = true ]]; then
@@ -145,6 +158,7 @@ if [[ $BUILD_EXE = true ]]; then
     rm -rf $COMPILE_LOG $PATHTR/build $PATHTR/exec $PATHTR/lib
     ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
     if [[ d -ne 0 ]]; then
+        set +x
 	error "Build did not finish successfully. Check $COMPILE_LOG"
     else
         set +x
@@ -154,6 +168,7 @@ if [[ $BUILD_EXE = true ]]; then
     cd $PATHRT
 else
     if [[ ! -f $PATHTR/exec/oiprep ]]; then
+      set +x
       error "oiprep exe file is not found in $PATHTR/exec/. Try -b to build or -h for help."
     fi
 fi
@@ -221,7 +236,7 @@ while read -r line || [ "$line" ]; do
 
     else
 
-      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 --mem=24g -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
                 --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
 
     fi
@@ -241,6 +256,7 @@ if [[ $target = wcoss2 ]]; then
   qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
         -N summary -l select=1:ncpus=1:mem=100MB \
         -W depend=afterok${all_tests} ./rt.summary.sh
+
 else
 
 # sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
