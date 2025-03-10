@@ -1,9 +1,9 @@
 #!/bin/bash
-set -eu
 
-SECONDS=0
+set -ux
 
 error() {
+    set +x
     echo
     echo "$@" 1>&2
     exit 1
@@ -30,71 +30,9 @@ usage() {
 }
 
 usage_and_exit() {
+    set +x
     usage
     exit $1
-}
-
-check_results() {
-
-    [ -o xtrace ] && set_x='set -x' || set_x='set +x'
-    set +x
-
-    local test_status=PASS
-    # verification run
-    if [[ $CREATE_BASELINE = false ]]; then
-
-        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-        echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-        echo "Baseline dir = $BASELINE" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-        echo "Checking test $TEST_NAME results ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-        for file in $BASELINE/*.nc; do
-            printf %s "Comparing " $(basename ${file}) "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-            if [[ ! -f $RUNDIR/$(basename ${file}) ]]; then
-                echo "....MISSING file" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-                test_status=FAIL
-            else
-                $NCCMP -dmfqS -w format $(basename ${file}) $file >>${PATHRT}/nccmp_${TEST_NAME}.log 2>&1 && d=$? || d=$?
-                if [[ $d -ne 0 ]]; then
-                    echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-                    test_status=FAIL
-                else
-                    echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-                fi
-            fi
-        done
-        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-        # baseline creation run
-    else
-
-        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-        echo "Working dir = $RUNDIR" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-        echo "Moving baseline files to $NEW_BASELINE ...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-        mkdir -p $NEW_BASELINE
-
-        for file in *.nc; do
-            printf %s "Moving " $file "...." | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-            cp $file $NEW_BASELINE/$file && d=$? || d=$?
-            if [[ $d -ne 0 ]]; then
-                echo "....NOT OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-                test_status=FAIL
-            else
-                echo "....OK" | tee -a $PATHRT/$REGRESSIONTEST_LOG
-            fi
-        done
-        echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
-
-    fi
-
-    if [[ $test_status == FAIL ]]; then
-        echo "$TEST_NAME failed" >> $PATHRT/fail_test_$TEST_NAME
-    fi
 }
 
 readonly program=$(basename $0)
@@ -104,84 +42,67 @@ export PATHRT
 # PATHTR - Path to the UFS UTILS directory
 readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
-TESTS_FILE="$PATHRT/rt.conf"
-export TEST_NAME=
-export ATMLIST=
 
-# for C3072 on hera, use WLCLK=60 and MEM="--exclusive"
-WLCLK_dflt=60
-export WLCLK=$WLCLK_dflt
-MEM_dflt="--mem=16g"
-export MEM=$MEM_dflt
-export MOM6_version=20250128
-
-cd $PATHRT
-export compiler=${compiler:-intelllvm}
 source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
-if [[ "$compiler" == "intelllvm" ]]; then
-  if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
-     echo "IntelLLVM not available. Will use Intel Classic."
-    compiler=intel
-  fi
-fi
+set +x
 echo "Machine: $target"
-echo "Compiler: $compiler"
+set -x
 
-COMPILE_LOG=compile.log
-REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.log
-rm -f fail_test* $COMPILE_LOG run_*.log nccmp_*.log summary.log
+MOM6_version=20250128
 
-if [[ $target = wcoss2 ]]; then
-    STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
-    export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
-    BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
-    ACCOUNT=${ACCOUNT:-GFS-DEV}
-    export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
-    QUEUE=${QUEUE:-dev}
-    SBATCH_COMMAND="./cpld_gridgen.sh"
-    NCCMP=nccmp
-elif [[ $target = hera ]]; then
-    STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
-    export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/${MOM6_version}
-    BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    ACCOUNT=${ACCOUNT:-nems}
-    QUEUE=${QUEUE:-batch}
-    NCCMP=nccmp
-    PARTITION=hera
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+# Adjust STMP, ACCOUNT and QUEUE as needed.
+
+if [[ $target = hera ]]; then
+  STMP=${STMP:-/scratch2/NCEPDEV/stmp1/$USER}
+  ACCOUNT=${ACCOUNT:-fv3-cpu}
+  QUEUE=${QUEUE:-batch}
+  WLCLK=40
+  export MOM6_FIXDIR=/scratch1/NCEPDEV/global/glopara/fix/mom6/${MOM6_version}
+  export NCCMP=nccmp
+  BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  PARTITION=hera
 elif [[ $target = orion ]]; then
-    STMP=${STMP:-/work/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
-    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    ACCOUNT=${ACCOUNT:-nems}
-    QUEUE=${QUEUE:-batch}
-    NCCMP=nccmp
-    PARTITION=orion
-    ulimit -s unlimited
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+  STMP=${STMP:-/work/noaa/stmp/$USER}
+  ACCOUNT=${ACCOUNT:-fv3-cpu}
+  QUEUE=${QUEUE:-batch}
+  WLCLK=85
+  export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
+  export NCCMP=nccmp
+  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  PARTITION=orion
+  ulimit -s unlimited
 elif [[ $target = hercules ]]; then
-    STMP=${STMP:-/work2/noaa/stmp/$USER}
-    export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
-    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
-    ACCOUNT=${ACCOUNT:-nems}
-    QUEUE=${QUEUE:-batch}
-    NCCMP=nccmp
-    PARTITION=hercules
-    ulimit -s unlimited
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+  STMP=${STMP:-/work2/noaa/stmp/$USER}
+  ACCOUNT=${ACCOUNT:-fv3-cpu}
+  QUEUE=${QUEUE:-batch}
+  WLCLK=45
+  export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
+  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
+  export NCCMP=nccmp
+  PARTITION=hercules
+  ulimit -s unlimited
 elif [[ $target = jet ]]; then
-    STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
-    export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
-    BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    ACCOUNT=${ACCOUNT:-h-nems}
-    QUEUE=${QUEUE:-batch}
-    NCCMP=nccmp
-    PARTITION=xjet
-    ulimit -s unlimited
-    SBATCH_COMMAND="./cpld_gridgen.sh"
+  STMP=${STMP:-/lfs5/HFIP/emcda/$USER/stmp}
+  ACCOUNT=${ACCOUNT:-hfv3gfs}
+  QUEUE=${QUEUE:-batch}
+  WLCLK=60
+  export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
+  BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  export NCCMP=nccmp
+  PARTITION=xjet
+  ulimit -s unlimited
+elif [[  $target = wcoss2 ]]; then
+  STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
+  ACCOUNT=${ACCOUNT:-GFS-DEV}
+  QUEUE=${QUEUE:-dev}
+  WLCLK=40
+  export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
+  BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
+  export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
+  export NCCMP=nccmp
 fi
+
 NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
-RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/rt_$$
 
 BUILD_EXE=false
 CREATE_BASELINE=false
@@ -205,22 +126,44 @@ while getopts :bcmh opt; do
     esac
 done
 
+export CREATE_BASELINE
+if [[ $CREATE_BASELINE = true ]]; then
+    rm -rf $NEW_BASELINE_ROOT
+    mkdir -p $NEW_BASELINE_ROOT
+fi
+
+compiler=${compiler:-intelllvm}
+if [[ "$compiler" == "intelllvm" ]]; then
+  if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
+    set +x
+    echo "IntelLLVM not available. Will use Intel Classic."
+    set -x
+    compiler=intel
+  fi
+fi
+export compiler
+set +x
+echo "Compiler: $compiler"
+set -x
+
 # Build the executable file
 if [[ $BUILD_EXE = true ]]; then
+    COMPILE_LOG=compile.log
     cd $PATHTR
-    rm -rf $PATHTR/build $PATHTR/exec $PATHTR/lib
+    rm -rf $COMPILE_LOG $PATHTR/build $PATHTR/exec $PATHTR/lib
     ./build_all.sh >$PATHRT/$COMPILE_LOG 2>&1 && d=$? || d=$?
     if [[ d -ne 0 ]]; then
         error "Build did not finish successfully. Check $COMPILE_LOG"
     else
+        set +x
         echo "Build was successful"
+        set -x
+        cd $PATHRT
     fi
-fi
-
-if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
-    error "cpld_gridgen exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
 else
-    echo "cpld_gridgen exe file is found in $PATHTR/exec/"
+    if [[ ! -f $PATHTR/exec/cpld_gridgen ]]; then
+       error "cpld_gridgen exe file is not found in $PATHTR/exe/. Try -b to build or -h for help."
+    fi
 fi
 
 module use $PATHTR/modulefiles
@@ -233,90 +176,69 @@ set +x
 module list
 set -x
 
-if [[ $CREATE_BASELINE = true ]]; then
-    rm -rf $NEW_BASELINE_ROOT
-    mkdir -p $NEW_BASELINE_ROOT
-fi
+RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/rt_$$
 
-date > $PATHRT/$REGRESSIONTEST_LOG
-echo "Start Regression test" | tee -a  $PATHRT/$REGRESSIONTEST_LOG
+declare -A tests
+all_tests=""
 
-# Run tests specified in $TESTS_FILE
+rm -f fail_test* nccmp_*.log summary.log run_*log RegressionTests_$target.$compiler.*.log
+
+# Kick off all tests.
+
+i=0
 while read -r line || [ "$line" ]; do
 
-    line="${line#"${line%%[![:space:]]*}"}"
-    [[ ${#line} == 0 ]] && continue
-    [[ $line =~ \# ]] && continue
+  line="${line#"${line%%[![:space:]]*}"}"
+  [[ ${#line} == 0 ]] && continue
+  [[ $line =~ \# ]] && continue
 
-    TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
-    TEST_NAME=${TEST_NAME##mx}
-    ATMLIST=$(echo $line | cut -d'|' -f2 | sed -e 's/^ *//' -e 's/ *$//')
-    if [[ -z ${ATMLIST} ]]; then
-        ATMLIST=-1
-    fi
+  TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
+  TEST_NAME=${TEST_NAME##mx}
+  ATMLIST=$(echo $line | cut -d'|' -f2 | sed -e 's/^ *//' -e 's/ *$//')
+  if [[ -z ${ATMLIST} ]]; then
+      ATMLIST=-1
+  fi
 
-    cd $PATHRT
-    RUNDIR=$RUNDIR_ROOT/$TEST_NAME
-    BASELINE=$BASELINE_ROOT/$TEST_NAME
-    NEW_BASELINE=$NEW_BASELINE_ROOT/$TEST_NAME
-    mkdir -p $RUNDIR
+  export NEW_BASELINE=${NEW_BASELINE_ROOT}/$TEST_NAME
+  RUNDIR=$RUNDIR_ROOT/$TEST_NAME
+  mkdir -p $RUNDIR
+  export RUNDIR
+  export OUTDIR_PATH=$RUNDIR
+  export BASELINE=$BASELINE_ROOT/$TEST_NAME
+  export REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.${TEST_NAME}.log
 
-    # OUTDIR_PATH is passed down to $PATHTR/ush/cpld_gridgen.sh
-    # It MUST be set
-    export OUTDIR_PATH=$RUNDIR
+  cp $PATHRT/parm/grid.nml.IN $RUNDIR
+  cp $PATHTR/exec/cpld_gridgen $RUNDIR
+  
+  if [[ $target = wcoss2 ]]; then
+    tests[$i]=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+       -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
 
-    cp $PATHTR/exec/cpld_gridgen $RUNDIR
-    cp $PATHTR/ush/cpld_gridgen.sh $RUNDIR
-    cp $PATHRT/parm/grid.nml.IN $RUNDIR
-    cd $RUNDIR
+  else
+    tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+            --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
+  fi
 
-    if [[ $target = wcoss2 ]]; then
+  all_tests=${all_tests}":"${tests[$i]}
 
-        TEST=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-             -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
+  ((i=i+1))
 
-    else
-        sbatch --wait --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-            --partition=$PARTITION -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log \
-            --wrap "time $SBATCH_COMMAND $TEST_NAME $ATMLIST" && d=$? || d=$?
+done < ./rt.conf
 
-        if [[ d -ne 0 ]]; then
-            error "Batch job for test $TEST_NAME did not finish successfully. Refer to run_${TEST_NAME}.log"
-        fi
+export target
 
-    fi
+# Once all the jobs are finished, this summary job will run.
 
-    check_results
+if [[ $target = wcoss2 ]]; then
 
-done <$TESTS_FILE
-if [[ $? -ne 0 ]]; then
-    error "Run test while loop did not finish properly"
-fi
-
-cd $PATHRT
-FAIL_FILES="fail_test_*"
-for file in $FAIL_FILES; do
-    if [[ -f "$file" ]]; then
-	cat "$file" >> fail_test
-    fi
-done
-
-if [[ -e fail_test ]]; then
-    echo | tee -a $REGRESSIONTEST_LOG
-    for file in fail_test_*; do
-	cat $file >>$REGRESSIONTEST_LOG
-	cat $file >>summary.log
-    done
-
-    echo | tee -a $REGRESSIONTEST_LOG
-    echo "REGRESSION TEST FAILED" | tee -a $REGRESSIONTEST_LOG
+  qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
+        -N summary -l select=1:ncpus=1:mem=100MB \
+        -W depend=afterok${all_tests} ./rt.summary.sh
 else
-    echo | tee -a $REGRESSIONTEST_LOG
-    echo "REGRESSION TEST WAS SUCCESSFUL" | tee -a $REGRESSIONTEST_LOG
-    echo "All tests passed" >>summary.log
-fi
-date >> $REGRESSIONTEST_LOG
 
-elapsed_time=$( printf '%02dh:%02dm:%02ds\n' $((SECONDS%86400/3600)) $((SECONDS%3600/60)) $((SECONDS%60)) )
-echo "Elapsed time: ${elapsed_time}. Have a nice day!" >> ${REGRESSIONTEST_LOG}
-echo "Elapsed time: ${elapsed_time}. Have a nice day!"
+  sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
+       --partition=$PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
+
+fi
+
+exit
