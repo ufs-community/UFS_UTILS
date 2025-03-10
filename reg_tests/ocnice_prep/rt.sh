@@ -73,7 +73,6 @@ if [[ $target = wcoss2 ]]; then
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
     QUEUE=${QUEUE:-dev}
     export NCCMP=nccmp
-    SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
@@ -83,7 +82,6 @@ elif [[ $target = hera ]]; then
     QUEUE=${QUEUE:-batch}
     export NCCMP=nccmp
     PARTITION=hera
-    SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = orion ]]; then
     STMP=${STMP:-/work/noaa/stmp/$USER}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/baseline_data
@@ -94,7 +92,6 @@ elif [[ $target = orion ]]; then
     export NCCMP=nccmp
     PARTITION=orion
     ulimit -s unlimited
-    SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = hercules ]]; then
     STMP=${STMP:-/work2/noaa/stmp/$USER}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/baseline_data
@@ -105,7 +102,6 @@ elif [[ $target = hercules ]]; then
     export NCCMP=nccmp
     PARTITION=hercules
     ulimit -s unlimited
-    SBATCH_COMMAND="./ocnice_prep.sh"
 elif [[ $target = jet ]]; then
     STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
     BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
@@ -116,7 +112,6 @@ elif [[ $target = jet ]]; then
     export NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
-    SBATCH_COMMAND="./ocnice_prep.sh"
 fi
 NEW_BASELINE_ROOT=$STMP/OCNICE_PREP/BASELINE
 RUNDIR_ROOT=$STMP/OCNICE_PREP/rt_$$
@@ -212,7 +207,7 @@ while read -r line || [ "$line" ]; do
     export REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.${TEST_NAME}.log
 
     cp $PATHTR/exec/oiprep $RUNDIR
-    cp $PATHTR/ush/ocnice_prep.sh $RUNDIR
+    cp ./ocnice_prep.sh $RUNDIR
     cp ./parm/ocniceprep.nml.IN $RUNDIR
     cp ./parm/$FTYPE.csv $RUNDIR
     cp $INPUT_ROOT/$FTYPE.nc $RUNDIR
@@ -222,12 +217,12 @@ while read -r line || [ "$line" ]; do
     if [[ $target = wcoss2 ]]; then
 
 	TEST=$(qsub -V -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-	    -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME $SBATCH_COMMAND)
+	    -Wblock=true -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME ./ocnice_prep.sh)
 
     else
 
       tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 ${MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-    --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log $PATHTR/ush/ocnice_prep.sh "$TEST_NAME")
+                --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
 
     fi
 
