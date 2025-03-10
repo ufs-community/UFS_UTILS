@@ -4,10 +4,10 @@
 # George Gayno, Clara Draper
 
 set(lib_src
-   grids_IO.F90
-   utils.F90)
+   grids_IO.f90
+   utils.f90)
 
-set(exe_src  regridStates.F90)
+set(exe_src  regridStates.f90)
 
 # coppied from global_cycle 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
@@ -43,6 +43,6 @@ target_link_libraries(${exe_name} PRIVATE regrid_lib)
 install(TARGETS ${exe_name})
 
 # If doxygen documentation we enabled, build it.
-#if(ENABLE_DOCS)
-#  add_subdirectory(docs)  
-#endif()
+if(ENABLE_DOCS)
+  add_subdirectory(docs)  
+endif()
