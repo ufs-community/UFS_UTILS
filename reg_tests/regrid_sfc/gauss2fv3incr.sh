@@ -80,6 +80,7 @@ cat << EOF > regrid.nml
  /
 EOF
 
+# run the executable
 $APRUN_REGRID $REGRID_EXEC
 
 iret=$?
@@ -91,14 +92,12 @@ fi
 
 test_failed=0
 
-exit
-
-# CSD change this
-for files in *gaussian_interp*
+# check the ouput
+for files in sfci*
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/regrid_sfc/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/gauss2fv3incr/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -110,15 +109,15 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo
   echo "**********************************************"
-  echo "<<< C192 GSI based LANDINC SOIL-NOAHMP CYCLE TEST FAILED. >>>"
+  echo "<<< REGRID SFC TEST FAILED. >>>"
   echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    ${NWPROD}/reg_tests/update_baseline.sh $HOMEreg "c192.gsi_lndincsoilnoahmp" $commit_num
+    ${NWPROD}/reg_tests/update_baseline.sh $HOMEreg "gauss2fv3incr" $commit_num
   fi
 else
   echo
   echo "*****************************************"
-  echo "<<< C192 GSI based LANDINC SOIL-NOAHMP CYCLE TEST PASSED. >>>"
+  echo "<<< REGRID SFC TEST PASSED >>>"
   echo "*****************************************"
 fi
 
