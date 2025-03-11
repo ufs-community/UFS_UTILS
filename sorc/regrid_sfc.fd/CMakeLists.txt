@@ -11,7 +11,7 @@ set(exe_src  regridStates.f90)
 
 # coppied from global_cycle 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8 -assume byterecl")
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fdefault-real-8 -ffree-line-length-0")
 endif()
