@@ -69,7 +69,7 @@ cat << EOF > regrid.nml
 EOF
 
 # input, fixed files
-${NCP} "${FIXorog}/${CASE_OUT}/gaussian.${LONB_CASE_IN}.${LATB_CASE_IN}.nc" \
+${NCP} "${FIXorog}/${CASE_IN}/gaussian.${LONB_CASE_IN}.${LATB_CASE_IN}.nc" \
         "${DATA}/gaussian_scrip.nc"
 
 # output, fixed files
