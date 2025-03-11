@@ -137,7 +137,7 @@ while getopts :bcmh opt; do
     esac
 done
 
-compiler=${compiler:-intelllvm}
+compiler=${compiler:-intellvm}
 if [[ "$compiler" == "intelllvm" ]]; then
   if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
     set +x
@@ -146,13 +146,13 @@ if [[ "$compiler" == "intelllvm" ]]; then
     compiler=intel
   fi
 fi
-export compiler
 set +x
 echo "Compiler: $compiler"
 set -x
 
 # Build the executable file
 if [[ $BUILD_EXE = true ]]; then
+    export compiler
     COMPILE_LOG=compile.log
     cd $PATHTR
     rm -rf $COMPILE_LOG $PATHTR/build $PATHTR/exec $PATHTR/lib
