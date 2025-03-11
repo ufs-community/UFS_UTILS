@@ -49,7 +49,7 @@ fi
 DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc/"
 
 #export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
-export HOMEreg=/scratch2/BMC/gsienkf/Clara.Draper/gerrit-hera/PRprep/reg_tests/regrid_sfc/
+export HOMEreg=/scratch2/BMC/gsienkf/Clara.Draper/gerrit-hera/PRprep/new_tests/regrid_sfc/
 
 export launcher="srun -l --export=ALL --hint=nomultithread"
 export APRUN_REGRID="${launcher} -n 6"
@@ -58,8 +58,8 @@ export NWPROD=$PWD/../..
 
 LOG_FILE=consistency.log01
 export DATA="${DATA_DIR}/test1"
-TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J regrid_test.sh \
-      -o $LOG_FILE -e $LOG_FILE ./regrid_test.sh)
+TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J gauss2fv3 \
+      -o $LOG_FILE -e $LOG_FILE ./gauss2fv3incr.sh)
 
 LOG_FILE=consistency.log
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J regrid_summary -o $LOG_FILE -e $LOG_FILE \
