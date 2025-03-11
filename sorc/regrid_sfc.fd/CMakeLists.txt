@@ -4,10 +4,10 @@
 # George Gayno, Clara Draper
 
 set(lib_src
-   grids_IO.f90
-   utils.f90)
+   grids_IO.F90
+   utils.F90)
 
-set(exe_src  regridStates.f90)
+set(exe_src  regridStates.F90)
 
 # coppied from global_cycle 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
