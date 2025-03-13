@@ -45,6 +45,8 @@ elif [ "$machine" = 'jet' ] ; then
   FIX_ORO_INPUT=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/orog/20230615
 elif [ "$machine" = 's4' ] ; then
   FIX_ORO_INPUT=/data/prod/glopara/fix/orog/20230615
+elif [ "$machine" = 'gaeac6' ] ; then
+  FIX_ORO_INPUT=/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix/orog/20230615
 else
   set +x
   echo ERROR machine $machine not supported.
