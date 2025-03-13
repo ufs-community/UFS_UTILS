@@ -5,7 +5,7 @@ Load environment to compile UFS_UTILS on NOAA CSPs using Intel
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.5"
+g2_ver=os.getenv("g2_ver") or "3.5.1"
 load(pathJoin("g2", g2_ver))
 
 ip_ver=os.getenv("ip_ver") or "4.3.0"

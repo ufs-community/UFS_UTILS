@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS on Orion using Intel classic
 ]])
 
-prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/unified-env-rocky9/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/fms-2024.01/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2021.9.0"
 load(pathJoin("stack-intel", stack_intel_ver))
@@ -16,7 +16,7 @@ load(pathJoin("cmake", cmake_ver))
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.5"
+g2_ver=os.getenv("g2_ver") or "3.5.1"
 load(pathJoin("g2", g2_ver))
 
 ip_ver=os.getenv("ip_ver") or "4.3.0"

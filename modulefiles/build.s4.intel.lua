@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS on S4 using Intel
 ]])
 
-prepend_path("MODULEPATH", "/data/prod/jedi/spack-stack/spack-stack-1.6.0/envs/unified-env/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/data/prod/jedi/spack-stack/spack-stack-1.6.0/envs/upp-addon-env/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2021.5.0"
 load(pathJoin("stack-intel", hpc_intel_ver))
@@ -16,7 +16,7 @@ load(pathJoin("cmake", cmake_ver))
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
 
-g2_ver=os.getenv("g2_ver") or "3.4.5"
+g2_ver=os.getenv("g2_ver") or "3.5.1"
 load(pathJoin("g2", g2_ver))
 
 ip_ver=os.getenv("ip_ver") or "4.3.0"

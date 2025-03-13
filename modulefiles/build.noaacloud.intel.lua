@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS on NOAA CSPs using Intel
 ]])
 
-prepend_path("MODULEPATH", "/contrib/spack-stack-rocky8/spack-stack-1.6.0/envs/ue-intel/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/contrib/spack-stack-rocky8/spack-stack-1.6.0/envs/fms-2024.01/install/modulefiles/Core")
 prepend_path("MODULEPATH", "/apps/modules/modulefiles")
 load("gnu")
 load("stack-intel")
