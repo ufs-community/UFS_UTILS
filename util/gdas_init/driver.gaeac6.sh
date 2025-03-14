@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #---------------------------------------------------------------------
-# Driver script for running on Hera.
+# Driver script for running on Gaea-C6.
 #
 # Edit the 'config' file before running.
 #---------------------------------------------------------------------
