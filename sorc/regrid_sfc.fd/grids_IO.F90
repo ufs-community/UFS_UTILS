@@ -19,17 +19,17 @@
  ! mask values for soilsnow_mask calculated in the GSI EnKF
  integer, public, parameter  :: mtype_water=0, & !< water
                                 mtype_snow=2     !< snow
- type, public  :: grid_setup_type !< kl
+ type, public  :: grid_setup_type
         character(7)   :: descriptor       !< options: gau_inc fv3_rst 
-        character(100) :: fname !< n
-        character(100) :: dir !< l 
-        character(15)  :: mask_variable(1) !< j l
-        character(100) :: fname_mask !< jlk
-        character(100) :: dir_mask !< j
-        character(100) :: fname_coord !< j 
-        character(100) :: dir_coord !< l 
-        integer        :: ires !< j 
-        integer        :: jres !< l 
+        character(100) :: fname            !< file name
+        character(100) :: dir              !< directory
+        character(15)  :: mask_variable(1) !< name of variables used for mask
+        character(100) :: fname_mask       !< file name for reading in mask
+        character(100) :: dir_mask         !< directory name for reading in mask
+        character(100) :: fname_coord      !< file name with coordinate info
+        character(100) :: dir_coord        !< directory name for coordinate info
+        integer        :: ires             !< latitudinal dimension
+        integer        :: jres             !< longitudinal dimension
  end type
 
  public :: setup_grid, &
@@ -39,6 +39,10 @@
  contains
 
 !> Create ESMF grid objects, with mask if requested
+!! @param[in] localpet          local pet
+!! @param[in] npets             total number of pets
+!! @param[in] grid_setup        data structure with grid details 
+!! @param[out] mod_grid         output esmf_grid structure 
 
  subroutine setup_grid(localpet, npets, grid_setup, mod_grid )
 
@@ -49,7 +53,7 @@
  integer, intent(in)            :: localpet, npets
 
  ! INTENT OUT
- type(esmf_grid)                :: mod_grid
+ type(esmf_grid), intent(out)   :: mod_grid
 
  ! LOCAL
  type(esmf_field)               :: mask_field(1,1)
@@ -128,6 +132,16 @@
  end subroutine setup_grid
 
 !> read variables from fv3 netcdf restart file into ESMF Fields
+!! @param[in] localpet          local pet
+!! @param[in] i_dim             latitudinal dimension
+!! @param[in] j_dim             longitudinal dimension
+!! @param[in] fname_read        file name to read in
+!! @param[in] dir_read          directory of file name to read
+!! @param[in] grid_setup        grid details
+!! @param[in] n_vars            number of variables to read in 
+!! @param[in] variable_list     variables to read in
+!! @param[inout] fields         fields to read variables into
+
  subroutine read_into_fields(localpet, i_dim, j_dim , fname_read, dir_read, &
                                grid_setup, n_vars, variable_list, fields)
 
@@ -216,6 +230,16 @@
 
 
 !> read lat and lon from SCRIP file, for use in Gaussian grid
+!! @param[in] localpet          local pet
+!! @param[in] i_dim             latitudinal dimension
+!! @param[in] j_dim             longitudinal dimension
+!! @param[in] fname_read        file name to read in
+!! @param[in] dir_read          directory of file name to read
+!! @param[in] grid_setup        grid details
+!! @param[in] gauss_grid        esmf grid describing Gauss grid
+!! @param[out] lon_fields       output field with lons
+!! @param[out] lat_fields       output fiel with lats
+!! 
  subroutine lonlat_read_into_fields(localpet, i_dim, j_dim, fname_read, dir_read, &
                                grid_setup, gauss_grid, lon_fields, lat_fields)
 
@@ -380,6 +404,15 @@
  end subroutine lonlat_read_into_fields
 
 !> write variables from ESMF Fields into netcdf restart-like file
+!! @param[in] localpet          local pet
+!! @param[in] i_dim             latitudinal dimension
+!! @param[in] j_dim             longitudinal dimension
+!! @param[in] fname_out         file name to write to
+!! @param[in] dir_out           directory of file name to write to
+!! @param[in] n_vars            number of variables to read in 
+!! @param[in] n_tims            number of times to write out
+!! @param[in] variable_list     variables to read in
+!! @param[in] fields         fields to read variables into
 
  subroutine write_from_fields(localpet, i_dim, j_dim , fname_out, dir_out, &
                                 n_vars, n_tims, variable_list, fields)
@@ -484,6 +517,12 @@
 
 !> subroutine to create grid object for fv3 grid
 !!  also sets distribution across procs
+!! @param[in] res_atm           resolution of grid
+!! @param[in] dir_fix           orog fix directory
+!! @param[in] localpet          local pet
+!! @param[in] npets             total number of pets
+!! @param[out] fv3_grid         output ESMF grid 
+
 
  subroutine create_grid_fv3(res_atm, dir_fix, npets, localpet, fv3_grid)
 
@@ -493,7 +532,7 @@
  character(*), intent(in)       :: dir_fix
 
  ! INTENT OUT
- type(esmf_grid)                :: fv3_grid
+ type(esmf_grid), intent(out)   :: fv3_grid
 
  integer                :: ierr, extra, tile
  integer                :: decomptile(2,n_tiles)
@@ -528,6 +567,10 @@
 
 !> subroutine to create grid object for gaussian grids
 !!  also sets distribution across procs
+!! @param[in] grid_setup        data structure with grid details 
+!! @param[in] npets             total number of pets
+!! @param[in] localpet          local pet
+!! @param[out] gauss_grid       output ESMF grid 
 
  subroutine create_grid_gauss(grid_setup, npets, localpet, gauss_grid)
 
