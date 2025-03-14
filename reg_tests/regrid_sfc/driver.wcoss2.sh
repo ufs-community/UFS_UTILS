@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run regrid_sfc consistency test on Hera.
+# Run regrid_sfc consistency test on WCOSS2.
 #
 # Set $WORK_DIR to your working directory.  Set the project code 
 # and queue as appropriate.
@@ -20,17 +20,19 @@
 
 set -x
 
-compiler=${compiler:-"intelllvm"}
+compiler=${compiler:-"intel"}
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
+module load netcdf
+module load nccmp
 module list
 
-WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
 
-PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-QUEUE="${QUEUE:-batch}"
+PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
+QUEUE="${QUEUE:-dev}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -43,23 +45,29 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc/"
+DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc"
 
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
+export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/regrid_sfc
+
+export OMP_NUM_THREADS_CY=2
+export OMP_PLACES=cores
 
 export NWPROD=$PWD/../..
 
-LOG_FILE=consistency.log01
-export DATA="${DATA_DIR}/test1"
-TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J gauss2fv3incr \
-      -o $LOG_FILE -e $LOG_FILE ./gauss2fv3incr.sh)
+reg_dir=$PWD
 
 LOG_FILE=consistency.log
-sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J regrid_summary -o $LOG_FILE -e $LOG_FILE \
-      --open-mode=append -q $QUEUE -d\
-      afterok:$TEST1 << EOF
+rm -f ${LOG_FILE}*
+
+export DATA="${DATA_DIR}/test1"
+TEST1=$(qsub -V -o ${LOG_FILE}01 -e ${LOG_FILE}01 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
+        -N gauss2fv3incr -l select=1:ncpus=6 $PWD/gauss2fv3incr.sh)
+
+qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
+        -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend=afterok:$TEST1 << EOF
 #!/bin/bash
-grep -a '<<<' ${LOG_FILE}*  > summary.log
+cd $reg_dir
+grep -a '<<<' ${LOG_FILE}?? | grep -v echo > summary.log
 EOF
 
 exit
