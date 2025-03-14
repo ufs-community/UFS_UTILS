@@ -1,10 +1,12 @@
- program regridStates
-! Program to re-grid a list of FV3 variables.
-! Intended for use in DA applications (regridding of restarts for recentering, regridding increments).
-!
-! Clara Draper, and George Gayno  Aug, 2024.
+!> @file
+!! @brief Program to re-grid a list of FV3 variables.
+!! @author Clara Draper, and George Gayno  Aug, 2024.
 
-! TO DO - add option to pre-compute, and read in regridding route.
+!> Program to re-grid a list of FV3 variables.
+!! Intended for use in DA applications (regridding of restarts for recentering, regridding increments).
+!! @return 0 for success, error code otherwise.
+
+ program regridStates
 
  use mpi_f08
  use esmf
@@ -19,7 +21,7 @@
 
  implicit none
 
- integer, parameter             :: max_vars = 10  ! increase if wish to specify more variables
+ integer, parameter             :: max_vars = 10  !< increase if wish to specify more variables
 
  ! namelist inputs
  character(len=15)              :: variable_list(max_vars)
@@ -266,11 +268,12 @@
 
  end program regridStates
 
+!> Subroutine to read in namelists, and convert
+!! values into setupgrid.
+!! Also fills in some values, and tests have all
+!! needed vals, according to the selected grid type.
+
  subroutine readin_setup(unt,namel,grid_setup)
-! subroutine to read in namelists, and convert
-! values into setupgrid.
-! Also fills in some values, and tests have all
-! needed vals, according to the selected grid type.
 
  use grids_IO, only     : grid_setup_type
  use utilities, only    : error_handler

@@ -1,6 +1,8 @@
+!> @file
+!! @brief Error handling utilities for tile2tile. 
+!! taken from UFS_UTILS/changeres.
+
 module utilities
-! error handling utilities for tile2tile. 
-! taken from UFS_UTILS/changeres.
 
 contains
 

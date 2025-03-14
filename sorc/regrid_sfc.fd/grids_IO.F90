@@ -1,7 +1,7 @@
+!> @file
+!! @brief ESMF grid-specific routines for GFS regridding program, including IO.
+!! @author Clara Draper, Aug 2024.
  module grids_IO
- ! ESMF grid-specific routines for GFS regridding program, including IO.
- !
- ! Clara Draper, Aug 2024.
 
  use esmf
  use netcdf
@@ -12,23 +12,24 @@
 
  private
 
- integer, public, parameter  :: n_tiles=6 ! number tiles in fv3 grid
- integer, public, parameter  :: vtype_water=0, & ! TO DO - which veg classification is this?
-                                vtype_landice=15 ! used for soil mask
+ integer, public, parameter  :: n_tiles=6 !< number tiles in fv3 grid
+ ! mask values for land / ocean mask built from veg type
+ integer, public, parameter  :: vtype_water=0, & !< non-land
+                                vtype_landice=15 !< land ice
  ! mask values for soilsnow_mask calculated in the GSI EnKF
- integer, public, parameter  :: mtype_water=0, &
-                                mtype_snow=2
- type, public  :: grid_setup_type
-        character(7)   :: descriptor
-        character(100) :: fname
-        character(100) :: dir
-        character(15)  :: mask_variable(1)
-        character(100) :: fname_mask
-        character(100) :: dir_mask
-        character(100) :: fname_coord
-        character(100) :: dir_coord
-        integer        :: ires
-        integer        :: jres
+ integer, public, parameter  :: mtype_water=0, & !< water
+                                mtype_snow=2     !< snow
+ type, public  :: grid_setup_type !< kl
+        character(7)   :: descriptor       !< options: gau_inc fv3_rst 
+        character(100) :: fname !< n
+        character(100) :: dir !< l 
+        character(15)  :: mask_variable(1) !< j l
+        character(100) :: fname_mask !< jlk
+        character(100) :: dir_mask !< j
+        character(100) :: fname_coord !< j 
+        character(100) :: dir_coord !< l 
+        integer        :: ires !< j 
+        integer        :: jres !< l 
  end type
 
  public :: setup_grid, &
@@ -37,8 +38,7 @@
 
  contains
 
-!-----------------------------------
-! Create ESMF grid objects, with mask if requested
+!> Create ESMF grid objects, with mask if requested
 
  subroutine setup_grid(localpet, npets, grid_setup, mod_grid )
 
@@ -127,7 +127,7 @@
 
  end subroutine setup_grid
 
- ! read variables from fv3 netcdf restart file into ESMF Fields
+!> read variables from fv3 netcdf restart file into ESMF Fields
  subroutine read_into_fields(localpet, i_dim, j_dim , fname_read, dir_read, &
                                grid_setup, n_vars, variable_list, fields)
 
@@ -214,8 +214,8 @@
 
  end subroutine read_into_fields
 
- ! read lat and lon from SCRIP file, for use in Gaussian grid
 
+!> read lat and lon from SCRIP file, for use in Gaussian grid
  subroutine lonlat_read_into_fields(localpet, i_dim, j_dim, fname_read, dir_read, &
                                grid_setup, gauss_grid, lon_fields, lat_fields)
 
@@ -378,7 +378,8 @@
  deallocate(array2d)
 
  end subroutine lonlat_read_into_fields
-! write variables from ESMF Fields into netcdf restart-like file
+
+!> write variables from ESMF Fields into netcdf restart-like file
 
  subroutine write_from_fields(localpet, i_dim, j_dim , fname_out, dir_out, &
                                 n_vars, n_tims, variable_list, fields)
@@ -481,8 +482,8 @@
 
  end subroutine write_from_fields
 
- ! subroutine to create grid object for fv3 grid
- ! also sets distribution across procs
+!> subroutine to create grid object for fv3 grid
+!!  also sets distribution across procs
 
  subroutine create_grid_fv3(res_atm, dir_fix, npets, localpet, fv3_grid)
 
@@ -524,6 +525,9 @@
     call error_handler("IN GridCreateMosaic", ierr)
 
  end subroutine create_grid_fv3
+
+!> subroutine to create grid object for gaussian grids
+!!  also sets distribution across procs
 
  subroutine create_grid_gauss(grid_setup, npets, localpet, gauss_grid)
 
