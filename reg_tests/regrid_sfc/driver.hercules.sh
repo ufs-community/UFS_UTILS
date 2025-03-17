@@ -2,12 +2,12 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run regrid_sfc consistency test on Hera.
+# Run regrid_sfc consistency tests on Hercules.
 #
-# Set $WORK_DIR to your working directory.  Set the project code 
+# Set $WORK_DIR to your working directory.  Set the project code and
 # and queue as appropriate.
 #
-# Invoke the script from the command line as follows:  ./$script
+# Invoke the script from command line as follows:  ./$script
 #
 # Log output is placed in consistency.log??.  A summary is
 # placed in summary.log
@@ -20,14 +20,14 @@
 
 set -x
 
-compiler=${compiler:-"intelllvm"}
-
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
-module load build.$target.$compiler
+module load build.$target.intelllvm
 module list
 
-WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+ulimit -s unlimited
+
+export WORK_DIR="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-batch}"
@@ -43,9 +43,11 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc/"
+DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc"
 
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/regrid_sfc
+
+export OMP_NUM_THREADS_CY=2
 
 export NWPROD=$PWD/../..
 

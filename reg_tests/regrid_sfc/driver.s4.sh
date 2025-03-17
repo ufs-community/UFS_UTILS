@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run regrid_sfc consistency test on Hera.
+# Run regrid_sfc consistency test on S4.
 #
 # Set $WORK_DIR to your working directory.  Set the project code 
 # and queue as appropriate.
@@ -20,16 +20,16 @@
 
 set -x
 
-compiler=${compiler:-"intelllvm"}
+compiler=${compiler:-"intel"}
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+WORK_DIR="${WORK_DIR:-/scratch/short/users/$LOGNAME}"
 
-PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+PROJECT_CODE="${PROJECT_CODE:-star}"
 QUEUE="${QUEUE:-batch}"
 
 #-----------------------------------------------------------------------------
@@ -43,9 +43,11 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc/"
+DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc"
 
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
+export HOMEreg=/data/users/dhuber/save/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc
+
+export OMP_NUM_THREADS_CY=2
 
 export NWPROD=$PWD/../..
 
