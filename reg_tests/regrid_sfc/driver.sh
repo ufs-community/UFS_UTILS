@@ -71,13 +71,6 @@ elif [[ "$target" == "hercules" ]];then
   export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/regrid_sfc
   export APRUN_REGRID=srun
   PARTITION=hercules
-elif [[ "$target" == "s4" ]];then
-  WORK_DIR="${WORK_DIR:-/scratch/short/users/$LOGNAME}"
-  PROJECT_CODE="${PROJECT_CODE:-star}"
-  QUEUE="${QUEUE:-batch}"
-  export HOMEreg=/data/users/dhuber/save/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc
-  export APRUN_REGRID=srun
-  PARTITION=s4
 fi
 
 DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc"
