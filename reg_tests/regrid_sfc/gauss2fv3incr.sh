@@ -93,7 +93,7 @@ fi
 test_failed=0
 
 # check the ouput
-for files in sfci*
+for files in sfci.tile*
 do
   if [ -f $files ]; then
     echo CHECK $files
