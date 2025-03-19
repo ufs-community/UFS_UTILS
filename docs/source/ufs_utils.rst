@@ -681,6 +681,7 @@ The gdas_init utility is used to create coldstart initial conditions for global 
      * Hera
      * Jet
      * WCOSS2
+     * Gaea C6
      * S4 (Only the chgres_cube step is supported, not the data pull step.)
 
 Location
