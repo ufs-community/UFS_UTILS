@@ -242,8 +242,6 @@ while read -r line || [ "$line" ]; do
 
     ((i=i+1))
 
-#   check_results
-
 done <$TESTS_FILE
 
 export target
@@ -256,8 +254,7 @@ if [[ $target = wcoss2 ]]; then
 
 else
 
-# sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
-  sbatch --ntasks=1 --mem=25m -t 0:01:00 -A $ACCOUNT -J summary -o temp -e temp \
+  sbatch --ntasks=1 --mem=25m -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
        --partition=$PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
 
 fi
