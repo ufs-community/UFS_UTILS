@@ -110,8 +110,6 @@ if [ $RESNAME = 100 ]; then
     export DSTDIMS="360,320"
 fi
 
-cd ${OUTDIR_PATH}
-
 edit_namelist < ocniceprep.nml.IN > ocniceprep.nml
 
 $APRUN ./oiprep

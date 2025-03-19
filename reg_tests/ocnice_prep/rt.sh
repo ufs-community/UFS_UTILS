@@ -213,9 +213,6 @@ while read -r line || [ "$line" ]; do
     export NEW_BASELINE
     mkdir -p $RUNDIR
 
-    # OUTDIR_PATH is passed down to $PATHTR/ush/ocnice_prep.sh
-    # It MUST be set
-    export OUTDIR_PATH=$RUNDIR
     export RESNAME=$TEST_FRES
     export FTYPE=$TEST_FTYP
     export WEIGHTS=$WEIGHTS_ROOT
