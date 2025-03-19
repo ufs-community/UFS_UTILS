@@ -71,7 +71,7 @@ elif [[ $target = hera ]]; then
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
     WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
-    ACCOUNT=${ACCOUNT:-nems}
+    ACCOUNT=${ACCOUNT:-fv3-cpu}
     QUEUE=${QUEUE:-batch}
     WLCLK=15
     export NCCMP=nccmp
@@ -137,7 +137,7 @@ while getopts :bcmh opt; do
     esac
 done
 
-compiler=${compiler:-intellvm}
+compiler=${compiler:-intelllvm}
 if [[ "$compiler" == "intelllvm" ]]; then
   if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
     set +x
@@ -149,10 +149,10 @@ fi
 set +x
 echo "Compiler: $compiler"
 set -x
+export compiler
 
 # Build the executable file
 if [[ $BUILD_EXE = true ]]; then
-    export compiler
     COMPILE_LOG=compile.log
     cd $PATHTR
     rm -rf $COMPILE_LOG $PATHTR/build $PATHTR/exec $PATHTR/lib
@@ -260,7 +260,7 @@ if [[ $target = wcoss2 ]]; then
 else
 
 # sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
-  sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o temp -e temp \
+  sbatch --ntasks=1 --mem=25m -t 0:01:00 -A $ACCOUNT -J summary -o temp -e temp \
        --partition=$PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
 
 fi
