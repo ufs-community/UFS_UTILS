@@ -80,7 +80,7 @@ if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]]
   export ACCOUNT=$PROJECT_CODE
   export STMP=$WORK_DIR/reg-tests
 
-  ./rt.sh 2>/dev/null &
+  ./rt.sh
 
   set -x
 

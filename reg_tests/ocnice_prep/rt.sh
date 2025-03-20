@@ -94,7 +94,7 @@ elif [[ $target = hercules ]]; then
     INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-fv3-cpu}
     QUEUE=${QUEUE:-batch}
-    WLCLK=15
+    WLCLK=10
     export NCCMP=nccmp
     PARTITION=hercules
     ulimit -s unlimited
