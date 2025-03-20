@@ -5,6 +5,7 @@
 
 set(lib_src
    grids_IO.F90
+   readin_setup.F90
    utils.F90)
 
 set(exe_src  regridStates.F90)

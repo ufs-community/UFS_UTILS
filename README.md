@@ -25,6 +25,7 @@ gdas_init | George Gayno
 global_cycle | George Gayno, Shrinivas Moorthi, Xu Li
 grid_tools | R. J. Purser (regional_esg_grid), Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
 orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
+regrid_sfc | Clara Draper
 sfc_climo_gen | George Gayno
 vcoord_gen | Fanglin Yang
 weight_gen | George Gayno
