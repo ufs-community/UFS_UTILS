@@ -1,12 +1,15 @@
+!> @file
+!! @brief Read program namelists.
+!! @author Clara Draper
+
 !> Subroutine to read in namelists, and convert
-!! values into setupgrid.
-!! Also fills in some values, and tests have all
-!! needed vals, according to the selected grid type.
+!! values into setupgrid. Also fills in some
+!! values, and ensures tests have all needed values,
+!! according to the selected grid type.
 !! 
 !! @param[in] unt          file unit
 !! @param[in] namel        options: input or output
 !! @param[out] grid_setup  data structure with grid details
-
  subroutine readin_setup(unt,namel,grid_setup)
 
  use grids_IO, only     : grid_setup_type
