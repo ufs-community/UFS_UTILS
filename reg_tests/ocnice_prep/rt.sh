@@ -105,7 +105,7 @@ elif [[ $target = jet ]]; then
     INPUT_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-h-nems}
     QUEUE=${QUEUE:-batch}
-    WLCLK=15
+    WLCLK=10
     export NCCMP=nccmp
     PARTITION=xjet
     ulimit -s unlimited
