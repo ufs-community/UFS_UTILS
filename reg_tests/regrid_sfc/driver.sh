@@ -13,7 +13,7 @@
 # placed in summary.log
 #
 # A test fails when its output does not match the baseline files
-# as determined by the 'nccmp' utility.  This baseline files are
+# as determined by the 'nccmp' utility. The baseline files are
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ if [[ "$compiler" == "intelllvm" ]]; then
     compiler=intel
   fi
 fi
-module load build.$target.intelllvm
+module load build.$target.$compiler
 set +x
 module list
 set -x
@@ -77,11 +77,13 @@ DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc"
 export NWPROD=$PWD/../..
 
 LOG_FILE=consistency.log01
+rm -f $LOG_FILE
 export DATA="${DATA_DIR}/test1"
 TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J gauss2fv3incr \
       --partition=$PARTITION -o $LOG_FILE -e $LOG_FILE ./gauss2fv3incr.sh)
 
 LOG_FILE=consistency.log
+rm -f $LOG_FILE summary.log
 sbatch --partition=$PARTITION --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d\
        afterok:$TEST1 << EOF

@@ -12,7 +12,7 @@ set -x
 NCCMP=${NCCMP:-$(which nccmp)}
 
 REGRID_EXEC=${NWPROD}/exec/regridStates.x
-FIXorog=${NWPROD}/fix/orog/
+FIXorog=$HOMEreg/fix
 
 COMIN_REGTEST=$HOMEreg/input_data_noahmp
 
@@ -37,17 +37,17 @@ cd ${DATA}
 /bin/cp -p ${COMIN_REGTEST}/sfcincr_gsi ${DATA}/sfcincr_gsi
 
 # input, fixed files
-ln -sf "${FIXorog}/${CASE_IN}/gaussian.${LONB_CASE_IN}.${LATB_CASE_IN}.nc" \
+ln -sf "${FIXorog}/gaussian.${LONB_CASE_IN}.${LATB_CASE_IN}.nc" \
         "${DATA}/gaussian_scrip.nc"
 
 # output, fixed files
-ln -sf "${FIXorog}/${CASE_OUT}/${CASE_OUT}_mosaic.nc" \
+ln -sf "${FIXorog}/${CASE_OUT}_mosaic.nc" \
         "${DATA}/${CASE_OUT}_mosaic.nc"
 
 ntiles=6
 for n in $(seq 1 $ntiles); do
-    ln -sf ${FIXorog}/${CASE_OUT}/sfc/${CASE_OUT}.mx${OCNRES_OUT}.vegetation_type.tile${n}.nc  ${DATA}/vegetation_type.tile${n}.nc
-    ln -sf ${FIXorog}/${CASE_OUT}/${CASE_OUT}_grid.tile${n}.nc ${DATA}/${CASE_OUT}_grid.tile${n}.nc
+    ln -sf ${FIXorog}/${CASE_OUT}.mx${OCNRES_OUT}.vegetation_type.tile${n}.nc  ${DATA}/vegetation_type.tile${n}.nc
+    ln -sf ${FIXorog}/${CASE_OUT}_grid.tile${n}.nc ${DATA}/${CASE_OUT}_grid.tile${n}.nc
 done
 
 # namelist
@@ -112,6 +112,17 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< REGRID SFC TEST FAILED. >>>"
   echo "**********************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+# Remove files from work directory that we don't want copied 
+# to the baseline directory.
+    for files in *
+    do
+      if [[ -f $files ]];then
+        file_check=$(echo $files | cut -c 1-4)
+        if [[ "$file_check" != "sfci" ]];then
+          rm -f $files
+        fi
+      fi
+    done
     ${NWPROD}/reg_tests/update_baseline.sh $HOMEreg "gauss2fv3incr" $commit_num
   fi
 else
