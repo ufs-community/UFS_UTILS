@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #--------------------------------------------------------------------------
-# Mimic v16 and prior GFS OPS.  This script is run from its
-# machine-specific driver.
+# Mimic v16 and prior GFS OPS, which used hemispheric afwa/airforce data.  
+# This script is run from its machine-specific driver.
 #--------------------------------------------------------------------------
 
-echo "BEGIN SNOW2MDL OPS TEST."
+echo "BEGIN SNOW2MDL HEMI TEST."
 
 set -x
 
@@ -16,11 +16,11 @@ cd $DATA
 cat << EOF > ./fort.41
  &source_data
   autosnow_file=""
-  nesdis_snow_file="$HOMEreg/input_data.test.issue.973/imssnow96.grb"
+  nesdis_snow_file="$HOMEreg/input_data.test.issue.973/hemi/imssnow96.grb"
   nesdis_lsmask_file=""
   afwa_snow_global_file=""
-  afwa_snow_nh_file="$HOMEreg/input_data.test.issue.973/NPR.SNWN.SP.S1200.MESH16"
-  afwa_snow_sh_file="$HOMEreg/input_data.test.issue.973/NPR.SNWS.SP.S1200.MESH16"
+  afwa_snow_nh_file="$HOMEreg/input_data.test.issue.973/hemi/NPR.SNWN.SP.S1200.MESH16"
+  afwa_snow_sh_file="$HOMEreg/input_data.test.issue.973/hemi/NPR.SNWS.SP.S1200.MESH16"
   afwa_lsmask_nh_file=""
   afwa_lsmask_sh_file=""
  /
@@ -54,13 +54,13 @@ eval $HOMEgfs/exec/emcsfc_snow2mdl >> OUTPUT 2> errfile
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< SNOW2MDL OPS TEST FAILED. <<<"
+  echo "<<< SNOW2MDL HEMI TEST FAILED. <<<"
   exit $iret
 fi
 
 test_failed=0
 
-cmp ${DATA}/snogrb_model $HOMEreg/baseline_data/t1534.ops/snogrb_model
+cmp ${DATA}/snogrb_model $HOMEreg/baseline_data/t1534.hemi/snogrb_model
 iret=$?
 if [ $iret -ne 0 ]; then
   test_failed=1
@@ -70,16 +70,16 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo
   echo "*********************************"
-  echo "<<< SNOW2MDL OPS TEST FAILED. >>>"
+  echo "<<< SNOW2MDL HEMI TEST FAILED. >>>"
   echo "*********************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
     cd $DATA
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "t1534.ops" $commit_num
+    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "t1534.hemi" $commit_num
   fi
 else
   echo
   echo "*********************************"
-  echo "<<< SNOW2MDL OPS TEST PASSED. >>>"
+  echo "<<< SNOW2MDL HEMI TEST PASSED. >>>"
   echo "*********************************"
 fi
 
