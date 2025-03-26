@@ -37,25 +37,30 @@ contains
     ! set the destination grids
     !---------------------------------------------------------------------
 
-    if(trim(res) .eq. '500')then
+    if(trim(res) .eq. '900')then
        ndest = 1
        allocate(destgrds(ndest))
-       destgrds = (/'5p00'/)
+       destgrds = (/'9p00'/)
     end if
-    if(trim(res) .eq. '100')then
+    if(trim(res) .eq. '500')then
        ndest = 2
        allocate(destgrds(ndest))
-       destgrds = (/'5p00', '1p00'/)
+       destgrds = (/'9p00', '5p00'/)
     end if
-    if(trim(res) .eq. '050')then
+    if(trim(res) .eq. '100')then
        ndest = 3
        allocate(destgrds(ndest))
-       destgrds = (/'5p00', '1p00', '0p50'/)
+       destgrds = (/'9p00', '5p00', '1p00'/)
     end if
-    if(trim(res) .eq. '025')then
+    if(trim(res) .eq. '050')then
        ndest = 4
        allocate(destgrds(ndest))
-       destgrds = (/'5p00', '1p00', '0p50', '0p25'/)
+       destgrds = (/'9p00', '5p00', '1p00', '0p50'/)
+    end if
+    if(trim(res) .eq. '025')then
+       ndest = 5
+       allocate(destgrds(ndest))
+       destgrds = (/'9p00', '5p00', '1p00', '0p50', '0p25'/)
     end if
 
     !---------------------------------------------------------------------

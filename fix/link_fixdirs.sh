@@ -1,8 +1,8 @@
 #!/bin/bash
 set -ex
 
-# Set up the 'fixed' directories. 
-# 
+# Set up the 'fixed' directories.
+#
 # This script takes two arguments:
 #
 #  $RUN_ENVIR - Either 'emc' (creates links) or
@@ -57,7 +57,7 @@ elif [ $machine = "s4" ]; then
 elif [ $machine = "gaeac5" ]; then
     FIX_DIR="/gpfs/f5/ufs-ard/world-shared/global/glopara/data/fix"
 elif [ $machine = "gaeac6" ]; then
-    FIX_DIR="/gpfs/f6/bil-fire8/world-shared/global/glopara/data/fix"
+    FIX_DIR="/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix"
 fi
 
 am_ver=${am_ver:-20220805}

@@ -26,6 +26,7 @@ program ocniceprep
   use arrays_mod ,     only : nbilin2d, nbilin3d, nconsd2d, bilin2d, bilin3d, consd2d
   use arrays_mod ,     only : mask3d, hmin, maskspval, eta
   use utils_mod  ,     only : getfield, packarrays, remap, dumpnc, nf90_err
+  use utils_mod  ,     only : zero_out_land_ice, zero_out_phantom_ice
   use utils_esmf_mod , only : createRH, remapRH, ChkErr, rotremap
   use restarts_mod ,   only : setup_icerestart, setup_ocnrestart
   use ocncalc_mod ,    only : calc_eta, vfill
@@ -47,13 +48,16 @@ program ocniceprep
   real(kind=8), allocatable, dimension(:,:)   :: out2d !< 2D destination grid output array
   real(kind=8), allocatable, dimension(:,:,:) :: out3d !< 3D destination grid output array
 
+  ! ice mask array for QC of ice files
+  integer(kind=4), allocatable, dimension(:,:) :: a2d  !< 2D land mask for ice
+  integer(kind=4), allocatable, dimension(:)   :: kmt  !< 1D land mask for ice
+  integer :: idx1, idx2, idx3, idx4
+
   character(len=120) :: errmsg
   character(len=120) :: meshfsrc, meshfdst
-  integer            :: nvalid
+  integer            :: nvalid, icnt
   integer            :: k,n,nn,rc,ncid,varid
   character(len=20)  :: vname
-  ! debug
-  integer :: i,j
 
   character(len=*), parameter :: u_FILE_u = __FILE__
 
@@ -120,6 +124,26 @@ program ocniceprep
   call getfield(trim(gridfile), 'anglet', dims=(/nxr,nyr/), field=angdst)
   call getfield(trim(gridfile),  'depth', dims=(/nxr,nyr/), field=bathydst)
   call nf90_err(nf90_close(ncid), 'close: '//trim(gridfile))
+
+  if (.not. do_ocnprep) then
+  ! -----------------------------------------------------------------------------
+  ! obtain the land mask for the ice model on the source grid to QC the ice fields
+  ! -----------------------------------------------------------------------------
+
+     allocate(a2d(nxt,nyt)); a2d = 0
+     allocate(kmt(nxt*nyt)); kmt = 0
+
+     ! obtain the land mask for the source grid
+     vname = 'wet'
+     gridfile = trim(griddir)//fsrc(3:5)//'/'//'tripole.'//trim(fsrc)//'.nc'
+     call nf90_err(nf90_open(trim(gridfile), nf90_nowrite, ncid), &
+          'open: '//trim(gridfile))
+     call nf90_err(nf90_inq_varid(ncid, trim(vname), varid), 'get variable ID: '//trim(vname))
+     call nf90_err(nf90_get_var(ncid, varid, a2d), 'get variable: '//trim(vname))
+     call nf90_err(nf90_close(ncid), 'close: '//trim(gridfile))
+     kmt(:) = reshape(a2d, (/nxt*nyt/))
+     deallocate(a2d)
+  end if
 
   ! -----------------------------------------------------------------------------
   ! get the 3rd (vertical or ncat) dimension and variable attributes for the
@@ -248,6 +272,41 @@ program ocniceprep
   if (allocated(bilin3d))then
      call packarrays(trim(input_file), trim(wgtsdir)//fsrc(3:5)//'/',           &
           cos(angsrc), sin(angsrc), b3d, dims=(/nxt,nyt,nlevs/), nflds=nbilin3d, fields=bilin3d)
+
+     if (.not. do_ocnprep) then
+        ! -----------------------------------------------------------------------------
+        ! QC the source ice files after packing. Not every possible inconsistency is
+        ! checked but these are those known to create issues in the coupled model
+        ! -----------------------------------------------------------------------------
+
+        do n = 1,nbilin3d
+           if (trim(b3d(n)%var_name) == 'aicen')idx1 = n
+           if (trim(b3d(n)%var_name) == 'vicen')idx2 = n
+           if (trim(b3d(n)%var_name) == 'vsnon')idx3 = n
+           if (trim(b3d(n)%var_name) == 'Tsfcn')idx4 = n
+        end do
+
+        ! remove land values, if they exist
+        call zero_out_land_ice(kmt, bilin3d(idx1,:,:), icnt)
+        write(logunit, '(a,i8,a)')'removed ',icnt,' locations of '//trim(b3d(idx1)%var_name)//' from land'
+        call zero_out_land_ice(kmt, bilin3d(idx2,:,:), icnt)
+        write(logunit, '(a,i8,a)')'removed ',icnt,' locations of '//trim(b3d(idx2)%var_name)//' from land'
+        call zero_out_land_ice(kmt, bilin3d(idx3,:,:), icnt)
+        write(logunit, '(a,i8,a)')'removed ',icnt,' locations of '//trim(b3d(idx3)%var_name)//' from land'
+        call zero_out_land_ice(kmt, bilin3d(idx4,:,:), icnt)
+        write(logunit, '(a,i8,a)')'removed ',icnt,' locations of '//trim(b3d(idx4)%var_name)//' from land'
+
+        ! remove phantom-ice (aice=0, vice or vsno /= 0)
+        call zero_out_phantom_ice(bilin3d(idx1,:,:), bilin3d(idx2,:,:), icnt)
+        write(logunit, '(a,i8,a)')'removed ',icnt,' locations of phantom '//trim(b3d(idx2)%var_name)
+        call zero_out_phantom_ice(bilin3d(idx1,:,:), bilin3d(idx3,:,:), icnt)
+        write(logunit, '(a,i8,a)')'removed ',icnt,' locations of phantom '//trim(b3d(idx3)%var_name)
+        ! remove phantom-ice (vicen=0, aicen /=0);  do not QC vsnon=0, aicen /=0)
+        call zero_out_phantom_ice(bilin3d(idx2,:,:), bilin3d(idx1,:,:), icnt)
+        write(logunit, '(a,i8,a)')'removed ',icnt,' locations of phantom '//trim(b3d(idx1)%var_name)
+        deallocate(kmt)
+     end if
+
      rgb3d = 0.0
      do k = 1,nlevs
         if (do_ocnprep) then

@@ -419,15 +419,13 @@
       real,    intent(out)      :: slm(im,jm)
       real,    intent(out)      :: land_frac(im,jm)
 
-      integer, parameter        :: MAXSUM=20000000
-
       real, parameter           :: D2R = 3.14159265358979/180.
 
       integer  jst, jen
       real GLAT(JMN), GLON(IMN)
       real    LONO(4),LATO(4),LONI,LATI
       real    LONO_RAD(4), LATO_RAD(4)
-      integer JM1,i,j,nsum,nsum_all,ii,jj,numx,i2
+      integer JM1,i,j,ii,jj,numx,i2
       integer ilist(IMN)
       real    DELXN,XNSUM,XLAND,XWATR,XL1,XS1,XW1
       real    XNSUM_ALL,XLAND_ALL,XWATR_ALL
@@ -451,20 +449,18 @@
 !
 !  (*j*)  for hard wired zero offset (lambda s =0) for terr05 
 !$omp parallel do  &
-!$omp  private (j,i,xnsum,xland,xwatr,nsum,xl1,xs1,xw1,lono, &
+!$omp  private (j,i,xnsum,xland,xwatr,xl1,xs1,xw1,lono, &
 !$omp           lato,lono_rad,lato_rad,jst,jen,ilist,numx,jj,i2,ii,loni,lati, &
-!$omp           xnsum_all,xland_all,xwatr_all,nsum_all)
+!$omp           xnsum_all,xland_all,xwatr_all)
 !
       DO J=1,JM
        DO I=1,IM
          XNSUM = 0.0
          XLAND = 0.0
          XWATR = 0.0
-         nsum = 0
          XNSUM_ALL = 0.0
          XLAND_ALL = 0.0
          XWATR_ALL = 0.0
-         nsum_all = 0
          
          LONO(1) = lon_c(i,j) 
          LONO(2) = lon_c(i+1,j) 
@@ -485,12 +481,6 @@
             XLAND_ALL = XLAND_ALL + FLOAT(ZSLM(ii,jj))
             XWATR_ALL = XWATR_ALL + FLOAT(1-ZSLM(ii,jj))
             XNSUM_ALL = XNSUM_ALL + 1.
-            nsum_all = nsum_all+1
-            if(nsum_all > MAXSUM) then
-              print*, "FATAL ERROR: nsum_all is greater than MAXSUM,"  
-              print*, "increase MAXSUM."
-              call ABORT()
-            endif
 
             if(inside_a_polygon(LONI*D2R,LATI*D2R,4, &
                 LONO_RAD,LATO_RAD))then
@@ -498,12 +488,6 @@
                XLAND = XLAND + FLOAT(ZSLM(ii,jj))
                XWATR = XWATR + FLOAT(1-ZSLM(ii,jj))
                XNSUM = XNSUM + 1.
-               nsum = nsum+1
-               if(nsum > MAXSUM) then
-                 print*, "FATAL ERROR: nsum is greater than MAXSUM,"
-                 print*, "increase MAXSUM."
-                 call ABORT()
-               endif
             endif
          enddo ; enddo
 
@@ -559,13 +543,12 @@
       real, intent(out)         :: oro(im,jm)
       real, intent(out)         :: var(im,jm),var4(im,jm)
 
-      integer, parameter        :: MAXSUM=20000000
       real, parameter           :: D2R = 3.14159265358979/180.
  
       real, dimension(:), allocatable ::  hgt_1d, hgt_1d_all
 
       real GLAT(JMN), GLON(IMN)
-      integer JST, JEN
+      integer JST, JEN, maxsum
       real    LONO(4),LATO(4),LONI,LATI
       real    LONO_RAD(4), LATO_RAD(4)
       real    HEIGHT
@@ -576,8 +559,6 @@
       real    XL1_ALL,XS1_ALL,XW1_ALL,XW2_ALL,XW4_ALL
 
       print*,'- CREATE OROGRAPHY AND CONVEXITY.'
-      allocate(hgt_1d(MAXSUM))
-      allocate(hgt_1d_all(MAXSUM))
 !---- GLOBAL XLAT AND XLON ( DEGREE )
 !
       JM1 = JM - 1
@@ -590,7 +571,24 @@
          GLON(I) = 0. + (I-1) * DELXN + DELXN * 0.5
       ENDDO
  
-!     land_frac(:,:) = 0.0     
+      MAXSUM=0
+      DO J=1,JM
+      DO I=1,IM
+         LONO(1) = lon_c(i,j) 
+         LONO(2) = lon_c(i+1,j) 
+         LONO(3) = lon_c(i+1,j+1) 
+         LONO(4) = lon_c(i,j+1) 
+         LATO(1) = lat_c(i,j) 
+         LATO(2) = lat_c(i+1,j) 
+         LATO(3) = lat_c(i+1,j+1) 
+         LATO(4) = lat_c(i,j+1) 
+         call get_index(IMN,JMN,4,LONO,LATO,DELXN,jst,jen,ilist,numx)
+         MAXSUM=MAX(MAXSUM,(JEN-JST+1)*IMN)
+      ENDDO
+      ENDDO
+      print*,"- MAXSUM IS ", maxsum
+      allocate(hgt_1d(MAXSUM))
+      allocate(hgt_1d_all(MAXSUM))
 !
 !---- FIND THE AVERAGE OF THE MODES IN A GRID BOX
 !
@@ -649,7 +647,7 @@
             nsum_all = nsum_all+1
             if(nsum_all > MAXSUM) then
               print*, "FATAL ERROR: nsum_all is greater than MAXSUM,"
-              print*, "increase MAXSUM."
+              print*, "increase MAXSUM.", jst,jen
               call ABORT()
             endif
             hgt_1d_all(nsum_all) = HEIGHT_ALL
@@ -668,7 +666,7 @@
                nsum = nsum+1
                if(nsum > MAXSUM) then
                  print*, "FATAL ERROR: nsum is greater than MAXSUM,"
-                 print*, "increase MAXSUM."
+                 print*, "increase MAXSUM.", jst,jen
                  call ABORT()
                endif
                hgt_1d(nsum) = HEIGHT

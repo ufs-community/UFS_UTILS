@@ -39,6 +39,7 @@
 !! @param[in] lat Latitude of the first column of the model grid tile.
 !! @author Jordan Alpert NOAA/EMC GFDL Programmer
   subroutine write_netcdf(im, jm, slm, land_frac, oro, hprime, ntiles, tile, geolon, geolat, lon, lat)
+    use netcdf
     implicit none
     integer, intent(in):: im, jm, ntiles, tile
     real, intent(in) :: lon(im), lat(jm)
@@ -56,7 +57,6 @@
     integer            :: id_oa1,id_oa2,id_oa3,id_oa4
     integer            :: id_ol1,id_ol2,id_ol3,id_ol4
     integer            :: id_theta,id_gamma,id_sigma,id_elvmax
-    include "netcdf.inc"
 
     if(ntiles > 1) then
       write(outfile, '(a,i4.4,a)') 'out.oro.tile', tile, '.nc'
@@ -68,164 +68,165 @@
     dim2=size(lat,1)
       
     !--- open the file
-    error = NF__CREATE(outfile, IOR(NF_NETCDF4,NF_CLASSIC_MODEL), inital, fsize, ncid)
+    error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid, &
+            initialsize=inital, chunksize=fsize)
     call netcdf_err(error, 'Creating file '//trim(outfile) )
     !--- define dimension
-    error = nf_def_dim(ncid, 'lon', dim1, dim_lon)
+    error = nf90_def_dim(ncid, 'lon', dim1, dim_lon)
     call netcdf_err(error, 'define dimension lon for file='//trim(outfile) )
-    error = nf_def_dim(ncid, 'lat', dim2, dim_lat)
+    error = nf90_def_dim(ncid, 'lat', dim2, dim_lat)
     call netcdf_err(error, 'define dimension lat for file='//trim(outfile) )  
 
     !--- define field
 !---geolon
-    error = nf_def_var(ncid, 'geolon', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolon)
+    error = nf90_def_var(ncid, 'geolon', NF90_FLOAT, (/dim_lon,dim_lat/), id_geolon)
     call netcdf_err(error, 'define var geolon for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolon, "long_name", 9, "Longitude")
+    error = nf90_put_att(ncid, id_geolon, "long_name", "Longitude")
     call netcdf_err(error, 'define geolon name for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolon, "units", 12, "degrees_east")
+    error = nf90_put_att(ncid, id_geolon, "units", "degrees_east")
     call netcdf_err(error, 'define geolon units for file='//trim(outfile) )
 !---geolat
-    error = nf_def_var(ncid, 'geolat', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolat)
+    error = nf90_def_var(ncid, 'geolat', NF90_FLOAT, (/dim_lon,dim_lat/), id_geolat)
     call netcdf_err(error, 'define var geolat for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolat, "long_name", 8, "Latitude")
+    error = nf90_put_att(ncid, id_geolat, "long_name", "Latitude")
     call netcdf_err(error, 'define geolat name for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolat, "units", 13, "degrees_north")
+    error = nf90_put_att(ncid, id_geolat, "units", "degrees_north")
     call netcdf_err(error, 'define geolat units for file='//trim(outfile) )
 !---slmsk
-    error = nf_def_var(ncid, 'slmsk', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_slmsk)
+    error = nf90_def_var(ncid, 'slmsk', NF90_FLOAT,(/dim_lon,dim_lat/), id_slmsk)
     call netcdf_err(error, 'define var slmsk for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_slmsk, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_slmsk, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define slmsk coordinates for file='//trim(outfile) )
 !--- land_frac
-    error = nf_def_var(ncid, 'land_frac', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_land_frac)
+    error = nf90_def_var(ncid, 'land_frac', NF90_FLOAT, (/dim_lon,dim_lat/), id_land_frac)
     call netcdf_err(error, 'define var land_frac for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_land_frac, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_land_frac, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define land_frac coordinates for file='//trim(outfile) )
 !---orography - raw
-    error = nf_def_var(ncid, 'orog_raw', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_orog_raw)
+    error = nf90_def_var(ncid, 'orog_raw', NF90_FLOAT, (/dim_lon,dim_lat/), id_orog_raw)
     call netcdf_err(error, 'define var orog_raw for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_orog_raw, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_orog_raw, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define orog_raw coordinates for file='//trim(outfile) )
 !---orography - filtered
-    error = nf_def_var(ncid, 'orog_filt', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_orog_filt)
+    error = nf90_def_var(ncid, 'orog_filt', NF90_FLOAT, (/dim_lon,dim_lat/), id_orog_filt)
     call netcdf_err(error, 'define var orog_filt for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_orog_filt, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_orog_filt, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define orog_filt coordinates for file='//trim(outfile) )
 !---stddev
-    error = nf_def_var(ncid, 'stddev', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_stddev)
+    error = nf90_def_var(ncid, 'stddev', NF90_FLOAT, (/dim_lon,dim_lat/), id_stddev)
     call netcdf_err(error, 'define var stddev for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_stddev, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_stddev, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define stddev coordinates for file='//trim(outfile) )
 !---convexity
-    error = nf_def_var(ncid, 'convexity', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_convex)
+    error = nf90_def_var(ncid, 'convexity', NF90_FLOAT, (/dim_lon,dim_lat/), id_convex)
     call netcdf_err(error, 'define var convexity for file='//trim(outfile) )      
-    error = nf_put_att_text(ncid, id_convex, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_convex, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define convexity coordinates for file='//trim(outfile) )
 !---oa1 -> oa4
-    error = nf_def_var(ncid, 'oa1', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_oa1)
+    error = nf90_def_var(ncid, 'oa1', NF90_FLOAT, (/dim_lon,dim_lat/), id_oa1)
     call netcdf_err(error, 'define var oa1 for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_oa1, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_oa1, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define oa1 coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'oa2', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_oa2)
+    error = nf90_def_var(ncid, 'oa2', NF90_FLOAT, (/dim_lon,dim_lat/), id_oa2)
     call netcdf_err(error, 'define var oa2 for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_oa2, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_oa2, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define oa2 coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'oa3', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_oa3)
+    error = nf90_def_var(ncid, 'oa3', NF90_FLOAT, (/dim_lon,dim_lat/), id_oa3)
     call netcdf_err(error, 'define var oa3 for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_oa3, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_oa3, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define oa3 coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'oa4', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_oa4)
+    error = nf90_def_var(ncid, 'oa4', NF90_FLOAT, (/dim_lon,dim_lat/), id_oa4)
     call netcdf_err(error, 'define var oa4 for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_oa4, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_oa4, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define oa4 coordinates for file='//trim(outfile) )
 !---ol1 -> ol4
-    error = nf_def_var(ncid, 'ol1', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_ol1)
+    error = nf90_def_var(ncid, 'ol1', NF90_FLOAT, (/dim_lon,dim_lat/), id_ol1)
     call netcdf_err(error, 'define var ol1 for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_ol1, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_ol1, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define ol1 coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'ol2', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_ol2)
+    error = nf90_def_var(ncid, 'ol2', NF90_FLOAT, (/dim_lon,dim_lat/), id_ol2)
     call netcdf_err(error, 'define var ol2 for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_ol2, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_ol2, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define ol2 coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'ol3', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_ol3)
+    error = nf90_def_var(ncid, 'ol3', NF90_FLOAT, (/dim_lon,dim_lat/), id_ol3)
     call netcdf_err(error, 'define var ol3 for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_ol3, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_ol3, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define ol3 coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'ol4', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_ol4)
+    error = nf90_def_var(ncid, 'ol4', NF90_FLOAT, (/dim_lon,dim_lat/), id_ol4)
     call netcdf_err(error, 'define var ol4 for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_ol4, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_ol4, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define ol4 coordinates for file='//trim(outfile) )
 !---theta gamma sigma elvmax
-    error = nf_def_var(ncid, 'theta', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_theta)
+    error = nf90_def_var(ncid, 'theta', NF90_FLOAT, (/dim_lon,dim_lat/), id_theta)
     call netcdf_err(error, 'define var theta for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_theta, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_theta, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define theta coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'gamma', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_gamma)
+    error = nf90_def_var(ncid, 'gamma', NF90_FLOAT, (/dim_lon,dim_lat/), id_gamma)
     call netcdf_err(error, 'define var gamma for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_gamma, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_gamma, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define gamma coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'sigma', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_sigma)
+    error = nf90_def_var(ncid, 'sigma', NF90_FLOAT, (/dim_lon,dim_lat/), id_sigma)
     call netcdf_err(error, 'define var sigma for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_sigma, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_sigma, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define sigma coordinates for file='//trim(outfile) )
-    error = nf_def_var(ncid, 'elvmax', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_elvmax)
+    error = nf90_def_var(ncid, 'elvmax', NF90_FLOAT, (/dim_lon,dim_lat/), id_elvmax)
     call netcdf_err(error, 'define var elvmax for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_elvmax, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_elvmax, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define elvmax coordinates for file='//trim(outfile) )
 
-    error = nf__enddef(ncid, header_buffer_val,4,0,4)
+    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
     call netcdf_err(error, 'end meta define for file='//trim(outfile) )
       
     !--- write out data
-    error = nf_put_var_double( ncid, id_geolon, geolon(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_geolon, geolon(:dim1,:dim2))
     call netcdf_err(error, 'write var geolon for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_geolat, geolat(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_geolat, geolat(:dim1,:dim2))
     call netcdf_err(error, 'write var geolat for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_slmsk, slm(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_slmsk, slm(:dim1,:dim2))
     call netcdf_err(error, 'write var slmsk for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_land_frac, land_frac(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_land_frac, land_frac(:dim1,:dim2))
     call netcdf_err(error, 'write var land_frac for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_orog_raw, oro(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_orog_raw, oro(:dim1,:dim2))
     call netcdf_err(error, 'write var orog_raw for file='//trim(outfile) )
 ! We no longer filter the orog, so the raw and filtered records are the same.
-    error = nf_put_var_double( ncid, id_orog_filt, oro(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_orog_filt, oro(:dim1,:dim2))
     call netcdf_err(error, 'write var orog_filt for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_stddev, hprime(:dim1,:dim2,1))
+    error = nf90_put_var( ncid, id_stddev, hprime(:dim1,:dim2,1))
     call netcdf_err(error, 'write var stddev for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_convex, hprime(:dim1,:dim2,2))
+    error = nf90_put_var( ncid, id_convex, hprime(:dim1,:dim2,2))
     call netcdf_err(error, 'write var convex for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_oa1, hprime(:dim1,:dim2,3))
+    error = nf90_put_var( ncid, id_oa1, hprime(:dim1,:dim2,3))
     call netcdf_err(error, 'write var oa1 for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_oa2, hprime(:dim1,:dim2,4))
+    error = nf90_put_var( ncid, id_oa2, hprime(:dim1,:dim2,4))
     call netcdf_err(error, 'write var oa2 for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_oa3, hprime(:dim1,:dim2,5))
+    error = nf90_put_var( ncid, id_oa3, hprime(:dim1,:dim2,5))
     call netcdf_err(error, 'write var oa3 for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_oa4, hprime(:dim1,:dim2,6))
+    error = nf90_put_var( ncid, id_oa4, hprime(:dim1,:dim2,6))
     call netcdf_err(error, 'write var oa4 for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_ol1, hprime(:dim1,:dim2,7))
+    error = nf90_put_var( ncid, id_ol1, hprime(:dim1,:dim2,7))
     call netcdf_err(error, 'write var ol1 for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_ol2, hprime(:dim1,:dim2,8))
+    error = nf90_put_var( ncid, id_ol2, hprime(:dim1,:dim2,8))
     call netcdf_err(error, 'write var ol2 for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_ol3, hprime(:dim1,:dim2,9))
+    error = nf90_put_var( ncid, id_ol3, hprime(:dim1,:dim2,9))
     call netcdf_err(error, 'write var ol3 for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_ol4, hprime(:dim1,:dim2,10))
+    error = nf90_put_var( ncid, id_ol4, hprime(:dim1,:dim2,10))
     call netcdf_err(error, 'write var ol4 for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_theta, hprime(:dim1,:dim2,11))
+    error = nf90_put_var( ncid, id_theta, hprime(:dim1,:dim2,11))
     call netcdf_err(error, 'write var theta for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_gamma, hprime(:dim1,:dim2,12))
+    error = nf90_put_var( ncid, id_gamma, hprime(:dim1,:dim2,12))
     call netcdf_err(error, 'write var gamma for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_sigma, hprime(:dim1,:dim2,13))
+    error = nf90_put_var( ncid, id_sigma, hprime(:dim1,:dim2,13))
     call netcdf_err(error, 'write var sigma for file='//trim(outfile) )
-    error = nf_put_var_double( ncid, id_elvmax, hprime(:dim1,:dim2,14))
+    error = nf90_put_var( ncid, id_elvmax, hprime(:dim1,:dim2,14))
     call netcdf_err(error, 'write var elvmax for file='//trim(outfile) )
 
-    error = nf_close(ncid) 
+    error = nf90_close(ncid) 
     call netcdf_err(error, 'close file='//trim(outfile) )  
       
   end subroutine write_netcdf
@@ -236,18 +237,19 @@
 !! @param[in] string The NetCDF error message
 !! @author Jordan Alpert NOAA/EMC
   subroutine netcdf_err( err, string )
+      use netcdf
+      implicit none
       integer, intent(in) :: err
       character(len=*), intent(in) :: string
       character(len=256) :: errmsg
-      include "netcdf.inc"
 
-      if( err.EQ.NF_NOERR )return
-      errmsg = NF_STRERROR(err)
+      if( err.EQ.NF90_NOERR )return
+      errmsg = NF90_STRERROR(err)
       print*, 'FATAL ERROR: ', trim(string), ': ', trim(errmsg)
       call abort
 
       return
-    end subroutine netcdf_err
+  end subroutine netcdf_err
 
 !> Write the land mask file
 !!
@@ -262,6 +264,7 @@
 !! @author George Gayno NOAA/EMC
 
   subroutine write_mask_netcdf(im, jm, slm, land_frac, ntiles, tile, geolon, geolat)
+    use netcdf
     implicit none
     integer, intent(in):: im, jm, ntiles, tile
     real, intent(in), dimension(im,jm)  :: slm, geolon, geolat, land_frac
@@ -273,7 +276,6 @@
     integer            :: dim_lon, dim_lat
     integer            :: id_geolon,id_geolat
     integer            :: id_slmsk,id_land_frac
-    include "netcdf.inc"
 
     if(ntiles > 1) then
       write(outfile, '(a,i4.4,a)') 'out.oro.tile', tile, '.nc'
@@ -285,57 +287,58 @@
     dim2=jm
       
     !--- open the file
-    error = NF__CREATE(outfile, IOR(NF_NETCDF4,NF_CLASSIC_MODEL), inital, fsize, ncid)
+    error = nf90_create(outfile, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid, &
+            initialsize=inital, chunksize=fsize)
     call netcdf_err(error, 'Creating file '//trim(outfile) )
     !--- define dimension
-    error = nf_def_dim(ncid, 'lon', dim1, dim_lon)
+    error = nf90_def_dim(ncid, 'lon', dim1, dim_lon)
     call netcdf_err(error, 'define dimension lon for file='//trim(outfile) )
-    error = nf_def_dim(ncid, 'lat', dim2, dim_lat)
+    error = nf90_def_dim(ncid, 'lat', dim2, dim_lat)
     call netcdf_err(error, 'define dimension lat for file='//trim(outfile) )  
 
     !--- define field
 !---geolon
-    error = nf_def_var(ncid, 'geolon', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolon)
+    error = nf90_def_var(ncid, 'geolon', NF90_FLOAT, (/dim_lon,dim_lat/), id_geolon)
     call netcdf_err(error, 'define var geolon for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolon, "long_name", 9, "Longitude")
+    error = nf90_put_att(ncid, id_geolon, "long_name", "Longitude")
     call netcdf_err(error, 'define geolon name for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolon, "units", 12, "degrees_east")
+    error = nf90_put_att(ncid, id_geolon, "units", "degrees_east")
     call netcdf_err(error, 'define geolon units for file='//trim(outfile) )
 !---geolat
-    error = nf_def_var(ncid, 'geolat', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_geolat)
+    error = nf90_def_var(ncid, 'geolat', NF90_FLOAT, (/dim_lon,dim_lat/), id_geolat)
     call netcdf_err(error, 'define var geolat for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolat, "long_name", 8, "Latitude")
+    error = nf90_put_att(ncid, id_geolat, "long_name", "Latitude")
     call netcdf_err(error, 'define geolat name for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_geolat, "units", 13, "degrees_north")
+    error = nf90_put_att(ncid, id_geolat, "units", "degrees_north")
     call netcdf_err(error, 'define geolat units for file='//trim(outfile) )
 !---slmsk
-    error = nf_def_var(ncid, 'slmsk', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_slmsk)
+    error = nf90_def_var(ncid, 'slmsk', NF90_FLOAT, (/dim_lon,dim_lat/), id_slmsk)
     call netcdf_err(error, 'define var slmsk for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_slmsk, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_slmsk, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define slmsk coordinates for file='//trim(outfile) )
 !--- land_frac
-    error = nf_def_var(ncid, 'land_frac', NF_FLOAT, 2, (/dim_lon,dim_lat/), id_land_frac)
+    error = nf90_def_var(ncid, 'land_frac', NF90_FLOAT, (/dim_lon,dim_lat/), id_land_frac)
     call netcdf_err(error, 'define var land_frac for file='//trim(outfile) )
-    error = nf_put_att_text(ncid, id_land_frac, "coordinates", 13, "geolon geolat")
+    error = nf90_put_att(ncid, id_land_frac, "coordinates", "geolon geolat")
     call netcdf_err(error, 'define land_frac coordinates for file='//trim(outfile) )
 
-    error = nf__enddef(ncid, header_buffer_val,4,0,4)
+    error = nf90_enddef(ncid, header_buffer_val,4,0,4)
     call netcdf_err(error, 'end meta define for file='//trim(outfile) )
       
     !--- write out data
-    error = nf_put_var_double( ncid, id_geolon, geolon(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_geolon, geolon(:dim1,:dim2))
     call netcdf_err(error, 'write var geolon for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_geolat, geolat(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_geolat, geolat(:dim1,:dim2))
     call netcdf_err(error, 'write var geolat for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_slmsk, slm(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_slmsk, slm(:dim1,:dim2))
     call netcdf_err(error, 'write var slmsk for file='//trim(outfile) )
 
-    error = nf_put_var_double( ncid, id_land_frac, land_frac(:dim1,:dim2))
+    error = nf90_put_var( ncid, id_land_frac, land_frac(:dim1,:dim2))
     call netcdf_err(error, 'write var land_frac for file='//trim(outfile) )
 
-    error = nf_close(ncid) 
+    error = nf90_close(ncid) 
     call netcdf_err(error, 'close file='//trim(outfile) )  
       
   end subroutine write_mask_netcdf
@@ -343,17 +346,18 @@
 !> Read the land mask file
 !!
 !! @param[in] merge_file path 
-!! @param[in] slm Land-sea mask.
-!! @param[in] land_frac Land fraction.
-!! @param[in] lake_frac Lake fraction
+!! @param[out] slm Land-sea mask.
+!! @param[out] land_frac Land fraction.
+!! @param[out] lake_frac Lake fraction
 !! @param[in] im 'i' dimension of a model grid tile.
 !! @param[in] jm 'j' dimension of a model grid tile.
 !! @author George Gayno NOAA/EMC
 
   subroutine read_mask(merge_file,slm,land_frac,lake_frac,im,jm)
 
+  use netcdf
+
   implicit none
-  include "netcdf.inc"
 
   character(len=*), intent(in) :: merge_file
 
@@ -363,30 +367,28 @@
   real, intent(out) :: lake_frac(im,jm)
   real, intent(out) :: slm(im,jm)
 
-  integer ncid, error, fsize, id_var
-
-  fsize = 66536
+  integer ncid, error, id_var
 
   print*,'- READ IN EXTERNAL LANDMASK FILE: ',trim(merge_file)
-  error=NF__OPEN(merge_file,NF_NOWRITE,fsize,ncid)
+  error=nf90_open(merge_file,nf90_nowrite,ncid)
   call netcdf_err(error, 'Open file '//trim(merge_file) )
 
-  error=nf_inq_varid(ncid, 'land_frac', id_var)
+  error=nf90_inq_varid(ncid, 'land_frac', id_var)
   call netcdf_err(error, 'inquire varid of land_frac')
-  error=nf_get_var_double(ncid, id_var, land_frac)
+  error=nf90_get_var(ncid, id_var, land_frac)
   call netcdf_err(error, 'inquire data of land_frac')
 
-  error=nf_inq_varid(ncid, 'slmsk', id_var)
+  error=nf90_inq_varid(ncid, 'slmsk', id_var)
   call netcdf_err(error, 'inquire varid of slmsk')
-  error=nf_get_var_double(ncid, id_var, slm)
+  error=nf90_get_var(ncid, id_var, slm)
   call netcdf_err(error, 'inquire data of slmsk')
 
-  error=nf_inq_varid(ncid, 'lake_frac', id_var)
+  error=nf90_inq_varid(ncid, 'lake_frac', id_var)
   call netcdf_err(error, 'inquire varid of lake_frac')
-  error=nf_get_var_double(ncid, id_var, lake_frac)
+  error=nf90_get_var(ncid, id_var, lake_frac)
   call netcdf_err(error, 'inquire data of lake_frac')
 
-  error = nf_close(ncid) 
+  error = nf90_close(ncid) 
 
   end subroutine read_mask
 
@@ -398,33 +400,32 @@
 !! @author George Gayno NOAA/EMC
   subroutine read_mdl_dims(mdl_grid_file, im, jm)
 
+  use netcdf
+
   implicit none
-  include "netcdf.inc"
 
   character(len=*), intent(in) :: mdl_grid_file
 
   integer, intent(out)         :: im, jm
 
-  integer ncid, error, fsize, id_dim, nx, ny
-
-  fsize = 66536
+  integer ncid, error, id_dim, nx, ny
 
   print*, "- READ MDL GRID DIMENSIONS FROM= ", trim(mdl_grid_file)
 
-  error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
+  error=nf90_open(mdl_grid_file, nf90_nowrite, ncid)
   call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )
 
-  error=nf_inq_dimid(ncid, 'nx', id_dim)
+  error=nf90_inq_dimid(ncid, 'nx', id_dim)
   call netcdf_err(error, 'inquire dimension nx from file '// trim(mdl_grid_file) )
-  error=nf_inq_dimlen(ncid,id_dim,nx)
+  error=nf90_inquire_dimension(ncid, id_dim, len=nx)
   call netcdf_err(error, 'inquire nx from file '//trim(mdl_grid_file) )
 
-  error=nf_inq_dimid(ncid, 'ny', id_dim)
+  error=nf90_inq_dimid(ncid, 'ny', id_dim)
   call netcdf_err(error, 'inquire dimension ny from file '// trim(mdl_grid_file) )
-  error=nf_inq_dimlen(ncid,id_dim,ny)
+  error=nf90_inquire_dimension(ncid, id_dim, len=ny)
   call netcdf_err(error, 'inquire ny from file '//trim(mdl_grid_file) )
 
-  error=nf_close(ncid)
+  error=nf90_close(ncid)
 
   IM = nx/2
   JM = ny/2
@@ -451,10 +452,11 @@
              geolon, geolon_c, geolat, geolat_c, dx, dy, &
              is_north_pole, is_south_pole)
 
+  use netcdf
+
   use orog_utils, only : find_poles, find_nearest_pole_points
 
   implicit none
-  include "netcdf.inc"
 
   character(len=*), intent(in) :: mdl_grid_file
 
@@ -470,12 +472,11 @@
   real, intent(out)            :: dx(im,jm), dy(im,jm)
 
   integer                      :: i, j
-  integer                      :: ncid, error, fsize, id_var, nx, ny
+  integer                      :: ncid, error, id_var, nx, ny
   integer                      :: i_south_pole,j_south_pole
   integer                      :: i_north_pole,j_north_pole
 
   real, allocatable     :: tmpvar(:,:)
-  fsize = 66536
 
   nx = 2*im
   ny = 2*jm
@@ -484,12 +485,12 @@
 
   print*, "- OPEN AND READ= ", trim(mdl_grid_file)
 
-  error=NF__OPEN(mdl_grid_file,NF_NOWRITE,fsize,ncid)
+  error=nf90_open(mdl_grid_file, nf90_nowrite, ncid)
   call netcdf_err(error, 'Opening file '//trim(mdl_grid_file) )
 
-  error=nf_inq_varid(ncid, 'x', id_var)
+  error=nf90_inq_varid(ncid, 'x', id_var)
   call netcdf_err(error, 'inquire varid of x from file ' // trim(mdl_grid_file))
-  error=nf_get_var_double(ncid, id_var, tmpvar)
+  error=nf90_get_var(ncid, id_var, tmpvar)
   call netcdf_err(error, 'inquire data of x from file ' // trim(mdl_grid_file))
 
 ! Adjust lontitude to be between 0 and 360.
@@ -503,9 +504,9 @@
   geolon(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
   geolon_c(1:IM+1,1:JM+1) = tmpvar(1:nx+1:2,1:ny+1:2)
 
-  error=nf_inq_varid(ncid, 'y', id_var)
+  error=nf90_inq_varid(ncid, 'y', id_var)
   call netcdf_err(error, 'inquire varid of y from file ' // trim(mdl_grid_file))
-  error=nf_get_var_double(ncid, id_var, tmpvar)
+  error=nf90_get_var(ncid, id_var, tmpvar)
   call netcdf_err(error, 'inquire data of y from file ' // trim(mdl_grid_file))
 
   geolat(1:IM,1:JM) = tmpvar(2:nx:2,2:ny:2)
@@ -522,12 +523,12 @@
 
   allocate(tmpvar(nx,ny))
 
-  error=nf_inq_varid(ncid, 'area', id_var)
+  error=nf90_inq_varid(ncid, 'area', id_var)
   call netcdf_err(error, 'inquire varid of area from file ' // trim(mdl_grid_file))
-  error=nf_get_var_double(ncid, id_var, tmpvar)
+  error=nf90_get_var(ncid, id_var, tmpvar)
   call netcdf_err(error, 'inquire data of area from file ' // trim(mdl_grid_file))
 
-  error = nf_close(ncid)
+  error = nf90_close(ncid)
 
   do j = 1, jm
     do i = 1, im
@@ -550,28 +551,48 @@
  subroutine read_global_orog(imn,jmn,glob)
 
  use orog_utils, only : transpose_orog
+ use netcdf
 
  implicit none
-
- include 'netcdf.inc'
 
  integer, intent(in)    :: imn, jmn
  integer*2, intent(out) :: glob(imn,jmn)
 
- integer :: ncid, error, id_var, fsize
-
- fsize=65536
+ integer :: ncid, error, id_dim, id_var, idim, jdim
 
  print*,"- OPEN AND READ ./topography.gmted2010.30s.nc"
 
- error=NF__OPEN("./topography.gmted2010.30s.nc", &
-                NF_NOWRITE,fsize,ncid)
- call netcdf_err(error, 'Open file topography.gmted2010.30s.nc' )
- error=nf_inq_varid(ncid, 'topo', id_var)
+ error=nf90_open("./topography.gmted2010.30s.nc", &
+                nf90_nowrite, ncid)
+ call netcdf_err(error, 'Opening file topography.gmted2010.30s.nc' )
+
+ error=nf90_inq_dimid(ncid, 'idim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of idim' )
+
+ error=nf90_inquire_dimension(ncid,id_dim,len=idim)
+ call netcdf_err(error, 'Reading idim' )
+
+ if (imn /= idim) then
+   print*,"FATAL ERROR: i-dimensions do not match."
+ endif
+
+ error=nf90_inq_dimid(ncid, 'jdim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of jdim' )
+
+ error=nf90_inquire_dimension(ncid,id_dim,len=jdim)
+ call netcdf_err(error, 'Reading jdim' )
+
+ if (jmn /= jdim) then
+   print*,"FATAL ERROR: j-dimensions do not match."
+ endif
+
+ error=nf90_inq_varid(ncid, 'topo', id_var)
  call netcdf_err(error, 'Inquire varid of topo')
- error=nf_get_var_int2(ncid, id_var, glob)
- call netcdf_err(error, 'Read topo')
- error = nf_close(ncid)
+
+ error=nf90_get_var(ncid, id_var, glob)
+ call netcdf_err(error, 'Reading topo')
+
+ error = nf90_close(ncid)
 
  print*,"- MAX/MIN OF OROGRAPHY DATA ",maxval(glob),minval(glob)
 
@@ -589,28 +610,48 @@
  subroutine read_global_mask(imn, jmn, mask)
 
  use orog_utils, only : transpose_mask
+ use netcdf
 
  implicit none
-
- include 'netcdf.inc'
 
  integer, intent(in)        :: imn, jmn
 
  integer(1), intent(out)    :: mask(imn,jmn)
 
- integer   :: ncid, fsize, id_var, error
-
- fsize = 65536
+ integer   :: ncid, id_var, id_dim, error, idim, jdim
 
  print*,"- OPEN AND READ ./landcover.umd.30s.nc"
 
- error=NF__OPEN("./landcover.umd.30s.nc",NF_NOWRITE,fsize,ncid)
- call netcdf_err(error, 'Open file landcover.umd.30s.nc' )
- error=nf_inq_varid(ncid, 'land_mask', id_var)
+ error=nf90_open("./landcover.umd.30s.nc",nf90_nowrite,ncid)
+ call netcdf_err(error, 'Opening file landcover.umd.30s.nc' )
+
+ error=nf90_inq_dimid(ncid, 'idim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of idim' )
+
+ error=nf90_inquire_dimension(ncid,id_dim,len=idim)
+ call netcdf_err(error, 'Reading idim' )
+
+ if (imn /= idim) then
+   print*,"FATAL ERROR: i-dimensions do not match."
+ endif
+
+ error=nf90_inq_dimid(ncid, 'jdim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of jdim' )
+
+ error=nf90_inquire_dimension(ncid,id_dim,len=jdim)
+ call netcdf_err(error, 'Reading jdim' )
+
+ if (jmn /= jdim) then
+   print*,"FATAL ERROR: j-dimensions do not match."
+ endif
+
+ error=nf90_inq_varid(ncid, 'land_mask', id_var)
  call netcdf_err(error, 'Inquire varid of land_mask')
- error=nf_get_var_int1(ncid, id_var, mask)
+
+ error=nf90_get_var(ncid, id_var, mask)
  call netcdf_err(error, 'Inquire data of land_mask')
- error = nf_close(ncid)
+
+ error = nf90_close(ncid)
 
  call transpose_mask(imn,jmn,mask)
 
@@ -626,48 +667,53 @@
 !! @author G. Gayno
  subroutine qc_orog_by_ramp(imn, jmn, zavg, zslm)
 
- implicit none
+ use netcdf
 
- include 'netcdf.inc'
+ implicit none
 
  integer, intent(in)      :: imn, jmn
  integer, intent(inout)   :: zavg(imn,jmn)
  integer, intent(inout)   :: zslm(imn,jmn)
 
- integer                  :: i, j, error, ncid, id_var, fsize
+ integer                  :: i, j, error, ncid, id_var, id_dim, jramp
 
  real(4), allocatable     :: gice(:,:)
-
- fsize = 65536
-
- allocate (GICE(IMN+1,3601))
 
 ! Read 30-sec Antarctica RAMP data. Points scan from South
 ! to North, and from Greenwich to Greenwich.
 
  print*,"- OPEN/READ RAMP DATA ./topography.antarctica.ramp.30s.nc"
 
- error=NF__OPEN("./topography.antarctica.ramp.30s.nc", &
-                 NF_NOWRITE,fsize,ncid)
+ error=nf90_open("./topography.antarctica.ramp.30s.nc", &
+                 nf90_nowrite, ncid)
  call netcdf_err(error, 'Opening RAMP topo file' )
- error=nf_inq_varid(ncid, 'topo', id_var)
+
+ error=nf90_inq_dimid(ncid, 'jdim', id_dim)
+ call netcdf_err(error, 'Inquire dimid of jdim' )
+
+ error=nf90_inquire_dimension(ncid, id_dim, len=jramp)
+ call netcdf_err(error, 'Reading jdim' )
+
+ allocate (GICE(IMN+1,jramp))
+
+ error=nf90_inq_varid(ncid, 'topo', id_var)
  call netcdf_err(error, 'Inquire varid of RAMP topo')
- error=nf_get_var_real(ncid, id_var, GICE)
+
+ error=nf90_get_var(ncid, id_var, GICE)
  call netcdf_err(error, 'Inquire data of RAMP topo')
- error = nf_close(ncid)
+
+ error = nf90_close(ncid)
 
  print*,"- QC GLOBAL OROGRAPHY DATA WITH RAMP."
 
 ! If RAMP values are valid, replace the global value with the RAMP
 ! value. Invalid values are less than or equal to 0 (0, -1, or -99).
 
- do j = 1, 3601
+ do j = 1, jramp
  do i = 1, IMN
-   if( GICE(i,j) .ne. -99. .and.  GICE(i,j) .ne. -1.0 ) then
-     if ( GICE(i,j) .gt. 0.) then
-       ZAVG(i,j) = int( GICE(i,j) + 0.5 )
-       ZSLM(i,j) = 1
-     endif
+   if ( GICE(i,j) .gt. 0.) then
+     ZAVG(i,j) = int( GICE(i,j) + 0.5 )
+     ZSLM(i,j) = 1
    endif
  enddo
  enddo
