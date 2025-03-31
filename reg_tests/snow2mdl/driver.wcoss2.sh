@@ -66,7 +66,7 @@ TEST1=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l select=1
 #-----------------------------------------------------------------------------
 
 export DATA=$DATA_ROOT/test.global
-TEST2=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l select=1:ncpus=1:mem=2500MB \
+TEST2=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l select=1:ncpus=1:mem=5000MB \
         -N snow.global -l walltime=00:03:00 -W depend=afterok:$TEST1 $PWD/snow2mdl.global.sh)
 
 #-----------------------------------------------------------------------------
