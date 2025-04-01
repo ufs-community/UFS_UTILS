@@ -752,7 +752,7 @@ else   ! stand-alone regional tile
 end if
 
 ! Open netCDF file for output
-err = nf90_create(oro_data_output_file_name, NF90_CLOBBER, ncid_out)
+err = nf90_create(oro_data_output_file_name, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid_out)
 call netcdf_err(err, 'creating: '//oro_data_output_file_name)
 
 err = nf90_redef(ncid_out)
@@ -925,7 +925,7 @@ if ( min_DX.le.7.5 ) then
    end if
 
    ! Open netCDF file for output
-   err = nf90_create(oro_data_output_file_name, NF90_CLOBBER, ncid_out)
+   err = nf90_create(oro_data_output_file_name, IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid_out)
    call netcdf_err(err, 'creating: '//oro_data_output_file_name)
 
    err = nf90_redef(ncid_out)

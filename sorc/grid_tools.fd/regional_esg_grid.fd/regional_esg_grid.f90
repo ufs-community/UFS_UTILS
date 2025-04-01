@@ -108,7 +108,7 @@ program regional_grid
   glat = glat*rtod
   where (glon < 0.0) glon = glon + 360.0
 
-  call check( nf90_create("regional_grid.nc", NF90_64BIT_OFFSET, ncid) )
+  call check( nf90_create("regional_grid.nc", IOR(NF90_NETCDF4,NF90_CLASSIC_MODEL), ncid) )
   call check( nf90_def_dim(ncid, "string", 255, string_dimid) )
   call check( nf90_def_dim(ncid, "nx", nx, nx_dimid) )
   call check( nf90_def_dim(ncid, "ny", ny, ny_dimid) )
