@@ -100,7 +100,7 @@ GFS_LONSPERLAT_FILE=${GFS_LONSPERLAT_FILE:-global_lonsperlat.t1534.3072.1536.txt
 # AFWA is global.
 #------------------------------------------------------------------------
 
-AFWA_GLOBAL_FILE=${AFWA_GLOBAL_FILE:-""}
+AFWA_GLOBAL_FILE=${AFWA_GLOBAL_FILE:-"snow.usaf.grib2"}
 IMS_FILE=${IMS_FILE:-"imssnow96.grb.grib2"}
 
 #------------------------------------------------------------------------
