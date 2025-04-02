@@ -25,8 +25,7 @@
 #    /nwprod/gfs.vX.Y.Z/ush/emcsfc_ice_blend.sh (create global ice blend)
 #    /nwprod/gfs.vX.Y.Z/ush/emcsfc_snow.sh (create model snow analysis)
 #  Input Files:
-#    $AFWA_NH_FILE           - nh afwa snow data (grib 1)
-#    $AFWA_SH_FILE           - sh afwa snow data (grib 1)
+#    $AFWA_GLOBAL_FILE       - afwa snow data (grib 2)
 #    $IMS_FILE               - nh ims snow cover and ice data (grib 2)
 #    $FIVE_MIN_ICE_FILE      - global 5-minute ice concentration (grib 2)
 #    $FIVE_MIN_ICE_MASK_FILE - corresponding land/sea mask for $FIVE_MIN_ICE_FILE 
@@ -101,9 +100,8 @@ fi
 # the input data for emcsfc_ice_blend and emcsfc_snow2mdl programs.
 #-----------------------------------------------------------------------
 
-# afwa snow depth data (grib 1)
-export AFWA_NH_FILE=${AFWA_NH_FILE:-"NPR.SNWN.SP.S1200.MESH16"}
-export AFWA_SH_FILE=${AFWA_SH_FILE:-"NPR.SNWS.SP.S1200.MESH16"}
+# afwa snow depth data (grib 2)
+export AFWA_GLOBAL_FILE=${AFWA_GLOBAL_FILE:-"snow.usaf.grib2"}
 
 # ims snow cover and ice cover data (grib 1 or grib 2)
 export IMS_FILE=${IMS_FILE:-"ims.grib2"} 

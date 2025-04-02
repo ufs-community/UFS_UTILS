@@ -23,6 +23,7 @@ module use ../../modulefiles
 module load build.$target.intel
 module load grib_util/1.2.2
 module load wgrib2/2.0.8
+module load prod_util/2.0.14
 module list
 
 set -x
@@ -53,19 +54,19 @@ SUM_FILE=summary.log
 rm -fr $DATA_ROOT
 
 #-----------------------------------------------------------------------------
-# Test GFS ops snow.
+# Test using the air force/afwa hemispheric data.
 #-----------------------------------------------------------------------------
 
-export DATA=$DATA_ROOT/test.ops
+export DATA=$DATA_ROOT/test.hemi
 TEST1=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l select=1:ncpus=1:mem=2500MB \
-        -N snow.ops -l walltime=00:03:00 $PWD/snow2mdl.ops.sh)
+        -N snow.hemi -l walltime=00:03:00 $PWD/snow2mdl.hemi.sh)
 
 #-----------------------------------------------------------------------------
-# Test afwa global snow.
+# Test air force/afwa global snow.
 #-----------------------------------------------------------------------------
 
 export DATA=$DATA_ROOT/test.global
-TEST2=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l select=1:ncpus=1:mem=2500MB \
+TEST2=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l select=1:ncpus=1:mem=5000MB \
         -N snow.global -l walltime=00:03:00 -W depend=afterok:$TEST1 $PWD/snow2mdl.global.sh)
 
 #-----------------------------------------------------------------------------

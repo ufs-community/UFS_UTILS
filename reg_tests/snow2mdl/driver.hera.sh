@@ -27,6 +27,7 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module load grib-util
 module load wgrib2/2.0.8
+module load prod_util/2.1.1
 module list
 
 # Because of a bug in the grib-util module, need to construct this
@@ -58,13 +59,13 @@ fi
 export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 
-# The first test mimics GFS OPS.
+# The first test uses hemispheric afwa/airforce data, as was done in OPS.
 
-export DATA="${DATA_ROOT}/test.ops"
-TEST1=$(sbatch --parsable -J snow.ops -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
-      --ntasks=1 -q ${QUEUE} -t 00:03:00 ./snow2mdl.ops.sh)
+export DATA="${DATA_ROOT}/test.hemi"
+TEST1=$(sbatch --parsable -J snow.hemi -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
+      --ntasks=1 -q ${QUEUE} -t 00:03:00 ./snow2mdl.hemi.sh)
 
-# The second test is for the new AFWA global GRIB2 data.
+# The second test mimics current OPS, which uses global afwa/airforce data.
 
 export DATA="${DATA_ROOT}/test.global"
 TEST2=$(sbatch --parsable -J snow.global -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
