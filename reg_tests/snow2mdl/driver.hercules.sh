@@ -47,6 +47,8 @@ fi
 
 rm -fr $DATA_ROOT
 
+export OMP_NUM_THREADS=1
+
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 export WGRIB=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/intel/2021.9.0/grib-util-1.3.0-wenl3in/bin/wgrib

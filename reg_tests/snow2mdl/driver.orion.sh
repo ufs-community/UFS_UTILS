@@ -47,6 +47,8 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
+export OMP_NUM_THREADS=1
+
 rm -fr $DATA_ROOT
 
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/snow2mdl
