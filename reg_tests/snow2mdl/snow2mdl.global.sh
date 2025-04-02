@@ -1,16 +1,14 @@
 #!/bin/bash
 
 #--------------------------------------------------------------------------
-# Create a snow file from afwa global data.  This script is run from 
-# its machine-specific driver.
+# Create a snow file from afwa global data and ims data.  This script 
+# is run from its machine-specific driver.
 #--------------------------------------------------------------------------
 
 set -x
 
-export IMS_FILE=$HOMEreg/input_data/imssnow96.afwa.global.grb
-export AFWA_NH_FILE=""
-export AFWA_SH_FILE=""
-export AFWA_GLOBAL_FILE="$HOMEreg/input_data/afwa.global.grb2"
+export IMS_FILE=$HOMEreg/input_data/global/gfs.t00z.imssnow96.grib2
+export AFWA_GLOBAL_FILE="$HOMEreg/input_data/global/gfs.t00z.snow.usaf.grib2"
 
 export MODEL_LATITUDE_FILE=$HOMEgfs/fix/am/global_latitudes.t1534.3072.1536.grb
 export MODEL_LONGITUDE_FILE=$HOMEgfs/fix/am/global_longitudes.t1534.3072.1536.grb
