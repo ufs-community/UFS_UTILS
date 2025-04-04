@@ -419,16 +419,17 @@
  ! INTENT OUT
  type(esmf_grid)                   :: gauss_grid
 
- integer :: ierr
+ integer :: ierr, fac
  character(len=200)     :: fname
 
  fname = trim(grid_setup%dir_coord)//trim(grid_setup%fname_coord)
 
  if (localpet == 0) print*," creating gauss grid for ", trim(fname)
 
+ fac = npets / n_tiles
  gauss_grid = ESMF_GridCreate(filename=trim(fname),  &
               fileFormat=ESMF_FILEFORMAT_SCRIP,  &
-              regDecomp=(/1,npets/), addCornerStagger=.true., rc=ierr)
+              regDecomp=(/n_tiles,fac/), addCornerStagger=.true., rc=ierr)
      if(ESMF_logFoundError(rcToCheck=ierr,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN Gauss GridCreate", ierr)
 
