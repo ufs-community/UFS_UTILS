@@ -167,15 +167,8 @@
  real(esmf_kind_r8), allocatable :: array_in(:,:,:)
  real(esmf_kind_r8), allocatable :: temp_array(:,:,:)
 
- if (localpet==0) then
-     allocate(array_in(n_vars,i_dim, j_dim))
-     allocate(temp_array(n_vars,i_dim, j_dim))
-     allocate(array2D(i_dim, j_dim))
- else
-     allocate(array_in(0,0,0))
-     allocate(temp_array(0,0,0))
-     allocate(array2D(0,0))
- end if
+ allocate(array_in(n_vars,i_dim, j_dim))
+ allocate(array2D(i_dim, j_dim))
 
  select case (grid_setup%descriptor)
  case ('fv3_rst')
@@ -213,16 +206,17 @@
          enddo
          ierr = nf90_close(ncid)
 
+         ! increment files are S->N, ESMF expects N->S
+         if  ( grid_setup%descriptor == 'gau_inc') then 
+            allocate(temp_array(n_vars,i_dim, j_dim))
+            temp_array = array_in
+            do j=1,j_dim
+                array_in(:,:,j) = temp_array(:,:,j_dim-j+1)
+            enddo
+            deallocate(temp_array)
+         endif
+
       endif
-
-
-     ! increment files are S->N, ESMF expects N->S
-     if  ( grid_setup%descriptor == 'gau_inc') then 
-        temp_array = array_in
-        do j=1,j_dim
-            array_in(:,:,j) = temp_array(:,:,j_dim-j+1)
-        enddo
-     endif
       ! scatter
       do v =1, n_vars
           array2D=array_in(v,:,:) ! scatter misbehaves if given indexed 3D array.
@@ -236,7 +230,6 @@
 
  ! clean up
  deallocate(array_in)
- deallocate(temp_array)
  deallocate(array2D)
 
  end subroutine read_into_fields
