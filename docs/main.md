@@ -83,6 +83,10 @@ https://github.com/ufs-community/UFS_UTILS.
   surface climatological fields, such as vegetation type and albedo,
   for an FV3 grid.
 
+- <a href="regrid_sfc/index.html">regrid_sfc</a> - Masked
+   bilinear interpolation of increments and states between fv3 and 
+   Gaussian grids.
+
 - <a href="vcoord_gen/index.html">vcoord_gen</a> - Generates hybrid
   coordinate parameters from fields such as surface pressure, model
   top and the number of vertical levels. Outputs the 'ak' and 'bk'

@@ -1,0 +1,26 @@
+ &config
+  n_vars=4,
+  variable_list="soilt1_inc", "soilt2_inc", "slc1_inc", "slc2_inc",
+  missing_value=0.,
+  extrap_levs=2,
+ /
+ &input
+  gridtype="gau_inc",
+  ires=768,
+  jres=384,
+  fname="sfcincr_gsi",
+  dir="./",
+  fname_coord="gaussian_scrip.nc",
+  dir_coord="./"
+ /
+
+ &output
+  gridtype="fv3_rst",
+  ires=192,
+  jres=192,
+  fname="sfci",
+  dir="./",
+  fname_mask="vegetation_type"
+  dir_mask="./"
+  dir_coord="./",
+ /
