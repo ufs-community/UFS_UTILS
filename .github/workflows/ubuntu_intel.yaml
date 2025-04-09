@@ -58,6 +58,7 @@ jobs:
       - name: install-dependencies-with-spack
         if: steps.cache-env.outputs.cache-hit != 'true'
         run: |
+          sudo mv /usr/local /usr/local_mv
           git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git
           source spack/share/spack/setup-env.sh
           sed "s/\[oneapi, gcc@10:10, apple-clang@14\]/\[oneapi\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
