@@ -26,7 +26,7 @@ env:
 
 jobs:
   setup:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: checkout  # this is to get the ci/spack.yaml file
@@ -58,6 +58,7 @@ jobs:
       - name: install-dependencies-with-spack
         if: steps.cache-env.outputs.cache-hit != 'true'
         run: |
+          sudo mv /usr/local /usr/local_mv
           git clone -c feature.manyFiles=true https://github.com/JCSDA/spack.git
           source spack/share/spack/setup-env.sh
           sed "s/\[oneapi, gcc@10:10, apple-clang@14\]/\[oneapi\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
@@ -78,7 +79,7 @@ jobs:
 
   ufs_utils:
     needs: setup
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: install-intel
