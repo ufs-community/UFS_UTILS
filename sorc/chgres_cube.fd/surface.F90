@@ -1071,11 +1071,11 @@
  bundle_allland_input = ESMF_FieldBundleCreate(name="all land input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
- call ESMF_FieldBundleAdd(bundle_allland_target, (/canopy_mc_target_grid, snow_depth_target_grid, &
+ call ESMF_FieldBundleAdd(bundle_allland_target, (/snow_depth_target_grid, &
                           snow_liq_equiv_target_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
- call ESMF_FieldBundleAdd(bundle_allland_input, (/canopy_mc_input_grid, snow_depth_input_grid, &
+ call ESMF_FieldBundleAdd(bundle_allland_input, (/snow_depth_input_grid, &
                           snow_liq_equiv_input_grid/), rc=rc)                          
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
@@ -1301,12 +1301,14 @@
       call error_handler("IN FieldBundleCreate", rc)
       
  call ESMF_FieldBundleAdd(bundle_nolandice_target, (/skin_temp_target_grid, terrain_from_input_grid,& 
-                          soil_type_from_input_grid,soilm_tot_target_grid,soil_temp_target_grid/), rc=rc)
+                          soil_type_from_input_grid,soilm_tot_target_grid,soil_temp_target_grid,&
+                          canopy_mc_target_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
       
  call ESMF_FieldBundleAdd(bundle_nolandice_input, (/skin_temp_input_grid, terrain_input_grid,&
-                          soil_type_input_grid,soilm_tot_input_grid,soil_temp_input_grid/), rc=rc)
+                          soil_type_input_grid,soilm_tot_input_grid,soil_temp_input_grid,&
+                          canopy_mc_input_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
  
