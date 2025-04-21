@@ -345,7 +345,7 @@
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
 
- LOGICAL             :: IS_NOAHMP
+ LOGICAL             :: IS_NOAHMP, coupled
  INTEGER             :: LSM
 
  real(kind=kind_io8) :: min_ice(lensfc)
@@ -375,7 +375,7 @@
                                       !! dead start. Set to zero for non-dead
                                       !! start.
  REAL, ALLOCATABLE   :: STC_BCK(:,:), SMC_BCK(:,:), SLC_BCK(:,:)
- REAL, ALLOCATABLE   :: SLIFCS_FG(:), SICFCS_FG(:)
+ REAL, ALLOCATABLE   :: SLIFCS_FG(:), SICFCS_FG(:), SIHFCS_FG(:)
  INTEGER, ALLOCATABLE :: LANDINC_MASK_FG(:), LANDINC_MASK(:)
  REAL, ALLOCATABLE   :: SND_BCK(:), SND_INC(:), SWE_BCK(:)
  REAL(KIND=KIND_IO8), ALLOCATABLE :: SLMASKL(:), SLMASKW(:), LANDFRAC(:)
@@ -400,6 +400,8 @@
  NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNOWINCR, DO_SOILINCR, INTERP_LANDINCR
 
  DATA NST_FILE/'NULL'/
+
+ coupled=.true.
 
  DO_SNOWINCR = .FALSE.
  DO_SOILINCR      = .FALSE.
@@ -429,13 +431,15 @@
 ! READ THE OROGRAPHY AND GRID POINT LAT/LONS FOR THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
+! Will we run coupled without a fractional grid?
+
  ALLOCATE(LANDFRAC(LENSFC))
  ALLOCATE(LAKEFRAC(LENSFC))
- IF(FRAC_GRID) THEN
+ IF(FRAC_GRID .OR. COUPLED) THEN
    PRINT*,'- RUNNING WITH FRACTIONAL GRID.'
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC,& 
         LANDFRAC=LANDFRAC,LAKEFRAC=LAKEFRAC)
-  print*,'lakefrac ',maxval(lakefrac),minval(lakefrac)
+  print*,'lakefrac ',do_nsst,maxval(lakefrac),minval(lakefrac)
  ELSE
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC)
    LANDFRAC=-999.9
@@ -477,7 +481,14 @@
    ALLOCATE(NSST%Z_C(LENSFC))
    ALLOCATE(NSST%ZM(LENSFC))
    ALLOCATE(SLIFCS_FG(LENSFC))
+ ENDIF
+
+ IF (DO_NSST .OR. COUPLED) THEN
    ALLOCATE(SICFCS_FG(LENSFC))
+ ENDIF
+  
+ IF (COUPLED) THEN
+   ALLOCATE(SIHFCS_FG(LENSFC))
  ENDIF
 
 IF (DO_LANDINCR) THEN
@@ -550,8 +561,11 @@ ENDIF
    IF(NINT(SLIFCS(I)).EQ.2) AISFCS(I) = 1.
  ENDDO
 
- IF (DO_NSST) THEN
+ IF (DO_NSST .OR. COUPLED) THEN
    SICFCS_FG=SICFCS
+ ENDIF
+
+ IF (DO_NSST) THEN
    IF (.NOT. DO_SFCCYCLE ) THEN
      PRINT*
      PRINT*,"FIRST GUESS MASK ADJUSTED BY IFD RECORD"
@@ -564,6 +578,10 @@ ENDIF
    ENDIF
  ENDIF
  
+ IF (COUPLED) THEN
+   SIHFCS_FG=SIHFCS
+ ENDIF
+
  ! CALCULATE MASK FOR LAND INCREMENTS
  IF (DO_LANDINCR)  &
     CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, &
@@ -686,6 +704,15 @@ ENDIF
                     tf_clm_tile,tf_trd_tile,sal_clm_tile,landfrac,frac_grid)
    ENDIF
  ENDIF
+
+ if (coupled) then
+   do i = 1, lensfc
+     if (lakefrac(i) == 0.0) then
+       sicfcs(i) = sicfcs_fg(i)
+       sihfcs(i) = sihfcs_fg(i)
+     endif
+   enddo
+ endif
 
 !--------------------------------------------------------------------------------
 ! READ IN AND APPLY LAND INCREMENTS
