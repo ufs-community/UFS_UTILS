@@ -711,6 +711,13 @@ ENDIF
        sicfcs(i) = sicfcs_fg(i)
        sihfcs(i) = sihfcs_fg(i)
      endif
+     if (nint(slifcs(i)) /= 1) then
+       if (sicfcs(i) > 0.0) then
+         slifcs(i) = 2.0
+       else
+         slifcs(i) = 0.0
+       endif
+     endif
    enddo
  endif
 
@@ -870,7 +877,7 @@ ENDIF
 
  IF (LSM==LSM_NOAHMP) THEN
 
-   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.false.,NSST,VEGFCS=VEGFCS, &
+   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.false.,NSST,SLIFCS=SLIFCS,VEGFCS=VEGFCS, &
                    SLCFCS=SLCFCS,SMCFCS=SMCFCS,STCFCS=STCFCS,&
                    SICFCS=SICFCS,SIHFCS=SIHFCS)
 
