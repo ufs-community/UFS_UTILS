@@ -701,7 +701,8 @@ ENDIF
 !
      CALL ADJUST_NSST(RLA,RLO,SLIFCS,SLIFCS_FG,TSFFCS,SITFCS,SICFCS,SICFCS_FG,&
                     STCFCS,NSST,LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2, &
-                    tf_clm_tile,tf_trd_tile,sal_clm_tile,landfrac,frac_grid)
+                    tf_clm_tile,tf_trd_tile,sal_clm_tile,landfrac,frac_grid, &
+                    lakefrac,coupled)
    ENDIF
  ENDIF
 
@@ -956,13 +957,15 @@ ENDIF
  !! @param[in] sal_clm_tile Climatological salinity on the cubed-sphere tile.
  !! @param[in] LANDFRAC Land fraction
  !! @param[in] FRAC_GRID Process fractional grid when true.
+ !! @param[in] LAKEFRAC Lake fraction
+ !! @param[in] COUPLED When true, running coupled to an ocean/ice model.
  !!
  !! @author Xu Li, George Gayno
  SUBROUTINE ADJUST_NSST(RLA,RLO,SLMSK_TILE,SLMSK_FG_TILE,SKINT_TILE,&
                         SICET_TILE,sice_tile,sice_fg_tile,SOILT_TILE,NSST, &
                         LENSFC,LSOIL,IDIM,JDIM,ZSEA1,ZSEA2, &
                         tf_clm_tile,tf_trd_tile,sal_clm_tile,LANDFRAC, &
-                        FRAC_GRID)
+                        FRAC_GRID,LAKEFRAC,COUPLED)
 
  USE UTILS
  USE GDSWZD_MOD
@@ -976,9 +979,10 @@ ENDIF
 
  INTEGER, INTENT(IN)      :: LENSFC, LSOIL, IDIM, JDIM
 
- LOGICAL, INTENT(IN)      :: FRAC_GRID
+ LOGICAL, INTENT(IN)      :: FRAC_GRID, COUPLED
 
  REAL, INTENT(IN)         :: SLMSK_TILE(LENSFC), SLMSK_FG_TILE(LENSFC), LANDFRAC(LENSFC)
+ REAL, INTENT(IN)         :: LAKEFRAC(LENSFC)
  real, intent(in)         :: tf_clm_tile(lensfc),tf_trd_tile(lensfc),sal_clm_tile(lensfc)
  REAL, INTENT(IN)         :: ZSEA1, ZSEA2,sice_tile(lensfc),sice_fg_tile(lensfc)
  REAL, INTENT(IN)         :: RLA(LENSFC), RLO(LENSFC)
@@ -1136,6 +1140,13 @@ ENDIF
    MASK_FG_TILE=0
    WHERE(SICE_FG_TILE > 0.0) MASK_FG_TILE=2
    WHERE(LANDFRAC == 1.0) MASK_FG_TILE=1
+ ENDIF
+
+! Lake fraction is either zero or one. Only process NSST at lakes
+! when running in coupled mode.
+
+ IF(COUPLED)THEN
+   WHERE(LAKEFRAC == 0.0) MASK_TILE=1
  ENDIF
 
  IJ_LOOP : DO IJ = 1, LENSFC
