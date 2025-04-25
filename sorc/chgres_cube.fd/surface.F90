@@ -1086,8 +1086,8 @@
  allocate(search_nums(num_fields))
  allocate(dozero(num_fields))
 
- search_nums = (/223,66,65/)
- dozero=(/.True.,.False.,.False./)
+ search_nums = (/66,65/)
+ dozero=(/.False.,.False./)
  
  call regrid_many(bundle_allland_input,bundle_allland_target,num_fields,regrid_all_land,dozero, &
                   unmapped_ptr=unmapped_ptr)
@@ -1392,8 +1392,8 @@
  allocate(search_nums(num_fields))
  allocate(dozero(num_fields))
  
- search_nums(1:5) = (/85,7,224,85,86/)
- dozero(1:5) = (/.False.,.False.,.True.,.True.,.False./)
+ search_nums(1:6) = (/85,7,224,85,86,223/)
+ dozero(1:6) = (/.False.,.False.,.True.,.True.,.False.,.True./)
  
  if (.not. vgfrc_from_climo) then
    search_nums(vgfrc_ind) = 224
@@ -2458,6 +2458,7 @@
  enddo
 
  print*,"- ZERO OUT TARGET GRID CANOPY MOISTURE CONTENT WHERE NO PLANTS."
+ print*,"- CAP TARGET GRID CANOPY MOISTURE CONTENT TO 2.0MM."
  call ESMF_FieldGet(canopy_mc_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2467,6 +2468,7 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
+   data_ptr(i,j) = AMIN1(data_ptr(i,j), 2.0)
    if (veg_greenness_ptr(i,j) <= 0.01) data_ptr(i,j) = 0.0
  enddo
  enddo
