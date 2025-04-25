@@ -2457,8 +2457,7 @@
  enddo
  enddo
 
- print*,"- ZERO OUT TARGET GRID CANOPY MOISTURE CONTENT WHERE NO PLANTS."
- print*,"- CAP TARGET GRID CANOPY MOISTURE CONTENT TO 2.0MM."
+ print*,"- QC TARGET GRID CANOPY MOISTURE CONTENT."
  call ESMF_FieldGet(canopy_mc_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2468,8 +2467,12 @@
 
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
-   data_ptr(i,j) = AMIN1(data_ptr(i,j), 2.0)
    if (veg_greenness_ptr(i,j) <= 0.01) data_ptr(i,j) = 0.0
+   if (data_ptr(i,j) > 2.0) data_ptr(i,j) = 2.0 ! Input data that used noah-mp can have
+                                                ! canopy moisture values above 10 mm, which
+                                                ! includes a snow portion. The coldstart file
+                                                ! assumes it is all liquid. Capping it to 2 mm
+                                                ! is a hack to remove the snow portion.
  enddo
  enddo
 
