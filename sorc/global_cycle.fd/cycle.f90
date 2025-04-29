@@ -335,6 +335,10 @@
  INTEGER, PARAMETER  :: NLUNIT=35
  INTEGER, PARAMETER  :: SZ_NML=1
 
+! Use the settings from the CCPP physics - SCM_GFS_v17_p8_input.nml
+ REAL, PARAMETER     :: MIN_LAKEICE=0.15
+ REAL, PARAMETER     :: MIN_SEAICE=0.15
+
  CHARACTER(LEN=5)    :: TILE_NUM
  CHARACTER(LEN=500)  :: NST_FILE
  CHARACTER(LEN=50)   :: FNAME_INC
@@ -633,11 +637,12 @@ ENDIF
 
    ENDIF SET_MASK
 
+! Follow logic in CCPP physics routine gcycle.F90
    DO I=1,LENSFC
-     if(nint(slmask(i)) == 0) then
-       min_ice(i) = 0.15_KIND_io8
+     if(lakefrac(i) > 0.0) then
+       min_ice(i) = min_lakeice
      else
-       min_ice(i) = 0.0_KIND_io8
+       min_ice(i) = min_seaice
      endif
    ENDDO
 
