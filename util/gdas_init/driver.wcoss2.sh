@@ -124,7 +124,9 @@ if [ $RUN_CHGRES == yes ]; then
   TASKS_PER_NODE=24
   WALLT="0:15:00"
   MEM=75GB
-  if [ $CRES_HIRES == 'C768' ] ; then
+  if [ $CRES_HIRES == 'C384' ] ; then
+    MEM=150GB
+  elif [ $CRES_HIRES == 'C768' ] ; then
     MEM=250GB
   elif [ $CRES_HIRES == 'C1152' ] ; then
     MEM=500GB
