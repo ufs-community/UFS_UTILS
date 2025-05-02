@@ -34,7 +34,7 @@ elif [[ -d /opt/spack-stack ]] ; then
     # We are using a container 
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         echo load the module command 1>&2
-        source /apps/lmod/lmod/init/$__ms_shell
+        source /var/lmod/lmod/init/$__ms_shell
     fi
     target=container
     module purge
