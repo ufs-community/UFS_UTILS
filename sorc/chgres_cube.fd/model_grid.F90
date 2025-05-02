@@ -142,7 +142,7 @@
 !!  - spectral gfs sigio  (prior to July 19, 2017)
 !!  - spectral gfs sfcio  (prior to July 19, 2017)
 !!
-!! @param [in] npets  Number of  persistent execution threads.
+!! @param [in] npets  Total number of persistent execution threads.
 !! @author George Gayno NCEP/EMC   
  subroutine define_input_grid_gaussian(npets)
 
@@ -154,6 +154,7 @@
                                  input_type, &
                                  convert_atm, convert_sfc
 
+ use mpi_f08
  use sfcio_module
  use sigio_module
  use netcdf
@@ -164,7 +165,7 @@
 
  character(len=250)               :: the_file
 
- integer                          :: i, j, rc, clb(2), cub(2), ncid, id_grid
+ integer                          :: i, j, rc, clb(2), cub(2), ncid, id_grid, myrank
  integer(sfcio_intkind)           :: rc2
  integer(sigio_intkind)           :: rc3
 
@@ -217,23 +218,30 @@
 
  elseif (trim(input_type) == "gaussian_netcdf") then
 
-   print*,'- OPEN AND READ: ',trim(the_file)
-   rc=nf90_open(trim(the_file),nf90_nowrite,ncid)
-   call netcdf_err(rc, 'opening file')
+   call mpi_comm_rank(mpi_comm_world, myrank, rc) 
 
-   print*,"- READ grid_xt"
-   rc=nf90_inq_dimid(ncid, 'grid_xt', id_grid)
-   call netcdf_err(rc, 'reading grid_xt id')
-   rc=nf90_inquire_dimension(ncid,id_grid,len=i_input)
-   call netcdf_err(rc, 'reading grid_xt')
+   if (myrank == 0) then
+     print*,'- OPEN AND READ: ',trim(the_file)
+     rc=nf90_open(trim(the_file),nf90_nowrite,ncid)
+     call netcdf_err(rc, 'opening file')
 
-   print*,"- READ grid_yt"
-   rc=nf90_inq_dimid(ncid, 'grid_yt', id_grid)
-   call netcdf_err(rc, 'reading grid_yt id')
-   rc=nf90_inquire_dimension(ncid,id_grid,len=j_input)
-   call netcdf_err(rc, 'reading grid_yt')
+     print*,"- READ grid_xt"
+     rc=nf90_inq_dimid(ncid, 'grid_xt', id_grid)
+     call netcdf_err(rc, 'reading grid_xt id')
+     rc=nf90_inquire_dimension(ncid,id_grid,len=i_input)
+     call netcdf_err(rc, 'reading grid_xt')
 
-   rc = nf90_close(ncid)
+     print*,"- READ grid_yt"
+     rc=nf90_inq_dimid(ncid, 'grid_yt', id_grid)
+     call netcdf_err(rc, 'reading grid_yt id')
+     rc=nf90_inquire_dimension(ncid,id_grid,len=j_input)
+     call netcdf_err(rc, 'reading grid_yt')
+
+     rc = nf90_close(ncid)
+   endif
+
+   call mpi_bcast(i_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
+   call mpi_bcast(j_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
 
  else ! nemsio format
 
@@ -886,6 +894,7 @@
 !! @author George Gayno NCEP/EMC   
  subroutine define_target_grid(localpet, npets)
 
+ use mpi_f08
  use netcdf
  use program_setup, only       : mosaic_file_target_grid, &
                                  orog_dir_target_grid,    &
@@ -901,7 +910,7 @@
  integer                               :: error, ncid, extra
  integer                               :: id_tiles
  integer                               :: id_dim, id_grid_tiles
- integer                               :: tile
+ integer                               :: myrank, tile
  integer, allocatable                  :: decomptile(:,:)
  integer(esmf_kind_i8), allocatable    :: landmask_one_tile(:,:)
  integer(esmf_kind_i8), allocatable    :: seamask_one_tile(:,:)
@@ -915,27 +924,35 @@
  real(esmf_kind_r8), allocatable       :: terrain_one_tile(:,:)
 
  lsoil_target = nsoill_out
- 
- print*,'- OPEN TARGET GRID MOSAIC FILE: ',trim(mosaic_file_target_grid)
- error=nf90_open(trim(mosaic_file_target_grid),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening grid mosaic file')
 
- print*,"- READ NUMBER OF TILES"
- error=nf90_inq_dimid(ncid, 'ntiles', id_tiles)
- call netcdf_err(error, 'reading ntile id')
- error=nf90_inquire_dimension(ncid,id_tiles,len=num_tiles_target_grid)
- call netcdf_err(error, 'reading ntiles')
- error=nf90_inq_varid(ncid, 'gridtiles', id_grid_tiles)
- call netcdf_err(error, 'reading gridtiles id')
+ call mpi_comm_rank(mpi_comm_world, myrank, error) 
+ 
+ if (myrank == 0) then
+   print*,'- OPEN TARGET GRID MOSAIC FILE: ',trim(mosaic_file_target_grid)
+   error=nf90_open(trim(mosaic_file_target_grid),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening grid mosaic file')
+   print*,"- READ NUMBER OF TILES"
+   error=nf90_inq_dimid(ncid, 'ntiles', id_tiles)
+   call netcdf_err(error, 'reading ntile id')
+   error=nf90_inquire_dimension(ncid,id_tiles,len=num_tiles_target_grid)
+   call netcdf_err(error, 'reading ntiles')
+   print*,'- NUMBER OF TILES, TARGET MODEL GRID IS ', num_tiles_target_grid
+ endif
+
+ call mpi_bcast(num_tiles_target_grid,1,MPI_INTEGER,0,MPI_COMM_WORLD,error)
  allocate(tiles_target_grid(num_tiles_target_grid))
  tiles_target_grid="NULL"
- print*,"- READ TILE NAMES"
- error=nf90_get_var(ncid, id_grid_tiles, tiles_target_grid)
- call netcdf_err(error, 'reading gridtiles')
 
- error = nf90_close(ncid)
+ if (myrank == 0) then
+   error=nf90_inq_varid(ncid, 'gridtiles', id_grid_tiles)
+   call netcdf_err(error, 'reading gridtiles id')
+   print*,"- READ TILE NAMES"
+   error=nf90_get_var(ncid, id_grid_tiles, tiles_target_grid)
+   call netcdf_err(error, 'reading gridtiles')
+   error = nf90_close(ncid)
+ endif
 
- print*,'- NUMBER OF TILES, TARGET MODEL GRID IS ', num_tiles_target_grid
+ call mpi_bcast(tiles_target_grid,len(tiles_target_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,error)
 
  if (mod(npets,num_tiles_target_grid) /= 0) then
    call error_handler("MUST RUN WITH TASK COUNT THAT IS A MULTIPLE OF # OF TILES.", 1)
@@ -947,21 +964,25 @@
 
  the_file = trim(orog_dir_target_grid) // trim(orog_files_target_grid(1))
 
- print*,'- OPEN FIRST TARGET GRID OROGRAPHY FILE: ',trim(the_file)
- error=nf90_open(trim(the_file),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening orography file')
- print*,"- READ GRID DIMENSIONS"
- error=nf90_inq_dimid(ncid, 'lon', id_dim)
- call netcdf_err(error, 'reading lon id')
- error=nf90_inquire_dimension(ncid,id_dim,len=i_target)
- call netcdf_err(error, 'reading lon')
- error=nf90_inq_dimid(ncid, 'lat', id_dim)
- call netcdf_err(error, 'reading lat id')
- error=nf90_inquire_dimension(ncid,id_dim,len=j_target)
- call netcdf_err(error, 'reading lat')
- error = nf90_close(ncid)
+ if (myrank == 0) then
+   print*,'- OPEN FIRST TARGET GRID OROGRAPHY FILE: ',trim(the_file)
+   error=nf90_open(trim(the_file),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening orography file')
+   print*,"- READ GRID DIMENSIONS"
+   error=nf90_inq_dimid(ncid, 'lon', id_dim)
+   call netcdf_err(error, 'reading lon id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=i_target)
+   call netcdf_err(error, 'reading lon')
+   error=nf90_inq_dimid(ncid, 'lat', id_dim)
+   call netcdf_err(error, 'reading lat id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=j_target)
+   call netcdf_err(error, 'reading lat')
+   error = nf90_close(ncid)
+   print*,"- I/J DIMENSIONS OF THE TARGET GRID TILES ", i_target, j_target
+ endif
 
- print*,"- I/J DIMENSIONS OF THE TARGET GRID TILES ", i_target, j_target
+ call mpi_bcast(i_target,1,MPI_INTEGER,0,MPI_COMM_WORLD,error)
+ call mpi_bcast(j_target,1,MPI_INTEGER,0,MPI_COMM_WORLD,error)
 
  ip1_target = i_target + 1
  jp1_target = j_target + 1
