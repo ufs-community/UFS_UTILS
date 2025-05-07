@@ -516,32 +516,35 @@ program gen_fixgrid
   !---------------------------------------------------------------------
   ! use ESMF to create positional weights for mapping a field from its
   ! native stagger location (Cu,Cv,Bu) onto the center (Ct) grid location
+  ! these are used for both post and downscaling
   !---------------------------------------------------------------------
 
-  method=ESMF_REGRIDMETHOD_BILINEAR
-  fdst = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
-  do k = 2,nv
-     cstagger = trim(staggerlocs(k))
-     fsrc = trim(dirout)//'/'//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
-     fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.'//trim(cstagger)//'.to.Ct.bilinear.nc'
-     logmsg = 'creating weight file '//trim(fwgt)
-     print '(a)',trim(logmsg)
+  if (trim(res) .ne. '008') then
+     method=ESMF_REGRIDMETHOD_BILINEAR
+     fdst = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
+     do k = 2,nv
+        cstagger = trim(staggerlocs(k))
+        fsrc = trim(dirout)//'/'//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
+        fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.'//trim(cstagger)//'.to.Ct.bilinear.nc'
+        logmsg = 'creating weight file '//trim(fwgt)
+        print '(a)',trim(logmsg)
 
-     call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
-          weightFile=trim(fwgt), regridmethod=method,                 &
-          ignoreDegenerate=.true.,                                    &
-          unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
-     if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
-          line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
-  end do
+        call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
+             weightFile=trim(fwgt), regridmethod=method,                 &
+             ignoreDegenerate=.true.,                                    &
+             unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
+        if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+             line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
+     end do
+  end if
 
   !---------------------------------------------------------------------
   ! use ESMF to create positional weights for mapping a field from the
   ! center (Ct) grid location back to the native stagger location
-  ! (Cu,Cv,Bu). The destination is never mx025.
+  ! (Cu,Cv,Bu). The destination is never mx025 or higher
   !---------------------------------------------------------------------
 
-  if(trim(res) .ne. '025') then
+  if(trim(res) .ne. '025' .and. trim(res) .ne. '008') then
      method=ESMF_REGRIDMETHOD_BILINEAR
      fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
      do k = 2,nv
