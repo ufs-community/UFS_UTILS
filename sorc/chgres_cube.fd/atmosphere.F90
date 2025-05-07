@@ -1277,6 +1277,7 @@
 
  endif
 
+ call mpi_barrier(MPI_COMM_WORLD,istat)
  call mpi_bcast(lev_target,1,MPI_INTEGER,0,MPI_COMM_WORLD,istat)
  call mpi_bcast(nvcoord_target,1,MPI_INTEGER,0,MPI_COMM_WORLD,istat)
 
@@ -1295,7 +1296,8 @@
 
  endif
 
- call mpi_bcast(vcoord_target,(nvcoord_target*levp1_target),MPI_INTEGER,0,MPI_COMM_WORLD,istat)
+ call mpi_barrier(MPI_COMM_WORLD,istat)
+ call mpi_bcast(vcoord_target,(nvcoord_target*levp1_target),MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,istat)
 
  end subroutine read_vcoord_info
 
