@@ -182,6 +182,30 @@ FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
 FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
 ncks -O -v kmt ${FSRC} ${FDST}
 
+# generate SCRIP files and meshes for DATM configurations
+# 3072x1536=4718592
+FDST=${OUTDIR_PATH}/datm.lon3072.lat1536.SCRIP.nc
+ncremap -g ${FDST} -G ttl='DATM grid 3072x1536'#latlon=1536,3072#lon_typ=grn_ctr#lat_typ=gss
+
+FSRC=${OUTDIR_PATH}/datm.lon3072.lat1536.SCRIP.nc
+FDST=${OUTDIR_PATH}/mesh.datm.lon3072.lat1536.nc
+$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+
+# 1760x880=1548800
+FDST=${OUTDIR_PATH}/datm.lon1760.lat880.SCRIP.nc
+ncremap -g ${FDST} -G ttl='DATM grid 1760.880'#latlon=880,1760#lon_typ=grn_ctr#lat_typ=gss
+FSRC=${OUTDIR_PATH}/datm.lon1760.lat880.SCRIP.nc
+FDST=${OUTDIR_PATH}/mesh.datm.lon1760.lat880.nc
+$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+
+
+# 1536x768=1179648; N->S ordering
+FDST=${OUTDIR_PATH}/datm.lon1536.lat768.SCRIP.nc
+ncremap -g ${FDST} -G ttl='DATM grid 1536.768'#latlon=768,1536#lon_typ=grn_ctr#lat_typ=gss#lat_drc=n2s
+FSRC=${OUTDIR_PATH}/datm.lon1536.lat768.SCRIP.nc
+FDST=${OUTDIR_PATH}/mesh.datm.lon1536.lat768.nc
+$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+
 check_results
 
 elapsed_time=$( printf '%02dh:%02dm:%02ds\n' $((SECONDS%86400/3600)) $((SECONDS%3600/60)) $((SECONDS%60)) )
