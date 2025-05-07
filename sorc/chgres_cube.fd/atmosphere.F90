@@ -117,8 +117,6 @@
 !! @author George Gayno
  subroutine atmosphere_driver(localpet)
 
- use mpi_f08
-
  implicit none
 
  integer, intent(in)                :: localpet
@@ -1254,33 +1252,50 @@
 !!
 !! @author George Gayno
  subroutine read_vcoord_info
+
+ use mpi_f08
+
  implicit none
 
- integer                    :: istat, n, k
+ integer                    :: istat, n, k, myrank
 
- print*
- print*,"OPEN VERTICAL COORD FILE: ", trim(vcoord_file_target_grid)
- open(14, file=trim(vcoord_file_target_grid), form='formatted', iostat=istat, action='read')
- if (istat /= 0) then
-   call error_handler("OPENING VERTICAL COORD FILE", istat)
+ call mpi_comm_rank(mpi_comm_world, myrank, istat)
+
+ if (myrank == 0) then
+
+   print*
+   print*,"OPEN VERTICAL COORD FILE: ", trim(vcoord_file_target_grid)
+   open(14, file=trim(vcoord_file_target_grid), form='formatted', iostat=istat, action='read')
+   if (istat /= 0) then
+     call error_handler("OPENING VERTICAL COORD FILE", istat)
+   endif
+
+   read(14, *, iostat=istat) nvcoord_target, lev_target
+   if (istat /= 0) then
+     call error_handler("READING VERTICAL COORD FILE", istat)
+   endif
+
  endif
 
- read(14, *, iostat=istat) nvcoord_target, lev_target
- if (istat /= 0) then
-   call error_handler("READING VERTICAL COORD FILE", istat)
- endif
+ call mpi_bcast(lev_target,1,MPI_INTEGER,0,MPI_COMM_WORLD,istat)
+ call mpi_bcast(nvcoord_target,1,MPI_INTEGER,0,MPI_COMM_WORLD,istat)
 
  levp1_target = lev_target + 1
 
  allocate(vcoord_target(levp1_target, nvcoord_target))
- read(14, *, iostat=istat) ((vcoord_target(n,k), k=1,nvcoord_target), n=1,levp1_target)
- if (istat /= 0) then
-   call error_handler("READING VERTICAL COORD FILE", istat)
+
+ if (myrank == 0) then
+
+   read(14, *, iostat=istat) ((vcoord_target(n,k), k=1,nvcoord_target), n=1,levp1_target)
+   if (istat /= 0) then
+     call error_handler("READING VERTICAL COORD FILE", istat)
+   endif
+   print*
+   close(14)
+
  endif
 
- print*
- 
- close(14)
+ call mpi_bcast(vcoord_target,(nvcoord_target*levp1_target),MPI_INTEGER,0,MPI_COMM_WORLD,istat)
 
  end subroutine read_vcoord_info
 
