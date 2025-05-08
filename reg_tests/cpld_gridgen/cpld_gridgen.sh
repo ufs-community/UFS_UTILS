@@ -103,118 +103,123 @@ fi
 
 APRUN=${APRUN:-"srun"}
 
-if [ $RESNAME = 900 ]; then
-    NI=40
-    NJ=20
-    TOPOGFILE=topog.nc
-    EDITSFILE='none'
-    if [ $DO_POSTWGTS == .true. ]; then
-        #pre-generate SCRIP files for dst rectilinear grids using NCO
-        $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
+if [ $RESNAME = datm ]; then
+    # generate SCRIP files and meshes for DATM configurations
+
+    # 3072x1536=4718592 (gfs)
+    NX=3072
+    NY=1536
+    FDIMS=${NX}x${NY}
+    FDST=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
+    ncremap -g ${FDST} -G ttl='DATM grid '${FDIMS}#latlon=${NY},${NX}#lon_typ=grn_ctr#lat_typ=gss
+
+    FSRC=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
+    FDST=${OUTDIR_PATH}/mesh.datm.${FDIMS}.nc
+    $APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+    #
+    # 1760x880=1548800 (cfsr)
+    NX=1760
+    NY=880
+    FDIMS=${NX}x${NY}
+    FDST=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
+    ncremap -g ${FDST} -G ttl='DATM grid '${FDIMS}#latlon=${NY},${NX}#lon_typ=grn_ctr#lat_typ=gss
+
+    FSRC=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
+    FDST=${OUTDIR_PATH}/mesh.datm.${FDIMS}.nc
+    $APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+    #
+    # 1536x768=1179648; ; N->S ordering (gefs)
+    NX=1536
+    NY=768
+    FDIMS=${NX}x${NY}
+    FDST=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
+    ncremap -g ${FDST} -G ttl='DATM grid '${FDIMS}#latlon=${NY},${NX}#lon_typ=grn_ctr#lat_typ=gss#lat_drc=n2s
+
+    FSRC=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
+    FDST=${OUTDIR_PATH}/mesh.datm.${FDIMS}.nc
+    $APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+
+else
+
+    if [ $RESNAME = 900 ]; then
+        NI=40
+        NJ=20
+        TOPOGFILE=topog.nc
+        EDITSFILE='none'
+        if [ $DO_POSTWGTS == .true. ]; then
+            #pre-generate SCRIP files for dst rectilinear grids using NCO
+            $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
+        fi
     fi
-fi
 
-if [ $RESNAME = 500 ]; then
-    NI=72
-    NJ=35
-    TOPOGFILE=ocean_topog.nc
-    EDITSFILE='none'
-    if [ $DO_POSTWGTS == .true. ]; then
-	#pre-generate SCRIP files for dst rectilinear grids using NCO
-        $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+    if [ $RESNAME = 500 ]; then
+        NI=72
+        NJ=35
+        TOPOGFILE=ocean_topog.nc
+        EDITSFILE='none'
+        if [ $DO_POSTWGTS == .true. ]; then
+	    #pre-generate SCRIP files for dst rectilinear grids using NCO
+            $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+        fi
     fi
-fi
 
-if [ $RESNAME = 100 ]; then
-    NI=360
-    NJ=320
-    MASKEDIT=.T.
-    TOPOGFILE=topog.nc
-    EDITSFILE=topo_edits_011818.nc
-    if [ $DO_POSTWGTS == .true. ]; then
-	#pre-generate SCRIP files for dst rectilinear grids using NCO
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
+    if [ $RESNAME = 100 ]; then
+        NI=360
+        NJ=320
+        MASKEDIT=.T.
+        TOPOGFILE=topog.nc
+        EDITSFILE=topo_edits_011818.nc
+        if [ $DO_POSTWGTS == .true. ]; then
+	    #pre-generate SCRIP files for dst rectilinear grids using NCO
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
+        fi
     fi
-fi
 
-if [ $RESNAME = 050 ]; then
-    NI=720
-    NJ=576
-    TOPOGFILE=ocean_topog.nc
-    EDITSFILE='none'
-    if [ $DO_POSTWGTS == .true. ]; then
-	#pre-generate SCRIP files for dst rectilinear grids using NCO
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p50_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
+    if [ $RESNAME = 050 ]; then
+        NI=720
+        NJ=576
+        TOPOGFILE=ocean_topog.nc
+        EDITSFILE='none'
+        if [ $DO_POSTWGTS == .true. ]; then
+	    #pre-generate SCRIP files for dst rectilinear grids using NCO
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p50_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
+        fi
     fi
-fi
 
-if [ $RESNAME = 025 ]; then
-    NI=1440
-    NJ=1080
-    TOPOGFILE=ocean_topog.nc
-    EDITSFILE=All_edits.nc
-    if [ $DO_POSTWGTS == .true. ]; then
-	#pre-generate SCRIP files for dst rectilinear grids using NCO
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p50_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
-	$APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p25_SCRIP.nc -G latlon=721,1440#lon_typ=grn_ctr#lat_typ=cap
+    if [ $RESNAME = 025 ]; then
+        NI=1440
+        NJ=1080
+        TOPOGFILE=ocean_topog.nc
+        EDITSFILE=All_edits.nc
+        if [ $DO_POSTWGTS == .true. ]; then
+	    #pre-generate SCRIP files for dst rectilinear grids using NCO
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.5p00_SCRIP.nc -G latlon=36,72#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.1p00_SCRIP.nc -G latlon=181,360#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p50_SCRIP.nc -G latlon=361,720#lon_typ=grn_ctr#lat_typ=cap
+	    $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.0p25_SCRIP.nc -G latlon=721,1440#lon_typ=grn_ctr#lat_typ=cap
+        fi
     fi
+
+    edit_namelist < grid.nml.IN > grid.nml
+    $APRUN ./cpld_gridgen
+
+    # generate ice mesh
+    FSRC=${OUTDIR_PATH}/Ct.mx${RESNAME}_SCRIP_land.nc
+    FDST=${OUTDIR_PATH}/mesh.mx${RESNAME}.nc
+    $APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
+
+    # generate kmt file for CICE
+    FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
+    FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
+    ncks -O -v kmt ${FSRC} ${FDST}
 fi
-
-edit_namelist < grid.nml.IN > grid.nml
-$APRUN ./cpld_gridgen
-
-# generate ice mesh
-FSRC=${OUTDIR_PATH}/Ct.mx${RESNAME}_SCRIP_land.nc
-FDST=${OUTDIR_PATH}/mesh.mx${RESNAME}.nc
-$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
-
-# generate kmt file for CICE
-FSRC=${OUTDIR_PATH}/grid_cice_NEMS_mx${RESNAME}.nc
-FDST=${OUTDIR_PATH}/kmtu_cice_NEMS_mx${RESNAME}.nc
-ncks -O -v kmt ${FSRC} ${FDST}
-
-# generate SCRIP files and meshes for DATM configurations
-# 3072x1536=4718592 (gfs)
-NX=3072
-NY=1536
-FDIMS=${NX}x${NY}
-FDST=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
-ncremap -g ${FDST} -G ttl='DATM grid '${FDIMS}#latlon=${NY},${NX}#lon_typ=grn_ctr#lat_typ=gss
-
-FSRC=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
-FDST=${OUTDIR_PATH}/mesh.datm.${FDIMS}.nc
-$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
-#
-# 1760x880=1548800 (cfsr)
-NX=1760
-NY=880
-FDIMS=${NX}x${NY}
-FDST=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
-ncremap -g ${FDST} -G ttl='DATM grid '${FDIMS}#latlon=${NY},${NX}#lon_typ=grn_ctr#lat_typ=gss
-
-FSRC=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
-FDST=${OUTDIR_PATH}/mesh.datm.${FDIMS}.nc
-$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
-#
-# 1536x768=1179648; ; N->S ordering (gefs)
-NX=1536
-NY=768
-FDIMS=${NX}x${NY}
-FDST=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
-ncremap -g ${FDST} -G ttl='DATM grid '${FDIMS}#latlon=${NY},${NX}#lon_typ=grn_ctr#lat_typ=gss#lat_drc=n2s
-
-FSRC=${OUTDIR_PATH}/datm.${FDIMS}.SCRIP.nc
-FDST=${OUTDIR_PATH}/mesh.datm.${FDIMS}.nc
-$APRUN -n 1 ESMF_Scrip2Unstruct ${FSRC} ${FDST} 0
 
 check_results
 
