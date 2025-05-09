@@ -32,10 +32,9 @@ elif [[ -d /lfs/h1 ]] ; then
     module reset
 elif [[ -d /opt/spack-stack ]] ; then
     # We are using a container 
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-        echo load the module command 1>&2
-        source /var/lmod/lmod/init/$__ms_shell
-    fi
+    # if ( ! eval module help > /dev/null 2>&1 ) ; then
+        source /usr/lmod/lmod/init/$__ms_shell
+    # fi
     target=container
     module purge
 elif [[ -d /scratch1 ]] ; then
