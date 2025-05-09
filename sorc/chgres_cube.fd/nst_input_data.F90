@@ -72,7 +72,7 @@ module nst_input_data
 
  integer                         :: rc
 
- print*,"- READ INPUT GRID NST DATA."
+ if (localpet == 0) print*,"- READ INPUT GRID NST DATA."
 
  print*,"- CALL FieldCreate FOR INPUT GRID C_D."
  c_d_input_grid = ESMF_FieldCreate(input_grid, &
