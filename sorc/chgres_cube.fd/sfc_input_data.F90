@@ -1401,6 +1401,7 @@ module sfc_input_data
 !! @author George Gayno NCEP/EMC   
  subroutine read_input_sfc_netcdf_file(localpet)
 
+ use mpi_f08
  implicit none
 
  integer, intent(in)             :: localpet
@@ -1409,7 +1410,7 @@ module sfc_input_data
 
  integer                         :: error, id_var
  integer                         :: id_dim, idim_input, jdim_input
- integer                         :: ncid, rc, tile
+ integer                         :: ncid, rc, tile, myrank
 
  real(esmf_kind_r8), allocatable :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
@@ -1419,26 +1420,34 @@ module sfc_input_data
 ! Do dimensions match those from the orography file?
 !---------------------------------------------------------------------------
 
+ call mpi_comm_rank(mpi_comm_world, myrank, rc)
+
  tilefile = trim(data_dir_input_grid) // "/" // trim(sfc_files_input_grid(1))
- print*,"- READ GRID DIMENSIONS FROM: ", trim(tilefile)
- error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening: '//trim(tilefile) )
 
- error=nf90_inq_dimid(ncid, 'grid_xt', id_dim)
- call netcdf_err(error, 'reading grid_xt id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=idim_input)
- call netcdf_err(error, 'reading grid_xt value' )
+ if (localpet == 0) then
+   print*,"- READ GRID DIMENSIONS FROM: ", trim(tilefile)
+   error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening: '//trim(tilefile) )
 
- error=nf90_inq_dimid(ncid, 'grid_yt', id_dim)
- call netcdf_err(error, 'reading grid_yt id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=jdim_input)
- call netcdf_err(error, 'reading grid_yt value' )
+   error=nf90_inq_dimid(ncid, 'grid_xt', id_dim)
+   call netcdf_err(error, 'reading grid_xt id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idim_input)
+   call netcdf_err(error, 'reading grid_xt value' )
+
+   error=nf90_inq_dimid(ncid, 'grid_yt', id_dim)
+   call netcdf_err(error, 'reading grid_yt id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=jdim_input)
+   call netcdf_err(error, 'reading grid_yt value' )
+   error = nf90_close(ncid)
+ endif
+
+ call mpi_barrier(MPI_COMM_WORLD,rc)
+ call mpi_bcast(idim_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
+ call mpi_bcast(jdim_input,1,MPI_INTEGER,0,MPI_COMM_WORLD,rc)
 
  if (idim_input /= i_input .or. jdim_input /= j_input) then
    call error_handler("DIMENSION MISMATCH BETWEEN SFC AND OROG FILES.", 3)
  endif
-
- error = nf90_close(ncid)
 
  if (localpet == 0) then
    allocate(data_one_tile(idim_input,jdim_input))
