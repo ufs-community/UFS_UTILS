@@ -76,7 +76,7 @@ check_results() {
 }
 
 set +x
-echo BEGIN cpld_gridgen.sh
+echo BEGIN ocnice_prep.sh
 set -x
 
 cd $RUNDIR

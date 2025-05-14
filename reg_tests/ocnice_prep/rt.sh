@@ -69,8 +69,9 @@ if [[ $target = wcoss2 ]]; then
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
-    WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    #WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
     #INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
+    WEIGHTS_ROOT=/scratch1/NCEPDEV/stmp4/Denise.Worthen/weights
     INPUT_ROOT=/scratch1/NCEPDEV/stmp4/Denise.Worthen/OIPREP_INPUT
     ACCOUNT=${ACCOUNT:-fv3-cpu}
     QUEUE=${QUEUE:-batch}
@@ -204,11 +205,11 @@ while read -r line || [ "$line" ]; do
     [[ $line =~ \# ]] && continue
 
     LINEVAL=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
-    TEST_FSRC=${LINEVAL##mx}
+    TEST_SORC=${LINEVAL##mx}
     TEST_FTYP=$(echo $line | cut -d'|' -f2 | sed -e 's/^ *//' -e 's/ *$//')
     LINEVAL=$(echo $line | cut -d'|' -f3 | sed -e 's/^ *//' -e 's/ *$//')
     TEST_DEST=${LINEVAL##mx}
-    TEST_NAME=${TEST_FSRC}_${TEST_FTYP}_${TEST_DEST}
+    TEST_NAME=${TEST_SORC}_${TEST_FTYP}_${TEST_DEST}
 
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
     BASELINE=$BASELINE_ROOT/$TEST_NAME
@@ -217,8 +218,8 @@ while read -r line || [ "$line" ]; do
     export NEW_BASELINE
     mkdir -p $RUNDIR
 
-    export SRCDIMS=$TEST_FSRC
-    export DSTDIMS=$TEST_DEST
+    export SRCRES=$TEST_SORC
+    export DSTRES=$TEST_DEST
     export FTYPE=$TEST_FTYP
     export WEIGHTS=$WEIGHTS_ROOT
     export REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.${TEST_NAME}.log
@@ -227,7 +228,7 @@ while read -r line || [ "$line" ]; do
     cp ./ocnice_prep.sh $RUNDIR
     cp ./parm/ocniceprep.nml.IN $RUNDIR
     cp ./parm/$FTYPE.csv $RUNDIR
-    cp $INPUT_ROOT/$SRCRES/$FTYPE.nc $RUNDIR
+    cp $INPUT_ROOT/$TEST_SORC/$FTYPE.nc $RUNDIR
     export RUNDIR
     export TEST_NAME
 
