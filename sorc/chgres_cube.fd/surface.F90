@@ -1071,11 +1071,11 @@
  bundle_allland_input = ESMF_FieldBundleCreate(name="all land input", rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleCreate", rc)
- call ESMF_FieldBundleAdd(bundle_allland_target, (/canopy_mc_target_grid, snow_depth_target_grid, &
+ call ESMF_FieldBundleAdd(bundle_allland_target, (/snow_depth_target_grid, &
                           snow_liq_equiv_target_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
- call ESMF_FieldBundleAdd(bundle_allland_input, (/canopy_mc_input_grid, snow_depth_input_grid, &
+ call ESMF_FieldBundleAdd(bundle_allland_input, (/snow_depth_input_grid, &
                           snow_liq_equiv_input_grid/), rc=rc)                          
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
@@ -1086,8 +1086,8 @@
  allocate(search_nums(num_fields))
  allocate(dozero(num_fields))
 
- search_nums = (/223,66,65/)
- dozero=(/.True.,.False.,.False./)
+ search_nums = (/66,65/)
+ dozero=(/.False.,.False./)
  
  call regrid_many(bundle_allland_input,bundle_allland_target,num_fields,regrid_all_land,dozero, &
                   unmapped_ptr=unmapped_ptr)
@@ -1301,12 +1301,14 @@
       call error_handler("IN FieldBundleCreate", rc)
       
  call ESMF_FieldBundleAdd(bundle_nolandice_target, (/skin_temp_target_grid, terrain_from_input_grid,& 
-                          soil_type_from_input_grid,soilm_tot_target_grid,soil_temp_target_grid/), rc=rc)
+                          soil_type_from_input_grid,soilm_tot_target_grid,soil_temp_target_grid,&
+                          canopy_mc_target_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
       
  call ESMF_FieldBundleAdd(bundle_nolandice_input, (/skin_temp_input_grid, terrain_input_grid,&
-                          soil_type_input_grid,soilm_tot_input_grid,soil_temp_input_grid/), rc=rc)
+                          soil_type_input_grid,soilm_tot_input_grid,soil_temp_input_grid,&
+                          canopy_mc_input_grid/), rc=rc)
   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
       call error_handler("IN FieldBundleAdd", rc)
  
@@ -1390,8 +1392,8 @@
  allocate(search_nums(num_fields))
  allocate(dozero(num_fields))
  
- search_nums(1:5) = (/85,7,224,85,86/)
- dozero(1:5) = (/.False.,.False.,.True.,.True.,.False./)
+ search_nums(1:6) = (/85,7,224,85,86,223/)
+ dozero(1:6) = (/.False.,.False.,.True.,.True.,.False.,.True./)
  
  if (.not. vgfrc_from_climo) then
    search_nums(vgfrc_ind) = 224
@@ -2455,7 +2457,7 @@
  enddo
  enddo
 
- print*,"- ZERO OUT TARGET GRID CANOPY MOISTURE CONTENT WHERE NO PLANTS."
+ print*,"- QC TARGET GRID CANOPY MOISTURE CONTENT."
  call ESMF_FieldGet(canopy_mc_target_grid, &
                     farrayPtr=data_ptr, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -2466,6 +2468,11 @@
  do j = clb(2), cub(2)
  do i = clb(1), cub(1)
    if (veg_greenness_ptr(i,j) <= 0.01) data_ptr(i,j) = 0.0
+   if (data_ptr(i,j) > 2.0) data_ptr(i,j) = 2.0 ! Input data that used noah-mp can have
+                                                ! canopy moisture values above 10 mm, which
+                                                ! includes a snow portion. The coldstart file
+                                                ! assumes it is all liquid. Capping it to 2 mm
+                                                ! is a hack to remove the snow portion.
  enddo
  enddo
 
