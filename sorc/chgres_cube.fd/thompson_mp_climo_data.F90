@@ -54,7 +54,7 @@
  integer            :: error, ncid, rc, clb(2), cub(2)
  integer            :: i, j, localpet, npets, id_var
  integer            :: jda(8), jdow, jdoy, jday, id_dim
- integer            :: mm, mmm, mmp, mon1, mon2
+ integer            :: mm, mmm, mmp, mon1, mon2, idum(3)
 
  real(esmf_kind_r8), allocatable :: dummy3d(:,:,:)
  real(esmf_kind_r8), allocatable :: dummy3d_mon1(:,:,:)
@@ -74,40 +74,6 @@
 ! Open the file and read the grid dimensions and latitude/longitude.
 !-----------------------------------------------------------------------------------
 
- print*,"- READ THOMP_MP_CLIMO_FILE: ", trim(thomp_mp_climo_file)
- error=nf90_open(trim(thomp_mp_climo_file),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening: '//trim(thomp_mp_climo_file) )
-
- error=nf90_inq_dimid(ncid, 'lat', id_dim)
- call netcdf_err(error, 'reading lat id')
- error=nf90_inquire_dimension(ncid,id_dim,len=j_thomp_mp_climo)
- call netcdf_err(error, 'reading lat')
-
- error=nf90_inq_dimid(ncid, 'lon', id_dim)
- call netcdf_err(error, 'reading lon id')
- error=nf90_inquire_dimension(ncid,id_dim,len=i_thomp_mp_climo)
- call netcdf_err(error, 'reading lon')
-
- error=nf90_inq_dimid(ncid, 'plev', id_dim)
- call netcdf_err(error, 'reading plev id')
- error=nf90_inquire_dimension(ncid,id_dim,len=lev_thomp_mp_climo)
- call netcdf_err(error, 'reading plev')
-
- allocate(lons(i_thomp_mp_climo))
- allocate(lats(j_thomp_mp_climo))
- error=nf90_inq_varid(ncid, 'lon', id_var)
- call netcdf_err(error, 'reading lon field id' )
- error=nf90_get_var(ncid, id_var, lons)
- call netcdf_err(error, 'reading grid longitude' )
- error=nf90_inq_varid(ncid, 'lat', id_var)
- call netcdf_err(error, 'reading lat field id' )
- error=nf90_get_var(ncid, id_var, lats)
- call netcdf_err(error, 'reading grid latitude' )
-
-!-----------------------------------------------------------------------------------
-! Now that we have the grid information, create the esmf grid object.
-!-----------------------------------------------------------------------------------
-
  print*,"- CALL VMGetGlobal"
  call ESMF_VMGetGlobal(vm, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
@@ -117,6 +83,61 @@
  call ESMF_VMGet(vm, localPet=localpet, petCount=npets, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN VMGet", rc)
+
+ if (localpet == 0) then
+   print*,"- READ THOMP_MP_CLIMO_FILE: ", trim(thomp_mp_climo_file)
+   error=nf90_open(trim(thomp_mp_climo_file),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening: '//trim(thomp_mp_climo_file) )
+
+   error=nf90_inq_dimid(ncid, 'lat', id_dim)
+   call netcdf_err(error, 'reading lat id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(1))
+   call netcdf_err(error, 'reading lat')
+
+   error=nf90_inq_dimid(ncid, 'lon', id_dim)
+   call netcdf_err(error, 'reading lon id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(2))
+   call netcdf_err(error, 'reading lon')
+
+   error=nf90_inq_dimid(ncid, 'plev', id_dim)
+   call netcdf_err(error, 'reading plev id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(3))
+   call netcdf_err(error, 'reading plev')
+ endif
+
+ call ESMF_VMBroadcast(vm, idum, 3, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGet", rc)
+
+ j_thomp_mp_climo = idum(1)
+ i_thomp_mp_climo = idum(2)
+ lev_thomp_mp_climo = idum(3)
+
+ allocate(lons(i_thomp_mp_climo))
+ allocate(lats(j_thomp_mp_climo))
+
+ if (localpet == 0) then
+   error=nf90_inq_varid(ncid, 'lon', id_var)
+   call netcdf_err(error, 'reading lon field id' )
+   error=nf90_get_var(ncid, id_var, lons)
+   call netcdf_err(error, 'reading grid longitude' )
+   error=nf90_inq_varid(ncid, 'lat', id_var)
+   call netcdf_err(error, 'reading lat field id' )
+   error=nf90_get_var(ncid, id_var, lats)
+   call netcdf_err(error, 'reading grid latitude' )
+ endif
+
+ call ESMF_VMBroadcast(vm, lons, i_thomp_mp_climo, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGet", rc)
+
+ call ESMF_VMBroadcast(vm, lats, j_thomp_mp_climo, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGet", rc)
+
+!-----------------------------------------------------------------------------------
+! Now that we have the grid information, create the esmf grid object.
+!-----------------------------------------------------------------------------------
 
  polekindflag(1:2) = ESMF_POLEKIND_MONOPOLE
 
@@ -309,14 +330,13 @@
            count=(/i_thomp_mp_climo,j_thomp_mp_climo,lev_thomp_mp_climo,1/) )
    call netcdf_err(error, 'reading prs month2 field' )
    dummy3d(:,:,:) = wei1m * dummy3d_mon1 + wei2m * dummy3d_mon2
+   error=nf90_close(ncid)
  endif
 
  print*,"- CALL FieldScatter FOR thomp press."
  call ESMF_FieldScatter(thomp_pres_climo_input_grid, dummy3d, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
-
- error=nf90_close(ncid)
 
  deallocate(lons, lats, dummy3d, dummy3d_mon1, dummy3d_mon2)
 
