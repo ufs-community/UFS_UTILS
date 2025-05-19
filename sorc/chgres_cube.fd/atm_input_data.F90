@@ -1056,7 +1056,7 @@ implicit none
  integer                         :: i, j, k
  integer                         :: clb(3), cub(3)
  integer                         :: rc, tile, ncid, id_var
- integer                         :: error, id_dim
+ integer                         :: error, id_dim, idum(1)
 
  real(esmf_kind_r8), allocatable :: ak(:)
  real(esmf_kind_r8), pointer     :: presptr(:,:,:), psptr(:,:)
@@ -1065,30 +1065,49 @@ implicit none
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), allocatable :: pres_interface(:)
 
+ type(esmf_vm)                   :: vm
+
 !---------------------------------------------------------------------------
 ! Get number of vertical levels and model top pressure.
 !---------------------------------------------------------------------------
 
- tilefile = trim(data_dir_input_grid) // "/" // trim(atm_core_files_input_grid(7))
- print*,"- READ ATM VERTICAL LEVELS FROM: ", trim(tilefile)
- error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening: '//trim(tilefile) )
+ call ESMF_VMGetGlobal(vm, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGetGlobal", rc)
 
- error=nf90_inq_dimid(ncid, 'xaxis_1', id_dim)
- call netcdf_err(error, 'reading xaxis_1 id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=levp1_input)
- call netcdf_err(error, 'reading xaxis_1 value' )
+ tilefile = trim(data_dir_input_grid) // "/" // trim(atm_core_files_input_grid(7))
+
+ if (localpet == 0) then
+   print*,"- READ ATM VERTICAL LEVELS FROM: ", trim(tilefile)
+   error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening: '//trim(tilefile) )
+   error=nf90_inq_dimid(ncid, 'xaxis_1', id_dim)
+   call netcdf_err(error, 'reading xaxis_1 id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(1))
+   call netcdf_err(error, 'reading xaxis_1 value' )
+ endif
+
+ call ESMF_VMBroadcast(vm, idum, 1, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN ESMF_VMBroadcast", rc)
+
+ levp1_input = idum(1)
 
  lev_input = levp1_input - 1
 
  allocate(ak(levp1_input))
 
- error=nf90_inq_varid(ncid, 'ak', id_var)
- call netcdf_err(error, 'reading field id' )
- error=nf90_get_var(ncid, id_var, ak)
- call netcdf_err(error, 'reading ak' )
+ if (localpet == 0) then
+   error=nf90_inq_varid(ncid, 'ak', id_var)
+   call netcdf_err(error, 'reading field id' )
+   error=nf90_get_var(ncid, id_var, ak)
+   call netcdf_err(error, 'reading ak' )
+   error = nf90_close(ncid)
+ endif
 
- error = nf90_close(ncid)
+ call ESMF_VMBroadcast(vm, ak, levp1_input, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN ESMF_VMBroadcast", rc)
 
 !---------------------------------------------------------------------------
 ! Initialize esmf atmospheric fields.
