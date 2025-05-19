@@ -441,7 +441,7 @@
  integer, intent(in)          :: localpet, npets
 
  integer                      :: id_tiles, id_dim, tile
- integer                      :: extra, error, ncid
+ integer                      :: extra, error, ncid, idum(1), idum2(2)
  integer, allocatable         :: decomptile(:,:)
 
  real(esmf_kind_r8), allocatable       :: latitude_one_tile(:,:)
@@ -451,17 +451,29 @@
  real(esmf_kind_r8), allocatable       :: longitude_s_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: longitude_w_one_tile(:,:)
 
- print*,'- OPEN INPUT GRID MOSAIC FILE: ',trim(mosaic_file_input_grid)
- error=nf90_open(trim(mosaic_file_input_grid),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening grid mosaic file')
+ type(esmf_vm)                         :: vm
 
- print*,"- READ NUMBER OF TILES"
- error=nf90_inq_dimid(ncid, 'ntiles', id_tiles)
- call netcdf_err(error, 'reading ntiles id')
- error=nf90_inquire_dimension(ncid,id_tiles,len=num_tiles_input_grid)
- call netcdf_err(error, 'reading ntiles')
+ call ESMF_VMGetGlobal(vm, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMGetGlobal", error)
 
- error = nf90_close(ncid)
+ if (localpet == 0) then
+   print*,'- OPEN INPUT GRID MOSAIC FILE: ',trim(mosaic_file_input_grid)
+   error=nf90_open(trim(mosaic_file_input_grid),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening grid mosaic file')
+   print*,"- READ NUMBER OF TILES"
+   error=nf90_inq_dimid(ncid, 'ntiles', id_tiles)
+   call netcdf_err(error, 'reading ntiles id')
+   error=nf90_inquire_dimension(ncid,id_tiles,len=idum(1))
+   call netcdf_err(error, 'reading ntiles')
+   error = nf90_close(ncid)
+ endif
+
+ call ESMF_VMBroadcast(vm, idum, 1, 0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", error)
+
+ num_tiles_input_grid = idum(1)
 
  print*,'- NUMBER OF TILES, INPUT MODEL GRID IS ', num_tiles_input_grid
 
@@ -552,19 +564,28 @@
 
  the_file = trim(orog_dir_input_grid) // trim(orog_files_input_grid(1))
 
- print*,'- OPEN FIRST INPUT GRID OROGRAPHY FILE: ',trim(the_file)
- error=nf90_open(trim(the_file),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening ororgraphy file')
- print*,"- READ GRID DIMENSIONS"
- error=nf90_inq_dimid(ncid, 'lon', id_dim)
- call netcdf_err(error, 'reading lon id')
- error=nf90_inquire_dimension(ncid,id_dim,len=i_input)
- call netcdf_err(error, 'reading lon')
- error=nf90_inq_dimid(ncid, 'lat', id_dim)
- call netcdf_err(error, 'reading lat id')
- error=nf90_inquire_dimension(ncid,id_dim,len=j_input)
- call netcdf_err(error, 'reading lat')
- error = nf90_close(ncid)
+ if (localpet == 0) then
+   print*,'- OPEN FIRST INPUT GRID OROGRAPHY FILE: ',trim(the_file)
+   error=nf90_open(trim(the_file),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening ororgraphy file')
+   print*,"- READ GRID DIMENSIONS"
+   error=nf90_inq_dimid(ncid, 'lon', id_dim)
+   call netcdf_err(error, 'reading lon id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum2(1))
+   call netcdf_err(error, 'reading lon')
+   error=nf90_inq_dimid(ncid, 'lat', id_dim)
+   call netcdf_err(error, 'reading lat id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum2(2))
+   call netcdf_err(error, 'reading lat')
+   error = nf90_close(ncid)
+ endif
+
+ call ESMF_VMBroadcast(vm, idum2, 2, 0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", error)
+
+ i_input = idum2(1)
+ j_input = idum2(2)
 
  print*,"- I/J DIMENSIONS OF THE INPUT GRID TILES ", i_input, j_input
 
