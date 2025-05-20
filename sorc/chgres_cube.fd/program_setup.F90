@@ -20,18 +20,22 @@
                                                                      !< atmospheric data. Not used
                                                                      !< for "grib2" or "restart"
                                                                      !< input types.
- character(len=500), public      :: atm_core_files_input_grid(7) = "NULL" !<  File names of input atmospheric restart core files.  Only used for 'restart' input type.
- character(len=500), public      :: atm_tracer_files_input_grid(6) = "NULL" !< File names of input atmospheric restart tracer files.  Only used for 'restart' input type.
+ character(len=500), public      :: atm_core_files_input_grid(7) = "NULL" !<  File names of input atmospheric 
+                                                                          !!  restart core files.  Only used for 'restart' input type.
+ character(len=500), public      :: atm_tracer_files_input_grid(6) = "NULL" !< File names of input atmospheric restart 
+                                                                            !! tracer files.  Only used for 'restart' input type.
  character(len=500), public      :: data_dir_input_grid = "NULL"  !< Directory containing input atm or sfc files.
  character(len=500), public      :: fix_dir_target_grid = "NULL" !< Directory containing target grid pre-computed fixed data (ex: soil type).
  character(len=500), public      :: mosaic_file_input_grid = "NULL" !< Input grid mosaic file.  Only used for "restart" or "history" input type.
  character(len=500), public      :: mosaic_file_target_grid = "NULL" !< Target grid mosaic file.
  character(len=500), public      :: nst_files_input_grid = "NULL" !< File name of input nst data.  Only used for input_type "gfs_gaussian_nemsio".
- character(len=500), public      :: grib2_file_input_grid = "NULL" !<  REQUIRED. File name of grib2 input data. Assumes atmospheric and surface data are in a single file. 
+ character(len=500), public      :: grib2_file_input_grid = "NULL" !<  REQUIRED. File name of grib2 input data. Assumes 
+                                                                   !!  atmospheric and surface data are in a single file. 
  character(len=500), public      :: geogrid_file_input_grid = "NULL" !< Name of "geogrid" file, which contains static
                                                                      !! surface fields on the input grid.  GRIB2 option
                                                                      !! only.
- character(len=500), public      :: orog_dir_input_grid = "NULL" !<  Directory containing the input grid orography files.  Only used for "restart" or "history" input types.
+ character(len=500), public      :: orog_dir_input_grid = "NULL" !<  Directory containing the input grid orography files.  Only 
+                                                                 !!  used for "restart" or "history" input types.
  character(len=500), public      :: orog_files_input_grid(6) = "NULL" !<  Input grid orography files.  Only used for "restart" or "history" input types.
  character(len=500), public      :: orog_dir_target_grid = "NULL" !<  Directory containing the target grid orography files.
  character(len=500), public      :: orog_files_target_grid(6) = "NULL" !<  Target grid orography files.
@@ -54,7 +58,9 @@
 !!                                    gaussian nemsio files
 !!                                 - "gfs_sigio" for spectral gfs
 !!                                    gfs sigio/sfcio files.
- character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current supported options are: "GFS", "HRRR", "NAM", "RAP", "RRFS". Default: "GFS"
+ character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current 
+                                                          !! supported options are: "GFS", "HRRR", "NAM", "RAP", "RRFS".
+                                                          !! Default: "GFS"
  
  integer, parameter, public      :: max_tracers=100 !< Maximum number of atmospheric tracers processed.
  integer, public                 :: num_tracers !< Number of atmospheric tracers to be processed.
@@ -86,9 +92,12 @@
  integer, public                 :: cycle_mon = -999 !< Cycle month.
  integer, public                 :: cycle_day = -999 !< Cycle day.
  integer, public                 :: cycle_hour = -999 !< Cycle hour.
- integer, public                 :: regional = 0 !<  For regional target grids.  When '1' remove boundary halo region from atmospheric/surface data and
-                                                 !! output atmospheric boundary file. When '2' output boundary file only. Default is '0' (global grids).
- integer, public                 :: halo_bndy = 0 !< Number of row/cols of lateral halo, where pure lateral bndy conditions are applied (regional target grids).
+ integer, public                 :: regional = 0 !< For regional target grids.  When '1' remove boundary 
+                                                 !! halo region from atmospheric/surface data and
+                                                 !! output atmospheric boundary file. When '2' output boundary file only. 
+                                                 !! Default is '0' (global grids).
+ integer, public                 :: halo_bndy = 0 !< Number of row/cols of lateral halo, where pure lateral bndy conditions 
+                                                  !! are applied (regional target grids).
  integer, public                 :: halo_blend = 0 !< Number of row/cols of blending halo, where model 
                                                    !! tendencies and lateral boundary tendencies are applied. Regional target grids only.
  integer, public                 :: nsoill_out = 4 !< Number of soil levels desired in the output data. 
@@ -125,7 +134,8 @@
  logical, public                 :: tg3_from_soil = .false. !<  If false, use lowest level soil temperature for the
                                                             !! base soil temperature instead of using data from 
                                                             !! static data. Default: False.
- logical, public                 :: use_thomp_mp_climo=.false. !<  When true, read and process Thompson MP climatological tracers.  False, when 'thomp_mp_climo_file' is NULL.
+ logical, public                 :: use_thomp_mp_climo=.false. !<  When true, read and process Thompson MP climatological tracers.
+                                                               !!  False, when 'thomp_mp_climo_file' is NULL.
 
  real, allocatable, public       :: drysmc_input(:)   !< Air dry soil moisture content input grid.
  real, allocatable, public       :: drysmc_target(:)  !< Air dry soil moisture content target grid.
@@ -153,12 +163,15 @@
 !! ./fort.41).
 !! @author George Gayno NCEP/EMC
  subroutine read_setup_namelist(filename)
+
+ use mpi_f08
+
  implicit none
 
  character(len=*), intent(in), optional :: filename
  character(len=250), allocatable :: filename_to_use
 
- integer                     :: is, ie, ierr
+ integer                     :: i, is, ie, ierr, myrank
 
  namelist /config/ varmap_file, &
                    mosaic_file_target_grid, &
@@ -196,19 +209,76 @@
                    nsoill_out, &
                    thomp_mp_climo_file
 
- print*,"- READ SETUP NAMELIST"
-
  if (present(filename)) then
    filename_to_use = filename
  else
    filename_to_use = "./fort.41"
  endif
 
- open(41, file=trim(filename_to_use), iostat=ierr)
- if (ierr /= 0) call error_handler("OPENING SETUP NAMELIST.", ierr)
- read(41, nml=config, iostat=ierr)
- if (ierr /= 0) call error_handler("READING SETUP NAMELIST.", ierr)
- close (41)
+ call mpi_comm_rank(mpi_comm_world, myrank, ierr)
+
+ if (myrank == 0) then
+   print*,"- READ SETUP NAMELIST"
+   open(41, file=trim(filename_to_use), iostat=ierr)
+   if (ierr /= 0) call error_handler("OPENING SETUP NAMELIST.", ierr)
+   read(41, nml=config, iostat=ierr)
+   if (ierr /= 0) call error_handler("READING SETUP NAMELIST.", ierr)
+   close (41)
+ endif
+
+ call mpi_barrier(MPI_COMM_WORLD,ierr)
+ call mpi_bcast(varmap_file,len(varmap_file),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(mosaic_file_target_grid,len(mosaic_file_target_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(fix_dir_target_grid,len(fix_dir_target_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(orog_dir_target_grid,len(orog_dir_target_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ do i = 1, 6
+   call mpi_bcast(orog_files_target_grid(i),len(orog_files_target_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ enddo
+ call mpi_bcast(mosaic_file_input_grid,len(mosaic_file_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(orog_dir_input_grid,len(orog_dir_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ do i = 1, 6
+   call mpi_bcast(orog_files_input_grid(i),len(orog_files_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ enddo
+ call mpi_bcast(nst_files_input_grid,len(nst_files_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ do i = 1, 6
+   call mpi_bcast(sfc_files_input_grid(i),len(sfc_files_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+   call mpi_bcast(atm_files_input_grid(i),len(atm_files_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+   call mpi_bcast(atm_tracer_files_input_grid(i),len(atm_tracer_files_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ enddo
+ do i = 1, 7
+   call mpi_bcast(atm_core_files_input_grid(i),len(atm_core_files_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ enddo
+ call mpi_bcast(grib2_file_input_grid,len(grib2_file_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(geogrid_file_input_grid,len(geogrid_file_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(data_dir_input_grid,len(data_dir_input_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(vcoord_file_target_grid,len(vcoord_file_target_grid),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(cycle_year,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(cycle_mon,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(cycle_day,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(cycle_hour,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(convert_atm,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(convert_nst,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(convert_sfc,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(wam_cold_start,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(vgtyp_from_climo,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(sotyp_from_climo,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(vgfrc_from_climo,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(minmax_vgfrc_from_climo,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(lai_from_climo,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(tg3_from_soil,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(regional,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(input_type,len(input_type),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(external_model,len(external_model),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(wam_parm_file,len(wam_parm_file),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(atm_weight_file,len(atm_weight_file),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ do i = 1, max_tracers
+   call mpi_bcast(tracers(i),len(tracers),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+   call mpi_bcast(tracers_input(i),len(tracers_input),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ enddo
+ call mpi_bcast(halo_bndy,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(halo_blend,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(nsoill_out,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(thomp_mp_climo_file,len(thomp_mp_climo_file),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
  
  call to_lower(input_type)
  
