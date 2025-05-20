@@ -107,7 +107,7 @@
 
  call ESMF_VMBroadcast(vm, idum, 3, 0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("IN VMGet", rc)
+    call error_handler("IN VMBroadcast", rc)
 
  j_thomp_mp_climo = idum(1)
  i_thomp_mp_climo = idum(2)

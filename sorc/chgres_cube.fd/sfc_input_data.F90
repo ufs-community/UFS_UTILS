@@ -1102,36 +1102,53 @@ module sfc_input_data
 
  integer                         :: error, rc
  integer                         :: id_dim, idim_input, jdim_input
- integer                         :: ncid, tile, id_var
+ integer                         :: ncid, tile, id_var, idum(2)
 
  real(esmf_kind_r8), allocatable :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
+
+ type(esmf_vm)                   :: vm
 
 !---------------------------------------------------------------------------
 ! Get i/j dimensions and number of soil layers from first surface file.
 ! Do dimensions match those from the orography file?
 !---------------------------------------------------------------------------
 
+ print*,"- CALL VMGetGlobal"
+ call ESMF_VMGetGlobal(vm, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGetGlobal", rc)
+
  tilefile = trim(data_dir_input_grid) // "/" // trim(sfc_files_input_grid(1))
- print*,"- READ GRID DIMENSIONS FROM: ", trim(tilefile)
- error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening: '//trim(tilefile) )
 
- error=nf90_inq_dimid(ncid, 'xaxis_1', id_dim)
- call netcdf_err(error, 'reading xaxis_1 id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=idim_input)
- call netcdf_err(error, 'reading xaxis_1 value' )
+ if (localpet == 0) then
+   print*,"- READ GRID DIMENSIONS FROM: ", trim(tilefile)
+   error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening: '//trim(tilefile) )
 
- error=nf90_inq_dimid(ncid, 'yaxis_1', id_dim)
- call netcdf_err(error, 'reading yaxis_1 id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=jdim_input)
- call netcdf_err(error, 'reading yaxis_1 value' )
+   error=nf90_inq_dimid(ncid, 'xaxis_1', id_dim)
+   call netcdf_err(error, 'reading xaxis_1 id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(1))
+   call netcdf_err(error, 'reading xaxis_1 value' )
+
+   error=nf90_inq_dimid(ncid, 'yaxis_1', id_dim)
+   call netcdf_err(error, 'reading yaxis_1 id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(2))
+   call netcdf_err(error, 'reading yaxis_1 value' )
+
+   error = nf90_close(ncid)
+ endif
+
+ call ESMF_VMBroadcast(vm, idum, 2, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMBroadcast", rc)
+
+ idim_input=idum(1)
+ jdim_input=idum(2)
 
  if (idim_input /= i_input .or. jdim_input /= j_input) then
    call error_handler("DIMENSION MISMATCH BETWEEN SFC AND OROG FILES.", 1)
  endif
-
- error = nf90_close(ncid)
 
  if (localpet == 0) then
    allocate(data_one_tile(idim_input,jdim_input))
@@ -1419,36 +1436,53 @@ module sfc_input_data
 
  integer                         :: error, id_var
  integer                         :: id_dim, idim_input, jdim_input
- integer                         :: ncid, rc, tile
+ integer                         :: ncid, rc, tile, idum(2)
 
  real(esmf_kind_r8), allocatable :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
+
+ type(esmf_vm)                   :: vm
 
 !---------------------------------------------------------------------------
 ! Get i/j dimensions and number of soil layers from first surface file.
 ! Do dimensions match those from the orography file?
 !---------------------------------------------------------------------------
 
+ print*,"- CALL VMGetGlobal"
+ call ESMF_VMGetGlobal(vm, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGetGlobal", rc)
+
  tilefile = trim(data_dir_input_grid) // "/" // trim(sfc_files_input_grid(1))
- print*,"- READ GRID DIMENSIONS FROM: ", trim(tilefile)
- error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening: '//trim(tilefile) )
 
- error=nf90_inq_dimid(ncid, 'grid_xt', id_dim)
- call netcdf_err(error, 'reading grid_xt id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=idim_input)
- call netcdf_err(error, 'reading grid_xt value' )
+ if (localpet == 0) then
+   print*,"- READ GRID DIMENSIONS FROM: ", trim(tilefile)
+   error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening: '//trim(tilefile) )
 
- error=nf90_inq_dimid(ncid, 'grid_yt', id_dim)
- call netcdf_err(error, 'reading grid_yt id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=jdim_input)
- call netcdf_err(error, 'reading grid_yt value' )
+   error=nf90_inq_dimid(ncid, 'grid_xt', id_dim)
+   call netcdf_err(error, 'reading grid_xt id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(1))
+   call netcdf_err(error, 'reading grid_xt value' )
+
+   error=nf90_inq_dimid(ncid, 'grid_yt', id_dim)
+   call netcdf_err(error, 'reading grid_yt id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(2))
+   call netcdf_err(error, 'reading grid_yt value' )
+
+   error = nf90_close(ncid)
+ endif
+
+ call ESMF_VMBroadcast(vm, idum, 2, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMBroadcast", rc)
+
+ idim_input=idum(1)
+ jdim_input=idum(2)
 
  if (idim_input /= i_input .or. jdim_input /= j_input) then
    call error_handler("DIMENSION MISMATCH BETWEEN SFC AND OROG FILES.", 3)
  endif
-
- error = nf90_close(ncid)
 
  if (localpet == 0) then
    allocate(data_one_tile(idim_input,jdim_input))
