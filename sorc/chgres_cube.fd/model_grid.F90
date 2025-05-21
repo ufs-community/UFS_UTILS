@@ -677,7 +677,6 @@
  real                             :: res
  real, allocatable                :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
  real, allocatable                :: rlon_corner(:,:),rlat_corner(:,:)
- real, allocatable                :: rlon_diff(:,:),rlat_diff(:,:)
  real, allocatable                :: xpts_corner(:,:),ypts_corner(:,:)
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
@@ -739,8 +738,6 @@
 
  allocate(rlat(i_input,j_input))
  allocate(rlon(i_input,j_input))
- allocate(rlat_diff(i_input,j_input))
- allocate(rlon_diff(i_input,j_input))
  allocate(xpts(i_input,j_input))
  allocate(ypts(i_input,j_input))
  allocate(rlat_corner(ip1_input,jp1_input))
