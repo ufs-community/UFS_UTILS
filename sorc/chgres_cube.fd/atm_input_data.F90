@@ -32,7 +32,7 @@ module atm_input_data
                                     input_type
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
-                                    ip1_input, jp1_input,  &
+                                    jp1_input,  &
                                     num_tiles_input_grid, &
                                     latitude_input_grid, &
                                     longitude_input_grid

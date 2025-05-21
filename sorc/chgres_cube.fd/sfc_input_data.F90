@@ -35,7 +35,6 @@ module sfc_input_data
                                     
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
-                                    ip1_input, jp1_input,  &
                                     num_tiles_input_grid
  use atm_input_data, only         : terrain_input_grid
 
