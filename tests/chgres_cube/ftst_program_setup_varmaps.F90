@@ -30,6 +30,7 @@ program ftst_program_setup_varmaps
   call mpi_init(ierr)
   call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
   call MPI_Comm_size(MPI_COMM_WORLD, nprocs, ierr)
+  call ESMF_Initialize(rc=ierr)
 
   if (my_rank .eq. 0) print*, "Starting test of program_setup reading varmaps."
   if (my_rank .eq. 0) print*, "testing read_varmap with GFSphys_varmap.txt..."
