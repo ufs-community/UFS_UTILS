@@ -147,7 +147,7 @@
  real, allocatable, public       :: wltsmc_target(:) !< Plant wilting point soil moisture content target grid.
  real, allocatable, public       :: bb_target(:)  !<  Soil 'b' parameter, target grid
  real, allocatable, public       :: satpsi_target(:) !<   Saturated soil potential, target grid
- real(kind=esmf_kind_r4), allocatable, public :: missing_var_values(:) !< If input GRIB2 record is missing, the variable
+ real(kind=esmf_kind_r4), allocatable, public  :: missing_var_values(:) !< If input GRIB2 record is missing, the variable
                                                                        !! is set to this value.
  
  public :: read_setup_namelist
@@ -449,57 +449,119 @@ subroutine read_varmap
 
  implicit none
 
- integer                    :: istat, k, nvars
- character(len=500)         :: line
+ integer                        :: istat, k, nvars, rc, localpet
+ integer                        :: idum1(1), idum2(2)
+ character(len=500)             :: line
  character(len=20),allocatable  :: var_type(:)
+
+ type(esmf_vm)                  :: vm
 
  if (trim(input_type) == "grib2") then 
 
-   print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_file)
-   open(14, file=trim(varmap_file), form='formatted', iostat=istat)
-   if (istat /= 0) then
-     call error_handler("OPENING VARIABLE MAPPING FILE", istat)
-   endif
+   call ESMF_VMGetGlobal(vm, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGetGlobal", rc)
 
-   num_tracers_input = 0
-   nvars = 0
+   call ESMF_VMGet(vm, localPet=localpet, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGet", rc)
 
-   !Loop over lines of file to count the number of variables
-   do
-     read(14, '(A)', iostat=istat) line !chgres_var_names_tmp(k)!, field_var_names(k) , &
-                          ! missing_var_methods(k), missing_var_values(k), var_type(k)
-     if (istat/=0) exit
-     if ( trim(line) .eq. '' ) cycle
-     nvars = nvars+1
-   enddo
-   if ( nvars == 0) call error_handler("VARMAP FILE IS EMPTY.", -1)
+   if (localpet == 0) then
+
+     print*,"OPEN VARIABLE MAPPING FILE: ", trim(varmap_file)
+     open(14, file=trim(varmap_file), form='formatted', iostat=istat)
+     if (istat /= 0) then
+       call error_handler("OPENING VARIABLE MAPPING FILE", istat)
+     endif
+
+     nvars = 0
+
+!  Loop over lines of file to count the number of variables
+     do
+       read(14, '(A)', iostat=istat) line
+       if (istat/=0) exit
+       if ( trim(line) .eq. '' ) cycle
+       nvars = nvars+1
+     enddo
+     if (nvars == 0) call error_handler("VARMAP FILE IS EMPTY.", -1)
+
+     idum1(1) = nvars
+
+   endif  ! localpet == 0
+
+   call ESMF_VMBroadcast(vm, idum1, 1, 0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN VMBroadcast", rc)
+
+   nvars = idum1(1)
 
    allocate(chgres_var_names(nvars))
    allocate(field_var_names(nvars))
    allocate(missing_var_methods(nvars))
    allocate(missing_var_values(nvars))
    allocate(read_from_input(nvars))
-   allocate(var_type(nvars))
 
    read_from_input(:) = .true.
-   rewind(14)
-    do k = 1,nvars
-      read(14, *, iostat=istat) chgres_var_names(k), field_var_names(k) , &
-                           missing_var_methods(k), missing_var_values(k), var_type(k)
-     if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
-     if(trim(var_type(k))=='T') then
-       num_tracers_input = num_tracers_input + 1
-       tracers_input(num_tracers_input)=chgres_var_names(k)
-       if ((trim(chgres_var_names(k)) == "ice_aero" .or. trim(chgres_var_names(k)) == "liq_aero") .and. &
+
+   if (localpet == 0) then
+
+     num_tracers_input = 0
+     allocate(var_type(nvars))
+     rewind(14)
+
+     do k = 1,nvars
+       read(14, *, iostat=istat) chgres_var_names(k), field_var_names(k) , &
+                            missing_var_methods(k), missing_var_values(k), var_type(k)
+       if (istat /= 0) call error_handler("READING VARIABLE MAPPING FILE", istat)
+
+       if(trim(var_type(k))=='T') then
+         num_tracers_input = num_tracers_input + 1
+         tracers_input(num_tracers_input)=chgres_var_names(k)
+         if ((trim(chgres_var_names(k)) == "ice_aero" .or. trim(chgres_var_names(k)) == "liq_aero") .and. &
            trim(thomp_mp_climo_file) .ne. "NULL" .and. trim(input_type) == "grib2") then
            call error_handler("VARMAP TABLE CONTAINS TRACER ENTRIES FOR THOMPSON AEROSOLS liq_aero or "// &
            "ice_aero. REMOVE THESE ENTRIES OR REMOVE THE NAMELIST ENTRY FOR "// &
            "thomp_mp_climo_file AND TRY AGAIN.",1)
+         endif
        endif
-     endif
-    enddo
-   close(14)
-   num_tracers = num_tracers_input
+     enddo
+     close(14)
+
+     num_tracers = num_tracers_input
+     idum2(1) = num_tracers
+     idum2(2) = num_tracers_input
+
+     deallocate(var_type)
+
+   endif  ! localpet = 0
+
+   call ESMF_VMBroadcast(vm, idum2, 2, 0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN VMBroadcast", rc)
+
+   num_tracers       = idum2(1)
+   num_tracers_input = idum2(2)
+
+   call ESMF_VMBroadcast(vm, tracers_input, len(tracers_input)*max_tracers, 0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN VMBroadcast", rc)
+
+   call ESMF_VMBroadcast(vm, chgres_var_names, len(chgres_var_names)*nvars, 0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN VMBroadcast", rc)
+
+   call ESMF_VMBroadcast(vm, field_var_names, len(field_var_names)*nvars, 0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN VMBroadcast", rc)
+
+   call ESMF_VMBroadcast(vm, missing_var_methods, len(missing_var_methods)*nvars, 0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN VMBroadcast", rc)
+
+   call ESMF_VMBroadcast(vm, missing_var_values, nvars, 0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+     call error_handler("IN VMBroadcast", rc)
+
  endif
 end subroutine read_varmap
 
