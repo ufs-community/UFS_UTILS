@@ -1756,54 +1756,67 @@ implicit none
 
  integer                         :: error, ncid, rc, tile
  integer                         :: id_dim, idim_input, jdim_input
- integer                         :: id_var, i, j, k, n
+ integer                         :: id_var, i, j, k, n, idum(5)
  integer                         :: clb(3), cub(3), num_tracers_file
 
  real(esmf_kind_r8), allocatable :: data_one_tile(:,:)
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
  real(esmf_kind_r8), pointer     :: presptr(:,:,:), dpresptr(:,:,:)
  real(esmf_kind_r8), pointer     :: psptr(:,:)
- real(esmf_kind_r8), allocatable :: pres_interface(:), phalf(:)
+ real(esmf_kind_r8), allocatable :: pres_interface(:)
 
- print*,"- READ INPUT ATMOS DATA FROM TILED HISTORY FILES."
+ type(esmf_vm)                   :: vm
 
- tilefile = trim(data_dir_input_grid) // "/" // trim(atm_files_input_grid(1))
- error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening: '//trim(tilefile) )
+ call ESMF_VMGetGlobal(vm, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN VMGetGlobal", rc)
+  
+ if (localpet == 0) then
+   print*,"- READ INPUT ATMOS DATA FROM TILED HISTORY FILES."
 
- error=nf90_inq_dimid(ncid, 'grid_xt', id_dim)
- call netcdf_err(error, 'reading grid_xt id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=idim_input)
- call netcdf_err(error, 'reading grid_xt value' )
+   tilefile = trim(data_dir_input_grid) // "/" // trim(atm_files_input_grid(1))
+   error=nf90_open(trim(tilefile),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening: '//trim(tilefile) )
 
- error=nf90_inq_dimid(ncid, 'grid_yt', id_dim)
- call netcdf_err(error, 'reading grid_yt id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=jdim_input)
- call netcdf_err(error, 'reading grid_yt value' )
+   error=nf90_inq_dimid(ncid, 'grid_xt', id_dim)
+   call netcdf_err(error, 'reading grid_xt id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(1))
+   call netcdf_err(error, 'reading grid_xt value' )
 
- if (idim_input /= i_input .or. jdim_input /= j_input) then
-   call error_handler("DIMENSION MISMATCH BETWEEN SFC AND OROG FILES.", 2)
+   error=nf90_inq_dimid(ncid, 'grid_yt', id_dim)
+   call netcdf_err(error, 'reading grid_yt id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(2))
+   call netcdf_err(error, 'reading grid_yt value' )
+
+   if (idum(1) /= i_input .or. idum(2) /= j_input) then
+     call error_handler("DIMENSION MISMATCH BETWEEN SFC AND OROG FILES.", 2)
+   endif
+
+   error=nf90_inq_dimid(ncid, 'pfull', id_dim)
+   call netcdf_err(error, 'reading pfull id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(3))
+   call netcdf_err(error, 'reading pfull value' )
+
+   error=nf90_inq_dimid(ncid, 'phalf', id_dim)
+   call netcdf_err(error, 'reading phalf id' )
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum(4))
+   call netcdf_err(error, 'reading phalf value' )
+
+   error=nf90_get_att(ncid, nf90_global, 'ncnsto', idum(5))
+   call netcdf_err(error, 'reading ntracer value' )
+
+   error = nf90_close(ncid)
  endif
 
- error=nf90_inq_dimid(ncid, 'pfull', id_dim)
- call netcdf_err(error, 'reading pfull id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=lev_input)
- call netcdf_err(error, 'reading pfull value' )
+ call ESMF_VMBroadcast(vm, idum, 5, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN ESMF_VMBroadcast", rc)
 
- error=nf90_inq_dimid(ncid, 'phalf', id_dim)
- call netcdf_err(error, 'reading phalf id' )
- error=nf90_inquire_dimension(ncid,id_dim,len=levp1_input)
- call netcdf_err(error, 'reading phalf value' )
- allocate(phalf(levp1_input))
- error=nf90_inq_varid(ncid, 'phalf', id_var)
- call netcdf_err(error, 'getting phalf varid' )
- error=nf90_get_var(ncid, id_var, phalf)
- call netcdf_err(error, 'reading phalf varid' )
-
- error=nf90_get_att(ncid, nf90_global, 'ncnsto', num_tracers_file)
- call netcdf_err(error, 'reading ntracer value' )
-
- error = nf90_close(ncid)
+ idim_input = idum(1)
+ jdim_input = idum(2)
+ lev_input = idum(3)
+ levp1_input = idum(4)
+ num_tracers_file = idum(5)
 
  print*,'- FILE HAS ', num_tracers_file, ' TRACERS.'
  print*,'- WILL PROCESS ', num_tracers_input, ' TRACERS.'
@@ -2025,7 +2038,7 @@ implicit none
    enddo
  enddo
 
- deallocate(pres_interface, phalf)
+ deallocate(pres_interface)
 
  call ESMF_FieldDestroy(dpres_input_grid, rc=rc)
 
