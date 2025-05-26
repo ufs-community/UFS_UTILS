@@ -25,14 +25,15 @@
 
  ! namelist inputs
  character(len=15)              :: variable_list(max_vars)
- character(len=2)               :: time_list(9)
  integer                        :: n_vars, n_tims, extrap_levs
+ integer                        :: time_list(10)               ! increment forecast hours
+ logical                        :: add_time_dim
  real(esmf_kind_r8)             :: missing_value ! value given to unmapped cells in the output grid
 
  type(grid_setup_type)          :: grid_setup_in, grid_setup_out
 
  integer                        :: ierr, localpet, npets
- integer                        :: v, t, SRCTERM
+ integer                        :: v, t, SRCTERM, k
 
  character(100)                 :: fname_time
 
@@ -46,9 +47,10 @@
  integer :: ut
 
  real :: t1, t2, t3, t4
+ character(len=3)               :: tstr
 
  ! see README for details of namelist variables.
- namelist /config/ n_vars, n_tims, time_list, variable_list, missing_value, extrap_levs
+ namelist /config/ n_vars, variable_list, missing_value, extrap_levs, time_list, add_time_dim
 
 ! INITIALIZE
 !-------------------------------------------------------------------------
@@ -87,7 +89,7 @@
  ! defaults
  missing_value=-999.
  extrap_levs=2
- n_tims=1
+ time_list=-1
 
  open(newunit=ut, file='regrid.nml', iostat=ierr)
  if (ierr /= 0) call error_handler("OPENING regrid NAMELIST.", ierr)
@@ -96,6 +98,16 @@
  call readin_setup(ut,"input",grid_setup_in)
  call readin_setup(ut,"output",grid_setup_out)
  close (ut)
+
+ 
+ n_tims = 0
+ do k=1,10
+   if (time_list(k) .lt. 0) exit
+   n_tims = n_tims + 1
+ enddo
+ if (n_tims < 1) then
+   call error_handler("n_tims < 1. must have at least one valid increment hour in time_list", 1)
+ endif
 
 
 !------------------------
@@ -161,12 +173,9 @@
 ! read data into input fields
 
  do t = 1, n_tims
-
-        if (n_tims>1) then
-                fname_time = trim(grid_setup_in%fname)//"."//time_list(t)
-        else
-                fname_time = trim(grid_setup_in%fname)
-        endif
+        
+        write(tstr,"(I3.3)")time_list(t)
+        fname_time = trim(grid_setup_in%fname)//tstr//".nc"
         write(6,*) 'reading into ', trim(fname_time)
         call read_into_fields(localpet, grid_setup_in%ires, grid_setup_in%jres, &
                                  trim(fname_time), trim(grid_setup_in%dir), &
@@ -224,7 +233,7 @@
 
  call write_from_fields(localpet, grid_setup_out%ires, grid_setup_out%jres,     &
                           trim(grid_setup_out%fname), trim(grid_setup_out%dir), &
-                          n_vars, n_tims, variable_list(1:n_vars), fields_out)
+                          n_vars, n_tims, variable_list(1:n_vars), fields_out, add_time_dim)
 
 
 ! clean up

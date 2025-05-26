@@ -29,18 +29,22 @@
  character(len=4)   :: default_str="NULL"
  integer            :: ires, jres
  integer            :: ierr
+ logical            :: add_time_dim
+ integer            :: fhrs(10) ! forecast hours of increment files
 
  namelist /input/  fname, dir, &
                    gridtype, &
                    fname_mask, dir_mask, &
                    fname_coord, dir_coord, &
-                   ires, jres
+                   ires, jres, &
+                   fhrs         
 
  namelist /output/  fname, dir, &
                     gridtype, &
                     fname_mask, dir_mask, &
                     fname_coord, dir_coord,&
-                    ires, jres
+                    ires, jres, &
+                    add_time_dim
 
  ! set defaults
  fname = default_str
@@ -51,6 +55,8 @@
  dir_coord = default_str
  ires = 0
  jres = 0
+ add_time_dim = .false.
+ fhrs = -1
 
  select case (namel)
  case ("input")

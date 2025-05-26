@@ -246,7 +246,7 @@
 !! @param[in] fields         fields to read variables into
 
  subroutine write_from_fields(localpet, i_dim, j_dim , fname_out, dir_out, &
-                                n_vars, n_tims, variable_list, fields)
+                                n_vars, n_tims, variable_list, fields, add_time_dim)
 
  implicit none
 
@@ -256,6 +256,7 @@
  character(*), intent(in)        :: dir_out
  character(15), dimension(n_vars), intent(in)     :: variable_list
  type(esmf_field), dimension(n_tims,n_vars), intent(in)  :: fields
+ logical,      intent(in)        :: add_time_dim
 
  ! LOCAL
  integer                         :: tt, id_var, ncid, ierr, &
@@ -299,7 +300,7 @@
          ierr = nf90_create(trim(fname), NF90_NETCDF4, ncid)
          call netcdf_err(ierr, 'creating file='//trim(fname) )
 
-         if (n_tims>1) then ! UFS_UTILS expects input with no time dim
+         if (add_time_dim) then ! UFS_UTILS expects input with no time dim
                            ! GFS (for IAU) expects a time dimension
                            ! later: update GFS to not expect a time dimension
              ierr = nf90_def_dim(ncid, 'Time', n_tims, id_t)
@@ -315,7 +316,7 @@
 
          do v=1, n_vars
 
-             if (n_tims>1) then
+             if (add_time_dim) then
                  ! UFS model code to read in the increments is expecting
                  ! dimensions: time, y, x (in the ncdump read out - which reverses fortran indexes)
                  ! need dimensions to be x,y,t below.
