@@ -33,12 +33,13 @@
  type(grid_setup_type)          :: grid_setup_in, grid_setup_out
 
  integer                        :: ierr, localpet, npets
- integer                        :: v, t, SRCTERM, k
+ integer                        :: v, t, SRCTERM
 
  character(100)                 :: fname_time
 
  type(esmf_vm)                  :: vm
- type(esmf_grid)                :: grid_in, grid_out
+ type(esmf_grid), allocatable   :: grid_in(:)
+ type(esmf_grid)                :: grid_out
  type(esmf_field), allocatable  :: fields_in(:,:)
  type(esmf_field), allocatable  :: fields_out(:,:)
  type(esmf_routehandle)         :: regrid_route
@@ -101,14 +102,13 @@
 
  
  n_tims = 0
- do k=1,10
-   if (time_list(k) .lt. 0) exit
+ do t=1,10
+   if (time_list(t) .lt. 0) exit
    n_tims = n_tims + 1
  enddo
  if (n_tims < 1) then
    call error_handler("n_tims < 1. must have at least one valid increment hour in time_list", 1)
  endif
-
 
 !------------------------
 ! Create esmf grid objects for input and output grids, and add land masks
@@ -116,8 +116,14 @@
 ! TO DO - can we make the number of tasks more flexible for fv3
 
  if (localpet==0) print*,'** Setting up grids'
- call setup_grid(localpet, npets, grid_setup_in, grid_in )
-
+ allocate(grid_in(n_tims))
+ do t = 1, n_tims
+   if (grid_setup_in%mask_from_input) then
+     call setup_grid(localpet, npets, grid_setup_in, grid_in(t), time_list(t) )
+   else
+     call setup_grid(localpet, npets, grid_setup_in, grid_in(t))
+   endif
+ enddo
  call setup_grid(localpet, npets, grid_setup_out, grid_out )
 
 !------------------------
@@ -131,7 +137,7 @@
  do t = 1, n_tims
      do v = 1, n_vars
 
-        fields_in(t,v)  = ESMF_FieldCreate(grid_in, &
+        fields_in(t,v)  = ESMF_FieldCreate(grid_in(t), &
                             typekind=ESMF_TYPEKIND_R8, &
                             staggerloc=ESMF_STAGGERLOC_CENTER, &
                             name="input for regridding", &
@@ -252,11 +258,11 @@
          if(ESMF_logFoundError(rcToCheck=ierr,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
             call error_handler("DESTROYING FIELD", ierr)
      enddo
+ 
+     call ESMF_GridDestroy(grid_in(t), rc=ierr)
+     if(ESMF_logFoundError(rcToCheck=ierr,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+        call error_handler("DESTROYING GRID", ierr)
  enddo
-
- call ESMF_GridDestroy(grid_in,rc=ierr)
- if(ESMF_logFoundError(rcToCheck=ierr,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-    call error_handler("DESTROYING GRID", ierr)
 
  call ESMF_GridDestroy(grid_out,rc=ierr)
  if(ESMF_logFoundError(rcToCheck=ierr,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &

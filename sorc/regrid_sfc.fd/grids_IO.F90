@@ -26,6 +26,7 @@
         character(15)  :: mask_variable(1) !< name of variables used for mask
         character(100) :: fname_mask       !< file name for reading in mask
         character(100) :: dir_mask         !< directory name for reading in mask
+        logical        :: mask_from_input  !< read mask from input file
         character(100) :: fname_coord      !< file name with coordinate info
         character(100) :: dir_coord        !< directory name for coordinate info
         integer        :: ires             !< latitudinal dimension
@@ -44,16 +45,18 @@
 !! @param[in] grid_setup        data structure with grid details 
 !! @param[out] mod_grid         output esmf_grid structure 
 
- subroutine setup_grid(localpet, npets, grid_setup, mod_grid )
+ subroutine setup_grid(localpet, npets, grid_setup, mod_grid, timestamp )
 
  implicit none
 
  ! INTENT IN
  type(grid_setup_type), intent(in)    :: grid_setup
  integer, intent(in)            :: localpet, npets
+ integer, intent(in), optional  :: timestamp
 
  ! INTENT OUT
  type(esmf_grid), intent(out)   :: mod_grid
+
 
  ! LOCAL
  type(esmf_field)               :: mask_field(1,1)
@@ -61,6 +64,8 @@
  integer(esmf_kind_i4), pointer :: ptr_mask(:,:)
 
  integer                        :: ierr, ncid, tile
+ character(len=128)             :: fname_mask
+ character(len=3)               :: tstr
 
 !--------------------------
 ! Create grid object, and set up pet distribution
@@ -85,7 +90,14 @@
  if(ESMF_logFoundError(rcToCheck=ierr,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate, mask_variable", ierr)
 
- call read_into_fields(localpet, grid_setup%ires, grid_setup%jres, trim(grid_setup%fname_mask), &
+ if (present(timestamp)) then 
+    write(tstr,"(I3.3)") timestamp
+    fname_mask = trim(grid_setup%fname_mask)//tstr//".nc"
+ else
+    fname_mask = trim(grid_setup%fname_mask)
+ endif
+
+ call read_into_fields(localpet, grid_setup%ires, grid_setup%jres, trim(fname_mask), &
                          trim(grid_setup%dir_mask), grid_setup, 1, &
                          grid_setup%mask_variable(1), mask_field(1,1))
 

@@ -73,6 +73,7 @@
 
  grid_setup%dir = dir
  grid_setup%fname = fname
+ grid_setup%mask_from_input = .false.
 
  ! set-up mask details, based on file type
  select case (gridtype)
@@ -84,6 +85,7 @@
      if (trim(fname_mask) == default_str) then ! if not specified, use input file
          grid_setup%dir_mask = dir
          grid_setup%fname_mask = fname
+         grid_setup%mask_from_input = .true.
      else
          grid_setup%dir_mask = dir_mask
          grid_setup%fname_mask = fname_mask
