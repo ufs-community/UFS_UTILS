@@ -44,6 +44,7 @@
 !! @param[in] npets             total number of pets
 !! @param[in] grid_setup        data structure with grid details 
 !! @param[out] mod_grid         output esmf_grid structure 
+!! @param[in, optional] timestamp      timestep of input file
 
  subroutine setup_grid(localpet, npets, grid_setup, mod_grid, timestamp )
 
@@ -256,6 +257,7 @@
 !! @param[in] n_tims            number of times to write out
 !! @param[in] variable_list     variables to read in
 !! @param[in] fields         fields to read variables into
+!! @param[in] add_time_dim      specify whether output file has time dimension
 
  subroutine write_from_fields(localpet, i_dim, j_dim , fname_out, dir_out, &
                                 n_vars, n_tims, variable_list, fields, add_time_dim)

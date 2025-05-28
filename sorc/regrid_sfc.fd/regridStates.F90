@@ -26,8 +26,8 @@
  ! namelist inputs
  character(len=15)              :: variable_list(max_vars)
  integer                        :: n_vars, n_tims, extrap_levs
- integer                        :: time_list(10)               ! increment forecast hours
- logical                        :: add_time_dim
+ integer                        :: time_list(10)               !< increment forecast hours
+ logical                        :: add_time_dim                !< specify whether the output increment has time dimension 
  real(esmf_kind_r8)             :: missing_value ! value given to unmapped cells in the output grid
 
  type(grid_setup_type)          :: grid_setup_in, grid_setup_out
