@@ -57,6 +57,7 @@ cat << EOF > regrid.nml
   variable_list="soilt1_inc", "soilt2_inc", "slc1_inc", "slc2_inc",
   missing_value=0.,
   time_list=6,
+  add_time_dim=.true.,
   extrap_levs=2,
  /
  &input
