@@ -44,7 +44,7 @@
 !! @param[in] npets             total number of pets
 !! @param[in] grid_setup        data structure with grid details 
 !! @param[out] mod_grid         output esmf_grid structure 
-!! @param[in, optional] timestamp      timestep of input file
+!! @param[in] timestamp      timestep of input file
 
  subroutine setup_grid(localpet, npets, grid_setup, mod_grid, timestamp )
 
