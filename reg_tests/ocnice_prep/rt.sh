@@ -69,10 +69,8 @@ if [[ $target = wcoss2 ]]; then
 elif [[ $target = hera ]]; then
     STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
     BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
-    #WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    #INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
-    WEIGHTS_ROOT=/scratch1/NCEPDEV/stmp4/Denise.Worthen/weights
-    INPUT_ROOT=/scratch1/NCEPDEV/stmp4/Denise.Worthen/OIPREP_INPUT
+    WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-fv3-cpu}
     QUEUE=${QUEUE:-batch}
     WLCLK=10
@@ -228,7 +226,7 @@ while read -r line || [ "$line" ]; do
     cp ./ocnice_prep.sh $RUNDIR
     cp ./parm/ocniceprep.nml.IN $RUNDIR
     cp ./parm/$FTYPE.csv $RUNDIR
-    cp $INPUT_ROOT/$TEST_SORC/$FTYPE.nc $RUNDIR
+    cp $INPUT_ROOT/$FTYPE.nc $RUNDIR
     export RUNDIR
     export TEST_NAME
 
