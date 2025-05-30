@@ -379,7 +379,7 @@
                                       !! dead start. Set to zero for non-dead
                                       !! start.
  REAL, ALLOCATABLE   :: STC_BCK(:,:), SMC_BCK(:,:), SLC_BCK(:,:)
- REAL, ALLOCATABLE   :: SLIFCS_FG(:), SICFCS_FG(:), SIHFCS_FG(:)
+ REAL, ALLOCATABLE   :: SLIFCS_FG(:), SICFCS_FG(:), SIHFCS_FG(:), SITFCS_FG(:)
  INTEGER, ALLOCATABLE :: LANDINC_MASK_FG(:), LANDINC_MASK(:)
  REAL, ALLOCATABLE   :: SND_BCK(:), SND_INC(:), SWE_BCK(:)
  REAL(KIND=KIND_IO8), ALLOCATABLE :: SLMASKL(:), SLMASKW(:), LANDFRAC(:)
@@ -493,6 +493,7 @@
   
  IF (COUPLED) THEN
    ALLOCATE(SIHFCS_FG(LENSFC))
+   ALLOCATE(SITFCS_FG(LENSFC))
  ENDIF
 
 IF (DO_LANDINCR) THEN
@@ -584,6 +585,7 @@ ENDIF
  
  IF (COUPLED) THEN
    SIHFCS_FG=SIHFCS
+   SITFCS_FG=SITFCS
  ENDIF
 
  ! CALCULATE MASK FOR LAND INCREMENTS
@@ -716,6 +718,7 @@ ENDIF
      if (lakefrac(i) == 0.0) then
        sicfcs(i) = sicfcs_fg(i)
        sihfcs(i) = sihfcs_fg(i)
+       sitfcs(i) = sitfcs_fg(i)
      endif
      if (nint(slifcs(i)) /= 1) then
        if (sicfcs(i) > 0.0) then
@@ -725,6 +728,7 @@ ENDIF
        endif
      endif
    enddo
+   deallocate(sihfcs_fg, sitfcs_fg)
  endif
 
 !--------------------------------------------------------------------------------
