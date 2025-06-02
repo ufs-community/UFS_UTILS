@@ -111,11 +111,13 @@
  INTEGER :: NPROCS, MYRANK, NUM_THREADS, NUM_PARTHDS, MAX_TASKS
  REAL    :: FH, DELTSFC, ZSEA1, ZSEA2
  LOGICAL :: USE_UFO, DO_NSST, DO_LANDINCR, DO_SFCCYCLE, FRAC_GRID
+ LOGICAL :: COUPLED
 !
  NAMELIST/NAMCYC/ IDIM,JDIM,LSOIL,LUGB,IY,IM,ID,IH,FH,&
                   DELTSFC,IALB,USE_UFO,DONST,             &
                   DO_SFCCYCLE,ISOT,IVEGSRC,ZSEA1_MM,      &
-                  ZSEA2_MM, MAX_TASKS, DO_LANDINCR, FRAC_GRID
+                  ZSEA2_MM, MAX_TASKS, DO_LANDINCR, FRAC_GRID, &
+                  COUPLED
 !
  DATA IDIM,JDIM,LSOIL/96,96,4/
  DATA IY,IM,ID,IH,FH/1997,8,2,0,0./
@@ -140,6 +142,7 @@
  DO_LANDINCR   = .FALSE.
  DO_SFCCYCLE = .TRUE.
  FRAC_GRID = .FALSE.
+ COUPLED = .FALSE.
 
  PRINT*
  PRINT*,"READ NAMCYC NAMELIST."
@@ -180,7 +183,7 @@
  CALL SFCDRV(LUGB,IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
              IY,IM,ID,IH,FH,IALB,                  &
              USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LANDINCR, &
-             FRAC_GRID,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
+             FRAC_GRID,COUPLED,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
  
  PRINT*
  PRINT*,'CYCLE PROGRAM COMPLETED NORMALLY ON RANK: ', MYRANK
@@ -297,6 +300,7 @@
  !! @param[in] DO_LANDINCR Read in land increment files, and add increments to
  !!            requested states.
  !! @param[in] FRAC_GRID When true, run with fractional grid.
+ !! @param[in] COUPLED When true, run in coupled mode.
  !! @param[in] ZSEA1 When running NSST model, this is the lower bound
  !!            of depth of sea temperature.  In whole mm.
  !! @param[in] ZSEA2 When running NSST model, this is the upper bound
@@ -308,7 +312,7 @@
  SUBROUTINE SFCDRV(LUGB, IDIM,JDIM,LENSFC,LSOIL,DELTSFC,  &
                    IY,IM,ID,IH,FH,IALB,                  &
                    USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LANDINCR,&
-                   FRAC_GRID,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
+                   FRAC_GRID,COUPLED,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
  use machine
@@ -328,7 +332,7 @@
  INTEGER, INTENT(IN) :: ISOT, IVEGSRC, MYRANK
 
  LOGICAL, INTENT(IN) :: USE_UFO, DO_NSST,DO_SFCCYCLE
- LOGICAL, INTENT(IN) :: DO_LANDINCR, FRAC_GRID
+ LOGICAL, INTENT(IN) :: DO_LANDINCR, FRAC_GRID, COUPLED
  
  REAL, INTENT(IN)    :: FH, DELTSFC, ZSEA1, ZSEA2
 
@@ -349,7 +353,7 @@
  INTEGER             :: IDUM(IDIM,JDIM)
  integer             :: num_parthds, num_threads
 
- LOGICAL             :: IS_NOAHMP, coupled
+ LOGICAL             :: IS_NOAHMP
  INTEGER             :: LSM
 
  real(kind=kind_io8) :: min_ice(lensfc)
@@ -405,13 +409,10 @@
 
  DATA NST_FILE/'NULL'/
 
- coupled=.true.
-
  DO_SNOWINCR = .FALSE.
  DO_SOILINCR      = .FALSE.
  INTERP_LANDINCR   = .FALSE.
  lsoil_incr = 3 !default
-
  
  SIG1T = 0.0            ! Not a dead start!
 
