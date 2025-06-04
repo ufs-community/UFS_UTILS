@@ -924,6 +924,7 @@ ENDIF
 
  USE UTILS
  USE GDSWZD_MOD
+ use sp_mod
  USE READ_WRITE_DATA, ONLY : IDIM_GAUS, JDIM_GAUS, &
                              SLMSK_GAUS, DTREF_GAUS, &
                              NSST_DATA

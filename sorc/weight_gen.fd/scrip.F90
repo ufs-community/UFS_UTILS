@@ -18,6 +18,8 @@
 !! @author George Gayno NOAA/EMC
  program scrip
 
+ use sp_mod
+
  implicit none
 
  character(len=128)             :: outfile

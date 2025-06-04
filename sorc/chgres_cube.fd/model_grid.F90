@@ -161,6 +161,7 @@
  use sfcio_module
  use sigio_module
 #endif
+ use sp_mod
  use netcdf
 
  implicit none

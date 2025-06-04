@@ -46,6 +46,14 @@ elif [[ -d /scratch1 ]] ; then
     fi
     target=hera
     module purge
+elif [[ -d /scratch3 ]] ; then
+    # We are on NOAA Ursa
+    if ( ! eval module help > /dev/null 2>&1 ) ; then
+        echo load the module command 1>&2
+        source /apps/lmod/lmod/init/$__ms_shell
+    fi
+    target=ursa
+    module purge
 elif [[ "$(hostname)" == "gaea5"* || "$(hostname)" =~ c5n[0-9]+ ]] && [[ -d /gpfs/f5 ]] ; then
     # We are on GAEAC5.
     if ( ! eval module help > /dev/null 2>&1 ) ; then
@@ -80,15 +88,18 @@ elif [[ -d /data/prod ]] ; then
     module purge
 else
     if [[ ! -v PW_CSP ]]; then
-        echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+        set +x
+        echo FATAL ERROR: UNKNOWN PLATFORM 1>&2; exit 99
     elif [[ -z "${PW_CSP}" ]]; then
-        echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+        set +x
+        echo FATAL ERROR: UNKNOWN PLATFORM 1>&2; exit 99
     else
         if [[ "${PW_CSP}" == "aws" || "${PW_CSP}" == "azure" || "${PW_CSP}" == "google" ]]; then
             target=noaacloud
             module purge
         else
-            echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+            set +x
+            echo FATAL ERROR: UNKNOWN PLATFORM 1>&2; exit 99
         fi
     fi
 fi
