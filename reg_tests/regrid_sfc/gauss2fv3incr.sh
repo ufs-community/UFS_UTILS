@@ -34,7 +34,7 @@ mkdir -p $DATA
 cd ${DATA}
 
 # input, increment
-/bin/cp -p ${COMIN_REGTEST}/sfcincr_gsi ${DATA}/sfcincr_gsi
+/bin/cp -p ${COMIN_REGTEST}/sfcincr_gsi ${DATA}/sfcincr_gsi006.nc
 
 # input, fixed files
 ln -sf "${FIXorog}/gaussian.${LONB_CASE_IN}.${LATB_CASE_IN}.nc" \
@@ -56,6 +56,8 @@ cat << EOF > regrid.nml
   n_vars=4,
   variable_list="soilt1_inc", "soilt2_inc", "slc1_inc", "slc2_inc",
   missing_value=0.,
+  time_list=6,
+  add_time_dim=.true.,
   extrap_levs=2,
  /
  &input

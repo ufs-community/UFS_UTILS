@@ -29,18 +29,22 @@
  character(len=4)   :: default_str="NULL"
  integer            :: ires, jres
  integer            :: ierr
+ logical            :: add_time_dim
+ integer            :: fhrs(10) ! forecast hours of increment files
 
  namelist /input/  fname, dir, &
                    gridtype, &
                    fname_mask, dir_mask, &
                    fname_coord, dir_coord, &
-                   ires, jres
+                   ires, jres, &
+                   fhrs         
 
  namelist /output/  fname, dir, &
                     gridtype, &
                     fname_mask, dir_mask, &
                     fname_coord, dir_coord,&
-                    ires, jres
+                    ires, jres, &
+                    add_time_dim
 
  ! set defaults
  fname = default_str
@@ -51,6 +55,8 @@
  dir_coord = default_str
  ires = 0
  jres = 0
+ add_time_dim = .false.
+ fhrs = -1
 
  select case (namel)
  case ("input")
@@ -67,6 +73,7 @@
 
  grid_setup%dir = dir
  grid_setup%fname = fname
+ grid_setup%mask_from_input = .false.
 
  ! set-up mask details, based on file type
  select case (gridtype)
@@ -78,6 +85,7 @@
      if (trim(fname_mask) == default_str) then ! if not specified, use input file
          grid_setup%dir_mask = dir
          grid_setup%fname_mask = fname
+         grid_setup%mask_from_input = .true.
      else
          grid_setup%dir_mask = dir_mask
          grid_setup%fname_mask = fname_mask
