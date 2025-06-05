@@ -16,8 +16,8 @@ One or more paragraphs describing the problem, solution, and required changes.
 ## TESTS CONDUCTED: 
 If there are changes to the build or source code, the tests below must be conducted. Contact a repository manager if you need assistance.
 
-- [ ] Compile branch on all Tier 1 machines using Intel (Orion, Jet, Hera, Hercules and WCOSS2).
-- [ ] Compile branch on Hera using GNU.
+- [ ] Compile branch on all Tier 1 machines using Intel (Orion, Jet, Ursa, Hercules and WCOSS2).
+- [ ] Compile branch on Ursa using GNU.
 - [ ] Compile branch in 'Debug' mode on WCOSS2.
 - [ ] Compile with Doxygen on any machine with no errors.
 - [ ] Run unit tests locally on any Tier 1 machine.
@@ -25,7 +25,7 @@ If there are changes to the build or source code, the tests below must be conduc
 
 Optional test.
 
-- [ ] Run full set of chgres_cube consistency tests on Hera.
+- [ ] Run full set of chgres_cube consistency tests on Ursa.
 
 Describe any additional tests performed.
 
