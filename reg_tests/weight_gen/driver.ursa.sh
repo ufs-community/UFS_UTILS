@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run weight_gen consistency test on Hera.
+# Run weight_gen consistency test on Ursa.
 #
 # Set $DATA to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
@@ -36,7 +36,7 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export DATA="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export DATA="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/weight_gen"
 
 #-----------------------------------------------------------------------------
@@ -50,7 +50,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/weight_gen
+export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/weight_gen
 export HOMEufs=$PWD/../..
 
 ./weight_gen.sh
