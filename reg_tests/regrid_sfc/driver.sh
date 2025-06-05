@@ -58,8 +58,7 @@ elif [[ "$target" == "ursa" ]];then
   WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
   PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
   QUEUE="${QUEUE:-batch}"
-# export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
-  export HOMEreg=/scratch3/NCEPDEV/da/George.Gayno/noscrub/reg_tests/regrid_sfc/
+  export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
   export APRUN_REGRID=srun
   PARTITION=''
 elif [[ "$target" == "orion" ]];then

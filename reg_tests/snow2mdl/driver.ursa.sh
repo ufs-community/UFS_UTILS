@@ -54,8 +54,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-#export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
-export HOMEreg=/scratch3/NCEPDEV/da/George.Gayno/noscrub/reg_tests/snow2mdl
+export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 
 # The first test uses hemispheric afwa/airforce data, as was done in OPS.
