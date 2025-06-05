@@ -9,9 +9,9 @@ set(lib_src
     ../../ccpp-physics/physics/Interstitials/UFS_SCM_NEPTUNE/sfcsub.F
     read_write_data.f90
     utils.F90
-    land_increments.f90)
+    land_increments.F90)
 
-set(exe_src cycle.f90)
+set(exe_src cycle.F90)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -r8")
@@ -20,6 +20,10 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10)
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
   endif()
+endif()
+
+if(ip_VERSION GREATER_EQUAL 5.0.0)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DIP_V5")
 endif()
 
 set(exe_name global_cycle)
