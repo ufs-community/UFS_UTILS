@@ -11,7 +11,7 @@
 
 #-------------------------------------------------------------------------------
 #
-# Run the weight_gen program on Hera.
+# Run the weight_gen program on Ursa.
 #
 # Set WORK_DIR to your working directory.
 #
@@ -39,7 +39,7 @@ module list
 
 export CRES="C48"
 
-export WORK_DIR=/scratch2/NCEPDEV/stmp1/$USER/weight_gen
+export WORK_DIR=/scratch4/NCEPDEV/stmp/$USER/weight_gen
 
 ${UFS_DIR}/util/weight_gen/weight_gen.sh
 
