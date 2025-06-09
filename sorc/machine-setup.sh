@@ -38,14 +38,6 @@ elif [[ -d /opt/spack-stack ]] ; then
     fi
     target=container
     module purge
-elif [[ -d /scratch1 ]] ; then
-    # We are on NOAA Hera
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-        echo load the module command 1>&2
-        source /apps/lmod/lmod/init/$__ms_shell
-    fi
-    target=hera
-    module purge
 elif [[ -d /scratch3 ]] ; then
     # We are on NOAA Ursa
     if ( ! eval module help > /dev/null 2>&1 ) ; then
