@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run the chgres_cube consistency tests on Hera.
+# Run the chgres_cube consistency tests on Ursa.
 #
 # Set WORK_DIR to a general working location outside the UFS_UTILS directory.
 # The exact working directory (OUTDIR) will be WORK_DIR/reg_tests/chgres-cube. 
@@ -36,7 +36,7 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export OUTDIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export OUTDIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
@@ -60,7 +60,7 @@ fi
 
 export HOMEufs=$PWD/../..
 
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/chgres_cube
+export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/chgres_cube
 
 rm -f consistency.log* summary*log
 
@@ -76,7 +76,7 @@ rm -fr $OUTDIR
 
 LOG_FILE=consistency.log01
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
+TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=50g -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.restart \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.restart.sh)
 
 #-----------------------------------------------------------------------------
@@ -85,7 +85,7 @@ TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:15:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log02
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
+TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 --mem=100g -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c192.fv3.history \
       -o $LOG_FILE -e $LOG_FILE ./c192.fv3.history.sh)
 
 #-----------------------------------------------------------------------------
@@ -94,7 +94,7 @@ TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 -t 0:15:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log03
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST3=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf \
+TEST3=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=100g -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.netcdf.sh)
 
 #-----------------------------------------------------------------------------
@@ -103,7 +103,7 @@ TEST3=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT_
 
 LOG_FILE=consistency.log04
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST4=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gfs.grib2 \
+TEST4=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=50g -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gfs.grib2 \
       -o $LOG_FILE -e $LOG_FILE ./c192.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ TEST4=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log05
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.grib2.conus \
+TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=50g -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./25km.conus.gfs.grib2.sh)
 
 #-----------------------------------------------------------------------------
@@ -121,7 +121,7 @@ TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log06
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.gfssdf.grib2.conus \
+TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=100g -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.gfssdf.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.gfssdf.grib2.sh)
 
 #-----------------------------------------------------------------------------
@@ -130,7 +130,7 @@ TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:10:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log07
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST7=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.newsfc.grib2.conus \
+TEST7=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 --mem=100g -t 0:10:00 -A $PROJECT_CODE -q $QUEUE -J 3km.conus.hrrr.newsfc.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./3km.conus.hrrr.newsfc.grib2.sh)
 
 #-----------------------------------------------------------------------------
@@ -139,7 +139,7 @@ TEST7=$(sbatch --parsable --ntasks-per-node=6 --nodes=2 -t 0:10:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log08
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST8=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.nam.grib2.conus \
+TEST8=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=50g -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.nam.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./13km.conus.nam.grib2.sh)
 
 #-----------------------------------------------------------------------------
@@ -148,7 +148,7 @@ TEST8=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log09
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST9=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.rap.grib2.conus \
+TEST9=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=100g -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.rap.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./13km.conus.rap.grib2.sh)
 
 #-----------------------------------------------------------------------------
@@ -157,7 +157,7 @@ TEST9=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 
 LOG_FILE=consistency.log10
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST10=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.na.gfs.ncei.grib2.conus \
+TEST10=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=100g -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.na.gfs.ncei.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./13km.na.gfs.ncei.grib2.sh)
 
 #-----------------------------------------------------------------------------
@@ -166,7 +166,7 @@ TEST10=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_
 
 LOG_FILE=consistency.log11
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST11=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf2wam \
+TEST11=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=100g -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.fv3.netcdf2wam \
       -o $LOG_FILE -e $LOG_FILE ./c96.fv3.netcdf2wam.sh)
 
 #-----------------------------------------------------------------------------
@@ -175,7 +175,7 @@ TEST11=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:15:00 -A $PROJECT
 
 LOG_FILE=consistency.log12
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST12=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.pbgrib2.conus \
+TEST12=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=100g -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 25km.conus.gfs.pbgrib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./25km.conus.gfs.pbgrib2.sh)
 
 #-----------------------------------------------------------------------------
@@ -184,26 +184,23 @@ TEST12=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_
 
 LOG_FILE=consistency.log13
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST13=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c96.gefs.grib2 \
+TEST13=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=50g -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c96.gefs.grib2 \
       -o $LOG_FILE -e $LOG_FILE ./c96.gefs.grib2.sh)
-
 
 #-----------------------------------------------------------------------------
 # Initialize CONUS 13-KM USING RAP-SMOKE GRIB2 file WITH GSD PHYSICS .
 #-----------------------------------------------------------------------------
 LOG_FILE=consistency.log14
 export OMP_NUM_THREADS=1   # should match cpus-per-task
-TEST14=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.rap-smoke.grib2.conus \
+TEST14=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 --mem=100g -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J 13km.conus.rap-smoke.grib2.conus \
       -o $LOG_FILE -e $LOG_FILE ./13km.conus.rap-smoke.grib2.sh)
-
-
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 LOG_FILE=consistency.log
-sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
+sbatch --ntasks=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
       --open-mode=append -q $QUEUE -d\
      afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14 << EOF
 #!/bin/bash
