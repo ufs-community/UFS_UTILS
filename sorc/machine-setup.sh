@@ -32,11 +32,14 @@ elif [[ -d /lfs/h1 ]] ; then
     module reset
 elif [[ -d /opt/spack-stack ]] ; then
     # We are using a container 
-    # if ( ! eval module help > /dev/null 2>&1 ) ; then
+    if [[ -v SINGULARITY_CONTAINER ]]; then
+        # We are in a container
         source /usr/lmod/lmod/init/$__ms_shell
-    # fi
-    target=container
-    module purge
+        target=container
+        module purge
+    else
+        echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+    fi
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then
