@@ -116,13 +116,14 @@ fi  # extract data?
 if [ $RUN_CHGRES == yes ]; then
 
   export APRUN=srun
-  NODES=3
+  NODES=2
   WALLT="0:15:00"
+  MEM=300G
   export OMP_NUM_THREADS=1
   if [ $CRES_HIRES == 'C768' ] ; then
-    NODES=5
+    NODES=3
   elif [ $CRES_HIRES == 'C1152' ] ; then
-    NODES=8
+    NODES=4
     WALLT="0:20:00"
   fi
   case $gfs_ver in
@@ -130,28 +131,28 @@ if [ $RUN_CHGRES == yes ]; then
       export OMP_NUM_THREADS=4
       export OMP_STACKSIZE=1024M
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --cpus-per-task=$OMP_NUM_THREADS \
-        -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+        --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
         -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_pre-v14.chgres.sh ${CDUMP}
       ;;
     v14)
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
       -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v14.chgres.sh ${CDUMP}
       ;;
     v15)
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
       -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v15.chgres.sh ${CDUMP}
       ;;
     v16retro)
       if [ "$CDUMP" = "gdas" ] ; then
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
         -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16retro.chgres.sh hires
       else
-        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+        sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
         -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16.chgres.sh ${CDUMP}
       fi
       ;;
     v16)
-      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
+      sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
       -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16.chgres.sh ${CDUMP}
       ;;
   esac
@@ -162,7 +163,7 @@ if [ $RUN_CHGRES == yes ]; then
 
     if [ "$gfs_ver" = "v16retro" ]; then
 
-      sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_enkf \
+      sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_enkf \
       -o log.enkf -e log.enkf ${DEPEND} run_v16retro.chgres.sh enkf
 
     else
@@ -179,19 +180,19 @@ if [ $RUN_CHGRES == yes ]; then
               export OMP_NUM_THREADS=2
               export OMP_STACKSIZE=1024M
               sbatch --parsable --ntasks-per-node=12 --nodes=1 --cpus-per-task=$OMP_NUM_THREADS \
-               -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
+               --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
                -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_pre-v14.chgres.sh ${MEMBER_CH}
             ;;
           v14)
-              sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
+              sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v14.chgres.sh ${MEMBER_CH}
             ;;
           v15)
-              sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
+              sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v15.chgres.sh ${MEMBER_CH}
             ;;
           v16)
-              sbatch --parsable --ntasks-per-node=12 --nodes=1 -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
+              sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
               -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v16.chgres.sh ${MEMBER_CH}
             ;;
         esac
