@@ -127,7 +127,7 @@ done
 
 for dir in weight_gen ice_blend; do
     cd $dir
-    if [[ $target == "ursa" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] || [[ $target == "hercules" ]] ; then
+    if [[ $target == "ursa" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "hercules" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss2" ]] ; then
         qsub -v WORK_DIR ./driver.$target.sh
