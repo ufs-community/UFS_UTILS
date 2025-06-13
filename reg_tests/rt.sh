@@ -43,8 +43,8 @@ else
     target=Jet
   elif [[ -d /lfs/h1 ]] ; then
     target=WCOSS2
-  elif [[ -d /scratch1 ]] ; then
-    target=Hera
+  elif [[ -d /scratch3 ]] ; then
+    target=Usra
   fi
   echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
 fi
@@ -88,8 +88,8 @@ cd ../reg_tests
 
 set -x
 
-#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] || [[ $target == "hercules" ]] || [[ $target == "wcoss2" ]] ; then
-#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hera" ]] || [[ $target == "hercules" ]] ; then
+#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hercules" ]] || [[ $target == "wcoss2" ]] ; then
+#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hercules" ]] ; then
 
   cd regrid_sfc
   ./driver.sh
@@ -127,7 +127,7 @@ done
 
 for dir in weight_gen ice_blend; do
     cd $dir
-    if [[ $target == "hera" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] || [[ $target == "hercules" ]] ; then
+    if [[ $target == "ursa" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "s4" ]] || [[ $target == "hercules" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss2" ]] ; then
         qsub -v WORK_DIR ./driver.$target.sh

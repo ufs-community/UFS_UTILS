@@ -4,12 +4,12 @@
 #
 # Check-out ufs-utils (and be sure to check out the ccpp submodule)
 # cd fix 
-# ./link_fixdirs.sh emc hera
+# ./link_fixdirs.sh emc $MACHINE
 # cd ../reg_tests/cpld_gridgen
 # Edit the rt.conf and add the non-standard case(s) you want to generate
 # Note you need to keep/run the C384_025 case because the lower resolution cases depend on it to generate the remapping weights used to create the CICE ICs and/or do the Post jobs.
 # Edit rt.sh for proper accounts/partitions
-# Build and run the test using ./rt.sh -b >output 2>&1 &
+# Build and run the test using ./rt.sh -b
 # Your results should be in /scratch1/NCEPDEV/stmp4/First.Last/CPLD_GRIDGEN/rt_#
 #
 #
