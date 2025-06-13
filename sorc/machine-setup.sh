@@ -46,18 +46,6 @@ elif [[ -d /scratch3 ]] ; then
     fi
     target=ursa
     module purge
-elif [[ "$(hostname)" == "gaea5"* || "$(hostname)" =~ c5n[0-9]+ ]] && [[ -d /gpfs/f5 ]] ; then
-    # We are on GAEAC5.
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-      # We cannot simply load the module command.  The GAEA
-      # /etc/profile modifies a number of module-related variables
-      # before loading the module command.  Without those variables,
-      # the module command fails.  Hence we actually have to source
-      # /etc/profile here.
-      source /etc/profile
-    fi
-    module reset
-    target=gaeac5
 elif [[ "$(hostname)" == "gaea6"* || "$(hostname)" =~ c6n[0-9]+ ]] && [[ -d /gpfs/f6 ]] ; then
     target=gaeac6
     source /opt/cray/pe/lmod/8.7.31/init/$__ms_shell

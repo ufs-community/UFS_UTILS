@@ -697,7 +697,7 @@ Invoke the build script from the root directory:
 
   ./build_all.sh
 
-Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is "wcoss2", "ursa", "jet", "orion", "hercules", "gaeac5" or "gaeac6"):
+Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is "wcoss2", "ursa", "jet", "orion", "hercules", or "gaeac6"):
 
 ::
 
