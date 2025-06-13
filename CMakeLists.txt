@@ -119,9 +119,12 @@ if(CHGRES_ALL OR GBLEVENTS)
   find_package(sigio 2.3.0 REQUIRED)
 endif()
 find_package(ip 3.3.3 REQUIRED)
-if(ip_VERSION LESS 5.0)
+# Can't use ip v5 without sp because modfications would need to be
+# made to global_cycle routine sfcsub.F, which is part of
+# ccpp-physics repo.
+#if(ip_VERSION LESS 5.0)
   find_package(sp 2.3.3 REQUIRED)
-endif()
+#endif()
 find_package(g2 3.4.3 REQUIRED)
 
 # If doxygen documentation we enabled, build it. This must come before

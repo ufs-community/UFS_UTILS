@@ -48,9 +48,6 @@ subroutine gaussian_to_fv3_interp(lsoil_incr,rla,rlo, &
 
     use utils
     use gdswzd_mod
-#ifdef IP_V5
-    use sp_mod
-#endif
     use read_write_data, only : idim_gaus, jdim_gaus, &
                              stc_inc_gaus, soilsnow_gaus, slc_inc_gaus
     use mpi

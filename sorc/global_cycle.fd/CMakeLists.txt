@@ -22,10 +22,6 @@ elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^(GNU)$")
   endif()
 endif()
 
-if(ip_VERSION GREATER_EQUAL 5.0.0)
-  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DIP_V5")
-endif()
-
 set(exe_name global_cycle)
 
 add_library(global_cycle_lib STATIC ${lib_src})

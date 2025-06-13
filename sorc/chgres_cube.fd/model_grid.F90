@@ -161,9 +161,6 @@
  use sfcio_module
  use sigio_module
 #endif
-#ifdef IP_V5
- use sp_mod
-#endif
  use netcdf
 
  implicit none

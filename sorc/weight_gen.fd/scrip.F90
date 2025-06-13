@@ -18,10 +18,6 @@
 !! @author George Gayno NOAA/EMC
  program scrip
 
-#ifdef IP_V5
- use sp_mod
-#endif
-
  implicit none
 
  character(len=128)             :: outfile
