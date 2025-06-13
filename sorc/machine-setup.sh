@@ -30,16 +30,11 @@ if [[ -d /lfs5 ]] ; then
 elif [[ -d /lfs/h1 ]] ; then
     target=wcoss2
     module reset
-elif [[ -d /opt/spack-stack ]] ; then
-    # We are using a container 
-    if [[ -v SINGULARITY_CONTAINER ]]; then
-        # We are in a container
-        source /usr/lmod/lmod/init/$__ms_shell
-        target=container
-        module purge
-    else
-        echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
-    fi
+elif [[ -d /opt/spack-stack && -v SINGULARITY_CONTAINER ]]; then
+    # We are in a container
+    source /usr/lmod/lmod/init/$__ms_shell
+    target=container
+    module purge
 elif [[ -d /scratch1 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then
