@@ -72,8 +72,6 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -g -traceback")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
   set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -check all -ftrapuv")
-# On some machines (Hera), using -check all results in an error
-# at the linking step. The uninit check is the culprit.
   if(CMAKE_Fortran_COMPILER_ID MATCHES "^(IntelLLVM)$")
     set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -check nouninit")
   endif()
