@@ -44,7 +44,7 @@ else
   elif [[ -d /lfs/h1 ]] ; then
     target=WCOSS2
   elif [[ -d /scratch3 ]] ; then
-    target=Usra
+    target=Ursa
   fi
   echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
 fi
