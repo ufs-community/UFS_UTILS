@@ -119,9 +119,9 @@ if(CHGRES_ALL OR GBLEVENTS)
   find_package(sigio 2.3.0 REQUIRED)
 endif()
 find_package(ip 3.3.3 REQUIRED)
-# Can't use ip v5 without sp because modfications would need to be
-# made to global_cycle routine sfcsub.F, which is part of
-# ccpp-physics repo.
+# TODO: Disable sp when using ip v5.0+.
+#       This requires an update to ccpp-physics and global_cycle's
+#       sfcsub.F module.
 #if(ip_VERSION LESS 5.0)
   find_package(sp 2.3.3 REQUIRED)
 #endif()
