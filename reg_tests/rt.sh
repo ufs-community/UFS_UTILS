@@ -88,34 +88,29 @@ cd ../reg_tests
 
 set -x
 
-#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hercules" ]] || [[ $target == "wcoss2" ]] ; then
-#if [[ $target == "orion" ]] || [[ $target == "jet" ]] || [[ $target == "hercules" ]] ; then
+cd regrid_sfc
+./driver.sh
 
-  cd regrid_sfc
-  ./driver.sh
+wait_for_fin
 
-  wait_for_fin
+cd ..
 
-  cd ..
+export ACCOUNT=$PROJECT_CODE
+export STMP=$WORK_DIR/reg-tests
 
-  export ACCOUNT=$PROJECT_CODE
-  export STMP=$WORK_DIR/reg-tests
+cd ocnice_prep
+./rt.sh
 
-  cd ocnice_prep
-  ./rt.sh
+wait_for_fin
 
-  wait_for_fin
+cd ..
 
-  cd ..
+cd cpld_gridgen
+./rt.sh
 
-  cd cpld_gridgen
-  ./rt.sh
+wait_for_fin
 
-  wait_for_fin
-
-  cd ..
-
-#fi
+cd ..
 
 for dir in snow2mdl global_cycle chgres_cube grid_gen; do
     cd $dir
