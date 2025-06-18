@@ -722,6 +722,11 @@ ENDIF
        sihfcs(i) = sihfcs_fg(i)
        sitfcs(i) = sitfcs_fg(i)
      endif
+   enddo
+   deallocate(sihfcs_fg, sitfcs_fg)
+ endif
+
+   do i = 1, lensfc
      if (nint(slifcs(i)) /= 1) then
        if (sicfcs(i) > 0.0) then
          slifcs(i) = 2.0
@@ -730,8 +735,6 @@ ENDIF
        endif
      endif
    enddo
-   deallocate(sihfcs_fg, sitfcs_fg)
- endif
 
 !--------------------------------------------------------------------------------
 ! READ IN AND APPLY LAND INCREMENTS
