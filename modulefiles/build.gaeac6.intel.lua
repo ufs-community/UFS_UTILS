@@ -62,5 +62,7 @@ load(pathJoin("esmf", esmf_ver))
 nco_ver=os.getenv("nco_ver") or "5.2.4"
 load(pathJoin("nco", nco_ver))
 
+unload("cray-libsci")
+
 whatis("Description: UFS_UTILS build environment")
 
