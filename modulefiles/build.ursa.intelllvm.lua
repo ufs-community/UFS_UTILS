@@ -53,6 +53,8 @@ load(pathJoin("esmf", esmf_ver))
 nco_ver=os.getenv("nco_ver") or "5.2.4"
 load(pathJoin("nco", nco_ver))
 
+load("doxygen")
+
 setenv("I_MPI_CC", "icx")
 setenv("I_MPI_FC", "ifx")
 
