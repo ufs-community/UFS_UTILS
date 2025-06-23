@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS on Ursa using Gnu
 ]])
 
-prepend_path("MODULEPATH", "/contrib/spack-stack/spack-stack-1.9.1/envs/ue-gcc-12.4.0/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/contrib/spack-stack/spack-stack-1.9.2/envs/ue-gcc-12.4.0/install/modulefiles/Core")
 
 stack_gcc_ver=os.getenv("stack_gcc_ver") or "12.4.0"
 load(pathJoin("stack-gcc", stack_gcc_ver))
@@ -25,8 +25,8 @@ load(pathJoin("ip", ip_ver))
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.4"
 load(pathJoin("nemsio", nemsio_ver))
 
---sp_ver=os.getenv("sp_ver") or "2.5.0"
---load(pathJoin("sp", sp_ver))
+sp_ver=os.getenv("sp_ver") or "2.5.0"
+load(pathJoin("sp", sp_ver))
 
 w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
 load(pathJoin("w3emc", w3emc_ver))
