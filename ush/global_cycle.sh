@@ -130,10 +130,6 @@
 #                   defaults to $pgmerr, then to '&1'
 #     pgmout        Executable standard output default
 #     pgmerr        Executable standard error default
-#     REDOUT        standard output redirect ('1>' or '1>>')
-#                   defaults to '1>', or to '1>>' to append if $PGMOUT is a file
-#     REDERR        standard error redirect ('2>' or '2>>')
-#                   defaults to '2>', or to '2>>' to append if $PGMERR is a file
 #     VERBOSE       Verbose flag (YES or NO)
 #                   defaults to NO
 #     use_ufo       Adjust sst and soil substrate temperature for differences
@@ -311,8 +307,6 @@ export ENDSCRIPT=${ENDSCRIPT:-" "}
 #  Other variables.
 export PGMOUT=${PGMOUT:-${pgmout:-'&1'}}
 export PGMERR=${PGMERR:-${pgmerr:-'&2'}}
-export REDOUT=${REDOUT:-'1>'}
-export REDERR=${REDERR:-'2>'}
 # Set defaults
 ################################################################################
 #  Preprocessing
@@ -403,7 +397,7 @@ cat << EOF > fort.37
  /
 EOF
 
-$APRUNCY $CYCLEXEC $REDOUT$PGMOUT $REDERR$PGMERR
+$APRUNCY $CYCLEXEC '1>'$PGMOUT '2>'$PGMERR
 
 export ERR=$?
 export err=$ERR
