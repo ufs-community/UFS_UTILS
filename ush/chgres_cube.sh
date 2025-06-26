@@ -250,8 +250,8 @@ CHGRESEXEC=${CHGRESEXEC:-${EXECufs}/chgres_cube}
 
 export OMP_NUM_THREADS=${OMP_NUM_THREADS_CH:-1}
 
-PGMOUT=${PGMOUT:-${pgmout:-'&1'}}
-PGMERR=${PGMERR:-${pgmerr:-'&2'}}
+PGMOUT=${PGMOUT:-${pgmout:-'out'}}
+PGMERR=${PGMERR:-${pgmerr:-'err'}}
 
 DATA=${DATA:-$PWD/chgres}
 mkdir -p $DATA
