@@ -305,7 +305,7 @@ cat << EOF > ./fort.41
  /
 EOF
 
-$APRUN $CHGRESEXEC '1>'$PGMOUT '2>'$PGMERR
+$APRUN $CHGRESEXEC 1>$PGMOUT 2>$PGMERR
 
 iret=$?
 if [ $iret -ne 0 ]; then
