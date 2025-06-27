@@ -125,9 +125,9 @@
 #     CYCLVARS      Other namelist inputs to the cycle executable
 #                   defaults to none set
 #     PGMOUT        Executable standard output
-#                   defaults to $pgmout, then to '&1'
+#                   defaults to $pgmout, then to 'out'
 #     PGMERR        Executable standard error
-#                   defaults to $pgmerr, then to '&1'
+#                   defaults to $pgmerr, then to 'err'
 #     pgmout        Executable standard output default
 #     pgmerr        Executable standard error default
 #     VERBOSE       Verbose flag (YES or NO)
@@ -305,8 +305,8 @@ export ERRSCRIPT=${ERRSCRIPT:-'eval [[ $err = 0 ]]'}
 export LOGSCRIPT=${LOGSCRIPT:-" "}
 export ENDSCRIPT=${ENDSCRIPT:-" "}
 #  Other variables.
-export PGMOUT=${PGMOUT:-${pgmout:-'&1'}}
-export PGMERR=${PGMERR:-${pgmerr:-'&2'}}
+PGMOUT=${PGMOUT:-${pgmout:-'out'}}
+PGMERR=${PGMERR:-${pgmerr:-'err'}}
 # Set defaults
 ################################################################################
 #  Preprocessing
@@ -397,7 +397,7 @@ cat << EOF > fort.37
  /
 EOF
 
-$APRUNCY $CYCLEXEC '1>'$PGMOUT '2>'$PGMERR
+$APRUNCY $CYCLEXEC 1>$PGMOUT 2>$PGMERR
 
 export ERR=$?
 export err=$ERR
