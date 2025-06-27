@@ -65,7 +65,7 @@ elif [[ $target = orion ]]; then
   STMP=${STMP:-/work/noaa/stmp/$USER}
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
-  WLCLK=85
+  WLCLK=120
   export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
   export NCCMP=nccmp
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
@@ -75,7 +75,7 @@ elif [[ $target = hercules ]]; then
   STMP=${STMP:-/work2/noaa/stmp/$USER}
   ACCOUNT=${ACCOUNT:-fv3-cpu}
   QUEUE=${QUEUE:-batch}
-  WLCLK=45
+  WLCLK=120
   export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
   export NCCMP=nccmp
@@ -209,7 +209,7 @@ while read -r line || [ "$line" ]; do
 
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cp $PATHTR/exec/cpld_gridgen $RUNDIR
-  
+
   if [[ $target = wcoss2 ]]; then
     tests[$i]=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
        -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
