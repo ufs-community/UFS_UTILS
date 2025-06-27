@@ -26,6 +26,7 @@
         character(15)  :: mask_variable(1) !< name of variables used for mask
         character(100) :: fname_mask       !< file name for reading in mask
         character(100) :: dir_mask         !< directory name for reading in mask
+        logical        :: mask_from_input  !< read mask from input file
         character(100) :: fname_coord      !< file name with coordinate info
         character(100) :: dir_coord        !< directory name for coordinate info
         integer        :: ires             !< latitudinal dimension
@@ -43,17 +44,20 @@
 !! @param[in] npets             total number of pets
 !! @param[in] grid_setup        data structure with grid details 
 !! @param[out] mod_grid         output esmf_grid structure 
+!! @param[in] timestamp      timestep of input file
 
- subroutine setup_grid(localpet, npets, grid_setup, mod_grid )
+ subroutine setup_grid(localpet, npets, grid_setup, mod_grid, timestamp )
 
  implicit none
 
  ! INTENT IN
  type(grid_setup_type), intent(in)    :: grid_setup
  integer, intent(in)            :: localpet, npets
+ integer, intent(in), optional  :: timestamp
 
  ! INTENT OUT
  type(esmf_grid), intent(out)   :: mod_grid
+
 
  ! LOCAL
  type(esmf_field)               :: mask_field(1,1)
@@ -61,6 +65,8 @@
  integer(esmf_kind_i4), pointer :: ptr_mask(:,:)
 
  integer                        :: ierr, ncid, tile
+ character(len=128)             :: fname_mask
+ character(len=3)               :: tstr
 
 !--------------------------
 ! Create grid object, and set up pet distribution
@@ -85,7 +91,14 @@
  if(ESMF_logFoundError(rcToCheck=ierr,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldCreate, mask_variable", ierr)
 
- call read_into_fields(localpet, grid_setup%ires, grid_setup%jres, trim(grid_setup%fname_mask), &
+ if (present(timestamp)) then 
+    write(tstr,"(I3.3)") timestamp
+    fname_mask = trim(grid_setup%fname_mask)//tstr//".nc"
+ else
+    fname_mask = trim(grid_setup%fname_mask)
+ endif
+
+ call read_into_fields(localpet, grid_setup%ires, grid_setup%jres, trim(fname_mask), &
                          trim(grid_setup%dir_mask), grid_setup, 1, &
                          grid_setup%mask_variable(1), mask_field(1,1))
 
@@ -244,9 +257,10 @@
 !! @param[in] n_tims            number of times to write out
 !! @param[in] variable_list     variables to read in
 !! @param[in] fields         fields to read variables into
+!! @param[in] add_time_dim      specify whether output file has time dimension
 
  subroutine write_from_fields(localpet, i_dim, j_dim , fname_out, dir_out, &
-                                n_vars, n_tims, variable_list, fields)
+                                n_vars, n_tims, variable_list, fields, add_time_dim)
 
  implicit none
 
@@ -256,6 +270,7 @@
  character(*), intent(in)        :: dir_out
  character(15), dimension(n_vars), intent(in)     :: variable_list
  type(esmf_field), dimension(n_tims,n_vars), intent(in)  :: fields
+ logical,      intent(in)        :: add_time_dim
 
  ! LOCAL
  integer                         :: tt, id_var, ncid, ierr, &
@@ -299,7 +314,7 @@
          ierr = nf90_create(trim(fname), NF90_NETCDF4, ncid)
          call netcdf_err(ierr, 'creating file='//trim(fname) )
 
-         if (n_tims>1) then ! UFS_UTILS expects input with no time dim
+         if (add_time_dim) then ! UFS_UTILS expects input with no time dim
                            ! GFS (for IAU) expects a time dimension
                            ! later: update GFS to not expect a time dimension
              ierr = nf90_def_dim(ncid, 'Time', n_tims, id_t)
@@ -315,7 +330,7 @@
 
          do v=1, n_vars
 
-             if (n_tims>1) then
+             if (add_time_dim) then
                  ! UFS model code to read in the increments is expecting
                  ! dimensions: time, y, x (in the ncdump read out - which reverses fortran indexes)
                  ! need dimensions to be x,y,t below.

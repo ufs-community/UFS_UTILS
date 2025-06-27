@@ -559,7 +559,7 @@ contains
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
     allocate(a3d(dims(1),dims(2),nflds)); a3d = 0.0
 
-    call nf90_err(nf90_create(trim(fname), nf90_clobber, ncid), 'create: '//fname)
+    call nf90_err(nf90_create(trim(fname), nf90_64bit_offset, ncid), 'create: '//fname)
     call nf90_err(nf90_def_dim(ncid, 'nx', dims(1), idimid), 'define dimension: nx')
     call nf90_err(nf90_def_dim(ncid, 'ny', dims(2), jdimid), 'define dimension: ny')
     call nf90_err(nf90_def_dim(ncid, 'nf', nflds,   fdimid), 'define dimension: nf')
@@ -602,7 +602,7 @@ contains
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
     allocate(a4d(dims(1),dims(2),dims(3),nflds)); a4d = 0.0
 
-    call nf90_err(nf90_create(trim(fname), nf90_clobber, ncid), 'create: '//fname)
+    call nf90_err(nf90_create(trim(fname), nf90_64bit_offset, ncid), 'create: '//fname)
     call nf90_err(nf90_def_dim(ncid, 'nx', dims(1), idimid), 'define dimension: nx')
     call nf90_err(nf90_def_dim(ncid, 'ny', dims(2), jdimid), 'define dimension: ny')
     call nf90_err(nf90_def_dim(ncid, 'nk', dims(3), kdimid), 'define dimension: nk')
@@ -645,7 +645,7 @@ contains
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
     allocate(a3d(dims(1),dims(2),dims(3))); a3d = 0.0
 
-    call nf90_err(nf90_create(trim(fname), nf90_clobber, ncid), 'nf90_create: '//fname)
+    call nf90_err(nf90_create(trim(fname), nf90_64bit_offset, ncid), 'nf90_create: '//fname)
     call nf90_err(nf90_def_dim(ncid, 'nx', dims(1), idimid), 'define dimension: nx')
     call nf90_err(nf90_def_dim(ncid, 'ny', dims(2), jdimid), 'define dimension: ny')
     call nf90_err(nf90_def_dim(ncid, 'nk', dims(3), kdimid), 'define dimension: nk')
@@ -686,7 +686,7 @@ contains
     if (debug)write(logunit,'(a)')'enter '//trim(subname)//' variable '//vname
     allocate(a2d(dims(1),dims(2))); a2d = 0.0
 
-    call nf90_err(nf90_create(trim(fname), nf90_clobber, ncid), 'nf90_create: '//fname)
+    call nf90_err(nf90_create(trim(fname), nf90_64bit_offset, ncid), 'nf90_create: '//fname)
     call nf90_err(nf90_def_dim(ncid, 'nx', dims(1), idimid), 'define dimension: nx')
     call nf90_err(nf90_def_dim(ncid, 'ny', dims(2), jdimid), 'define dimension: ny')
     call nf90_err(nf90_def_var(ncid, vname, nf90_double, (/idimid,jdimid/), varid), &

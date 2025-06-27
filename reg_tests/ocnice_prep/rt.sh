@@ -202,9 +202,12 @@ while read -r line || [ "$line" ]; do
     [[ ${#line} == 0 ]] && continue
     [[ $line =~ \# ]] && continue
 
-    TEST_NAME=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
-    TEST_FTYP=${TEST_NAME##*_}
-    TEST_FRES=${TEST_NAME%_*}
+    LINEVAL=$(echo $line | cut -d'|' -f1 | sed -e 's/^ *//' -e 's/ *$//')
+    TEST_SORC=${LINEVAL##mx}
+    TEST_FTYP=$(echo $line | cut -d'|' -f2 | sed -e 's/^ *//' -e 's/ *$//')
+    LINEVAL=$(echo $line | cut -d'|' -f3 | sed -e 's/^ *//' -e 's/ *$//')
+    TEST_DEST=${LINEVAL##mx}
+    TEST_NAME=${TEST_SORC}_${TEST_FTYP}_${TEST_DEST}
 
     RUNDIR=$RUNDIR_ROOT/$TEST_NAME
     BASELINE=$BASELINE_ROOT/$TEST_NAME
@@ -213,7 +216,8 @@ while read -r line || [ "$line" ]; do
     export NEW_BASELINE
     mkdir -p $RUNDIR
 
-    export RESNAME=$TEST_FRES
+    export SRCRES=$TEST_SORC
+    export DSTRES=$TEST_DEST
     export FTYPE=$TEST_FTYP
     export WEIGHTS=$WEIGHTS_ROOT
     export REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.${TEST_NAME}.log
