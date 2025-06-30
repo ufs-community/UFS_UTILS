@@ -678,11 +678,10 @@ Introduction
 
 The gdas_init utility is used to create coldstart initial conditions for global cycled and forecast-only experiments using the chgres_cube program.  It has two components: one that pulls the input data required by chgres_cube from HPSS, and one that runs chgres_cube. The utility is only supported on machines with access to HPSS:
 
-     * Hera
+     * Ursa
      * Jet
      * WCOSS2
      * Gaea C6
-     * S4 (Only the chgres_cube step is supported, not the data pull step.)
 
 Location
 --------
@@ -698,7 +697,7 @@ Invoke the build script from the root directory:
 
   ./build_all.sh
 
-Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is 'hera', 'jet', 'orion', 'hercules', 'gaea', 'wcoss2', or 's4'):
+Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is "wcoss2", "ursa", "jet", "orion", "hercules", or "gaeac6"):
 
 ::
 
@@ -710,7 +709,7 @@ Configure for your experiment
 Edit the variables in the 'config' file for your experiment:
 
      * **EXTRACT_DIR**  - Directory where data extracted from HPSS is stored.
-     * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'. On 's4' this step can't be run. Instead, the data must be pulled from another machine.
+     * **EXTRACT_DATA** - Set to 'yes' to extract data from HPSS. If data has been extracted and is located in EXTRACT_DIR, set to 'no'.
      * **RUN_CHGRES**   - To run chgres, set to 'yes'.  To extract data only, set to 'no'.
      * **yy/mm/dd/hh**  - The year/month/day/hour of your desired experiment. Use a four digit year and two digits for month/day/hour. **NOTE:** *The standard build of chgres_cube does NOT support experiments prior to June 12, 2019. To coldstart an experiment prior to these dates, contact a repository manager for assistance.*
      * **LEVS**         - Number of hybrid levels plus 1.  To run with 127 levels, set LEVS to 128.
@@ -727,7 +726,7 @@ Note: This utility selects the ocean resolution in the set_fixed_files.sh script
 Kick off the utility
 --------------------
 
-Submit the driver script (where $MACHINE is 'hera', 'jet', 'wcoss2', or 's4')
+Submit the driver script (where $MACHINE is 'gaeac6', 'ursa', 'jet', 'wcoss2')
 
 ::
 

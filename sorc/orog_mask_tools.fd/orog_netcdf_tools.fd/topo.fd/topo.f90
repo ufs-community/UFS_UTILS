@@ -56,7 +56,7 @@
    print*,'lat_corner ',i,lats_corner(i)
  enddo
 
- fileraw="/scratch1/NCEPDEV/global/glopara/fix/raw/orog/gmted2010.30sec.int"
+ fileraw="/scratch3/NCEPDEV/global/role.glopara/fix/raw/orog/gmted2010.30sec.int"
 
  open(11, file=trim(fileraw), access='direct', recl=idim*jdim*2)
  read(11, rec=1, iostat=istat) topo
