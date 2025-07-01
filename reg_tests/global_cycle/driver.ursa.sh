@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run global_cycle consistency test on Hera.
+# Run global_cycle consistency test on Ursa.
 #
 # Set $WORK_DIR to your working directory.  Set the project code 
 # and queue as appropriate.
@@ -27,7 +27,7 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-batch}"
@@ -45,7 +45,7 @@ fi
 
 DATA_DIR="${WORK_DIR}/reg-tests/global-cycle"
 
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/global_cycle
+export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/global_cycle
 
 export OMP_NUM_THREADS_CY=2
 

@@ -66,16 +66,16 @@ if [[ $target = wcoss2 ]]; then
     QUEUE=${QUEUE:-dev}
     WLCLK=15
     export NCCMP=nccmp
-elif [[ $target = hera ]]; then
-    STMP=${STMP:-/scratch1/NCEPDEV/stmp4/$USER}
-    BASELINE_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
-    WEIGHTS_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    INPUT_ROOT=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
+elif [[ $target = ursa ]]; then
+    STMP=${STMP:-/scratch4/NCEPDEV/stmp/$USER}
+    BASELINE_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
+    WEIGHTS_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
     ACCOUNT=${ACCOUNT:-fv3-cpu}
     QUEUE=${QUEUE:-batch}
     WLCLK=10
     export NCCMP=nccmp
-    PARTITION=hera
+    PARTITION=''
 elif [[ $target = orion ]]; then
     STMP=${STMP:-/work/noaa/stmp/$USER}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/baseline_data
@@ -85,7 +85,7 @@ elif [[ $target = orion ]]; then
     QUEUE=${QUEUE:-batch}
     WLCLK=15
     export NCCMP=nccmp
-    PARTITION=orion
+    PARTITION=''
     ulimit -s unlimited
 elif [[ $target = hercules ]]; then
     STMP=${STMP:-/work2/noaa/stmp/$USER}
@@ -96,7 +96,7 @@ elif [[ $target = hercules ]]; then
     QUEUE=${QUEUE:-batch}
     WLCLK=10
     export NCCMP=nccmp
-    PARTITION=hercules
+    PARTITION=''
     ulimit -s unlimited
 elif [[ $target = jet ]]; then
     STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
@@ -107,7 +107,7 @@ elif [[ $target = jet ]]; then
     QUEUE=${QUEUE:-batch}
     WLCLK=10
     export NCCMP=nccmp
-    PARTITION=xjet
+    PARTITION="--partition=xjet"
     ulimit -s unlimited
 fi
 
@@ -238,7 +238,7 @@ while read -r line || [ "$line" ]; do
     else
 
       tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 --mem=24g -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-                --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
+                $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
 
     fi
 
@@ -259,7 +259,7 @@ if [[ $target = wcoss2 ]]; then
 else
 
   sbatch --ntasks=1 --mem=25m -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
-       --partition=$PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
+       $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
 
 fi
 
