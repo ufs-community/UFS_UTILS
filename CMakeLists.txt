@@ -72,8 +72,6 @@ if(CMAKE_Fortran_COMPILER_ID MATCHES "^(Intel|IntelLLVM)$")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -g -traceback")
   set(CMAKE_Fortran_FLAGS_RELEASE "-O3 -fp-model precise")
   set(CMAKE_Fortran_FLAGS_DEBUG "-O0 -check all -ftrapuv")
-# On some machines (Hera), using -check all results in an error
-# at the linking step. The uninit check is the culprit.
   if(CMAKE_Fortran_COMPILER_ID MATCHES "^(IntelLLVM)$")
     set(CMAKE_Fortran_FLAGS_DEBUG "${CMAKE_Fortran_FLAGS_DEBUG} -check nouninit")
   endif()
@@ -121,9 +119,12 @@ if(CHGRES_ALL OR GBLEVENTS)
   find_package(sigio 2.3.0 REQUIRED)
 endif()
 find_package(ip 3.3.3 REQUIRED)
-if(ip_VERSION LESS 5.0)
+# TODO: Disable sp when using ip v5.0+.
+#       This requires an update to ccpp-physics and global_cycle's
+#       sfcsub.F module.
+#if(ip_VERSION LESS 5.0)
   find_package(sp 2.3.3 REQUIRED)
-endif()
+#endif()
 find_package(g2 3.4.3 REQUIRED)
 
 # If doxygen documentation we enabled, build it. This must come before

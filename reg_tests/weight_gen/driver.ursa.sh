@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run ice_blend consistency test on S4.
+# Run weight_gen consistency test on Ursa.
 #
 # Set $DATA to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
@@ -12,32 +12,32 @@
 # Log output is placed in consistency.log.  A summary is
 # placed in summary.log
 #
-# The test fails when its output does not match the baseline file
-# as determined by the 'cmp' command.  The baseline file is
+# The test fails when its output does not match the baseline files
+# as determined by the 'nccmp' command.  The baseline file is
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
 
-#SBATCH -J ice_blend
-#SBATCH -A s4
+#SBATCH -J weight_gen
+#SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
 #SBATCH -o consistency.log
 #SBATCH -e consistency.log
 #SBATCH --ntasks=1
-#SBATCH -q s4
+#SBATCH -q debug
 #SBATCH -t 00:03:00
 
 set -x
 
-compiler=${compiler:-"intel"}
+compiler=${compiler:-"intelllvm"}
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
-export DATA="${WORK_DIR:-/scratch/short/users/$LOGNAME}"
-export DATA="${DATA}/reg-tests/ice-blend"
+export DATA="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/weight_gen"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -50,17 +50,9 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export WGRIB=/data/prod/hpc-stack/intel-2022.1/grib_util/1.2.2/bin/wgrib
-export WGRIB2=/data/prod/hpc-stack/intel-2022.1/wgrib2/2.0.8/bin/wgrib2
-export COPYGB=/data/prod/hpc-stack/intel-2022.1/grib_util/1.2.2/bin/copygb
-export COPYGB2=/data/prod/hpc-stack/intel-2022.1/grib_util/1.2.2/bin/copygb2
-export CNVGRIB=/data/prod/hpc-stack/intel-2022.1/grib_util/1.2.2/bin/cnvgrib
+export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/weight_gen
+export HOMEufs=$PWD/../..
 
-export HOMEreg=/data/users/dhuber/save/nems/role.ufsutils/ufs_utils/reg_tests/ice_blend
-export HOMEgfs=$PWD/../..
-
-rm -fr $DATA
-
-./ice_blend.sh
+./weight_gen.sh
 
 exit 0

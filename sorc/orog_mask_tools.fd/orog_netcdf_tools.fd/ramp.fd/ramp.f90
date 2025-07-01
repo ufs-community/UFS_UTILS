@@ -58,7 +58,7 @@
    print*,'lat_corner ',i,lats_corner(i)
  enddo
 
- fileraw="/scratch1/NCEPDEV/global/glopara/fix/raw/orog/thirty.second.antarctic.new.bin"
+ fileraw="/scratch3/NCEPDEV/global/role.glopara/fix/raw/orog/thirty.second.antarctic.new.bin"
 
  open(11, file=trim(fileraw), form='unformatted', access='sequential', iostat=istat)
  print*,'iostat on open ',istat

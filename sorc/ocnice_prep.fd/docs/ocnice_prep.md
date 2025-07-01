@@ -2,7 +2,7 @@
 
 # Introduction
 
-The ocnice_prep program will downscale a MOM6 or CICE6 1/4deg tripole restart file to a desired lower resolution tripole warm-start file using ESMF regridding.
+The ocnice_prep program will create a MOM6 or CICE6 warmstart file at a destination resolution using a MOM6 and CICE6 restart file at a different resolution.
 
 This document is part of the <a href="../index.html">UFS_UTILS
 documentation</a>.
@@ -12,7 +12,7 @@ The ocnice_prep program is part of the
 
 ## Description of MOM6 and CICE6 restarts
 
-A warmstart file can be created from an existing restart file (at higher resolution) by using ESMF Regridding to map fields
+A warmstart file for MOM6 or CICE6 can be created from an existing restart file by using ESMF Regridding to map fields
 to a destination grid. For MOM6, the procedure produces a warm-start file (composed of T,S,U,V and Interface Height), where the
 utility creates the interface heights (``eta``) using the sea surface height (``sfc``) and the interface thickness (``h``) in
 the MOM6 restart. A full restart file is not generated because MOM6 has resolution dependent parameterizations, so that restart
@@ -31,9 +31,10 @@ not currently supported.
 
 ## Pre-generation of a single MOM6 restart file
 
-Because the required fields for MOM6 are located in two separate restart files, a single file containing all the necessary fields
-must be generated for the ``ocean`` case. This is done using NetCDF operators (NCO) with the following commands, assuming that the
-two required MOM6 restart files are available locally and are named ``MOM.res.nc`` and ``MOM.res_1.nc``.
+If using a 1/4deg MOM6 restart as the source file, the required fields are located in two separate restart files. This requires that a single file containing
+all the necessary fields must be generated for the ``ocean`` case. This is done using NetCDF operators (NCO) with the following commands,
+assuming that the two required MOM6 restart files are available locally and are named ``MOM.res.nc`` and ``MOM.res_1.nc``. Note that using
+either the 1deg or 1/2deg MOM6 as a source restart file does not require this step.
 
 ```
 ncks -v Temp,Salt,h,u MOM.res.nc ocean.nc

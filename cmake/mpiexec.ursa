@@ -12,4 +12,4 @@ QOS=debug
 NP=$1
 shift
 
-srun -A $ACCOUNT -q $QOS -n $NP $@
+srun -A $ACCOUNT -q $QOS -t 0:01 -n $NP $@

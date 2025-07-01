@@ -56,7 +56,7 @@
    print*,'lat_corner ',i,lats_corner(i)
  enddo
 
- fileraw="/scratch1/NCEPDEV/global/glopara/fix/raw/orog/landcover30.fixed"
+ fileraw="/scratch3/NCEPDEV/global/role.glopara/fix/raw/orog/landcover30.fixed"
 
  open(11, file=trim(fileraw), access='direct', recl=idim*jdim)
  read(11, rec=1, iostat=istat) mask

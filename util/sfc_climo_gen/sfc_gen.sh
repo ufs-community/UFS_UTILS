@@ -81,12 +81,12 @@ export veg_type_src="viirs.v3.igbp.30s"
 
 export soil_type_src="bnu.v3.30s"
 
-export WORK_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/work.sfc
-export SAVE_DIR=/scratch1/NCEPDEV/stmp2/$LOGNAME/sfc.save
+export WORK_DIR=/scratch4/NCEPDEV/stmp/$LOGNAME/work.sfc
+export SAVE_DIR=/scratch4/NCEPDEV/stmp/$LOGNAME/sfc.save
 
 export FIX_FV3=${BASE_DIR}/fix/orog/C${res}
 
-# Requires much more resources when true. On hera, use 6 nodes,
+# Requires much more resources when true. On ursa, use 6 nodes,
 # 12 tasks per node. On WCOSS2, use 5 nodes, 12 tasks per node.
 
 export vegsoilt_frac=.false.
