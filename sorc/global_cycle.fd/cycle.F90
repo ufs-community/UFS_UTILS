@@ -591,9 +591,10 @@ ENDIF
  ENDIF
 
  ! CALCULATE MASK FOR LAND INCREMENTS
- IF (DO_LANDINCR)  &
+ IF (DO_LANDINCR) THEN
     CALL CALCULATE_LANDINC_MASK(SWEFCS, VETFCS, SOTFCS, &
                     LENSFC,VEG_TYPE_LANDICE,  LANDINC_MASK)
+ ENDIF
 
 !--------------------------------------------------------------------------------
 ! UPDATE SURFACE FIELDS.
@@ -828,6 +829,7 @@ ENDIF
             !--------------------------------------------------------------------------------
             ! save interpolated increments
             !-------------------------------------------------------------------------------- 
+
             CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
                             STCINC=STCINC,SLCINC=SLCINC)
 
