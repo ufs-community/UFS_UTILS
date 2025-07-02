@@ -5,13 +5,13 @@
 #SBATCH --open-mode=truncate
 #SBATCH -o log.fv3_grid_driver
 #SBATCH -e log.fv3_grid_driver
-#SBATCH --nodes=6 --ntasks-per-node=12
-#SBATCH --partition=bigmem
+#SBATCH --nodes=4 --ntasks-per-node=12
+#SBATCH --mem=300g
 #SBATCH -q debug
 #SBATCH -t 00:30:00
 
 #-----------------------------------------------------------------------
-# Driver script to create a cubic-sphere based model grid on Hera.
+# Driver script to create a cubic-sphere based model grid on Ursa.
 #
 # Produces the following files (netcdf, each tile in separate file):
 #   1) 'mosaic' and 'grid' files containing lat/lon and other
@@ -24,9 +24,8 @@
 # Note: The sfc_climo_gen program only runs with an
 #       mpi task count that is a multiple of six.  This is
 #       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes or to be run on
-#       'bigmem' nodes (#SBATCH --partition=bigmem). The 
-#       orography code benefits from threads.
+#       tasks spread across multiple nodes. The orography
+#       code benefits from threads.
 #
 # To run, do the following:
 #
@@ -158,8 +157,8 @@ fi
 #-----------------------------------------------------------------------
 
 export home_dir=$SLURM_SUBMIT_DIR/..
-export TEMP_DIR=/scratch2/NCEPDEV/stmp1/$LOGNAME/fv3_grid.$gtype
-export out_dir=/scratch2/NCEPDEV/stmp1/$LOGNAME/my_grids
+export TEMP_DIR=/scratch4/NCEPDEV/stmp/$LOGNAME/fv3_grid.$gtype
+export out_dir=/scratch4/NCEPDEV/stmp/$LOGNAME/my_grids
 
 #-----------------------------------------------------------------------
 # Should not need to change anything below here.

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #------------------------------------------------------------
-# Run the sfc_climo_gen program stand-alone on Hera using
+# Run the sfc_climo_gen program stand-alone on Ursa using
 # pre-exiting 'grid' and 'orography' files. See the
 # sfc_gen.sh script for details.
 #
@@ -15,9 +15,9 @@
 #SBATCH -o log
 #SBATCH -e log
 #SBATCH --nodes=1 --ntasks-per-node=24
-#SBATCH --partition=bigmem
+#SBATCH --mem=300g
 #SBATCH -q debug
-#SBATCH -t 00:10:00
+#SBATCH -t 00:15:00
 
 set -x
 

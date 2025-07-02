@@ -1684,7 +1684,7 @@ end subroutine qtoax
 !! @param[in] d 1st component of given quaternion
 !! @param[in] e 2nd component of given quaternion
 !! @param[in] g 3rd component of given quaternion
-!! @param[in] r output 3*3 real rotation matrix
+!! @param[out] r output 3*3 real rotation matrix
 !! @author R. J. Purser
 subroutine setem(c,d,e,g,r)!                                           [setem]
 implicit none

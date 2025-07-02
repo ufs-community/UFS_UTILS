@@ -29,21 +29,13 @@ function (platform_name RETURN_VARIABLE)
   # Determine platform name from site name...
   site_name (SITENAME)
   
-  # hera
-  if (SITENAME MATCHES "^hfe01" OR
-      SITENAME MATCHES "^hfe02" OR
-      SITENAME MATCHES "^hfe03" OR
-      SITENAME MATCHES "^hfe04" OR
-      SITENAME MATCHES "^hfe05" OR
-      SITENAME MATCHES "^hfe06" OR
-      SITENAME MATCHES "^hfe07" OR
-      SITENAME MATCHES "^hfe08" OR
-      SITENAME MATCHES "^hfe09" OR
-      SITENAME MATCHES "^hfe10" OR
-      SITENAME MATCHES "^hfe11" OR
-      SITENAME MATCHES "^hfe12")
+  # ursa
+  if (SITENAME MATCHES "^ufe01" OR
+      SITENAME MATCHES "^ufe02" OR
+      SITENAME MATCHES "^ufe03" OR
+      SITENAME MATCHES "^ufe04")
 
-    set (${RETURN_VARIABLE} "hera" PARENT_SCOPE)
+    set (${RETURN_VARIABLE} "ursa" PARENT_SCOPE)
 
   # wcoss2
   elseif (SITENAME MATCHES "^along01" OR
@@ -133,10 +125,6 @@ function (platform_name RETURN_VARIABLE)
     
 
     set (${RETURN_VARIABLE} "stampede" PARENT_SCOPE)
-
-  elseif (SITENAME MATCHES "^s4-submit.ssec.wisc.edu")
-
-    set (${RETURN_VARIABLE} "s4" PARENT_SCOPE)
 
   else ()
 
