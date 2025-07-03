@@ -9,6 +9,7 @@ spack:
   - bacio@2.4.1
   - g2@3.5.1
   - ip@5.1.0 precision=d
+  - sp@2.5.0
   - nemsio@2.5.4
   - w3emc@2.10.0
   - sigio@2.3.3
