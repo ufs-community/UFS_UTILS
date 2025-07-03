@@ -35,14 +35,18 @@ elif [[ -d /opt/spack-stack && -v SINGULARITY_CONTAINER ]]; then
     source /usr/lmod/lmod/init/$__ms_shell
     target=container
     module purge
-elif [[ -d /scratch3 ]] ; then
-    # We are on NOAA Ursa
+elif [[ -d /scratch3 ]]; then
+    # We are on NOAA Hera or Ursa
+    mount=$(findmnt -n -o SOURCE /home)
+    if [[ ${mount} =~ "ursa" ]]; then
+      target=ursa
+    else
+      target=hera
+    fi
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         echo load the module command 1>&2
         source /apps/lmod/lmod/init/$__ms_shell
     fi
-    target=ursa
-    module purge
 elif [[ "$(hostname)" == "gaea6"* || "$(hostname)" =~ c6n[0-9]+ ]] && [[ -d /gpfs/f6 ]] ; then
     target=gaeac6
     source /opt/cray/pe/lmod/8.7.31/init/$__ms_shell
