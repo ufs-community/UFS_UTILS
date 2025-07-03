@@ -642,13 +642,13 @@ ENDIF
    ENDIF SET_MASK
 
 ! Follow logic in CCPP physics routine gcycle.F90
-   DO I=1,LENSFC
+   do i=1,lensfc
      if(lakefrac(i) > 0.0) then
        min_ice(i) = min_lakeice
      else
        min_ice(i) = min_seaice
      endif
-   ENDDO
+   enddo
 
    SOCFCS=0 ! Soil color. Not used yet.
 
