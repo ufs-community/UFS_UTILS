@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #------------------------------------------------------------------
-# Run global_cycle for a C48 case that tests the NOAHMP and
-# fractional grid options.  
+# Run global_cycle for a C48 case that tests the 
+# coupled/NOAHMP/fractional grid configuration.
 #
 # Compare output to a baseline set of files using the 'nccmp'
 # utility.
@@ -40,6 +40,7 @@ export FNAISC=$HOMEgfs/fix/am/IMS-NIC.blended.ice.monthly.clim.grb
 export DONST="YES"
 export use_ufo=.true.
 export FRAC_GRID=.true.
+export COUPLED=.true.
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=99999.,FSNOS=99999.,
