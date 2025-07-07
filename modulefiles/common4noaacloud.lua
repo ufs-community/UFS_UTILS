@@ -1,50 +1,28 @@
-help([[ 
-Load environment to compile UFS_UTILS on NOAA CSPs using Intel
-]])
+whatis("Description: UFS_UTILS build environment common libraries")
 
-bacio_ver=os.getenv("bacio_ver") or "2.4.1"
-load(pathJoin("bacio", bacio_ver))
+local ufs_utils_modules = {
+  {["jasper"]          = "2.0.32" },
+  {["g2"]              = "3.5.1"  },
+  {["ip"]              = "5.1.0" },
+  {["sp"]              = "2.5.0" },
+  {["netcdf-c"]        = "4.9.2"  },
+  {["netcdf-fortran"]  = "4.6.1"  },
+  {["bacio"]           = "2.4.1"  },
+  {["nemsio"]          = "2.5.4"  },
+  {["w3emc"]           = "2.10.0" },
+  {["sigio"]           = "2.3.3"  },
+  {["zlib"]            = "1.2.13" },
+  {["libpng"]          = "1.6.37" },
+  {["hdf5"]            = "1.14.3" },
+  {["netcdf"]          = "4.7.0"  },
+  {["nccmp"]           = "1.9.1"  },
+  {["esmf"]            = "8.6.1"  },
+  {["nco"]             = "5.1.6"  },
+}
 
-g2_ver=os.getenv("g2_ver") or "3.5.1"
-load(pathJoin("g2", g2_ver))
-
-ip_ver=os.getenv("ip_ver") or "4.3.0"
-load(pathJoin("ip", ip_ver))
-
-nemsio_ver=os.getenv("nemsio_ver") or "2.5.4"
-load(pathJoin("nemsio", nemsio_ver))
-
-sp_ver=os.getenv("sp_ver") or "2.5.0"
-load(pathJoin("sp", sp_ver))
-
-w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
-load(pathJoin("w3emc", w3emc_ver))
-
--- Uncomment when CHGRES_ALL is ON
---sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
---load(pathJoin("sfcio", sfcio_ver))
-
-sigio_ver=os.getenv("sigio_ver") or "2.3.2"
-load(pathJoin("sigio", sigio_ver))
-
-zlib_ver=os.getenv("zlib_ver") or "1.2.13"
-load(pathJoin("zlib", zlib_ver))
-png_ver=os.getenv("png_ver") or "1.6.37"
-load(pathJoin("libpng", png_ver))
-
-hdf5_ver=os.getenv("hdf5_ver") or "1.10.6"
-load(pathJoin("hdf5", hdf5_ver))
-
-netcdf_ver=os.getenv("netcdf_ver") or "4.6.1"
-load(pathJoin("netcdf", netcdf_ver))
-
-nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
-load(pathJoin("nccmp", nccmp_ver))
-
-esmf_ver=os.getenv("esmf_ver") or "8.6.0"
-load(pathJoin("esmf", esmf_ver))
-
-nco_ver=os.getenv("nco_ver") or "4.9.1"
-load(pathJoin("nco", nco_ver))
-
-whatis("Description: UFS_UTILS build environment")
+for i = 1, #ufs_utils_modules do
+  for name, default_version in pairs(ufs_utils_modules[i]) do
+    local env_version_name = string.gsub(name, "-", "_") .. "_ver"
+    load(pathJoin(name, os.getenv(env_version_name) or default_version))
+  end
+end
