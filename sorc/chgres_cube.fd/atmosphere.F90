@@ -1256,31 +1256,62 @@
  subroutine read_vcoord_info
  implicit none
 
- integer                    :: istat, n, k
+ integer                    :: istat, n, k, localpet, idum(2)
 
- print*
- print*,"OPEN VERTICAL COORD FILE: ", trim(vcoord_file_target_grid)
- open(14, file=trim(vcoord_file_target_grid), form='formatted', iostat=istat, action='read')
- if (istat /= 0) then
-   call error_handler("OPENING VERTICAL COORD FILE", istat)
+ real(esmf_kind_r8), allocatable :: dum1d(:)
+
+ type(esmf_vm)                   :: vm
+
+ call ESMF_VMGetGlobal(vm, rc=istat)
+ if(ESMF_logFoundError(rcToCheck=istat,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMGetGlobal", istat)
+
+ call ESMF_VMGet(vm, localPet=localpet, rc=istat)
+ if(ESMF_logFoundError(rcToCheck=istat,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMGet", istat)
+
+ if (localpet == 0) then
+   print*
+   print*,"OPEN VERTICAL COORD FILE: ", trim(vcoord_file_target_grid)
+   open(14, file=trim(vcoord_file_target_grid), form='formatted', iostat=istat, action='read')
+   if (istat /= 0) then
+     call error_handler("OPENING VERTICAL COORD FILE", istat)
+   endif
+
+   read(14, *, iostat=istat) idum(1), idum(2)
+   if (istat /= 0) then
+     call error_handler("READING VERTICAL COORD FILE", istat)
+   endif
  endif
 
- read(14, *, iostat=istat) nvcoord_target, lev_target
- if (istat /= 0) then
-   call error_handler("READING VERTICAL COORD FILE", istat)
- endif
+ call ESMF_VMBroadcast(vm, idum, 2, 0, rc=istat)
+ if(ESMF_logFoundError(rcToCheck=istat,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", istat)
+
+ nvcoord_target = idum(1)
+ lev_target = idum(2)
 
  levp1_target = lev_target + 1
 
+ allocate(dum1d(levp1_target*nvcoord_target)) ! esmf broadcast requires a 1d array.
  allocate(vcoord_target(levp1_target, nvcoord_target))
- read(14, *, iostat=istat) ((vcoord_target(n,k), k=1,nvcoord_target), n=1,levp1_target)
- if (istat /= 0) then
-   call error_handler("READING VERTICAL COORD FILE", istat)
+
+ if (localpet == 0) then
+   read(14, *, iostat=istat) ((vcoord_target(n,k), k=1,nvcoord_target), n=1,levp1_target)
+   if (istat /= 0) then
+     call error_handler("READING VERTICAL COORD FILE", istat)
+   endif
+   close(14)
+   dum1d = reshape (vcoord_target, (/nvcoord_target*levp1_target/))
  endif
 
- print*
+ call ESMF_VMBroadcast(vm, dum1d, (nvcoord_target*levp1_target), 0, rc=istat)
+ if(ESMF_logFoundError(rcToCheck=istat,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", istat)
  
- close(14)
+ vcoord_target = reshape (dum1d, (/levp1_target,nvcoord_target/))
+
+ deallocate(dum1d)
 
  end subroutine read_vcoord_info
 
