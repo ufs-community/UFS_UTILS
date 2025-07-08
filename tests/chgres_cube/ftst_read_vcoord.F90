@@ -27,9 +27,13 @@
 
  use program_setup, only : vcoord_file_target_grid
 
+ use esmf
+
  implicit none
 
- integer :: j
+ type(esmf_vm)                :: vm
+
+ integer :: j, rc
 
  integer, parameter :: LEV_TARGET_EXPECTED=28    ! number of levels.
  integer, parameter :: LEVP1_TARGET_EXPECTED=29  ! number of level interfaces.
@@ -62,6 +66,10 @@
 
  print*,'Starting test of read_vcoord_info routine'
 
+ call mpi_init(rc)
+
+ call ESMF_Initialize(rc=rc)
+
  vcoord_file_target_grid="./data/global_hyblev.l28.txt"
  
  call read_vcoord_info
@@ -76,6 +84,10 @@
  enddo
 
  print*,"OK"
+
+ call ESMF_finalize(endflag=ESMF_END_KEEPMPI)
+
+ call mpi_finalize(rc)
 
  print*,"SUCCESS!"
 
