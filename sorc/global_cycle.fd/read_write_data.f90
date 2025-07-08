@@ -727,6 +727,7 @@ MODULE READ_WRITE_DATA
  !! @param[out] OROG_UF Unfiltered orography.
  !! @param[out] TILE_NUM Cubed-sphere tile number
  !! @param[out] LANDFRAC Land fraction.
+ !! @param[out] LAKEFRAC Lake fraction.
  !! @author George Gayno NOAA/EMC
  SUBROUTINE READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,&
            TILE_NUM,IDIM,JDIM,IJDIM,LANDFRAC,LAKEFRAC)
