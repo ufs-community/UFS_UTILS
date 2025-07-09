@@ -25,7 +25,7 @@ export DELTSFC=6
 export CASE=C48
 export OCNRES=500
 
-export COMIN=$HOMEreg/input_data_c48.noahmp.coupled.grid
+export COMIN=$HOMEreg/input_data_c48.noahmp.coupled
 export FNACNA=$COMIN/gdas.t06z.seaice.5min.blend.grb
 export FNTSFA=" "
 export FNSNOA=" "
