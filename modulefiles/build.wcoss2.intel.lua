@@ -17,9 +17,9 @@ load(pathJoin("intel", intel_ver))
 cray_mpich_ver=os.getenv("cray_mpich_ver") or "8.1.19"
 load(pathJoin("cray-mpich", cray_mpich_ver))
 
--- C MPI bindings needed by netCDF are not included by default (used by fregrid, make_solo_mosaic, and make_hgrid).
--- TODO when this is fixed in the cray "cc" wrappers, remove this
-setenv("CMAKE_FLAGS", "-DCMAKE_C_FLAGS=/opt/cray/pe/mpich/8.1.19/ofi/intel/19.0/lib/libmpifort_intel.so /opt/cray/pe/mpich/8.1.19/ofi/intel/19.0/lib/libmpi_intel.so ")
+-- Need the cray library path for C MPI libraries
+local cray_lib_path=os.getenv("CRAY_LD_LIBRARY_PATH") or ""
+prepend_path("LD_LIBRARY_PATH", cray_lib_path)
 
 libjpeg_ver=os.getenv("libjpeg_ver") or "9c"
 load(pathJoin("libjpeg", libjpeg_ver))
