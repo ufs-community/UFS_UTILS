@@ -8,6 +8,9 @@ set -eux
 # Rahul Mahajan, 10/11/2017
 #-------------------------------------------------------------------------------------------------
 
+export PGMOUT=${PGMOUT:-${pgmout:-'out'}}    # standard output from executable placed in this file.
+export PGMERR=${PGMERR:-${pgmerr:-'err'}}    # standard error from executable placed in this file.
+
 export CASE=${CASE:-C768}                    # resolution of tile: 48, 96, 192, 384, 768, 1152, 3072
 export OCNRES=${OCNRES:-100}
 export CDATE=${CDATE:-${cdate:-2017031900}}  # format yyyymmddhh yyyymmddhh ...

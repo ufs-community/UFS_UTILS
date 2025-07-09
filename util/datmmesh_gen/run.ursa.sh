@@ -3,7 +3,7 @@
 # Edit account (-A) setting as required !
 
 #SBATCH -J datmmesh_gen
-#SBATCH -A nems
+#SBATCH -A fv3-cpu
 #SBATCH --open-mode=truncate
 #SBATCH -o log
 #SBATCH -e log
@@ -13,7 +13,7 @@
 
 #-------------------------------------------------------------------------------
 #
-# Run the datmmesh generation program on Hera.
+# Run the datmmesh generation program on Ursa.
 #
 # Set NX and NY to your desired resolution. Valid choices are:
 #   NX=3072, NY=1536 => 3072x1536 mesh
@@ -34,7 +34,7 @@ module use $UFS_DIR/modulefiles
 module load build.$target.intelllvm
 module list
 
-export OUTPUT_DIR=/scratch1/NCEPDEV/stmp4/$USER/datmmesh_gen
+export OUTPUT_DIR=/scratch4/NCEPDEV/stmp/$USER/datmmesh_gen
 mkdir -p $OUTPUT_DIR
 
 export NX=3072

@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run snow2mdl consistency tests on Hera.
+# Run snow2mdl consistency tests on Ursa.
 #
 # Set $DATA_ROOT to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
@@ -26,18 +26,16 @@ source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
 module load grib-util
-module load wgrib2/2.0.8
-module load prod_util/2.1.1
+module load wgrib2
+module load prod_util
 module list
 
-# Because of a bug in the grib-util module, need to construct this
-# variable.
-WGRIB=${grib_util_ROOT}/bin/wgrib
+WGRIB=${GRIB_UTIL_ROOT}/bin/wgrib
 
 export WGRIB
 export WGRIB2
 
-DATA_ROOT="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+DATA_ROOT="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
 
 rm -fr $DATA_ROOT
@@ -56,20 +54,20 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
+export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 
 # The first test uses hemispheric afwa/airforce data, as was done in OPS.
 
 export DATA="${DATA_ROOT}/test.hemi"
 TEST1=$(sbatch --parsable -J snow.hemi -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
-      --ntasks=1 -q ${QUEUE} -t 00:03:00 ./snow2mdl.hemi.sh)
+      --ntasks=1 --mem=5GB -q ${QUEUE} -t 00:03:00 ./snow2mdl.hemi.sh)
 
 # The second test mimics current OPS, which uses global afwa/airforce data.
 
 export DATA="${DATA_ROOT}/test.global"
 TEST2=$(sbatch --parsable -J snow.global -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
-      --ntasks=1 -q ${QUEUE} -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
+      --ntasks=1 --mem=5GB -q ${QUEUE} -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
 
 # Create summary file.
 
