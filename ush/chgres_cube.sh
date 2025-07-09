@@ -243,8 +243,6 @@ NSOILL_OUT=${NSOILL_OUT:-4}
 # DATA - working directory.
 # PGMOUT - standard output file
 # PGMERR - standard error file
-# REDOUT - standard output redirect
-# REDERR - standard error redirect
 #----------------------------------------------------------------------------
 
 APRUN=${APRUN:-time}
@@ -252,10 +250,8 @@ CHGRESEXEC=${CHGRESEXEC:-${EXECufs}/chgres_cube}
 
 export OMP_NUM_THREADS=${OMP_NUM_THREADS_CH:-1}
 
-PGMOUT=${PGMOUT:-${pgmout:-'&1'}}
-PGMERR=${PGMERR:-${pgmerr:-'&2'}}
-REDOUT=${REDOUT:-'1>'}
-REDERR=${REDERR:-'2>'}
+PGMOUT=${PGMOUT:-${pgmout:-'out'}}
+PGMERR=${PGMERR:-${pgmerr:-'err'}}
 
 DATA=${DATA:-$PWD/chgres}
 mkdir -p $DATA
@@ -309,7 +305,7 @@ cat << EOF > ./fort.41
  /
 EOF
 
-$APRUN $CHGRESEXEC $REDOUT$PGMOUT $REDERR$PGMERR
+$APRUN $CHGRESEXEC 1>$PGMOUT 2>$PGMERR
 
 iret=$?
 if [ $iret -ne 0 ]; then
