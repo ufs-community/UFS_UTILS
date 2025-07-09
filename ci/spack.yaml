@@ -15,7 +15,7 @@ spack:
   - sigio@2.3.3
   - nccmp@1.9.0.1
   - parallelio@2.5.10+fortran~pnetcdf
-  - esmf@8.8.0
+  - esmf@8.6.0
   view: true
   concretizer:
     unify: when_possible
