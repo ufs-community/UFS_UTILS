@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #------------------------------------------------------------------
-# Run global_cycle for a C48 case that tests the NOAHMP and
-# fractional grid options.  
+# Run global_cycle for a C48 case that tests the 
+# coupled/NOAHMP/fractional grid configuration.
 #
 # Compare output to a baseline set of files using the 'nccmp'
 # utility.
@@ -25,7 +25,7 @@ export DELTSFC=6
 export CASE=C48
 export OCNRES=500
 
-export COMIN=$HOMEreg/input_data_c48.noahmp.frac.grid
+export COMIN=$HOMEreg/input_data_c48.noahmp.coupled
 export FNACNA=$COMIN/gdas.t06z.seaice.5min.blend.grb
 export FNTSFA=" "
 export FNSNOA=" "
@@ -40,6 +40,7 @@ export FNAISC=$HOMEgfs/fix/am/IMS-NIC.blended.ice.monthly.clim.grb
 export DONST="YES"
 export use_ufo=.true.
 export FRAC_GRID=.true.
+export COUPLED=.true.
 
 export VERBOSE=YES
 export CYCLVARS=FSNOL=99999.,FSNOS=99999.,
@@ -58,7 +59,7 @@ cat $PGMERR
 
 if [ $iret -ne 0 ]; then
   set +x
-  echo "<<< C48 NOAHMP FRAC GRID TEST FAILED. >>>"
+  echo "<<< C48 NOAHMP COUPLED GRID TEST FAILED. >>>"
   exit $iret
 fi
 
@@ -68,7 +69,7 @@ for files in *tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c48.noahmp.fracgrid/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c48.noahmp.coupled/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -80,15 +81,15 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo
   echo "******************************************"
-  echo "<<< C48 NOAHMP FRAC GRID TEST FAILED. >>>"
+  echo "<<< C48 NOAHMP COUPLED GRID TEST FAILED. >>>"
   echo "******************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c48.noahmp.fracgrid" $commit_num
+    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c48.noahmp.coupled" $commit_num
   fi
 else
   echo
   echo "*****************************************"
-  echo "<<< C48 NOAHMP FRAC GRID TEST PASSED. >>>"
+  echo "<<< C48 NOAHMP COUPLED GRID TEST PASSED. >>>"
   echo "*****************************************"
 fi
 
