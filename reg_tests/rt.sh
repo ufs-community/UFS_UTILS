@@ -15,14 +15,14 @@ wait_for_fin() {
 
 ulimit -s unlimited
 
-export MAILTO=david.huber@noaa.gov
+export MAILTO=
 
 # Directory to download UFS_UTILS to and run the consistency tests
-export WORK_DIR=/lfs/h2/emc/stmp/david.huber/ufs_utils_rt
+export WORK_DIR=
 
-export PROJECT_CODE=GFS-DEV
-export QUEUE=dev
-TIMEOUT_LIMIT=7200
+export PROJECT_CODE=
+export QUEUE=
+TIMEOUT_LIMIT=3600
 
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
