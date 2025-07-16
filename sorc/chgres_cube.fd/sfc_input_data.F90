@@ -1184,7 +1184,7 @@ module sfc_input_data
      ! If this condition not satisfies, restart and orog files are inconsistent
      call read_fv3_grid_data_netcdf('vtype', tile, idim_input, jdim_input, &
                                    lsoil_input, sfcdata=vtype_one_tile)
-     if (any((land_frac_one_tile > 0.) .and. (vtype_one_tile <= 0))) then
+     if (any((land_frac_one_tile > 0.) .and. (vtype_one_tile <= 0)) .or. any((land_frac_one_tile == 0.) .and. (vtype_one_tile > 0))) then
        call error_handler("INCONSISTENT LAND/SEA MASK BETWEEN RESTART AND OROG FILES.", 10)
      else
        print*,'mask check ',tile,': consistent!'
