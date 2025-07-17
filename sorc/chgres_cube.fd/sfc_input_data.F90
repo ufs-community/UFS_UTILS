@@ -1437,6 +1437,7 @@ module sfc_input_data
  enddo TILE_LOOP
 
  deallocate(data_one_tile, data_one_tile_3d)
+ deallocate(vtype_one_tile, land_frac_one_tile)
 
  end subroutine read_input_sfc_restart_file
 
