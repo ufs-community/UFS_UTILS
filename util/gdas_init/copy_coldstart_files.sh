@@ -69,4 +69,43 @@ else
   copy_data ${MEMBER}
 fi
 
+
+
+
+
+#------------------------------------------------------------------------------------
+# Make the README files with all relevant info to reproduce the outputs
+#------------------------------------------------------------------------------------
+
+cd $UFS_DIR
+
+commit_string=$(git log -1 --oneline)
+commit_num=$(echo $commit_string | cut -c1-7)
+
+
+
+cd ${SAVEDIR_MODEL_DATA}
+
+cat <<EOF > README.TXT
+The following parameters were used
+creation date=$(date +%Y-%m-%d)
+commit_num=$commit_num
+creation date=$(date +%Y-%m-%d)
+yy=$yy
+mm=$mm
+dd=$dd
+hh=$hh
+LEVS=$LEVS
+CRES_HIRES=$CRES_HIRES
+OUTDIR=$OUTDIR
+FIX_ORO_INPUT=$FIX_ORO_INPUT
+
+
+EOF
+
+
+
+
+
+
 exit 0

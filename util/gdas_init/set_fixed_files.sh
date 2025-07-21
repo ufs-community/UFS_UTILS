@@ -40,7 +40,7 @@ ORO_NAME="${CTAR}.mx${OCNRES}_oro_data"
 if [ "$machine" = 'ursa' ] ; then
   FIX_ORO_INPUT=/scratch3/NCEPDEV/global/role.glopara/fix/orog/20240917
 elif [ "$machine" = 'wcoss2' ] ; then
-  FIX_ORO_INPUT=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/orog/20240917
+  FIX_ORO_INPUT=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/orog/20230615
 elif [ "$machine" = 'jet' ] ; then
   FIX_ORO_INPUT=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/orog/20230615
 elif [ "$machine" = 'gaeac6' ] ; then
@@ -50,3 +50,4 @@ else
   echo ERROR machine $machine not supported.
   exit 3
 fi
+export FIX_ORO_INPUT
