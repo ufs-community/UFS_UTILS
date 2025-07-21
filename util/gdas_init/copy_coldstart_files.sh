@@ -90,7 +90,6 @@ cat <<EOF > README.TXT
 The following parameters were used
 creation date=$(date +%Y-%m-%d)
 commit_num=$commit_num
-creation date=$(date +%Y-%m-%d)
 yy=$yy
 mm=$mm
 dd=$dd
