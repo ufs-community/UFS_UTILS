@@ -82,8 +82,6 @@ cd $UFS_DIR
 commit_string=$(git log -1 --oneline)
 commit_num=$(echo $commit_string | cut -c1-7)
 
-
-
 cd ${SAVEDIR_MODEL_DATA}
 
 cat <<EOF > README.TXT
@@ -96,9 +94,11 @@ dd=$dd
 hh=$hh
 LEVS=$LEVS
 CRES_HIRES=$CRES_HIRES
+CRES_ENKF=$CRES_ENKF
+gfs_ver=$gfs_ver
+use_v16retro=$use_v16retro
 OUTDIR=$OUTDIR
 FIX_ORO_INPUT=$FIX_ORO_INPUT
-
 
 EOF
 
