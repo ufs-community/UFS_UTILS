@@ -45,6 +45,16 @@ if [ -d ./sfc ]; then
   chmod 555 $base_dir_commit/sfc
 fi
 
+if [[ "$test_name" == "c192.gsi_lndincsoilnoahmp" ]]; then
+  for files in gaussian_interp.*
+  do
+    if [ -f $files ]; then
+      cp $files $base_dir_commit
+      chmod 444 $base_dir_commit/$files
+    fi
+  done
+fi
+
 chmod 555 $base_dir_commit
 rm -f $base_dir/$test_name
 cd $base_dir
