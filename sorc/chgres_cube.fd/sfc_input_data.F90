@@ -1188,23 +1188,22 @@ module sfc_input_data
      print*,'terrain check ',tile, maxval(data_one_tile)
      error=nf90_close(ncid)
 
-     ! Since the dimensional mismatch case will be captured above
-     ! A consistent fractional grid, will meet both condition1 and condition2
-     ! A consistent non-fractional grid, only can meet condition1 
-     ! An inconsistent fractional(or non-fractional) grid, will not meet condition1
+     ! A consistent non-fractional grid, will meet condition1
+     ! A consistent fractional grid, will meet condition2
      call read_fv3_grid_data_netcdf('vtype', tile, idim_input, jdim_input, &
                                    lsoil_input, sfcdata=vtype_one_tile)
      
-     condition1_met = all((vtype_one_tile > 0) .or. (slmsk_orog_one_tile /= 1))
+     condition1_met = all(((vtype_one_tile > 0) .and. (slmsk_orog_one_tile == 1)) .or. ((vtype_one_tile <= 0) .and. (slmsk_orog_one_tile == 0)))
      condition2_met = all(((land_frac_one_tile > 0.) .and. (vtype_one_tile > 0)) .or. ((land_frac_one_tile == 0.) .and. (vtype_one_tile <= 0)))
 
      if (condition1_met) then
-       if (condition2_met) then
+          print*,'[Non-fractional grid]: mask check ',tile,': consistent!'
+     endif
+     if (condition2_met) then
           print*,'[Fractional grid]: mask check ',tile,': consistent!'
-       else
-          print*, '[Non-fractional grid]: mask check ',tile,': consistent!'
-       endif
-     else
+     endif
+
+     if ((.not. condition1_met) .and. (.not. condition2_met)) then
        call error_handler("INCONSISTENT LAND/SEA MASK BETWEEN RESTART AND OROG FILES.", 10)
      endif
 
