@@ -54,7 +54,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/grid_gen/baseline_data
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/grid_gen
 
 rm -fr $WORK_DIR
 
