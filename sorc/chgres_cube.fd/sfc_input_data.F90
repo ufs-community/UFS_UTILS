@@ -1105,7 +1105,7 @@ module sfc_input_data
 
  real(esmf_kind_r8), allocatable :: data_one_tile(:,:) 
  real(esmf_kind_r8), allocatable :: land_frac_one_tile(:,:), vtype_one_tile(:,:)
- real(esmf_kind_i4), allocatable :: slmsk_orog_one_tile(:,:)
+ real(esmf_kind_r4), allocatable :: slmsk_orog_one_tile(:,:)
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
 
  type(esmf_vm)                   :: vm
@@ -1193,7 +1193,7 @@ module sfc_input_data
      call read_fv3_grid_data_netcdf('vtype', tile, idim_input, jdim_input, &
                                    lsoil_input, sfcdata=vtype_one_tile)
      
-     condition1_met = all(((NINT(vtype_one_tile) > 0) .and. (slmsk_orog_one_tile == 1)) .or. ((NINT(vtype_one_tile) <= 0) .and. (slmsk_orog_one_tile == 0)))
+     condition1_met = all(((NINT(vtype_one_tile) > 0) .and. (NINT(slmsk_orog_one_tile) == 1)) .or. ((NINT(vtype_one_tile) <= 0) .and. (NINT(slmsk_orog_one_tile) == 0)))
      condition2_met = all(((land_frac_one_tile > 0.) .and. (NINT(vtype_one_tile) > 0)) .or. ((land_frac_one_tile == 0.) .and. (NINT(vtype_one_tile)<= 0)))
 
      if (condition1_met) then
