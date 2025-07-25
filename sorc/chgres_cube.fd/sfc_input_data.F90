@@ -1101,17 +1101,20 @@ module sfc_input_data
 
  integer                         :: error, rc
  integer                         :: id_dim, idim_input, jdim_input
- integer                         :: ncid, tile, id_var, idum(2)
+ integer                         :: ncid, tile, id_var, id_var1, id_var2, idum(2)
 
- real(esmf_kind_r8), allocatable :: data_one_tile(:,:)
+ real(esmf_kind_r8), allocatable :: data_one_tile(:,:) 
+ real(esmf_kind_r8), allocatable :: land_frac_one_tile(:,:), vtype_one_tile(:,:)
+ real(esmf_kind_r4), allocatable :: slmsk_orog_one_tile(:,:)
  real(esmf_kind_r8), allocatable :: data_one_tile_3d(:,:,:)
 
  type(esmf_vm)                   :: vm
-
-!---------------------------------------------------------------------------
+ logical                         :: condition1_met, condition2_met
+!------------------------------------------------------------------------------------------
 ! Get i/j dimensions and number of soil layers from first surface file.
 ! Do dimensions match those from the orography file?
-!---------------------------------------------------------------------------
+! Do land/sea masks (i.e., ocean res. and orog version) match those from the orography file?
+!------------------------------------------------------------------------------------------
 
  print*,"- CALL VMGetGlobal"
  call ESMF_VMGetGlobal(vm, rc=rc)
@@ -1151,9 +1154,15 @@ module sfc_input_data
 
  if (localpet == 0) then
    allocate(data_one_tile(idim_input,jdim_input))
+   allocate(land_frac_one_tile(idim_input,jdim_input))
+   allocate(slmsk_orog_one_tile(idim_input,jdim_input))
+   allocate(vtype_one_tile(idim_input,jdim_input))
    allocate(data_one_tile_3d(idim_input,jdim_input,lsoil_input))
  else
    allocate(data_one_tile(0,0))
+   allocate(land_frac_one_tile(0,0))
+   allocate(slmsk_orog_one_tile(0,0))
+   allocate(vtype_one_tile(0,0))
    allocate(data_one_tile_3d(0,0,0))
  endif
 
@@ -1166,10 +1175,38 @@ module sfc_input_data
      call netcdf_err(error, 'OPENING OROGRAPHY FILE' )
      error=nf90_inq_varid(ncid, 'orog_raw', id_var)
      call netcdf_err(error, 'READING OROG RECORD ID' )
+     error=nf90_inq_varid(ncid, 'land_frac', id_var1)
+     call netcdf_err(error, 'READING OROG LAND_FRAC ID' )
+     error=nf90_inq_varid(ncid, 'slmsk', id_var2)
+     call netcdf_err(error, 'READING OROG SLMSK ID' )
      error=nf90_get_var(ncid, id_var, data_one_tile)
      call netcdf_err(error, 'READING OROG RECORD' )
+     error=nf90_get_var(ncid, id_var1, land_frac_one_tile)
+     call netcdf_err(error, 'READING OROG LAND_FRAC' )
+     error=nf90_get_var(ncid, id_var2, slmsk_orog_one_tile)
+     call netcdf_err(error, 'READING OROG SLMSK' )
      print*,'terrain check ',tile, maxval(data_one_tile)
      error=nf90_close(ncid)
+
+     ! A consistent non-fractional grid, will meet condition1
+     ! A consistent fractional grid, will meet condition2
+     call read_fv3_grid_data_netcdf('vtype', tile, idim_input, jdim_input, &
+                                   lsoil_input, sfcdata=vtype_one_tile)
+     
+     condition1_met = all(((NINT(vtype_one_tile) > 0) .and. (NINT(slmsk_orog_one_tile) == 1)) .or. ((NINT(vtype_one_tile) <= 0) .and. (NINT(slmsk_orog_one_tile) == 0)))
+     condition2_met = all(((land_frac_one_tile > 0.) .and. (NINT(vtype_one_tile) > 0)) .or. ((land_frac_one_tile == 0.) .and. (NINT(vtype_one_tile)<= 0)))
+
+     if (condition1_met) then
+          print*,'[Non-fractional grid]: mask check ',tile,': consistent!'
+     endif
+     if (condition2_met) then
+          print*,'[Fractional grid]: mask check ',tile,': consistent!'
+     endif
+
+     if ((.not. condition1_met) .and. (.not. condition2_met)) then
+       call error_handler("INCONSISTENT LAND/SEA MASK BETWEEN RESTART AND OROG FILES.", 10)
+     endif
+
    endif
 
    print*,"- CALL FieldScatter FOR INPUT TERRAIN."
@@ -1417,6 +1454,7 @@ module sfc_input_data
  enddo TILE_LOOP
 
  deallocate(data_one_tile, data_one_tile_3d)
+ deallocate(vtype_one_tile, land_frac_one_tile, slmsk_orog_one_tile)
 
  end subroutine read_input_sfc_restart_file
 
