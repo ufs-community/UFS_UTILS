@@ -86,7 +86,7 @@ elif [[ $target = orion ]]; then
     WLCLK=15
     export NCCMP=nccmp
     PARTITION=''
-    ulimit -s unlimited
+    ulimit -a
 elif [[ $target = hercules ]]; then
     STMP=${STMP:-/work2/noaa/stmp/$USER}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/baseline_data

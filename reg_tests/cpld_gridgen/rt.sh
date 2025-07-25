@@ -70,7 +70,7 @@ elif [[ $target = orion ]]; then
   export NCCMP=nccmp
   BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   PARTITION=''
-  ulimit -s unlimited
+  ulimit -a
 elif [[ $target = hercules ]]; then
   STMP=${STMP:-/work2/noaa/stmp/$USER}
   ACCOUNT=${ACCOUNT:-fv3-cpu}

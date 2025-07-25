@@ -36,7 +36,7 @@ module load grib-util/1.3.0
 module load wgrib2/2.0.8
 module list
 
-ulimit -s unlimited
+ulimit -a
 
 export DATA="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice-blend"
