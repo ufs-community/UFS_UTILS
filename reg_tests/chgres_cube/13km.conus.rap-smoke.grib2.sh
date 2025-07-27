@@ -45,6 +45,9 @@ export OMP_NUM_THREADS_CH=${OMP_NUM_THREADS:-1}
 
 NCCMP=${NCCMP:-$(which nccmp)}
 
+export PGMOUT=out
+export PGMERR=err
+
 #-----------------------------------------------------------------------------
 # Invoke chgres program.
 #-----------------------------------------------------------------------------
@@ -54,6 +57,12 @@ echo "Starting at: " `date`
 ${HOMEufs}/ush/chgres_cube.sh
 
 iret=$?
+
+cd $DATA
+
+cat $PGMOUT
+cat $PGMERR
+
 if [ $iret -ne 0 ]; then
   set +x
   echo "<<< 13-km CONUS RAP-SMOKE W/ GSD PHYSICS AND SFC FROM FILE GRIB2 TEST FAILED. <<<"
@@ -74,8 +83,6 @@ if [ $machine == 'orion' ]; then
   module unload netcdfp/4.7.4.release
   module load netcdf/4.7.2
 fi
-
-cd $DATA
 
 test_failed=0
 for files in *.nc

@@ -54,7 +54,7 @@ for files in *tile*.nc ./sfc/*tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/regional.gsl.gwd/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/regional.gsl.gwd/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -66,7 +66,7 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< REGIONAL ${nthreads} THREAD GSL GWD TEST FAILED. >>>"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $home_dir/reg_tests/update_baseline.sh "${HOMEreg}/.." "regional.gsl.gwd" $commit_num
+    $home_dir/reg_tests/update_baseline.sh "${HOMEreg}" "regional.gsl.gwd" $commit_num
   fi
 else
   echo "<<< REGIONAL ${nthreads} THREAD GSL GWD TEST PASSED. >>>"

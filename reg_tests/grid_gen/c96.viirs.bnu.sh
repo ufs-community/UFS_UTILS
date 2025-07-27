@@ -47,7 +47,7 @@ for files in *tile*.nc ./sfc/*tile*.nc
 do
   if [ -f $files ]; then
     echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/c96.viirs.bnu/$files
+    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c96.viirs.bnu/$files
     iret=$?
     if [ $iret -ne 0 ]; then
       test_failed=1
@@ -59,7 +59,7 @@ set +x
 if [ $test_failed -ne 0 ]; then
   echo "<<< C96 VIIRS BNU TEST FAILED. >>>"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $home_dir/reg_tests/update_baseline.sh "${HOMEreg}/.." "c96.viirs.bnu" $commit_num
+    $home_dir/reg_tests/update_baseline.sh "${HOMEreg}" "c96.viirs.bnu" $commit_num
   fi
 else
   echo "<<< C96 VIIRS BNU TEST PASSED. >>>"

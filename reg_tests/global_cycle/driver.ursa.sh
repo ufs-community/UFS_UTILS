@@ -76,8 +76,8 @@ TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
 LOG_FILE=consistency.log04
 export DATA="${DATA_DIR}/test4"
 export COMOUT=$DATA
-TEST4=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c48.noahmp.frac \
-      -o $LOG_FILE -e $LOG_FILE ./C48.noahmp.fracgrid.sh)
+TEST4=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c48.noahmp.coupled \
+      -o $LOG_FILE -e $LOG_FILE ./C48.noahmp.coupled.sh)
 
 LOG_FILE=consistency.log05
 export DATA="${DATA_DIR}/test5"
