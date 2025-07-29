@@ -7,7 +7,7 @@ spack:
   - netcdf-c@4.9.2
   - netcdf-fortran@4.6.1
   - bacio@2.4.1
-  - g2@3.4.5
+  - g2@3.5.1
   - ip@4.4.0 precision=d
   - nemsio@2.5.4
   - sp@2.5.0
