@@ -65,7 +65,7 @@ TEST1=$(sbatch --parsable -J snow.hemi -A $PROJECT_CODE -o consistency.log \
 export DATA="${DATA_ROOT}/test.global"
 TEST2=$(sbatch --parsable -J snow.global -A $PROJECT_CODE -o consistency.log \
         -e consistency.log --ntasks=1 -q $QUEUE -t 00:03:00 --open-mode=append \
-        -d afterok:$TEST1 ./snow2mdl.global.sh)
+        -d afterok:$TEST1 ./snow2mdl.global2.sh)
 
 # Create the summary file.
 
