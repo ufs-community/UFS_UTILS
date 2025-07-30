@@ -18,7 +18,16 @@ export GFS_LONSPERLAT_FILE=$HOMEgfs/fix/am/global_lonsperlat.t1534.3072.1536.txt
 export OMP_NUM_THREADS=1
 export OUTPUT_GRIB2=.false.
 
-${HOMEgfs}/ush/emcsfc_snow.sh
+export USHgfs=${HOMEgfs}/ush
+export EXECgfs=${HOMEgfs}/exec
+export PARMgfs=${HOMEgfs}/parm
+export FIXgfs=${HOMEgfs}/fix
+
+rm -fr $DATA
+mkdir -p $DATA
+cd $DATA
+
+${HOMEgfs}/ush/prep_sfc_snow.sh
 
 iret=$?
 if [ $iret -ne 0 ]; then
