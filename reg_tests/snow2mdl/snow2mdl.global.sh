@@ -14,16 +14,21 @@ echo "BEGIN SNOW2MDL GLOBAL TEST."
 
 set -x
 
-source "${HOMEgfs}/ush/atparse.bash"  # include function atparse for parsing @[XYZ] templated files
+HOMEush="${HOMEgfs}/ush"
+HOMEparm="${HOMEgfs}/parm"
+HOMEexec="${HOMEgfs}/exec"
+HOMEfix="${HOMEgfs}/fix/am"
 
-SNOW2MDLNMLTMPL="${HOMEgfs}/parm/prep_sfc/snow2mdl.nml.tmpl"
+source "${HOMEush}/atparse.bash"  # include function atparse for parsing @[XYZ] templated files
 
-CLIMO_QC="${HOMEgfs}/fix/am/emcsfc_snow_cover_climo.grib2"
+SNOW2MDLNMLTMPL="${HOMEparm}/prep_sfc/snow2mdl.nml.tmpl"
 
-MODEL_LATITUDE_FILE="$HOMEgfs/fix/am/global_latitudes.t1534.3072.1536.grb"
-MODEL_LONGITUDE_FILE="$HOMEgfs/fix/am/global_longitudes.t1534.3072.1536.grb"
-MODEL_SLMASK_FILE="$HOMEgfs/fix/am/global_slmask.t1534.3072.1536.grb"
-GFS_LONSPERLAT_FILE="$HOMEgfs/fix/am/global_lonsperlat.t1534.3072.1536.txt"
+CLIMO_QC="${HOMEfix}/emcsfc_snow_cover_climo.grib2"
+
+MODEL_LATITUDE_FILE="${HOMEfix}/global_latitudes.t1534.3072.1536.grb"
+MODEL_LONGITUDE_FILE="${HOMEfix}/global_longitudes.t1534.3072.1536.grb"
+MODEL_SLMASK_FILE="${HOMEfix}/global_slmask.t1534.3072.1536.grb"
+GFS_LONSPERLAT_FILE="${HOMEfix}/global_lonsperlat.t1534.3072.1536.txt"
 
 MODEL_SNOW_FILE="snogrb_model"
 OUTPUT_GRIB2=".false."
@@ -44,7 +49,7 @@ atparse < "${SNOW2MDLNMLTMPL}" >> "./fort.41"
 echo "Rendered fort.41"
 cat "./fort.41"
 
-eval $HOMEgfs/exec/emcsfc_snow2mdl >> OUTPUT 2> errfile
+eval ${HOMEexec}/emcsfc_snow2mdl >> OUTPUT 2> errfile
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x

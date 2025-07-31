@@ -27,8 +27,8 @@ module list
 
 ulimit -s unlimited
 
-export DATA_ROOT="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
-export DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
+DATA_ROOT="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
+DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-batch}"

@@ -25,8 +25,8 @@ module list
 
 set -x
 
-export DATA_ROOT="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
-export DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
+DATA_ROOT="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
+DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
 
 PROJECT_CODE=${PROJECT_CODE:-"GFS-DEV"}
 QUEUE=${QUEUE:-"dev"}
