@@ -57,7 +57,6 @@ export COPYGB2=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/
 export CNVGRIB=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/intel/2021.9.0/grib-util-1.3.0-wenl3in/bin/cnvgrib
 
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ice_blend
-export HOMEreg=/work/noaa/global/dhuber/noscrub/ufs_utils/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
 
 rm -fr $DATA

@@ -14,7 +14,8 @@
 
  integer, public, parameter  :: n_tiles=6 !< number tiles in fv3 grid
  ! mask values for land / ocean mask built from veg type
- integer, public, parameter  :: vtype_water=0, & !< non-land
+ integer, public, parameter  :: vtype_nonland=0, & !< non-land
+                                vtype_water=17, & !< water
                                 vtype_landice=15 !< land ice
  ! mask values for soilsnow_mask calculated in the GSI EnKF
  integer, public, parameter  :: mtype_water=0, & !< water
@@ -127,7 +128,8 @@
 ! calculate the mask
  ptr_mask = 1 ! initialize land everywhere
  select case (trim(grid_setup%mask_variable(1)))
- case("vegetation_type") ! removing non-land and glaciers using veg class
+ case("vegetation_type") ! removing non-land, water, and glaciers using veg class
+     where (nint(ptr_maskvar) == vtype_nonland)   ptr_mask = 0 ! exclude non-land
      where (nint(ptr_maskvar) == vtype_water )   ptr_mask = 0 ! exclude water
      where (nint(ptr_maskvar) == vtype_landice ) ptr_mask = 0 ! exclude glaciers
  case("soilsnow_mask") ! removing snow and non-land using pre-computed mask
