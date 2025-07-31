@@ -54,8 +54,6 @@ fi
 export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ice_blend
 export HOMEgfs=$PBS_O_WORKDIR/../..
 
-rm -fr $DATA
-
 ./ice_blend.sh
 
 exit 0

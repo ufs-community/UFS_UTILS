@@ -55,8 +55,6 @@ fi
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
 
-rm -fr $DATA
-
 ./ice_blend.sh
 
 exit 0

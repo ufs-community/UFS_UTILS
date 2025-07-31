@@ -59,8 +59,6 @@ fi
 export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
 
-rm -fr $DATA
-
 ./ice_blend.sh
 
 exit 0
