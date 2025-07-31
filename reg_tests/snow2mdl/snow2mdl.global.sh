@@ -4,6 +4,8 @@
 # Create a snow file from afwa global data and ims data.  This script
 # is run from its machine-specific driver.
 #
+# This test mimics current GFS OPS which uses the global afwa data.
+#
 # Note, this test uses the "snow2mdl.nml.tmpl" template to create
 # the fort.41 namelist as is done by the global workflow.
 #--------------------------------------------------------------------------
