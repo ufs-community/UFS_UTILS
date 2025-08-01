@@ -42,9 +42,9 @@ if [ "$machine" = 'ursa' ] ; then
 elif [ "$machine" = 'wcoss2' ] ; then
   FIX_ORO_INPUT=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/orog/20240917
 elif [ "$machine" = 'jet' ] ; then
-  FIX_ORO_INPUT=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/orog/20230615
+  FIX_ORO_INPUT=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/orog/20240917
 elif [ "$machine" = 'gaeac6' ] ; then
-  FIX_ORO_INPUT=/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix/orog/20230615
+  FIX_ORO_INPUT=/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix/orog/20240917
 else
   set +x
   echo ERROR machine $machine not supported.
