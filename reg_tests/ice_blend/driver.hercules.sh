@@ -38,7 +38,7 @@ module list
 
 ulimit -s unlimited
 
-export DATA="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
+DATA="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
