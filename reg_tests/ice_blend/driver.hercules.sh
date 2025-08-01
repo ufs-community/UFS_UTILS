@@ -32,6 +32,8 @@ set -x
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intelllvm
+module load grib-util
+module load wgrib2/2.0.8
 module list
 
 ulimit -s unlimited
@@ -49,11 +51,6 @@ export UPDATE_BASELINE="FALSE"
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
-
-export WGRIB2=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/intel/2021.9.0/wgrib2-3.1.1-v7xhwos/bin/wgrib2
-export COPYGB=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/intel/2021.9.0/grib-util-1.3.0-wenl3in/bin/copygb
-export COPYGB2=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/intel/2021.9.0/grib-util-1.3.0-wenl3in/bin/copygb2
-export CNVGRIB=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/intel/2021.9.0/grib-util-1.3.0-wenl3in/bin/cnvgrib
 
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
