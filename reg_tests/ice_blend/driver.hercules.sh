@@ -32,8 +32,8 @@ set -x
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intelllvm
-module load grib-util
-module load wgrib2/2.0.8
+module load grib-util/1.4.0
+module load wgrib2/3.6.0
 module list
 
 ulimit -s unlimited
