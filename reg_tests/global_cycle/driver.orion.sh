@@ -25,6 +25,8 @@ module use ../../modulefiles
 module load build.$target.intelllvm
 module list
 
+ulimit -a
+
 export WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"

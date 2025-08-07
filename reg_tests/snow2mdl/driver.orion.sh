@@ -25,7 +25,7 @@ module use ../../modulefiles
 module load build.$target.intelllvm
 module list
 
-ulimit -s unlimited
+ulimit -a
 
 DATA_ROOT="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
