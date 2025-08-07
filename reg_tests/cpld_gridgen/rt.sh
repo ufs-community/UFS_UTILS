@@ -169,8 +169,7 @@ fi
 module use $PATHTR/modulefiles
 module load build.$target.$compiler
 if [[ $target = wcoss2 ]]; then
-  module load netcdf
-  module load nccmp
+  module load nccmp-D/1.9.0.1
 fi
 set +x
 module list
