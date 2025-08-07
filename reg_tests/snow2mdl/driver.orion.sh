@@ -28,7 +28,7 @@ module load wgrib2/3.6.0
 module load prod_util/2.1.1
 module list
 
-ulimit -s unlimited
+ulimit -a
 
 export DATA_ROOT="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
