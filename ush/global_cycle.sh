@@ -125,15 +125,11 @@
 #     CYCLVARS      Other namelist inputs to the cycle executable
 #                   defaults to none set
 #     PGMOUT        Executable standard output
-#                   defaults to $pgmout, then to '&1'
+#                   defaults to $pgmout, then to 'out'
 #     PGMERR        Executable standard error
-#                   defaults to $pgmerr, then to '&1'
+#                   defaults to $pgmerr, then to 'err'
 #     pgmout        Executable standard output default
 #     pgmerr        Executable standard error default
-#     REDOUT        standard output redirect ('1>' or '1>>')
-#                   defaults to '1>', or to '1>>' to append if $PGMOUT is a file
-#     REDERR        standard error redirect ('2>' or '2>>')
-#                   defaults to '2>', or to '2>>' to append if $PGMERR is a file
 #     VERBOSE       Verbose flag (YES or NO)
 #                   defaults to NO
 #     use_ufo       Adjust sst and soil substrate temperature for differences
@@ -280,6 +276,7 @@ zsea1=${zsea1:-0}
 zsea2=${zsea2:-0}
 MAX_TASKS_CY=${MAX_TASKS_CY:-99999}
 FRAC_GRID=${FRAC_GRID:-.false.}
+COUPLED=${COUPLED:-.false.}
 
 FNGLAC=${FNGLAC:-${FIXgfs}/am/global_glacier.2x2.grb}
 FNMXIC=${FNMXIC:-${FIXgfs}/am/global_maxice.2x2.grb}
@@ -309,10 +306,8 @@ export ERRSCRIPT=${ERRSCRIPT:-'eval [[ $err = 0 ]]'}
 export LOGSCRIPT=${LOGSCRIPT:-" "}
 export ENDSCRIPT=${ENDSCRIPT:-" "}
 #  Other variables.
-export PGMOUT=${PGMOUT:-${pgmout:-'&1'}}
-export PGMERR=${PGMERR:-${pgmerr:-'&2'}}
-export REDOUT=${REDOUT:-'1>'}
-export REDERR=${REDERR:-'2>'}
+PGMOUT=${PGMOUT:-${pgmout:-'out'}}
+PGMERR=${PGMERR:-${pgmerr:-'err'}}
 # Set defaults
 ################################################################################
 #  Preprocessing
@@ -388,7 +383,7 @@ cat << EOF > fort.36
   deltsfc=$DELTSFC,ialb=$IALB,use_ufo=$use_ufo,donst="$DONST",
   do_sfccycle=$DO_SFCCYCLE,do_landincr=$DO_LANDINCR,isot=$ISOT,ivegsrc=$IVEGSRC,
   zsea1_mm=$zsea1,zsea2_mm=$zsea2,MAX_TASKS=$MAX_TASKS_CY,
-  frac_grid=$FRAC_GRID
+  frac_grid=$FRAC_GRID,coupled=$COUPLED
  /
 EOF
 
@@ -403,7 +398,7 @@ cat << EOF > fort.37
  /
 EOF
 
-$APRUNCY $CYCLEXEC $REDOUT$PGMOUT $REDERR$PGMERR
+$APRUNCY $CYCLEXEC 1>$PGMOUT 2>$PGMERR
 
 export ERR=$?
 export err=$ERR

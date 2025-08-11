@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run ice_blend consistency test on Hera.
+# Run ice_blend consistency test on Ursa.
 #
 # Set $DATA to your working directory.  Set the project code (SBATCH -A)
 # and queue (SBATCH -q) as appropriate.
@@ -35,12 +35,14 @@ source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
 module load grib-util
-# Because of a bug in the grib-util module, the wgrib2 module
-# must be loaded last.
-module load wgrib2/2.0.8
+module load wgrib2/3.6.0
 module list
 
-export DATA="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export CNVGRIB=${GRIB_UTIL_ROOT}/bin/cnvgrib
+export COPYGB=${GRIB_UTIL_ROOT}/bin/copygb
+export COPYGB2=${GRIB_UTIL_ROOT}/bin/copygb2
+
+export DATA="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice-blend"
 
 #-----------------------------------------------------------------------------
@@ -54,7 +56,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ice_blend
+export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ice_blend
 export HOMEgfs=$PWD/../..
 
 rm -fr $DATA

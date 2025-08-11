@@ -25,7 +25,6 @@ module nst_input_data
  
  use model_grid, only             : input_grid,        &
                                     i_input, j_input,  &
-                                    ip1_input, jp1_input,  &
                                     num_tiles_input_grid
  
  use sfc_input_data, only         : lsoil_input, &

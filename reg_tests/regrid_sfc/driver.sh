@@ -33,8 +33,7 @@ if [[ "$compiler" == "intelllvm" ]]; then
 fi
 module load build.$target.$compiler
 if [[ "$target" == "wcoss2" ]];then
-  module load netcdf
-  module load nccmp
+  module load nccmp-D/1.9.0.1
 fi
 set +x
 module list
@@ -53,28 +52,29 @@ if [[ "$target" == "jet" ]];then
   QUEUE="${QUEUE:-batch}"
   export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/regrid_sfc
   export APRUN_REGRID=srun
-  PARTITION=xjet
-elif [[ "$target" == "hera" ]];then
-  WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+  PARTITION="--partition=xjet"
+elif [[ "$target" == "ursa" ]];then
+  WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
   PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
   QUEUE="${QUEUE:-batch}"
-  export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
+  export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
   export APRUN_REGRID=srun
-  PARTITION=hera
+  PARTITION=''
 elif [[ "$target" == "orion" ]];then
   WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
   PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
   QUEUE="${QUEUE:-batch}"
   export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/regrid_sfc
   export APRUN_REGRID=srun
-  PARTITION=orion
+  PARTITION=''
+  ulimit -a
 elif [[ "$target" == "hercules" ]];then
   WORK_DIR="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
   PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
   QUEUE="${QUEUE:-batch}"
   export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/regrid_sfc
   export APRUN_REGRID=srun
-  PARTITION=hercules
+  PARTITION=''
 elif [[ "$target" == "wcoss2" ]];then
   WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
   PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
@@ -94,7 +94,7 @@ if [[ "$target" == "wcoss2" ]];then
         -N gauss2fv3incr -l select=1:ncpus=6:ompthreads=1:mem=10GB ./gauss2fv3incr.sh)
 else
   TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J gauss2fv3incr \
-      --partition=$PARTITION -o $LOG_FILE -e $LOG_FILE ./gauss2fv3incr.sh)
+      $PARTITION -o $LOG_FILE -e $LOG_FILE ./gauss2fv3incr.sh)
 fi
 
 LOG_FILE=consistency.log
@@ -112,8 +112,8 @@ EOF
 
 else
 
-sbatch --partition=$PARTITION --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST1 << EOF
+sbatch --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J summary -o $LOG_FILE -e $LOG_FILE \
+       $PARTITION --open-mode=append -q $QUEUE -d afterok:$TEST1 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}* > ./summary.log
 EOF

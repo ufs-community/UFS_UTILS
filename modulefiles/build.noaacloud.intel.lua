@@ -2,13 +2,16 @@ help([[
 Load environment to compile UFS_UTILS on NOAA CSPs using Intel
 ]])
 
-prepend_path("MODULEPATH", "/contrib/spack-stack-rocky8/spack-stack-1.6.0/envs/fms-2024.01/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/contrib/spack-stack-rocky8/spack-stack-1.9.2/envs/ue-oneapi-2024.2.1/install/modulefiles/Core")
 prepend_path("MODULEPATH", "/apps/modules/modulefiles")
-load("gnu")
-load("stack-intel")
-load("stack-intel-oneapi-mpi")
-unload("gnu")
-load("cmake/3.23.1")
+
+stack_oneapi_ver=os.getenv("stack_oneapi_ver") or "2024.2.1"
+stack_impi_ver=os.getenv("stack_impi_ver") or "2021.13"
+cmake_ver=os.getenv("cmake_ver") or "3.27.9"
+
+load(pathJoin("stack-oneapi", stack_oneapi_ver))
+load(pathJoin("stack-intel-oneapi-mpi", stack_impi_ver))
+load(pathJoin("cmake", cmake_ver))
 
 load("common4noaacloud")
 

@@ -2,15 +2,15 @@ help([[
 Load environment to compile UFS_UTILS on Orion using Intel classic
 ]])
 
-prepend_path("MODULEPATH", "/work/noaa/epic/role-epic/spack-stack/orion/spack-stack-1.6.0/envs/fms-2024.01/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/apps/contrib/spack-stack/spack-stack-1.9.2/envs/ue-oneapi-2024.1.0/install/modulefiles/Core")
 
-stack_intel_ver=os.getenv("stack_intel_ver") or "2021.9.0"
-load(pathJoin("stack-intel", stack_intel_ver))
+stack_oneapi_ver=os.getenv("stack_oneapi_ver") or "2024.2.1"
+load(pathJoin("stack-oneapi", stack_oneapi_ver))
 
-stack_impi_ver=os.getenv("stack_impi_ver") or "2021.9.0"
+stack_impi_ver=os.getenv("stack_impi_ver") or "2021.13"
 load(pathJoin("stack-intel-oneapi-mpi", stack_impi_ver))
 
-cmake_ver=os.getenv("cmake_ver") or "3.23.1"
+cmake_ver=os.getenv("cmake_ver") or "3.27.9"
 load(pathJoin("cmake", cmake_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
@@ -19,7 +19,7 @@ load(pathJoin("bacio", bacio_ver))
 g2_ver=os.getenv("g2_ver") or "3.5.1"
 load(pathJoin("g2", g2_ver))
 
-ip_ver=os.getenv("ip_ver") or "4.3.0"
+ip_ver=os.getenv("ip_ver") or "5.1.0"
 load(pathJoin("ip", ip_ver))
 
 nemsio_ver=os.getenv("nemsio_ver") or "2.5.4"
@@ -32,10 +32,10 @@ w3emc_ver=os.getenv("w3emc_ver") or "2.10.0"
 load(pathJoin("w3emc", w3emc_ver))
 
 -- Uncomment when CHGRES_ALL is ON
---sfcio_ver=os.getenv("sfcio_ver") or "1.4.1"
+--sfcio_ver=os.getenv("sfcio_ver") or "1.4.2"
 --load(pathJoin("sfcio", sfcio_ver))
 
-sigio_ver=os.getenv("sigio_ver") or "2.3.2"
+sigio_ver=os.getenv("sigio_ver") or "2.3.3"
 load(pathJoin("sigio", sigio_ver))
 
 zlib_ver=os.getenv("zlib_ver") or "1.2.13"
@@ -53,10 +53,16 @@ load(pathJoin("netcdf-fortran", netcdf_fortran_ver))
 nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
 load(pathJoin("nccmp", nccmp_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8.6.0"
+esmf_ver=os.getenv("esmf_ver") or "8.8.0"
 load(pathJoin("esmf", esmf_ver))
 
-nco_ver=os.getenv("nco_ver") or "5.0.6"
+nco_ver=os.getenv("nco_ver") or "5.2.4"
 load(pathJoin("nco", nco_ver))
+
+setenv("I_MPI_CC", "icx")
+setenv("I_MPI_F90", "ifort")
+
+setenv("CC", "mpiicx")
+setenv("FC", "mpiifort")
 
 whatis("Description: UFS_UTILS build environment")

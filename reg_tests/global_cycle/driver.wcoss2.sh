@@ -25,8 +25,7 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
-module load netcdf
-module load nccmp
+module load nccmp-D/1.9.0.1
 module list
 
 WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
@@ -79,7 +78,7 @@ TEST3=$(qsub -V -o ${LOG_FILE}03 -e ${LOG_FILE}03 -q $QUEUE -A $PROJECT_CODE -l 
 export DATA="${DATA_DIR}/test4"
 export COMOUT=$DATA
 TEST4=$(qsub -V -o ${LOG_FILE}04 -e ${LOG_FILE}04 -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
-        -N c48.noahmp.frac -l select=1:ncpus=12:mem=8GB $PWD/C48.noahmp.fracgrid.sh)
+        -N c48.noahmp.coupled -l select=1:ncpus=12:mem=8GB $PWD/C48.noahmp.coupled.sh)
 
 export DATA="${DATA_DIR}/test5"
 export COMOUT=$DATA

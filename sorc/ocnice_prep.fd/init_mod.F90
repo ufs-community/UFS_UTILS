@@ -104,18 +104,27 @@ contains
     nxr = dstdims(1); nyr = dstdims(2)
     fsrc = '' ; fdst = ''
     if (nxt == 1440 .and. nyt == 1080) fsrc = 'mx025'    ! 1/4deg tripole
+    if (nxt ==  720 .and. nyt ==  576) fsrc = 'mx050'    ! 1/2deg tripole
+    if (nxt ==  360 .and. nyt ==  320) fsrc = 'mx100'    ! 1deg tripole
     if (len_trim(fsrc) == 0) then
        rc = 1
        write(errmsg,'(a)')'FATAL ERROR: source grid dimensions invalid'
        return
     end if
 
-    if (nxr == 720  .and. nyr == 576) fdst = 'mx050'     ! 1/2deg tripole
-    if (nxr == 360  .and. nyr == 320) fdst = 'mx100'     ! 1deg tripole
-    if (nxr == 72   .and. nyr == 35)  fdst = 'mx500'     ! 5deg tripole
+    if (nxr == 1440 .and. nyr == 1080) fdst = 'mx025'    ! 1/4deg tripole
+    if (nxr ==  720 .and. nyr ==  576) fdst = 'mx050'    ! 1/2deg tripole
+    if (nxr ==  360 .and. nyr ==  320) fdst = 'mx100'    ! 1deg tripole
+    if (nxr ==   72 .and. nyr ==   35) fdst = 'mx500'    ! 5deg tripole
     if (len_trim(fdst) == 0) then
        rc = 1
        write(errmsg,'(a)')'FATAL ERROR: destination grid dimensions invalid'
+       return
+    end if
+
+    if (trim(fsrc) .eq. trim(fdst)) then
+       rc = 1
+       write(errmsg,'(a)')'FATAL ERROR: Source and destination grids must differ'
        return
     end if
 
@@ -199,7 +208,6 @@ contains
     end do
     close(iounit)
     nvalid = nn
-
     ! check for u,v pairs, these should be listed in csv file in ordered pairs
     idx1 = 0; idx2 = 0
     do n = 1,nvalid
@@ -209,32 +217,34 @@ contains
        end if
     end do
 
-    if (trim(outvars(idx1)%var_pair) /= trim(outvars(idx2)%var_name)) then
-       rc = 1
-       write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx1)%var_name) &
-            //' is not set correctly'
-       return
-    end if
-    if (trim(outvars(idx2)%var_pair) /= trim(outvars(idx1)%var_name)) then
-       rc = 1
-       write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx2)%var_name) &
-            //' is not set correctly'
-       return
-    end if
-
-    ! check for u velocities on u-staggers and v-velocities on v-staggers
-    if (outvars(idx1)%var_name(1:1) == 'u') then
-       if ((outvars(idx1)%var_grid(1:2) /= 'Cu') .and. outvars(idx1)%var_grid(1:2) /= 'Bu') then
+    if (idx1*idx2 > 0) then
+       if (trim(outvars(idx1)%var_pair) /= trim(outvars(idx2)%var_name)) then
           rc = 1
-          write(errmsg,'(a)')'FATAL ERROR: u-vector has wrong grid '
+          write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx1)%var_name) &
+               //' is not set correctly'
           return
        end if
-    end if
-    if (outvars(idx2)%var_name(1:1) == 'v') then
-       if ((outvars(idx2)%var_grid(1:2) /= 'Cv') .and. outvars(idx2)%var_grid(1:2) /= 'Bu') then
+       if (trim(outvars(idx2)%var_pair) /= trim(outvars(idx1)%var_name)) then
           rc = 1
-          write(errmsg,'(a)')'FATAL ERROR: v-vector has wrong grid '
+          write(errmsg,'(a)')'FATAL ERROR: vector pair for '//trim(outvars(idx2)%var_name) &
+               //' is not set correctly'
           return
+       end if
+
+       ! check for u velocities on u-staggers and v-velocities on v-staggers
+       if (outvars(idx1)%var_name(1:1) == 'u') then
+          if ((outvars(idx1)%var_grid(1:2) /= 'Cu') .and. outvars(idx1)%var_grid(1:2) /= 'Bu') then
+             rc = 1
+             write(errmsg,'(a)')'FATAL ERROR: u-vector has wrong grid '
+             return
+          end if
+       end if
+       if (outvars(idx2)%var_name(1:1) == 'v') then
+          if ((outvars(idx2)%var_grid(1:2) /= 'Cv') .and. outvars(idx2)%var_grid(1:2) /= 'Bu') then
+             rc = 1
+             write(errmsg,'(a)')'FATAL ERROR: v-vector has wrong grid '
+             return
+          end if
        end if
     end if
 

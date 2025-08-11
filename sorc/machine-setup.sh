@@ -30,34 +30,23 @@ if [[ -d /lfs5 ]] ; then
 elif [[ -d /lfs/h1 ]] ; then
     target=wcoss2
     module reset
-elif [[ -d /opt/spack-stack ]] ; then
-    # We are using a container 
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-        echo load the module command 1>&2
-        source /apps/lmod/lmod/init/$__ms_shell
-    fi
+elif [[ -d /opt/spack-stack && -v SINGULARITY_CONTAINER ]]; then
+    # We are in a container
+    source /usr/lmod/lmod/init/$__ms_shell
     target=container
     module purge
-elif [[ -d /scratch1 ]] ; then
-    # We are on NOAA Hera
+elif [[ -d /scratch3 ]]; then
+    # We are on NOAA Hera or Ursa
+    mount=$(findmnt -n -o SOURCE /home)
+    if [[ ${mount} =~ "ursa" ]]; then
+      target=ursa
+    else
+      target=hera
+    fi
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         echo load the module command 1>&2
         source /apps/lmod/lmod/init/$__ms_shell
     fi
-    target=hera
-    module purge
-elif [[ "$(hostname)" == "gaea5"* || "$(hostname)" =~ c5n[0-9]+ ]] && [[ -d /gpfs/f5 ]] ; then
-    # We are on GAEAC5.
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-      # We cannot simply load the module command.  The GAEA
-      # /etc/profile modifies a number of module-related variables
-      # before loading the module command.  Without those variables,
-      # the module command fails.  Hence we actually have to source
-      # /etc/profile here.
-      source /etc/profile
-    fi
-    module reset
-    target=gaeac5
 elif [[ "$(hostname)" == "gaea6"* || "$(hostname)" =~ c6n[0-9]+ ]] && [[ -d /gpfs/f6 ]] ; then
     target=gaeac6
     source /opt/cray/pe/lmod/8.7.31/init/$__ms_shell
@@ -70,25 +59,20 @@ elif [[ "$(hostname)" =~ "hercules" || "$(hostname)" =~ "Hercules" ]]; then
 elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
     target=stampede
     module purge
-elif [[ -d /data/prod ]] ; then
-    # We are on SSEC S4
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-        echo load the module command 1>&2
-        source /usr/share/lmod/lmod/init/$__ms_shell
-    fi
-    target=s4
-    module purge
 else
     if [[ ! -v PW_CSP ]]; then
-        echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+        set +x
+        echo FATAL ERROR: UNKNOWN PLATFORM 1>&2; exit 99
     elif [[ -z "${PW_CSP}" ]]; then
-        echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+        set +x
+        echo FATAL ERROR: UNKNOWN PLATFORM 1>&2; exit 99
     else
         if [[ "${PW_CSP}" == "aws" || "${PW_CSP}" == "azure" || "${PW_CSP}" == "google" ]]; then
             target=noaacloud
             module purge
         else
-            echo WARNING: UNKNOWN PLATFORM 1>&2; exit 99
+            set +x
+            echo FATAL ERROR: UNKNOWN PLATFORM 1>&2; exit 99
         fi
     fi
 fi

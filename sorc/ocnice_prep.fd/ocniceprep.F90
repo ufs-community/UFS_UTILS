@@ -57,6 +57,7 @@ program ocniceprep
   character(len=120) :: meshfsrc, meshfdst
   integer            :: nvalid, icnt
   integer            :: k,n,nn,rc,ncid,varid
+  integer            :: localPet, nPet
   character(len=20)  :: vname
 
   character(len=*), parameter :: u_FILE_u = __FILE__
@@ -65,10 +66,11 @@ program ocniceprep
   ! initialize ESMF
   ! -----------------------------------------------------------------------------
 
-  call ESMF_Initialize(rc=rc)
-  if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
   call ESMF_VMGetGlobal(vm, rc=rc)
-  if (chkerr(rc,__LINE__,u_FILE_u)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
+  call ESMF_Initialize(VM=vm, logkindflag=ESMF_LOGKIND_MULTI, rc=rc)
+  call ESMF_VMGet(vm, localPet=localPet, peCount=nPet, rc=rc)
+  if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
+       line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
 
   ! -----------------------------------------------------------------------------
   ! read the nml file and a file containing the list of variables to be remapped
@@ -88,6 +90,11 @@ program ocniceprep
      stop
   else
      write(logunit,'(a)')trim(errmsg)
+  end if
+
+  if (nPet /= 1) then
+     write(logunit, '(a)')'More than one task specified; Aborting '
+     call ESMF_Finalize(endflag=ESMF_END_ABORT)
   end if
 
   ! -----------------------------------------------------------------------------

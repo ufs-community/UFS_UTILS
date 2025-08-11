@@ -14,8 +14,12 @@ load(pathJoin("craype", craype_ver))
 intel_ver=os.getenv("intel_ver") or "19.1.3.304"
 load(pathJoin("intel", intel_ver))
 
-cray_mpich_ver=os.getenv("cray_mpich_ver") or "8.1.12"
+cray_mpich_ver=os.getenv("cray_mpich_ver") or "8.1.19"
 load(pathJoin("cray-mpich", cray_mpich_ver))
+
+-- Need the cray library path for C MPI libraries
+local cray_lib_path=os.getenv("CRAY_LD_LIBRARY_PATH") or ""
+prepend_path("LD_LIBRARY_PATH", cray_lib_path)
 
 libjpeg_ver=os.getenv("libjpeg_ver") or "9c"
 load(pathJoin("libjpeg", libjpeg_ver))
@@ -27,10 +31,13 @@ libpng_ver=os.getenv("libpng_ver") or "1.6.37"
 load(pathJoin("libpng", libpng_ver))
 
 hdf5_ver=os.getenv("hdf5_ver") or "1.14.0"
-load(pathJoin("hdf5-C", hdf5_ver))
+load(pathJoin("hdf5-D", hdf5_ver))
 
 netcdf_ver=os.getenv("netcdf_ver") or "4.9.2"
-load(pathJoin("netcdf-C", netcdf_ver))
+load(pathJoin("netcdf-D", netcdf_ver))
+
+netcdf_ver=os.getenv("pnetcdf_ver") or "1.12.2"
+load(pathJoin("pnetcdf-D", netcdf_ver))
 
 bacio_ver=os.getenv("bacio_ver") or "2.4.1"
 load(pathJoin("bacio", bacio_ver))
@@ -51,7 +58,7 @@ load(pathJoin("sigio", sigio_ver))
 sp_ver=os.getenv("sp_ver") or "2.4.0"
 load(pathJoin("sp", sp_ver))
 
-ip_ver=os.getenv("ip_ver") or "4.0.0"
+ip_ver=os.getenv("ip_ver") or "5.2.0"
 load(pathJoin("ip", ip_ver))
 
 g2_ver=os.getenv("g2_ver") or "3.5.1"
@@ -72,7 +79,7 @@ load(pathJoin("gsl", gsl_ver))
 nco_ver=os.getenv("nco_ver") or "5.0.6"
 load(pathJoin("nco", nco_ver))
 
-esmf_ver=os.getenv("esmf_ver") or "8.6.0"
-load(pathJoin("esmf-C", esmf_ver))
+esmf_ver=os.getenv("esmf_ver") or "8.8.0"
+load(pathJoin("esmf-D", esmf_ver))
 
 whatis("Description: UFS_UTILS build environment")

@@ -126,9 +126,9 @@
      trim(input_type) == "gfs_gaussian_nemsio" .or. &
      trim(input_type) == "gfs_sigio" .or. &
      trim(input_type) == "gaussian_netcdf") then
-   call define_input_grid_gaussian(npets)
+   call define_input_grid_gaussian(localpet,npets)
  elseif (trim(input_type) == "grib2") then
-   call define_input_grid_grib2(npets)
+   call define_input_grid_grib2(localpet, npets)
  else
    call define_input_grid_mosaic(localpet, npets)
  endif
@@ -143,9 +143,10 @@
 !!  - spectral gfs sigio  (prior to July 19, 2017)
 !!  - spectral gfs sfcio  (prior to July 19, 2017)
 !!
+!! @param [in] localpet  Local persistent execution thread.
 !! @param [in] npets  Number of  persistent execution threads.
 !! @author George Gayno NCEP/EMC   
- subroutine define_input_grid_gaussian(npets)
+ subroutine define_input_grid_gaussian(localpet, npets)
 
 #ifdef CHGRES_ALL
  use nemsio_module
@@ -165,11 +166,11 @@
 
  implicit none
 
- integer, intent(in)              :: npets
+ integer, intent(in)              :: localpet, npets
 
  character(len=250)               :: the_file
 
- integer                          :: i, j, rc, clb(2), cub(2), ncid, id_grid
+ integer                          :: i, j, rc, clb(2), cub(2), ncid, id_grid, idum(2)
 #ifdef CHGRES_ALL
  integer(sfcio_intkind)           :: rc2
  integer(sigio_intkind)           :: rc3
@@ -193,6 +194,8 @@
  type(sigio_head)                 :: sighead
 #endif
 
+ type(esmf_vm)                    :: vm
+
  print*,"- DEFINE INPUT GRID OBJECT FOR GAUSSIAN DATA."
 
  num_tiles_input_grid = 1
@@ -205,23 +208,36 @@
 
  if (trim(input_type) == "gaussian_netcdf") then
 
-   print*,'- OPEN AND READ: ',trim(the_file)
-   rc=nf90_open(trim(the_file),nf90_nowrite,ncid)
-   call netcdf_err(rc, 'opening file')
+   call ESMF_VMGetGlobal(vm, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMGetGlobal", rc)
 
-   print*,"- READ grid_xt"
-   rc=nf90_inq_dimid(ncid, 'grid_xt', id_grid)
-   call netcdf_err(rc, 'reading grid_xt id')
-   rc=nf90_inquire_dimension(ncid,id_grid,len=i_input)
-   call netcdf_err(rc, 'reading grid_xt')
+   if (localpet == 0) then
+     print*,'- OPEN AND READ: ',trim(the_file)
+     rc=nf90_open(trim(the_file),nf90_nowrite,ncid)
+     call netcdf_err(rc, 'opening file')
 
-   print*,"- READ grid_yt"
-   rc=nf90_inq_dimid(ncid, 'grid_yt', id_grid)
-   call netcdf_err(rc, 'reading grid_yt id')
-   rc=nf90_inquire_dimension(ncid,id_grid,len=j_input)
-   call netcdf_err(rc, 'reading grid_yt')
+     print*,"- READ grid_xt"
+     rc=nf90_inq_dimid(ncid, 'grid_xt', id_grid)
+     call netcdf_err(rc, 'reading grid_xt id')
+     rc=nf90_inquire_dimension(ncid,id_grid,len=idum(1))
+     call netcdf_err(rc, 'reading grid_xt')
 
-   rc = nf90_close(ncid)
+     print*,"- READ grid_yt"
+     rc=nf90_inq_dimid(ncid, 'grid_yt', id_grid)
+     call netcdf_err(rc, 'reading grid_yt id')
+     rc=nf90_inquire_dimension(ncid,id_grid,len=idum(2))
+     call netcdf_err(rc, 'reading grid_yt')
+
+     rc = nf90_close(ncid)
+   endif
+
+   call ESMF_VMBroadcast(vm, idum, 2, 0, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", rc)
+
+   i_input = idum(1)
+   j_input = idum(2)
 
 #ifdef CHGRES_ALL
  elseif (trim(input_type) == "gfs_sigio") then  ! sigio/sfcio format, used by
@@ -425,7 +441,7 @@
  integer, intent(in)          :: localpet, npets
 
  integer                      :: id_tiles, id_dim, tile
- integer                      :: extra, error, ncid
+ integer                      :: extra, error, ncid, idum(1), idum2(2)
  integer, allocatable         :: decomptile(:,:)
 
  real(esmf_kind_r8), allocatable       :: latitude_one_tile(:,:)
@@ -435,17 +451,29 @@
  real(esmf_kind_r8), allocatable       :: longitude_s_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: longitude_w_one_tile(:,:)
 
- print*,'- OPEN INPUT GRID MOSAIC FILE: ',trim(mosaic_file_input_grid)
- error=nf90_open(trim(mosaic_file_input_grid),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening grid mosaic file')
+ type(esmf_vm)                         :: vm
 
- print*,"- READ NUMBER OF TILES"
- error=nf90_inq_dimid(ncid, 'ntiles', id_tiles)
- call netcdf_err(error, 'reading ntiles id')
- error=nf90_inquire_dimension(ncid,id_tiles,len=num_tiles_input_grid)
- call netcdf_err(error, 'reading ntiles')
+ call ESMF_VMGetGlobal(vm, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMGetGlobal", error)
 
- error = nf90_close(ncid)
+ if (localpet == 0) then
+   print*,'- OPEN INPUT GRID MOSAIC FILE: ',trim(mosaic_file_input_grid)
+   error=nf90_open(trim(mosaic_file_input_grid),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening grid mosaic file')
+   print*,"- READ NUMBER OF TILES"
+   error=nf90_inq_dimid(ncid, 'ntiles', id_tiles)
+   call netcdf_err(error, 'reading ntiles id')
+   error=nf90_inquire_dimension(ncid,id_tiles,len=idum(1))
+   call netcdf_err(error, 'reading ntiles')
+   error = nf90_close(ncid)
+ endif
+
+ call ESMF_VMBroadcast(vm, idum, 1, 0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", error)
+
+ num_tiles_input_grid = idum(1)
 
  print*,'- NUMBER OF TILES, INPUT MODEL GRID IS ', num_tiles_input_grid
 
@@ -536,19 +564,28 @@
 
  the_file = trim(orog_dir_input_grid) // trim(orog_files_input_grid(1))
 
- print*,'- OPEN FIRST INPUT GRID OROGRAPHY FILE: ',trim(the_file)
- error=nf90_open(trim(the_file),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening ororgraphy file')
- print*,"- READ GRID DIMENSIONS"
- error=nf90_inq_dimid(ncid, 'lon', id_dim)
- call netcdf_err(error, 'reading lon id')
- error=nf90_inquire_dimension(ncid,id_dim,len=i_input)
- call netcdf_err(error, 'reading lon')
- error=nf90_inq_dimid(ncid, 'lat', id_dim)
- call netcdf_err(error, 'reading lat id')
- error=nf90_inquire_dimension(ncid,id_dim,len=j_input)
- call netcdf_err(error, 'reading lat')
- error = nf90_close(ncid)
+ if (localpet == 0) then
+   print*,'- OPEN FIRST INPUT GRID OROGRAPHY FILE: ',trim(the_file)
+   error=nf90_open(trim(the_file),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening ororgraphy file')
+   print*,"- READ GRID DIMENSIONS"
+   error=nf90_inq_dimid(ncid, 'lon', id_dim)
+   call netcdf_err(error, 'reading lon id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum2(1))
+   call netcdf_err(error, 'reading lon')
+   error=nf90_inq_dimid(ncid, 'lat', id_dim)
+   call netcdf_err(error, 'reading lat id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum2(2))
+   call netcdf_err(error, 'reading lat')
+   error = nf90_close(ncid)
+ endif
+
+ call ESMF_VMBroadcast(vm, idum2, 2, 0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", error)
+
+ i_input = idum2(1)
+ j_input = idum2(2)
 
  print*,"- I/J DIMENSIONS OF THE INPUT GRID TILES ", i_input, j_input
 
@@ -615,11 +652,12 @@
 
 !> Define input grid object for grib2 input data.
 !!
+!! @param [in] localpet ESMF local persistent execution thread 
 !! @param [in] npets  Number of persistent execution threads
 !! @author Larissa Reames
 !! @author Jeff Beck
 !! @author George Gayno
- subroutine define_input_grid_grib2(npets)
+ subroutine define_input_grid_grib2(localpet, npets)
 
  use grib_mod
  use gdswzd_mod
@@ -627,123 +665,145 @@
 
  implicit none
 
- integer, intent(in)              :: npets
+ integer, intent(in)              :: localpet, npets
 
  character(len=500)               :: the_file
 
  integer                          :: i, j, k, jdisc, jgdtn, jpdtn, lugb, lugi
  integer                          :: jids(200), jgdt(200), jpdt(200), rc
- integer                          :: kgds(200), nret, clb(2), cub(2)
+ integer                          :: kgds(200), nret, clb(2), cub(2), idum(3)
 
  logical                          :: unpack
 
  real                             :: res
  real, allocatable                :: rlon(:,:),rlat(:,:),xpts(:,:),ypts(:,:)
  real, allocatable                :: rlon_corner(:,:),rlat_corner(:,:)
- real, allocatable                :: rlon_diff(:,:),rlat_diff(:,:)
  real, allocatable                :: xpts_corner(:,:),ypts_corner(:,:)
  real(esmf_kind_r8), allocatable  :: latitude(:,:)
  real(esmf_kind_r8), allocatable  :: longitude(:,:)
  real(esmf_kind_r8), allocatable  :: latitude_corner(:,:)
  real(esmf_kind_r8), allocatable  :: longitude_corner(:,:)
- real(esmf_kind_r8), pointer      :: lat_src_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lat_src_ptr(:,:), lat_ptr(:,:)
  real(esmf_kind_r8), pointer      :: lat_corner_src_ptr(:,:)
- real(esmf_kind_r8), pointer      :: lon_src_ptr(:,:)
+ real(esmf_kind_r8), pointer      :: lon_src_ptr(:,:), lon_ptr(:,:)
  real(esmf_kind_r8), pointer      :: lon_corner_src_ptr(:,:)
+
+ type(esmf_field)                 :: lat_corner, lon_corner
 
  type(esmf_polekind_flag)         :: polekindflag(2)
 
  type(gribfield)                  :: gfld
 
+ type(esmf_vm)                    :: vm
+
+ call ESMF_VMGetGlobal(vm, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMGetGlobal", rc)
+
  the_file = trim(data_dir_input_grid) // "/" // grib2_file_input_grid
 
  lugb=12
 
- print*,"- OPEN AND READ INPUT DATA GRIB2 FILE: ", trim(the_file)
- call baopenr(lugb,the_file,rc)
- if (rc /= 0) call error_handler("OPENING FILE", rc)
+ if (localpet == 0) then
+
+   print*,"- OPEN AND READ INPUT DATA GRIB2 FILE: ", trim(the_file)
+   call baopenr(lugb,the_file,rc)
+   if (rc /= 0) call error_handler("OPENING FILE", rc)
 
 ! Read the first record and get the grid definition template.
 
- j       = 0      ! Search at beginning of file
- lugi    = 0      ! No grib index file
- jdisc   = -1     ! Search for any discipline
- jpdtn   = -1     ! Search for any product definition template number
- jgdtn   = -1     ! Search for any grid definition template number
- jids    = -9999  ! Array of values in identification section, set to wildcard.
- jgdt    = -9999  ! Array of values in grid definition template, set to wildcard.
- jpdt    = -9999  ! Array of values in product definition template, set to wildcard.
- unpack  = .false. ! unpack data
+   j       = 0      ! Search at beginning of file
+   lugi    = 0      ! No grib index file
+   jdisc   = -1     ! Search for any discipline
+   jpdtn   = -1     ! Search for any product definition template number
+   jgdtn   = -1     ! Search for any grid definition template number
+   jids    = -9999  ! Array of values in identification section, set to wildcard.
+   jgdt    = -9999  ! Array of values in grid definition template, set to wildcard.
+   jpdt    = -9999  ! Array of values in product definition template, set to wildcard.
+   unpack  = .false. ! unpack data
    
- call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
+   call getgb2(lugb, lugi, j, jdisc, jids, jpdtn, jpdt, jgdtn, jgdt, &
              unpack, k, gfld, rc)
- if (rc /= 0) call error_handler("DEGRIBBING INPUT FILE.", rc)
+   if (rc /= 0) call error_handler("DEGRIBBING INPUT FILE.", rc)
 
- call baclose(lugb,rc)
+   call baclose(lugb,rc)
 
- if (gfld%igdtnum == 0) then
+   kgds = 0
+   call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, idum(1), idum(2), res)
+
+   idum(3) = gfld%igdtnum
+
+ endif
+
+ call ESMF_VMBroadcast(vm, idum, 3, 0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", rc)
+
+ i_input = idum(1)
+ j_input = idum(2)
+
+ ip1_input = i_input + 1
+ jp1_input = j_input + 1
+
+ if (idum(3) == 0) then
    print*,"- INPUT DATA ON LAT/LON GRID."
    input_grid_type = 'latlon'
- elseif (gfld%igdtnum == 30) then
+ elseif (idum(3) == 30) then
    print*,"- INPUT DATA ON LAMBERT CONFORMAL GRID."
    input_grid_type = 'lambert'
- elseif (gfld%igdtnum == 32769 .or. gfld%igdtnum == 1) then
+ elseif (idum(3) == 32769 .or. idum(3) == 1) then
    print*,"- INPUT DATA ON ROTATED LAT/LON GRID."
    input_grid_type = 'rotated_latlon'
  else
    call error_handler("INPUT GRID TEMPLATE NOT SUPPORTED.", 2)
  endif
 
- kgds = 0
- call gdt_to_gds(gfld%igdtnum, gfld%igdtmpl, gfld%igdtlen, kgds, i_input, j_input, res)
+ if (localpet == 0) then
 
- ip1_input = i_input + 1
- jp1_input = j_input + 1
+   allocate(rlat(i_input,j_input))
+   allocate(rlon(i_input,j_input))
+   allocate(xpts(i_input,j_input))
+   allocate(ypts(i_input,j_input))
+   allocate(rlat_corner(ip1_input,jp1_input))
+   allocate(rlon_corner(ip1_input,jp1_input))
+   allocate(xpts_corner(ip1_input,jp1_input))
+   allocate(ypts_corner(ip1_input,jp1_input))
 
- allocate(rlat(i_input,j_input))
- allocate(rlon(i_input,j_input))
- allocate(rlat_diff(i_input,j_input))
- allocate(rlon_diff(i_input,j_input))
- allocate(xpts(i_input,j_input))
- allocate(ypts(i_input,j_input))
- allocate(rlat_corner(ip1_input,jp1_input))
- allocate(rlon_corner(ip1_input,jp1_input))
- allocate(xpts_corner(ip1_input,jp1_input))
- allocate(ypts_corner(ip1_input,jp1_input))
+   do j = 1, j_input
+   do i = 1, i_input
+     xpts(i,j) = float(i)
+     ypts(i,j) = float(j)
+   enddo
+   enddo
 
- do j = 1, j_input
- do i = 1, i_input
-   xpts(i,j) = float(i)
-   ypts(i,j) = float(j)
- enddo
- enddo
+   print*,"- COMPUTE GRID CELL CENTER COORDINATES."
+   call gdswzd(kgds,1,(i_input*j_input),-9999.,xpts,ypts,rlon,rlat,nret)
 
- print*,"- COMPUTE GRID CELL CENTER COORDINATES."
- call gdswzd(kgds,1,(i_input*j_input),-9999.,xpts,ypts,rlon,rlat,nret)
+   if (nret /= (i_input*j_input)) then
+     call error_handler("GDSWZD RETURNED WRONG NUMBER OF POINTS.", 2)
+   endif
 
- if (nret /= (i_input*j_input)) then
-   call error_handler("GDSWZD RETURNED WRONG NUMBER OF POINTS.", 2)
- endif
+   deallocate(xpts, ypts)
 
- deallocate(xpts, ypts)
+   do j = 1, jp1_input
+   do i = 1, ip1_input
+     xpts_corner(i,j) = float(i) - 0.5
+     ypts_corner(i,j) = float(j) - 0.5
+   enddo
+   enddo
 
- do j = 1, jp1_input
- do i = 1, ip1_input
-   xpts_corner(i,j) = float(i) - 0.5
-   ypts_corner(i,j) = float(j) - 0.5
- enddo
- enddo
+   print*,"- COMPUTE GRID CELL CORNER COORDINATES."
+   call gdswzd(kgds,1,(ip1_input*jp1_input),-9999.,xpts_corner,ypts_corner,rlon_corner,rlat_corner,nret)
 
- print*,"- COMPUTE GRID CELL CORNER COORDINATES."
- call gdswzd(kgds,1,(ip1_input*jp1_input),-9999.,xpts_corner,ypts_corner,rlon_corner,rlat_corner,nret)
+   if (nret /= (ip1_input*jp1_input)) then
+     call error_handler("GDSWZD RETURNED WRONG NUMBER OF POINTS.", 2)
+   endif
 
- if (nret /= (ip1_input*jp1_input)) then
-   call error_handler("GDSWZD RETURNED WRONG NUMBER OF POINTS.", 2)
- endif
+   deallocate(xpts_corner, ypts_corner)
 
- deallocate(xpts_corner, ypts_corner)
+ end if
 
- if (gfld%igdtnum == 0) then ! gfs lat/lon data
+ if (trim(input_grid_type) == 'latlon') then ! gfs lat/lon data
 
    print*,"- CALL GridCreate1PeriDim FOR INPUT GRID."
 
@@ -787,13 +847,16 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
    call error_handler("IN FieldCreate", rc)
 
- allocate(latitude(i_input,j_input))
- allocate(longitude(i_input,j_input))
-
- latitude = rlat
- longitude = rlon
-
- deallocate (rlat, rlon)
+ if (localpet == 0) then
+   allocate(latitude(i_input,j_input))
+   allocate(longitude(i_input,j_input))
+   latitude = rlat
+   longitude = rlon
+   deallocate (rlat, rlon)
+ else
+   allocate(latitude(0,0))
+   allocate(longitude(0,0))
+ endif 
 
  print*,"- CALL FieldScatter FOR INPUT GRID LONGITUDE."
  call ESMF_FieldScatter(longitude_input_grid, longitude, rootpet=0, rc=rc)
@@ -804,6 +867,8 @@
  call ESMF_FieldScatter(latitude_input_grid, latitude, rootpet=0, rc=rc)
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN FieldScatter", rc)
+
+ deallocate(latitude, longitude)
 
  print*,"- CALL GridAddCoord FOR INPUT GRID."
  call ESMF_GridAddCoord(input_grid, &
@@ -831,23 +896,74 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord", rc)
 
+ nullify(lat_ptr)
+ print*,"- CALL FieldGet FOR latitude."
+ call ESMF_FieldGet(latitude_input_grid, &
+                    farrayPtr=lat_ptr, rc=rc) 
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ nullify(lon_ptr)
+ print*,"- CALL FieldGet FOR longitude."
+ call ESMF_FieldGet(longitude_input_grid, &
+                    farrayPtr=lon_ptr, rc=rc) 
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     lon_src_ptr(i,j) = longitude(i,j)
+     lon_src_ptr(i,j) = lon_ptr(i,j)
      if (lon_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_src_ptr(i,j) = lon_src_ptr(i,j) - 360.0_esmf_kind_r8
-     lat_src_ptr(i,j) = latitude(i,j)
+     lat_src_ptr(i,j) = lat_ptr(i,j)
    enddo
  enddo
 
- deallocate(latitude, longitude)
+ if (localpet == 0) then
+   if (trim(input_grid_type) == 'latlon') then ! gfs lat/lon data. grid is periodic in 'i'
+                                               ! direction.
+     allocate(latitude_corner(i_input,jp1_input))
+     allocate(longitude_corner(i_input,jp1_input))
+     latitude_corner(1:i_input,:) = rlat_corner(1:i_input,:)
+     longitude_corner(1:i_input,:) = rlon_corner(1:i_input,:)
+   else
+     allocate(latitude_corner(ip1_input,jp1_input))
+     allocate(longitude_corner(ip1_input,jp1_input))
+     longitude_corner = rlon_corner
+     latitude_corner = rlat_corner
+   endif
+   deallocate (rlat_corner, rlon_corner)
+ else
+   allocate(latitude_corner(0,0))
+   allocate(longitude_corner(0,0))
+ endif
 
- allocate(latitude_corner(ip1_input,jp1_input))
- allocate(longitude_corner(ip1_input,jp1_input))
+ print*,"- CALL FieldCreate FOR INPUT GRID CORNER LATITUDE."
+ lat_corner = ESMF_FieldCreate(input_grid, &
+                               typekind=ESMF_TYPEKIND_R8, &
+                               staggerloc=ESMF_STAGGERLOC_CORNER, &
+                               name="input_grid_corner_latitude", rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN FieldCreate", rc)
 
- latitude_corner = rlat_corner
- longitude_corner = rlon_corner
+ print*,"- CALL FieldCreate FOR INPUT GRID CORNER LONGITUDE."
+ lon_corner = ESMF_FieldCreate(input_grid, &
+                               typekind=ESMF_TYPEKIND_R8, &
+                               staggerloc=ESMF_STAGGERLOC_CORNER, &
+                               name="input_grid_corner_longitude", rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN FieldCreate", rc)
 
- deallocate (rlat_corner, rlon_corner)
+ print*,"- CALL FieldScatter FOR INPUT GRID CORNER LONGITUDE."
+ call ESMF_FieldScatter(lon_corner, longitude_corner, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ print*,"- CALL FieldScatter FOR INPUT GRID CORNER LATITUDE."
+ call ESMF_FieldScatter(lat_corner, latitude_corner, rootpet=0, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldScatter", rc)
+
+ deallocate(latitude_corner, longitude_corner)
 
  print*,"- CALL GridAddCoord FOR INPUT GRID."
  call ESMF_GridAddCoord(input_grid, &
@@ -875,15 +991,30 @@
  if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridGetCoord", rc)
 
+ nullify(lat_ptr)
+ print*,"- CALL FieldGet FOR corner latitude."
+ call ESMF_FieldGet(lat_corner, &
+                    farrayPtr=lat_ptr, rc=rc) 
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
+ nullify(lon_ptr)
+ print*,"- CALL FieldGet FOR corner longitude."
+ call ESMF_FieldGet(lon_corner, &
+                    farrayPtr=lon_ptr, rc=rc) 
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+    call error_handler("IN FieldGet", rc)
+
  do j = clb(2), cub(2)
    do i = clb(1), cub(1)
-     lon_corner_src_ptr(i,j) = longitude_corner(i,j)
+     lon_corner_src_ptr(i,j) = lon_ptr(i,j)
      if (lon_corner_src_ptr(i,j) > 360.0_esmf_kind_r8) lon_corner_src_ptr(i,j) = lon_corner_src_ptr(i,j) - 360.0_esmf_kind_r8
-     lat_corner_src_ptr(i,j) = latitude_corner(i,j)
+     lat_corner_src_ptr(i,j) = lat_ptr(i,j)
    enddo
  enddo
 
- deallocate(latitude_corner, longitude_corner)
+ call ESMF_FieldDestroy(lon_corner, rc=rc)
+ call ESMF_FieldDestroy(lat_corner, rc=rc)
 
  end subroutine define_input_grid_grib2
 
@@ -909,7 +1040,7 @@
  integer                               :: error, ncid, extra
  integer                               :: id_tiles
  integer                               :: id_dim, id_grid_tiles
- integer                               :: tile
+ integer                               :: tile, idum1(1), idum2(2)
  integer, allocatable                  :: decomptile(:,:)
  integer(esmf_kind_i8), allocatable    :: landmask_one_tile(:,:)
  integer(esmf_kind_i8), allocatable    :: seamask_one_tile(:,:)
@@ -923,26 +1054,46 @@
  real(esmf_kind_r8), allocatable       :: longitude_w_one_tile(:,:)
  real(esmf_kind_r8), allocatable       :: terrain_one_tile(:,:)
 
- lsoil_target = nsoill_out
- 
- print*,'- OPEN TARGET GRID MOSAIC FILE: ',trim(mosaic_file_target_grid)
- error=nf90_open(trim(mosaic_file_target_grid),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening grid mosaic file')
+ type(esmf_vm)                         :: vm
 
- print*,"- READ NUMBER OF TILES"
- error=nf90_inq_dimid(ncid, 'ntiles', id_tiles)
- call netcdf_err(error, 'reading ntile id')
- error=nf90_inquire_dimension(ncid,id_tiles,len=num_tiles_target_grid)
- call netcdf_err(error, 'reading ntiles')
- error=nf90_inq_varid(ncid, 'gridtiles', id_grid_tiles)
- call netcdf_err(error, 'reading gridtiles id')
+ lsoil_target = nsoill_out
+
+ call ESMF_VMGetGlobal(vm, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMGetGlobal", error)
+
+ if (localpet == 0) then
+   print*,'- OPEN TARGET GRID MOSAIC FILE: ',trim(mosaic_file_target_grid)
+   error=nf90_open(trim(mosaic_file_target_grid),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening grid mosaic file')
+   print*,"- READ NUMBER OF TILES"
+   error=nf90_inq_dimid(ncid, 'ntiles', id_tiles)
+   call netcdf_err(error, 'reading ntile id')
+   error=nf90_inquire_dimension(ncid,id_tiles,len=idum1(1))
+   call netcdf_err(error, 'reading ntiles')
+ endif
+
+ call ESMF_VMBroadcast(vm, idum1, 1, 0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", error)
+
+ num_tiles_target_grid = idum1(1)
+
  allocate(tiles_target_grid(num_tiles_target_grid))
  tiles_target_grid="NULL"
- print*,"- READ TILE NAMES"
- error=nf90_get_var(ncid, id_grid_tiles, tiles_target_grid)
- call netcdf_err(error, 'reading gridtiles')
 
- error = nf90_close(ncid)
+ if (localpet == 0) then
+   error=nf90_inq_varid(ncid, 'gridtiles', id_grid_tiles)
+   call netcdf_err(error, 'reading gridtiles id')
+   print*,"- READ TILE NAMES"
+   error=nf90_get_var(ncid, id_grid_tiles, tiles_target_grid)
+   call netcdf_err(error, 'reading gridtiles')
+   error = nf90_close(ncid)
+ endif
+
+ call ESMF_VMBroadcast(vm, tiles_target_grid, num_tiles_target_grid, 0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", error)
 
  print*,'- NUMBER OF TILES, TARGET MODEL GRID IS ', num_tiles_target_grid
 
@@ -956,19 +1107,28 @@
 
  the_file = trim(orog_dir_target_grid) // trim(orog_files_target_grid(1))
 
- print*,'- OPEN FIRST TARGET GRID OROGRAPHY FILE: ',trim(the_file)
- error=nf90_open(trim(the_file),nf90_nowrite,ncid)
- call netcdf_err(error, 'opening orography file')
- print*,"- READ GRID DIMENSIONS"
- error=nf90_inq_dimid(ncid, 'lon', id_dim)
- call netcdf_err(error, 'reading lon id')
- error=nf90_inquire_dimension(ncid,id_dim,len=i_target)
- call netcdf_err(error, 'reading lon')
- error=nf90_inq_dimid(ncid, 'lat', id_dim)
- call netcdf_err(error, 'reading lat id')
- error=nf90_inquire_dimension(ncid,id_dim,len=j_target)
- call netcdf_err(error, 'reading lat')
- error = nf90_close(ncid)
+ if (localpet == 0) then
+   print*,'- OPEN FIRST TARGET GRID OROGRAPHY FILE: ',trim(the_file)
+   error=nf90_open(trim(the_file),nf90_nowrite,ncid)
+   call netcdf_err(error, 'opening orography file')
+   print*,"- READ GRID DIMENSIONS"
+   error=nf90_inq_dimid(ncid, 'lon', id_dim)
+   call netcdf_err(error, 'reading lon id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum2(1))
+   call netcdf_err(error, 'reading lon')
+   error=nf90_inq_dimid(ncid, 'lat', id_dim)
+   call netcdf_err(error, 'reading lat id')
+   error=nf90_inquire_dimension(ncid,id_dim,len=idum2(2))
+   call netcdf_err(error, 'reading lat')
+   error = nf90_close(ncid)
+ endif
+
+ call ESMF_VMBroadcast(vm, idum2, 2, 0, rc=error)
+ if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   call error_handler("IN VMBroadcast", error)
+
+ i_target = idum2(1)
+ j_target = idum2(2)
 
  print*,"- I/J DIMENSIONS OF THE TARGET GRID TILES ", i_target, j_target
 

@@ -2,7 +2,7 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run grid generation consistency tests on Hera.
+# Run grid generation consistency tests on Ursa.
 #
 # Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
 # as appropriate.  To see which projects you are authorized to use,
@@ -30,7 +30,7 @@ module list
 
 set -x
 
-export WORK_DIR="${WORK_DIR:-/scratch2/NCEPDEV/stmp1/$LOGNAME}"
+export WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 QUEUE="${QUEUE:-batch}"
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
@@ -52,10 +52,9 @@ export home_dir=$PWD/../..
 export APRUN=time
 export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
-export HOMEreg=/scratch1/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/grid_gen/baseline_data
+export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/grid_gen
 
 ulimit -a
-#ulimit -s unlimited
 
 rm -fr $WORK_DIR
 
@@ -74,8 +73,8 @@ TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_
 #-----------------------------------------------------------------------------
 
 LOG_FILE2=${LOG_FILE}02
-TEST2=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.bnu \
-      --partition=bigmem -o $LOG_FILE2 -e $LOG_FILE2 ./c96.viirs.bnu.sh)
+TEST2=$(sbatch --parsable --ntasks-per-node=12 --nodes=2 --mem=300g -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.bnu \
+      -o $LOG_FILE2 -e $LOG_FILE2 ./c96.viirs.bnu.sh)
 
 #-----------------------------------------------------------------------------
 # gfdl regional grid

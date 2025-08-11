@@ -53,7 +53,7 @@ contains
     call nf90_err(nf90_close(ncid), 'close: '//trim(fin))
 
     ! create the restart file
-    call nf90_err(nf90_create(trim(fout), nf90_clobber, ncid), 'create: '//trim(fout))
+    call nf90_err(nf90_create(trim(fout), nf90_64bit_offset, ncid), 'create: '//trim(fout))
     call nf90_err(nf90_def_dim(ncid, 'ni', nxr, idimid), 'define dimension: ni')
     call nf90_err(nf90_def_dim(ncid, 'nj', nyr, jdimid), 'define dimension: nj')
     call nf90_err(nf90_def_dim(ncid, 'ncat',  nlevs, kdimid), 'define dimension: ncat')
@@ -139,7 +139,7 @@ contains
          'get variable: Layer '//trim(fin))
     call nf90_err(nf90_close(ncid), 'close: '//trim(fin))
 
-    call nf90_err(nf90_create(trim(fout), nf90_clobber, ncid), 'create: '//trim(fout))
+    call nf90_err(nf90_create(trim(fout), nf90_64bit_offset, ncid), 'create: '//trim(fout))
     call nf90_err(nf90_def_dim(ncid, 'nx', nxr, idimid),                        &
          'define dimension: nx')
     call nf90_err(nf90_def_dim(ncid, 'ny', nyr, jdimid),                        &

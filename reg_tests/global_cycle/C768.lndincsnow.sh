@@ -45,9 +45,18 @@ export DO_SFCCYCLE=".FALSE."
 export VERBOSE=YES
 export CYCLVARS=FSNOL=99999.,FSNOS=99999.,
 
+export PGMOUT='out'
+export PGMERR='err'
+
 $HOMEgfs/ush/global_cycle_driver.sh
 
 iret=$?
+
+cd $DATA
+
+cat $PGMOUT
+cat $PGMERR
+
 if [ $iret -ne 0 ]; then
   set +x
   echo "<<< C768 LANDINC SNOW CYCLE TEST FAILED. >>>"
@@ -56,7 +65,6 @@ fi
 
 test_failed=0
 
-cd $DATA
 for files in *tile*.nc
 do
   if [ -f $files ]; then
