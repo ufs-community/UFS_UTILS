@@ -25,15 +25,7 @@ compiler=${compiler:-"intelllvm"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
-module load grib-util
-module load wgrib2
-module load prod_util
 module list
-
-WGRIB=${GRIB_UTIL_ROOT}/bin/wgrib
-
-export WGRIB
-export WGRIB2
 
 DATA_ROOT="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
