@@ -1,0 +1,45 @@
+#!/bin/bash
+
+##############
+WORK_DIR_URSA=/scratch4/NCEPDEV/stmp/${LOGNAME}
+WORK_DIR_HERCULES=/work2/noaa/stmp/${LOGNAME}
+WORK_DIR_ORION=/work/noaa/stmp/${LOGNAME}
+WORK_DIR_WCOSS2=/lfs/h2/emc/stmp/${LOGNAME}
+WORK_DIR_JET=/lfs5/HFIP/emcda/${LOGNAME}/stmp
+##############
+
+#MAILTO="george.gayno@noaa.gov brian.curtis@noaa.gov"
+MAILTO="brian.curtis@noaa.gov"
+WORK_DIR=${WORK_DIR_URSA:-}
+PROJECT_CODE="nems"
+QUEUE="batch"
+TIMEOUT_LIMIT=7200
+
+### REPO INFO ###
+REPO_TO_RUN="git@github.com:ufs-community/UFS_UTILS.git"
+
+RUN_CHGRES_CUBE="false"
+RUN_CPLD_GRIDGEN="false"
+RUN_GLOBAL_CYCLE="false"
+RUN_GRID_GEN="false"
+RUN_ICE_BLEND="true"
+RUN_OCNICE_PREP="true"
+RUN_REGRID_SFC="false"
+RUN_SNOW2MDL="true"
+RUN_WEIGHT_GEN="false"
+
+RUN_CATALOG=("RUN_CHGRES_CUBE" "RUN_CPLD_GRIDGEN" "RUN_GLOBAL_CYCLE" "RUN_GRID_GEN" "RUN_ICE_BLEND" "RUN_OCNICE_PREP"
+"RUN_REGRID_SFC" "RUN_SNOW2MDL" "RUN_WEIGHT_GEN")
+
+RUN_SET=()
+
+for var_name in "${RUN_CATALOG[@]}"; do
+    # Use indirect expansion to get the value of the variable
+    value="${!var_name}"
+
+    if [[ "$value" == "true" ]]; then
+        RUN_SET+=("$var_name")
+    fi
+done
+
+export MAILTO WORK_DIR PROJECT_CODE QUEUE TIMEOUT_LIMIT RUN_SET REPO_TO_RUN
