@@ -157,10 +157,11 @@ elapsed_time=$((end_time - start_time))
 echo "Total elapsed time: $((elapsed_time / 60)) minutes and $((elapsed_time % 60)) seconds" >> "${WORK_DIR}/reg_test_results.txt"
 echo "Finished on ${MACHINE_ID}" >> "${WORK_DIR}/reg_test_results.txt"
 
+# shellcheck disable=SC2086
 if [[ "$success" == true ]]; then
-    mail -s "UFS_UTILS Consistency Tests PASSED on ${MACHINE_ID}" "${MAILTO}" < "${WORK_DIR}/reg_test_results.txt"
+    mail -s "UFS_UTILS Consistency Tests PASSED on ${MACHINE_ID}" ${MAILTO} < "${WORK_DIR}/reg_test_results.txt"
 else
-    mail -s "UFS_UTILS Consistency Tests FAILED on ${MACHINE_ID}" "${MAILTO}" < "${WORK_DIR}/reg_test_results.txt"
+    mail -s "UFS_UTILS Consistency Tests FAILED on ${MACHINE_ID}" ${MAILTO} < "${WORK_DIR}/reg_test_results.txt"
 fi
 
 # Save current hash as previous hash for next time
