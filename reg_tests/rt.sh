@@ -12,7 +12,7 @@ wait_for_fin() {
     fi
   done
 }
-set -x
+start_time=$SECONDS
 if [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then
   ulimit -a
 else
@@ -152,6 +152,11 @@ for dir in regrid_sfc weight_gen ocnice_prep cpld_gridgen chgres_cube grid_gen g
   fi
 done
 
+end_time=$SECONDS
+elapsed_time=$((end_time - start_time))
+echo "Total elapsed time: $((elapsed_time / 60)) minutes and $((elapsed_time % 60)) seconds" >> "${WORK_DIR}/reg_test_results.txt"
+echo "Finished on ${MACHINE_ID}" >> "${WORK_DIR}/reg_test_results.txt"
+
 if [[ "$success" == true ]]; then
     mail -s "UFS_UTILS Consistency Tests PASSED on ${MACHINE_ID}" "${MAILTO}" < "${WORK_DIR}/reg_test_results.txt"
 else
@@ -160,3 +165,5 @@ fi
 
 # Save current hash as previous hash for next time
 echo "${current_hash}" > "${WORK_DIR}/prev_hash.txt"
+
+
