@@ -12,7 +12,7 @@ wait_for_fin() {
     fi
   done
 }
-
+set -x
 if [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then
   ulimit -a
 else
@@ -83,32 +83,40 @@ cd fix || { echo "Can't change directory into 'fix'.. exiting"; exit; }
 cd ../reg_tests || { echo "Can't change directory into '../reg_tests'.. exiting"; exit; }
 
 set -x
-
+PID_LIST=()
 if [[ " ${RUN_SET[*]} " =~ " RUN_REGRID_SFC " ]]; then
+  echo "Running regrid_sfc tests"
   cd regrid_sfc || { echo "Can't change directory into 'regrid_sfc'.. exiting"; exit; }
-  (trap 'kill 0' SIGINT; ./driver.sh && wait_for_fin) &
+  (./driver.sh && wait_for_fin) &
+  PID_LIST+=($!)
   cd ..
 fi
 export ACCOUNT=$PROJECT_CODE
 export STMP=$WORK_DIR/reg-tests
 
 if [[ " ${RUN_SET[*]} " =~ " RUN_OCNICE_PREP " ]]; then
+  echo "Running ocnice_prep tests"
   cd ocnice_prep || { echo "Can't change directory into 'ocnice_prep'.. exiting"; exit; }
-  (trap 'kill 0' SIGINT; ./rt.sh && wait_for_fin) &
+  (./rt.sh && wait_for_fin) &
+  PID_LIST+=($!)
   cd ..
 fi
 
 if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
+  echo "Running cpld_gridgen tests"
   cd cpld_gridgen || { echo "Can't change directory into 'cpld_gridgen'.. exiting"; exit; }
-  (trap 'kill 0' SIGINT; ./rt.sh && wait_for_fin) &
+  (./rt.sh && wait_for_fin) &
+  PID_LIST+=($!)
   cd ..
 fi
 
 for dir in snow2mdl global_cycle chgres_cube grid_gen; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+    echo "Running ${dir} tests"
     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
     (bash "./driver.${MACHINE_ID}.sh" && wait_for_fin) &
+    PID_LIST+=($!)
     cd ..
   fi
 done
@@ -116,17 +124,20 @@ done
 for dir in weight_gen ice_blend; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+    echo "Running ${dir} tests"
     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
     if [[ ${MACHINE_ID} == "ursa" ]] || [[ ${MACHINE_ID} == "jet" ]] || [[ ${MACHINE_ID} == "orion" ]] || [[ ${MACHINE_ID} == "hercules" ]] ; then
         (sbatch -A "${PROJECT_CODE}" "./driver.${MACHINE_ID}.sh" && wait_for_fin) &
+        PID_LIST+=($!)
     elif [[ ${MACHINE_ID} == "wcoss2" ]] ; then
         (qsub -v WORK_DIR "./driver.${MACHINE_ID}.sh" && wait_for_fin) &
+        PID_LIST+=($!)
     fi
     cd ..
   fi
 done
 echo "SUBMITTED ALL TASKS. Waiting for them to finish.."
-wait 
+wait "${PID_LIST[@]}"
 
 echo "Commit hash: ${current_hash}" >> "${WORK_DIR}/reg_test_results.txt"
 echo "" >> "${WORK_DIR}/reg_test_results.txt"
