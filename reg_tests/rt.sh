@@ -28,12 +28,11 @@ cd "${WORK_DIR}" || { echo "Can't change directory to '${WORK_DIR}'.. exiting"; 
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-#git clone https://github.com/ufs-community/UFS_UTILS.git
 git clone -b "${REPO_BRANCH}" "${REPO_LOC}"
 rc=$?
 
-### Check to see if the clone was successful. Previously, it has
-### failed due to lack of disk space.
+### Check to see if the clone was successful.
+### Previously, it has failed due to lack of disk space.
 
 if [[ $rc == 0 ]] && [[ -d UFS_UTILS ]];then
   echo "Clone Successful"
@@ -74,8 +73,6 @@ if [[ ${MACHINE_ID} == "wcoss2" ]]; then
     fi
 fi
 
-#machine_id=${target}
-
 cd fix || { echo "Can't change directory into 'fix'.. exiting"; exit; }
 
 ./link_fixdirs.sh emc "${MACHINE_ID}"
@@ -87,7 +84,7 @@ PID_LIST=()
 if [[ " ${RUN_SET[*]} " =~ " RUN_REGRID_SFC " ]]; then
   echo "Running regrid_sfc tests"
   cd regrid_sfc || { echo "Can't change directory into 'regrid_sfc'.. exiting"; exit; }
-  (./driver.sh && wait_for_fin) &
+  (./driver.sh && wait_for_fin > regrid_sfc_rt.out 2>&1) &
   PID_LIST+=($!)
   cd ..
 fi
@@ -97,7 +94,7 @@ export STMP=$WORK_DIR/reg-tests
 if [[ " ${RUN_SET[*]} " =~ " RUN_OCNICE_PREP " ]]; then
   echo "Running ocnice_prep tests"
   cd ocnice_prep || { echo "Can't change directory into 'ocnice_prep'.. exiting"; exit; }
-  (./rt.sh && wait_for_fin) &
+  (./rt.sh && wait_for_fin > ocnice_prep_rt.out 2>&1) &
   PID_LIST+=($!)
   cd ..
 fi
@@ -105,7 +102,7 @@ fi
 if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
   echo "Running cpld_gridgen tests"
   cd cpld_gridgen || { echo "Can't change directory into 'cpld_gridgen'.. exiting"; exit; }
-  (./rt.sh && wait_for_fin) &
+  (./rt.sh && wait_for_fin > cpld_gridgen_rt.out 2>&1) &
   PID_LIST+=($!)
   cd ..
 fi
@@ -115,7 +112,7 @@ for dir in snow2mdl global_cycle chgres_cube grid_gen; do
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"
     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-    (bash "./driver.${MACHINE_ID}.sh" && wait_for_fin) &
+    (bash "./driver.${MACHINE_ID}.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
     PID_LIST+=($!)
     cd ..
   fi
@@ -127,10 +124,10 @@ for dir in weight_gen ice_blend; do
     echo "Running ${dir} tests"
     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
     if [[ ${MACHINE_ID} == "ursa" ]] || [[ ${MACHINE_ID} == "jet" ]] || [[ ${MACHINE_ID} == "orion" ]] || [[ ${MACHINE_ID} == "hercules" ]] ; then
-        (sbatch -A "${PROJECT_CODE}" "./driver.${MACHINE_ID}.sh" && wait_for_fin) &
+        (sbatch -A "${PROJECT_CODE}" "./driver.${MACHINE_ID}.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
         PID_LIST+=($!)
     elif [[ ${MACHINE_ID} == "wcoss2" ]] ; then
-        (qsub -v WORK_DIR "./driver.${MACHINE_ID}.sh" && wait_for_fin) &
+        (qsub -v WORK_DIR "./driver.${MACHINE_ID}.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
         PID_LIST+=($!)
     fi
     cd ..

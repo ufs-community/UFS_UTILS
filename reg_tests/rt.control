@@ -2,15 +2,15 @@
 
 RTID=$$
 
-##### WORK DIRS#########
-WORK_DIR_URSA="/scratch4/NCEPDEV/stmp/${LOGNAME}/ufsurt_${RTID}"
-WORK_DIR_HERCULES="/work2/noaa/stmp/${LOGNAME}/ufsurt_${RTID}"
-WORK_DIR_ORION="/work/noaa/stmp/${LOGNAME}/ufsurt_${RTID}"
-WORK_DIR_WCOSS2="/lfs/h2/emc/stmp/${LOGNAME}/ufsurt_${RTID}"
-WORK_DIR_JET="/lfs5/HFIP/emcda/${LOGNAME}/stmp/ufsurt_${RTID}"
+##### WORK DIRS #########
+WORK_DIR_URSA="/scratch4/NCEPDEV/stmp/${LOGNAME}/ufs_utils"
+WORK_DIR_HERCULES="/work2/noaa/stmp/${LOGNAME}/ufs_utils"
+WORK_DIR_ORION="/work/noaa/stmp/${LOGNAME}/ufs_utils"
+WORK_DIR_WCOSS2="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
+WORK_DIR_JET="/lfs5/HFIP/emcda/${LOGNAME}/stmp/ufs_utils"
 ##############
 
-##### PROJECT CODES#########
+##### PROJECT CODES #########
 PROJECT_CODE_URSA="nems"
 PROJECT_CODE_HERCULES="nems"
 PROJECT_CODE_ORION="nems"
@@ -18,24 +18,7 @@ PROJECT_CODE_WCOSS2="GFS-DEV"
 PROJECT_CODE_JET="nggps_emc"
 ##############
 
-#MAILTO="george.gayno@noaa.gov brian.curtis@noaa.gov"
-MAILTO="brian.curtis@noaa.gov"
-source detect_machine.sh
-
-### SYSTEM INFO ###
-WHICH_WORK_DIR=WORK_DIR_$(eval 'echo ${MACHINE_ID^^}')
-WORK_DIR=${!WHICH_WORK_DIR:-}
-
-WHICH_PROJECT_CODE=PROJECT_CODE_$(eval 'echo ${MACHINE_ID^^}')
-PROJECT_CODE=${!WHICH_PROJECT_CODE:-}
-
-QUEUE="batch"
-TIMEOUT_LIMIT=7200
-
-### REPO INFO ###
-REPO_BRANCH="develop"
-REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
-
+##### TOGGLE JOBS #########
 RUN_CHGRES_CUBE="false"
 RUN_CPLD_GRIDGEN="true"
 RUN_GLOBAL_CYCLE="false"
@@ -45,10 +28,37 @@ RUN_OCNICE_PREP="true"
 RUN_REGRID_SFC="true"
 RUN_SNOW2MDL="false"
 RUN_WEIGHT_GEN="false"
+##############
 
+# Where to send mail when job is completed?
+# Please use quotes and put a space between multiple email addresses.
+#MAILTO="george.gayno@noaa.gov brian.curtis@noaa.gov"
+MAILTO="brian.curtis@noaa.gov"
+
+### SYSTEM INFO ###
+#Detect the machine we're on
+source detect_machine.sh
+
+WHICH_WORK_DIR=WORK_DIR_$(eval 'echo ${MACHINE_ID^^}')
+WORK_DIR=${!WHICH_WORK_DIR:-}
+
+WHICH_PROJECT_CODE=PROJECT_CODE_$(eval 'echo ${MACHINE_ID^^}')
+PROJECT_CODE=${!WHICH_PROJECT_CODE:-}
+
+QUEUE="batch"
+TIMEOUT_LIMIT=7200
+######
+
+### REPO INFO ###
+REPO_BRANCH="develop"
+REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+######
+
+# If there are any test changes, this will need to be updated
 RUN_CATALOG=("RUN_CHGRES_CUBE" "RUN_CPLD_GRIDGEN" "RUN_GLOBAL_CYCLE" "RUN_GRID_GEN" "RUN_ICE_BLEND" "RUN_OCNICE_PREP"
 "RUN_REGRID_SFC" "RUN_SNOW2MDL" "RUN_WEIGHT_GEN")
 
+# Shouldn't need to edit below here #
 RUN_SET=()
 
 for var_name in "${RUN_CATALOG[@]}"; do
@@ -57,7 +67,5 @@ for var_name in "${RUN_CATALOG[@]}"; do
         RUN_SET+=("$var_name")
     fi
 done
-
-echo "RUN_SET: ${RUN_SET[*]}"
 
 export MAILTO WORK_DIR PROJECT_CODE QUEUE TIMEOUT_LIMIT RUN_SET REPO_BRANCH REPO_LOC RTID MACHINE_ID
