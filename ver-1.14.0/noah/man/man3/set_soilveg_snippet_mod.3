@@ -1,0 +1,84 @@
+.TH "set_soilveg_snippet_mod" 3 "Version 1.14.0" "noah" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+set_soilveg_snippet_mod \- Below was extracted from namelist_soilveg\&.f and set_soilveg\&.f (couldn't get above to compile for doxygen)  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBset_soilveg_noah\fP (isot, ivet, maxsmc, bb, satpsi, iret)"
+.br
+.RI "This subroutine initializes soil and vegetation parameters needed in global_cycle/land_increment\&.f90\&. "
+.ti -1c
+.RI "subroutine, public \fBset_soilveg_noahmp\fP (isot, ivet, maxsmc, bb, satpsi, iret)"
+.br
+.RI "This subroutine initializes soil and vegetation parameters needed in global_cycle/land_increment\&.f90 for noah-mp\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Below was extracted from namelist_soilveg\&.f and set_soilveg\&.f (couldn't get above to compile for doxygen) 
+
+Add Noah-MP LSM soil and veg params needed for global_cycle Noah-MP related parameters were extracted from noahmp_table\&.f isot (soil type) = 1: STATSGO must be selected if NoahMP is used ivet (vegetation type) = 1: IBGP is used by UFS offline Land DA for Noah-MP as of 07/13/2023 
+.PP
+\fBAuthor\fP
+.RS 4
+Yuan Xue 
+.RE
+.PP
+
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine, public set_soilveg_snippet_mod::set_soilveg_noah (integer, intent(in) isot, integer, intent(in) ivet, real, dimension(30), intent(out) maxsmc, real, dimension(30), intent(out) bb, real, dimension(30), intent(out) satpsi, integer, intent(out) iret)"
+
+.PP
+This subroutine initializes soil and vegetation parameters needed in global_cycle/land_increment\&.f90\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIisot\fP Soil type 
+.br
+\fIivet\fP Vegetation type 
+.br
+\fImaxsmc\fP Maximum soil moisture for each soil type 
+.br
+\fIbb\fP B exponent for each soil type 
+.br
+\fIsatpsi\fP Saturated matric potential for each soil type 
+.br
+\fIiret\fP Return integer 
+.RE
+.PP
+
+.PP
+Definition at line \fB34\fP of file \fBset_soilveg_snippet\&.f90\fP\&.
+.SS "subroutine, public set_soilveg_snippet_mod::set_soilveg_noahmp (integer, intent(in) isot, integer, intent(in) ivet, real, dimension(30), intent(out) maxsmc, real, dimension(30), intent(out) bb, real, dimension(30), intent(out) satpsi, integer, intent(out) iret)"
+
+.PP
+This subroutine initializes soil and vegetation parameters needed in global_cycle/land_increment\&.f90 for noah-mp\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIisot\fP Soil type 
+.br
+\fIivet\fP Vegetation type 
+.br
+\fImaxsmc\fP Maximum soil moisture for each soil type 
+.br
+\fIbb\fP B exponent for each soil type 
+.br
+\fIsatpsi\fP Saturated matric potential for each soil type 
+.br
+\fIiret\fP Return integer 
+.RE
+.PP
+
+.PP
+Definition at line \fB106\fP of file \fBset_soilveg_snippet\&.f90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for noah from the source code\&.

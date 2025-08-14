@@ -1,0 +1,887 @@
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/regional_esg_grid.fd/pietc.f90" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/regional_esg_grid.fd/pietc.f90 \- Double-precision constants\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBpietc\fP"
+.br
+.RI "Some of the commonly used constants (pi etc) mainly for double-precision subroutines\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::c0\fP =(\fBu0\fP, \fBu0\fP)"
+.br
+.RI "complex zero "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::c1\fP =(\fBu1\fP, \fBu0\fP)"
+.br
+.RI "complex one "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::ci\fP =(\fBu0\fP, \fBu1\fP)"
+.br
+.RI "complex i=sqrt(-1) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::cipi\fP =\fBci\fP*\fBpi\fP"
+.br
+.RI "complex i*pi "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::dtor\fP =\fBpi\fP/180"
+.br
+.RI "Degrees to radians\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::euler\fP =0\&.57721566490153286060651209008240243104215933593992359880e0_dp"
+.br
+.RI "Euler-Mascheroni constant\&. "
+.ti -1c
+.RI "logical, parameter \fBpietc::f\fP =\&.false\&."
+.br
+.RI "for pain-relief in logical ops "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::mc1\fP =\-\fBc1\fP"
+.br
+.RI "complex minus-one "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::mci\fP =\-\fBci\fP"
+.br
+.RI "complex minus-i "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mo2\fP =\-\fBo2\fP"
+.br
+.RI "minus-half "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mo3\fP =\-\fBo3\fP"
+.br
+.RI "minus-third "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mo4\fP =\-\fBo4\fP"
+.br
+.RI "minus-fourth "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mo5\fP =\-\fBo5\fP"
+.br
+.RI "minus-fifth "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mo6\fP =\-\fBo6\fP"
+.br
+.RI "minus-sixth "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms10\fP =\-\fBs10\fP"
+.br
+.RI "minus-sine(10 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms11\fP =\-\fBs11\fP"
+.br
+.RI "minus-sine(90/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms13\fP =\-\fBs13\fP"
+.br
+.RI "minus-sine(90/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms15\fP =\-\fBs15\fP"
+.br
+.RI "minus-sine(15 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms18\fP =\-\fBs18\fP"
+.br
+.RI "minus-sine(18 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms20\fP =\-\fBs20\fP"
+.br
+.RI "minus-sine(20 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms22\fP =\-\fBs22\fP"
+.br
+.RI "minus-sine(22\&.5 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms26\fP =\-\fBs26\fP"
+.br
+.RI "minus-sine(90*2/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms30\fP =\-\fBs30\fP"
+.br
+.RI "minus-sine(30 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms34\fP =\-\fBs34\fP"
+.br
+.RI "minus-sine(90*3/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms36\fP =\-\fBs36\fP"
+.br
+.RI "minus-sine(36 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms39\fP =\-\fBs39\fP"
+.br
+.RI "minus-sine(90*3/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms40\fP =\-\fBs40\fP"
+.br
+.RI "minus-sine(40 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms45\fP =\-\fBs45\fP"
+.br
+.RI "minus-sine(45 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms50\fP =\-\fBs50\fP"
+.br
+.RI "minus-sine(50 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms51\fP =\-\fBs51\fP"
+.br
+.RI "minus-sine(90*4/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms54\fP =\-\fBs54\fP"
+.br
+.RI "minus-sine(54 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms56\fP =\-\fBs56\fP"
+.br
+.RI "minus-sine(90*5/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms60\fP =\-\fBs60\fP"
+.br
+.RI "minus-sine(60 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms64\fP =\-\fBs64\fP"
+.br
+.RI "minus-sine(90*5/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms68\fP =\-\fBs68\fP"
+.br
+.RI "minus-sine(67\&.5 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms70\fP =\-\fBs70\fP"
+.br
+.RI "minus-sine(70 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms72\fP =\-\fBs72\fP"
+.br
+.RI "minus-sine(72 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms75\fP =\-\fBs75\fP"
+.br
+.RI "minus-sine(75 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms77\fP =\-\fBs77\fP"
+.br
+.RI "minus-sine(90*6/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms79\fP =\-\fBs79\fP"
+.br
+.RI "minus-sine(90*7/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::ms80\fP =\-\fBs80\fP"
+.br
+.RI "minus-sine(80 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mu1\fP =\-\fBu1\fP"
+.br
+.RI "minus-one "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mu2\fP =\-\fBu2\fP"
+.br
+.RI "minus-two "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mu3\fP =\-\fBu3\fP"
+.br
+.RI "minus-three "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mu4\fP =\-\fBu4\fP"
+.br
+.RI "minus-four "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mu5\fP =\-\fBu5\fP"
+.br
+.RI "minus-five "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::mu6\fP =\-\fBu6\fP"
+.br
+.RI "minus-six "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::o2\fP =\fBu1\fP/\fBu2\fP"
+.br
+.RI "half "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::o3\fP =\fBu1\fP/\fBu3\fP"
+.br
+.RI "third "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::o4\fP =\fBu1\fP/\fBu4\fP"
+.br
+.RI "fourth "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::o5\fP =\fBu1\fP/\fBu5\fP"
+.br
+.RI "fifth "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::o6\fP =\fBu1\fP/\fBu6\fP"
+.br
+.RI "sixth "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::or2\fP =\fBu1\fP/\fBr2\fP"
+.br
+.RI "1\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::or3\fP =\fBu1\fP/\fBr3\fP"
+.br
+.RI "1\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::or5\fP =\fBu1\fP/\fBr5\fP"
+.br
+.RI "1\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::phi\fP =1\&.6180339887498948482045868343656381177203091798057628621354e0_dp"
+.br
+.RI "Golden number\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::pi\fP =3\&.1415926535897932384626433832795028841971693993751058209749e0_dp"
+.br
+.RI "Pi\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::pi2\fP =6\&.2831853071795864769252867665590057683943387987502116419498e0_dp"
+.br
+.RI "Pi*2\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::pih\fP =1\&.5707963267948966192313216916397514420985846996875529104874e0_dp"
+.br
+.RI "pi*half "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::r2\fP =1\&.4142135623730950488016887242096980785696718753769480731766e0_dp"
+.br
+.RI "Square root of 2\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::r3\fP =1\&.7320508075688772935274463415058723669428052538103806280558e0_dp"
+.br
+.RI "Square root of 3\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::r5\fP =2\&.2360679774997896964091736687312762354406183596115257242708e0_dp"
+.br
+.RI "Square root of 5\&. "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::rpi\fP =1\&.7724538509055160272981674833411451827975494561223871282138e0_dp"
+.br
+.RI "square root of pi "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::rtod\fP =180/\fBpi\fP"
+.br
+.RI "radians to degrees "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s10\fP =\&.173648177666930348851716626769314796000375677184069387236241e0_dp"
+.br
+.RI "sine(10 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s11\fP =\&.195090322016128267848284868477022240927691617751954807754502e0_dp"
+.br
+.RI "sine(90/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s13\fP =\&.222520933956314404288902564496794759466355568764544955311987e0_dp"
+.br
+.RI "sine(90/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s15\fP =\&.258819045102520762348898837624048328349068901319930513814003e0_dp"
+.br
+.RI "sine(15 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s18\fP =\&.309016994374947424102293417182819058860154589902881431067724e0_dp"
+.br
+.RI "sine(18 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s20\fP =\&.342020143325668733044099614682259580763083367514160628465048e0_dp"
+.br
+.RI "sine(20 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s22\fP =\&.382683432365089771728459984030398866761344562485627041433800e0_dp"
+.br
+.RI "sine(22\&.5 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s26\fP =\&.433883739117558120475768332848358754609990727787459876444547e0_dp"
+.br
+.RI "sine(90*2/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s30\fP =\fBo2\fP"
+.br
+.RI "sine(30 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s34\fP =\&.555570233019602224742830813948532874374937190754804045924153e0_dp"
+.br
+.RI "sine(90*3/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s36\fP =\&.587785252292473129168705954639072768597652437643145991072272e0_dp"
+.br
+.RI "sine(36 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s39\fP =\&.623489801858733530525004884004239810632274730896402105365549e0_dp"
+.br
+.RI "sine(90*3/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s40\fP =\&.642787609686539326322643409907263432907559884205681790324977e0_dp"
+.br
+.RI "sine(40 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s45\fP =\fBor2\fP"
+.br
+.RI "sine(45 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s50\fP =\&.766044443118978035202392650555416673935832457080395245854045e0_dp"
+.br
+.RI "sine(50 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s51\fP =\&.781831482468029808708444526674057750232334518708687528980634e0_dp"
+.br
+.RI "sine(90*4/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s54\fP =\&.809016994374947424102293417182819058860154589902881431067724e0_dp"
+.br
+.RI "sine(54 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s56\fP =\&.831469612302545237078788377617905756738560811987249963446124e0_dp"
+.br
+.RI "sine(90*5/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s60\fP =\fBr3\fP*\fBo2\fP"
+.br
+.RI "sine(60 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s64\fP =\&.900968867902419126236102319507445051165919162131857150053562e0_dp"
+.br
+.RI "sine(90*5/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s68\fP =\&.923879532511286756128183189396788286822416625863642486115097e0_dp"
+.br
+.RI "sine(67\&.5 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s70\fP =\&.939692620785908384054109277324731469936208134264464633090286e0_dp"
+.br
+.RI "sine(70 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s72\fP =\&.951056516295153572116439333379382143405698634125750222447305e0_dp"
+.br
+.RI "sine(72 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s75\fP =\&.965925826289068286749743199728897367633904839008404550402343e0_dp"
+.br
+.RI "sine(75 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s77\fP =\&.974927912181823607018131682993931217232785800619997437648079e0_dp"
+.br
+.RI "sine(90*6/7 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s79\fP =\&.980785280403230449126182236134239036973933730893336095002916e0_dp"
+.br
+.RI "sine(90*7/8 deg) "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::s80\fP =\&.984807753012208059366743024589523013670643251719842418790025e0_dp"
+.br
+.RI "sine(80 deg) "
+.ti -1c
+.RI "logical, parameter \fBpietc::t\fP =\&.true\&."
+.br
+.RI "for pain-relief in logical ops "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::u0\fP =0_dp"
+.br
+.RI "zero "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::u1\fP =1_dp"
+.br
+.RI "one "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::u2\fP =2_dp"
+.br
+.RI "two "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::u3\fP =3_dp"
+.br
+.RI "three "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::u4\fP =4_dp"
+.br
+.RI "four "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::u5\fP =5_dp"
+.br
+.RI "five "
+.ti -1c
+.RI "real(dp), parameter \fBpietc::u6\fP =6_dp"
+.br
+.RI "six "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z000\fP =\fBc1\fP"
+.br
+.RI "exp(2*pi*i*0) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z010\fP =( \fBs80\fP, \fBs10\fP)"
+.br
+.RI "exp(2*pi*i/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z011\fP =( \fBs79\fP, \fBs11\fP)"
+.br
+.RI "exp(2*pi*i/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z013\fP =( \fBs77\fP, \fBs13\fP)"
+.br
+.RI "exp(2*pi*i/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z015\fP =( \fBs75\fP, \fBs15\fP)"
+.br
+.RI "exp(2*pi*i/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z018\fP =( \fBs72\fP, \fBs18\fP)"
+.br
+.RI "exp(2*pi*i/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z020\fP =( \fBs70\fP, \fBs20\fP)"
+.br
+.RI "exp(2*pi*i/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z022\fP =( \fBs68\fP, \fBs22\fP)"
+.br
+.RI "exp(2*pi*i/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z026\fP =( \fBs64\fP, \fBs26\fP)"
+.br
+.RI "exp(2*pi*i/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z030\fP =( \fBs60\fP, \fBs30\fP)"
+.br
+.RI "exp(2*pi*i/12) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z034\fP =( \fBs56\fP, \fBs34\fP)"
+.br
+.RI "exp(2*pi*i*3/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z036\fP =( \fBs54\fP, \fBs36\fP)"
+.br
+.RI "exp(2*pi*i/10) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z039\fP =( \fBs51\fP, \fBs39\fP)"
+.br
+.RI "exp(2*pi*i*3/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z040\fP =( \fBs50\fP, \fBs40\fP)"
+.br
+.RI "exp(2*pi*i/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z045\fP =( \fBs45\fP, \fBs45\fP)"
+.br
+.RI "exp(2*pi*i/8) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z050\fP =( \fBs40\fP, \fBs50\fP)"
+.br
+.RI "exp(2*pi*i*5/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z051\fP =( \fBs39\fP, \fBs51\fP)"
+.br
+.RI "exp(2*pi*i/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z054\fP =( \fBs36\fP, \fBs54\fP)"
+.br
+.RI "exp(2*pi*i*3/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z056\fP =( \fBs34\fP, \fBs56\fP)"
+.br
+.RI "exp(2*pi*i*5/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z060\fP =( \fBs30\fP, \fBs60\fP)"
+.br
+.RI "exp(2*pi*i/6) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z064\fP =( \fBs26\fP, \fBs64\fP)"
+.br
+.RI "exp(2*pi*i*5/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z068\fP =( \fBs22\fP, \fBs68\fP)"
+.br
+.RI "exp(2*pi*i*3/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z070\fP =( \fBs20\fP, \fBs70\fP)"
+.br
+.RI "exp(2*pi*i*7/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z072\fP =( \fBs18\fP, \fBs72\fP)"
+.br
+.RI "exp(2*pi*i/5) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z075\fP =( \fBs15\fP, \fBs75\fP)"
+.br
+.RI "exp(2*pi*i*5/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z077\fP =( \fBs13\fP, \fBs77\fP)"
+.br
+.RI "exp(2*pi*i*3/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z079\fP =( \fBs11\fP, \fBs79\fP)"
+.br
+.RI "exp(2*pi*i*7/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z080\fP =( \fBs10\fP, \fBs80\fP)"
+.br
+.RI "exp(2*pi*i*2/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z090\fP =\fBci\fP"
+.br
+.RI "exp(2*pi*i/4) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z100\fP =(\fBms10\fP, \fBs80\fP)"
+.br
+.RI "exp(2*pi*i*5/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z101\fP =(\fBms11\fP, \fBs79\fP)"
+.br
+.RI "exp(2*pi*i*9/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z103\fP =(\fBms13\fP, \fBs77\fP)"
+.br
+.RI "exp(2*pi*i*2/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z105\fP =(\fBms15\fP, \fBs75\fP)"
+.br
+.RI "exp(2*pi*i*7/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z108\fP =(\fBms18\fP, \fBs72\fP)"
+.br
+.RI "exp(2*pi*i*3/10) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z110\fP =(\fBms20\fP, \fBs70\fP)"
+.br
+.RI "exp(2*pi*i*11/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z112\fP =(\fBms22\fP, \fBs68\fP)"
+.br
+.RI "exp(2*pi*i*5/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z116\fP =(\fBms26\fP, \fBs64\fP)"
+.br
+.RI "exp(2*pi*i*9/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z120\fP =(\fBms30\fP, \fBs60\fP)"
+.br
+.RI "exp(2*pi*i/3) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z124\fP =(\fBms34\fP, \fBs56\fP)"
+.br
+.RI "exp(2*pi*i*11/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z126\fP =(\fBms36\fP, \fBs54\fP)"
+.br
+.RI "exp(2*pi*i*7/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z129\fP =(\fBms39\fP, \fBs51\fP)"
+.br
+.RI "exp(2*pi*i*5/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z130\fP =(\fBms40\fP, \fBs50\fP)"
+.br
+.RI "exp(2*pi*i*13/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z135\fP =(\fBms45\fP, \fBs45\fP)"
+.br
+.RI "exp(2*pi*i*3/8) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z140\fP =(\fBms50\fP, \fBs40\fP)"
+.br
+.RI "exp(2*pi*i*7/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z141\fP =(\fBms51\fP, \fBs39\fP)"
+.br
+.RI "exp(2*pi*i*11/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z144\fP =(\fBms54\fP, \fBs36\fP)"
+.br
+.RI "exp(2*pi*i*2/5) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z146\fP =(\fBms56\fP, \fBs34\fP)"
+.br
+.RI "exp(2*pi*i*13/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z150\fP =(\fBms60\fP, \fBs30\fP)"
+.br
+.RI "exp(2*pi*i*5/12) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z154\fP =(\fBms64\fP, \fBs26\fP)"
+.br
+.RI "exp(2*pi*i*3/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z158\fP =(\fBms68\fP, \fBs22\fP)"
+.br
+.RI "exp(2*pi*i*7/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z160\fP =(\fBms70\fP, \fBs20\fP)"
+.br
+.RI "exp(2*pi*i*4/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z162\fP =(\fBms72\fP, \fBs18\fP)"
+.br
+.RI "exp(2*pi*i*9/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z165\fP =(\fBms75\fP, \fBs15\fP)"
+.br
+.RI "exp(2*pi*i*11/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z167\fP =(\fBms77\fP, \fBs13\fP)"
+.br
+.RI "exp(2*pi*i*13/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z169\fP =(\fBms79\fP, \fBs11\fP)"
+.br
+.RI "exp(2*pi*i*15/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z170\fP =(\fBms80\fP, \fBs10\fP)"
+.br
+.RI "exp(2*pi*i*17/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z180\fP =\-\fBz000\fP"
+.br
+.RI "exp(2*pi*i/2) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z190\fP =\-\fBz010\fP"
+.br
+.RI "exp(2*pi*i*19/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z191\fP =\-\fBz011\fP"
+.br
+.RI "exp(2*pi*i*17/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z193\fP =\-\fBz013\fP"
+.br
+.RI "exp(2*pi*i*15/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z195\fP =\-\fBz015\fP"
+.br
+.RI "exp(2*pi*i*13/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z198\fP =\-\fBz018\fP"
+.br
+.RI "exp(2*pi*i*11/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z200\fP =\-\fBz020\fP"
+.br
+.RI "exp(2*pi*i*5/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z202\fP =\-\fBz022\fP"
+.br
+.RI "exp(2*pi*i*9/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z206\fP =\-\fBz026\fP"
+.br
+.RI "exp(2*pi*i*4/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z210\fP =\-\fBz030\fP"
+.br
+.RI "exp(2*pi*i*7/12) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z214\fP =\-\fBz034\fP"
+.br
+.RI "exp(2*pi*i*19/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z216\fP =\-\fBz036\fP"
+.br
+.RI "exp(2*pi*i*3/5) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z219\fP =\-\fBz039\fP"
+.br
+.RI "exp(2*pi*i*17/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z220\fP =\-\fBz040\fP"
+.br
+.RI "exp(2*pi*i*11/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z225\fP =\-\fBz045\fP"
+.br
+.RI "exp(2*pi*i*5/8) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z230\fP =\-\fBz050\fP"
+.br
+.RI "exp(2*pi*i*23/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z231\fP =\-\fBz051\fP"
+.br
+.RI "exp(2*pi*i*9/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z234\fP =\-\fBz054\fP"
+.br
+.RI "exp(2*pi*i*13/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z236\fP =\-\fBz056\fP"
+.br
+.RI "exp(2*pi*i*21/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z240\fP =\-\fBz060\fP"
+.br
+.RI "exp(2*pi*i*2/3) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z244\fP =\-\fBz064\fP"
+.br
+.RI "exp(2*pi*i*19/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z248\fP =\-\fBz068\fP"
+.br
+.RI "exp(2*pi*i*11/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z250\fP =\-\fBz070\fP"
+.br
+.RI "exp(2*pi*i*25/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z252\fP =\-\fBz072\fP"
+.br
+.RI "exp(2*pi*i*7/10) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z255\fP =\-\fBz075\fP"
+.br
+.RI "exp(2*pi*i*17/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z257\fP =\-\fBz077\fP"
+.br
+.RI "exp(2*pi*i*5/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z259\fP =\-\fBz079\fP"
+.br
+.RI "exp(2*pi*i*23/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z260\fP =\-\fBz080\fP"
+.br
+.RI "exp(2*pi*i*13/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z270\fP =\-\fBz090\fP"
+.br
+.RI "exp(2*pi*i*3/4) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z280\fP =\-\fBz100\fP"
+.br
+.RI "exp(2*pi*i*7/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z281\fP =\-\fBz101\fP"
+.br
+.RI "exp(2*pi*i*25/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z283\fP =\-\fBz103\fP"
+.br
+.RI "exp(2*pi*i*11/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z285\fP =\-\fBz105\fP"
+.br
+.RI "exp(2*pi*i*19/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z288\fP =\-\fBz108\fP"
+.br
+.RI "exp(2*pi*i*4/5) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z290\fP =\-\fBz110\fP"
+.br
+.RI "exp(2*pi*i*29/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z292\fP =\-\fBz112\fP"
+.br
+.RI "exp(2*pi*i*13/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z296\fP =\-\fBz116\fP"
+.br
+.RI "exp(2*pi*i*23/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z300\fP =\-\fBz120\fP"
+.br
+.RI "exp(2*pi*i*5/6) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z304\fP =\-\fBz124\fP"
+.br
+.RI "exp(2*pi*i*27/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z306\fP =\-\fBz126\fP"
+.br
+.RI "exp(2*pi*i*17/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z309\fP =\-\fBz129\fP"
+.br
+.RI "exp(2*pi*i*6/7) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z310\fP =\-\fBz130\fP"
+.br
+.RI "exp(2*pi*i*31/36) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z315\fP =\-\fBz135\fP"
+.br
+.RI "exp(2*pi*i*7/8) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z320\fP =\-\fBz140\fP"
+.br
+.RI "exp(2*pi*i*8/9) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z321\fP =\-\fBz141\fP"
+.br
+.RI "exp(2*pi*i*25/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z324\fP =\-\fBz144\fP"
+.br
+.RI "exp(2*pi*i*9/10) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z326\fP =\-\fBz146\fP"
+.br
+.RI "exp(2*pi*i*29/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z330\fP =\-\fBz150\fP"
+.br
+.RI "exp(2*pi*i*11/12) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z334\fP =\-\fBz154\fP"
+.br
+.RI "exp(2*pi*i*13/14) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z338\fP =\-\fBz158\fP"
+.br
+.RI "exp(2*pi*i*15/16) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z340\fP =\-\fBz160\fP"
+.br
+.RI "exp(2*pi*i*17/18) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z342\fP =\-\fBz162\fP"
+.br
+.RI "exp(2*pi*i*19/20) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z345\fP =\-\fBz165\fP"
+.br
+.RI "exp(2*pi*i*23/24) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z347\fP =\-\fBz167\fP"
+.br
+.RI "exp(2*pi*i*27/28) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z349\fP =\-\fBz169\fP"
+.br
+.RI "exp(2*pi*i*31/32) "
+.ti -1c
+.RI "complex(dpc), parameter \fBpietc::z350\fP =\-\fBz170\fP"
+.br
+.RI "exp(2*pi*i*35/36) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Double-precision constants\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2014 
+.RE
+.PP
+
+.PP
+Definition in file \fBpietc\&.f90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

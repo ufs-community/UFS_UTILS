@@ -1,0 +1,123 @@
+.TH "pmat::l1lm" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat::l1lm
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBdl1lm\fP (a, b)"
+.br
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBdl1lmf\fP (a, b, ff)"
+.br
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBsl1lm\fP (a, b)"
+.br
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
+.ti -1c
+.RI "subroutine \fBsl1lmf\fP (a, b, ff)"
+.br
+.RI "Cholesky, M -> L*U, U(i,j)=L(j,i) "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB37\fP of file \fBpmat\&.f90\fP\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat::l1lm::dl1lm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b)"
+
+.PP
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP symmetric matrix\&. 
+.br
+\fIb\fP Cholesky factor matrix\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line \fB933\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::l1lm::dl1lmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)"
+
+.PP
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP symmetric matrix\&. 
+.br
+\fIb\fP Cholesky factor matrix\&. 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line \fB981\fP of file \fBpmat\&.f90\fP\&.
+.PP
+References \fBpietc::f\fP, \fBpietc::u0\fP, and \fBpietc::u1\fP\&.
+.SS "subroutine pmat::l1lm::sl1lm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b)"
+
+.PP
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP symmetric matrix\&. 
+.br
+\fIb\fP Cholesky factor matrix\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line \fB920\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::l1lm::sl1lmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)"
+
+.PP
+Cholesky, M -> L*U, U(i,j)=L(j,i) 
+.PP
+\fBParameters\fP
+.RS 4
+\fIa\fP symmetric matrix\&. 
+.br
+\fIb\fP Cholesky factor matrix\&. 
+.br
+\fIff\fP failure flag 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line \fB947\fP of file \fBpmat\&.f90\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.

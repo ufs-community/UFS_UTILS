@@ -1,0 +1,62 @@
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/ocean_merge.fd/merge_lake_ocnmsk.F90" 3 "Version 1.14.0" "ocean_merge" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/ocean_merge.fd/merge_lake_ocnmsk.F90 \- Determines the water mask by merging the lake mask with the mapped ocean mask from MOM6\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "program \fBmerge_lake_ocnmsk\fP"
+.br
+.RI "Determine the water mask by merging the lake mask with the mapped ocean mask from MOM6, both are on the FV3 grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Determines the water mask by merging the lake mask with the mapped ocean mask from MOM6\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Shan Sun 
+.PP
+Rahul Mahajan 
+.PP
+Sanath Kumar 
+.RE
+.PP
+
+.PP
+Definition in file \fBmerge_lake_ocnmsk\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "program merge_lake_ocnmsk"
+
+.PP
+Determine the water mask by merging the lake mask with the mapped ocean mask from MOM6, both are on the FV3 grid\&. During merge, the ocean mask dominates the lake mask if there is a conflict\&. After the merge, the remaining non-water fraction is the land fraction\&.
+.PP
+\fBReturns\fP
+.RS 4
+0 for success, error code otherwise\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+Shan Sun 
+.PP
+Rahul Mahajan 
+.PP
+Sanath Kumar 
+.RE
+.PP
+
+.PP
+Definition at line \fB17\fP of file \fBmerge_lake_ocnmsk\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ocean_merge from the source code\&.

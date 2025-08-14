@@ -1,0 +1,70 @@
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/sfc_climo_gen.fd/interp_frac_cats.F90" 3 "Version 1.14.0" "sfc_climo_gen" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/sfc_climo_gen.fd/interp_frac_cats.F90 \- Read the input cateogorical source data and interpolate percent of each category to the model grid\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBinterp_frac_cats\fP (localpet, input_file)"
+.br
+.RI "Read the input source data and interpolate it to the model grid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read the input cateogorical source data and interpolate percent of each category to the model grid\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition in file \fBinterp_frac_cats\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine interp_frac_cats (integer, intent(in) localpet, character(len=*), intent(in) input_file)"
+
+.PP
+Read the input source data and interpolate it to the model grid\&. Outputs the percentage of each category within a model grid box and the dominant category\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIlocalpet\fP this mpi task 
+.br
+\fIinput_file\fP filename of input source data\&. 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+George Gayno 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+2022 
+.RE
+.PP
+
+.PP
+Definition at line \fB14\fP of file \fBinterp_frac_cats\&.F90\fP\&.
+.PP
+References \fButils::error_handler()\fP, \fBsource_grid::field_names\fP, \fBmodel_grid::grid_mdl\fP, \fBsource_grid::grid_src\fP, \fBmodel_grid::i_mdl\fP, \fBsource_grid::i_src\fP, \fBmodel_grid::j_mdl\fP, \fBsource_grid::j_src\fP, \fBmodel_grid::land_frac_field_mdl\fP, \fBmodel_grid::latitude_field_mdl\fP, \fBmodel_grid::longitude_field_mdl\fP, \fBmodel_grid::mask_field_mdl\fP, \fButils::netcdf_err()\fP, \fBmodel_grid::num_tiles\fP, \fBoutput_frac_cats::output_driver()\fP, and \fBsearch_frac_cats()\fP\&.
+.PP
+Referenced by \fBdriver()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

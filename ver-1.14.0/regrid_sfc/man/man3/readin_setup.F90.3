@@ -1,0 +1,55 @@
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/regrid_sfc.fd/readin_setup.F90" 3 "Version 1.14.0" "regrid_sfc" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/regrid_sfc.fd/readin_setup.F90 \- Read program namelists\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBreadin_setup\fP (unt, namel, grid_setup)"
+.br
+.RI "Subroutine to read in namelists, and convert values into setupgrid\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Read program namelists\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Clara Draper 
+.RE
+.PP
+
+.PP
+Definition in file \fBreadin_setup\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine readin_setup (integer, intent(in) unt, character(*), intent(in) namel, type(\fBgrid_setup_type\fP), intent(out) grid_setup)"
+
+.PP
+Subroutine to read in namelists, and convert values into setupgrid\&. Also fills in some values, and ensures tests have all needed values, according to the selected grid type\&.
+.PP
+\fBParameters\fP
+.RS 4
+\fIunt\fP file unit 
+.br
+\fInamel\fP options: input or output 
+.br
+\fIgrid_setup\fP data structure with grid details 
+.RE
+.PP
+
+.PP
+Definition at line \fB13\fP of file \fBreadin_setup\&.F90\fP\&.
+.PP
+Referenced by \fBregridstates()\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for regrid_sfc from the source code\&.

@@ -1,0 +1,122 @@
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/orog_mask_tools.fd/orog.fd/orog_utils.F90" 3 "Version 1.14.0" "orog_mask_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/orog_mask_tools.fd/orog.fd/orog_utils.F90 \- Utilities for orog code\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBorog_utils\fP"
+.br
+.RI "Module containing utilites used by the orog program\&. "
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine, public \fBorog_utils::find_nearest_pole_points\fP (i_north_pole, j_north_pole, i_south_pole, j_south_pole, im, jm, is_north_pole, is_south_pole)"
+.br
+.RI "Find the point on the model grid tile closest to the north and south pole\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::find_poles\fP (geolat, nx, ny, i_north_pole, j_north_pole, i_south_pole, j_south_pole)"
+.br
+.RI "Find the point on the model grid tile closest to the north and south pole\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::get_index\fP (imn, jmn, npts, lono, lato, delxn, jst, jen, ilist, numx)"
+.br
+.RI "Determine the location of a cubed-sphere point within the high-resolution orography data\&. "
+.ti -1c
+.RI "real function, public \fBorog_utils::get_lat_angle\fP (dy)"
+.br
+.RI "Convert the 'y' direction distance of a cubed-sphere grid point to the corresponding distance in latitude\&. "
+.ti -1c
+.RI "real function, public \fBorog_utils::get_lon_angle\fP (dx, lat_in)"
+.br
+.RI "Convert the 'x' direction distance of a cubed-sphere grid point to the corresponding distance in longitude\&. "
+.ti -1c
+.RI "real function, public \fBorog_utils::get_xnsum\fP (lon1, lat1, lon2, lat2, imn, jmn, glat, zavg, zslm, delxn)"
+.br
+.RI "Count the number of high-resolution orography points that are higher than the model grid box average orography height\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::get_xnsum2\fP (lon1, lat1, lon2, lat2, imn, jmn, glat, zavg, delxn, xnsum1, xnsum2, hc)"
+.br
+.RI "Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::get_xnsum3\fP (lon1, lat1, lon2, lat2, imn, jmn, glat, zavg, delxn, xnsum1, xnsum2, hc)"
+.br
+.RI "Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. "
+.ti -1c
+.RI "logical function, public \fBorog_utils::inside_a_polygon\fP (lon1, lat1, npts, lon2, lat2)"
+.br
+.RI "Check if a point is inside a polygon\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::latlon2xyz\fP (siz, lon, lat, x, y, z)"
+.br
+.RI "Convert from latitude and longitude to x,y,z coordinates\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::minmax\fP (im, jm, a, title, imax, jmax)"
+.br
+.RI "Print out the maximum and minimum values of an array and optionally pass back the i/j location of the maximum\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::remove_isolated_pts\fP (im, jm, slm, oro, var, var4, oa, ol)"
+.br
+.RI "Remove isolated model points\&. "
+.ti -1c
+.RI "real function \fBorog_utils::spherical_angle\fP (v1, v2, v3)"
+.br
+.RI "Compute spherical angle\&. "
+.ti -1c
+.RI "real function, public \fBorog_utils::timef\fP ()"
+.br
+.RI "Get the date/time from the system clock\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::transpose_mask\fP (imn, jmn, mask)"
+.br
+.RI "Transpose the global landmask by flipping the poles and moving the starting longitude to Greenwich\&. "
+.ti -1c
+.RI "subroutine, public \fBorog_utils::transpose_orog\fP (imn, jmn, glob)"
+.br
+.RI "Transpose the global orography data by flipping the poles and moving the starting longitude to Greenwich\&. "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "real, parameter \fBorog_utils::deg2rad\fP = 3\&.14159265358979/180\&."
+.br
+.RI "degrees per radians\&. "
+.ti -1c
+.RI "real, parameter \fBorog_utils::earth_radius\fP = 6371200\&."
+.br
+.RI "earth radius in meters\&. "
+.ti -1c
+.RI "real, parameter \fBorog_utils::pi\fP =3\&.1415926535897931"
+.br
+.RI "pi\&. "
+.ti -1c
+.RI "real, parameter \fBorog_utils::rad2deg\fP = 180\&./3\&.14159265358979"
+.br
+.RI "radians per degrees\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Utilities for orog code\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+George Gayno NOAA/EMC 
+.RE
+.PP
+
+.PP
+Definition in file \fBorog_utils\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for orog_mask_tools from the source code\&.

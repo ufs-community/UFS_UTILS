@@ -1,0 +1,246 @@
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/regrid_sfc.fd/grids_IO.F90" 3 "Version 1.14.0" "regrid_sfc" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/regrid_sfc.fd/grids_IO.F90 \- ESMF grid-specific routines for GFS regridding program, including IO\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "type \fBgrids_io::grid_setup_type\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBgrids_io::create_grid_fv3\fP (res_atm, dir_fix, npets, localpet, fv3_grid)"
+.br
+.RI "subroutine to create grid object for fv3 grid also sets distribution across procs "
+.ti -1c
+.RI "subroutine \fBgrids_io::create_grid_gauss\fP (grid_setup, npets, localpet, gauss_grid)"
+.br
+.RI "subroutine to create grid object for gaussian grids also sets distribution across procs "
+.ti -1c
+.RI "subroutine, public \fBgrids_io::read_into_fields\fP (localpet, i_dim, j_dim, fname_read, dir_read, grid_setup, n_vars, variable_list, fields)"
+.br
+.RI "read variables from fv3 netcdf restart file into ESMF Fields "
+.ti -1c
+.RI "subroutine, public \fBgrids_io::setup_grid\fP (localpet, npets, grid_setup, mod_grid, timestamp)"
+.br
+.RI "Create ESMF grid objects, with mask if requested\&. "
+.ti -1c
+.RI "subroutine, public \fBgrids_io::write_from_fields\fP (localpet, i_dim, j_dim, fname_out, dir_out, n_vars, n_tims, variable_list, fields, add_time_dim)"
+.br
+.RI "write variables from ESMF Fields into netcdf restart-like file "
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, parameter, public \fBgrids_io::mtype_snow\fP =2"
+.br
+.RI "snow "
+.ti -1c
+.RI "integer, parameter, public \fBgrids_io::mtype_water\fP =0"
+.br
+.RI "water "
+.ti -1c
+.RI "integer, parameter, public \fBgrids_io::n_tiles\fP =6"
+.br
+.RI "number tiles in fv3 grid "
+.ti -1c
+.RI "integer, parameter, public \fBgrids_io::vtype_landice\fP =15"
+.br
+.RI "land ice "
+.ti -1c
+.RI "integer, parameter, public \fBgrids_io::vtype_nonland\fP =0"
+.br
+.RI "non-land "
+.ti -1c
+.RI "integer, parameter, public \fBgrids_io::vtype_water\fP =17"
+.br
+.RI "water "
+.in -1c
+.SH "Detailed Description"
+.PP 
+ESMF grid-specific routines for GFS regridding program, including IO\&. 
+
+
+.PP
+\fBAuthor\fP
+.RS 4
+Clara Draper, Aug 2024\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBgrids_IO\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine grids_io::create_grid_fv3 (integer, intent(in) res_atm, character(*), intent(in) dir_fix, integer, intent(in) npets, integer, intent(in) localpet, type(esmf_grid), intent(out) fv3_grid)\fR [private]\fP"
+
+.PP
+subroutine to create grid object for fv3 grid also sets distribution across procs 
+.PP
+\fBParameters\fP
+.RS 4
+\fIres_atm\fP resolution of grid 
+.br
+\fIdir_fix\fP orog fix directory 
+.br
+\fIlocalpet\fP local pet 
+.br
+\fInpets\fP total number of pets 
+.br
+\fIfv3_grid\fP output ESMF grid 
+.RE
+.PP
+
+.PP
+Definition at line \fB375\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "subroutine grids_io::create_grid_gauss (type(\fBgrid_setup_type\fP), intent(in) grid_setup, integer, intent(in) npets, integer, intent(in) localpet, type(esmf_grid) gauss_grid)\fR [private]\fP"
+
+.PP
+subroutine to create grid object for gaussian grids also sets distribution across procs 
+.PP
+\fBParameters\fP
+.RS 4
+\fIgrid_setup\fP data structure with grid details 
+.br
+\fInpets\fP total number of pets 
+.br
+\fIlocalpet\fP local pet 
+.br
+\fIgauss_grid\fP output ESMF grid 
+.RE
+.PP
+
+.PP
+Definition at line \fB423\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "subroutine, public grids_io::read_into_fields (integer, intent(in) localpet, integer, intent(in) i_dim, integer, intent(in) j_dim, character(*), intent(in) fname_read, character(*), intent(in) dir_read, type(\fBgrid_setup_type\fP), intent(in) grid_setup, integer, intent(in) n_vars, character(len=15), dimension(n_vars), intent(in) variable_list, type(esmf_field), dimension(1,n_vars), intent(inout) fields)"
+
+.PP
+read variables from fv3 netcdf restart file into ESMF Fields 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlocalpet\fP local pet 
+.br
+\fIi_dim\fP longitudinal dimension 
+.br
+\fIj_dim\fP latitudinal dimension 
+.br
+\fIfname_read\fP file name to read in 
+.br
+\fIdir_read\fP directory of file name to read 
+.br
+\fIgrid_setup\fP grid details 
+.br
+\fIn_vars\fP number of variables to read in 
+.br
+\fIvariable_list\fP variables to read in 
+.br
+\fIfields\fP fields to read variables into 
+.RE
+.PP
+
+.PP
+Definition at line \fB160\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "subroutine, public grids_io::setup_grid (integer, intent(in) localpet, integer, intent(in) npets, type(\fBgrid_setup_type\fP), intent(in) grid_setup, type(esmf_grid), intent(out) mod_grid, integer, intent(in), optional timestamp)"
+
+.PP
+Create ESMF grid objects, with mask if requested\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlocalpet\fP local pet 
+.br
+\fInpets\fP total number of pets 
+.br
+\fIgrid_setup\fP data structure with grid details 
+.br
+\fImod_grid\fP output esmf_grid structure 
+.br
+\fItimestamp\fP timestep of input file 
+.RE
+.PP
+
+.PP
+Definition at line \fB50\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "subroutine, public grids_io::write_from_fields (integer, intent(in) localpet, integer, intent(in) i_dim, integer, intent(in) j_dim, character(*), intent(in) fname_out, character(*), intent(in) dir_out, integer, intent(in) n_vars, integer, intent(in) n_tims, character(15), dimension(n_vars), intent(in) variable_list, type(esmf_field), dimension(n_tims,n_vars), intent(in) fields, logical, intent(in) add_time_dim)"
+
+.PP
+write variables from ESMF Fields into netcdf restart-like file 
+.PP
+\fBParameters\fP
+.RS 4
+\fIlocalpet\fP local pet 
+.br
+\fIi_dim\fP longitudinal dimension 
+.br
+\fIj_dim\fP latitudinal dimension 
+.br
+\fIfname_out\fP file name to write to 
+.br
+\fIdir_out\fP directory of file name to write to 
+.br
+\fIn_vars\fP number of variables to read in 
+.br
+\fIn_tims\fP number of times to write out 
+.br
+\fIvariable_list\fP variables to read in 
+.br
+\fIfields\fP fields to read variables into 
+.br
+\fIadd_time_dim\fP specify whether output file has time dimension 
+.RE
+.PP
+
+.PP
+Definition at line \fB264\fP of file \fBgrids_IO\&.F90\fP\&.
+.SH "Variable Documentation"
+.PP 
+.SS "integer, parameter, public grids_io::mtype_snow =2"
+
+.PP
+snow 
+.PP
+Definition at line \fB21\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "integer, parameter, public grids_io::mtype_water =0"
+
+.PP
+water 
+.PP
+Definition at line \fB21\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "integer, parameter, public grids_io::n_tiles =6"
+
+.PP
+number tiles in fv3 grid 
+.PP
+Definition at line \fB15\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "integer, parameter, public grids_io::vtype_landice =15"
+
+.PP
+land ice 
+.PP
+Definition at line \fB17\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "integer, parameter, public grids_io::vtype_nonland =0"
+
+.PP
+non-land 
+.PP
+Definition at line \fB17\fP of file \fBgrids_IO\&.F90\fP\&.
+.SS "integer, parameter, public grids_io::vtype_water =17"
+
+.PP
+water 
+.PP
+Definition at line \fB17\fP of file \fBgrids_IO\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for regrid_sfc from the source code\&.

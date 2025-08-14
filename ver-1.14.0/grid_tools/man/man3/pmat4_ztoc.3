@@ -1,0 +1,82 @@
+.TH "pmat4::ztoc" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+pmat4::ztoc
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBztoc\fP (z, infz, v)"
+.br
+.RI "Given a complex z, return the equivalent cartesian unit 3-vector associated by the polar stereographic projection\&. "
+.ti -1c
+.RI "subroutine \fBztocd\fP (z, infz, v, vd)"
+.br
+.RI "The convention adopted for the complex derivative is that, for a complex infinitesimal map displacement, delta_z, the corresponding infinitesimal change of cartesian vector position is delta_v given by: delta_v = Real(vd*delta_z)\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line \fB106\fP of file \fBpmat4\&.f90\fP\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "subroutine pmat4::ztoc::ztoc (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v)"
+
+.PP
+Given a complex z, return the equivalent cartesian unit 3-vector associated by the polar stereographic projection\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIz\fP complex input argument 
+.br
+\fIinfz\fP logical indicator for z being the point at infinity 
+.br
+\fIv\fP cartesian unit 3-vector position equivalent to z 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line \fB2052\fP of file \fBpmat4\&.f90\fP\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "subroutine pmat4::ztoc::ztocd (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v, complex(dpc), dimension(3), intent(out) vd)"
+
+.PP
+The convention adopted for the complex derivative is that, for a complex infinitesimal map displacement, delta_z, the corresponding infinitesimal change of cartesian vector position is delta_v given by: delta_v = Real(vd*delta_z)\&. Thus, by a kind of Cauchy-Riemann relation, Imag(vd)=v CROSS Real(vd)\&.
+.PP
+\fBNote\fP
+.RS 4
+The derivative for the ideal point at infinity has not been coded yet\&.
+.RE
+.PP
+\fBParameters\fP
+.RS 4
+\fIz\fP complex input argument 
+.br
+\fIinfz\fP logical indicator for z being the point at infinity 
+.br
+\fIv\fP cartesian unit 3-vector position equivalent to z 
+.br
+\fIvd\fP derivative of cartesian v wrt z 
+.RE
+.PP
+\fBAuthor\fP
+.RS 4
+R\&. J\&. Purser 
+.RE
+.PP
+
+.PP
+Definition at line \fB2082\fP of file \fBpmat4\&.f90\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for grid_tools from the source code\&.
