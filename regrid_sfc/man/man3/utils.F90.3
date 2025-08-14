@@ -1,0 +1,63 @@
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/regrid_sfc.fd/utils.F90" 3 "Version 1.14.0" "regrid_sfc" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/regrid_sfc.fd/utils.F90 \- Error handling utilities for tile2tile\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fButilities::error_handler\fP (string, rc)"
+.br
+.RI "General error handler\&. "
+.ti -1c
+.RI "subroutine \fButilities::netcdf_err\fP (err, string)"
+.br
+.RI "Error handler for netcdf\&. "
+.in -1c
+.SH "Detailed Description"
+.PP 
+Error handling utilities for tile2tile\&. 
+
+taken from UFS_UTILS/changeres\&. 
+.PP
+Definition in file \fButils\&.F90\fP\&.
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine utilities::error_handler (character(len=*), intent(in) string, integer, intent(in) rc)"
+
+.PP
+General error handler\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIstring\fP error message 
+.br
+\fIrc\fP error status code 
+.RE
+.PP
+
+.PP
+Definition at line \fB13\fP of file \fButils\&.F90\fP\&.
+.SS "subroutine utilities::netcdf_err (integer, intent(in) err, character(len=*), intent(in) string)"
+
+.PP
+Error handler for netcdf\&. 
+.PP
+\fBParameters\fP
+.RS 4
+\fIerr\fP error status code 
+.br
+\fIstring\fP error message 
+.RE
+.PP
+
+.PP
+Definition at line \fB35\fP of file \fButils\&.F90\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for regrid_sfc from the source code\&.
