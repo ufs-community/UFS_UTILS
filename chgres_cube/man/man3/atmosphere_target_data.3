@@ -1,4 +1,4 @@
-.TH "atmosphere_target_data" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "atmosphere_target_data" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -89,7 +89,7 @@ Module to hold variables and ESMF fields associated with the target grid atmosph
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
@@ -97,23 +97,23 @@ George Gayno NCEP/EMC
 
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine, public atmosphere_target_data::cleanup_atmosphere_target_data ()"
+.SS "subroutine, public atmosphere_target_data::cleanup_atmosphere_target_data"
 
 .PP
 Free up memory for fields and variables in this module\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George\&.Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 46 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB45\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-References delp_target_grid, dzdt_target_grid, program_setup::num_tracers, ps_target_grid, qnifa_climo_target_grid, qnwfa_climo_target_grid, temp_target_grid, tracers_target_grid, u_s_target_grid, u_w_target_grid, v_s_target_grid, v_w_target_grid, vcoord_target, and zh_target_grid\&.
+References \fBdelp_target_grid\fP, \fBdzdt_target_grid\fP, \fBprogram_setup::num_tracers\fP, \fBps_target_grid\fP, \fBqnifa_climo_target_grid\fP, \fBqnwfa_climo_target_grid\fP, \fBtemp_target_grid\fP, \fBtracers_target_grid\fP, \fBu_s_target_grid\fP, \fBu_w_target_grid\fP, \fBv_s_target_grid\fP, \fBv_w_target_grid\fP, \fBvcoord_target\fP, and \fBzh_target_grid\fP\&.
 .PP
-Referenced by atmosphere::cleanup_all_target_atm_data()\&.
+Referenced by \fBatmosphere::cleanup_all_target_atm_data()\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "type(esmf_field), public atmosphere_target_data::delp_target_grid"
@@ -121,129 +121,129 @@ Referenced by atmosphere::cleanup_all_target_atm_data()\&.
 .PP
 Pressure thickness\&. 
 .PP
-Definition at line 23 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB23\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::create_atm_esmf_fields(), atmosphere::newpr1(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBatmosphere::newpr1()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::dzdt_target_grid"
 
 .PP
 Vertical velocity\&. 
 .PP
-Definition at line 24 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB24\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::create_atm_esmf_fields(), atmosphere::vintg(), atmosphere::vintg_wam(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBatmosphere::vintg()\fP, \fBatmosphere::vintg_wam()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "integer, public atmosphere_target_data::lev_target"
 
 .PP
 Number of vertical levels\&. 
 .PP
-Definition at line 17 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB17\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::create_atm_esmf_fields(), atmosphere::horiz_interp_thomp_mp_climo(), atmosphere::newpr1(), atmosphere::read_vcoord_info(), atmosphere::vintg(), atmosphere::vintg_thomp_mp_climo(), atmosphere::vintg_wam(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBatmosphere::create_atm_esmf_fields()\fP, \fBatmosphere::horiz_interp_thomp_mp_climo()\fP, \fBatmosphere::newpr1()\fP, \fBatmosphere::read_vcoord_info()\fP, \fBatmosphere::vintg()\fP, \fBatmosphere::vintg_thomp_mp_climo()\fP, \fBatmosphere::vintg_wam()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "integer, public atmosphere_target_data::levp1_target"
 
 .PP
 Number of vertical levels plus 1\&. 
 .PP
-Definition at line 18 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB18\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::compute_zh(), atmosphere::create_atm_esmf_fields(), atmosphere::newpr1(), atmosphere::read_vcoord_info(), write_data::write_fv3_atm_bndy_data_netcdf(), write_data::write_fv3_atm_data_netcdf(), and write_data::write_fv3_atm_header_netcdf()\&.
+Referenced by \fBatmosphere::compute_zh()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBatmosphere::newpr1()\fP, \fBatmosphere::read_vcoord_info()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, \fBwrite_data::write_fv3_atm_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_header_netcdf()\fP\&.
 .SS "integer, public atmosphere_target_data::nvcoord_target"
 
 .PP
 Number of vertical coordinate variables\&. 
 .PP
-Definition at line 19 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB19\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::read_vcoord_info(), and write_data::write_fv3_atm_header_netcdf()\&.
+Referenced by \fBatmosphere::read_vcoord_info()\fP, and \fBwrite_data::write_fv3_atm_header_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::ps_target_grid"
 
 .PP
 Surface pressure\&. 
 .PP
-Definition at line 25 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB25\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::compute_zh(), atmosphere::create_atm_esmf_fields(), atmosphere::newpr1(), atmosphere::newps(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::compute_zh()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBatmosphere::newpr1()\fP, \fBatmosphere::newps()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::qnifa_climo_target_grid"
 
 .PP
 Number concentration of ice friendly aerosols\&. 
 .PP
-Definition at line 33 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB33\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::horiz_interp_thomp_mp_climo(), atmosphere::vintg_thomp_mp_climo(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::horiz_interp_thomp_mp_climo()\fP, \fBatmosphere::vintg_thomp_mp_climo()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::qnwfa_climo_target_grid"
 
 .PP
 Number concentration of water friendly aerosols\&. 
 .PP
-Definition at line 35 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB35\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::horiz_interp_thomp_mp_climo(), atmosphere::vintg_thomp_mp_climo(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::horiz_interp_thomp_mp_climo()\fP, \fBatmosphere::vintg_thomp_mp_climo()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::temp_target_grid"
 
 .PP
 Temperautre\&. 
 .PP
-Definition at line 26 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB26\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::compute_zh(), atmosphere::create_atm_esmf_fields(), atmosphere::vintg(), atmosphere::vintg_wam(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::compute_zh()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBatmosphere::vintg()\fP, \fBatmosphere::vintg_wam()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), dimension(:), allocatable, public atmosphere_target_data::tracers_target_grid"
 
 .PP
 Tracers\&. 
 .PP
-Definition at line 27 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB27\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::compute_zh(), atmosphere::create_atm_esmf_fields(), atmosphere::vintg(), atmosphere::vintg_wam(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::compute_zh()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBatmosphere::vintg()\fP, \fBatmosphere::vintg_wam()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::u_s_target_grid"
 
 .PP
 U-wind, 'south' edge of grid cell\&. 
 .PP
-Definition at line 28 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB28\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::convert_winds_to_uv(), atmosphere::create_atm_esmf_fields(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::convert_winds_to_uv()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::u_w_target_grid"
 
 .PP
 U-wind, 'west' edge of grid cell\&. 
 .PP
-Definition at line 30 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB30\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::convert_winds_to_uv(), atmosphere::create_atm_esmf_fields(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::convert_winds_to_uv()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::v_s_target_grid"
 
 .PP
 V-wind, 'south' edge of grid cell\&. 
 .PP
-Definition at line 29 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB29\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::convert_winds_to_uv(), atmosphere::create_atm_esmf_fields(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::convert_winds_to_uv()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::v_w_target_grid"
 
 .PP
 V-wind, 'west' edge of grid cell\&. 
 .PP
-Definition at line 31 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB31\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::convert_winds_to_uv(), atmosphere::create_atm_esmf_fields(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::convert_winds_to_uv()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SS "real(esmf_kind_r8), dimension(:,:), allocatable, public atmosphere_target_data::vcoord_target"
 
 .PP
 Vertical coordinate\&. 
 .PP
-Definition at line 21 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB21\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::compute_zh(), atmosphere::newpr1(), atmosphere::read_vcoord_info(), and write_data::write_fv3_atm_header_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::compute_zh()\fP, \fBatmosphere::newpr1()\fP, \fBatmosphere::read_vcoord_info()\fP, and \fBwrite_data::write_fv3_atm_header_netcdf()\fP\&.
 .SS "type(esmf_field), public atmosphere_target_data::zh_target_grid"
 
 .PP
 3-d height\&. 
 .PP
-Definition at line 32 of file atmosphere_target_data\&.F90\&.
+Definition at line \fB32\fP of file \fBatmosphere_target_data\&.F90\fP\&.
 .PP
-Referenced by cleanup_atmosphere_target_data(), atmosphere::compute_zh(), atmosphere::create_atm_esmf_fields(), write_data::write_fv3_atm_bndy_data_netcdf(), and write_data::write_fv3_atm_data_netcdf()\&.
+Referenced by \fBcleanup_atmosphere_target_data()\fP, \fBatmosphere::compute_zh()\fP, \fBatmosphere::create_atm_esmf_fields()\fP, \fBwrite_data::write_fv3_atm_bndy_data_netcdf()\fP, and \fBwrite_data::write_fv3_atm_data_netcdf()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

@@ -1,6 +1,6 @@
 var init__mod_8F90 =
 [
-    [ "vardefs", "structinit__mod_1_1vardefs.html", "structinit__mod_1_1vardefs" ],
+    [ "init_mod::vardefs", "structinit__mod_1_1vardefs.html", "structinit__mod_1_1vardefs" ],
     [ "readcsv", "init__mod_8F90.html#a347504571584677d09f00d62e8ff1116", null ],
     [ "readnml", "init__mod_8F90.html#a56b1b366e113e069293b2b0e424b27d3", null ],
     [ "debug", "init__mod_8F90.html#adc6556df96f84421a9bc9de762478b79", null ],

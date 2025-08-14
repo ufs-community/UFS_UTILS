@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/lsm_routines.fd/noah.fd/sflx_snippet.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "noah" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/lsm_routines.fd/noah.fd/sflx_snippet.f90" 3 "Version 1.14.0" "noah" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/lsm_routines.fd/noah.fd/sflx_snippet.f90 \- Snippets of noah model from sflx\&.F needed for land DA updates\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/lsm_routines.fd/noah.fd/sflx_snippet.f90 \- Snippets of noah model from sflx\&.F needed for land DA updates\&.  
 
 .SH SYNOPSIS
 .br
@@ -21,7 +21,7 @@ Snippets of noah model from sflx\&.F needed for land DA updates\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Clara Draper 
 .RE
@@ -36,7 +36,7 @@ Definition in file \fBsflx_snippet\&.f90\fP\&.
 .PP
 Calculate the liquid water (slc) for a given total moisture content and soil temperature\&. Used here to update slc when DA update to stc crosses freezing\&. Note this is an approximation, since in sflx\&.F (noah) the change in slc estimated by this routine is often clipped, depending on the net energy input to the soil layer\&. Also, this routine is being called using stc, but in sflx\&.F it is called using the soil temp at the midpoint of the layer\&. However, testing shows the affects of these approximations is small (O(0\&.001 m3/m3))\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fItkelv\fP Soil temperature in K 
 .br
@@ -55,7 +55,7 @@ Calculate the liquid water (slc) for a given total moisture content and soil tem
 .PP
 
 .PP
-Definition at line 34 of file sflx_snippet\&.f90\&.
+Definition at line \fB28\fP of file \fBsflx_snippet\&.f90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for noah from the source code\&.

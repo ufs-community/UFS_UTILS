@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/search.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/sfc_climo_gen.fd/search.f90" 3 "Version 1.14.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/sfc_climo_gen.fd/search.f90 \- Replace undefined values on the model grid with a valid value at a nearby neighbor\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/sfc_climo_gen.fd/search.f90 \- Replace undefined values on the model grid with a valid value at a nearby neighbor\&.  
 
 .SH SYNOPSIS
 .br
@@ -21,12 +21,12 @@ Replace undefined values on the model grid with a valid value at a nearby neighb
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2018 
 .RE
@@ -41,7 +41,7 @@ Definition in file \fBsearch\&.f90\fP\&.
 .PP
 Replace undefined values on the model grid with a valid value at a nearby neighbor\&. Undefined values are typically associated with isolated islands where there is no source data\&. Routine searches a neighborhood with a radius of 100 grid points\&. If no valid value is found, a default value is used\&. This routine works for one tile of a cubed sphere grid\&. It does not consider valid values at adjacent faces\&. That is a future upgrade\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfield\fP - input: field before missing values are replaced
 .IP "\(bu" 2
@@ -59,21 +59,21 @@ output: field after missing values are replaced
 \fIfield_name\fP field name 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2018 
 .RE
 .PP
 
 .PP
-Definition at line 24 of file search\&.f90\&.
+Definition at line \fB23\fP of file \fBsearch\&.f90\fP\&.
 .PP
-Referenced by interp()\&.
+Referenced by \fBinterp()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

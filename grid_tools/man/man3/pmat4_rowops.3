@@ -1,4 +1,4 @@
-.TH "pmat4::rowops" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::rowops" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat4::rowops
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -16,15 +16,15 @@ pmat4::rowops
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 90 of file pmat4\&.f90\&.
+Definition at line \fB90\fP of file \fBpmat4\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat4::rowops::rowops (integer(spi), intent(in) m, integer(spi), intent(in) n, integer(spi), dimension(n), intent(in) ipiv, real(dp), dimension(m,n), intent(in) tt, real(dp), dimension(m), intent(in) v, real(dp), dimension(m), intent(out) vv)\fC [private]\fP"
+.SS "subroutine pmat4::rowops::rowops (integer(spi), intent(in) m, integer(spi), intent(in) n, integer(spi), dimension(n), intent(in) ipiv, real(dp), dimension(m,n), intent(in) tt, real(dp), dimension(m), intent(in) v, real(dp), dimension(m), intent(out) vv)"
 
 .PP
 Apply the row-operations, implied by ipiv and tt returned by rowgram, to the single column vector, v, to produce the transformed vector vv\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm\fP number of rows of matrix tt, dimension of vectors V and VV 
 .br
@@ -39,14 +39,14 @@ Apply the row-operations, implied by ipiv and tt returned by rowgram, to the sin
 \fIvv\fP output column vector vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1400 of file pmat4\&.f90\&.
+Definition at line \fB1399\fP of file \fBpmat4\&.f90\fP\&.
 
 .SH "Author"
 .PP 

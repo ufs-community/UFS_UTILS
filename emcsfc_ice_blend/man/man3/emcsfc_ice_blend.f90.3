@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "emcsfc_ice_blend" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90" 3 "Version 1.14.0" "emcsfc_ice_blend" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90 \- Create blended ice product for gfs/gdas cycles\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/emcsfc_ice_blend.fd/emcsfc_ice_blend.f90 \- Create blended ice product for gfs/gdas cycles\&.  
 
 .SH SYNOPSIS
 .br
@@ -21,12 +21,12 @@ Create blended ice product for gfs/gdas cycles\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2014-03-20 
 .RE
@@ -36,7 +36,7 @@ George Gayno NCEP/EMC
 Definition in file \fBemcsfc_ice_blend\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "program emcsfc_ice_blend ()"
+.SS "program emcsfc_ice_blend"
 
 .PP
 Create a global 5-minute blended ice concentration dataset for use by GDAS/GFS\&. This blend is created from National Ice Center Interactive Multisensor Snow and Ice Mapping System (IMS) data, and the NCEP/MMAB global 5-minute ice concentration data\&.
@@ -56,7 +56,10 @@ fort\&.15 - global 5-minute MMAB ice concentration file (grib 2)
 .IP "\(bu" 2
 fort\&.17 - global 5-minute MMAB land mask file (grib 2)\&. 
 .br
- output files:
+
+.PP
+.PP
+output files:
 .IP "\(bu" 2
 fort\&.51 - global 5-minute blended ice concentration file (grib 2)
 .PP
@@ -91,9 +94,9 @@ This program creates an ice concentration file on the same 5-minute grid as the 
 .PP
 .nf
 
- grid173='0 0 0 0 0 0 0 0 4320 2160 0 0 89958000 42000 48 -89958000 359958000 83000 83000 0'
- copygb2 -x -i3 -g '$grid173' ims\&.icec\&.grib2 ims\&.icec\&.5min\&.grib2
- 
+     grid173=
+     copygb2 -x -i3 -g  ims\&.icec\&.grib2 ims\&.icec\&.5min\&.grib2
+     
 .fi
 .PP
 .PP
@@ -115,7 +118,8 @@ The blended value is set to zero if the IMS concentration is less than 50%\&.
 .IP "  \(bu" 4
 If the IMS concentration is >=50%, then the neighboring 5-minute data is checked for ice\&. 
 .br
- * If the 5-minute point is ice free, but at least one of its neighbors has ice, the blended value is set to the IMS ice concentration\&. Examination of the 5-minute showed isolated open water points within large areas of ice\&. This logic attempts to remove these likely wrong points\&.
+.IP "    \(bu" 6
+If the 5-minute point is ice free, but at least one of its neighbors has ice, the blended value is set to the IMS ice concentration\&. Examination of the 5-minute showed isolated open water points within large areas of ice\&. This logic attempts to remove these likely wrong points\&.
 .IP "    \(bu" 6
 If (i) is false, then the blended value is set to the 5-minute value or 15%, whichever is greater\&. 15% is the lower threshold in the MMAB 5-minute product\&.
 .PP
@@ -126,19 +130,19 @@ If (i) is false, then the blended value is set to the 5-minute value or 15%, whi
 .PP
 In the SH, the blended value is simply the 5-minute ice concentration at 'water' points\&. 'Coast' and 'land' points are bitmapped out\&.
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 0 for success, error code otherwise\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 93 of file emcsfc_ice_blend\&.f90\&.
+Definition at line \fB93\fP of file \fBemcsfc_ice_blend\&.f90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for emcsfc_ice_blend from the source code\&.

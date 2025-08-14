@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/orog_utils.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/orog_mask_tools.fd/orog.fd/orog_utils.F90" 3 "Version 1.14.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/orog_utils.F90 \- Utilities for orog code\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/orog_mask_tools.fd/orog.fd/orog_utils.F90 \- Utilities for orog code\&.  
 
 .SH SYNOPSIS
 .br
@@ -27,7 +27,7 @@
 .br
 .RI "Find the point on the model grid tile closest to the north and south pole\&. "
 .ti -1c
-.RI "subroutine, public \fBorog_utils::get_index\fP (imn, jmn, npts, lonO, latO, delxn, jst, jen, ilist, numx)"
+.RI "subroutine, public \fBorog_utils::get_index\fP (imn, jmn, npts, lono, lato, delxn, jst, jen, ilist, numx)"
 .br
 .RI "Determine the location of a cubed-sphere point within the high-resolution orography data\&. "
 .ti -1c
@@ -47,7 +47,7 @@
 .br
 .RI "Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. "
 .ti -1c
-.RI "subroutine, public \fBorog_utils::get_xnsum3\fP (lon1, lat1, lon2, lat2, imn, jmn, glat, zavg, delxn, xnsum1, xnsum2, HC)"
+.RI "subroutine, public \fBorog_utils::get_xnsum3\fP (lon1, lat1, lon2, lat2, imn, jmn, glat, zavg, delxn, xnsum1, xnsum2, hc)"
 .br
 .RI "Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. "
 .ti -1c
@@ -109,7 +109,7 @@ Utilities for orog code\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE

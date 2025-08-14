@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.F90" 3 "Version 1.14.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.F90 \- Terrain maker for the ufs weather model\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/orog_mask_tools.fd/orog.fd/mtnlm7_oclsm.F90 \- Terrain maker for the ufs weather model\&.  
 
 .SH SYNOPSIS
 .br
@@ -11,7 +11,7 @@
 
 .in +1c
 .ti -1c
-.RI "program \fB__mtnlm7_oclsm\&.f90__\fP"
+.RI "program \fB__mtnlm7_oclsm_f90__\fP"
 .br
 .RI "This program creates landmask, land fraction, terrain and and fields required for the model's gravity wave drag (GWD) scheme\&. "
 .ti -1c
@@ -19,19 +19,19 @@
 .br
 .RI "Create the land-mask, land fraction\&. "
 .ti -1c
-.RI "subroutine \fBmakemt2\fP (ZAVG, ZSLM, ORO, SLM, VAR, VAR4, IM, JM, IMN, JMN, lon_c, lat_c, \fBlake_frac\fP, land_frac)"
+.RI "subroutine \fBmakemt2\fP (zavg, zslm, oro, slm, var, var4, im, jm, imn, jmn, lon_c, lat_c, lake_frac, land_frac)"
 .br
 .RI "Create the orography, standard deviation of orography and the convexity on a model tile\&. "
 .ti -1c
-.RI "subroutine \fBmakeoa2\fP (ZAVG, zslm, VAR, OA4, OL, ELVMAX, ORO, IM, JM, IMN, JMN, lon_c, lat_c, lon_t, lat_t, dx, dy, is_south_pole, is_north_pole)"
+.RI "subroutine \fBmakeoa2\fP (zavg, zslm, var, oa4, ol, elvmax, oro, im, jm, imn, jmn, lon_c, lat_c, lon_t, lat_t, dx, dy, is_south_pole, is_north_pole)"
 .br
 .RI "Create orographic asymmetry and orographic length scale on the model grid\&. "
 .ti -1c
-.RI "subroutine \fBmakepc2\fP (ZAVG, ZSLM, THETA, GAMMA, SIGMA, IM, JM, IMN, JMN, lon_c, lat_c, SLM)"
+.RI "subroutine \fBmakepc2\fP (zavg, zslm, theta, gamma, sigma, im, jm, imn, jmn, lon_c, lat_c, slm)"
 .br
 .RI "Make the principle coordinates - slope of orography, anisotropy, angle of mountain range with respect to east\&. "
 .ti -1c
-.RI "subroutine \fBtersub\fP (IM, JM, EFAC, OUTGRID, MASK_ONLY, EXTERNAL_MASK_FILE)"
+.RI "subroutine \fBtersub\fP (im, jm, efac, outgrid, mask_only, external_mask_file)"
 .br
 .RI "Driver routine to compute terrain\&. "
 .in -1c
@@ -41,12 +41,12 @@ Terrain maker for the ufs weather model\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Mark Iredell 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 92-04-16 
 .RE
@@ -56,7 +56,7 @@ Mark Iredell
 Definition in file \fBmtnlm7_oclsm\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "program __mtnlm7_oclsm\&.f90__ ()"
+.SS "program __mtnlm7_oclsm_f90__"
 
 .PP
 This program creates landmask, land fraction, terrain and and fields required for the model's gravity wave drag (GWD) scheme\&. Specifically:
@@ -153,22 +153,22 @@ CONTAINS ONLY LAND MASK AND FRACTION\&.
 
 .PP
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 0 for success, error code otherwise\&. 
 .RE
 .PP
 
 .PP
-Definition at line 72 of file mtnlm7_oclsm\&.F90\&.
+Definition at line \fB72\fP of file \fBmtnlm7_oclsm\&.F90\fP\&.
 .PP
-References io_utils::read_mdl_dims(), and tersub()\&.
+References \fBio_utils::read_mdl_dims()\fP, and \fBtersub()\fP\&.
 .SS "subroutine make_mask (integer, dimension(imn,jmn), intent(in) zslm, real, dimension(im,jm), intent(out) slm, real, dimension(im,jm), intent(out) land_frac, integer, intent(in) im, integer, intent(in) jm, integer, intent(in) imn, integer, intent(in) jmn, real, dimension(im+1,jm+1), intent(in) lon_c, real, dimension(im+1,jm+1), intent(in) lat_c)"
 
 .PP
 Create the land-mask, land fraction\&. This routine is used for the FV3GFS model\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIzslm\fP The high-resolution input land-mask dataset\&. 
 .br
@@ -189,24 +189,24 @@ Create the land-mask, land fraction\&. This routine is used for the FV3GFS model
 \fIlat_c\fP Latitude on the model grid corner points\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 409 of file mtnlm7_oclsm\&.F90\&.
+Definition at line \fB407\fP of file \fBmtnlm7_oclsm\&.F90\fP\&.
 .PP
-References orog_utils::get_index(), and orog_utils::inside_a_polygon()\&.
+References \fBorog_utils::get_index()\fP, and \fBorog_utils::inside_a_polygon()\fP\&.
 .PP
-Referenced by tersub()\&.
-.SS "subroutine makemt2 (integer, dimension(imn,jmn), intent(in) ZAVG, integer, dimension(imn,jmn), intent(in) ZSLM, real, dimension(im,jm), intent(out) ORO, real, dimension(im,jm), intent(in) SLM, real, dimension(im,jm), intent(out) VAR, real, dimension(im,jm), intent(out) VAR4, integer, intent(in) IM, integer, intent(in) JM, integer, intent(in) IMN, integer, intent(in) JMN, real, dimension(im+1,jm+1), intent(in) lon_c, real, dimension(im+1,jm+1), intent(in) lat_c, real, dimension(im,jm), intent(in) lake_frac, real, dimension(im,jm), intent(in) land_frac)"
+Referenced by \fBtersub()\fP\&.
+.SS "subroutine makemt2 (integer, dimension(imn,jmn), intent(in) zavg, integer, dimension(imn,jmn), intent(in) zslm, real, dimension(im,jm), intent(out) oro, real, dimension(im,jm), intent(in) slm, real, dimension(im,jm), intent(out) var, real, dimension(im,jm), intent(out) var4, integer, intent(in) im, integer, intent(in) jm, integer, intent(in) imn, integer, intent(in) jmn, real, dimension(im+1,jm+1), intent(in) lon_c, real, dimension(im+1,jm+1), intent(in) lat_c, real, dimension(im,jm), intent(in) lake_frac, real, dimension(im,jm), intent(in) land_frac)"
 
 .PP
 Create the orography, standard deviation of orography and the convexity on a model tile\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIzavg\fP The high-resolution input orography dataset\&. 
 .br
@@ -237,24 +237,24 @@ Create the orography, standard deviation of orography and the convexity on a mod
 \fIland_frac\fP Fractional land within the grid 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 531 of file mtnlm7_oclsm\&.F90\&.
+Definition at line \fB529\fP of file \fBmtnlm7_oclsm\&.F90\fP\&.
 .PP
-References orog_utils::get_index(), and orog_utils::inside_a_polygon()\&.
+References \fBorog_utils::get_index()\fP, and \fBorog_utils::inside_a_polygon()\fP\&.
 .PP
-Referenced by tersub()\&.
-.SS "subroutine makeoa2 (integer, dimension(imn,jmn), intent(in) ZAVG, integer, dimension(imn,jmn), intent(in) zslm, real, dimension(im,jm), intent(in) VAR, real, dimension(im,jm,4), intent(out) OA4, real, dimension(im,jm,4), intent(out) OL, real, dimension(im,jm), intent(out) ELVMAX, real, dimension(im,jm), intent(in) ORO, integer, intent(in) IM, integer, intent(in) JM, integer, intent(in) IMN, integer, intent(in) JMN, real, dimension(im+1,jm+1), intent(in) lon_c, real, dimension(im+1,jm+1), intent(in) lat_c, real, dimension(im,jm), intent(in) lon_t, real, dimension(im,jm), intent(in) lat_t, real, dimension(im,jm), intent(in) dx, real, dimension(im,jm), intent(in) dy, logical, dimension(im,jm), intent(in) is_south_pole, logical, dimension(im,jm), intent(in) is_north_pole)"
+Referenced by \fBtersub()\fP\&.
+.SS "subroutine makeoa2 (integer, dimension(imn,jmn), intent(in) zavg, integer, dimension(imn,jmn), intent(in) zslm, real, dimension(im,jm), intent(in) var, real, dimension(im,jm,4), intent(out) oa4, real, dimension(im,jm,4), intent(out) ol, real, dimension(im,jm), intent(out) elvmax, real, dimension(im,jm), intent(in) oro, integer, intent(in) im, integer, intent(in) jm, integer, intent(in) imn, integer, intent(in) jmn, real, dimension(im+1,jm+1), intent(in) lon_c, real, dimension(im+1,jm+1), intent(in) lat_c, real, dimension(im,jm), intent(in) lon_t, real, dimension(im,jm), intent(in) lat_t, real, dimension(im,jm), intent(in) dx, real, dimension(im,jm), intent(in) dy, logical, dimension(im,jm), intent(in) is_south_pole, logical, dimension(im,jm), intent(in) is_north_pole)"
 
 .PP
 Create orographic asymmetry and orographic length scale on the model grid\&. This routine is used for the cubed-sphere grid\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIzavg\fP High-resolution orography data\&. 
 .br
@@ -295,24 +295,24 @@ Create orographic asymmetry and orographic length scale on the model grid\&. Thi
 \fIis_north_pole\fP is the model point at the north pole? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1026 of file mtnlm7_oclsm\&.F90\&.
+Definition at line \fB1023\fP of file \fBmtnlm7_oclsm\&.F90\fP\&.
 .PP
-References orog_utils::get_index(), orog_utils::get_lat_angle(), orog_utils::get_lon_angle(), orog_utils::get_xnsum(), orog_utils::get_xnsum2(), orog_utils::get_xnsum3(), and orog_utils::inside_a_polygon()\&.
+References \fBorog_utils::get_index()\fP, \fBorog_utils::get_lat_angle()\fP, \fBorog_utils::get_lon_angle()\fP, \fBorog_utils::get_xnsum()\fP, \fBorog_utils::get_xnsum2()\fP, \fBorog_utils::get_xnsum3()\fP, and \fBorog_utils::inside_a_polygon()\fP\&.
 .PP
-Referenced by tersub()\&.
-.SS "subroutine makepc2 (integer, dimension(imn,jmn), intent(in) ZAVG, integer, dimension(imn,jmn), intent(in) ZSLM, real, dimension(im,jm), intent(out) THETA, real, dimension(im,jm), intent(out) GAMMA, real, dimension(im,jm), intent(out) SIGMA, integer, intent(in) IM, integer, intent(in) JM, integer, intent(in) IMN, integer, intent(in) JMN, real, dimension(im+1,jm+1), intent(in) lon_c, real, dimension(im+1,jm+1), intent(in) lat_c, real, dimension(im,jm), intent(in) SLM)"
+Referenced by \fBtersub()\fP\&.
+.SS "subroutine makepc2 (integer, dimension(imn,jmn), intent(in) zavg, integer, dimension(imn,jmn), intent(in) zslm, real, dimension(im,jm), intent(out) theta, real, dimension(im,jm), intent(out) gamma, real, dimension(im,jm), intent(out) sigma, integer, intent(in) im, integer, intent(in) jm, integer, intent(in) imn, integer, intent(in) jmn, real, dimension(im+1,jm+1), intent(in) lon_c, real, dimension(im+1,jm+1), intent(in) lat_c, real, dimension(im,jm), intent(in) slm)"
 
 .PP
 Make the principle coordinates - slope of orography, anisotropy, angle of mountain range with respect to east\&. This routine is used for the FV3GFS cubed-sphere grid\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIzavg\fP The high-resolution input orography dataset\&. 
 .br
@@ -339,24 +339,24 @@ Make the principle coordinates - slope of orography, anisotropy, angle of mounta
 \fISLM\fP mask 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 770 of file mtnlm7_oclsm\&.F90\&.
+Definition at line \fB768\fP of file \fBmtnlm7_oclsm\&.F90\fP\&.
 .PP
-References orog_utils::get_index(), and orog_utils::inside_a_polygon()\&.
+References \fBorog_utils::get_index()\fP, and \fBorog_utils::inside_a_polygon()\fP\&.
 .PP
-Referenced by tersub()\&.
-.SS "subroutine tersub (integer, intent(in) IM, integer, intent(in) JM, integer, intent(in) EFAC, character(len=*), intent(in) OUTGRID, logical, intent(in) MASK_ONLY, character(len=*), intent(in) EXTERNAL_MASK_FILE)"
+Referenced by \fBtersub()\fP\&.
+.SS "subroutine tersub (integer, intent(in) im, integer, intent(in) jm, integer, intent(in) efac, character(len=*), intent(in) outgrid, logical, intent(in) mask_only, character(len=*), intent(in) external_mask_file)"
 
 .PP
 Driver routine to compute terrain\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIM\fP 'i' dimension of the model grid tile\&. 
 .br
@@ -371,18 +371,18 @@ Driver routine to compute terrain\&.
 \fIEXTERNAL_MASK_FILE\fP File containing an externally generated land mask/fraction\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Jordan Alpert NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 119 of file mtnlm7_oclsm\&.F90\&.
+Definition at line \fB118\fP of file \fBmtnlm7_oclsm\&.F90\fP\&.
 .PP
-References make_mask(), makemt2(), makeoa2(), makepc2(), orog_utils::minmax(), io_utils::qc_orog_by_ramp(), io_utils::read_global_mask(), io_utils::read_global_orog(), io_utils::read_mask(), io_utils::read_mdl_grid_file(), orog_utils::remove_isolated_pts(), orog_utils::timef(), io_utils::write_mask_netcdf(), and io_utils::write_netcdf()\&.
+References \fBmake_mask()\fP, \fBmakemt2()\fP, \fBmakeoa2()\fP, \fBmakepc2()\fP, \fBorog_utils::minmax()\fP, \fBio_utils::qc_orog_by_ramp()\fP, \fBio_utils::read_global_mask()\fP, \fBio_utils::read_global_orog()\fP, \fBio_utils::read_mask()\fP, \fBio_utils::read_mdl_grid_file()\fP, \fBorog_utils::remove_isolated_pts()\fP, \fBorog_utils::timef()\fP, \fBio_utils::write_mask_netcdf()\fP, and \fBio_utils::write_netcdf()\fP\&.
 .PP
-Referenced by __mtnlm7_oclsm\&.f90__()\&.
+Referenced by \fB__mtnlm7_oclsm_f90__()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for orog_mask_tools from the source code\&.

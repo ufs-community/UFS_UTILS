@@ -1,4 +1,4 @@
-.TH "pesg::xstoxt" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::xstoxt" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pesg::xstoxt
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -16,15 +16,15 @@ pesg::xstoxt
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 27 of file pesg\&.f90\&.
+Definition at line \fB27\fP of file \fBpesg\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::xstoxt::xstoxt (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xs, real(dp), dimension(2), intent(out) xt, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xstoxt::xstoxt (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xs, real(dp), dimension(2), intent(out) xt, logical, intent(out) ff)"
 
 .PP
 Inverse of xttoxs\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIk\fP Gaussian curvature parameter of Schmidt mapping 
 .br
@@ -35,14 +35,16 @@ Inverse of xttoxs\&.
 \fIff\fP Failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 139 of file pesg\&.f90\&.
+Definition at line \fB138\fP of file \fBpesg\&.f90\fP\&.
+.PP
+References \fBpietc::u1\fP, and \fBpietc::u2\fP\&.
 
 .SH "Author"
 .PP 

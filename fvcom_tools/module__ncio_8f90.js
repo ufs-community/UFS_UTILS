@@ -1,6 +1,6 @@
 var module__ncio_8f90 =
 [
-    [ "ncio", "structmodule__ncio_1_1ncio.html", "structmodule__ncio_1_1ncio" ],
+    [ "module_ncio::ncio", "structmodule__ncio_1_1ncio.html", "structmodule__ncio_1_1ncio" ],
     [ "add_new_var_2d", "module__ncio_8f90.html#a3a5af221792e9c4677e778f995b4c673", null ],
     [ "add_new_var_3d", "module__ncio_8f90.html#afcf167057aef272b73e9ee7136930e51", null ],
     [ "close_nc", "module__ncio_8f90.html#a61ba2044f4a26a3fee7c6f7e25b4d4c3", null ],

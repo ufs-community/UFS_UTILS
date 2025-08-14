@@ -1,4 +1,4 @@
-.TH "pmat4" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -480,7 +480,7 @@ Gram: Right-handed orthogonal basis and rank, nrank\&. The first nrank basis vec
 .PP
 In addition, we include routines that relate to stereographic projections and some associated mobius transformation utilities, since these complex operations have a strong geometrical flavor\&.
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
@@ -490,198 +490,194 @@ R\&. J\&. Purser
 
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "real(dp) function pmat4::absv_d (real(dp), dimension(:), intent(in) a)\fC [private]\fP"
+.SS "real(dp) function pmat4::absv_d (real(dp), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the absolute magnitude of a double precision real vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 s result, double precision real scalar 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 131 of file pmat4\&.f90\&.
+Definition at line \fB130\fP of file \fBpmat4\&.f90\fP\&.
 .PP
-Referenced by normalized_d()\&.
-.SS "real(sp) function pmat4::absv_s (real(sp), dimension(:), intent(in) a)\fC [private]\fP"
+Referenced by \fBpmat4::normalized::normalized_d()\fP\&.
+.SS "real(sp) function pmat4::absv_s (real(sp), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the absolute magnitude of a single precision real vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 s result, single precision real scalar 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 119 of file pmat4\&.f90\&.
+Definition at line \fB118\fP of file \fBpmat4\&.f90\fP\&.
 .PP
-Referenced by normalized_s()\&.
-.SS "real(dp) function, dimension(3) pmat4::axial33_d (real(dp), dimension(3,3), intent(in) b)"
+Referenced by \fBpmat4::normalized::normalized_s()\fP\&.
+.SS "real(dp) function, dimension(3) pmat4::axial33_d (real(dp), dimension(3,3), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the 3-vector corresponding to the given antisymmetric 'axial vector' matrix, assuming a right-handed correspondence\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP real type input antisymmetric matrix 'axial vector' B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result, 3-vector corresponding to B 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 462 of file pmat4\&.f90\&.
-.PP
-References pietc::o2\&.
-.SS "real(sp) function, dimension(3) pmat4::axial33_s (real(sp), dimension(3,3), intent(in) b)"
+Definition at line \fB461\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(3) pmat4::axial33_s (real(sp), dimension(3,3), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the 3-vector corresponding to the given antisymmetric 'axial vector' matrix, assuming a right-handed correspondence\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP real type input antisymmetric matrix 'axial vector' B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result, 3-vector corresponding to B 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 448 of file pmat4\&.f90\&.
-.SS "real(dp) function, dimension(3,3) pmat4::axial3_d (real(dp), dimension(3), intent(in) a)"
+Definition at line \fB447\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(3,3) pmat4::axial3_d (real(dp), dimension(3), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the axial 'vector', as an antisymmetric matrix, corresponding to the given 3-vector assuming a right-handed correspondence\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input 3-vector A 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, antisymmetrix 'axial vector' matrix corresponding to A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 434 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
-.SS "real(sp) function, dimension(3,3) pmat4::axial3_s (real(sp), dimension(3), intent(in) a)"
+Definition at line \fB433\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(3,3) pmat4::axial3_s (real(sp), dimension(3), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the axial 'vector', as an antisymmetric matrix, corresponding to the given 3-vector assuming a right-handed correspondence\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input 3-vector A 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, antisymmetrix 'axial vector' matrix corresponding to A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 420 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::axtoq\fP (real(dp), dimension(3), intent(in) v, real(dp), dimension(0:3), intent(out) q)"
+Definition at line \fB419\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::axtoq (real(dp), dimension(3), intent(in) v, real(dp), dimension(0:3), intent(out) q)"
 
 .PP
 Go from an axial 3-vector to its equivalent quaternion\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIv\fP axial 3-vector 
 .br
 \fIq\fP quaternion 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1658 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::axtorot\fP (real(dp), dimension(3), intent(in) ax3, real(dp), dimension(3,3), intent(out) orth33)"
+Definition at line \fB1657\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::axtorot (real(dp), dimension(3), intent(in) ax3, real(dp), dimension(3,3), intent(out) orth33)"
 
 .PP
 Construct the 3*3 orthogonal matrix, orth33, that corresponds to the proper rotation encoded by the 3-vector, ax3\&. The antisymmetric matrix ax33 equivalent to the axial vector ax3 is exponentiated to obtain orth33\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIax3\fP axial 3-vector 
 .br
 \fIorth33\fP 3*3 orthogonal matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1548 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::cmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, real(dp), dimension(3), intent(in) vz, real(dp), dimension(3), intent(out) vw)\fC [private]\fP"
+Definition at line \fB1547\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::cmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, real(dp), dimension(3), intent(in) vz, real(dp), dimension(3), intent(out) vw)\fR [private]\fP"
 
 .PP
 Perform a complex Mobius transformation from cartesian vz to cartesian vw where the transformation coefficients are the standard aa,bb,cc,dd\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIaa\fP Mobius transformation coefficient 
 .br
@@ -696,22 +692,20 @@ Perform a complex Mobius transformation from cartesian vz to cartesian vw where 
 \fIvw\fP Cartesian unit 3-vector representation of output 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2312 of file pmat4\&.f90\&.
-.PP
-References zmobius()\&.
-.SS "subroutine, public \fBpmat4::corral\fP (integer(spi), intent(in) m, integer(spi), intent(in) n, logical, dimension(m,n), intent(in) mask, real(dp), dimension(m,n), intent(in) a, real(dp), dimension(m  ), intent(out) d, real(dp), dimension(m,n), intent(out) aa, real(dp), dimension(  n), intent(out) e)"
+Definition at line \fB2311\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::corral (integer(spi), intent(in) m, integer(spi), intent(in) n, logical, dimension(m,n), intent(in) mask, real(dp), dimension(m,n), intent(in) a, real(dp), dimension(m  ), intent(out) d, real(dp), dimension(m,n), intent(out) aa, real(dp), dimension(  n), intent(out) e)"
 
 .PP
 Find positive diagonals D and E and a Lagrange multiplier F that minimize the row-sum +column-sum of masked terms, (D_i +log(|A_ij|) +E_j)^2 subject to the single constraint, sum_j E_j =0, where the mask permits only nonnegligible A_ij to participate in the quadratic quantities\&. Once a solution for D and E is found, return their exponentials, d and e, together with the rescaled matrix aa such that a = d\&.aa\&.e when d and e are interpreted as diagonal matrices\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm\fP number of rows of A 
 .br
@@ -728,67 +722,67 @@ Find positive diagonals D and E and a Lagrange multiplier F that minimize the ro
 \fIe\fP positive diagonal matrix of dimension n 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 1441 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "real(dp) function, dimension(3) pmat4::cross_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b)\fC [private]\fP"
+Definition at line \fB1440\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(3) pmat4::cross_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the cross product of two double precision real 3-vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input 3-vector 
 .br
 \fIb\fP real type input 3-vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 c result, double precision real 3-vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 215 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(3) pmat4::cross_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b)\fC [private]\fP"
+Definition at line \fB214\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(3) pmat4::cross_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the cross product of two single precision real 3-vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input 3-vector 
 .br
 \fIb\fP real type input 3-vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 c result, single precision real 3-vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 202 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::ctoz\fP (real(dp), dimension(3), intent(in) v, complex(dpc), intent(out) z, logical, intent(out) infz)"
+Definition at line \fB201\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::ctoz (real(dp), dimension(3), intent(in) v, complex(dpc), intent(out) z, logical, intent(out) infz)"
 
 .PP
 Utility codes for various Mobius transformations\&. If aa1,bb1,cc1,dd1 are the coefficients for one transformation, and aa2,bb2,cc2,dd2 are the coefficients for a second one, then the coefficients for the mapping of a test point, zz, by aa1 etc to zw, followed by a mapping of zw, by aa2 etc to zv, is equivalent to a single mapping zz-->zv by the transformatn with coefficients aa3,bb3,cc3,dd3, such that, as 2*2 complex matrices:
@@ -796,16 +790,16 @@ Utility codes for various Mobius transformations\&. If aa1,bb1,cc1,dd1 are the c
 .PP
 .nf
 
- [ aa3, bb3 ]   [ aa2, bb2 ]   [ aa1, bb1 ]
- [          ] = [          ] * [          ]
- [ cc3, dd3 ]   [ cc2, dd2 ]   [ cc1, dd1 ] \&.
- 
+     [ aa3, bb3 ]   [ aa2, bb2 ]   [ aa1, bb1 ]
+     [          ] = [          ] * [          ]
+     [ cc3, dd3 ]   [ cc2, dd2 ]   [ cc1, dd1 ] \&.
+     
 .fi
 .PP
 .PP
 Note that the determinant of these matrices is always +1\&. Given a cartesian 3-vector representation of a point on the Riemann unit sphere, return the stereographically equivalent complex number\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIv\fP cartesian 3-vector representation of point on Riemann sphere 
 .br
@@ -814,260 +808,250 @@ Note that the determinant of these matrices is always +1\&. Given a cartesian 3-
 \fIinfz\fP logical indicator for z being the point at infinity 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2027 of file pmat4\&.f90\&.
-.PP
-References pkind::dpc, pietc::u0, and pietc::u1\&.
-.SS "real(dp) function pmat4::det_d (real(dp), dimension(:,:), intent(in) a)"
+Definition at line \fB2026\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function pmat4::det_d (real(dp), dimension(:,:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the determinant of a double precision matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input matrix A 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 det result, determinant of matrix A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 369 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
-.SS "integer(spi) function pmat4::det_i (integer(spi), dimension(:,:), intent(in) a)"
+Definition at line \fB368\fP of file \fBpmat4\&.f90\fP\&.
+.SS "integer(spi) function pmat4::det_i (integer(spi), dimension(:,:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the determinant of a single precision integer matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP integer type input matrix A 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 idet result, determinant of matrix A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 390 of file pmat4\&.f90\&.
-.SS "integer(dpi) function pmat4::det_id (integer(dpi), dimension(:,:), intent(in) a)\fC [private]\fP"
+Definition at line \fB389\fP of file \fBpmat4\&.f90\fP\&.
+.SS "integer(dpi) function pmat4::det_id (integer(dpi), dimension(:,:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the determinant of a double precision integer matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP integer type input matrix A 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 idet result, determinant of matrix A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 404 of file pmat4\&.f90\&.
-.PP
-References pkind::dp, and pkind::dpi\&.
-.SS "real(sp) function pmat4::det_s (real(sp), dimension(:,:), intent(in) a)\fC [private]\fP"
+Definition at line \fB403\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function pmat4::det_s (real(sp), dimension(:,:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the determinant of a single precision matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input matrix A 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 det result, determinant of matrix A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 348 of file pmat4\&.f90\&.
-.SS "real(dp) function, dimension(size(a),size(a)) pmat4::diagn_d (real(dp), dimension(:), intent(in) a)"
+Definition at line \fB347\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(size(a),size(a)) pmat4::diagn_d (real(dp), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the diagonal matrix whose elements are the given vector\&. Double precision version
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input vector A listing the diagonal elements 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, diagonal matrix with the elements of A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 492 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
-.SS "integer(spi) function, dimension(size(a),size(a)) pmat4::diagn_i (integer(spi), dimension(:), intent(in) a)"
+Definition at line \fB491\fP of file \fBpmat4\&.f90\fP\&.
+.SS "integer(spi) function, dimension(size(a),size(a)) pmat4::diagn_i (integer(spi), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the diagonal matrix whose elements are the given vector\&. Integer version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP integer input vector A listing the diagonal elements 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, diagonal matrix with the elements of A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 508 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(size(a),size(a)) pmat4::diagn_s (real(sp), dimension(:), intent(in) a)"
+Definition at line \fB507\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(size(a),size(a)) pmat4::diagn_s (real(sp), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the diagonal matrix whose elements are the given vector\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input vector A listing the diagonal elements 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, diagonal matrix with the elements of A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 476 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
-.SS "real(dp) function, dimension(size(b,1)) pmat4::diagnn_d (real(dp), dimension(:,:), intent(in) b)\fC [private]\fP"
+Definition at line \fB475\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(size(b,1)) pmat4::diagnn_d (real(dp), dimension(:,:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the vector whose elements are the diagonal ones of a given matrix\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP real type input matrix 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result, vector listing the diagonal elements of the given matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 538 of file pmat4\&.f90\&.
-.SS "integer(spi) function, dimension(size(b,1)) pmat4::diagnn_i (integer(spi), dimension(:,:), intent(in) b)\fC [private]\fP"
+Definition at line \fB537\fP of file \fBpmat4\&.f90\fP\&.
+.SS "integer(spi) function, dimension(size(b,1)) pmat4::diagnn_i (integer(spi), dimension(:,:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the vector whose elements are the diagonal ones of a given matrix\&. Integer version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP integer type input matrix 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result, vector listing the diagonal elements of the given matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 553 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(size(b,1)) pmat4::diagnn_s (real(sp), dimension(:,:), intent(in) b)\fC [private]\fP"
+Definition at line \fB552\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(size(b,1)) pmat4::diagnn_s (real(sp), dimension(:,:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the vector whose elements are the diagonal ones of a given matrix\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP real type input matrix 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result, vector listing the diagonal elements of the given matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 523 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::dlltoxy_d (real(dp), intent(in) rlat, real(dp), intent(in) drlat, real(dp), intent(in) drlon, real(dp), dimension(2), intent(out) x2)"
+Definition at line \fB522\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::dlltoxy_d (real(dp), intent(in) rlat, real(dp), intent(in) drlat, real(dp), intent(in) drlon, real(dp), dimension(2), intent(out) x2)\fR [private]\fP"
 
 .PP
 From a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrlat\fP latitude 
 .br
@@ -1078,22 +1062,20 @@ From a reference latitude, and increments of latitude and longitude, return the 
 \fIx2\fP output 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 936 of file pmat4\&.f90\&.
-.PP
-References pietc::u2\&.
-.SS "subroutine pmat4::dlltoxy_s (real(sp), intent(in) rlat, real(sp), intent(in) drlat, real(sp), intent(in) drlon, real(sp), dimension(2), intent(out) x2)\fC [private]\fP"
+Definition at line \fB935\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::dlltoxy_s (real(sp), intent(in) rlat, real(sp), intent(in) drlat, real(sp), intent(in) drlon, real(sp), dimension(2), intent(out) x2)\fR [private]\fP"
 
 .PP
 From a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrlat\fP latitude 
 .br
@@ -1104,20 +1086,20 @@ From a reference latitude, and increments of latitude and longitude, return the 
 \fIx2\fP output 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 916 of file pmat4\&.f90\&.
-.SS "real(dp) function pmat4::dqarea_d (real(dp), intent(in) rlat, real(dp), intent(in) drlata, real(dp), intent(in) drlona, real(dp), intent(in) drlatb, real(dp), intent(in) drlonb, real(dp), intent(in) drlatc, real(dp), intent(in) drlonc)\fC [private]\fP"
+Definition at line \fB915\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function pmat4::dqarea_d (real(dp), intent(in) rlat, real(dp), intent(in) drlata, real(dp), intent(in) drlona, real(dp), intent(in) drlatb, real(dp), intent(in) drlonb, real(dp), intent(in) drlatc, real(dp), intent(in) drlonc)\fR [private]\fP"
 
 .PP
 Compute the area of the spherical quadrilateral with a vertex at latitude rlat, and three other vertices at A, B, and C in turn, whose incremented latitudes and longitudes are drlata,drlona (for A), drlatb,drlonb (for B), and drlatc,drlonc (for C)\&. The computations are designed to give a proportionately accurate area estimate even when the quadrilateral is very small, provided the diagonal making the B-increment is not disproportionately small compared to the characteristic size of the quadrilateral\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrlat\fP latitude of reference point 
 .br
@@ -1134,25 +1116,25 @@ Compute the area of the spherical quadrilateral with a vertex at latitude rlat, 
 \fIdrlonc\fP incremental longitude of point C 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 898 of file pmat4\&.f90\&.
-.SS "real(sp) function pmat4::dqarea_s (real(sp), intent(in) rlat, real(sp), intent(in) drlata, real(sp), intent(in) drlona, real(sp), intent(in) drlatb, real(sp), intent(in) drlonb, real(sp), intent(in) drlatc, real(sp), intent(in) drlonc)"
+Definition at line \fB896\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function pmat4::dqarea_s (real(sp), intent(in) rlat, real(sp), intent(in) drlata, real(sp), intent(in) drlona, real(sp), intent(in) drlatb, real(sp), intent(in) drlonb, real(sp), intent(in) drlatc, real(sp), intent(in) drlonc)\fR [private]\fP"
 
 .PP
 Compute the area of the spherical quadrilateral with a vertex at latitude rlat, and three other vertices at A, B, and C in turn, whose incremented latitudes and longitudes are drlata,drlona (for A), drlatb,drlonb (for B), and drlatc,drlonc (for C)\&. The computations are designed to give a proportionately accurate area estimate even when the quadrilateral is very small, provided the diagonal making the B-increment is not disproportionately small compared to the characteristic size of the quadrilateral\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrlat\fP latitude of reference point 
 .br
@@ -1169,25 +1151,25 @@ Compute the area of the spherical quadrilateral with a vertex at latitude rlat, 
 \fIdrlonc\fP incremental longitude of point C 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area result 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 869 of file pmat4\&.f90\&.
-.SS "real(dp) function pmat4::dtarea_d (real(dp), intent(in) rlat, real(dp), intent(in) drlata, real(dp), intent(in) drlona, real(dp), intent(in) drlatb, real(dp), intent(in) drlonb)"
+Definition at line \fB867\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function pmat4::dtarea_d (real(dp), intent(in) rlat, real(dp), intent(in) drlata, real(dp), intent(in) drlona, real(dp), intent(in) drlatb, real(dp), intent(in) drlonb)\fR [private]\fP"
 
 .PP
 Compute the area of the spherical triangle with a vertex at latitude rlat, and two other vertices, A and B, whose incremented latitudes and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B)\&. The computations are designed to give a proportionately accurate area estimate even when the triangle is very small, provided the B-increment is not disproportionately small compared to the other two sides\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrlat\fP latitude of reference point 
 .br
@@ -1200,27 +1182,25 @@ Compute the area of the spherical triangle with a vertex at latitude rlat, and t
 \fIdrlonb\fP incremental longitude of B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area result 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 825 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "real(sp) function pmat4::dtarea_s (real(sp), intent(in) rlat, real(sp), intent(in) drlata, real(sp), intent(in) drlona, real(sp), intent(in) drlatb, real(sp), intent(in) drlonb)\fC [private]\fP"
+Definition at line \fB824\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function pmat4::dtarea_s (real(sp), intent(in) rlat, real(sp), intent(in) drlata, real(sp), intent(in) drlona, real(sp), intent(in) drlatb, real(sp), intent(in) drlonb)\fR [private]\fP"
 
 .PP
 Compute the area of the spherical triangle with a vertex at latitude rlat, and two other vertices, A and B, whose incremented latitudes and longitudes are drlata,drlona (for A) and drlatb,drlonb (for B)\&. The computations are designed to give a proportionately accurate area estimate even when the triangle is very small, provided the B-increment is not disproportionately small compared to the other two sides\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrlat\fP latitude of reference point 
 .br
@@ -1233,25 +1213,25 @@ Compute the area of the spherical triangle with a vertex at latitude rlat, and t
 \fIdrlonb\fP incremental longitude of B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area result 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 786 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::expmat\fP (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), intent(out) detb)"
+Definition at line \fB785\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::expmat (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), intent(out) detb)"
 
 .PP
 Evaluate the exponential, B, of a matrix, A, of degree n\&. Apply the iterated squaring method, m times, to the approximation to exp(A/(2**m)) obtained as a Taylor expansion of degree L See Fung, T\&. C\&., 2004, Int\&. J\&. Numer\&. Meth\&. Engng, 59, 1273--1286\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIn\fP order of square matrix A 
 .br
@@ -1262,22 +1242,20 @@ Evaluate the exponential, B, of a matrix, A, of degree n\&. Apply the iterated s
 \fIdetb\fP determinant of matrix B 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1729 of file pmat4\&.f90\&.
-.PP
-References pietc::o2, pietc::u0, pietc::u1, and pietc::u2\&.
-.SS "subroutine pmat4::expmatd (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), dimension(n,n,(n*(n+1))/2), intent(out) bd, real(dp), intent(out) detb, real(dp), dimension((n*(n+1))/2), intent(out) detbd)"
+Definition at line \fB1728\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::expmatd (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), dimension(n,n,(n*(n+1))/2), intent(out) bd, real(dp), intent(out) detb, real(dp), dimension((n*(n+1))/2), intent(out) detbd)\fR [private]\fP"
 
 .PP
 Like expmat, but for the 1st derivatives also\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIn\fP order of square matrix A 
 .br
@@ -1292,22 +1270,20 @@ Like expmat, but for the 1st derivatives also\&.
 \fIdetbd\fP derivative of detb wrt elements of A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1767 of file pmat4\&.f90\&.
-.PP
-References pietc::o2, pietc::u0, pietc::u1, and pietc::u2\&.
-.SS "subroutine pmat4::expmatdd (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), dimension(n,n,(n*(n+1))/2), intent(out) bd, real(dp), dimension(n,n,(n*(n+1))/2,(n*(n+1))/2), intent(out) bdd, real(dp), intent(out) detb, real(dp), dimension((n*(n+1))/2), intent(out) detbd, real(dp), dimension((n*(n+1))/2,(n*(n+1))/2), intent(out) detbdd)"
+Definition at line \fB1766\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::expmatdd (integer(spi), intent(in) n, real(dp), dimension(n,n), intent(in) a, real(dp), dimension(n,n), intent(out) b, real(dp), dimension(n,n,(n*(n+1))/2), intent(out) bd, real(dp), dimension(n,n,(n*(n+1))/2,(n*(n+1))/2), intent(out) bdd, real(dp), intent(out) detb, real(dp), dimension((n*(n+1))/2), intent(out) detbd, real(dp), dimension((n*(n+1))/2,(n*(n+1))/2), intent(out) detbdd)\fR [private]\fP"
 
 .PP
 Like expmat, but for the 1st and 2nd derivatives also\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIn\fP order of the matrix A 
 .br
@@ -1326,22 +1302,20 @@ Like expmat, but for the 1st and 2nd derivatives also\&.
 \fIdetbdd\fP 2nd derivative of detb wrt elements of A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1834 of file pmat4\&.f90\&.
-.PP
-References pietc::o2, pietc::u0, pietc::u1, and pietc::u2\&.
-.SS "subroutine pmat4::gram_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(dp), intent(out) det)"
+Definition at line \fB1833\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::gram_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(dp), intent(out) det)\fR [private]\fP"
 
 .PP
 Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. The number of columns returned is the rank, nrank, of A, and the determinant of the projection of A into the subspace of B is returned as det\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIas\fP given matrix A 
 .br
@@ -1352,22 +1326,22 @@ Apply a form of Gram-Schmidt orthogonalization process to return as many normali
 \fIdet\fP determinant of projection of A into subspace of B 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 1078 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat4::gram_s (real(sp), dimension(:,:), intent(in) as, real(sp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(sp), intent(out) det)"
+Definition at line \fB1077\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::gram_s (real(sp), dimension(:,:), intent(in) as, real(sp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, real(sp), intent(out) det)\fR [private]\fP"
 
 .PP
 Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. The number of columns returned is the rank, nrank, of A, and the determinant of the projection of A into the subspace of B is returned as det\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIas\fP given matrix A 
 .br
@@ -1378,20 +1352,20 @@ Apply a form of Gram-Schmidt orthogonalization process to return as many normali
 \fIdet\fP determinant of projection of A into subspace of B 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1007 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::graml_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, integer(spi), intent(out) detsign, real(dp), intent(out) ldet)"
+Definition at line \fB1006\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::graml_d (real(dp), dimension(:,:), intent(in) as, real(dp), dimension(:,:), intent(out) b, integer(spi), intent(out) nrank, integer(spi), intent(out) detsign, real(dp), intent(out) ldet)\fR [private]\fP"
 
 .PP
 A version of gram_d where the determinant information is returned in logarithmic form (to avoid overflows for large matrices)\&. When the matrix is singular, the 'sign' of the determinant, detsign, is returned as zero (instead of either +1 or -1) and ldet is then just the log of the nonzero factors found by the process\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIas\fP given matrix A 
 .br
@@ -1404,545 +1378,529 @@ A version of gram_d where the determinant information is returned in logarithmic
 \fIldet\fP logarithm of absolute value of determinant 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1150 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
-.SS "real(dp) function pmat4::hav_d (real(dp), intent(in) t)"
+Definition at line \fB1149\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function pmat4::hav_d (real(dp), intent(in) t)\fR [private]\fP"
 
 .PP
 Haversine function in double precision\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIt\fP input argument 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 964 of file pmat4\&.f90\&.
-.PP
-References pietc::o2\&.
-.SS "real(sp) function pmat4::hav_s (real(sp), intent(in) t)"
+Definition at line \fB963\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function pmat4::hav_s (real(sp), intent(in) t)\fR [private]\fP"
 
 .PP
 Haversine function in single precision\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIt\fP input argument 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 951 of file pmat4\&.f90\&.
-.PP
-References pietc::t\&.
-.SS "real(dp) function pmat4::huarea_d (real(dp), intent(in) sa, real(dp), intent(in) sb)\fC [private]\fP"
+Definition at line \fB950\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function pmat4::huarea_d (real(dp), intent(in) sa, real(dp), intent(in) sb)\fR [private]\fP"
 
 .PP
 Spherical area of right-angle triangle whose orthogonal sides have orthographic projection dimensions, sa and sb, sphere of unit radius\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIsa\fP orthographic projection of triangle's side A 
 .br
 \fIsb\fP orthographic projection of triangle's side B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area (steradians) of the right-angle spherical triangle 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 648 of file pmat4\&.f90\&.
-.SS "real(sp) function pmat4::huarea_s (real(sp), intent(in) sa, real(sp), intent(in) sb)\fC [private]\fP"
+Definition at line \fB647\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function pmat4::huarea_s (real(sp), intent(in) sa, real(sp), intent(in) sb)\fR [private]\fP"
 
 .PP
 Spherical area of right-angle triangle whose orthogonal sides have orthographic projection dimensions, sa and sb, sphere of unit radius\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIsa\fP orthographic projection of triangle's side A 
 .br
 \fIsb\fP orthographic projection of triangle's side B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area (steradians) of the right-angle spherical triangle 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 630 of file pmat4\&.f90\&.
-.SS "integer(spi) function, dimension(3,3) pmat4::identity3_i ()\fC [private]\fP"
+Definition at line \fB629\fP of file \fBpmat4\&.f90\fP\&.
+.SS "integer(spi) function, dimension(3,3) pmat4::identity3_i\fR [private]\fP"
 
 .PP
 Return the 3-dimensional integer identity matrix\&. 
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result, identity matrix in 3 dimensions\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 615 of file pmat4\&.f90\&.
-.SS "integer(spi) function, dimension(n,n) pmat4::identity_i (integer(spi), intent(in) n)\fC [private]\fP"
+Definition at line \fB614\fP of file \fBpmat4\&.f90\fP\&.
+.SS "integer(spi) function, dimension(n,n) pmat4::identity_i (integer(spi), intent(in) n)\fR [private]\fP"
 
 .PP
 Return the integer identity matrix for a given dimensionality\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIn\fP input integer dimensionality 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 a result, identity matrix of the given dimensionality 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 603 of file pmat4\&.f90\&.
-.SS "real(dp) function, dimension(0:3), public \fBpmat4::mulqq\fP (real(dp), dimension(0:3), intent(in) a, real(dp), dimension(0:3), intent(in) b)"
+Definition at line \fB602\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(0:3), public pmat4::mulqq (real(dp), dimension(0:3), intent(in) a, real(dp), dimension(0:3), intent(in) b)"
 
 .PP
 Multiply quaternions, a*b, assuming operation performed from right to left\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP input quaternion 
 .br
 \fIb\fP input quaternion 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 c result quaternion a*b 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1709 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::normalize_d (real(dp), dimension(:), intent(inout) v)"
+Definition at line \fB1708\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::normalize_d (real(dp), dimension(:), intent(inout) v)\fR [private]\fP"
 
 .PP
 Normalize the given double precision real vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIv\fP vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 988 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat4::normalize_s (real(sp), dimension(:), intent(inout) v)"
+Definition at line \fB987\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::normalize_s (real(sp), dimension(:), intent(inout) v)\fR [private]\fP"
 
 .PP
 Normalize the given single precision real vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIv\fP vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 976 of file pmat4\&.f90\&.
-.SS "real(dp) function, dimension(size(a)) pmat4::normalized_d (real(dp), dimension(:), intent(in) a)"
+Definition at line \fB975\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(size(a)) pmat4::normalized_d (real(dp), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the normalized version of a double precision real vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, double precision real vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 157 of file pmat4\&.f90\&.
-.PP
-References absv_d(), and pietc::u0\&.
-.SS "real(sp) function, dimension(size(a)) pmat4::normalized_s (real(sp), dimension(:), intent(in) a)\fC [private]\fP"
+Definition at line \fB156\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(size(a)) pmat4::normalized_s (real(sp), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the normalized version of a single precision real vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, single precision real vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 143 of file pmat4\&.f90\&.
-.PP
-References absv_s()\&.
-.SS "real(dp) function, dimension(size(u)) pmat4::orthogonalized_d (real(dp), dimension(:), intent(in) u, real(dp), dimension(:), intent(in) a)\fC [private]\fP"
+Definition at line \fB142\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(size(u)) pmat4::orthogonalized_d (real(dp), dimension(:), intent(in) u, real(dp), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the part of vector a that is orthogonal to unit vector u\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIu\fP real type input unit vector 
 .br
 \fIa\fP real type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, double precision real vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 187 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(size(u)) pmat4::orthogonalized_s (real(sp), dimension(:), intent(in) u, real(sp), dimension(:), intent(in) a)"
+Definition at line \fB186\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(size(u)) pmat4::orthogonalized_s (real(sp), dimension(:), intent(in) u, real(sp), dimension(:), intent(in) a)\fR [private]\fP"
 
 .PP
 Return the part of vector a that is orthogonal to unit vector u\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIu\fP real type input unit vector 
 .br
 \fIa\fP real type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 b result, single precision real vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 172 of file pmat4\&.f90\&.
-.SS "real(dp) function, dimension(size(a),size(b)) pmat4::outer_product_d (real(dp), dimension(:), intent(in) a, real(dp), dimension(:), intent(in) b)\fC [private]\fP"
+Definition at line \fB171\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(size(a),size(b)) pmat4::outer_product_d (real(dp), dimension(:), intent(in) a, real(dp), dimension(:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the outer product matrix of two double precision real vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input vector 
 .br
 \fIb\fP real type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 c result, rank-1 matrix outer product 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 289 of file pmat4\&.f90\&.
-.SS "integer(spi) function, dimension(size(a),size(b)) pmat4::outer_product_i (integer(spi), dimension(:), intent(in) a, integer(spi), dimension(:), intent(in) b)\fC [private]\fP"
+Definition at line \fB288\fP of file \fBpmat4\&.f90\fP\&.
+.SS "integer(spi) function, dimension(size(a),size(b)) pmat4::outer_product_i (integer(spi), dimension(:), intent(in) a, integer(spi), dimension(:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the outer product matrix of two integer vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP integer type input vector 
 .br
 \fIb\fP integer type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 c result, rank-1 matrix outer product 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 305 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(size(a),size(b)) pmat4::outer_product_s (real(sp), dimension(:), intent(in) a, real(sp), dimension(:), intent(in) b)\fC [private]\fP"
+Definition at line \fB304\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(size(a),size(b)) pmat4::outer_product_s (real(sp), dimension(:), intent(in) a, real(sp), dimension(:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the outer product matrix of two single precision real vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input vector 
 .br
 \fIb\fP real type input vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 c result, rank-1 matrix outer product 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 273 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::plaingram_d (real(dp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)"
+Definition at line \fB272\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::plaingram_d (real(dp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)\fR [private]\fP"
 
 .PP
 A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP input as given matrix, output as orthogonalized vectors 
 .br
 \fInrank\fP effective rank of given matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1263 of file pmat4\&.f90\&.
-.PP
-References pietc::u0\&.
-.SS "subroutine pmat4::plaingram_s (real(sp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)"
+Definition at line \fB1262\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::plaingram_s (real(sp), dimension(:,:), intent(inout) b, integer(spi), intent(out) nrank)\fR [private]\fP"
 
 .PP
 A 'plain' (unpivoted) version of Gram-Schmidt, for square matrices only\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP input as given matrix, output as orthogonalized vectors 
 .br
 \fInrank\fP effective rank of given matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1227 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::qtoax\fP (real(dp), dimension(0:3), intent(in) q, real(dp), dimension(3), intent(out) v)"
+Definition at line \fB1226\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::qtoax (real(dp), dimension(0:3), intent(in) q, real(dp), dimension(3), intent(out) v)"
 
 .PP
 Go from quaternion to axial 3-vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIq\fP quaternion 
 .br
 \fIv\fP axial 3-vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1672 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::qtorot\fP (real(dp), dimension(0:3), intent(in) q, real(dp), dimension(3,3), intent(out) rot)"
+Definition at line \fB1671\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::qtorot (real(dp), dimension(0:3), intent(in) q, real(dp), dimension(3,3), intent(out) rot)"
 
 .PP
 Go from quaternion to rotation matrix representations\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIq\fP quaternion representation 
 .br
 \fIrot\fP rotation matrix representations 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1646 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::qtospin\fP (real(dp), dimension(0:3), intent(in) q, complex(dpc), dimension(2,2), intent(out) cspin)"
+Definition at line \fB1645\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::qtospin (real(dp), dimension(0:3), intent(in) q, complex(dpc), dimension(2,2), intent(out) cspin)"
 
 .PP
 Go from the unit quaternion to the complex spinor representation\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIq\fP given unit quaternion representation 
 .br
 \fIcspin\fP spinor representation 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1575 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::rottoax\fP (real(dp), dimension(3,3), intent(in) orth33, real(dp), dimension(3), intent(out) ax3)"
+Definition at line \fB1574\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::rottoax (real(dp), dimension(3,3), intent(in) orth33, real(dp), dimension(3), intent(out) ax3)"
 
 .PP
 Assuming that given orth33 is a 3*3 proper rotation matrix, derive an axial 3-vector, ax3, such that orth33 is implied by ax3 when the latter is interpreted as encoding a rotation (as in subroutine axtorot)\&. Note that such ax3 are not unique -- adding any multiple of 2*pi times the parallel unit vector leads to the same orth33\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIorth33\fP 3*3 proper rotation matrix 
 .br
 \fIax3\fP axial 3-vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1518 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::rottoq\fP (real(dp), dimension(3,3), intent(in) rot, real(dp), dimension(0:3), intent(out) q)"
+Definition at line \fB1517\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::rottoq (real(dp), dimension(3,3), intent(in) rot, real(dp), dimension(0:3), intent(out) q)"
 
 .PP
 Go from rotation matrix to a corresponding unit quaternion representation\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrot\fP given rotation matrix 
 .br
 \fIq\fP quaternion representation 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1590 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, pietc::u1, and pietc::u2\&.
-.SS "subroutine pmat4::rowgram (integer(spi), intent(in) m, integer(spi), intent(in) n, real(dp), dimension(m,n), intent(in) a, integer(spi), dimension(n), intent(out) ipiv, real(dp), dimension(m,n), intent(out) tt, real(dp), dimension(n,n), intent(out) b, integer(spi), intent(out) rank)"
+Definition at line \fB1589\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::rowgram (integer(spi), intent(in) m, integer(spi), intent(in) n, real(dp), dimension(m,n), intent(in) a, integer(spi), dimension(n), intent(out) ipiv, real(dp), dimension(m,n), intent(out) tt, real(dp), dimension(n,n), intent(out) b, integer(spi), intent(out) rank)\fR [private]\fP"
 
 .PP
 Without changing (tall) rectangular input matrix a, perform pivoted gram- Schmidt operations to orthogonalize the rows, until rows that remain become negligible\&. Record the pivoting sequence in ipiv, and the row-normalization in tt(j,j) and the row-orthogonalization in tt(i,j), for i>j\&. Note that tt(i,j)=0 for i<j (tt is truncated lower triangular)\&. The orthonormalized rows are returned in square array b, which is complete even when the effective rank < n\&. The recorded row operations can be repeated on independent column vectors through the use of subroutine ROWOPS (in this module)\&. It is recommended to rescale the original matrix A via a call to CORRAL (in this module) because the negligibility criterion depends upon an 'epsilon' value that is fixed (10**(-13)) and assumes elements of a are never too different in magnitude from unity, unless they are actually zero\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm\fP number of rows of A 
 .br
@@ -1959,22 +1917,20 @@ Without changing (tall) rectangular input matrix a, perform pivoted gram- Schmid
 \fIrank\fP effective rank of A 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1315 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine, public \fBpmat4::rowops\fP (integer(spi), intent(in) m, integer(spi), intent(in) n, integer(spi), dimension(n), intent(in) ipiv, real(dp), dimension(m,n), intent(in) tt, real(dp), dimension(m), intent(in) v, real(dp), dimension(m), intent(out) vv)"
+Definition at line \fB1314\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::rowops (integer(spi), intent(in) m, integer(spi), intent(in) n, integer(spi), dimension(n), intent(in) ipiv, real(dp), dimension(m,n), intent(in) tt, real(dp), dimension(m), intent(in) v, real(dp), dimension(m), intent(out) vv)"
 
 .PP
 Apply the row-operations, implied by ipiv and tt returned by rowgram, to the single column vector, v, to produce the transformed vector vv\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm\fP number of rows of matrix tt, dimension of vectors V and VV 
 .br
@@ -1989,20 +1945,20 @@ Apply the row-operations, implied by ipiv and tt returned by rowgram, to the sin
 \fIvv\fP output column vector vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1400 of file pmat4\&.f90\&.
-.SS "real(dp) function pmat4::sarea_d (real(dp), dimension(3), intent(in) v1, real(dp), dimension(3), intent(in) v2, real(dp), dimension(3), intent(in) v3)\fC [private]\fP"
+Definition at line \fB1399\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function pmat4::sarea_d (real(dp), dimension(3), intent(in) v1, real(dp), dimension(3), intent(in) v2, real(dp), dimension(3), intent(in) v3)\fR [private]\fP"
 
 .PP
 Compute the area of the spherical triangle, {v1,v2,v3}\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIv1\fP unit-3-vector vertex of the spherical triangle 
 .br
@@ -2011,27 +1967,25 @@ Compute the area of the spherical triangle, {v1,v2,v3}\&.
 \fIv3\fP unit-3-vector vertex of the spherical triangle 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area result 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 723 of file pmat4\&.f90\&.
-.PP
-References cyclic(), and pietc::u0\&.
-.SS "real(sp) function pmat4::sarea_s (real(sp), dimension(3), intent(in) v1, real(sp), dimension(3), intent(in) v2, real(sp), dimension(3), intent(in) v3)\fC [private]\fP"
+Definition at line \fB722\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function pmat4::sarea_s (real(sp), dimension(3), intent(in) v1, real(sp), dimension(3), intent(in) v2, real(sp), dimension(3), intent(in) v3)\fR [private]\fP"
 
 .PP
 Compute the area of the spherical triangle, {v1,v2,v3}, measured in the right-handed sense, by dropping a perpendicular to u0 on the longest side so that the area becomes the sum of areas of the two simpler right-angled triangles\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIv1\fP area of the spherical triangle 
 .br
@@ -2040,27 +1994,25 @@ Compute the area of the spherical triangle, {v1,v2,v3}, measured in the right-ha
 \fIv3\fP area of the spherical triangle 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area result 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 668 of file pmat4\&.f90\&.
-.PP
-References cyclic()\&.
-.SS "subroutine \fBpmat4::setem\fP (real(dp), intent(in) c, real(dp), intent(in) d, real(dp), intent(in) e, real(dp), intent(in) g, real(dp), dimension(3,3), intent(out) r)\fC [private]\fP"
+Definition at line \fB667\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::setem (real(dp), intent(in) c, real(dp), intent(in) d, real(dp), intent(in) e, real(dp), intent(in) g, real(dp), dimension(3,3), intent(out) r)\fR [private]\fP"
 
 .PP
 Given the 4 components of a unit quaternion, return the associated 3*3 rotation matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIc\fP 0th component of given quaternion 
 .br
@@ -2073,20 +2025,20 @@ Given the 4 components of a unit quaternion, return the associated 3*3 rotation 
 \fIr\fP output 3*3 real rotation matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1690 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::setmobius\fP (real(dp), dimension(3), intent(in) xc0, real(dp), dimension(3), intent(in) xc1, real(dp), dimension(3), intent(in) xc2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)"
+Definition at line \fB1689\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::setmobius (real(dp), dimension(3), intent(in) xc0, real(dp), dimension(3), intent(in) xc1, real(dp), dimension(3), intent(in) xc2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)"
 
 .PP
 Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*cc=1, for a standard (north-)polar stereographic transformation that takes cartesian point, xc0 to the north pole, xc1 to (lat=0,lon=0), xc2 to the south pole (=complex infinity)\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIxc0\fP cartesian point that will map to (0,0,1) 
 .br
@@ -2103,109 +2055,109 @@ Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*
 \fIdd\fP Mobius transformation complex coefficient 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2123 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::spintoq\fP (complex(dpc), dimension(2,2), intent(in) cspin, real(dp), dimension(0:3), intent(out) q)"
+Definition at line \fB2122\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::spintoq (complex(dpc), dimension(2,2), intent(in) cspin, real(dp), dimension(0:3), intent(out) q)"
 
 .PP
 Go from the complex spinor matrix to the unit quaternion representation\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIcspin\fP complex spinor representation 
 .br
 \fIq\fP unit quaternion representation 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1562 of file pmat4\&.f90\&.
-.SS "real(dp) function pmat4::trace_d (real(dp), dimension(:,:), intent(in) b)\fC [private]\fP"
+Definition at line \fB1561\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function pmat4::trace_d (real(dp), dimension(:,:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the trace of a given double precision real matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP real type input matrix B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 s result, trace, or sum of diagonal elements, of B 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 579 of file pmat4\&.f90\&.
-.SS "integer(spi) function pmat4::trace_i (integer(spi), dimension(:,:), intent(in) b)\fC [private]\fP"
+Definition at line \fB578\fP of file \fBpmat4\&.f90\fP\&.
+.SS "integer(spi) function pmat4::trace_i (integer(spi), dimension(:,:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the trace of a given integer matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP integer type input matrix B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 s result, trace, or sum of diagonal elements, of B 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 591 of file pmat4\&.f90\&.
-.SS "real(sp) function pmat4::trace_s (real(sp), dimension(:,:), intent(in) b)\fC [private]\fP"
+Definition at line \fB590\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function pmat4::trace_s (real(sp), dimension(:,:), intent(in) b)\fR [private]\fP"
 
 .PP
 Return the trace of a given single precision real matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIb\fP real type input matrix B 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 s result, trace, or sum of diagonal elements, of B 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 567 of file pmat4\&.f90\&.
-.SS "real(dp) function, dimension(4) pmat4::triple_cross_product_d (real(dp), dimension(4), intent(in) u, real(dp), dimension(4), intent(in) v, real(dp), dimension(4), intent(in) w)\fC [private]\fP"
+Definition at line \fB566\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function, dimension(4) pmat4::triple_cross_product_d (real(dp), dimension(4), intent(in) u, real(dp), dimension(4), intent(in) v, real(dp), dimension(4), intent(in) w)\fR [private]\fP"
 
 .PP
 Return the triple_cross_product for 4-vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIu\fP real type input 4-vector 
 .br
@@ -2214,25 +2166,25 @@ Return the triple_cross_product for 4-vectors\&.
 \fIw\fP real type input 4-vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 x result, triple-cross-product 4-vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 253 of file pmat4\&.f90\&.
-.SS "real(sp) function, dimension(4) pmat4::triple_cross_product_s (real(sp), dimension(4), intent(in) u, real(sp), dimension(4), intent(in) v, real(sp), dimension(4), intent(in) w)\fC [private]\fP"
+Definition at line \fB252\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function, dimension(4) pmat4::triple_cross_product_s (real(sp), dimension(4), intent(in) u, real(sp), dimension(4), intent(in) v, real(sp), dimension(4), intent(in) w)\fR [private]\fP"
 
 .PP
 Deliver the triple-cross-product, x, of the three 4-vectors, u, v, w, with the sign convention that ordered, {u,v,w,x} form a right-handed quartet in the generic case (determinant >= 0)\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIu\fP real type input 4-vector 
 .br
@@ -2241,25 +2193,25 @@ Deliver the triple-cross-product, x, of the three 4-vectors, u, v, w, with the s
 \fIw\fP real type input 4-vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 x result, triple-cross-product 4-vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 232 of file pmat4\&.f90\&.
-.SS "real(dp) function pmat4::triple_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b, real(dp), dimension(3), intent(in) c)\fC [private]\fP"
+Definition at line \fB231\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(dp) function pmat4::triple_product_d (real(dp), dimension(3), intent(in) a, real(dp), dimension(3), intent(in) b, real(dp), dimension(3), intent(in) c)\fR [private]\fP"
 
 .PP
 Return the triple product of three double precision real 3-vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input 3-vector 
 .br
@@ -2268,25 +2220,25 @@ Return the triple product of three double precision real 3-vectors\&.
 \fIc\fP real type input 3-vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 tripleproduct result, scalar triple product 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 336 of file pmat4\&.f90\&.
-.SS "real(sp) function pmat4::triple_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b, real(sp), dimension(3), intent(in) c)\fC [private]\fP"
+Definition at line \fB335\fP of file \fBpmat4\&.f90\fP\&.
+.SS "real(sp) function pmat4::triple_product_s (real(sp), dimension(3), intent(in) a, real(sp), dimension(3), intent(in) b, real(sp), dimension(3), intent(in) c)\fR [private]\fP"
 
 .PP
 Return the triple product of three single precision real 3-vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real type input 3-vector 
 .br
@@ -2295,25 +2247,25 @@ Return the triple product of three single precision real 3-vectors\&.
 \fIc\fP real type input 3-vector 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 tripleproduct result, scalar triple product 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 322 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::zmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) z, logical, intent(in) infz, complex(dpc), intent(out) w, logical, intent(out) infw)\fC [private]\fP"
+Definition at line \fB321\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::zmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) z, logical, intent(in) infz, complex(dpc), intent(out) w, logical, intent(out) infw)\fR [private]\fP"
 
 .PP
 Perform a complex Mobius transformation from (z,infz) to (w,infw) where the transformation coefficients are the standard aa,bb,cc,dd\&. Infz is \&.TRUE\&. only when z is at complex infinity; likewise infw and w\&. For these infinite cases, it is important that numerical z==(0,0)\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIaa\fP Mobius transformation complex coefficient 
 .br
@@ -2332,22 +2284,22 @@ Perform a complex Mobius transformation from (z,infz) to (w,infw) where the tran
 \fIinfw\fP logical indicator for w being a point at infinity 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2277 of file pmat4\&.f90\&.
+Definition at line \fB2276\fP of file \fBpmat4\&.f90\fP\&.
 .PP
-Referenced by cmobius(), and zmobiusi()\&.
-.SS "subroutine pmat4::zmobiusi (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) zz, logical, intent(in) infz, complex(dpc), intent(out) zw, logical, intent(out) infw)\fC [private]\fP"
+Referenced by \fBpmat4::mobius::cmobius()\fP, and \fBpmat4::mobiusi::zmobiusi()\fP\&.
+.SS "subroutine pmat4::zmobiusi (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) zz, logical, intent(in) infz, complex(dpc), intent(out) zw, logical, intent(out) infw)\fR [private]\fP"
 
 .PP
 Perform the inverse of the mobius transformation with coefficients, {aa,bb,cc,dd}\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIaa\fP inverse Mobius transformation coefficient 
 .br
@@ -2366,22 +2318,20 @@ Perform the inverse of the mobius transformation with coefficients, {aa,bb,cc,dd
 \fIinfw\fP logical indicator for zw the point at infinity 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2336 of file pmat4\&.f90\&.
-.PP
-References zmobius()\&.
-.SS "subroutine, public \fBpmat4::znfun\fP (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn, real(dp), intent(out) znd, real(dp), intent(out) zndd, real(dp), intent(out) znddd)"
+Definition at line \fB2335\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::znfun (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn, real(dp), intent(out) znd, real(dp), intent(out) zndd, real(dp), intent(out) znddd)"
 
 .PP
 For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&.,(n+3)th derivatives, wrt z, of the function C(z) = cosh(sqrt(2z)) or, equivalently, of C(z) = cos(sqrt(-2z)), according to the sign of z\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIn\fP integer order of the first of the returned derivatives of C\&. 
 .br
@@ -2396,22 +2346,20 @@ For a given nonnegative integer n and real argument z, evaluate the nth,\&.\&.\&
 \fIznddd\fP (n+3)th-derivative of C(z) 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1960 of file pmat4\&.f90\&.
-.PP
-References pietc::u0, pietc::u2, and pietc::u3\&.
-.SS "subroutine, public \fBpmat4::zntay\fP (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn)"
+Definition at line \fB1959\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::zntay (integer(spi), intent(in) n, real(dp), intent(in) z, real(dp), intent(out) zn)"
 
 .PP
 Evaluate, by Taylor-Maclaurin expansion, the nth-derivative of the function, C(z)=cosh(sqrt(2z)), or equiavlently, of C(z)=cos(sqrt(-2z))\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIn\fP integer order of the derivative 
 .br
@@ -2420,22 +2368,20 @@ Evaluate, by Taylor-Maclaurin expansion, the nth-derivative of the function, C(z
 \fIzn\fP returned value of the nth derivative 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1921 of file pmat4\&.f90\&.
-.PP
-References pietc::u2\&.
-.SS "subroutine pmat4::zsetmobius (complex(dp), intent(in) z0, logical, intent(in) infz0, complex(dp), intent(in) z1, logical, intent(in) infz1, complex(dp), intent(in) z2, logical, intent(in) infz2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)\fC [private]\fP"
+Definition at line \fB1920\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::zsetmobius (complex(dp), intent(in) z0, logical, intent(in) infz0, complex(dp), intent(in) z1, logical, intent(in) infz1, complex(dp), intent(in) z2, logical, intent(in) infz2, complex(dpc), intent(out) aa, complex(dpc), intent(out) bb, complex(dpc), intent(out) cc, complex(dpc), intent(out) dd)\fR [private]\fP"
 
 .PP
 Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*cc=1, that takes polar stereographic point, z0 to the north pole, z1 to (lat=0,lon=0), z2 to the south pole (=complex infinity)\&. Should any one of z0,z1,z2 be itself the 'point at infinity' its corresponding infz will be set 'true' (and the z value itself not used)\&. This routine is like setmobius, except the three fixed points defining the mapping are given in standard complex stereographic form, together with the logical codes 'infzn' that are TRUE if that point is itself the projection pole (i\&.e\&., the South Pole for a north polar stereographic)\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIz0\fP complex input point that will map to (0,0) 
 .br
@@ -2458,20 +2404,20 @@ Find the Mobius transformation complex coefficients, aa,bb,cc,dd, with aa*dd-bb*
 \fIdd\fP Mobius transformation complex coefficient 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2206 of file pmat4\&.f90\&.
-.SS "subroutine, public \fBpmat4::ztoc\fP (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v)"
+Definition at line \fB2205\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine, public pmat4::ztoc (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v)"
 
 .PP
 Given a complex z, return the equivalent cartesian unit 3-vector associated by the polar stereographic projection\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIz\fP complex input argument 
 .br
@@ -2480,25 +2426,25 @@ Given a complex z, return the equivalent cartesian unit 3-vector associated by t
 \fIv\fP cartesian unit 3-vector position equivalent to z 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2053 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::ztocd (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v, complex(dpc), dimension(3), intent(out) vd)\fC [private]\fP"
+Definition at line \fB2052\fP of file \fBpmat4\&.f90\fP\&.
+.SS "subroutine pmat4::ztocd (complex(dpc), intent(in) z, logical, intent(in) infz, real(dp), dimension(3), intent(out) v, complex(dpc), dimension(3), intent(out) vd)\fR [private]\fP"
 
 .PP
 The convention adopted for the complex derivative is that, for a complex infinitesimal map displacement, delta_z, the corresponding infinitesimal change of cartesian vector position is delta_v given by: delta_v = Real(vd*delta_z)\&. Thus, by a kind of Cauchy-Riemann relation, Imag(vd)=v CROSS Real(vd)\&.
 .PP
-\fBNote:\fP
+\fBNote\fP
 .RS 4
 The derivative for the ideal point at infinity has not been coded yet\&.
 .RE
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIz\fP complex input argument 
 .br
@@ -2509,16 +2455,14 @@ The derivative for the ideal point at infinity has not been coded yet\&.
 \fIvd\fP derivative of cartesian v wrt z 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2083 of file pmat4\&.f90\&.
-.PP
-References pkind::dpc\&.
+Definition at line \fB2082\fP of file \fBpmat4\&.f90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

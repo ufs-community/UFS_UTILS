@@ -1,4 +1,4 @@
-.TH "pmat4::mobius" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::mobius" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat4::mobius
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ pmat4::mobius
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 108 of file pmat4\&.f90\&.
+Definition at line \fB108\fP of file \fBpmat4\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat4::mobius::cmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, real(dp), dimension(3), intent(in) vz, real(dp), dimension(3), intent(out) vw)\fC [private]\fP"
+.SS "subroutine pmat4::mobius::cmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, real(dp), dimension(3), intent(in) vz, real(dp), dimension(3), intent(out) vw)"
 
 .PP
 Perform a complex Mobius transformation from cartesian vz to cartesian vw where the transformation coefficients are the standard aa,bb,cc,dd\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIaa\fP Mobius transformation coefficient 
 .br
@@ -43,20 +43,22 @@ Perform a complex Mobius transformation from cartesian vz to cartesian vw where 
 \fIvw\fP Cartesian unit 3-vector representation of output 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2312 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::mobius::zmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) z, logical, intent(in) infz, complex(dpc), intent(out) w, logical, intent(out) infw)\fC [private]\fP"
+Definition at line \fB2311\fP of file \fBpmat4\&.f90\fP\&.
+.PP
+References \fBpmat4::zmobius()\fP\&.
+.SS "subroutine pmat4::mobius::zmobius (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) z, logical, intent(in) infz, complex(dpc), intent(out) w, logical, intent(out) infw)"
 
 .PP
 Perform a complex Mobius transformation from (z,infz) to (w,infw) where the transformation coefficients are the standard aa,bb,cc,dd\&. Infz is \&.TRUE\&. only when z is at complex infinity; likewise infw and w\&. For these infinite cases, it is important that numerical z==(0,0)\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIaa\fP Mobius transformation complex coefficient 
 .br
@@ -75,14 +77,14 @@ Perform a complex Mobius transformation from (z,infz) to (w,infw) where the tran
 \fIinfw\fP logical indicator for w being a point at infinity 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2277 of file pmat4\&.f90\&.
+Definition at line \fB2276\fP of file \fBpmat4\&.f90\fP\&.
 
 .SH "Author"
 .PP 

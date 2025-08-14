@@ -1,4 +1,4 @@
-.TH "utils_mod::getvecpair" 3 "Tue Jan 21 2025" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.TH "utils_mod::getvecpair" 3 "Version 1.14.0" "ocnice_prep" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ utils_mod::getvecpair
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ utils_mod::getvecpair
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 33 of file utils_mod\&.F90\&.
+Definition at line \fB33\fP of file \fButils_mod\&.F90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine utils_mod::getvecpair::getvecpair2d (character(len=*), intent(in) fname, character(len=*), intent(in) wdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, character(len=*), intent(in) vname1, character(len=*), intent(in) vgrid1, character(len=*), intent(in) vname2, character(len=*), intent(in) vgrid2, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(out) vecpair)\fC [private]\fP"
+.SS "subroutine utils_mod::getvecpair::getvecpair2d (character(len=*), intent(in) fname, character(len=*), intent(in) wdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, character(len=*), intent(in) vname1, character(len=*), intent(in) vgrid1, character(len=*), intent(in) vname2, character(len=*), intent(in) vgrid2, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(out) vecpair)"
 
 .PP
 Obtain 2D vector pairs mapped to Ct and rotated to EN\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing the fields to retrieve 
 .br
@@ -51,20 +51,20 @@ Obtain 2D vector pairs mapped to Ct and rotated to EN\&.
 \fIvecpair\fP the vector pair array
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 191 of file utils_mod\&.F90\&.
-.SS "subroutine utils_mod::getvecpair::getvecpair3d (character(len=*), intent(in) fname, character(len=*), intent(in) wdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, character(len=*), intent(in) vname1, character(len=*), intent(in) vgrid1, character(len=*), intent(in) vname2, character(len=*), intent(in) vgrid2, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:,:), intent(out) vecpair)\fC [private]\fP"
+Definition at line \fB192\fP of file \fButils_mod\&.F90\fP\&.
+.SS "subroutine utils_mod::getvecpair::getvecpair3d (character(len=*), intent(in) fname, character(len=*), intent(in) wdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, character(len=*), intent(in) vname1, character(len=*), intent(in) vgrid1, character(len=*), intent(in) vname2, character(len=*), intent(in) vgrid2, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:,:), intent(out) vecpair)"
 
 .PP
 Obtain 3D vector pairs mapped to Ct and rotated to EN\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing the fields to retrieve 
 .br
@@ -87,14 +87,14 @@ Obtain 3D vector pairs mapped to Ct and rotated to EN\&.
 \fIvecpair\fP the vector pair array
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 241 of file utils_mod\&.F90\&.
+Definition at line \fB242\fP of file \fButils_mod\&.F90\fP\&.
 
 .SH "Author"
 .PP 

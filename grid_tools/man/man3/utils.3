@@ -1,4 +1,4 @@
-.TH "utils" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "utils" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -73,7 +73,7 @@ Module that contains general utility routines\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL programmer 
 .RE
@@ -86,62 +86,60 @@ GFDL programmer
 .PP
 This routine extrapolate geolat_c and geolon_c halo points for the regional standalone grid\&. Halo points are needed for dxc and dyc calculation\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIdata\fP - field to be extrapolated 
 .br
 \fIhalo\fP - number of halo rows/columns 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Ratko Vasic (NCEP/EMC) 
 .RE
 .PP
 
 .PP
-Definition at line 71 of file utils\&.F90\&.
-.PP
-Referenced by read_grid_file()\&.
+Definition at line \fB70\fP of file \fButils\&.F90\fP\&.
 .SS "subroutine utils::handle_err (integer, intent(in) status, character(len=*), intent(in) string)"
 
 .PP
 Prints an error message to standard output, then halts program execution with a bad status\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIstatus\fP Error status code\&. 
 .br
 \fIstring\fP Error message\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 107 of file utils\&.F90\&.
+Definition at line \fB106\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by read_grid_file(), and read_namelist()\&.
-.SS "subroutine utils::read_namelist ()"
+Referenced by \fBread_namelist()\fP\&.
+.SS "subroutine utils::read_namelist"
 
 .PP
 Read the program namelist file\&. Then, write the namelist variables to standard output\&.
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 37 of file utils\&.F90\&.
+Definition at line \fB36\fP of file \fButils\&.F90\fP\&.
 .PP
-References grid_file, grid_type, handle_err(), mask_field, nested, regional, res, stretch_fac, topo_field, topo_file, and zero_ocean\&.
+References \fBgrid_file\fP, \fBgrid_type\fP, \fBhandle_err()\fP, \fBmask_field\fP, \fBnested\fP, \fBregional\fP, \fBres\fP, \fBstretch_fac\fP, \fBtopo_field\fP, \fBtopo_file\fP, and \fBzero_ocean\fP\&.
 .PP
-Referenced by filter_topo()\&.
+Referenced by \fBfilter_topo()\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "character(len=512) utils::grid_file = 'atmos_mosaic\&.nc'"
@@ -149,81 +147,81 @@ Referenced by filter_topo()\&.
 .PP
 Path/name of the grid mosaic file\&. 
 .PP
-Definition at line 18 of file utils\&.F90\&.
+Definition at line \fB18\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by read_grid_file(), and read_namelist()\&.
+Referenced by \fBread_namelist()\fP\&.
 .SS "integer utils::grid_type = 0"
 
 .PP
 Grid type\&. 0 for a gnomonic grid\&. 
 .PP
-Definition at line 25 of file utils\&.F90\&.
+Definition at line \fB25\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by filter_topo(), and read_namelist()\&.
+Referenced by \fBfilter_topo()\fP, and \fBread_namelist()\fP\&.
 .SS "character(len=128) utils::mask_field = 'slmsk'"
 
 .PP
 NetCDF record name of the land/sea mask\&. 
 .PP
-Definition at line 17 of file utils\&.F90\&.
+Definition at line \fB17\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by read_namelist()\&.
+Referenced by \fBread_namelist()\fP\&.
 .SS "logical utils::nested = \&.false\&."
 
 .PP
 If true, process a global grid with a nest\&. 
 .PP
-Definition at line 22 of file utils\&.F90\&.
+Definition at line \fB22\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by filter_topo(), read_grid_file(), and read_namelist()\&.
+Referenced by \fBfilter_topo()\fP, and \fBread_namelist()\fP\&.
 .SS "logical utils::regional = \&.false\&."
 
 .PP
 If true, process a stand-alone regional grid\&. 
 .PP
-Definition at line 23 of file utils\&.F90\&.
+Definition at line \fB23\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by filter_topo(), read_grid_file(), and read_namelist()\&.
+Referenced by \fBfilter_topo()\fP, and \fBread_namelist()\fP\&.
 .SS "real utils::res = 48\&."
 
 .PP
 The 'CRES' resolution\&. 
 .PP
-Definition at line 28 of file utils\&.F90\&.
+Definition at line \fB28\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by read_namelist()\&.
+Referenced by \fBread_namelist()\fP\&.
 .SS "real utils::stretch_fac = 1\&.0"
 
 .PP
 Grid stretching factor\&. 
 .PP
-Definition at line 27 of file utils\&.F90\&.
+Definition at line \fB27\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by filter_topo(), and read_namelist()\&.
+Referenced by \fBfilter_topo()\fP, and \fBread_namelist()\fP\&.
 .SS "character(len=128) utils::topo_field = 'orog_filt'"
 
 .PP
 NetCDF record name of the filtered topography (or orography)\&. 
 .PP
-Definition at line 15 of file utils\&.F90\&.
+Definition at line \fB15\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by read_namelist()\&.
+Referenced by \fBread_namelist()\fP\&.
 .SS "character(len=512) utils::topo_file = 'orog'"
 
 .PP
 Path/name of the topography (or orography) file\&. 
 .PP
-Definition at line 14 of file utils\&.F90\&.
+Definition at line \fB14\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by read_namelist()\&.
+Referenced by \fBread_namelist()\fP\&.
 .SS "logical utils::zero_ocean = \&.true\&."
 
 .PP
 If true, no diffusive flux into water/ocean area (preserve islands)\&. 
 .PP
-Definition at line 20 of file utils\&.F90\&.
+Definition at line \fB20\fP of file \fButils\&.F90\fP\&.
 .PP
-Referenced by read_namelist()\&.
+Referenced by \fBread_namelist()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

@@ -1,14 +1,21 @@
 var searchData=
 [
-  ['make_5ffrac_5fland',['make_frac_land',['../mapped__mask_8F90.html#a294833098b0022e556300aef737edb21',1,'mapped_mask']]],
-  ['make_5fpostwgts',['make_postwgts',['../postwgts_8F90.html#a131c35fd7b9524da32b5274b9a19780a',1,'postwgts']]],
-  ['mapped_5fmask_2ef90',['mapped_mask.F90',['../mapped__mask_8F90.html',1,'']]],
-  ['maskfile',['maskfile',['../charstrings_8F90.html#aa85024703aa16d5714437bc0c0b9f42c',1,'charstrings']]],
-  ['masking_5fdepth',['masking_depth',['../grdvars_8F90.html#a435598dba041e0bc7d08df4b38d9bbdd',1,'grdvars']]],
-  ['maskname',['maskname',['../charstrings_8F90.html#ad96111223ad5249c12f9a44ba377c55d',1,'charstrings']]],
-  ['maximum_5fdepth',['maximum_depth',['../grdvars_8F90.html#a87e55332b7fbdf58eb6d358e9a83db62',1,'grdvars']]],
-  ['maximum_5flat',['maximum_lat',['../grdvars_8F90.html#a3cf9b75a8b19de88d4b9915fe8d8d2f4',1,'grdvars']]],
-  ['maxvars',['maxvars',['../vartypedefs_8F90.html#a878f2e5a9cc17301181e00ab56a4aed4',1,'vartypedefs']]],
-  ['minimum_5fdepth',['minimum_depth',['../grdvars_8F90.html#a905b13bcf0b7c85412837facaac0d46e',1,'grdvars']]],
-  ['modulo_5faround_5fpoint',['modulo_around_point',['../angles_8F90.html#ab1ed53b3e9e6d449e7180ed6b1ab6006',1,'angles']]]
+  ['latbu_0',['latbu',['../grdvars_8F90.html#a1d50d7a29d4497a00ac0002f46c576f0',1,'grdvars']]],
+  ['latbu_5fvert_1',['latbu_vert',['../grdvars_8F90.html#a55f2b7e1bbca711e0f1a0f75d0eb368e',1,'grdvars']]],
+  ['latct_2',['latct',['../grdvars_8F90.html#ac0f195cc905f80fe69f72bbf971cdeed',1,'grdvars']]],
+  ['latct_5fvert_3',['latct_vert',['../grdvars_8F90.html#afca7b7e1a1cedcdf844079922084474a',1,'grdvars']]],
+  ['latcu_4',['latcu',['../grdvars_8F90.html#a0caaebffaf05b908aa34df40f4d9448c',1,'grdvars']]],
+  ['latcu_5fvert_5',['latcu_vert',['../grdvars_8F90.html#ad7fa7f129a25369663cd572053f5b45b',1,'grdvars']]],
+  ['latcv_6',['latcv',['../grdvars_8F90.html#a4578f746f307159d1fc05265fc963725',1,'grdvars']]],
+  ['latcv_5fvert_7',['latcv_vert',['../grdvars_8F90.html#ac3a0b1c629003322533b688399fe5f0b',1,'grdvars']]],
+  ['logmsg_8',['logmsg',['../charstrings_8F90.html#a7e839b077a33bd6979918c0a68e586ca',1,'charstrings']]],
+  ['lonbu_9',['lonbu',['../grdvars_8F90.html#a1eeff04e52a3a061164ef7384d5216a7',1,'grdvars']]],
+  ['lonbu_5fvert_10',['lonbu_vert',['../grdvars_8F90.html#a987e7e9a4a96fd323cff526364aa32ba',1,'grdvars']]],
+  ['lonct_11',['lonct',['../grdvars_8F90.html#aa7ad651120fed8d4948cd9f81bfd47d4',1,'grdvars']]],
+  ['lonct_5fvert_12',['lonct_vert',['../grdvars_8F90.html#a36f7c345d9b787a4956e99beb3b1a9bf',1,'grdvars']]],
+  ['loncu_13',['loncu',['../grdvars_8F90.html#a5886bacae93178b0e08db66bde1249a7',1,'grdvars']]],
+  ['loncu_5fvert_14',['loncu_vert',['../grdvars_8F90.html#a794e74698074e5da6bed508acba81c82',1,'grdvars']]],
+  ['loncv_15',['loncv',['../grdvars_8F90.html#aaa244d80145056fa3070bf52267efa73',1,'grdvars']]],
+  ['loncv_5fvert_16',['loncv_vert',['../grdvars_8F90.html#ac6c23c5be7ca4fd67344e5b3852a88ef',1,'grdvars']]],
+  ['long_5fname_17',['long_name',['../structvartypedefs_1_1vardefs.html#a8dc3375c6d39785faf9888ebb27bff07',1,'vartypedefs::vardefs']]]
 ];

@@ -1,4 +1,4 @@
-.TH "pesg::guessak_geo" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::guessak_geo" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pesg::guessak_geo
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -16,15 +16,15 @@ pesg::guessak_geo
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 41 of file pesg\&.f90\&.
+Definition at line \fB41\fP of file \fBpesg\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::guessak_geo::guessak_geo (real(dp), intent(in) asp, real(dp), intent(in) arc, real(dp), dimension(2), intent(out) ak)\fC [private]\fP"
+.SS "subroutine pesg::guessak_geo::guessak_geo (real(dp), intent(in) asp, real(dp), intent(in) arc, real(dp), dimension(2), intent(out) ak)"
 
 .PP
 Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical (degree) units measured along the rectangle's median, return a first guess for the parameter vector, ak, approximately optimal for the domain of the given dimensions\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIasp\fP aspect ratio of intended domain 
 .br
@@ -33,14 +33,14 @@ Given an aspect ratio, asp<=1, and major semi-axis, arc, in geographical (degree
 \fIak\fP first guess of the parameter vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 809 of file pesg\&.f90\&.
+Definition at line \fB808\fP of file \fBpesg\&.f90\fP\&.
 
 .SH "Author"
 .PP 

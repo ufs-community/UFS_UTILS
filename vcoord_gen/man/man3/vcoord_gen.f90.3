@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/vcoord_gen.fd/vcoord_gen.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "vcoord_gen" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/vcoord_gen.fd/vcoord_gen.f90" 3 "Version 1.14.0" "vcoord_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/vcoord_gen.fd/vcoord_gen.f90 \- Generates hybrid coordinate interface profiles\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/vcoord_gen.fd/vcoord_gen.f90 \- Generates hybrid coordinate interface profiles\&.  
 
 .SH SYNOPSIS
 .br
@@ -21,12 +21,12 @@ Generates hybrid coordinate interface profiles\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Mark Iredell 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2008-08-01 
 .RE
@@ -45,7 +45,7 @@ The hybrid coordinate is returned in terms of vectors AK and BK, where the inter
 .PP
 The procedure for the calculation is described in the remarks section below\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlevs\fP integer number of levels 
 .br
@@ -88,49 +88,45 @@ lubksb lower and upper triangular back substitution
 .PP
 .nf
 
-   Example: Create the operational GFS 64-level hybrid coordinate\&.
-     real(8) pmin,ak(0:64),bk(0:64)
-     call vcoord_gen(64,64,100000\&.,99400\&.,7000\&.,0\&.,0\&.,500\&.,1200\&.,18000\&.,60\&.,60\&.,&
-                  pmin,ak,bk)
-     print '(2i6)',2,64
-     print '(f12\&.3,f12\&.8)',(ak(k),bk(k),k=0,64)
-     end
-.fi
-.PP
-.PP
-.PP
-.nf
-   Graphical description of parameters and zones:
-     ptop  ---  -----  ----------------------
-           \&.\&.\&.  dptop
-           ---         zone U (upper atmos)
-           \&.\&.\&.
-     pupp  ---  -----  ----------------------
-           \&.\&.\&.  dpupp
-           ---  -----
-           \&.\&.\&.         zone P (pure pressure)
-           ---
-           \&.\&.\&.
-     ppre  ---  -----  ----------------------
-           \&.\&.\&.
-           ---  dppre  zone T1 (transition 1)
-           \&.\&.\&.
-           ---  -----  ----------------------
-           \&.\&.\&.
-           ---
-           \&.\&.\&.         zone T2 (transition 2)
-           ---
-           \&.\&.\&.
-           ---  -----  ----------------------
-           \&.\&.\&.
-           ---  dpsig  zone T3 (transition 3)
-           \&.\&.\&.
-     psig  ---  -----  ----------------------
-           \&.\&.\&.
-           ---  -----  zone S (pure sigma)
-           \&.\&.\&.  dpbot
-     pbot  ---  -----  ----------------------
- 
+       Example: Create the operational GFS 64-level hybrid coordinate\&.
+         real(8) pmin,ak(0:64),bk(0:64)
+         call vcoord_gen(64,64,100000\&.,99400\&.,7000\&.,0\&.,0\&.,500\&.,1200\&.,18000\&.,60\&.,60\&.,&
+                      pmin,ak,bk)
+         print '(2i6)',2,64
+         print '(f12\&.3,f12\&.8)',(ak(k),bk(k),k=0,64)
+         end
+
+       Graphical description of parameters and zones:
+         ptop  ---  -----  ----------------------
+               \&.\&.\&.  dptop
+               ---         zone U (upper atmos)
+               \&.\&.\&.
+         pupp  ---  -----  ----------------------
+               \&.\&.\&.  dpupp
+               ---  -----
+               \&.\&.\&.         zone P (pure pressure)
+               ---
+               \&.\&.\&.
+         ppre  ---  -----  ----------------------
+               \&.\&.\&.
+               ---  dppre  zone T1 (transition 1)
+               \&.\&.\&.
+               ---  -----  ----------------------
+               \&.\&.\&.
+               ---
+               \&.\&.\&.         zone T2 (transition 2)
+               ---
+               \&.\&.\&.
+               ---  -----  ----------------------
+               \&.\&.\&.
+               ---  dpsig  zone T3 (transition 3)
+               \&.\&.\&.
+         psig  ---  -----  ----------------------
+               \&.\&.\&.
+               ---  -----  zone S (pure sigma)
+               \&.\&.\&.  dpbot
+         pbot  ---  -----  ----------------------
+     
 .fi
 .PP
 .PP
@@ -138,37 +134,37 @@ Detailed procedure description: 1 STEP 1\&. The pressure profile is computed wit
 .PP
 .nf
 
-     p(psfc)=p(pbot)*(psfc-pmin)/(pbot-pmin)+p(pmin)*(pbot-psfc)/(pbot-pmin)
- 
+         p(psfc)=p(pbot)*(psfc-pmin)/(pbot-pmin)+p(pmin)*(pbot-psfc)/(pbot-pmin)
+     
 .fi
 .PP
  from which the hybrid coordinate profiles ak and bk are found such that 
 .PP
 .nf
 
-     p(psfc)=ak+bk*psfc
- 
+         p(psfc)=ak+bk*psfc
+     
 .fi
 .PP
  
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Mark Iredell 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2008-08-01 
 .RE
 .PP
 
 .PP
-Definition at line 153 of file vcoord_gen\&.f90\&.
+Definition at line \fB151\fP of file \fBvcoord_gen\&.f90\fP\&.
 .PP
-References lubksb(), and ludcmp()\&.
+References \fBlubksb()\fP, and \fBludcmp()\fP\&.
 .PP
-Referenced by driver()\&.
+Referenced by \fBdriver()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for vcoord_gen from the source code\&.

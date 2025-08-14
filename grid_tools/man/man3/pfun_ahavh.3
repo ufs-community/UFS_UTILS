@@ -1,4 +1,4 @@
-.TH "pfun::ahavh" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pfun::ahavh" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pfun::ahavh
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,60 +20,66 @@ pfun::ahavh
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 24 of file pfun\&.f90\&.
+Definition at line \fB24\fP of file \fBpfun\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "real(dp) function pfun::ahavh::ahavh_d (real(dp), intent(in) a)\fC [private]\fP"
+.SS "real(dp) function pfun::ahavh::ahavh_d (real(dp), intent(in) a)"
 
 .PP
 Hyperbolic arc-haversine for double precision real\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP double precision real argument 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 t hyperbolic arc-haversine of a 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 185 of file pfun\&.f90\&.
-.SS "real(sp) function pfun::ahavh::ahavh_s (real(sp), intent(in) a)\fC [private]\fP"
+Definition at line \fB184\fP of file \fBpfun\&.f90\fP\&.
+.PP
+References \fBpietc::t\fP, and \fBpietc::u2\fP\&.
+.SS "real(sp) function pfun::ahavh::ahavh_s (real(sp), intent(in) a)"
 
 .PP
 Hyperbolic arc-haversine for single precision real\&. 
 .PP
-\fBNote:\fP
+\fBNote\fP
 .RS 4
 The minus sign in the hyperbolic arc-haversine definition\&.
 .RE
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP single precision real argument 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 t hyperbolic arc-haversine of a 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 172 of file pfun\&.f90\&.
+Definition at line \fB171\fP of file \fBpfun\&.f90\fP\&.
 
 .SH "Author"
 .PP 

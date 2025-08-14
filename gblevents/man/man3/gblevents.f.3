@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/gblevents.fd/gblevents.f" 3 "Tue Jan 21 2025" "Version 1.13.0" "gblevents" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/gblevents.fd/gblevents.f" 3 "Version 1.14.0" "gblevents" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/gblevents.fd/gblevents.f \- Pre/Post processing of of prepbufr events\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/gblevents.fd/gblevents.f \- Pre/Post processing of of prepbufr events\&.  
 
 .SH SYNOPSIS
 .br
@@ -11,19 +11,19 @@
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBgblevents\fP (IDATEP, IUNITF, IUNITE, IUNITP, IUNITS, SUBSET, NEWTYP)"
+.RI "subroutine \fBgblevents\fP (idatep, iunitf, iunite, iunitp, iunits, subset, newtyp)"
 .br
 .RI "SUBPROGRAM: GBLEVENTS PRE/POST PROCESSING OF PREPBUFR EVENTS PRGMMR: DENNIS KEYSER ORG: EMC DATE: 2017-02-22\&. "
 .ti -1c
-.RI "subroutine \fBgblevn01\fP (IUNITE)"
+.RI "subroutine \fBgblevn01\fP (iunite)"
 .br
 .RI "Read observation error table\&. "
 .ti -1c
-.RI "subroutine \fBgblevn02\fP (IUNITP, IUNITS, NEWTYP, subset)"
+.RI "subroutine \fBgblevn02\fP (iunitp, iunits, newtyp, subset)"
 .br
 .RI "Filter data\&. "
 .ti -1c
-.RI "subroutine \fBgblevn03\fP (SUBSET)"
+.RI "subroutine \fBgblevn03\fP (subset)"
 .br
 .RI "GBLEVN03 - INTERPOLATE MODEL DATA (FIRST GUESS OR ANALYSIS) TO OB LOCATIONS\&. "
 .ti -1c
@@ -31,15 +31,15 @@
 .br
 .RI "Get observation error\&. "
 .ti -1c
-.RI "subroutine \fBgblevn06\fP (XOB, YOB)"
+.RI "subroutine \fBgblevn06\fP (xob, yob)"
 .br
 .RI "SUBROUTINE GBLEVN06 - 2D LINEAR HORIZONTAL INTERPOLATION\&. "
 .ti -1c
-.RI "subroutine \fBgblevn08\fP (IUNITP, SUBSET)"
+.RI "subroutine \fBgblevn08\fP (iunitp, subset)"
 .br
 .RI "SUBPROGRAM: GBLEVN08 PRGMMR: S\&. "
 .ti -1c
-.RI "subroutine \fBgblevn10\fP (IUNITF, IDATEP, IM, JM, IDRT)"
+.RI "subroutine \fBgblevn10\fP (iunitf, idatep, im, jm, idrt)"
 .br
 .RI "Do something\&. "
 .ti -1c
@@ -49,13 +49,15 @@
 .ti -1c
 .RI "subroutine \fBgblevn11d\fP (imax, jmax, grid)"
 .br
-.RI "Does something\&. "
+.RI "Does something 
+.br
+ "
 .ti -1c
-.RI "subroutine \fBgblevn12\fP (IUNITF, IDATEP, IM, JM, IDRT)"
+.RI "subroutine \fBgblevn12\fP (iunitf, idatep, im, jm, idrt)"
 .br
 .RI "Does something\&. "
 .ti -1c
-.RI "subroutine \fBgblevn13\fP (IUNITF, IDATEP, IMX, JMX, IDRT)"
+.RI "subroutine \fBgblevn13\fP (iunitf, idatep, imx, jmx, idrt)"
 .br
 .RI "NetCDF Input\&. "
 .ti -1c
@@ -63,7 +65,7 @@
 .br
 .RI "get latitudes "
 .ti -1c
-.RI "function \fBoefg01\fP (P, TYP, IE, OEMIN)"
+.RI "function \fBoefg01\fP (p, typ, ie, oemin)"
 .br
 .RI "SUBPROGRAM: OEFG01 PRGMMR: D\&. "
 .in -1c
@@ -164,14 +166,12 @@ Pre/Post processing of of prepbufr events\&.
 Definition in file \fBgblevents\&.f\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine gblevents ( IDATEP, integer*4, dimension(2) IUNITF,  IUNITE,  IUNITP,  IUNITS, character*8 SUBSET,  NEWTYP)"
+.SS "subroutine gblevents ( idatep, integer*4, dimension(2) iunitf,  iunite,  iunitp,  iunits, character*8 subset,  newtyp)"
 
 .PP
 SUBPROGRAM: GBLEVENTS PRE/POST PROCESSING OF PREPBUFR EVENTS PRGMMR: DENNIS KEYSER ORG: EMC DATE: 2017-02-22\&. RUNS IN TWO MODES: 'PREVENTS' AND 'POSTEVENTS'\&. IN THE PREVENTS MODE, PREPARES OBSERVATIONAL PREPBUFR REPORTS FOR SUBSEQUENT QUALITY CONTROL AND ANALYSIS PROGRAMS\&. THIS IS DONE THROUGH THE FOLLOWING: INTERPOLATION OF GLOBAL FIRST GUESS {FROM EITHER SIGIO (SIGMA OR HYBRID) OR NEMSIO INPUT} TO PREPBUFR OBSERVATION LOCATIONS WITH ENCODING OF FIRST GUESS VALUES INTO PREPBUFR REPORTS; ENCODING OF 'PREVENT' AND/OR 'VIRTMP' EVENTS INTO PREPBUFR REPORTS; IN CERTAIN CASES, ENCODING OF A DERIVED PMSL INTO SURFACE PREPBUFR REPORTS; AND ENCODING OF OBSERVATION ERRORS FROM THE ERROR SPECIFICATION FILE INTO PREPBUFR REPORTS\&. IN THE POSTEVENTS MODE, AFTER ALL QUALITY CONTROL AND ANALYSIS PROGRAMS HAVE RUN, INTERPOLATES THE GLOBAL ANALYSIS {FROM EITHER SIGIO (SIGMA OR HYBRID) INPUT OR NEMSIO INPUT} TO PREPBUFR OBSERVATION LOCATIONS AND ENCODES THESE ANALYZED VALUES INTO PREPBUFR REPORTS\&. THE REMAINDER OF THIS ABSTRACT APPLIES ONLY TO THE PREVENTS MODE\&. THE 'PREVENT' EVENT CAN CHANGE A QUALITY MARKER TO FLAG AN OBSERVATION DATUM FOR NON-USE BY SUBSEQUENT QC AND ANALYSIS PROGRAMS (FILTERING)\&. EXAMPLES WHERE THIS SUBROUTINE WILL WRITE AN EVENT TO FLAG A DATUM INCLUDE: THE OBSERVATION ERROR FOR THAT DATUM IS READ IN AS MISSING IN THE INPUT ERROR FILE, THE DATUM ITSELF VIOLATES A GROSS OR 'SANITY' CHECK, OR THE OBSERVED PRESSURE DATUM IS MORE THAN 100 MB BELOW THE GUESS SURFACE PRESSURE\&. THE 'VIRTMP' EVENT CAN CHANGE THE SPECIFIC HUMIDITY OBSERVATION (RE-CALCULATED) AS WELL AS THE TEMPERATURE OBSERVATION (FROM SENSIBLE TO VIRTUAL TEMPERATURE, BASED ON JUST-CALCULATED SPECIFIC HUMIDITY)\&. CURRENTLY THIS APPLIES ONLY TO SURFACE (LAND, MARINE AND MESONET) DATA TYPES, POSSIBLY TO RAOB, DROP AND MULTI-LEVEL RECCO DATA TYPES IF THE SWITCH 'ADPUPA_VIRT' IS TRUE (NORMALLY, HOWEVER IT IS FALSE) [OTHER DATA TYPES WITH REPORTED SENSIBLE TEMPERATURE EITHER HAVE MISSING MOISTURE (E\&.G\&., ALL AIRCRAFT TYPES EXCEPT FOR SOME ACARS, SATELLITE WIND TYPES), FLAGGED MOISTURE (E\&.G\&., SOME ACARS) OR CALCULATE SPECIFIC HUMIDITY/VIRTUAL TEMPERATURE IN SUBSEQUENT PROGRAMS (E\&.G\&., RAOBS, DROPS AND MULTI-LEVEL RECCOS WHICH CALCULATE THESE IN PROGRAM 'CQCBUFR', IN WHICH CASE THE SWITCH 'ADPUPA_VIRT' HERE MUST BE FALSE!)]\&. FOR CASES WHERE THE SWITCH 'DOBERR' IS FALSE, THE OBSERVATION ERROR FOR ALL DATA REMAINS MISSING IN THE PREPBUFR FILE\&. IN THIS CASE, THE INPUT ERROR FILE IS USUALLY A NULL FILE AND THE 'PREVENT' EVENT TO FLAG THE DATUM IS NOT INVOKED\&. FOR CASES WHERE THE SWITCH 'DOFCST' IS FALSE, IF THE SWITCH 'SOME_FCST' IS ALSO FALSE, THEN FORECAST VALUES ARE NOT ENCODED FOR ANY MESSAGE TYPE; IF 'SOME_FCST' IS TRUE THEN FORECAST VALUES ARE ENCODED, BUT ONLY FOR REPORTS IN THOSE MESSAGE TYPES FOR WHICH A GUESS VALUE IS NEEDED BY SUBSEQUENT QC PROGRAMS\&. IT SHOULD BE NOTED THAT THE FILTERING OF DATA ASSOCIATED WITH THE 'PREVENT' EVENT PROCESSING IS NOT INVOKED IF ALL THREE ARE TRUE: DOBERR= FALSE, THE FORECAST VALUES ARE MISSING (DOFCST=FALSE & SOME_FCST=TRUE & MESSAGE TYPE IS NOT 'ADPUPA', 'AIRCFT', 'AIRCAR', 'PROFLR', OR 'VADWND' -- OR -- DOFCST=FALSE & SOME_FCST=FALSE), AND 'VIRTMP' EVENT PROCESSING IS NOT INVOKED (EITHER MESSAGE TYPE IS NOT 'ADPSFC', 'SFCSHP' OR 'MSONET' WHEN 'ADPUPA_VIRT' IS FALSE, OR MESSAGE TYPE IS NOT 'ADPSFC', 'SFCSHP', 'MSONET' OR 'ADPUPA' WHEN 'ADPUPA_VIRT' IS TRUE)\&. ALSO, IF VIRTUAL TEMPERATURE PROCESSING IS PERFORMED, ALL SURFACE REPORTS WITH MISSING PMSL WILL ENCODE A DERIVED PMSL INTO PREPBUFR IF THE SWITCH DOPMSL IS TRUE AND A VIRTUAL TEMPERATURE WAS SUCCESSFULLY CALCULATED\&.
 .PP
 PROGRAM HISTORY LOG: -1999-07-01 D\&. A\&. KEYSER -- ORIGINAL AUTHOR (ADAPTED FROM PREVENTS SUBROUTINE IN PREPDATA PROGRAM, BUT NOW GENERALIZED FOR POSTEVENTS MODE) -1999-07-12 D\&. A\&. KEYSER -- MODIFIED TO INTERPOLATE MODEL SPECIFIC HUMIDITY TO OBSERVATION LOCATION WHEN OBS\&. SPECIFIC HUMIDITY IS MISSING AS LONG AS OBS\&. TEMPERATURE IS NON-MISSING -1999-09-09 D\&. A\&. KEYSER -- ADDED 'VADWND' TO THE LIST OF MESSAGE TYPES FOR WHICH FORECAST VALUES MUST BE ENCODED, EVEN WHEN DOFCST=FALSE (NECESSARY BECAUSE THE NEW PROGRAM CQCVAD NEEDS THE BACKGROUND DATA) -1999-09-09 D\&. A\&. KEYSER -- CHANGES TO MAKE CODE MORE PORTABLE; 'TFC' NOW GENERATED FOR VADWND MESSAGE TYPES EVEN THOUGH TOB IS MISSING (NEEDED BY CQCVAD PROGRAM) -1999-12-01 D\&. A\&. KEYSER -- SPEC\&. HUMIDITY AND VIRT\&. TEMPERATURE ARE NOW CALCULATED WHEN SPEC\&. HUMIDITY QUAL\&. MARKER IS BAD (SUBJECT TO A SANITY CHECK), HOWEVER THE VIRT\&. TEMPERATURE GETS A BAD QUAL\&. MARKER (8) -2000-09-21 D\&. A\&. KEYSER -- THE PRESSURE LEVEL ABOVE WHICH ALL SPEC\&. HUMIDITY QUAL\&. MARKERS ARE 'REJECTED' (Q\&.M\&. SET TO 9) IS NOW READ IN AS A N-LIST SWITCH (QTOP_REJ), BEFORE IT WAS HARDWIRED TO 300 MB -2000-12-13 D\&. A\&. KEYSER -- WILL NO LONGER PERFORM VIRTUAL TEMPERATURE PROCESSING FOR ACARS DATA SINCE MOISTURE IS FLAGGED RIGHT NOW (ACARS MOISTURE ONLY WRITTEN INTO PREPBUFR FILE FOR STATISTICAL REASONS) -2001-02-02 D\&. A\&. KEYSER -- RESTORED LEGACY LOGIC TO FLAG CERTAIN SATELLITE TEMPERATURE SOUNDINGS EITHER BELOW 100 MB (TEMP\&. OBS) OR ON ALL LEVELS (SPEC\&. HUM\&. OBS), CONTROLLED BY NEW NAMELIST SWITCH 'SATMQC' -2001-09-27 D\&. A\&. KEYSER -- 'TFC' AND 'QFC' NOW GENERATED FOR REPORT TYPE 111 (SYNDAT REPORTS AT STORM CENTER) EVEN THOUGH 'TOB' AND 'QOB' ARE MISSING (NEEDED BY SYNDATA PROGRAM); IN PREPARATION FOR CHANGE FROM T170L42 TO T254L64 SGES, NOW MAKES COEFFICIENT ARRAYS ALLOCATABLE TO ALLOW THEM TO OBTAIN MEMORY FROM 'HEAP' RATHER THAN FROM 'STACK', ALSO HAVE INCREASED THE MAX NUMBER OF LEVELS IN ARRAYS FROM 42 TO 64, FINALLY ALSO NO LONGER STOPS WITH C\&. CODE 70 IF EVEN NUMBER OF LONGITUDES IN SIGMA GUESS (IMAX, HARDWIRED TO 384) IS \&.LT\&. SPECTRAL RESOLUTION (JCAP) * 2 -2001-10-10 D\&. A\&. KEYSER -- AT PREPBUFR CENTER DATES WITH AN HOUR THAT IS NOT A MULTIPLE OF 3 (WHEN A GLOBAL SIGMA GUESS/ANAL FILE IS NOT AVAILABLE; E\&.G\&., IN RUC2A RUNS) NOW PERFORMS A LINEAR INTERPOLATION BETWEEN SPECTRAL COEFFICIENTS IN 2 SPANNING SIGMA GUESS/ANAL FILES 3-HRS APART TO CENERATE A GUESS/ANAL FILE VALID AT THE PREPBUFR CENTER TIME -2002-05-10 D\&. A\&. KEYSER -- ADDED 'AIRCAR' TO THE LIST OF TABLE A MESSAGE TYPES THAT WILL STILL HAVE THE BACKGROUND ENCODED WHEN DOFCST IS FALSE (BECAUSE ACARS ARE NOW Q\&.C\&.'d IN PREPOBS_ACARSQC PROGRAM) -2003-09-02 D\&. A\&. KEYSER -- ADDED 'MSONET' TO THE LIST OF TABLE A MESSAGE TYPES THAT WILL HAVE THE VIRTUAL TEMPERATURE CALCULATED; DOES NOT CALL UFBINT FOR OUTPUTTING DATA IF 'NLEV' (4'TH ARGUMENT) IS ZERO (NOW CAN ONLY HAPPEN FOR GOESND FORECAST DATA WHEN ONLY RADIANCES ARE PRESENT) -2004-08-30 D\&. A\&. KEYSER -- NOW INCLUDES THE 4 LAYER PWATERS, THESE GET AN OBS\&. ERROR (EACH THE SAME AS TOTAL PWATER) AND AN EVENT IS GENERATED WITH A REJECTED Q\&.M\&. FOR THE 4 LAYER PWATERS IF THE PWATER OBS\&. ERROR READ IN IS MISSING (THIS CHANGE ALLOWS THE ETA/ GSI TO PROCESS OBS\&. ERRORS IN THE PREPBUFR FILE THE SAME AS THE ETA/3DVAR DID WHEN READING THE OBS\&. ERRORS FROM AN EXTERNAL FILE); FOR 'RASSDA' TYPES, ENCODES A SIMPLE COPY OF THE REPORTED (VIRTUAL) TEMPERATURE AS A 'VIRTMP' EVENT IF DOVTMP IS TRUE, GETS NEW REASON CODE 3 -2004-09-10 D\&. T\&. KLEIST -- ADDED CAPABILITY TO READ GUESS FIELDS FROM EITHER HYBRID OR, AS BEFORE, SIGMA GLOBAL FORECAST FILES -2005-01-03 D\&. A\&. KEYSER -- FIXED ERROR READING CDAS SGES FILE WHICH STILL HAS A 207-WORD HEADER (T62) {2004-09-10 CHANGE ASSUMED ALL SGES FILES HAD A 226-WORD HEADER (T254), BUT THIS IS VALID ONLY FOR GFS SGES) -2006-05-05 R\&. E\&. TREADON -- CHANGE VERTICAL INTERPOLATION TO DIRECTLY USE PRESSURE PROFILE, NOT PRESSURE PROFILE CONVERTED TO SIGMA\&. 
-.br
-
 .br
  THIS CHANGE IS IN SUBROUTINE GBLEVN03\&. AS A RESULT OF THIS CHANGE, SUBROUTINE GBLEVN07 WAS REMOVED\&. -2006-07-14 D\&. A\&. KEYSER -- ADDED NEW NAMELIST SWITCH 'SOME_FCST' WHICH APPLIES ONLY WHEN EXISTING SWITCH 'DOFCST' IS FALSE: IF DOFCST=F AND SOME_FCST=T THEN, JUST AS BEFORE WHEN DOFCST=F, A FORECAST WILL STILL BE ENCODED FOR REPORTS IN CERTAIN MESSAGE TYPES USED IN SUBSEQUENT Q\&.C\&. PROGRAMS (I\&.E, 'ADPUPA', 'AIRCFT', 'AIRCAR', 'PROFLR' OR 'VADWND') (THE DEFAULT FOR SOME_FCST IS TRUE); HOWEVER IF DOFCST=F AND SOME_FCST=F THEN A FORECAST WILL NOT BE ENCODED INTO REPORTS IN ANY MESSAGE TYPE (THIS ALLOWS THIS PROGRAM TO ENCODE OBS ERRORS AND/OR VIRTUAL TEMPERATURE EVENTS INTO A PREPBUFR FILE WITHOUT ENCODING A FORECAST); ADDED NEW NAMELIST SWITCH 'ADPUPA_VIRT' WHICH, WHEN TRUE, INCLUDES REPORTS IN MESSAGE TYPE ADPUPA (I\&.E\&., RAOBS, DROPS, MULTI-LEVEL RECCOS) IN THE 'VIRTMP' PROCESSING (PROCESSING THEM WITH SAME LOGIC AS IN SUBROUTINE VTPEVN OF PROGRAM PREPOBS_CQCBUFR) {NORMALLY 'ADPUPA_VIRT' IS FALSE (DEFAULT) BECAUSE SUBSEQUENT PROGRAM PREPOBS_CQCBUFR PERFORMS THIS FUNCTION} -2007-09-14 S\&. MOORTHI -- ADDED CAPABILITY TO READ GENERALIZED SIGMA/ HYBRID FILES FROM THE GFS USING 'SIGIO' UTILITY; ALSO, CLEANED UP SOME CODE; NEW ERROR CONDITION CODES 70 AND 71 ADDED -2007-09-14 D\&. A\&. KEYSER -- FUNCTION OEFG01, WHICH RETURNS THE OBS ERROR FOR A REQUESTED VARIABLE INTERP\&. TO A DEFINED PRESSURE LEVEL FOR A DEFINED REPORT TYPE, MODIFIED TO USE EXACT LOGIC AS IN GSI (MINIMUM LIMITING VALUE FOR OBS ERROR BASED ON VARIABLE TYPE, LEVEL PRESSURE LIMITED TO MAX OF 2000 MB AND MIN OF ZERO MB, A FEW OTHER MINOR CHANGES) - THIS WILL ALLOW GSI TO READ OBS ERROR DIRECTLY OUT OF PREPBUFR FILE RATHER THAN OUT OF AN EXTERNAL FILE; FOR PW TYPES, NOW PASSES REPORTED SURFACE PRESSURE (PRSS * 0\&.01) INTO FUNCTION OEFG01 RATHER THAN VERTICAL COORDINATE PRESSURE (POB), SINCE LATTER IS ALWAYS MISSING FOR THESE TYPES (DOESN'T CHANGE VALUE COMING OUT OF OEFG01 SINCE IT IS CONSTANT ON ALL LEVELS ANYWAY FOR PW); IN SUBR\&. GBLEVN02, Q\&.M\&. 9 IS NOW ASSIGNED TO A VARIABLE ONLY IF ITS OBS ERROR IS MISSING, OR IN THE CASE OF MOISTURE IF THE LEVEL IS ABOVE PRESSURE LEVEL 'QTOP_REJ' OR IF ITS TEMPERATURE OBS ERROR IS MISSING, ALL OTHER EVENT (E\&.G\&., GROSS CHECK ERRORS) ASSIGN Q\&.M\&. 8 (EVEN IF OBS ERROR IS MISSING), PRIOR TO THIS ONLY REJECTION OF PRESSURE ON LEVEL RESULTED IN Q\&.M\&. 8, ALL OTHER REJECTIONS GOT Q\&.M\&. 9 - THIS MEANS TRULY 'BAD' OBS WILL NOW ALWAYS GET Q\&.M\&. 8 AND ONLY OBS FLAGGED FOR NON-USE BY ASSIMILATION (BUT STILL 'GOOD') WILL NOW GET Q\&.M\&. 9 (GSI MONITORS, BUT DOES NOT USE, OBS WITH Q\&.M\&. 9, BUT IT DOES NOT EVEN CONSIDER OBS WITH Q\&.M\&. 8); CORRECTED ERROR WHICH MISTAKENLY ASSIGNED REASON CODE OF 9 INSTEAD OF 3 TO MOISTURE WITH MISSING OBS ERROR; IN SUBR\&. GBLEVN02, Q\&.M\&. 9 WILL NOT BE ASSIGNED TO A VARIABLE IF THAT VARIABLE ALREADY HAS A 'BAD' Q\&.M\&. (I\&.E\&., > 3 BUT < 15), IN FACT THE 'PREVENT' EVENT WHICH WOULD ASSIGN Q\&.M\&. 9 IS SKIPPED ENTIRELY (DO NOT WANT THE GSI TO MONITOR THE OBS WHICH REALLY ARE ARE 'BAD'); IN SUBR\&. GBLEVN08, FOR NON- 'ADPUPA' TYPES, Q\&.M\&. 9 IS NOW ASSIGNED TO CALCULATED VIRT\&. TEMPS IF THE MOISTURE Q\&.M\&. IS 9 OR 15 AND ORIG\&. TEMP NOT 'BAD', THESE 'VIRTMP' EVENTS RECEIVE NEW REASON CODE 4, HAD RECEIVED Q\&.M\&. 8 WITH REASON CODE 2 LIKE VIRT\&. TEMPS CALCULATED FROM 'BAD' MOISTURE - THIS MEANS ONLY TRULY 'BAD' VIRT\&. TEMPS WILL NOW GET Q\&.M\&. 8 AND VIRT\&. TEMPS FLAGGED FOR NON-USE BY ASSIMILATION (BUT STILL 'GOOD') WILL NOW GET Q\&.M\&. 9 (GSI MONITORS, BUT DOES NOT USE, OBS WITH Q\&.M\&. 9, BUT IT DOES NOT EVEN CONSIDER OBS WITH Q\&.M\&. 8); IN SUBR\&. GBLEVN08, FOR 'ADPUPA' TYPES, Q\&.M\&. 3 IS NOW ASSIGNED TO CALCULATED VIRT\&. TEMPS ONLY IF THE MOISTURE Q\&.M\&. IS TRULY BAD (I\&.E\&. > 3 BUT NOT 9 OR 15) (AND, AS BEFORE, ORIG\&. TQM IS 1 OR 2 AND POB IS BELOW 700 MB) - BEFORE, TQM SET TO 3 WHEN QQM WAS 9 OR 15 AND ALL OTHER CONDITIONS MET; FOR 'SATEMP' TYPES, ENCODES A SIMPLE COPY OF THE REPORTED (VIRTUAL) TEMPERATURE AS A 'VIRTMP' EVENT IF DOVTMP IS TRUE, GETS REASON CODE 3 (SIMILAR TO WHAT IS ALREADY DONE FOR 'RASSDA' TYPES) -2010-01-29 D\&. A\&. KEYSER -- ADDED NEW NAMELIST SWITCH 'RECALC_Q' WHICH APPLIES ONLY WHEN EXISTING SWITCH 'DOVTMP' IS FALSE: IF DOVTMP=F AND RECALC_Q=T THEN, JUST AS BEFORE WHEN DOVTMP=F, SPEC\&. HUMIDITY IS STILL RE-CALCULATED AND THE EVENT IS ENCODED INTO THE PREPBUFR FILE (BUT VIRTUAL TEMP\&. IS NOT ENCODED) (THE DEFAULT FOR RECALC_Q IS TRUE), HOWEVER IF DOVTMP=F AND RECALC_Q=F THEN SPEC\&. HUMIDITY IS NOT RE-CALCULATED (AND NEITHER IS VIRTUAL TEMPERATURE) (THIS ALLOWS THIS PROGRAM TO BYPASS ALL 'VIRTMP' EVENT PROCESSING); ADDED NEW NAMELIST SWITCH 'DOPREV' WHICH, WHEN TRUE, WRITES 'PREVENT' EVENTS INTO THE PREPBUFR FILE (IT ALWAYS DID THIS BEFORE) (DEFAULT), BUT NOW ALLOWS THE PROGRAM TO BYPASS 'PREVENT' EVENT PROCESSING WHEN DOPREV=F; INITIALIZED ARRAY IDATE AS ZERO IN SUBR\&. GBLEVN10, CORRECTED BUG WHICH EXPOSED PREVIOUSLY HIDDEN MEMORY CLOBBERING WHEN CALLING PROGRAMS WERE LINKED TO NEW BUFRLIB; RULES IN SUBROUTINE GBLEVN02 REFINED TO INCLUDE FULL SFC PRESSURE SANITY CHECK FOR ALL SFC REPORTS (MASS, 18x, & WIND, 28x), BEFORE ONLY DONE FOR SFC MASS REPORTS (18x) AND STILL NOT DONE FOR NON-SFC WIND REPORTS SINCE LOWEST LEVEL PRESSURE NOT NECESSARILY AT THE SFC), AS A RESULT 28x WINDS WILL NOW GET QM=8 IF PRESSURE FAILS SANITY CHECK (OFTEN HAPPENS IN MESONET REPORTS) (GSI WAS ALREADY NOT USING THESE WINDS SINCE PRESSURE QM SET TO 8 ALL ALONG) -2012-11-20 J\&. WOOLLEN INITIAL PORT TO WCOSS\&. ADDED CALL TO BUFRLIB ROUTINE GETBMISS TO ADAPT BMISS TO LINUX ENVIRONMENT IF NEED BE {I\&.E\&., OBTAINS BUFRLIB MISSING (BMISS) VIA CALL TO GETBMISS RATHER THAN HARDWIRING IT TO 10E10 (10E10 CAN CAUSE INTEGER OVERFLOW ON WCOSS - SEE CALLING PROGRAM FOR MORE INFO)} -2013-02-13 D\&. A\&. KEYSER -- FINAL CHANGES TO RUN ON WCOSS: USE FORMATTED PRINT STATEMENTS WHERE PREVIOUSLY UNFORMATTED PRINT WAS > 80 CHARACTERS; RENAME ALL REAL(8) VARIABLES AS *_8 -2013-04-12 D\&. A\&. KEYSER -- IN SUBROUTINE GBLEVN08, DON'T ALLOW CALCULATED Q TO BE < 0 WHICH CAN OCCUR ON WCOSS FOR CASES OF HORRIBLY BAD MESONET DATA -2014-03-25 S\&. MELCHIOR -- ADDED NEW NAMELIST SWITCH 'DOPMSL' WHICH, WHEN TRUE, DERIVES PMSL (MNEMONIC 'PMO') FROM REPORTED STATION PRESSURE ('POB'), STATION HEIGHT/ELEVATION ('ZOB') AND THE JUST- COMPUTED VIRTUAL TEMPERATURE FOR SURFACE REPORTS IN CASES WHEN REPORTED PMSL IS MISSING (DONE IN SUBROUTINE GBLEVN08)\&. DOVTMP MUST BE TRUE AND DOANLS MUST BE FALSE ('PREVENTS' MODE)\&. THE DERIVED PMSL EITHER GETS A QUALITY MARK ('PMQ') OF 3 OR INHERITS THE STATION PRESSURE QUALITY MARK ('PQM'), WHICHEVER IS GREATER\&. THE VALUE OF THE PMSL INDICATOR (NEW MNEMONIC 'PMIN') IS SET TO 1 TO DENOTE PMSL WAS DERIVED RATHER THAN OBSERVED\&. THE DEFAULT FOR 'DOPMSL' IS FALSE (NORMALLY ONLY TRUE IN RTMA AND URMA RUNS)\&. IT IS FORCED TO BE FALSE IN 'POSTEVENTS' MODE (DOANLS=TRUE)\&. IN SUBROUTINE GBLEVN02, SFCSHP REPORTS WITH CALM WINDS AND NON- MISSING BACKGROUND U- OR V-COMPONENT WIND \&.GE\&. 5 M/SEC ARE FLAGGED WITH Q\&.M\&. 8 (EVENT PGM 'PREVENT', REASON CODE 8)\&. -2014-05-08 JWhiting -- altered print statement (2 format) in GBLEVN10 subroutine; increased field width for spectral resolution to accommodate models w/ up to 5-digit resolution (I3 to I5)\&. -2016-06-13 FANGLIN YANG AND RUSS TREADON -- HANG LEI ADDED NEMSIO TO SUBROUTINE GBLEVN10 AND REMOVED ALL SIGIO CAPABILITY\&. THIS UPDATE RESTORES GBLEVN10 FOR PROCESSING SIGIO INPUT, AND ADDS A NEW GBLEVN12 FOR PROCESSING NEMSIO INPUT\&. THE INPUT GFS FILE TYPE SIGIO VS NEMSIO IS NOW DETERMINED IN THE MAIN PROGRAM\&. THE CODE IS ALSO UPDATED TO REMOVE BUGS\&. SUBROUTINE SIGIO_MODPR IS USED TO COMPUTE LAYER AND INTERFACE PRESSURE FOR NEMSIO INPUT\&. -2017-02-17 D Keyser & J Whiting -- In subroutine GBLEVN12, removed references to multiple input files, since only 1 nemsio formatted input is needed (no interpolation is attempted; c\&.f\&.; what is done with sigio formatted inputs); GBLEVN12 routine still retains input\&. Updated comments and docblock to account for new NEMSIO input\&. -2017-02-22 D\&. Keyser -- Further changes to subr\&. GBLEVN12 to remove array and logic references to multiple input files\&. -2019-10-31 Hang Lei -- Add GBLEVN13 to process netcdf input\&.
 .PP
@@ -179,7 +179,7 @@ USAGE: CALL GBLEVENTS(IDATEP,IUNITF,IUNITE,IUNITP,IUNITS,SUBSET, $ NEWTYP)
 .PP
 INPUT ARGUMENT LIST: 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIDATEP\fP - CENTER DATE FOR PREPBUFR FILE IN THE FORM YYYYMMDDHH 
 .br
@@ -296,30 +296,30 @@ DOPMSL - ENCODE DERIVED PMSL ('PMO') FOR ALL SURFACE REPORTS WHEN REPORTED PMSL 
 .PP
 
 .PP
-Definition at line 553 of file gblevents\&.f\&.
+Definition at line \fB551\fP of file \fBgblevents\&.f\fP\&.
 .PP
-References gblevn01(), gblevn02(), gblevn03(), gblevn04(), gblevn08(), gblevn10(), gblevn12(), and gblevn13()\&.
-.SS "subroutine gblevn01 ( IUNITE)"
+References \fBgblevn01()\fP, \fBgblevn02()\fP, \fBgblevn03()\fP, \fBgblevn04()\fP, \fBgblevn08()\fP, \fBgblevn10()\fP, \fBgblevn12()\fP, and \fBgblevn13()\fP\&.
+.SS "subroutine gblevn01 ( iunite)"
 
 .PP
 Read observation error table\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIUNITE\fP - UNIT NUMBER OF INPUT OBSERVATION ERROR FILE (USED ONLY IN PREVENTS MODE) 
 .RE
 .PP
 
 .PP
-Definition at line 921 of file gblevents\&.f\&.
+Definition at line \fB920\fP of file \fBgblevents\&.f\fP\&.
 .PP
-Referenced by gblevents()\&.
-.SS "subroutine gblevn02 ( IUNITP,  IUNITS,  NEWTYP, character*8 subset)"
+Referenced by \fBgblevents()\fP\&.
+.SS "subroutine gblevn02 ( iunitp,  iunits,  newtyp, character*8 subset)"
 
 .PP
 Filter data\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIUNITP\fP - UNIT NUMBER OF OUTPUT PREPBUFR DATA SET 
 .br
@@ -345,47 +345,47 @@ CHANGED FROM THAT OF THE PREVIOUS REPORT (=0 - NO,
 .PP
 
 .PP
-Definition at line 963 of file gblevents\&.f\&.
+Definition at line \fB962\fP of file \fBgblevents\&.f\fP\&.
 .PP
-References oefg01()\&.
+References \fBoefg01()\fP\&.
 .PP
-Referenced by gblevents()\&.
-.SS "subroutine gblevn03 (character*8 SUBSET)"
+Referenced by \fBgblevents()\fP\&.
+.SS "subroutine gblevn03 (character*8 subset)"
 
 .PP
 GBLEVN03 - INTERPOLATE MODEL DATA (FIRST GUESS OR ANALYSIS) TO OB LOCATIONS\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fISUBSET\fP - THE BUFR MESSAGE TABLE A ENTRY FOR THE PARTICULAR REPORT BEING PROCESSED 
 .RE
 .PP
 
 .PP
-Definition at line 1681 of file gblevents\&.f\&.
+Definition at line \fB1680\fP of file \fBgblevents\&.f\fP\&.
 .PP
-References gblevn06()\&.
+References \fBgblevn06()\fP\&.
 .PP
-Referenced by gblevents()\&.
-.SS "subroutine gblevn04 ()"
+Referenced by \fBgblevents()\fP\&.
+.SS "subroutine gblevn04"
 
 .PP
 Get observation error\&. 
 .PP
-Definition at line 1858 of file gblevents\&.f\&.
+Definition at line \fB1857\fP of file \fBgblevents\&.f\fP\&.
 .PP
-References oefg01()\&.
+References \fBoefg01()\fP\&.
 .PP
-Referenced by gblevents()\&.
-.SS "subroutine gblevn06 ( XOB,  YOB)"
+Referenced by \fBgblevents()\fP\&.
+.SS "subroutine gblevn06 ( xob,  yob)"
 
 .PP
 SUBROUTINE GBLEVN06 - 2D LINEAR HORIZONTAL INTERPOLATION\&. 
 .PP
-Definition at line 1911 of file gblevents\&.f\&.
+Definition at line \fB1910\fP of file \fBgblevents\&.f\fP\&.
 .PP
-Referenced by gblevn03()\&.
-.SS "subroutine gblevn08 ( IUNITP, character*8 SUBSET)"
+Referenced by \fBgblevn03()\fP\&.
+.SS "subroutine gblevn08 ( iunitp, character*8 subset)"
 
 .PP
 SUBPROGRAM: GBLEVN08 PRGMMR: S\&. MELCHIOR ORG: NP22 DATE: 2014-03-25
@@ -396,7 +396,7 @@ PROGRAM HISTORY LOG: 1995-05-17 J\&. WOOLLEN (NP20) - ORIGINAL AUTHOR 1997-06-01
 .PP
 USAGE: CALL GBLEVN08(IUNITP) INPUT ARGUMENT LIST: 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIUNITP\fP - BUFR OUTPUT FILE UNIT 
 .br
@@ -410,15 +410,15 @@ REMARKS: WILL IMMEDIATELY RETURN TO CALLING PROGRAM IF ANY OF THE FOLLOWING COND
 .PP
 ATTRIBUTES: LANGUAGE: FORTRAN 90 MACHINE: NCEP WCOSS 
 .PP
-Definition at line 2228 of file gblevents\&.f\&.
+Definition at line \fB2227\fP of file \fBgblevents\&.f\fP\&.
 .PP
-Referenced by gblevents()\&.
-.SS "subroutine gblevn10 (integer, dimension(2) IUNITF, integer IDATEP, integer IM, integer JM, integer IDRT)"
+Referenced by \fBgblevents()\fP\&.
+.SS "subroutine gblevn10 (integer, dimension(2) iunitf, integer idatep, integer im, integer jm, integer idrt)"
 
 .PP
 Do something\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIUNITF\fP - 2-WORD ARRAY: For SIGIO input:
 .IP "\(bu" 2
@@ -442,33 +442,35 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 2500 of file gblevents\&.f\&.
+Definition at line \fB2499\fP of file \fBgblevents\&.f\fP\&.
 .PP
-References gblevn11()\&.
+References \fBgblevn11()\fP\&.
 .PP
-Referenced by gblevents()\&.
+Referenced by \fBgblevents()\fP\&.
 .SS "subroutine gblevn11 (integer imax, integer jmax, real, dimension(imax,jmax) grid)"
 
 .PP
 North-south swap\&. 
 .PP
-Definition at line 2949 of file gblevents\&.f\&.
+Definition at line \fB2948\fP of file \fBgblevents\&.f\fP\&.
 .PP
-Referenced by gblevn10()\&.
+Referenced by \fBgblevn10()\fP\&.
 .SS "subroutine gblevn11d (integer imax, integer jmax, real(kind=8), dimension(imax,jmax) grid)"
 
 .PP
-Does something\&. 
+Does something 
+.br
+ 
 .PP
-Definition at line 2969 of file gblevents\&.f\&.
+Definition at line \fB2968\fP of file \fBgblevents\&.f\fP\&.
 .PP
-Referenced by gblevn12(), and gblevn13()\&.
-.SS "subroutine gblevn12 (integer, dimension(2) IUNITF, integer IDATEP, integer IM, integer JM, integer IDRT)"
+Referenced by \fBgblevn12()\fP, and \fBgblevn13()\fP\&.
+.SS "subroutine gblevn12 (integer, dimension(2) iunitf, integer idatep, integer im, integer jm, integer idrt)"
 
 .PP
 Does something\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiunitf\fP 
 .br
@@ -491,6 +493,7 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .br
 \fIIDATEP\fP - CENTER DATE FOR PREPBUFR FILE IN THE FORM YYYYMMDDHH 
 .br
+ 
 .br
 \fIim\fP 
 .br
@@ -501,17 +504,17 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 3019 of file gblevents\&.f\&.
+Definition at line \fB3018\fP of file \fBgblevents\&.f\fP\&.
 .PP
-References gblevn11d(), and getlats()\&.
+References \fBgblevn11d()\fP, and \fBgetlats()\fP\&.
 .PP
-Referenced by gblevents()\&.
-.SS "subroutine gblevn13 (integer, dimension(2) IUNITF, integer IDATEP, integer IMX, integer JMX, integer IDRT)"
+Referenced by \fBgblevents()\fP\&.
+.SS "subroutine gblevn13 (integer, dimension(2) iunitf, integer idatep, integer imx, integer jmx, integer idrt)"
 
 .PP
 NetCDF Input\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIUNITF\fP - 2-WORD ARRAY: For SIGIO input:
 .IP "\(bu" 2
@@ -526,6 +529,7 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .br
 \fIIDATEP\fP - CENTER DATE FOR PREPBUFR FILE IN THE FORM YYYYMMDDHH 
 .br
+ 
 .br
 \fIIMX\fP 
 .br
@@ -536,27 +540,27 @@ WORD 2 - NOT USED, SHOULD BE A NULL FILE
 .PP
 
 .PP
-Definition at line 3435 of file gblevents\&.f\&.
+Definition at line \fB3434\fP of file \fBgblevents\&.f\fP\&.
 .PP
-References gblevn11d(), and getlats()\&.
+References \fBgblevn11d()\fP, and \fBgetlats()\fP\&.
 .PP
-Referenced by gblevents()\&.
+Referenced by \fBgblevents()\fP\&.
 .SS "subroutine getlats ( idrt)"
 
 .PP
 get latitudes 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIDRT\fP INTEGER GRID IDENTIFIER (IDRT=4 FOR GAUSSIAN GRID, IDRT=0 FOR EQUALLY-SPACED GRID INCLUDING POLES, IDRT=256 FOR EQUALLY-SPACED GRID EXCLUDING POLES) 
 .RE
 .PP
 
 .PP
-Definition at line 3773 of file gblevents\&.f\&.
+Definition at line \fB3772\fP of file \fBgblevents\&.f\fP\&.
 .PP
-Referenced by gblevn12(), and gblevn13()\&.
-.SS "function oefg01 ( P,  TYP,  IE,  OEMIN)"
+Referenced by \fBgblevn12()\fP, and \fBgblevn13()\fP\&.
+.SS "function oefg01 ( p,  typ,  ie,  oemin)"
 
 .PP
 SUBPROGRAM: OEFG01 PRGMMR: D\&. A\&. KEYSER ORG: NP22 DATE: 2007-09-14
@@ -567,7 +571,7 @@ PROGRAM HISTORY LOG: 1995-05-17 J\&. WOOLLEN (NP20) - ORIGINAL AUTHOR (FUNCTION 
 .PP
 USAGE: XX = OEFG01(P,TYP,IE,OEMIN) INPUT ARGUMENT LIST: 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIP\fP - REAL PRESSURE LEVEL (MB) TO INTERPOLATE OBS ERROR TO 
 .br
@@ -588,7 +592,7 @@ INTERPOLATED)
 .PP
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 OEFG01 OBSERVATION ERROR
 .RE
@@ -597,9 +601,11 @@ REMARKS: 'OEFG01' RETURNED IS OBSERVATION ERROR FOR VARIABLE 'IE' IN REPORT TYPE
 .PP
 ATTRIBUTES: LANGUAGE: FORTRAN 90 MACHINE: NCEP WCOSS 
 .PP
-Definition at line 2081 of file gblevents\&.f\&.
+Definition at line \fB2080\fP of file \fBgblevents\&.f\fP\&.
 .PP
-Referenced by gblevn02(), and gblevn04()\&.
+References \fBoefg01()\fP\&.
+.PP
+Referenced by \fBgblevn02()\fP, \fBgblevn04()\fP, and \fBoefg01()\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "real gblevn_module::dlat"
@@ -607,127 +613,127 @@ Referenced by gblevn02(), and gblevn04()\&.
 .PP
 LATITUDINAL GRID SPACING IN DEGREES\&. 
 .PP
-Definition at line 36 of file gblevents\&.f\&.
+Definition at line \fB36\fP of file \fBgblevents\&.f\fP\&.
 .SS "real gblevn_module::dlon"
 
 .PP
 LONGITUDINAL GRID SPACING IN DEGREES\&. 
 .PP
-Definition at line 37 of file gblevents\&.f\&.
+Definition at line \fB37\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:), allocatable gblevn_module::iar12z"
 
 .PP
 OROGRAPHY\&. 
 .PP
-Definition at line 27 of file gblevents\&.f\&.
+Definition at line \fB27\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:), allocatable gblevn_module::iar13p"
 
 .PP
 SURFACE PRESSURE\&. 
 .PP
-Definition at line 28 of file gblevents\&.f\&.
+Definition at line \fB28\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iar14t"
 
 .PP
 VIRTUAL TEMPERATURE\&. 
 .PP
-Definition at line 23 of file gblevents\&.f\&.
+Definition at line \fB23\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iar15u"
 
 .PP
 U-COMPONENT WIND\&. 
 .PP
-Definition at line 24 of file gblevents\&.f\&.
+Definition at line \fB24\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iar16v"
 
 .PP
 V-COMPONENT WIND\&. 
 .PP
-Definition at line 25 of file gblevents\&.f\&.
+Definition at line \fB25\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iar17q"
 
 .PP
 SPECIFIC HUMIDITY\&. 
 .PP
-Definition at line 26 of file gblevents\&.f\&.
+Definition at line \fB26\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iarpsd"
 
 .PP
 NOT USED\&. 
 .PP
-Definition at line 31 of file gblevents\&.f\&.
+Definition at line \fB31\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iarpsi"
 
 .PP
 3-D INTERFACE PRESSURE\&. 
 .PP
-Definition at line 29 of file gblevents\&.f\&.
+Definition at line \fB29\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=8), dimension(:,:,:), allocatable gblevn_module::iarpsl"
 
 .PP
 3-D LAYER PRESSURE\&. 
 .PP
-Definition at line 30 of file gblevents\&.f\&.
+Definition at line \fB30\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer*4 gblevn_module::idsl"
 
 .PP
 TYPE OF SIGMA STRUCTURE\&. 1-PHILLIPS; 2-MEAN\&. 
 .PP
-Definition at line 15 of file gblevents\&.f\&.
+Definition at line \fB15\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer*4 gblevn_module::idvc"
 
 .PP
 VERTICAL COORDINATE ID\&. 1-SIGMA; 2-EC-HYBRID; 3-NCEP HYBRID\&. 
 .PP
-Definition at line 13 of file gblevents\&.f\&.
+Definition at line \fB13\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer gblevn_module::imax"
 
 .PP
 I-DIMENSION OF GRID\&. 
 .PP
-Definition at line 9 of file gblevents\&.f\&.
+Definition at line \fB9\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer gblevn_module::jmax"
 
 .PP
 J-DIMENSION OF GRID\&. 
 .PP
-Definition at line 10 of file gblevents\&.f\&.
+Definition at line \fB10\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer gblevn_module::kmax"
 
 .PP
 NUMBER OF VERTICAL LAYERS\&. 
 .PP
-Definition at line 11 of file gblevents\&.f\&.
+Definition at line \fB11\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer gblevn_module::kmaxs"
 
 .PP
 NUMBER OF FIELDS TO TRANSFORM\&. 
 .PP
-Definition at line 12 of file gblevents\&.f\&.
+Definition at line \fB12\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer*4 gblevn_module::nvcoord"
 
 .PP
 NUMBER OF VERTICAL COORDINATES\&. 
 .PP
-Definition at line 17 of file gblevents\&.f\&.
+Definition at line \fB17\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer*4 gblevn_module::sfcpress_id"
 
 .PP
 SURFACE PRESSURE ID\&. 0/1 - LOG PRESSURE Pa/1000 2 - PRESSURE Pa/1000 ELSE - PRESSURE IN Pa\&. 
 .PP
-Definition at line 18 of file gblevents\&.f\&.
+Definition at line \fB18\fP of file \fBgblevents\&.f\fP\&.
 .SS "integer*4 gblevn_module::thermodyn_id"
 
 .PP
 THERMODYNAMIC ID\&. 
 .PP
-Definition at line 22 of file gblevents\&.f\&.
+Definition at line \fB22\fP of file \fBgblevents\&.f\fP\&.
 .SS "real (kind=4), dimension(:,:), allocatable gblevn_module::vcoord"
 
 .PP
 VERTICAL COORDINATE VALUES - (KMAX+1,NVCOORD) FOR IDVC=1, NVCOORD=1: SIGMA INTERFACE FOR IDVC=2, NVCOORD=2: HYBRID INTERFACE A AND B FOR IDVC=3, NVCOORD=3: JUANG GENERAL HYBRID INTERFACE\&. 
 .PP
-Definition at line 32 of file gblevents\&.f\&.
+Definition at line \fB32\fP of file \fBgblevents\&.f\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for gblevents from the source code\&.

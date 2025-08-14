@@ -1,4 +1,4 @@
-.TH "grib2_util" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "grib2_util" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -46,7 +46,7 @@ George Gayno NCEP/EMC
 .PP
 Convert omega to vertical velocity\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIomega\fP on input, vertical velocity on output 
 .br
@@ -61,7 +61,7 @@ Convert omega to vertical velocity\&.
 \fIcub\fP upper bounds of indices processed by this mpi task 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Larissa Reames 
 .PP
@@ -70,47 +70,49 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 218 of file grib2_util\&.F90\&.
+Definition at line \fB217\fP of file \fBgrib2_util\&.F90\fP\&.
 .PP
-Referenced by atm_input_data::read_input_atm_grib2_file()\&.
+Referenced by \fBatm_input_data::read_input_atm_grib2_file()\fP\&.
 .SS "elemental real function, public grib2_util::fpvsnew (real(esmf_kind_r8), intent(in) t)"
 
 .PP
 Compute saturation vapor pressure\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIt\fP temperature in Kelvin 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 fpvsnew Saturation vapor pressure 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 N Phillips w/NMC2X2 
 .br
  
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 30 dec 82 
 .RE
 .PP
 
 .PP
-Definition at line 136 of file grib2_util\&.F90\&.
+Definition at line \fB135\fP of file \fBgrib2_util\&.F90\fP\&.
 .PP
-Referenced by rh2spfh_gfs()\&.
+References \fBfpvsnew()\fP\&.
+.PP
+Referenced by \fBfpvsnew()\fP, and \fBrh2spfh_gfs()\fP\&.
 .SS "subroutine, public grib2_util::rh2spfh (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout) rh_sphum, real(esmf_kind_r8), intent(in) p, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) t)"
 
 .PP
 Convert relative humidity to specific humidity\&. Calculation of saturation water vapor pressure is based on Brock and Richardson 2001 (Meterological Measurement Systems, p\&. 86, equation 5\&.1)
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrh_sphum\fP rel humidity (%) on input\&. spec hum (kg/kg) on output\&. 
 .br
@@ -119,7 +121,7 @@ Convert relative humidity to specific humidity\&. Calculation of saturation wate
 \fIt\fP temperature 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Larissa Reames 
 .PP
@@ -128,15 +130,15 @@ Jeff Beck
 .PP
 
 .PP
-Definition at line 38 of file grib2_util\&.F90\&.
+Definition at line \fB37\fP of file \fBgrib2_util\&.F90\fP\&.
 .PP
-Referenced by atm_input_data::read_input_atm_grib2_file()\&.
+Referenced by \fBatm_input_data::read_input_atm_grib2_file()\fP\&.
 .SS "subroutine, public grib2_util::rh2spfh_gfs (real(esmf_kind_r4), dimension(i_input,j_input), intent(inout) rh_sphum, real(esmf_kind_r8), intent(in) p, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) t)"
 
 .PP
 Convert relative humidity to specific humidity (GFS formula) Calculation of saturation water vapor pressure is based on GFS function fvpsnew (Phillips 1982)\&. The model does account for the variation of the latent heat of condensation with temperature\&. A linear interpolation is done between values in a calculated lookup table\&. Ice and water are considered separately\&. This option provides a consistent conversion for GFS grib2 data to be ingested\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrh_sphum\fP rel humidity on input\&. spec hum on output\&. 
 .br
@@ -145,18 +147,18 @@ Convert relative humidity to specific humidity (GFS formula) Calculation of satu
 \fIt\fP temperature 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Jili Dong NCEP/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 81 of file grib2_util\&.F90\&.
+Definition at line \fB80\fP of file \fBgrib2_util\&.F90\fP\&.
 .PP
-References fpvsnew(), model_grid::i_input, and model_grid::j_input\&.
+References \fBfpvsnew()\fP, \fBmodel_grid::i_input\fP, and \fBmodel_grid::j_input\fP\&.
 .PP
-Referenced by atm_input_data::read_input_atm_grib2_file()\&.
+Referenced by \fBatm_input_data::read_input_atm_grib2_file()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

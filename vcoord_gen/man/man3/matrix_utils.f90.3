@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/vcoord_gen.fd/matrix_utils.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "vcoord_gen" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/vcoord_gen.fd/matrix_utils.f90" 3 "Version 1.14.0" "vcoord_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/vcoord_gen.fd/matrix_utils.f90 \- Lower and upper triangular decomposition\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/vcoord_gen.fd/matrix_utils.f90 \- Lower and upper triangular decomposition\&.  
 
 .SH SYNOPSIS
 .br
@@ -25,12 +25,12 @@ Lower and upper triangular decomposition\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Mark Iredell 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2008-08-01 
 .RE
@@ -45,19 +45,19 @@ Definition in file \fBmatrix_utils\&.f90\fP\&.
 .PP
 Lower and upper triangular back substitution\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Iredell 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2008-08-01
 .RE
 .PP
 This subprogram back substitutes to solve decomposed lower and upper triangular matrices as outputted by ludcmp\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP real(np,np) LU-decomposed matrix (from ludcmp) 
 .br
@@ -73,27 +73,27 @@ output real(n) solution of linear problem (original A times output B equals orig
 .PP
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Mark Iredell 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2008-08-01 
 .RE
 .PP
 
 .PP
-Definition at line 101 of file matrix_utils\&.f90\&.
+Definition at line \fB100\fP of file \fBmatrix_utils\&.f90\fP\&.
 .PP
-Referenced by vcoord_gen()\&.
+Referenced by \fBvcoord_gen()\fP\&.
 .SS "subroutine ludcmp (real, dimension(np,np), intent(inout) a, integer, intent(in) n, integer, intent(in) np, integer, dimension(n), intent(out) indx, real, intent(out) d)"
 
 .PP
 This subprogram decomposes a matrix into a product of lower and upper triangular matrices\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP - input: a real(np,np) matrix (will be overwritten) output:
 .IP "\(bu" 2
@@ -109,21 +109,21 @@ output real(np,np) LU-decomposed matrix (U is upper part of A, including diagona
 \fId\fP real determinant permutation (1 or -1, or 0 if singular) (determinant is output diagonal product times d) 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Mark Iredell 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2008-08-01 
 .RE
 .PP
 
 .PP
-Definition at line 21 of file matrix_utils\&.f90\&.
+Definition at line \fB20\fP of file \fBmatrix_utils\&.f90\fP\&.
 .PP
-Referenced by vcoord_gen()\&.
+Referenced by \fBvcoord_gen()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for vcoord_gen from the source code\&.

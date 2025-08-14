@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/shave.fd/shave_nc.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/shave.fd/shave_nc.F90" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/shave.fd/shave_nc.F90 \- Utility to shave down domains of FV3 files\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/shave.fd/shave_nc.F90 \- Utility to shave down domains of FV3 files\&.  
 
 .SH SYNOPSIS
 .br
@@ -25,7 +25,7 @@ Utility to shave down domains of FV3 files\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Tom Black 
 .RE
@@ -40,39 +40,39 @@ Definition in file \fBshave_nc\&.F90\fP\&.
 .PP
 Handle netCDF return codes\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIstatus\fP error code 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Tom Black 
 .RE
 .PP
 
 .PP
-Definition at line 267 of file shave_nc\&.F90\&.
-.SS "program shave_nc ()"
+Definition at line \fB267\fP of file \fBshave_nc\&.F90\fP\&.
+.SS "program shave_nc"
 
 .PP
 The grid driver step in FV3 preprocessing generates a grid_tile file and an oro_tile file for the regional domain\&. The final size of these files' domains must include the halo surrounding the computational domain\&. However the original size of these domains must exceed the domain size plus haloes so that the topography filtering program can produce correct values over the halo region\&. Then before the files go into the chgres job their domains must be shaved down to only the computational interior and the halo which is what this code does\&.
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 0 for success, error code otherwise\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Tom Black 
 .RE
 .PP
 
 .PP
-Definition at line 17 of file shave_nc\&.F90\&.
+Definition at line \fB17\fP of file \fBshave_nc\&.F90\fP\&.
 .PP
-References check()\&.
+References \fBcheck()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

@@ -1,4 +1,4 @@
-.TH "orog_utils" 3 "Tue Jan 21 2025" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "orog_utils" 3 "Version 1.14.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,7 +19,7 @@ orog_utils \- Module containing utilites used by the orog program\&.
 .br
 .RI "Find the point on the model grid tile closest to the north and south pole\&. "
 .ti -1c
-.RI "subroutine, public \fBget_index\fP (imn, jmn, npts, lonO, latO, delxn, jst, jen, ilist, numx)"
+.RI "subroutine, public \fBget_index\fP (imn, jmn, npts, lono, lato, delxn, jst, jen, ilist, numx)"
 .br
 .RI "Determine the location of a cubed-sphere point within the high-resolution orography data\&. "
 .ti -1c
@@ -39,7 +39,7 @@ orog_utils \- Module containing utilites used by the orog program\&.
 .br
 .RI "Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. "
 .ti -1c
-.RI "subroutine, public \fBget_xnsum3\fP (lon1, lat1, lon2, lat2, imn, jmn, glat, zavg, delxn, xnsum1, xnsum2, HC)"
+.RI "subroutine, public \fBget_xnsum3\fP (lon1, lat1, lon2, lat2, imn, jmn, glat, zavg, delxn, xnsum1, xnsum2, hc)"
 .br
 .RI "Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. "
 .ti -1c
@@ -101,7 +101,7 @@ Module containing utilites used by the orog program\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
@@ -114,7 +114,7 @@ George Gayno NOAA/EMC
 .PP
 Find the point on the model grid tile closest to the north and south pole\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIi_north_pole\fP 'i' index of north pole\&. '0' if pole is outside of grid\&. 
 .br
@@ -133,22 +133,22 @@ Find the point on the model grid tile closest to the north and south pole\&.
 \fIis_south_pole\fP 'true' for points surrounding the south pole\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 487 of file orog_utils\&.F90\&.
+Definition at line \fB484\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by io_utils::read_mdl_grid_file()\&.
+Referenced by \fBio_utils::read_mdl_grid_file()\fP\&.
 .SS "subroutine, public orog_utils::find_poles (real, dimension(nx+1,ny+1), intent(in) geolat, integer, intent(in) nx, integer, intent(in) ny, integer, intent(out) i_north_pole, integer, intent(out) j_north_pole, integer, intent(out) i_south_pole, integer, intent(out) j_south_pole)"
 
 .PP
 Find the point on the model grid tile closest to the north and south pole\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIgeolat\fP Latitude on the supergrid\&. 
 .br
@@ -165,22 +165,22 @@ Find the point on the model grid tile closest to the north and south pole\&.
 \fIj_south_pole\fP 'j' index of south pole\&. '0' if pole is outside of grid\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 411 of file orog_utils\&.F90\&.
+Definition at line \fB409\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by io_utils::read_mdl_grid_file()\&.
-.SS "subroutine, public orog_utils::get_index (integer, intent(in) imn, integer, intent(in) jmn, integer, intent(in) npts, real, dimension(npts), intent(in) lonO, real, dimension(npts), intent(in) latO, real, intent(in) delxn, integer, intent(out) jst, integer, intent(out) jen, integer, dimension(imn), intent(out) ilist, integer, intent(out) numx)"
+Referenced by \fBio_utils::read_mdl_grid_file()\fP\&.
+.SS "subroutine, public orog_utils::get_index (integer, intent(in) imn, integer, intent(in) jmn, integer, intent(in) npts, real, dimension(npts), intent(in) lono, real, dimension(npts), intent(in) lato, real, intent(in) delxn, integer, intent(out) jst, integer, intent(out) jen, integer, dimension(imn), intent(out) ilist, integer, intent(out) numx)"
 
 .PP
 Determine the location of a cubed-sphere point within the high-resolution orography data\&. The location is described by the range of i/j indices on the high-res grid\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIimn\fP 'i' dimension of the high-resolution orography data set\&. 
 .br
@@ -203,78 +203,78 @@ Determine the location of a cubed-sphere point within the high-resolution orogra
 \fInumx\fP The number of 'i' indices on the high-resolution grid\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL programmer 
 .RE
 .PP
 
 .PP
-Definition at line 691 of file orog_utils\&.F90\&.
+Definition at line \fB689\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by make_mask(), makemt2(), makeoa2(), and makepc2()\&.
+Referenced by \fBmake_mask()\fP, \fBmakemt2()\fP, \fBmakeoa2()\fP, and \fBmakepc2()\fP\&.
 .SS "real function, public orog_utils::get_lat_angle (real, intent(in) dy)"
 
 .PP
 Convert the 'y' direction distance of a cubed-sphere grid point to the corresponding distance in latitude\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIdy\fP Distance along the 'y' direction of a cubed-sphere point in meters\&. 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 get_lat_angle Corresponding latitudinal distance in degrees\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL programmer 
 .RE
 .PP
 
 .PP
-Definition at line 128 of file orog_utils\&.F90\&.
+Definition at line \fB127\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-References earth_radius, and rad2deg\&.
+References \fBearth_radius\fP, \fBget_lat_angle()\fP, and \fBrad2deg\fP\&.
 .PP
-Referenced by makeoa2()\&.
+Referenced by \fBget_lat_angle()\fP, and \fBmakeoa2()\fP\&.
 .SS "real function, public orog_utils::get_lon_angle (real, intent(in) dx, real, intent(in) lat_in)"
 
 .PP
 Convert the 'x' direction distance of a cubed-sphere grid point to the corresponding distance in longitude\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIdx\fP Distance along the 'x' direction of a cubed-sphere grid point in meters\&. 
 .br
 \fIlat_in\fP Latitude of the cubed-sphere point in degrees\&. 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 get_lon_angle Corresponding distance in longitude in degrees\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL programmer 
 .RE
 .PP
 
 .PP
-Definition at line 152 of file orog_utils\&.F90\&.
+Definition at line \fB151\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-References deg2rad, earth_radius, and rad2deg\&.
+References \fBdeg2rad\fP, \fBearth_radius\fP, \fBget_lon_angle()\fP, and \fBrad2deg\fP\&.
 .PP
-Referenced by makeoa2()\&.
+Referenced by \fBget_lon_angle()\fP, and \fBmakeoa2()\fP\&.
 .SS "real function, public orog_utils::get_xnsum (real, intent(in) lon1, real, intent(in) lat1, real, intent(in) lon2, real, intent(in) lat2, integer, intent(in) imn, integer, intent(in) jmn, real, dimension(jmn), intent(in) glat, integer, dimension(imn,jmn), intent(in) zavg, integer, dimension(imn,jmn), intent(in) zslm, real, intent(in) delxn)"
 
 .PP
 Count the number of high-resolution orography points that are higher than the model grid box average orography height\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlon1\fP Longitude of corner point 1 of the model grid box\&. 
 .br
@@ -297,27 +297,29 @@ Count the number of high-resolution orography points that are higher than the mo
 \fIdelxn\fP Resolution of the high-res orography data\&. 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 get_xnsum The number of high-res points above the mean orography\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 793 of file orog_utils\&.F90\&.
+Definition at line \fB791\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by makeoa2()\&.
+References \fBget_xnsum()\fP\&.
+.PP
+Referenced by \fBget_xnsum()\fP, and \fBmakeoa2()\fP\&.
 .SS "subroutine, public orog_utils::get_xnsum2 (real, intent(in) lon1, real, intent(in) lat1, real, intent(in) lon2, real, intent(in) lat2, integer, intent(in) imn, integer, intent(in) jmn, real, dimension(jmn), intent(in) glat, integer, dimension(imn,jmn), intent(in) zavg, real, intent(in) delxn, real, intent(out) xnsum1, real, intent(out) xnsum2, real, intent(out) hc)"
 
 .PP
 Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. The critical value is a function of the standard deviation of orography\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlon1\fP Longitude of corner point 1 of the model grid box\&. 
 .br
@@ -344,22 +346,22 @@ Count the number of high-resolution orography points that are higher than a crit
 \fIhc\fP Critical height\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 904 of file orog_utils\&.F90\&.
+Definition at line \fB902\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by makeoa2()\&.
-.SS "subroutine, public orog_utils::get_xnsum3 (real, intent(in) lon1, real, intent(in) lat1, real, intent(in) lon2, real, intent(in) lat2, integer, intent(in) imn, integer, intent(in) jmn, real, dimension(jmn), intent(in) glat, integer, dimension(imn,jmn), intent(in) zavg, real, intent(in) delxn, real, intent(out) xnsum1, real, intent(out) xnsum2, real, intent(in) HC)"
+Referenced by \fBmakeoa2()\fP\&.
+.SS "subroutine, public orog_utils::get_xnsum3 (real, intent(in) lon1, real, intent(in) lat1, real, intent(in) lon2, real, intent(in) lat2, integer, intent(in) imn, integer, intent(in) jmn, real, dimension(jmn), intent(in) glat, integer, dimension(imn,jmn), intent(in) zavg, real, intent(in) delxn, real, intent(out) xnsum1, real, intent(out) xnsum2, real, intent(in) hc)"
 
 .PP
 Count the number of high-resolution orography points that are higher than a critical value inside a model grid box (or a portion of a model grid box)\&. Unlike routine \fBget_xnsum2()\fP, this routine does not compute the critical value\&. Rather, it is passed in\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlon1\fP Longitude of corner point 1 of the model grid box\&. 
 .br
@@ -386,22 +388,22 @@ Count the number of high-resolution orography points that are higher than a crit
 \fIhc\fP Critical height\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1006 of file orog_utils\&.F90\&.
+Definition at line \fB1004\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by makeoa2()\&.
+Referenced by \fBmakeoa2()\fP\&.
 .SS "logical function, public orog_utils::inside_a_polygon (real, intent(in) lon1, real, intent(in) lat1, integer, intent(in) npts, real, dimension(npts), intent(in) lon2, real, dimension(npts), intent(in) lat2)"
 
 .PP
 Check if a point is inside a polygon\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlon1\fP Longitude of the point to check\&. 
 .br
@@ -414,29 +416,29 @@ Check if a point is inside a polygon\&.
 \fIlat2\fP Latitude of the polygon vertices\&. 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 inside_a_polygon When true, point is within the polygon\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL programmer 
 .RE
 .PP
 
 .PP
-Definition at line 318 of file orog_utils\&.F90\&.
+Definition at line \fB317\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-References latlon2xyz(), pi, and spherical_angle()\&.
+References \fBinside_a_polygon()\fP, \fBlatlon2xyz()\fP, \fBpi\fP, and \fBspherical_angle()\fP\&.
 .PP
-Referenced by make_mask(), makemt2(), makeoa2(), and makepc2()\&.
+Referenced by \fBinside_a_polygon()\fP, \fBmake_mask()\fP, \fBmakemt2()\fP, \fBmakeoa2()\fP, and \fBmakepc2()\fP\&.
 .SS "subroutine, public orog_utils::latlon2xyz (integer, intent(in) siz, real, dimension(siz), intent(in) lon, real, dimension(siz), intent(in) lat, real, dimension(siz), intent(out) x, real, dimension(siz), intent(out) y, real, dimension(siz), intent(out) z)"
 
 .PP
 Convert from latitude and longitude to x,y,z coordinates\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIsiz\fP Number of points to convert\&. 
 .br
@@ -451,22 +453,22 @@ Convert from latitude and longitude to x,y,z coordinates\&.
 \fIz\fP 'z' Coordinate of the converted points\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL programmer 
 .RE
 .PP
 
 .PP
-Definition at line 101 of file orog_utils\&.F90\&.
+Definition at line \fB100\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by inside_a_polygon()\&.
+Referenced by \fBinside_a_polygon()\fP\&.
 .SS "subroutine, public orog_utils::minmax (integer, intent(in) im, integer, intent(in) jm, real, dimension(im,jm), intent(in) a, character(len=8), intent(in) title, integer, intent(out), optional imax, integer, intent(out), optional jmax)"
 
 .PP
 Print out the maximum and minimum values of an array and optionally pass back the i/j location of the maximum\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIim\fP The 'i' dimension of the array\&. 
 .br
@@ -481,22 +483,22 @@ Print out the maximum and minimum values of an array and optionally pass back th
 \fIjmax\fP The 'j' location of the maximum\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Jordan Alpert NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 50 of file orog_utils\&.F90\&.
+Definition at line \fB49\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by tersub()\&.
+Referenced by \fBtersub()\fP\&.
 .SS "subroutine, public orog_utils::remove_isolated_pts (integer, intent(in) im, integer, intent(in) jm, real, dimension(im,jm), intent(inout) slm, real, dimension(im,jm), intent(inout) oro, real, dimension(im,jm), intent(inout) var, real, dimension(im,jm), intent(inout) var4, real, dimension(im,jm,4), intent(inout) oa, real, dimension(im,jm,4), intent(inout) ol)"
 
 .PP
 Remove isolated model points\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIim\fP 'i' dimension of a model grid tile\&. 
 .br
@@ -515,22 +517,22 @@ Remove isolated model points\&.
 \fIol\fP Orographic length scale on the model tile\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Jordan Alpert NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 561 of file orog_utils\&.F90\&.
+Definition at line \fB560\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by tersub()\&.
-.SS "real function orog_utils::spherical_angle (real, dimension(3), intent(in) v1, real, dimension(3), intent(in) v2, real, dimension(3), intent(in) v3)\fC [private]\fP"
+Referenced by \fBtersub()\fP\&.
+.SS "real function orog_utils::spherical_angle (real, dimension(3), intent(in) v1, real, dimension(3), intent(in) v2, real, dimension(3), intent(in) v3)\fR [private]\fP"
 
 .PP
 Compute spherical angle\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIv1\fP Vector 1\&. 
 .br
@@ -539,49 +541,51 @@ Compute spherical angle\&.
 \fIv3\fP Vector 3\&. 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 spherical_angle Spherical Angle\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL programmer 
 .RE
 .PP
 
 .PP
-Definition at line 262 of file orog_utils\&.F90\&.
+Definition at line \fB261\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-References pi\&.
+References \fBpi\fP, and \fBspherical_angle()\fP\&.
 .PP
-Referenced by inside_a_polygon()\&.
-.SS "real function, public orog_utils::timef ()"
+Referenced by \fBinside_a_polygon()\fP, and \fBspherical_angle()\fP\&.
+.SS "real function, public orog_utils::timef"
 
 .PP
 Get the date/time from the system clock\&. 
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 timef 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Mark Iredell 
 .RE
 .PP
 
 .PP
-Definition at line 1064 of file orog_utils\&.F90\&.
+Definition at line \fB1063\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by tersub()\&.
+References \fBtimef()\fP\&.
+.PP
+Referenced by \fBtersub()\fP, and \fBtimef()\fP\&.
 .SS "subroutine, public orog_utils::transpose_mask (integer, intent(in) imn, integer, intent(in) jmn, integer(1), dimension(imn,jmn), intent(inout) mask)"
 
 .PP
 Transpose the global landmask by flipping the poles and moving the starting longitude to Greenwich\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIimn\fP i-dimension of landmask data\&. 
 .br
@@ -590,22 +594,22 @@ Transpose the global landmask by flipping the poles and moving the starting long
 \fImask\fP The global landmask data\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 G\&. Gayno 
 .RE
 .PP
 
 .PP
-Definition at line 177 of file orog_utils\&.F90\&.
+Definition at line \fB176\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by io_utils::read_global_mask()\&.
+Referenced by \fBio_utils::read_global_mask()\fP\&.
 .SS "subroutine, public orog_utils::transpose_orog (integer, intent(in) imn, integer, intent(in) jmn, integer(2), dimension(imn,jmn), intent(inout) glob)"
 
 .PP
 Transpose the global orography data by flipping the poles and moving the starting longitude to Greenwich\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIimn\fP i-dimension of orography data\&. 
 .br
@@ -614,50 +618,50 @@ Transpose the global orography data by flipping the poles and moving the startin
 \fIglob\fP The global orography data\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 G\&. Gayno 
 .RE
 .PP
 
 .PP
-Definition at line 220 of file orog_utils\&.F90\&.
+Definition at line \fB219\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by io_utils::read_global_orog()\&.
+Referenced by \fBio_utils::read_global_orog()\fP\&.
 .SH "Variable Documentation"
 .PP 
-.SS "real, parameter orog_utils::deg2rad = 3\&.14159265358979/180\&.\fC [private]\fP"
+.SS "real, parameter orog_utils::deg2rad = 3\&.14159265358979/180\&.\fR [private]\fP"
 
 .PP
 degrees per radians\&. 
 .PP
-Definition at line 17 of file orog_utils\&.F90\&.
+Definition at line \fB17\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by get_lon_angle()\&.
-.SS "real, parameter orog_utils::earth_radius = 6371200\&.\fC [private]\fP"
+Referenced by \fBget_lon_angle()\fP\&.
+.SS "real, parameter orog_utils::earth_radius = 6371200\&.\fR [private]\fP"
 
 .PP
 earth radius in meters\&. 
 .PP
-Definition at line 14 of file orog_utils\&.F90\&.
+Definition at line \fB14\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by get_lat_angle(), and get_lon_angle()\&.
-.SS "real, parameter orog_utils::pi =3\&.1415926535897931\fC [private]\fP"
+Referenced by \fBget_lat_angle()\fP, and \fBget_lon_angle()\fP\&.
+.SS "real, parameter orog_utils::pi =3\&.1415926535897931\fR [private]\fP"
 
 .PP
 pi\&. 
 .PP
-Definition at line 15 of file orog_utils\&.F90\&.
+Definition at line \fB15\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by inside_a_polygon(), and spherical_angle()\&.
-.SS "real, parameter orog_utils::rad2deg = 180\&./3\&.14159265358979\fC [private]\fP"
+Referenced by \fBinside_a_polygon()\fP, and \fBspherical_angle()\fP\&.
+.SS "real, parameter orog_utils::rad2deg = 180\&./3\&.14159265358979\fR [private]\fP"
 
 .PP
 radians per degrees\&. 
 .PP
-Definition at line 16 of file orog_utils\&.F90\&.
+Definition at line \fB16\fP of file \fBorog_utils\&.F90\fP\&.
 .PP
-Referenced by get_lat_angle(), and get_lon_angle()\&.
+Referenced by \fBget_lat_angle()\fP, and \fBget_lon_angle()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for orog_mask_tools from the source code\&.

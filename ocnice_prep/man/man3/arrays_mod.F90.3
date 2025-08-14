@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/arrays_mod.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/ocnice_prep.fd/arrays_mod.F90" 3 "Version 1.14.0" "ocnice_prep" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/arrays_mod.F90 \- Define arrays, dimensions and types\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/ocnice_prep.fd/arrays_mod.F90 \- Define arrays, dimensions and types\&.  
 
 .SH SYNOPSIS
 .br
@@ -19,11 +19,11 @@
 
 .in +1c
 .ti -1c
-.RI "type(vardefs), dimension(:), allocatable \fBarrays_mod::b2d\fP"
+.RI "type(\fBvardefs\fP), dimension(:), allocatable \fBarrays_mod::b2d\fP"
 .br
 .RI "variable metadata for 2D source fields bilinear remap "
 .ti -1c
-.RI "type(vardefs), dimension(:), allocatable \fBarrays_mod::b3d\fP"
+.RI "type(\fBvardefs\fP), dimension(:), allocatable \fBarrays_mod::b3d\fP"
 .br
 .RI "variable metadata for 3D source fields bilinear remap "
 .ti -1c
@@ -35,7 +35,7 @@
 .br
 .RI "packed 3D source fields for bilinear remap "
 .ti -1c
-.RI "type(vardefs), dimension(:), allocatable \fBarrays_mod::c2d\fP"
+.RI "type(\fBvardefs\fP), dimension(:), allocatable \fBarrays_mod::c2d\fP"
 .br
 .RI "variable metadata for 2D source fields conservative remap "
 .ti -1c
@@ -89,14 +89,14 @@ Define arrays, dimensions and types\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov
 .RE
 .PP
 This module contains arrays and types 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
@@ -111,21 +111,21 @@ Definition in file \fBarrays_mod\&.F90\fP\&.
 .PP
 Count numbers of fields to be remapped for each mapping type and allocate the packed arrays\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIvars\fP a structure describing the variable metadata 
 .br
 \fInvalid\fP the number of variables provided in the ocean or ice csv file
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 53 of file arrays_mod\&.F90\&.
+Definition at line \fB52\fP of file \fBarrays_mod\&.F90\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "type(vardefs), dimension(:), allocatable arrays_mod::b2d"
@@ -133,97 +133,97 @@ Definition at line 53 of file arrays_mod\&.F90\&.
 .PP
 variable metadata for 2D source fields bilinear remap 
 .PP
-Definition at line 28 of file arrays_mod\&.F90\&.
+Definition at line \fB28\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "type(vardefs), dimension(:), allocatable arrays_mod::b3d"
 
 .PP
 variable metadata for 3D source fields bilinear remap 
 .PP
-Definition at line 30 of file arrays_mod\&.F90\&.
+Definition at line \fB30\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), dimension(:,:), allocatable arrays_mod::bilin2d"
 
 .PP
 packed 2D source fields for bilinear remap 
 .PP
-Definition at line 23 of file arrays_mod\&.F90\&.
+Definition at line \fB23\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), dimension(:,:,:), allocatable arrays_mod::bilin3d"
 
 .PP
 packed 3D source fields for bilinear remap 
 .PP
-Definition at line 25 of file arrays_mod\&.F90\&.
+Definition at line \fB25\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "type(vardefs), dimension(:), allocatable arrays_mod::c2d"
 
 .PP
 variable metadata for 2D source fields conservative remap 
 .PP
-Definition at line 29 of file arrays_mod\&.F90\&.
+Definition at line \fB29\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), dimension(:,:), allocatable arrays_mod::consd2d"
 
 .PP
 packed 2D source fields for conservative remap 
 .PP
-Definition at line 24 of file arrays_mod\&.F90\&.
+Definition at line \fB24\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), dimension(:,:), allocatable arrays_mod::eta"
 
 .PP
 the interface heights (eta) on the source grid 
 .PP
-Definition at line 41 of file arrays_mod\&.F90\&.
+Definition at line \fB41\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), parameter arrays_mod::hmin = 1\&.0d\-3"
 
 .PP
 minimum layer thickness for the ocean 
 .PP
-Definition at line 16 of file arrays_mod\&.F90\&.
+Definition at line \fB16\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), dimension(:,:), allocatable arrays_mod::mask3d"
 
 .PP
 the 3D mask of the source fields on Ct grid points 
 .PP
-Definition at line 38 of file arrays_mod\&.F90\&.
+Definition at line \fB38\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), parameter arrays_mod::maskspval = 9\&.9692099683868690d+36"
 
 .PP
 spval for RH mask values 
 .PP
-Definition at line 15 of file arrays_mod\&.F90\&.
+Definition at line \fB15\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "integer arrays_mod::nbilin2d"
 
 .PP
 the number of 2D fields mapped bilinearly 
 .PP
-Definition at line 18 of file arrays_mod\&.F90\&.
+Definition at line \fB18\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "integer arrays_mod::nbilin3d"
 
 .PP
 the number of 3D fields mapped bilinearly 
 .PP
-Definition at line 19 of file arrays_mod\&.F90\&.
+Definition at line \fB19\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "integer arrays_mod::nconsd2d"
 
 .PP
 the number of 2D fields mapped conservatively 
 .PP
-Definition at line 20 of file arrays_mod\&.F90\&.
+Definition at line \fB20\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), dimension(:,:), allocatable arrays_mod::rgb2d"
 
 .PP
 packed 2D fields with bilinear remap 
 .PP
-Definition at line 33 of file arrays_mod\&.F90\&.
+Definition at line \fB33\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), dimension(:,:,:), allocatable arrays_mod::rgb3d"
 
 .PP
 packed 3D fields with bilinear remap 
 .PP
-Definition at line 35 of file arrays_mod\&.F90\&.
+Definition at line \fB35\fP of file \fBarrays_mod\&.F90\fP\&.
 .SS "real(kind=8), dimension(:,:), allocatable arrays_mod::rgc2d"
 
 .PP
 packed 2D fields with conservative remap 
 .PP
-Definition at line 34 of file arrays_mod\&.F90\&.
+Definition at line \fB34\fP of file \fBarrays_mod\&.F90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for ocnice_prep from the source code\&.

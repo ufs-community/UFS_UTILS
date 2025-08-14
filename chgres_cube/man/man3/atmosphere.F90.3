@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atmosphere.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/atmosphere.F90" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/atmosphere.F90 \- Process atmospheric fields\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/atmosphere.F90 \- Process atmospheric fields\&.  
 
 .SH SYNOPSIS
 .br
@@ -63,11 +63,11 @@
 .br
 .RI "Reads model vertical coordinate definition file (as specified by namelist variable vcoord_file_target_grid)\&. "
 .ti -1c
-.RI "subroutine \fBatmosphere::rsearch\fP (IM, KM1, IXZ1, KXZ1, Z1, KM2, IXZ2, KXZ2, Z2, IXL2, KXL2, L2)"
+.RI "subroutine \fBatmosphere::rsearch\fP (im, km1, ixz1, kxz1, z1, km2, ixz2, kxz2, z2, ixl2, kxl2, l2)"
 .br
 .RI "Search for a surrounding real interval\&. "
 .ti -1c
-.RI "subroutine \fBatmosphere::terp3\fP (IM, IXZ1, IXQ1, IXZ2, IXQ2, NM, NXQ1, NXQ2, KM1, KXZ1, KXQ1, Z1, Q1, KM2, KXZ2, KXQ2, Z2, Q2)"
+.RI "subroutine \fBatmosphere::terp3\fP (im, ixz1, ixq1, ixz2, ixq2, nm, nxq1, nxq2, km1, kxz1, kxq1, z1, q1, km2, kxz2, kxq2, z2, q2)"
 .br
 .RI "Cubically interpolate in one dimension\&. "
 .ti -1c
@@ -79,7 +79,7 @@
 .br
 .RI "Vertically interpolate atmospheric fields to target FV3 grid\&. "
 .ti -1c
-.RI "subroutine \fBatmosphere::vintg_wam\fP (YEAR, MONTH, DAY, HOUR, PF)"
+.RI "subroutine \fBatmosphere::vintg_wam\fP (year, month, day, hour, pf)"
 .br
 .RI "Vertically extend model top into thermosphere for whole atmosphere model\&. "
 .in -1c
@@ -181,7 +181,7 @@ Process atmospheric fields\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE

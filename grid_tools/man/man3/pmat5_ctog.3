@@ -1,4 +1,4 @@
-.TH "pmat5::ctog" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat5::ctog" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat5::ctog
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ pmat5::ctog
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 40 of file pmat5\&.f90\&.
+Definition at line \fB40\fP of file \fBpmat5\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat5::ctog::dctog (real(dp), dimension(3), intent(in) xe, real(dp), intent(out) dlat, real(dp), intent(out) dlon)\fC [private]\fP"
+.SS "subroutine pmat5::ctog::dctog (real(dp), dimension(3), intent(in) xe, real(dp), intent(out) dlat, real(dp), intent(out) dlon)"
 
 .PP
 Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIxe\fP Earth-centered cartesian unit 3-vector\&. 
 .br
@@ -37,20 +37,22 @@ Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coor
 \fIdlon\fP degrees longitude\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 398 of file pmat5\&.f90\&.
-.SS "subroutine pmat5::ctog::sctog (real(sp), dimension(3), intent(in) xe, real(sp), intent(out) dlat, real(sp), intent(out) dlon)\fC [private]\fP"
+Definition at line \fB397\fP of file \fBpmat5\&.f90\fP\&.
+.PP
+References \fBpietc::rtod\fP, and \fBpietc::u0\fP\&.
+.SS "subroutine pmat5::ctog::sctog (real(sp), dimension(3), intent(in) xe, real(sp), intent(out) dlat, real(sp), intent(out) dlon)"
 
 .PP
 Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coordinates refer to latitude and longitude (degrees) and cartesian coordinates are standard earth-centered cartesian coordinates: xe(3) pointing north, xe(1) pointing to the 0-meridian\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIxe\fP Earth-centered cartesian unit 3-vector\&. 
 .br
@@ -59,19 +61,19 @@ Transform 'Cartesian' to 'Geographical' coordinates, where the geographical coor
 \fIdlon\fP degrees longitude\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1994 
 .RE
 .PP
 
 .PP
-Definition at line 373 of file pmat5\&.f90\&.
+Definition at line \fB372\fP of file \fBpmat5\&.f90\fP\&.
 
 .SH "Author"
 .PP 

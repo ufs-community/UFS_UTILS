@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/regional_esg_grid.fd/pmat.f90" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat.f90 \- Utility routines for various linear inversions and Cholesky\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/regional_esg_grid.fd/pmat.f90 \- Utility routines for various linear inversions and Cholesky\&.  
 
 .SH SYNOPSIS
 .br
@@ -245,7 +245,7 @@ Utility routines for various linear inversions and Cholesky\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, NOAA/NCEP/EMC, Tsukasa Fujita, JMA\&. 
 .RE
@@ -255,52 +255,50 @@ R\&. J\&. Purser, NOAA/NCEP/EMC, Tsukasa Fujita, JMA\&.
 Definition in file \fBpmat\&.f90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat::cinvmt (complex(dpc), dimension(:,:), intent(inout) a)\fC [private]\fP"
+.SS "subroutine pmat::cinvmt (complex(dpc), dimension(:,:), intent(inout) a)\fR [private]\fP"
 
 .PP
 Invert complex matrix in place\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 104 of file pmat\&.f90\&.
-.SS "subroutine pmat::cinvmtf (complex(dpc), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB103\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::cinvmtf (complex(dpc), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert a complex matrix in place, or flag if process fails\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP matrix 
 .br
 \fIff\fP flag for error condition 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 191 of file pmat\&.f90\&.
-.PP
-References pietc::c1\&.
-.SS "subroutine pmat::cldum (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d)\fC [private]\fP"
+Definition at line \fB190\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::cldum (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d)\fR [private]\fP"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Complex double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP input square matrix, output L,D,U factors 
 .br
@@ -309,20 +307,20 @@ Perform L*D*U decomposition, with pivoting, of square matrix\&. Complex double p
 \fIipiv\fP vector of pivots 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 509 of file pmat\&.f90\&.
-.SS "subroutine pmat::cldumf (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d, logical, intent(out) ff)"
+Definition at line \fB508\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::cldumf (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Complex double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -333,42 +331,40 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Complex
 \fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 660 of file pmat\&.f90\&.
-.PP
-References pietc::c0, pietc::c1, pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat::clinmmt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b)\fC [private]\fP"
+Definition at line \fB659\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::clinmmt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b)\fR [private]\fP"
 
 .PP
 Invert complex linear system with multiple right-hand side vectors\&. Complex double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
 \fIb\fP input RHS vectors, output solution vectors 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 256 of file pmat\&.f90\&.
-.SS "subroutine pmat::clinmmtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB255\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::clinmmtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert linear system with multiple right-hand side vectors, or flag failure\&. Complex double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
@@ -377,40 +373,40 @@ Invert linear system with multiple right-hand side vectors, or flag failure\&. C
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 320 of file pmat\&.f90\&.
-.SS "subroutine pmat::clinmvt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b)\fC [private]\fP"
+Definition at line \fB319\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::clinmvt (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b)\fR [private]\fP"
 
 .PP
 Invert linear system with single right-hand side vector\&. Complex double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
 \fIb\fP input RHS vector, output solution vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 372 of file pmat\&.f90\&.
-.SS "subroutine pmat::clinmvtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB371\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::clinmvtf (complex(dpc), dimension(:,:), intent(inout) a, complex(dpc), dimension(:), intent(inout) b, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert complex linear system with single right-hand side vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
@@ -419,40 +415,40 @@ Invert complex linear system with single right-hand side vector\&.
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 430 of file pmat\&.f90\&.
-.SS "subroutine pmat::cswpvv (complex(dpc), dimension(:), intent(inout) d, complex(dpc), dimension(:), intent(inout) e)\fC [private]\fP"
+Definition at line \fB429\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::cswpvv (complex(dpc), dimension(:), intent(inout) d, complex(dpc), dimension(:), intent(inout) e)\fR [private]\fP"
 
 .PP
 Swap a pair of complex vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fId\fP vector 
 .br
 \fIe\fP vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 72 of file pmat\&.f90\&.
-.SS "subroutine pmat::cudlmm (complex(dpc), dimension(:,:), intent(in) a, complex(dpc), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+Definition at line \fB71\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::cudlmm (complex(dpc), dimension(:,:), intent(in) a, complex(dpc), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fR [private]\fP"
 
 .PP
 Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -461,22 +457,20 @@ Use l-u factors in A to back-substitute for several rhs in B, using ipiv to defi
 \fIipiv\fP vector encoding the pivoting sequence 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 798 of file pmat\&.f90\&.
-.PP
-References pietc::c1\&.
-.SS "subroutine pmat::cudlmv (complex(dpc), dimension(:,:), intent(in) a, complex(dpc), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+Definition at line \fB797\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::cudlmv (complex(dpc), dimension(:,:), intent(in) a, complex(dpc), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fR [private]\fP"
 
 .PP
 Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -485,118 +479,114 @@ Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the
 \fIipiv\fP array encoding the pivoting sequence 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 893 of file pmat\&.f90\&.
-.PP
-References pietc::c1\&.
-.SS "subroutine pmat::dinvl (real(dp), dimension(:,:), intent(inout) a)"
+Definition at line \fB892\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dinvl (real(dp), dimension(:,:), intent(inout) a)\fR [private]\fP"
 
 .PP
 Invert lower triangular matrix in place\&. Double precision\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP lower triangular matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1154 of file pmat\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat::dinvmt (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+Definition at line \fB1153\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dinvmt (real(dp), dimension(:,:), intent(inout) a)\fR [private]\fP"
 
 .PP
 Invert double precision matrix in place\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 93 of file pmat\&.f90\&.
-.SS "subroutine pmat::dinvmtf (real(dp), dimension(:,:), intent(inout) a, logical, intent(out) ff)"
+Definition at line \fB92\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dinvmtf (real(dp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert a double precision matrix in place, or flag if process fails\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP matrix 
 .br
 \fIff\fP flag for error condition 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 154 of file pmat\&.f90\&.
-.SS "subroutine pmat::dinvu (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+Definition at line \fB153\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dinvu (real(dp), dimension(:,:), intent(inout) a)\fR [private]\fP"
 
 .PP
 Invert the upper triangular matrix in place by transposing, calling invl, and transposing again\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP upper triangular matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1127 of file pmat\&.f90\&.
-.SS "subroutine pmat::dl1lm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b)\fC [private]\fP"
+Definition at line \fB1126\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dl1lm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b)\fR [private]\fP"
 
 .PP
 Cholesky, M -> L*U, U(i,j)=L(j,i) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP symmetric matrix\&. 
 .br
 \fIb\fP Cholesky factor matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 934 of file pmat\&.f90\&.
-.SS "subroutine pmat::dl1lmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)"
+Definition at line \fB933\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dl1lmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Cholesky, M -> L*U, U(i,j)=L(j,i) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP symmetric matrix\&. 
 .br
@@ -605,22 +595,20 @@ Cholesky, M -> L*U, U(i,j)=L(j,i)
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 982 of file pmat\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat::dldlm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d)\fC [private]\fP"
+Definition at line \fB981\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dldlm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d)\fR [private]\fP"
 
 .PP
 Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP symmetric matrix\&. 
 .br
@@ -629,20 +617,20 @@ Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i)
 \fId\fP diagonal matrix, D\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1031 of file pmat\&.f90\&.
-.SS "subroutine pmat::dldlmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d, logical, intent(out) ff)"
+Definition at line \fB1030\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dldlmf (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, real(dp), dimension(:), intent(out) d, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Modified Cholesky Q --> L*D*U, U(i,j)=L(j,i) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP symmetric matrix\&. 
 .br
@@ -653,22 +641,20 @@ Modified Cholesky Q --> L*D*U, U(i,j)=L(j,i)
 \fIff\fP error flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1084 of file pmat\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat::dldum (real(dp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(dp), intent(out) d)\fC [private]\fP"
+Definition at line \fB1083\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dldum (real(dp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(dp), intent(out) d)\fR [private]\fP"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP input square matrix, output L,D,U factors 
 .br
@@ -677,20 +663,20 @@ Perform L*D*U decomposition, with pivoting, of square matrix\&. Double precision
 \fIipiv\fP vector of pivots 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 493 of file pmat\&.f90\&.
-.SS "subroutine pmat::dldumf (real(dp), dimension(:,:), intent(inout) a, integer, dimension(:), intent(out) ipiv, real(dp), intent(out) d, logical(spi), intent(out) ff)"
+Definition at line \fB492\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dldumf (real(dp), dimension(:,:), intent(inout) a, integer, dimension(:), intent(out) ipiv, real(dp), intent(out) d, logical(spi), intent(out) ff)\fR [private]\fP"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -701,62 +687,60 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Double 
 \fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 593 of file pmat\&.f90\&.
-.PP
-References pietc::u0, and pietc::u1\&.
-.SS "subroutine pmat::dlinlv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fC [private]\fP"
+Definition at line \fB592\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dlinlv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fR [private]\fP"
 
 .PP
 Solve linear system involving lower triangular system matrix\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP lower triangular matrix\&. 
 .br
 \fIu\fP input RHS vector, output solution vector\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1189 of file pmat\&.f90\&.
-.SS "subroutine pmat::dlinmmt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b)\fC [private]\fP"
+Definition at line \fB1188\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dlinmmt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b)\fR [private]\fP"
 
 .PP
 Invert linear system with multiple right-hand side vectors\&. Double precision version
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
 \fIb\fP input RHS vectors, output solution vectors 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 243 of file pmat\&.f90\&.
-.SS "subroutine pmat::dlinmmtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB242\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dlinmmtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert linear system with multiple right-hand side vectors, or flag failure\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
@@ -765,40 +749,40 @@ Invert linear system with multiple right-hand side vectors, or flag failure\&. D
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 295 of file pmat\&.f90\&.
-.SS "subroutine pmat::dlinmvt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b)\fC [private]\fP"
+Definition at line \fB294\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dlinmvt (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b)\fR [private]\fP"
 
 .PP
 Invert linear system with single right-hand side vector\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
 \fIb\fP input RHS vector, output solution vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 358 of file pmat\&.f90\&.
-.SS "subroutine pmat::dlinmvtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB357\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dlinmvtf (real(dp), dimension(:,:), intent(inout) a, real(dp), dimension(:), intent(inout) b, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert linear system with single right-hand side vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
@@ -807,60 +791,60 @@ Invert linear system with single right-hand side vector\&.
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 408 of file pmat\&.f90\&.
-.SS "subroutine pmat::dlinuv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fC [private]\fP"
+Definition at line \fB407\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dlinuv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fR [private]\fP"
 
 .PP
 Solve linear system involving upper triangular system matrix\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP upper triangular matrix\&. 
 .br
 \fIu\fP input RHS vector, output solution vector\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1219 of file pmat\&.f90\&.
-.SS "subroutine pmat::dswpvv (real(dp), dimension(:), intent(inout) d, real(dp), dimension(:), intent(inout) e)\fC [private]\fP"
+Definition at line \fB1218\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dswpvv (real(dp), dimension(:), intent(inout) d, real(dp), dimension(:), intent(inout) e)\fR [private]\fP"
 
 .PP
 Swap a pair of double precision vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fId\fP vector 
 .br
 \fIe\fP vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 61 of file pmat\&.f90\&.
-.SS "subroutine pmat::dudlmm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+Definition at line \fB60\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dudlmm (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fR [private]\fP"
 
 .PP
 Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -869,22 +853,20 @@ Use l-u factors in A to back-substitute for several rhs in B, using ipiv to defi
 \fIipiv\fP vector encoding the pivoting sequence 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 764 of file pmat\&.f90\&.
-.PP
-References pietc::u1\&.
-.SS "subroutine pmat::dudlmv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+Definition at line \fB763\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::dudlmv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fR [private]\fP"
 
 .PP
 Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -893,138 +875,134 @@ Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the
 \fIipiv\fP array encoding the pivoting sequence 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 862 of file pmat\&.f90\&.
-.PP
-References pietc::u1\&.
-.SS "subroutine pmat::iinvf (integer(spi), dimension(:,:), intent(inout) imat, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB861\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::iinvf (integer(spi), dimension(:,:), intent(inout) imat, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert integer square matrix, imat, if possible, but flag ff=\&.true\&. if not possible\&. (Determinant of imat must be +1 or -1)
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIimat\fP integer square matrix 
 .br
 \fIff\fP error flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 452 of file pmat\&.f90\&.
-.PP
-References pietc::t\&.
-.SS "subroutine pmat::sinvl (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+Definition at line \fB451\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sinvl (real(sp), dimension(:,:), intent(inout) a)\fR [private]\fP"
 
 .PP
 Invert lower triangular matrix in place\&. Single precision\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP lower triangular matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1136 of file pmat\&.f90\&.
-.SS "subroutine pmat::sinvmt (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+Definition at line \fB1135\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sinvmt (real(sp), dimension(:,:), intent(inout) a)\fR [private]\fP"
 
 .PP
 Invert single precision matrix in place\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 82 of file pmat\&.f90\&.
-.SS "subroutine pmat::sinvmtf (real(sp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB81\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sinvmtf (real(sp), dimension(:,:), intent(inout) a, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert a single precision matrix in place, or flag if process fails\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP matrix 
 .br
 \fIff\fP flag for error condition 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 116 of file pmat\&.f90\&.
-.SS "subroutine pmat::sinvu (real(sp), dimension(:,:), intent(inout) a)"
+Definition at line \fB115\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sinvu (real(sp), dimension(:,:), intent(inout) a)\fR [private]\fP"
 
 .PP
 Invert the upper triangular matrix in place by transposing, calling invl, and transposing again\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP upper triangular matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1117 of file pmat\&.f90\&.
-.SS "subroutine pmat::sl1lm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b)"
+Definition at line \fB1116\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sl1lm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b)\fR [private]\fP"
 
 .PP
 Cholesky, M -> L*U, U(i,j)=L(j,i) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP symmetric matrix\&. 
 .br
 \fIb\fP Cholesky factor matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 921 of file pmat\&.f90\&.
-.SS "subroutine pmat::sl1lmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB920\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sl1lmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Cholesky, M -> L*U, U(i,j)=L(j,i) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP symmetric matrix\&. 
 .br
@@ -1033,22 +1011,20 @@ Cholesky, M -> L*U, U(i,j)=L(j,i)
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 948 of file pmat\&.f90\&.
-.PP
-References pietc::f\&.
-.SS "subroutine pmat::sldlm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d)"
+Definition at line \fB947\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sldlm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d)\fR [private]\fP"
 
 .PP
 Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP symmetric matrix\&. 
 .br
@@ -1057,20 +1033,20 @@ Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i)
 \fId\fP diagonal matrix, D\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1016 of file pmat\&.f90\&.
-.SS "subroutine pmat::sldlmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB1015\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sldlmf (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, real(sp), dimension(:), intent(out) d, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP symmetric matrix 
 .br
@@ -1081,22 +1057,20 @@ Modified Cholesky decompose Q --> L*D*U, U(i,j)=L(j,i)
 \fIff\fP error flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1047 of file pmat\&.f90\&.
-.PP
-References pietc::f\&.
-.SS "subroutine pmat::sldum (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d)\fC [private]\fP"
+Definition at line \fB1046\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sldum (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d)\fR [private]\fP"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP input square matrix, output L,D,U factors 
 .br
@@ -1105,20 +1079,20 @@ Perform L*D*U decomposition, with pivoting, of square matrix\&. Single precision
 \fIipiv\fP vector of pivots 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 477 of file pmat\&.f90\&.
-.SS "subroutine pmat::sldumf (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB476\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sldumf (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -1129,62 +1103,60 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Single 
 \fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 526 of file pmat\&.f90\&.
-.PP
-References pietc::f, and pietc::t\&.
-.SS "subroutine pmat::slinlv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)"
+Definition at line \fB525\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::slinlv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)\fR [private]\fP"
 
 .PP
 Solve linear system involving lower triangular system matrix\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP lower triangular matrix\&. 
 .br
 \fIu\fP input RHS vector, output solution vector\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1174 of file pmat\&.f90\&.
-.SS "subroutine pmat::slinmmt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b)"
+Definition at line \fB1173\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::slinmmt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b)\fR [private]\fP"
 
 .PP
 Invert linear system with multiple right-hand side vectors\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
 \fIb\fP input RHS vectors, output solution vectors 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 230 of file pmat\&.f90\&.
-.SS "subroutine pmat::slinmmtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB229\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::slinmmtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:,:), intent(inout) b, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert linear system with multiple right-hand side vectors, or flag failure\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
@@ -1193,40 +1165,40 @@ Invert linear system with multiple right-hand side vectors, or flag failure\&. S
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 270 of file pmat\&.f90\&.
-.SS "subroutine pmat::slinmvt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b)\fC [private]\fP"
+Definition at line \fB269\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::slinmvt (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b)\fR [private]\fP"
 
 .PP
 Invert linear system with single right-hand side vector\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
 \fIb\fP input RHS vector, output solution vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 344 of file pmat\&.f90\&.
-.SS "subroutine pmat::slinmvtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB343\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::slinmvtf (real(sp), dimension(:,:), intent(inout) a, real(sp), dimension(:), intent(inout) b, logical, intent(out) ff)\fR [private]\fP"
 
 .PP
 Invert linear system with single right-hand side vector\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Invertible system matrix, destroyed on output 
 .br
@@ -1235,60 +1207,60 @@ Invert linear system with single right-hand side vector\&.
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 386 of file pmat\&.f90\&.
-.SS "subroutine pmat::slinuv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)\fC [private]\fP"
+Definition at line \fB385\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::slinuv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)\fR [private]\fP"
 
 .PP
 Solve linear system involving upper triangular system matrix\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP upper triangular matrix\&. 
 .br
 \fIu\fP input RHS vector, output solution vector\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1204 of file pmat\&.f90\&.
-.SS "subroutine pmat::sswpvv (real(sp), dimension(:), intent(inout) d, real(sp), dimension(:), intent(inout) e)\fC [private]\fP"
+Definition at line \fB1203\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sswpvv (real(sp), dimension(:), intent(inout) d, real(sp), dimension(:), intent(inout) e)\fR [private]\fP"
 
 .PP
 Swap a pair of single precision vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fId\fP vector 
 .br
 \fIe\fP vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 50 of file pmat\&.f90\&.
-.SS "subroutine pmat::sudlmm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+Definition at line \fB49\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sudlmm (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:,:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fR [private]\fP"
 
 .PP
 Use l-u factors in A to back-substitute for several rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP L-D-U factorization of linear system matrux 
 .br
@@ -1297,20 +1269,20 @@ Use l-u factors in A to back-substitute for several rhs in B, using ipiv to defi
 \fIipiv\fP vector encoding the pivoting sequence 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 730 of file pmat\&.f90\&.
-.SS "subroutine pmat::sudlmv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)"
+Definition at line \fB729\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::sudlmv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) b, integer(spi), dimension(:), intent(in) ipiv)\fR [private]\fP"
 
 .PP
 Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the pivoting permutation used in the l-u decomposition\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP L-D-U factorization of linear system matrix 
 .br
@@ -1319,14 +1291,14 @@ Use l-u factors in A to back-substitute for 1 rhs in B, using ipiv to define the
 \fIipiv\fP vector encoding the pivoting sequence 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 831 of file pmat\&.f90\&.
+Definition at line \fB830\fP of file \fBpmat\&.f90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

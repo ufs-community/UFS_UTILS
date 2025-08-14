@@ -1,4 +1,4 @@
-.TH "pmat4::mobiusi" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::mobiusi" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat4::mobiusi
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -16,15 +16,15 @@ pmat4::mobiusi
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 109 of file pmat4\&.f90\&.
+Definition at line \fB109\fP of file \fBpmat4\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat4::mobiusi::zmobiusi (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) zz, logical, intent(in) infz, complex(dpc), intent(out) zw, logical, intent(out) infw)\fC [private]\fP"
+.SS "subroutine pmat4::mobiusi::zmobiusi (complex(dpc), intent(in) aa, complex(dpc), intent(in) bb, complex(dpc), intent(in) cc, complex(dpc), intent(in) dd, complex(dpc), intent(in) zz, logical, intent(in) infz, complex(dpc), intent(out) zw, logical, intent(out) infw)"
 
 .PP
 Perform the inverse of the mobius transformation with coefficients, {aa,bb,cc,dd}\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIaa\fP inverse Mobius transformation coefficient 
 .br
@@ -43,14 +43,16 @@ Perform the inverse of the mobius transformation with coefficients, {aa,bb,cc,dd
 \fIinfw\fP logical indicator for zw the point at infinity 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 2336 of file pmat4\&.f90\&.
+Definition at line \fB2335\fP of file \fBpmat4\&.f90\fP\&.
+.PP
+References \fBpmat4::zmobius()\fP\&.
 
 .SH "Author"
 .PP 

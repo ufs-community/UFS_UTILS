@@ -1,4 +1,4 @@
-.TH "atm_input_data" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "atm_input_data" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -127,7 +127,7 @@ Supported formats include fv3 tiled 'restart' files, fv3 tiled 'history' files, 
 .PP
 Public variables are defined below: 'input' indicates field associated with the input grid\&.
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
@@ -135,12 +135,12 @@ George Gayno NCEP/EMC
 
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine atm_input_data::calcalpha_rotlatlon (real(esmf_kind_r8), dimension(i_input,j_input), intent(in) latgrid, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) longrid, real(esmf_kind_r4), intent(in) cenlat, real(esmf_kind_r4), intent(in) cenlon, real(esmf_kind_r4), dimension(i_input,j_input), intent(out) alpha)"
+.SS "subroutine atm_input_data::calcalpha_rotlatlon (real(esmf_kind_r8), dimension(i_input,j_input), intent(in) latgrid, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) longrid, real(esmf_kind_r4), intent(in) cenlat, real(esmf_kind_r4), intent(in) cenlon, real(esmf_kind_r4), dimension(i_input,j_input), intent(out) alpha)\fR [private]\fP"
 
 .PP
 Calculate rotation angle for rotated latlon grids\&. Needed to convert to earth-relative winds\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlatgrid\fP grid latitudes 
 .br
@@ -153,63 +153,67 @@ Calculate rotation angle for rotated latlon grids\&. Needed to convert to earth-
 \fIalpha\fP grid rotation angle 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Larissa Reames 
 .RE
 .PP
 
 .PP
-Definition at line 3334 of file atm_input_data\&.F90\&.
+Definition at line \fB3402\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References model_grid::i_input, and model_grid::j_input\&.
+References \fBmodel_grid::i_input\fP, and \fBmodel_grid::j_input\fP\&.
 .PP
-Referenced by read_winds()\&.
-.SS "subroutine, public atm_input_data::cleanup_input_atm_data ()"
+Referenced by \fBread_winds()\fP\&.
+.SS "subroutine, public atm_input_data::cleanup_input_atm_data"
 
 .PP
 Free up memory associated with atm data\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 3373 of file atm_input_data\&.F90\&.
+Definition at line \fB3441\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References dzdt_input_grid, program_setup::num_tracers_input, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, tracers_input_grid, xwind_input_grid, ywind_input_grid, and zwind_input_grid\&.
+References \fBdzdt_input_grid\fP, \fBpres_input_grid\fP, \fBps_input_grid\fP, \fBtemp_input_grid\fP, \fBterrain_input_grid\fP, \fBtracers_input_grid\fP, \fBxwind_input_grid\fP, \fBywind_input_grid\fP, and \fBzwind_input_grid\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver()\&.
-.SS "subroutine, public atm_input_data::convert_winds_to_xyz ()"
+Referenced by \fBatmosphere::atmosphere_driver()\fP\&.
+.SS "subroutine, public atm_input_data::convert_winds_to_xyz"
 
 .PP
 Convert winds from 2-d to 3-d components\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 3203 of file atm_input_data\&.F90\&.
+Definition at line \fB3271\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References model_grid::latitude_input_grid, model_grid::longitude_input_grid, u_input_grid, v_input_grid, xwind_input_grid, ywind_input_grid, and zwind_input_grid\&.
+References \fBmodel_grid::latitude_input_grid\fP, \fBmodel_grid::longitude_input_grid\fP, \fBu_input_grid\fP, \fBv_input_grid\fP, \fBxwind_input_grid\fP, \fBywind_input_grid\fP, and \fBzwind_input_grid\fP\&.
 .PP
-Referenced by init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
-.SS "subroutine atm_input_data::gridrot (real(esmf_kind_r4), intent(in) lov, real(esmf_kind_r4), intent(in) latin1, real(esmf_kind_r4), intent(in) latin2, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) lon, real(esmf_kind_r4), dimension(i_input,j_input), intent(inout) rot)\fC [private]\fP"
+Referenced by \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
+.SS "subroutine atm_input_data::gridrot (real(esmf_kind_r4), intent(in) lov, real(esmf_kind_r4), intent(in) latin1, real(esmf_kind_r4), intent(in) latin2, real(esmf_kind_r8), dimension(i_input,j_input), intent(in) lon, real(esmf_kind_r4), dimension(i_input,j_input), intent(inout) rot)\fR [private]\fP"
 
 .PP
 Compute grid rotation angle for non-latlon grids\&. 
 .PP
-\fBNote:\fP
+\fBNote\fP
 .RS 4
 The original gridrot subroutine was specific to polar stereographic grids\&. We need to compute it for Lambert Conformal grids\&. So we need lat1,lat2\&. This follows the ncl_ncarg source code: ncl_ncarg-6\&.6\&.2/ni/src/ncl/GetGrids\&.c
 .RE
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlov\fP orientation angle 
 .br
@@ -222,165 +226,176 @@ The original gridrot subroutine was specific to polar stereographic grids\&. We 
 \fIrot\fP rotation angle 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Larissa Reames 
 .RE
 .PP
 
 .PP
-Definition at line 3293 of file atm_input_data\&.F90\&.
+Definition at line \fB3361\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References model_grid::i_input, and model_grid::j_input\&.
+References \fBmodel_grid::i_input\fP, and \fBmodel_grid::j_input\fP\&.
 .PP
-Referenced by read_winds()\&.
-.SS "subroutine atm_input_data::init_atm_esmf_fields ()\fC [private]\fP"
+Referenced by \fBread_winds()\fP\&.
+.SS "subroutine atm_input_data::init_atm_esmf_fields\fR [private]\fP"
 
 .PP
 Create atmospheric esmf fields\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 152 of file atm_input_data\&.F90\&.
+Definition at line \fB151\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References program_setup::atm_files_input_grid, convert_winds_to_xyz(), program_setup::data_dir_input_grid, dpres_input_grid, dzdt_input_grid, model_grid::i_input, model_grid::input_grid, model_grid::j_input, lev_input, levp1_input, program_setup::num_tracers_input, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, v_input_grid, xwind_input_grid, ywind_input_grid, and zwind_input_grid\&.
+References \fBprogram_setup::atm_files_input_grid\fP, \fBconvert_winds_to_xyz()\fP, \fBprogram_setup::data_dir_input_grid\fP, \fBdpres_input_grid\fP, \fBdzdt_input_grid\fP, \fBmodel_grid::i_input\fP, \fBinit_atm_esmf_fields()\fP, \fBmodel_grid::input_grid\fP, \fBmodel_grid::j_input\fP, \fBlev_input\fP, \fBlevp1_input\fP, \fBprogram_setup::num_tracers_input\fP, \fBpres_input_grid\fP, \fBps_input_grid\fP, \fBtemp_input_grid\fP, \fBterrain_input_grid\fP, \fBprogram_setup::tracers_input\fP, \fBtracers_input_grid\fP, \fBu_input_grid\fP, \fBv_input_grid\fP, \fBxwind_input_grid\fP, \fBywind_input_grid\fP, and \fBzwind_input_grid\fP\&.
 .PP
-Referenced by read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "subroutine, public atm_input_data::read_input_atm_data (integer, intent(in) localpet)"
 
 .PP
 Read input grid atmospheric data driver\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlocalpet\fP ESMF local persistent execution thread 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 80 of file atm_input_data\&.F90\&.
+Definition at line \fB79\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References program_setup::input_type, read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+References \fBprogram_setup::input_type\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver()\&.
-.SS "subroutine atm_input_data::read_input_atm_gaussian_netcdf_file (integer, intent(in) localpet)\fC [private]\fP"
+Referenced by \fBatmosphere::atmosphere_driver()\fP\&.
+.SS "subroutine atm_input_data::read_input_atm_gaussian_netcdf_file (integer, intent(in) localpet)\fR [private]\fP"
 
 .PP
 Read fv3 netcdf gaussian history file\&. Each task reads a horizontal slice\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlocalpet\fP ESMF local persistent execution thread 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 1308 of file atm_input_data\&.F90\&.
+Definition at line \fB1326\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References program_setup::atm_files_input_grid, convert_winds_to_xyz(), program_setup::data_dir_input_grid, dpres_input_grid, dzdt_input_grid, model_grid::i_input, init_atm_esmf_fields(), model_grid::input_grid, model_grid::j_input, lev_input, levp1_input, program_setup::num_tracers_input, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
+References \fBprogram_setup::atm_files_input_grid\fP, \fBconvert_winds_to_xyz()\fP, \fBprogram_setup::data_dir_input_grid\fP, \fBdpres_input_grid\fP, \fBdzdt_input_grid\fP, \fBmodel_grid::i_input\fP, \fBinit_atm_esmf_fields()\fP, \fBmodel_grid::input_grid\fP, \fBmodel_grid::j_input\fP, \fBlev_input\fP, \fBlevp1_input\fP, \fBprogram_setup::num_tracers_input\fP, \fBpres_input_grid\fP, \fBps_input_grid\fP, \fBtemp_input_grid\fP, \fBterrain_input_grid\fP, \fBprogram_setup::tracers_input\fP, \fBtracers_input_grid\fP, \fBu_input_grid\fP, and \fBv_input_grid\fP\&.
 .PP
-Referenced by read_input_atm_data()\&.
-.SS "subroutine atm_input_data::read_input_atm_grib2_file (integer, intent(in) localpet)"
+Referenced by \fBread_input_atm_data()\fP\&.
+.SS "subroutine atm_input_data::read_input_atm_grib2_file (integer, intent(in) localpet)\fR [private]\fP"
 
 .PP
 Read input grid atmospheric fv3gfs grib2 files\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlocalpet\fP ESMF local persistent execution thread 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 1983 of file atm_input_data\&.F90\&.
+Definition at line \fB2051\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References grib2_util::convert_omega(), convert_winds_to_xyz(), program_setup::data_dir_input_grid, dzdt_input_grid, program_setup::external_model, program_setup::get_var_cond(), program_setup::grib2_file_input_grid, model_grid::i_input, init_atm_esmf_fields(), model_grid::j_input, lev_input, levp1_input, pres_input_grid, ps_input_grid, program_setup::read_from_input, read_winds(), grib2_util::rh2spfh(), grib2_util::rh2spfh_gfs(), slevs, temp_input_grid, terrain_input_grid, program_setup::tracers, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
+References \fBgrib2_util::convert_omega()\fP, \fBconvert_winds_to_xyz()\fP, \fBprogram_setup::data_dir_input_grid\fP, \fBdzdt_input_grid\fP, \fBprogram_setup::external_model\fP, \fBprogram_setup::get_var_cond()\fP, \fBprogram_setup::grib2_file_input_grid\fP, \fBmodel_grid::i_input\fP, \fBinit_atm_esmf_fields()\fP, \fBmodel_grid::j_input\fP, \fBlev_input\fP, \fBlevp1_input\fP, \fBpres_input_grid\fP, \fBps_input_grid\fP, \fBprogram_setup::read_from_input\fP, \fBread_winds()\fP, \fBgrib2_util::rh2spfh()\fP, \fBgrib2_util::rh2spfh_gfs()\fP, \fBslevs\fP, \fBtemp_input_grid\fP, \fBterrain_input_grid\fP, \fBprogram_setup::tracers\fP, \fBprogram_setup::tracers_input\fP, \fBtracers_input_grid\fP, \fBu_input_grid\fP, and \fBv_input_grid\fP\&.
 .PP
-Referenced by read_input_atm_data()\&.
-.SS "subroutine atm_input_data::read_input_atm_restart_file (integer, intent(in) localpet)\fC [private]\fP"
+Referenced by \fBread_input_atm_data()\fP\&.
+.SS "subroutine atm_input_data::read_input_atm_restart_file (integer, intent(in) localpet)\fR [private]\fP"
 
 .PP
 Read input grid fv3 atmospheric data 'warm' restart files\&. 
 .PP
-\fBNote:\fP
+\fBNote\fP
 .RS 4
 Routine reads tiled files in parallel\&. Tile 1 is read by localpet 0; tile 2 by localpet 1, etc\&. The number of pets must be equal to or greater than the number of tiled files\&. 
 .br
  Logic only tested with global input data of six tiles\&. 
 .RE
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlocalpet\fP ESMF local persistent execution thread 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
-.RE
-.PP
-
-.PP
-Definition at line 1049 of file atm_input_data\&.F90\&.
-.PP
-References program_setup::atm_core_files_input_grid, program_setup::atm_tracer_files_input_grid, convert_winds_to_xyz(), program_setup::data_dir_input_grid, dpres_input_grid, dzdt_input_grid, model_grid::i_input, init_atm_esmf_fields(), model_grid::input_grid, model_grid::j_input, lev_input, levp1_input, model_grid::num_tiles_input_grid, program_setup::num_tracers_input, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
-.PP
-Referenced by read_input_atm_data()\&.
-.SS "subroutine atm_input_data::read_input_atm_tiled_history_file (integer, intent(in) localpet)"
-
-.PP
-Read input grid fv3 atmospheric tiled history files in netcdf format\&. 
-.PP
-\fBNote:\fP
-.RS 4
-Routine reads tiled files in parallel\&. Tile 1 is read by localpet 0; tile 2 by localpet 1, etc\&. The number of pets must be equal to or greater than the number of tiled files\&. 
 .br
  
 .RE
 .PP
-\fBParameters:\fP
+
+.PP
+Definition at line \fB1048\fP of file \fBatm_input_data\&.F90\fP\&.
+.PP
+References \fBprogram_setup::atm_core_files_input_grid\fP, \fBprogram_setup::atm_tracer_files_input_grid\fP, \fBconvert_winds_to_xyz()\fP, \fBprogram_setup::data_dir_input_grid\fP, \fBdpres_input_grid\fP, \fBdzdt_input_grid\fP, \fBmodel_grid::i_input\fP, \fBinit_atm_esmf_fields()\fP, \fBmodel_grid::input_grid\fP, \fBmodel_grid::j_input\fP, \fBlev_input\fP, \fBlevp1_input\fP, \fBmodel_grid::num_tiles_input_grid\fP, \fBprogram_setup::num_tracers_input\fP, \fBpres_input_grid\fP, \fBps_input_grid\fP, \fBtemp_input_grid\fP, \fBterrain_input_grid\fP, \fBprogram_setup::tracers_input\fP, \fBtracers_input_grid\fP, \fBu_input_grid\fP, and \fBv_input_grid\fP\&.
+.PP
+Referenced by \fBread_input_atm_data()\fP\&.
+.SS "subroutine atm_input_data::read_input_atm_tiled_history_file (integer, intent(in) localpet)\fR [private]\fP"
+
+.PP
+Read input grid fv3 atmospheric tiled history files in netcdf format\&. 
+.PP
+\fBNote\fP
+.RS 4
+Routine reads tiled files in parallel\&. Tile 1 is read by localpet 0; tile 2 by localpet 1, etc\&. The number of pets must be equal to or greater than the number of tiled files\&. 
+.br
+.RE
+.PP
+\fBParameters\fP
 .RS 4
 \fIlocalpet\fP ESMF local persistent execution thread 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
+.br
+ 
 .RE
 .PP
 
 .PP
-Definition at line 1692 of file atm_input_data\&.F90\&.
+Definition at line \fB1747\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References program_setup::atm_files_input_grid, convert_winds_to_xyz(), program_setup::data_dir_input_grid, dpres_input_grid, dzdt_input_grid, model_grid::i_input, init_atm_esmf_fields(), model_grid::input_grid, model_grid::j_input, lev_input, levp1_input, model_grid::num_tiles_input_grid, program_setup::num_tracers_input, pres_input_grid, ps_input_grid, temp_input_grid, terrain_input_grid, program_setup::tracers_input, tracers_input_grid, u_input_grid, and v_input_grid\&.
+References \fBprogram_setup::atm_files_input_grid\fP, \fBconvert_winds_to_xyz()\fP, \fBprogram_setup::data_dir_input_grid\fP, \fBdpres_input_grid\fP, \fBdzdt_input_grid\fP, \fBmodel_grid::i_input\fP, \fBinit_atm_esmf_fields()\fP, \fBmodel_grid::input_grid\fP, \fBmodel_grid::j_input\fP, \fBlev_input\fP, \fBlevp1_input\fP, \fBmodel_grid::num_tiles_input_grid\fP, \fBprogram_setup::num_tracers_input\fP, \fBpres_input_grid\fP, \fBps_input_grid\fP, \fBtemp_input_grid\fP, \fBterrain_input_grid\fP, \fBprogram_setup::tracers_input\fP, \fBtracers_input_grid\fP, \fBu_input_grid\fP, and \fBv_input_grid\fP\&.
 .PP
-Referenced by read_input_atm_data()\&.
-.SS "subroutine atm_input_data::read_winds (real(esmf_kind_r8), dimension(:,:,:), intent(inout), allocatable u, real(esmf_kind_r8), dimension(:,:,:), intent(inout), allocatable v, integer, intent(in) localpet, integer, intent(in) octet_23, real(esmf_kind_r8), dimension(\fBlev_input\fP), intent(in) rlevs, integer, intent(in) lugb, integer, intent(in) pdt_num)"
+Referenced by \fBread_input_atm_data()\fP\&.
+.SS "subroutine atm_input_data::read_winds (real(esmf_kind_r8), dimension(:,:,:), intent(inout), allocatable u, real(esmf_kind_r8), dimension(:,:,:), intent(inout), allocatable v, integer, intent(in) localpet, integer, intent(in) octet_23, real(esmf_kind_r8), dimension(\fBlev_input\fP), intent(in) rlevs, integer, intent(in) lugb, integer, intent(in) pdt_num)\fR [private]\fP"
 
 .PP
 Read winds from a grib2 file\&. Rotate winds to be earth relative if necessary\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIu\fP u-component wind 
 .br
@@ -397,140 +412,140 @@ Read winds from a grib2 file\&. Rotate winds to be earth relative if necessary\&
 \fIpdt_num\fP Product definition template number\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Larissa Reames 
 .RE
 .PP
 
 .PP
-Definition at line 3020 of file atm_input_data\&.F90\&.
+Definition at line \fB3088\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-References calcalpha_rotlatlon(), program_setup::get_var_cond(), gridrot(), model_grid::i_input, model_grid::j_input, model_grid::jp1_input, model_grid::latitude_input_grid, lev_input, model_grid::longitude_input_grid, and slevs\&.
+References \fBcalcalpha_rotlatlon()\fP, \fBprogram_setup::external_model\fP, \fBprogram_setup::get_var_cond()\fP, \fBgridrot()\fP, \fBmodel_grid::i_input\fP, \fBmodel_grid::j_input\fP, \fBmodel_grid::jp1_input\fP, \fBmodel_grid::latitude_input_grid\fP, \fBlev_input\fP, \fBmodel_grid::longitude_input_grid\fP, \fBprogram_setup::read_from_input\fP, and \fBslevs\fP\&.
 .PP
-Referenced by read_input_atm_grib2_file()\&.
+Referenced by \fBread_input_atm_grib2_file()\fP\&.
 .SH "Variable Documentation"
 .PP 
-.SS "type(esmf_field) atm_input_data::dpres_input_grid\fC [private]\fP"
+.SS "type(esmf_field) atm_input_data::dpres_input_grid\fR [private]\fP"
 
 .PP
 pressure thickness 
 .PP
-Definition at line 51 of file atm_input_data\&.F90\&.
+Definition at line \fB51\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "type(esmf_field), public atm_input_data::dzdt_input_grid"
 
 .PP
 vert velocity 
 .PP
-Definition at line 50 of file atm_input_data\&.F90\&.
+Definition at line \fB50\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "integer, public atm_input_data::lev_input"
 
 .PP
 number of atmospheric layers 
 .PP
-Definition at line 64 of file atm_input_data\&.F90\&.
+Definition at line \fB64\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::create_atm_b4adj_esmf_fields(), init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), read_input_atm_tiled_history_file(), read_winds(), atmosphere::vintg(), and atmosphere::vintg_wam()\&.
+Referenced by \fBatmosphere::create_atm_b4adj_esmf_fields()\fP, \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, \fBread_input_atm_tiled_history_file()\fP, \fBread_winds()\fP, \fBatmosphere::vintg()\fP, and \fBatmosphere::vintg_wam()\fP\&.
 .SS "integer, public atm_input_data::levp1_input"
 
 .PP
 number of atmos layer interfaces 
 .PP
-Definition at line 65 of file atm_input_data\&.F90\&.
+Definition at line \fB65\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "type(esmf_field), public atm_input_data::pres_input_grid"
 
 .PP
 3-d pressure 
 .PP
-Definition at line 52 of file atm_input_data\&.F90\&.
+Definition at line \fB52\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "type(esmf_field), public atm_input_data::ps_input_grid"
 
 .PP
 surface pressure 
 .PP
-Definition at line 53 of file atm_input_data\&.F90\&.
+Definition at line \fB53\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
-.SS "character(len=50), dimension(:), allocatable, private atm_input_data::slevs\fC [private]\fP"
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
+.SS "character(len=50), dimension(:), allocatable, private atm_input_data::slevs\fR [private]\fP"
 
 .PP
 The atmospheric levels in the GRIB2 input file\&. 
 .PP
-Definition at line 67 of file atm_input_data\&.F90\&.
+Definition at line \fB67\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by read_input_atm_grib2_file(), and read_winds()\&.
+Referenced by \fBread_input_atm_grib2_file()\fP, and \fBread_winds()\fP\&.
 .SS "type(esmf_field), public atm_input_data::temp_input_grid"
 
 .PP
 temperature 
 .PP
-Definition at line 55 of file atm_input_data\&.F90\&.
+Definition at line \fB55\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "type(esmf_field), public atm_input_data::terrain_input_grid"
 
 .PP
 terrain height 
 .PP
-Definition at line 54 of file atm_input_data\&.F90\&.
+Definition at line \fB54\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), sfc_input_data::cleanup_input_sfc_data(), init_atm_esmf_fields(), sfc_input_data::init_sfc_esmf_fields(), surface::interp(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), read_input_atm_tiled_history_file(), sfc_input_data::read_input_sfc_data(), sfc_input_data::read_input_sfc_grib2_file(), sfc_input_data::read_input_sfc_netcdf_file(), and sfc_input_data::read_input_sfc_restart_file()\&.
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBsfc_input_data::cleanup_input_sfc_data()\fP, \fBinit_atm_esmf_fields()\fP, \fBsfc_input_data::init_sfc_esmf_fields()\fP, \fBsurface::interp()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, \fBread_input_atm_tiled_history_file()\fP, \fBsfc_input_data::read_input_sfc_data()\fP, \fBsfc_input_data::read_input_sfc_grib2_file()\fP, \fBsfc_input_data::read_input_sfc_netcdf_file()\fP, and \fBsfc_input_data::read_input_sfc_restart_file()\fP\&.
 .SS "type(esmf_field), dimension(:), allocatable, public atm_input_data::tracers_input_grid"
 
 .PP
 tracers 
 .PP
-Definition at line 62 of file atm_input_data\&.F90\&.
+Definition at line \fB62\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "type(esmf_field), public atm_input_data::u_input_grid"
 
 .PP
 u/v wind at grid 
 .PP
-Definition at line 57 of file atm_input_data\&.F90\&.
+Definition at line \fB57\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by convert_winds_to_xyz(), init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBconvert_winds_to_xyz()\fP, \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "type(esmf_field), public atm_input_data::v_input_grid"
 
 .PP
 box center 
 .PP
-Definition at line 58 of file atm_input_data\&.F90\&.
+Definition at line \fB58\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by convert_winds_to_xyz(), init_atm_esmf_fields(), read_input_atm_gaussian_netcdf_file(), read_input_atm_grib2_file(), read_input_atm_restart_file(), and read_input_atm_tiled_history_file()\&.
+Referenced by \fBconvert_winds_to_xyz()\fP, \fBinit_atm_esmf_fields()\fP, \fBread_input_atm_gaussian_netcdf_file()\fP, \fBread_input_atm_grib2_file()\fP, \fBread_input_atm_restart_file()\fP, and \fBread_input_atm_tiled_history_file()\fP\&.
 .SS "type(esmf_field), public atm_input_data::xwind_input_grid"
 
 .PP
 x-component wind 
 .PP
-Definition at line 59 of file atm_input_data\&.F90\&.
+Definition at line \fB59\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), convert_winds_to_xyz(), and init_atm_esmf_fields()\&.
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBconvert_winds_to_xyz()\fP, and \fBinit_atm_esmf_fields()\fP\&.
 .SS "type(esmf_field), public atm_input_data::ywind_input_grid"
 
 .PP
 y-component wind 
 .PP
-Definition at line 60 of file atm_input_data\&.F90\&.
+Definition at line \fB60\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), convert_winds_to_xyz(), and init_atm_esmf_fields()\&.
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBconvert_winds_to_xyz()\fP, and \fBinit_atm_esmf_fields()\fP\&.
 .SS "type(esmf_field), public atm_input_data::zwind_input_grid"
 
 .PP
 z-component wind 
 .PP
-Definition at line 61 of file atm_input_data\&.F90\&.
+Definition at line \fB61\fP of file \fBatm_input_data\&.F90\fP\&.
 .PP
-Referenced by atmosphere::atmosphere_driver(), cleanup_input_atm_data(), convert_winds_to_xyz(), and init_atm_esmf_fields()\&.
+Referenced by \fBatmosphere::atmosphere_driver()\fP, \fBcleanup_input_atm_data()\fP, \fBconvert_winds_to_xyz()\fP, and \fBinit_atm_esmf_fields()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

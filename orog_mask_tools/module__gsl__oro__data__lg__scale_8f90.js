@@ -1,8 +1,8 @@
 var module__gsl__oro__data__lg__scale_8f90 =
 [
     [ "calc_gsl_oro_data_lg_scale", "module__gsl__oro__data__lg__scale_8f90.html#a9830b4caf14b991d636d80fc982d5051", null ],
-    [ "calc_mean_hgt", "module__gsl__oro__data__lg__scale_8f90.html#a3e467b4f19f0e3c747d10ef3fa7eedeb", null ],
-    [ "hgt_interpolate", "module__gsl__oro__data__lg__scale_8f90.html#ab3cced8b5bb1ffb5de2027f8072b6e29", null ],
+    [ "calc_mean_hgt", "module__gsl__oro__data__lg__scale_8f90.html#a665a3e1241cb01b7e586874c5e8143da", null ],
+    [ "hgt_interpolate", "module__gsl__oro__data__lg__scale_8f90.html#afee60815958c62b06af945175a82eb38", null ],
     [ "interp_1d", "module__gsl__oro__data__lg__scale_8f90.html#a5bb95a0f684cd2f38d45103b548e6e06", null ],
     [ "nearest_i_east", "module__gsl__oro__data__lg__scale_8f90.html#a705e630d560e2e06f41e5fb270536e0c", null ],
     [ "nearest_i_west", "module__gsl__oro__data__lg__scale_8f90.html#a76d4b7d1141c857bbc966501c10773bb", null ],

@@ -1,4 +1,4 @@
-.TH "utils_mod::getfield" 3 "Tue Jan 21 2025" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.TH "utils_mod::getfield" 3 "Version 1.14.0" "ocnice_prep" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ utils_mod::getfield
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ utils_mod::getfield
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 17 of file utils_mod\&.F90\&.
+Definition at line \fB17\fP of file \fButils_mod\&.F90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine utils_mod::getfield::getfield2d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(out) field, character(len=*), intent(in), optional wgts)\fC [private]\fP"
+.SS "subroutine utils_mod::getfield::getfield2d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(out) field, character(len=*), intent(in), optional wgts)"
 
 .PP
 Obtain a 2D field and return a 1-D vector array\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing the fields to retrieve 
 .br
@@ -41,20 +41,20 @@ Obtain a 2D field and return a 1-D vector array\&.
 \fIwgts\fP the optional ESMF regridding weights
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 286 of file utils_mod\&.F90\&.
-.SS "subroutine utils_mod::getfield::getfield3d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(out) field, character(len=*), intent(in), optional wgts)\fC [private]\fP"
+Definition at line \fB287\fP of file \fButils_mod\&.F90\fP\&.
+.SS "subroutine utils_mod::getfield::getfield3d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(out) field, character(len=*), intent(in), optional wgts)"
 
 .PP
 Obtain a 3D field and return a 2-D vector array\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing the fields to retrieve 
 .br
@@ -67,14 +67,14 @@ Obtain a 3D field and return a 2-D vector array\&.
 \fIwgts\fP the optional ESMF regridding weights
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 331 of file utils_mod\&.F90\&.
+Definition at line \fB332\fP of file \fButils_mod\&.F90\fP\&.
 
 .SH "Author"
 .PP 

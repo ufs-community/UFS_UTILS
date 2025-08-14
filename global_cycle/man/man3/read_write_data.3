@@ -1,4 +1,4 @@
-.TH "read_write_data" 3 "Tue Jan 21 2025" "Version 1.13.0" "global_cycle" \" -*- nroff -*-
+.TH "read_write_data" 3 "Version 1.14.0" "global_cycle" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -30,19 +30,19 @@ read_write_data \- This module contains routines that read and write data\&.
 .br
 .RI "Check the NetCDF status code\&. "
 .ti -1c
-.RI "subroutine \fBnetcdf_err\fP (ERR, STRING)"
+.RI "subroutine \fBnetcdf_err\fP (err, string)"
 .br
 .RI "If a NetCDF call returns an error, print out a user-supplied message and the NetCDF library message\&. "
 .ti -1c
-.RI "subroutine, public \fBread_data\fP (LSOIL, LENSFC, DO_NSST, DO_SNO_INC_JEDI, DO_SOI_INC_JEDI, INC_FILE, IS_NOAHMP, TSFFCS, SMCFCS, SWEFCS, STCFCS, TG3FCS, ZORFCS, CVFCS, CVBFCS, CVTFCS, ALBFCS, VEGFCS, SLIFCS, CNPFCS, F10M, VETFCS, SOTFCS, ALFFCS, USTAR, FMM, FHH, SIHFCS, SICFCS, SITFCS, TPRCP, SRFLAG, SNDFCS, VMNFCS, VMXFCS, SLCFCS, STCINC, SLCINC, SLPFCS, ABSFCS, T2M, Q2M, SLMASK, ZSOIL, NSST)"
+.RI "subroutine, public \fBread_data\fP (lsoil, lensfc, do_nsst, is_noahmp, fname_inc, tsffcs, smcfcs, swefcs, stcfcs, tg3fcs, zorfcs, cvfcs, cvbfcs, cvtfcs, albfcs, vegfcs, slifcs, cnpfcs, f10m, vetfcs, sotfcs, alffcs, ustar, fmm, fhh, sihfcs, sicfcs, sitfcs, tprcp, srflag, sndfcs, vmnfcs, vmxfcs, slcfcs, stcinc, slcinc, lsoil_incr, slpfcs, absfcs, t2m, q2m, slmask, zsoil, nsst)"
 .br
 .RI "Read the first guess surface records and nsst records (if selected) for a single cubed-sphere tile\&. "
 .ti -1c
-.RI "subroutine, public \fBread_gsi_data\fP (GSI_FILE, FILE_TYPE, LSOIL)"
+.RI "subroutine, public \fBread_gsi_data\fP (gsi_file, file_type, lsoil)"
 .br
 .RI "Read increment file from the GSI containing either the foundation temperature increments and mask, or the soil increments\&. "
 .ti -1c
-.RI "subroutine, public \fBread_lat_lon_orog\fP (RLA, RLO, OROG, OROG_UF, TILE_NUM, IDIM, JDIM, IJDIM, LANDFRAC)"
+.RI "subroutine, public \fBread_lat_lon_orog\fP (rla, rlo, orog, orog_uf, tile_num, idim, jdim, ijdim, landfrac, lakefrac)"
 .br
 .RI "Read latitude and longitude for the cubed-sphere tile from the 'grid' file\&. "
 .ti -1c
@@ -100,7 +100,7 @@ This module contains routines that read and write data\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Xu Li, Hang Lei, George Gayno NOAA/EMC 
 .RE
@@ -110,7 +110,7 @@ Xu Li, Hang Lei, George Gayno NOAA/EMC
 .PP 
 .SH "type read_write_data::nsst_data"
 .PP 
-Definition at line 16 of file read_write_data\&.f90\&.
+Definition at line \fB16\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
 \fBData Fields:\fP
 .RS 4
@@ -180,7 +180,7 @@ real, dimension(:), allocatable \fIzm\fP
 .PP
 Get the i/j dimensions of the data from a NetCDF file\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfilename\fP Name of the file to be read\&. 
 .br
@@ -189,24 +189,24 @@ Get the i/j dimensions of the data from a NetCDF file\&.
 \fInlon\fP 'i' dimension of the data in the file\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Xu Li NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 1922 of file read_write_data\&.f90\&.
+Definition at line \fB1979\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-References nc_check()\&.
+References \fBnc_check()\fP\&.
 .PP
-Referenced by get_sal_clm()\&.
+Referenced by \fBget_sal_clm()\fP\&.
 .SS "subroutine, public read_write_data::get_tf_clm_dim (character(*), intent(in) file_sst, integer, intent(out) mlat_sst, integer, intent(out) mlon_sst)"
 
 .PP
 Get the i/j dimensions of RTG SST climatology file\&. The file is GRIB1\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfile_sst\fP File name of the sst file\&. 
 .br
@@ -215,69 +215,69 @@ Get the i/j dimensions of RTG SST climatology file\&. The file is GRIB1\&.
 \fImlon_sst\fP The 'i' dimension of the data\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Xu Li NOAA/EMC 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2019-03-13 
 .RE
 .PP
 
 .PP
-Definition at line 1793 of file read_write_data\&.f90\&.
+Definition at line \fB1850\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by get_tf_clm()\&.
-.SS "subroutine read_write_data::nc_check (integer, intent(in) status)"
+Referenced by \fBget_tf_clm()\fP\&.
+.SS "subroutine read_write_data::nc_check (integer, intent(in) status)\fR [private]\fP"
 
 .PP
 Check the NetCDF status code\&. If there is an error, print the library error message and stop processing\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIstatus\fP NetCDF status code\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Xu Li NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 1959 of file read_write_data\&.f90\&.
+Definition at line \fB2016\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by get_dim_nc(), and read_salclm_gfs_nc()\&.
-.SS "subroutine read_write_data::netcdf_err (integer, intent(in) ERR, character(len=*), intent(in) STRING)"
+Referenced by \fBget_dim_nc()\fP, and \fBread_salclm_gfs_nc()\fP\&.
+.SS "subroutine read_write_data::netcdf_err (integer, intent(in) err, character(len=*), intent(in) string)\fR [private]\fP"
 
 .PP
 If a NetCDF call returns an error, print out a user-supplied message and the NetCDF library message\&. Then stop processing\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIERR\fP NetCDF error code\&. 
 .br
 \fISTRING\fP User-defined error message\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 876 of file read_write_data\&.f90\&.
+Definition at line \fB885\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by read_data(), read_gsi_data(), read_lat_lon_orog(), remove_checksum(), and write_data()\&.
-.SS "subroutine, public read_write_data::read_data (integer, intent(in) LSOIL, integer, intent(in) LENSFC, logical, intent(in) DO_NSST, logical, intent(in) DO_SNO_INC_JEDI, logical, intent(in) DO_SOI_INC_JEDI, logical, intent(in) INC_FILE, logical, intent(out), optional IS_NOAHMP, real, dimension(lensfc), intent(out), optional TSFFCS, real, dimension(lensfc,lsoil), intent(out), optional SMCFCS, real, dimension(lensfc), intent(out), optional SWEFCS, real, dimension(lensfc,lsoil), intent(out), optional STCFCS, real, dimension(lensfc), intent(out), optional TG3FCS, real, dimension(lensfc), intent(out), optional ZORFCS, real, dimension(lensfc), intent(out), optional CVFCS, real, dimension(lensfc), intent(out), optional CVBFCS, real, dimension(lensfc), intent(out), optional CVTFCS, real, dimension(lensfc,4), intent(out), optional ALBFCS, real, dimension(lensfc), intent(out), optional VEGFCS, real, dimension(lensfc), intent(out), optional SLIFCS, real, dimension(lensfc), intent(out), optional CNPFCS, real, dimension(lensfc), intent(out), optional F10M, real, dimension(lensfc), intent(out), optional VETFCS, real, dimension(lensfc), intent(out), optional SOTFCS, real, dimension(lensfc,2), intent(out), optional ALFFCS, real, dimension(lensfc), intent(out), optional USTAR, real, dimension(lensfc), intent(out), optional FMM, real, dimension(lensfc), intent(out), optional FHH, real, dimension(lensfc), intent(out), optional SIHFCS, real, dimension(lensfc), intent(out), optional SICFCS, real, dimension(lensfc), intent(out), optional SITFCS, real, dimension(lensfc), intent(out), optional TPRCP, real, dimension(lensfc), intent(out), optional SRFLAG, real, dimension(lensfc), intent(out), optional SNDFCS, real, dimension(lensfc), intent(out), optional VMNFCS, real, dimension(lensfc), intent(out), optional VMXFCS, real, dimension(lensfc,lsoil), intent(out), optional SLCFCS, real, dimension(lensfc,lsoil), intent(out), optional STCINC, real, dimension(lensfc,lsoil), intent(out), optional SLCINC, real, dimension(lensfc), intent(out), optional SLPFCS, real, dimension(lensfc), intent(out), optional ABSFCS, real, dimension(lensfc), intent(out), optional T2M, real, dimension(lensfc), intent(out), optional Q2M, real, dimension(lensfc), intent(out), optional SLMASK, real(kind=4), dimension(lsoil), intent(out), optional ZSOIL, type(\fBnsst_data\fP), optional NSST)"
+Referenced by \fBread_data()\fP, \fBread_gsi_data()\fP, \fBread_lat_lon_orog()\fP, \fBremove_checksum()\fP, and \fBwrite_data()\fP\&.
+.SS "subroutine, public read_write_data::read_data (integer, intent(in) lsoil, integer, intent(in) lensfc, logical, intent(in) do_nsst, logical, intent(out), optional is_noahmp, character(len=50), intent(in), optional fname_inc, real, dimension(lensfc), intent(out), optional tsffcs, real, dimension(lensfc,lsoil), intent(out), optional smcfcs, real, dimension(lensfc), intent(out), optional swefcs, real, dimension(lensfc,lsoil), intent(out), optional stcfcs, real, dimension(lensfc), intent(out), optional tg3fcs, real, dimension(lensfc), intent(out), optional zorfcs, real, dimension(lensfc), intent(out), optional cvfcs, real, dimension(lensfc), intent(out), optional cvbfcs, real, dimension(lensfc), intent(out), optional cvtfcs, real, dimension(lensfc,4), intent(out), optional albfcs, real, dimension(lensfc), intent(out), optional vegfcs, real, dimension(lensfc), intent(out), optional slifcs, real, dimension(lensfc), intent(out), optional cnpfcs, real, dimension(lensfc), intent(out), optional f10m, real, dimension(lensfc), intent(out), optional vetfcs, real, dimension(lensfc), intent(out), optional sotfcs, real, dimension(lensfc,2), intent(out), optional alffcs, real, dimension(lensfc), intent(out), optional ustar, real, dimension(lensfc), intent(out), optional fmm, real, dimension(lensfc), intent(out), optional fhh, real, dimension(lensfc), intent(out), optional sihfcs, real, dimension(lensfc), intent(out), optional sicfcs, real, dimension(lensfc), intent(out), optional sitfcs, real, dimension(lensfc), intent(out), optional tprcp, real, dimension(lensfc), intent(out), optional srflag, real, dimension(lensfc), intent(out), optional sndfcs, real, dimension(lensfc), intent(out), optional vmnfcs, real, dimension(lensfc), intent(out), optional vmxfcs, real, dimension(lensfc,lsoil), intent(out), optional slcfcs, real, dimension(lensfc,lsoil), intent(out), optional stcinc, real, dimension(lensfc,lsoil), intent(out), optional slcinc, integer, intent(in), optional lsoil_incr, real, dimension(lensfc), intent(out), optional slpfcs, real, dimension(lensfc), intent(out), optional absfcs, real, dimension(lensfc), intent(out), optional t2m, real, dimension(lensfc), intent(out), optional q2m, real, dimension(lensfc), intent(out), optional slmask, real(kind=4), dimension(lsoil), intent(out), optional zsoil, type(\fBnsst_data\fP), optional nsst)"
 
 .PP
 Read the first guess surface records and nsst records (if selected) for a single cubed-sphere tile\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fILSOIL\fP Number of soil layers\&. 
 .br
@@ -285,13 +285,9 @@ Read the first guess surface records and nsst records (if selected) for a single
 .br
 \fIDO_NSST\fP When true, nsst fields are read\&. 
 .br
-\fIDO_SNO_INC_JEDI\fP When true, read in snow increment file 
-.br
-\fIDO_SOI_INC_JEDI\fP When true, read in soil increment file 
-.br
-\fIINC_FILE\fP When true, read from an increment file\&. False reads from a restart file\&. increments are on the cubed-sphere tiles 
-.br
 \fIIS_NOAHMP\fP When true, process for the Noah-MP LSM\&. 
+.br
+\fIFNAME_INC\fP Name of the increment file\&. 
 .br
 \fITSFFCS\fP Skin Temperature\&. 
 .br
@@ -368,9 +364,11 @@ Read the first guess surface records and nsst records (if selected) for a single
 \fISLCINC\fP Liquid soil moisture increments on the cubed-sphere tiles 
 .br
 \fISTCINC\fP Soil temperature increments on the cubed-sphere tiles 
+.br
+\fILSOIL_INCR\fP Number of soil layers (from top) to apply soil increments to 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .PP
@@ -379,17 +377,17 @@ Yuan Xue: add capability to read soil related increments on the cubed-sphere til
 .PP
 
 .PP
-Definition at line 1101 of file read_write_data\&.f90\&.
+Definition at line \fB1094\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-References netcdf_err()\&.
+References \fBnetcdf_err()\fP\&.
 .PP
-Referenced by sfcdrv()\&.
-.SS "subroutine, public read_write_data::read_gsi_data (character(len=*), intent(in) GSI_FILE, character(len=3), intent(in) FILE_TYPE, integer, intent(in), optional LSOIL)"
+Referenced by \fBsfcdrv()\fP\&.
+.SS "subroutine, public read_write_data::read_gsi_data (character(len=*), intent(in) gsi_file, character(len=3), intent(in) file_type, integer, intent(in), optional lsoil)"
 
 .PP
 Read increment file from the GSI containing either the foundation temperature increments and mask, or the soil increments\&. The data is in NetCDF and on a gaussian grid\&. The grid contains two extra rows for each pole\&. The interpolation from gaussian to native grid assumes no pole points, so these are removed\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIGSI_FILE\fP Path/name of the GSI file to be read\&. 
 .br
@@ -398,24 +396,24 @@ Read increment file from the GSI containing either the foundation temperature in
 \fILSOIL\fP Number of model soil levels\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 909 of file read_write_data\&.f90\&.
+Definition at line \fB918\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-References dtref_gaus, idim_gaus, jdim_gaus, netcdf_err(), slc_inc_gaus, slmsk_gaus, soilsnow_gaus, and stc_inc_gaus\&.
+References \fBdtref_gaus\fP, \fBidim_gaus\fP, \fBjdim_gaus\fP, \fBnetcdf_err()\fP, \fBslc_inc_gaus\fP, \fBslmsk_gaus\fP, \fBsoilsnow_gaus\fP, and \fBstc_inc_gaus\fP\&.
 .PP
-Referenced by sfcdrv()\&.
-.SS "subroutine, public read_write_data::read_lat_lon_orog (real, dimension(ijdim), intent(out) RLA, real, dimension(ijdim), intent(out) RLO, real, dimension(ijdim), intent(out) OROG, real, dimension(ijdim), intent(out) OROG_UF, character(len=5), intent(out) TILE_NUM, integer, intent(in) IDIM, integer, intent(in) JDIM, integer, intent(in) IJDIM, real(kind=kind_io8), dimension(ijdim), intent(out), optional LANDFRAC)"
+Referenced by \fBsfcdrv()\fP\&.
+.SS "subroutine, public read_write_data::read_lat_lon_orog (real, dimension(ijdim), intent(out) rla, real, dimension(ijdim), intent(out) rlo, real, dimension(ijdim), intent(out) orog, real, dimension(ijdim), intent(out) orog_uf, character(len=5), intent(out) tile_num, integer, intent(in) idim, integer, intent(in) jdim, integer, intent(in) ijdim, real(kind=kind_io8), dimension(ijdim), intent(out), optional landfrac, real(kind=kind_io8), dimension(ijdim), intent(out), optional lakefrac)"
 
 .PP
 Read latitude and longitude for the cubed-sphere tile from the 'grid' file\&. Read the filtered and unfiltered orography and optionally the land fraction from the 'orography' file\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIIDIM\fP 'i' dimension of cubed-sphere tile\&. 
 .br
@@ -434,26 +432,28 @@ Read latitude and longitude for the cubed-sphere tile from the 'grid' file\&. Re
 \fITILE_NUM\fP Cubed-sphere tile number 
 .br
 \fILANDFRAC\fP Land fraction\&. 
+.br
+\fILAKEFRAC\fP Lake fraction\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 733 of file read_write_data\&.f90\&.
+Definition at line \fB732\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-References netcdf_err()\&.
+References \fBnetcdf_err()\fP\&.
 .PP
-Referenced by sfcdrv()\&.
+Referenced by \fBsfcdrv()\fP\&.
 .SS "subroutine, public read_write_data::read_salclm_gfs_nc (character (len=*), intent(in) filename, real, dimension(nlon,nlat), intent(out) sal, real, dimension(nlat), intent(out) xlats, real, dimension(nlon), intent(out) xlons, integer, intent(in) nlat, integer, intent(in) nlon, integer, intent(in) itime)"
 
 .PP
 Read the woa05 salinity monthly climatology file\&. The file is NetCDF\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfilename\fP The name of the climatology file\&. 
 .br
@@ -470,29 +470,29 @@ Read the woa05 salinity monthly climatology file\&. The file is NetCDF\&.
 \fIsal\fP The salinity\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Xu Li NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 1851 of file read_write_data\&.f90\&.
+Definition at line \fB1908\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-References nc_check()\&.
+References \fBnc_check()\fP\&.
 .PP
-Referenced by get_sal_clm_ta()\&.
+Referenced by \fBget_sal_clm_ta()\fP\&.
 .SS "subroutine, public read_write_data::read_tf_clim_grb (character(*), intent(in) file_sst, real, dimension(mlon_sst,mlat_sst), intent(out) sst, real, dimension(mlat_sst), intent(out) rlats_sst, real, dimension(mlon_sst), intent(out) rlons_sst, integer, intent(in) mlat_sst, integer, intent(in) mlon_sst, integer, intent(in) mon)"
 
 .PP
 Read a GRIB1 sst climatological analysis file\&. Read the sst analysis and save it as an expanded and transposed array\&.
 .PP
-\fBNote:\fP
+\fBNote\fP
 .RS 4
 The data is stored from north to south, but this routine flips the poles\&.
 .RE
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfile_sst\fP File name of the sst file\&. 
 .br
@@ -509,56 +509,56 @@ The data is stored from north to south, but this routine flips the poles\&.
 \fIrlons_sst\fP The longitudes of the sst data points\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Xu Li NOAA/EMC 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2019-03-13 
 .RE
 .PP
 
 .PP
-Definition at line 1651 of file read_write_data\&.f90\&.
+Definition at line \fB1708\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by get_tf_clm_ta()\&.
-.SS "subroutine read_write_data::remove_checksum (integer, intent(in) ncid, integer, intent(in) id_var)"
+Referenced by \fBget_tf_clm_ta()\fP\&.
+.SS "subroutine read_write_data::remove_checksum (integer, intent(in) ncid, integer, intent(in) id_var)\fR [private]\fP"
 
 .PP
 Remove the checksum attribute from a netcdf record\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIncid\fP netcdf file id 
 .br
 \fIid_var\fP netcdf variable id\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 693 of file read_write_data\&.f90\&.
+Definition at line \fB692\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-References netcdf_err()\&.
+References \fBnetcdf_err()\fP\&.
 .PP
-Referenced by write_data()\&.
+Referenced by \fBwrite_data()\fP\&.
 .SS "subroutine, public read_write_data::write_data (integer, intent(in) lensfc, integer, intent(in) idim, integer, intent(in) jdim, integer, intent(in) lsoil, logical, intent(in) do_nsst, logical, intent(in) inc_file, type(\fBnsst_data\fP), intent(in) nsst, real, dimension(lensfc), intent(in), optional slifcs, real, dimension(lensfc), intent(in), optional tsffcs, real, dimension(lensfc), intent(in), optional vegfcs, real, dimension(lensfc), intent(in), optional swefcs, real, dimension(lensfc), intent(in), optional tg3fcs, real, dimension(lensfc), intent(in), optional zorfcs, real, dimension(lensfc,4), intent(in), optional albfcs, real, dimension(lensfc,2), intent(in), optional alffcs, real, dimension(lensfc), intent(in), optional cnpfcs, real, dimension(lensfc), intent(in), optional f10m, real, dimension(lensfc), intent(in), optional t2m, real, dimension(lensfc), intent(in), optional q2m, real, dimension(lensfc), intent(in), optional vetfcs, real, dimension(lensfc), intent(in), optional sotfcs, real, dimension(lensfc), intent(in), optional ustar, real, dimension(lensfc), intent(in), optional fmm, real, dimension(lensfc), intent(in), optional fhh, real, dimension(lensfc), intent(in), optional sicfcs, real, dimension(lensfc), intent(in), optional sihfcs, real, dimension(lensfc), intent(in), optional sitfcs, real, dimension(lensfc), intent(in), optional tprcp, real, dimension(lensfc), intent(in), optional srflag, real, dimension(lensfc), intent(in), optional swdfcs, real, dimension(lensfc), intent(in), optional vmnfcs, real, dimension(lensfc), intent(in), optional vmxfcs, real, dimension(lensfc), intent(in), optional slpfcs, real, dimension(lensfc), intent(in), optional absfcs, real, dimension(lensfc,lsoil), intent(in), optional slcfcs, real, dimension(lensfc,lsoil), intent(in), optional smcfcs, real, dimension(lensfc,lsoil), intent(in), optional stcfcs, real, dimension(lensfc,lsoil), intent(in), optional stcinc, real, dimension(lensfc,lsoil), intent(in), optional slcinc)"
 
 .PP
 Update surface records - and nsst records if selected - on a single cubed-sphere tile to a pre-existing model restart file (in netcdf)\&. 
 .PP
-\fBNote:\fP
+\fBNote\fP
 .RS 4
 The model restart files contain an additional snow field - snow cover (snocvr)\&. That field is required for bit identical reproducability\&. If that record does not exist, the model will compute it as an initialization step\&. Because this program does not contain the snow cover algorithm, it will let the model compute it\&.
 .RE
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIidim\fP 'i' dimension of a tile\&. 
 .br
@@ -639,18 +639,18 @@ The model restart files contain an additional snow field - snow cover (snocvr)\&
 \fIslcinc\fP Liquid soil moisture increments on the cubed-sphere tiles
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 132 of file read_write_data\&.f90\&.
+Definition at line \fB123\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-References netcdf_err(), and remove_checksum()\&.
+References \fBnetcdf_err()\fP, and \fBremove_checksum()\fP\&.
 .PP
-Referenced by sfcdrv()\&.
+Referenced by \fBsfcdrv()\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "real, dimension(:,:), allocatable, public read_write_data::dtref_gaus"
@@ -658,57 +658,57 @@ Referenced by sfcdrv()\&.
 .PP
 GSI foundation temperature increment on the gaussian grid\&. 
 .PP
-Definition at line 49 of file read_write_data\&.f90\&.
+Definition at line \fB49\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by adjust_nsst(), and read_gsi_data()\&.
+Referenced by \fBadjust_nsst()\fP, and \fBread_gsi_data()\fP\&.
 .SS "integer, public read_write_data::idim_gaus"
 
 .PP
 'i' dimension of GSI gaussian grid\&. 
 .PP
-Definition at line 38 of file read_write_data\&.f90\&.
+Definition at line \fB38\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by adjust_nsst(), land_increments::gaussian_to_fv3_interp(), and read_gsi_data()\&.
+Referenced by \fBadjust_nsst()\fP, \fBland_increments::gaussian_to_fv3_interp()\fP, and \fBread_gsi_data()\fP\&.
 .SS "integer, public read_write_data::jdim_gaus"
 
 .PP
 'j' dimension of GSI gaussian grid\&. 
 .PP
-Definition at line 40 of file read_write_data\&.f90\&.
+Definition at line \fB40\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by adjust_nsst(), land_increments::gaussian_to_fv3_interp(), and read_gsi_data()\&.
+Referenced by \fBadjust_nsst()\fP, \fBland_increments::gaussian_to_fv3_interp()\fP, and \fBread_gsi_data()\fP\&.
 .SS "real, dimension(:,:,:), allocatable, public read_write_data::slc_inc_gaus"
 
 .PP
 GSI soil moisture increments on the gaussian grid\&. 
 .PP
-Definition at line 55 of file read_write_data\&.f90\&.
+Definition at line \fB55\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by land_increments::gaussian_to_fv3_interp(), and read_gsi_data()\&.
+Referenced by \fBland_increments::gaussian_to_fv3_interp()\fP, and \fBread_gsi_data()\fP\&.
 .SS "integer, dimension(:,:), allocatable, public read_write_data::slmsk_gaus"
 
 .PP
 GSI land mask on the gaussian grid\&. 
 .PP
-Definition at line 42 of file read_write_data\&.f90\&.
+Definition at line \fB42\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by adjust_nsst(), and read_gsi_data()\&.
+Referenced by \fBadjust_nsst()\fP, and \fBread_gsi_data()\fP\&.
 .SS "integer, dimension(:,:), allocatable, public read_write_data::soilsnow_gaus"
 
 .PP
 GSI soil / snow mask for land on the gaussian grid\&. 1 - soil, 2 - snow, 0 - not land 
 .PP
-Definition at line 45 of file read_write_data\&.f90\&.
+Definition at line \fB45\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by land_increments::gaussian_to_fv3_interp(), and read_gsi_data()\&.
+Referenced by \fBland_increments::gaussian_to_fv3_interp()\fP, and \fBread_gsi_data()\fP\&.
 .SS "real, dimension(:,:,:), allocatable, public read_write_data::stc_inc_gaus"
 
 .PP
 GSI soil temperature increments on the gaussian grid\&. 
 .PP
-Definition at line 52 of file read_write_data\&.f90\&.
+Definition at line \fB52\fP of file \fBread_write_data\&.f90\fP\&.
 .PP
-Referenced by land_increments::gaussian_to_fv3_interp(), and read_gsi_data()\&.
+Referenced by \fBland_increments::gaussian_to_fv3_interp()\fP, and \fBread_gsi_data()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for global_cycle from the source code\&.

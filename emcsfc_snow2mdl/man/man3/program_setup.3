@@ -1,4 +1,4 @@
-.TH "program_setup" 3 "Tue Jan 21 2025" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "program_setup" 3 "Version 1.14.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -124,12 +124,12 @@ program history log:
 2014-Sep-30 gayno - added 'output_grib2' flag
 .PP
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno org: w/np2 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2005-DEC-16 
 .RE
@@ -137,12 +137,12 @@ George Gayno org: w/np2
 
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine, public program_setup::read_config_nml ()"
+.SS "subroutine, public program_setup::read_config_nml"
 
 .PP
 Read namelist control\&. 
 .PP
-\fBNote:\fP
+\fBNote\fP
 .RS 4
 This subroutine reads the program's configuration namelist that contains the the paths/filenames for input and output, and other program control flags\&.
 .RE
@@ -161,23 +161,23 @@ condition codes: all fatal
 78 - bad read on configuration namelist
 .PP
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno org: w/np2 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2005-Dec-16 
 .RE
 .PP
 
 .PP
-Definition at line 81 of file program_setup\&.F90\&.
+Definition at line \fB80\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-References afwa_lsmask_nh_file, afwa_lsmask_sh_file, afwa_snow_global_file, afwa_snow_nh_file, afwa_snow_sh_file, autosnow_file, climo_qc_file, gfs_lpl_file, grib_century, grib_day, grib_hour, grib_month, grib_year, lat_threshold, min_snow_depth, model_lat_file, model_lon_file, model_lsmask_file, model_snow_file, nesdis_lsmask_file, nesdis_snow_file, output_grib2, and snow_cvr_threshold\&.
+References \fBafwa_lsmask_nh_file\fP, \fBafwa_lsmask_sh_file\fP, \fBafwa_snow_global_file\fP, \fBafwa_snow_nh_file\fP, \fBafwa_snow_sh_file\fP, \fBautosnow_file\fP, \fBclimo_qc_file\fP, \fBgfs_lpl_file\fP, \fBgrib_century\fP, \fBgrib_day\fP, \fBgrib_hour\fP, \fBgrib_month\fP, \fBgrib_year\fP, \fBlat_threshold\fP, \fBmin_snow_depth\fP, \fBmodel_lat_file\fP, \fBmodel_lon_file\fP, \fBmodel_lsmask_file\fP, \fBmodel_snow_file\fP, \fBnesdis_lsmask_file\fP, \fBnesdis_snow_file\fP, \fBoutput_grib2\fP, and \fBsnow_cvr_threshold\fP\&.
 .PP
-Referenced by driver()\&.
+Referenced by \fBdriver()\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "character*200, public program_setup::afwa_lsmask_nh_file"
@@ -185,185 +185,185 @@ Referenced by driver()\&.
 .PP
 path/name afwa n hemis land/sea mask 
 .PP
-Definition at line 24 of file program_setup\&.F90\&.
+Definition at line \fB24\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and snowdat::readafwa()\&.
+Referenced by \fBread_config_nml()\fP, and \fBsnowdat::readafwa()\fP\&.
 .SS "character*200, public program_setup::afwa_lsmask_sh_file"
 
 .PP
 path/name afwa s hemis land/sea mask 
 .PP
-Definition at line 25 of file program_setup\&.F90\&.
+Definition at line \fB25\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and snowdat::readafwa()\&.
+Referenced by \fBread_config_nml()\fP, and \fBsnowdat::readafwa()\fP\&.
 .SS "character*200, public program_setup::afwa_snow_global_file"
 
 .PP
 global afwa snow file\&. 
 .PP
-Definition at line 21 of file program_setup\&.F90\&.
+Definition at line \fB21\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and snowdat::readafwa()\&.
+Referenced by \fBread_config_nml()\fP, and \fBsnowdat::readafwa()\fP\&.
 .SS "character*200, public program_setup::afwa_snow_nh_file"
 
 .PP
 path/name afwa n hemis snow depth 
 .PP
-Definition at line 22 of file program_setup\&.F90\&.
+Definition at line \fB22\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and snowdat::readafwa()\&.
+Referenced by \fBread_config_nml()\fP, and \fBsnowdat::readafwa()\fP\&.
 .SS "character*200, public program_setup::afwa_snow_sh_file"
 
 .PP
 path/name afwa s hemis snow depth 
 .PP
-Definition at line 23 of file program_setup\&.F90\&.
+Definition at line \fB23\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and snowdat::readafwa()\&.
+Referenced by \fBread_config_nml()\fP, and \fBsnowdat::readafwa()\fP\&.
 .SS "character*200, public program_setup::autosnow_file"
 
 .PP
 path/name s hemis autosnow file 
 .PP
-Definition at line 26 of file program_setup\&.F90\&.
+Definition at line \fB26\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and snowdat::readautosnow()\&.
+Referenced by \fBread_config_nml()\fP, and \fBsnowdat::readautosnow()\fP\&.
 .SS "character*200, public program_setup::climo_qc_file"
 
 .PP
 Climatological snow cover file\&. Used to quality control snow data\&. 
 .PP
-Definition at line 27 of file program_setup\&.F90\&.
+Definition at line \fB27\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snowdat::nh_climo_check(), and read_config_nml()\&.
+Referenced by \fBsnowdat::nh_climo_check()\fP, and \fBread_config_nml()\fP\&.
 .SS "character*200, public program_setup::gfs_lpl_file"
 
 .PP
 GFS gaussian thinned (reduced) grid definition file\&. Contains the number of longitudes (i-points) for each latitude (row)\&. 
 .PP
-Definition at line 29 of file program_setup\&.F90\&.
+Definition at line \fB29\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and model_grid::read_mdl_grid_info()\&.
+Referenced by \fBread_config_nml()\fP, and \fBmodel_grid::read_mdl_grid_info()\fP\&.
 .SS "integer, public program_setup::grib_century"
 
 .PP
 date of the final merged snow product that will be placed in grib header\&. 
 .PP
-Definition at line 39 of file program_setup\&.F90\&.
+Definition at line \fB39\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snowdat::nh_climo_check(), read_config_nml(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+Referenced by \fBsnowdat::nh_climo_check()\fP, \fBread_config_nml()\fP, \fBsnow2mdl::write_grib1()\fP, and \fBsnow2mdl::write_grib2()\fP\&.
 .SS "integer, public program_setup::grib_day"
 
 .PP
 date of the final merged snow product that will be placed in grib header\&. 
 .PP
-Definition at line 41 of file program_setup\&.F90\&.
+Definition at line \fB41\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snowdat::nh_climo_check(), read_config_nml(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+Referenced by \fBsnowdat::nh_climo_check()\fP, \fBread_config_nml()\fP, \fBsnow2mdl::write_grib1()\fP, and \fBsnow2mdl::write_grib2()\fP\&.
 .SS "integer, public program_setup::grib_hour"
 
 .PP
 date of the final merged snow product that will be placed in grib header\&. 
 .PP
-Definition at line 42 of file program_setup\&.F90\&.
+Definition at line \fB42\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+Referenced by \fBread_config_nml()\fP, \fBsnow2mdl::write_grib1()\fP, and \fBsnow2mdl::write_grib2()\fP\&.
 .SS "integer, public program_setup::grib_month"
 
 .PP
 date of the final merged snow product that will be placed in grib header\&. 
 .PP
-Definition at line 43 of file program_setup\&.F90\&.
+Definition at line \fB43\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snowdat::nh_climo_check(), read_config_nml(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+Referenced by \fBsnowdat::nh_climo_check()\fP, \fBread_config_nml()\fP, \fBsnow2mdl::write_grib1()\fP, and \fBsnow2mdl::write_grib2()\fP\&.
 .SS "integer, public program_setup::grib_year"
 
 .PP
 date of the final merged snow product that will be placed in grib header\&. 
 .PP
-Definition at line 44 of file program_setup\&.F90\&.
+Definition at line \fB44\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snowdat::nh_climo_check(), read_config_nml(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+Referenced by \fBsnowdat::nh_climo_check()\fP, \fBread_config_nml()\fP, \fBsnow2mdl::write_grib1()\fP, and \fBsnow2mdl::write_grib2()\fP\&.
 .SS "real, public program_setup::lat_threshold"
 
 .PP
 equatorward of this latitude, model points with undefined cover or depth (because the interpolation routines could not find valid snow data) are set to a default value of zero\&. poleward, undefined points are set according to logic in module \fBsnow2mdl\fP\&. 
 .PP
-Definition at line 48 of file program_setup\&.F90\&.
+Definition at line \fB48\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snow2mdl::interp(), and read_config_nml()\&.
+Referenced by \fBsnow2mdl::interp()\fP, and \fBread_config_nml()\fP\&.
 .SS "real, public program_setup::min_snow_depth"
 
 .PP
 minimum snow depth in meters at model points with coverage exceeding threshold\&. 
 .PP
-Definition at line 52 of file program_setup\&.F90\&.
+Definition at line \fB52\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snow2mdl::interp(), and read_config_nml()\&.
+Referenced by \fBsnow2mdl::interp()\fP, and \fBread_config_nml()\fP\&.
 .SS "character*200, public program_setup::model_lat_file"
 
 .PP
 path/name lats on the model grid 
 .PP
-Definition at line 32 of file program_setup\&.F90\&.
+Definition at line \fB32\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and model_grid::read_mdl_grid_info()\&.
+Referenced by \fBread_config_nml()\fP, and \fBmodel_grid::read_mdl_grid_info()\fP\&.
 .SS "character*200, public program_setup::model_lon_file"
 
 .PP
 path/name lons on the model grid 
 .PP
-Definition at line 33 of file program_setup\&.F90\&.
+Definition at line \fB33\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and model_grid::read_mdl_grid_info()\&.
+Referenced by \fBread_config_nml()\fP, and \fBmodel_grid::read_mdl_grid_info()\fP\&.
 .SS "character*200, public program_setup::model_lsmask_file"
 
 .PP
 path/name nesdis/ims land mask 
 .PP
-Definition at line 34 of file program_setup\&.F90\&.
+Definition at line \fB34\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and model_grid::read_mdl_grid_info()\&.
+Referenced by \fBread_config_nml()\fP, and \fBmodel_grid::read_mdl_grid_info()\fP\&.
 .SS "character*200, public program_setup::model_snow_file"
 
 .PP
 path/name nesdis/ims snow cover 
 .PP
-Definition at line 35 of file program_setup\&.F90\&.
+Definition at line \fB35\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), snow2mdl::write_grib1(), and snow2mdl::write_grib2()\&.
+Referenced by \fBread_config_nml()\fP, \fBsnow2mdl::write_grib1()\fP, and \fBsnow2mdl::write_grib2()\fP\&.
 .SS "character*200, public program_setup::nesdis_lsmask_file"
 
 .PP
 nesdis/ims land mask file 
 .PP
-Definition at line 36 of file program_setup\&.F90\&.
+Definition at line \fB36\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and snowdat::readnesdis()\&.
+Referenced by \fBread_config_nml()\fP, and \fBsnowdat::readnesdis()\fP\&.
 .SS "character*200, public program_setup::nesdis_snow_file"
 
 .PP
 nesdis/ims snow file 
 .PP
-Definition at line 37 of file program_setup\&.F90\&.
+Definition at line \fB37\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by read_config_nml(), and snowdat::readnesdis()\&.
+Referenced by \fBread_config_nml()\fP, and \fBsnowdat::readnesdis()\fP\&.
 .SS "logical, public program_setup::output_grib2"
 
 .PP
 when true, output model snow analysis is grib 2\&. when false, grib 1\&. 
 .PP
-Definition at line 46 of file program_setup\&.F90\&.
+Definition at line \fB46\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snow2mdl::interp(), and read_config_nml()\&.
+Referenced by \fBsnow2mdl::interp()\fP, and \fBread_config_nml()\fP\&.
 .SS "real, public program_setup::snow_cvr_threshold"
 
 .PP
 if percent coverage according to nesdis/ims or autosnow exceeds this value, then non-zero snow depth is assigned\&. below this threshold, depth is set to zero\&. 
 .PP
-Definition at line 53 of file program_setup\&.F90\&.
+Definition at line \fB53\fP of file \fBprogram_setup\&.F90\fP\&.
 .PP
-Referenced by snow2mdl::interp(), and read_config_nml()\&.
+Referenced by \fBsnow2mdl::interp()\fP, and \fBread_config_nml()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for emcsfc_snow2mdl from the source code\&.

@@ -1,4 +1,4 @@
-.TH "io_utils" 3 "Tue Jan 21 2025" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "io_utils" 3 "Version 1.14.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,7 +27,7 @@ io_utils \- Module containing utilities that read and write data\&.
 .br
 .RI "Read input global 30-arc second orography data\&. "
 .ti -1c
-.RI "subroutine, public \fBread_mask\fP (merge_file, slm, land_frac, \fBlake_frac\fP, im, jm)"
+.RI "subroutine, public \fBread_mask\fP (merge_file, slm, land_frac, lake_frac, im, jm)"
 .br
 .RI "Read the land mask file\&. "
 .ti -1c
@@ -53,7 +53,7 @@ Module containing utilities that read and write data\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
@@ -61,34 +61,34 @@ George Gayno NOAA/EMC
 
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine io_utils::netcdf_err (integer, intent(in) err, character(len=*), intent(in) string)"
+.SS "subroutine io_utils::netcdf_err (integer, intent(in) err, character(len=*), intent(in) string)\fR [private]\fP"
 
 .PP
 Check NetCDF error code and output the error message\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIerr\fP NetCDF error code 
 .br
 \fIstring\fP The NetCDF error message 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Jordan Alpert NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 240 of file io_utils\&.F90\&.
+Definition at line \fB239\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-Referenced by qc_orog_by_ramp(), read_global_mask(), read_global_orog(), read_mask(), read_mdl_dims(), read_mdl_grid_file(), write_mask_netcdf(), and write_netcdf()\&.
+Referenced by \fBqc_orog_by_ramp()\fP, \fBread_global_mask()\fP, \fBread_global_orog()\fP, \fBread_mask()\fP, \fBread_mdl_dims()\fP, \fBread_mdl_grid_file()\fP, \fBwrite_mask_netcdf()\fP, and \fBwrite_netcdf()\fP\&.
 .SS "subroutine, public io_utils::qc_orog_by_ramp (integer, intent(in) imn, integer, intent(in) jmn, integer, dimension(imn,jmn), intent(inout) zavg, integer, dimension(imn,jmn), intent(inout) zslm)"
 
 .PP
 Quality control the global orography and landmask data over Antarctica using RAMP data\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIimn\fP i-dimension of the global data\&. 
 .br
@@ -99,24 +99,24 @@ Quality control the global orography and landmask data over Antarctica using RAM
 \fIzslm\fP The global landmask data\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 G\&. Gayno 
 .RE
 .PP
 
 .PP
-Definition at line 669 of file io_utils\&.F90\&.
+Definition at line \fB668\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-References netcdf_err()\&.
+References \fBnetcdf_err()\fP\&.
 .PP
-Referenced by tersub()\&.
+Referenced by \fBtersub()\fP\&.
 .SS "subroutine, public io_utils::read_global_mask (integer, intent(in) imn, integer, intent(in) jmn, integer(1), dimension(imn,jmn), intent(out) mask)"
 
 .PP
 Read input global 30-arc second land mask data\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIimn\fP i-dimension of orography data\&. 
 .br
@@ -125,24 +125,24 @@ Read input global 30-arc second land mask data\&.
 \fImask\fP The land mask data\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 G\&. Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 611 of file io_utils\&.F90\&.
+Definition at line \fB610\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-References netcdf_err(), and orog_utils::transpose_mask()\&.
+References \fBnetcdf_err()\fP, and \fBorog_utils::transpose_mask()\fP\&.
 .PP
-Referenced by tersub()\&.
+Referenced by \fBtersub()\fP\&.
 .SS "subroutine, public io_utils::read_global_orog (integer, intent(in) imn, integer, intent(in) jmn, integer*2, dimension(imn,jmn), intent(out) glob)"
 
 .PP
 Read input global 30-arc second orography data\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIimn\fP i-dimension of orography data\&. 
 .br
@@ -151,24 +151,24 @@ Read input global 30-arc second orography data\&.
 \fIglob\fP The orography data\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Jordan Alpert NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 552 of file io_utils\&.F90\&.
+Definition at line \fB551\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-References netcdf_err(), and orog_utils::transpose_orog()\&.
+References \fBnetcdf_err()\fP, and \fBorog_utils::transpose_orog()\fP\&.
 .PP
-Referenced by tersub()\&.
+Referenced by \fBtersub()\fP\&.
 .SS "subroutine, public io_utils::read_mask (character(len=*), intent(in) merge_file, real, dimension(im,jm), intent(out) slm, real, dimension(im,jm), intent(out) land_frac, real, dimension(im,jm), intent(out) lake_frac, integer, intent(in) im, integer, intent(in) jm)"
 
 .PP
 Read the land mask file\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fImerge_file\fP path 
 .br
@@ -183,24 +183,24 @@ Read the land mask file\&.
 \fIjm\fP 'j' dimension of a model grid tile\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 357 of file io_utils\&.F90\&.
+Definition at line \fB356\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-References lake_frac(), and netcdf_err()\&.
+References \fBnetcdf_err()\fP\&.
 .PP
-Referenced by tersub()\&.
+Referenced by \fBtersub()\fP\&.
 .SS "subroutine, public io_utils::read_mdl_dims (character(len=*), intent(in) mdl_grid_file, integer, intent(out) im, integer, intent(out) jm)"
 
 .PP
 Read the grid dimensions from the model 'grid' file\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fImdl_grid_file\fP path/name of model 'grid' file\&. 
 .br
@@ -209,24 +209,24 @@ Read the grid dimensions from the model 'grid' file\&.
 \fIjm\fP 'j' dimension of a model grid tile\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 402 of file io_utils\&.F90\&.
+Definition at line \fB401\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-References netcdf_err()\&.
+References \fBnetcdf_err()\fP\&.
 .PP
-Referenced by __mtnlm7_oclsm\&.f90__()\&.
+Referenced by \fB__mtnlm7_oclsm_f90__()\fP\&.
 .SS "subroutine, public io_utils::read_mdl_grid_file (character(len=*), intent(in) mdl_grid_file, integer, intent(in) im, integer, intent(in) jm, real, dimension(im,jm), intent(out) geolon, real, dimension(im+1,jm+1), intent(out) geolon_c, real, dimension(im,jm), intent(out) geolat, real, dimension(im+1,jm+1), intent(out) geolat_c, real, dimension(im,jm), intent(out) dx, real, dimension(im,jm), intent(out) dy, logical, dimension(im,jm), intent(out) is_north_pole, logical, dimension(im,jm), intent(out) is_south_pole)"
 
 .PP
 Read the grid dimensions from the model 'grid' file\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fImdl_grid_file\fP Path/name of model 'grid' file\&. 
 .br
@@ -251,24 +251,24 @@ Read the grid dimensions from the model 'grid' file\&.
 \fIis_south_pole\fP 'true' for points surrounding the south pole\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 454 of file io_utils\&.F90\&.
+Definition at line \fB451\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-References orog_utils::find_nearest_pole_points(), orog_utils::find_poles(), and netcdf_err()\&.
+References \fBorog_utils::find_nearest_pole_points()\fP, \fBorog_utils::find_poles()\fP, and \fBnetcdf_err()\fP\&.
 .PP
-Referenced by tersub()\&.
+Referenced by \fBtersub()\fP\&.
 .SS "subroutine, public io_utils::write_mask_netcdf (integer, intent(in) im, integer, intent(in) jm, real, dimension(im,jm), intent(in) slm, real, dimension(im,jm), intent(in) land_frac, integer, intent(in) ntiles, integer, intent(in) tile, real, dimension(im,jm), intent(in) geolon, real, dimension(im,jm), intent(in) geolat)"
 
 .PP
 Write the land mask file\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIim\fP 'i' dimension of a model grid tile\&. 
 .br
@@ -287,24 +287,24 @@ Write the land mask file\&.
 \fIgeolat\fP Latitude on the model grid tile\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NOAA/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 267 of file io_utils\&.F90\&.
+Definition at line \fB266\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-References netcdf_err()\&.
+References \fBnetcdf_err()\fP\&.
 .PP
-Referenced by tersub()\&.
+Referenced by \fBtersub()\fP\&.
 .SS "subroutine, public io_utils::write_netcdf (integer, intent(in) im, integer, intent(in) jm, real, dimension(im,jm), intent(in) slm, real, dimension(im,jm), intent(in) land_frac, real, dimension(im,jm), intent(in) oro, real, dimension(im,jm,14), intent(in) hprime, integer, intent(in) ntiles, integer, intent(in) tile, real, dimension(im,jm), intent(in) geolon, real, dimension(im,jm), intent(in) geolat, real, dimension(im), intent(in) lon, real, dimension(jm), intent(in) lat)"
 
 .PP
 Write out orography file in netcdf format\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIim\fP 'i' dimension of a model grid tile\&. 
 .br
@@ -331,18 +331,18 @@ Write out orography file in netcdf format\&.
 \fIlat\fP Latitude of the first column of the model grid tile\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Jordan Alpert NOAA/EMC GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 42 of file io_utils\&.F90\&.
+Definition at line \fB41\fP of file \fBio_utils\&.F90\fP\&.
 .PP
-References netcdf_err()\&.
+References \fBnetcdf_err()\fP\&.
 .PP
-Referenced by tersub()\&.
+Referenced by \fBtersub()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for orog_mask_tools from the source code\&.

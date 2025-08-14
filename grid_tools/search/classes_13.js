@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wrtb',['wrtb',['../interfacepmat2_1_1wrtb.html',1,'pmat2']]]
+  ['wrtb_0',['wrtb',['../interfacepmat2_1_1wrtb.html',1,'pmat2']]]
 ];

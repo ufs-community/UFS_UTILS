@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['kinds',['kinds',['../namespacekinds.html',1,'']]],
-  ['kinds_2ef90',['kinds.f90',['../kinds_8f90.html',1,'']]]
+  ['kinds_0',['kinds',['../namespacekinds.html',1,'']]],
+  ['kinds_2ef90_1',['kinds.f90',['../kinds_8f90.html',1,'']]]
 ];

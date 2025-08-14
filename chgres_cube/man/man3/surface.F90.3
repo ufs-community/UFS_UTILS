@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/surface.F90" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/surface.F90 \- Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/surface.F90 \- Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) fields\&.  
 
 .SH SYNOPSIS
 .br
@@ -53,7 +53,7 @@
 .br
 .RI "Create ESMF fields for the target grid surface variables\&. "
 .ti -1c
-.RI "real function \fBsurface::frh2o\fP (TKELV, SMC, SH2O, SMCMAX, BEXP, PSIS)"
+.RI "real function \fBsurface::frh2o\fP (tkelv, smc, sh2o, smcmax, bexp, psis)"
 .br
 .RI "Calculate supercooled soil moisture\&. "
 .ti -1c
@@ -147,7 +147,7 @@ Process land, sea/lake ice, open water/Near Sea Surface Temperature (NSST) field
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
@@ -155,6 +155,34 @@ George Gayno NCEP/EMC
 
 .PP
 Definition in file \fBsurface\&.F90\fP\&.
+.SH "Data Type Documentation"
+.PP 
+.SH "type surface::realptr_2d"
+.PP 
+Definition at line \fB88\fP of file \fBsurface\&.F90\fP\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+real(esmf_kind_r8), dimension(:,:), pointer \fIp\fP array of 2d pointers 
+.br
+pointer to hold array of 2d pointers 
+.br
+.PP
+.RE
+.PP
+.SH "type surface::realptr_3d"
+.PP 
+Definition at line \fB93\fP of file \fBsurface\&.F90\fP\&.
+.PP
+\fBData Fields:\fP
+.RS 4
+real(esmf_kind_r8), dimension(:,:,:), pointer \fIp\fP array of 3d pointers 
+.br
+pointer to hold array of 3d pointers 
+.br
+.PP
+.RE
+.PP
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

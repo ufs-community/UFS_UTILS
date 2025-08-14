@@ -1,4 +1,4 @@
-.TH "pietc" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pietc" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -861,12 +861,12 @@ Some of the commonly used constants (pi etc) mainly for double-precision subrout
 
 ms10 etc are needed to satisfy the some (eg\&., gnu fortran) compilers' more rigorous standards regarding the way 'data' statements are initialized\&. Zero and the first few units are u0,u1,u2, etc\&., their reciprocals being, o2,o3 etc and their square roots, r2,r3\&. Reciprocal roots are or2,or3 etc\&.
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2014 
 .RE
@@ -879,1313 +879,1315 @@ R\&. J\&. Purser
 .PP
 complex zero 
 .PP
-Definition at line 112 of file pietc\&.f90\&.
+Definition at line \fB112\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pmat::cldumf(), and pmat2::clib_c()\&.
+Referenced by \fBpmat::ldum::cldumf()\fP, and \fBpmat2::clipb::clib_c()\fP\&.
 .SS "complex(dpc), parameter pietc::c1 =(\fBu1\fP, \fBu0\fP)"
 
 .PP
 complex one 
 .PP
-Definition at line 113 of file pietc\&.f90\&.
+Definition at line \fB113\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pmat::cinvmtf(), pmat::cldumf(), pmat::cudlmm(), and pmat::cudlmv()\&.
+Referenced by \fBpmat::inv::cinvmtf()\fP, \fBpmat::ldum::cldumf()\fP, \fBpmat::udlmm::cudlmm()\fP, and \fBpmat::udlmm::cudlmv()\fP\&.
 .SS "complex(dpc), parameter pietc::ci =(\fBu0\fP, \fBu1\fP)"
 
 .PP
 complex i=sqrt(-1) 
 .PP
-Definition at line 115 of file pietc\&.f90\&.
+Definition at line \fB115\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::cipi =\fBci\fP*\fBpi\fP"
 
 .PP
 complex i*pi 
 .PP
-Definition at line 117 of file pietc\&.f90\&.
+Definition at line \fB117\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::dtor =\fBpi\fP/180"
 
 .PP
 Degrees to radians\&. 
 .PP
-Definition at line 54 of file pietc\&.f90\&.
+Definition at line \fB54\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pmat5::dgtoc(), pmat5::dgtocd(), pmat5::dgtocdd(), pmat5::dininmap(), pmat5::dinivmap(), pesg::get_edges(), pesg::gtoxm_ak_dd_g(), pesg::gtoxm_ak_dd_m(), pesg::hgrid_ak_dc(), pesg::hgrid_ak_dd(), pesg::hgrid_ak_dd_c(), regional_grid(), pesg::xmtog_ak_dd_g(), and pesg::xmtog_ak_dd_m()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, \fBpmat5::gtoc::dgtoc()\fP, \fBpmat5::gtoc::dgtocd()\fP, \fBpmat5::gtoc::dgtocdd()\fP, \fBpmat5::ininmap::dininmap()\fP, \fBpmat5::inivmap::dinivmap()\fP, and \fBregional_grid()\fP\&.
 .SS "real(dp), parameter pietc::euler =0\&.57721566490153286060651209008240243104215933593992359880e0_dp"
 
 .PP
 Euler-Mascheroni constant\&. 
 .PP
-Definition at line 53 of file pietc\&.f90\&.
+Definition at line \fB53\fP of file \fBpietc\&.f90\fP\&.
 .SS "logical, parameter pietc::f =\&.false\&."
 
 .PP
 for pain-relief in logical ops 
 .PP
-Definition at line 18 of file pietc\&.f90\&.
+Definition at line \fB18\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pmat::sl1lmf(), pmat::sldlmf(), pmat::sldumf(), pesg::xctoxm_ak(), pesg::zmtozt(), and pesg::zttozm()\&.
+Referenced by \fBpesg::zmtozt::zmtozt()\fP, \fBpesg::zttozm::zttozm()\fP, \fBpmat::ldum::cldumf()\fP, \fBpmat::l1lm::dl1lmf()\fP, \fBpmat::ldlm::dldlmf()\fP, \fBpmat::ldum::dldumf()\fP, and \fBpesg::zmtozt::zmtozt1()\fP\&.
 .SS "complex(dpc), parameter pietc::mc1 =\-\fBc1\fP"
 
 .PP
 complex minus-one 
 .PP
-Definition at line 114 of file pietc\&.f90\&.
+Definition at line \fB114\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::mci =\-\fBci\fP"
 
 .PP
 complex minus-i 
 .PP
-Definition at line 116 of file pietc\&.f90\&.
+Definition at line \fB116\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mo2 =\-\fBo2\fP"
 
 .PP
 minus-half 
 .PP
-Definition at line 37 of file pietc\&.f90\&.
+Definition at line \fB37\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mo3 =\-\fBo3\fP"
 
 .PP
 minus-third 
 .PP
-Definition at line 38 of file pietc\&.f90\&.
+Definition at line \fB38\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mo4 =\-\fBo4\fP"
 
 .PP
 minus-fourth 
 .PP
-Definition at line 39 of file pietc\&.f90\&.
+Definition at line \fB39\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mo5 =\-\fBo5\fP"
 
 .PP
 minus-fifth 
 .PP
-Definition at line 40 of file pietc\&.f90\&.
+Definition at line \fB40\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mo6 =\-\fBo6\fP"
 
 .PP
 minus-sixth 
 .PP
-Definition at line 41 of file pietc\&.f90\&.
+Definition at line \fB41\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms10 =\-\fBs10\fP"
 
 .PP
 minus-sine(10 deg) 
 .PP
-Definition at line 85 of file pietc\&.f90\&.
+Definition at line \fB85\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms11 =\-\fBs11\fP"
 
 .PP
 minus-sine(90/8 deg) 
 .PP
-Definition at line 86 of file pietc\&.f90\&.
+Definition at line \fB86\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms13 =\-\fBs13\fP"
 
 .PP
 minus-sine(90/7 deg) 
 .PP
-Definition at line 87 of file pietc\&.f90\&.
+Definition at line \fB87\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms15 =\-\fBs15\fP"
 
 .PP
 minus-sine(15 deg) 
 .PP
-Definition at line 88 of file pietc\&.f90\&.
+Definition at line \fB88\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms18 =\-\fBs18\fP"
 
 .PP
 minus-sine(18 deg) 
 .PP
-Definition at line 89 of file pietc\&.f90\&.
+Definition at line \fB89\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::ms20 =\-\fBs20\fP"
 
 .PP
 minus-sine(20 deg) 
 .PP
-Definition at line 90 of file pietc\&.f90\&.
+Definition at line \fB90\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms22 =\-\fBs22\fP"
 
 .PP
 minus-sine(22\&.5 deg) 
 .PP
-Definition at line 91 of file pietc\&.f90\&.
+Definition at line \fB91\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms26 =\-\fBs26\fP"
 
 .PP
 minus-sine(90*2/7 deg) 
 .PP
-Definition at line 92 of file pietc\&.f90\&.
+Definition at line \fB92\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms30 =\-\fBs30\fP"
 
 .PP
 minus-sine(30 deg) 
 .PP
-Definition at line 93 of file pietc\&.f90\&.
+Definition at line \fB93\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms34 =\-\fBs34\fP"
 
 .PP
 minus-sine(90*3/8 deg) 
 .PP
-Definition at line 94 of file pietc\&.f90\&.
+Definition at line \fB94\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms36 =\-\fBs36\fP"
 
 .PP
 minus-sine(36 deg) 
 .PP
-Definition at line 95 of file pietc\&.f90\&.
+Definition at line \fB95\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::ms39 =\-\fBs39\fP"
 
 .PP
 minus-sine(90*3/7 deg) 
 .PP
-Definition at line 96 of file pietc\&.f90\&.
+Definition at line \fB96\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms40 =\-\fBs40\fP"
 
 .PP
 minus-sine(40 deg) 
 .PP
-Definition at line 97 of file pietc\&.f90\&.
+Definition at line \fB97\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms45 =\-\fBs45\fP"
 
 .PP
 minus-sine(45 deg) 
 .PP
-Definition at line 98 of file pietc\&.f90\&.
+Definition at line \fB98\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms50 =\-\fBs50\fP"
 
 .PP
 minus-sine(50 deg) 
 .PP
-Definition at line 99 of file pietc\&.f90\&.
+Definition at line \fB99\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms51 =\-\fBs51\fP"
 
 .PP
 minus-sine(90*4/7 deg) 
 .PP
-Definition at line 100 of file pietc\&.f90\&.
+Definition at line \fB100\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms54 =\-\fBs54\fP"
 
 .PP
 minus-sine(54 deg) 
 .PP
-Definition at line 101 of file pietc\&.f90\&.
+Definition at line \fB101\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::ms56 =\-\fBs56\fP"
 
 .PP
 minus-sine(90*5/8 deg) 
 .PP
-Definition at line 102 of file pietc\&.f90\&.
+Definition at line \fB102\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms60 =\-\fBs60\fP"
 
 .PP
 minus-sine(60 deg) 
 .PP
-Definition at line 103 of file pietc\&.f90\&.
+Definition at line \fB103\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms64 =\-\fBs64\fP"
 
 .PP
 minus-sine(90*5/7 deg) 
 .PP
-Definition at line 104 of file pietc\&.f90\&.
+Definition at line \fB104\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms68 =\-\fBs68\fP"
 
 .PP
 minus-sine(67\&.5 deg) 
 .PP
-Definition at line 105 of file pietc\&.f90\&.
+Definition at line \fB105\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms70 =\-\fBs70\fP"
 
 .PP
 minus-sine(70 deg) 
 .PP
-Definition at line 106 of file pietc\&.f90\&.
+Definition at line \fB106\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms72 =\-\fBs72\fP"
 
 .PP
 minus-sine(72 deg) 
 .PP
-Definition at line 107 of file pietc\&.f90\&.
+Definition at line \fB107\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::ms75 =\-\fBs75\fP"
 
 .PP
 minus-sine(75 deg) 
 .PP
-Definition at line 108 of file pietc\&.f90\&.
+Definition at line \fB108\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms77 =\-\fBs77\fP"
 
 .PP
 minus-sine(90*6/7 deg) 
 .PP
-Definition at line 109 of file pietc\&.f90\&.
+Definition at line \fB109\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms79 =\-\fBs79\fP"
 
 .PP
 minus-sine(90*7/8 deg) 
 .PP
-Definition at line 110 of file pietc\&.f90\&.
+Definition at line \fB110\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::ms80 =\-\fBs80\fP"
 
 .PP
 minus-sine(80 deg) 
 .PP
-Definition at line 111 of file pietc\&.f90\&.
+Definition at line \fB111\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mu1 =\-\fBu1\fP"
 
 .PP
 minus-one 
 .PP
-Definition at line 21 of file pietc\&.f90\&.
+Definition at line \fB21\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mu2 =\-\fBu2\fP"
 
 .PP
 minus-two 
 .PP
-Definition at line 23 of file pietc\&.f90\&.
+Definition at line \fB23\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mu3 =\-\fBu3\fP"
 
 .PP
 minus-three 
 .PP
-Definition at line 25 of file pietc\&.f90\&.
+Definition at line \fB25\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mu4 =\-\fBu4\fP"
 
 .PP
 minus-four 
 .PP
-Definition at line 27 of file pietc\&.f90\&.
+Definition at line \fB27\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mu5 =\-\fBu5\fP"
 
 .PP
 minus-five 
 .PP
-Definition at line 29 of file pietc\&.f90\&.
+Definition at line \fB29\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::mu6 =\-\fBu6\fP"
 
 .PP
 minus-six 
 .PP
-Definition at line 31 of file pietc\&.f90\&.
+Definition at line \fB31\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::o2 =\fBu1\fP/\fBu2\fP"
 
 .PP
 half 
 .PP
-Definition at line 32 of file pietc\&.f90\&.
+Definition at line \fB32\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pfun::atanh_d(), pfun::atanh_s(), pmat4::axial33_d(), psym2::eigensym2(), psym2::eigensym2d(), pmat4::expmat(), pmat4::expmatd(), pmat4::expmatdd(), psym2::expsym2d(), pesg::get_qx(), pesg::get_qxd(), pfun::hav_d(), pmat4::hav_d(), pfun::hav_s(), pfun::havh_d(), pfun::havh_s(), psym2::logsym2d(), psym2::sqrtsym2d_e(), psym2::sqrtsym2d_t(), and pesg::xttoxs1()\&.
+Referenced by \fBpsym2::eigensym2::eigensym2()\fP, \fBpmat4::expmat::expmat()\fP, \fBpsym2::sqrtsym2d_e::sqrtsym2d_e()\fP, \fBpsym2::sqrtsym2d_t::sqrtsym2d_t()\fP, \fBpfun::atanh::atanh_d()\fP, \fBpmat4::axial::axial33_d()\fP, \fBpsym2::eigensym2::eigensym2d()\fP, \fBpmat4::expmat::expmatd()\fP, \fBpmat4::expmat::expmatdd()\fP, \fBpsym2::expsym2::expsym2d()\fP, \fBpfun::hav::hav_d()\fP, \fBpmat4::hav::hav_d()\fP, \fBpfun::havh::havh_d()\fP, \fBpsym2::logsym2::logsym2d()\fP, \fBpesg::xttoxs::xttoxs1()\fP, and \fBpesg::zmtozt::zmtozt1()\fP\&.
 .SS "real(dp), parameter pietc::o3 =\fBu1\fP/\fBu3\fP"
 
 .PP
 third 
 .PP
-Definition at line 33 of file pietc\&.f90\&.
+Definition at line \fB33\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pfun::atanh_d(), and pesg::zmtozt1()\&.
+Referenced by \fBpfun::atanh::atanh_d()\fP, and \fBpesg::zmtozt::zmtozt1()\fP\&.
 .SS "real(dp), parameter pietc::o4 =\fBu1\fP/\fBu4\fP"
 
 .PP
 fourth 
 .PP
-Definition at line 34 of file pietc\&.f90\&.
+Definition at line \fB34\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::o5 =\fBu1\fP/\fBu5\fP"
 
 .PP
 fifth 
 .PP
-Definition at line 35 of file pietc\&.f90\&.
+Definition at line \fB35\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pfun::atanh_d(), pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, \fBpesg::bestesg_map::bestesg_map()\fP, and \fBpfun::atanh::atanh_d()\fP\&.
 .SS "real(dp), parameter pietc::o6 =\fBu1\fP/\fBu6\fP"
 
 .PP
 sixth 
 .PP
-Definition at line 36 of file pietc\&.f90\&.
+Definition at line \fB36\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::or2 =\fBu1\fP/\fBr2\fP"
 
 .PP
 1\&. /root of two 
 .PP
-Definition at line 49 of file pietc\&.f90\&.
+Definition at line \fB49\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::or3 =\fBu1\fP/\fBr3\fP"
 
 .PP
 1\&. /root of three 
 .PP
-Definition at line 50 of file pietc\&.f90\&.
+Definition at line \fB50\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::or5 =\fBu1\fP/\fBr5\fP"
 
 .PP
 1\&. /root of five 
 .PP
-Definition at line 51 of file pietc\&.f90\&.
+Definition at line \fB51\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::phi =1\&.6180339887498948482045868343656381177203091798057628621354e0_dp"
 
 .PP
 Golden number\&. 
 .PP
-Definition at line 52 of file pietc\&.f90\&.
+Definition at line \fB52\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::pi =3\&.1415926535897932384626433832795028841971693993751058209749e0_dp"
 
 .PP
 Pi\&. 
 .PP
-Definition at line 42 of file pietc\&.f90\&.
+Definition at line \fB42\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::pi2 =6\&.2831853071795864769252867665590057683943387987502116419498e0_dp"
 
 .PP
 Pi*2\&. 
 .PP
-Definition at line 43 of file pietc\&.f90\&.
+Definition at line \fB43\fP of file \fBpietc\&.f90\fP\&.
+.PP
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::pih =1\&.5707963267948966192313216916397514420985846996875529104874e0_dp"
 
 .PP
 pi*half 
 .PP
-Definition at line 44 of file pietc\&.f90\&.
+Definition at line \fB44\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::gaulegh(), and pesg::zmtozt()\&.
+Referenced by \fBpesg::zmtozt::zmtozt()\fP, and \fBpesg::zmtozt::zmtozt1()\fP\&.
 .SS "real(dp), parameter pietc::r2 =1\&.4142135623730950488016887242096980785696718753769480731766e0_dp"
 
 .PP
 Square root of 2\&. 
 .PP
-Definition at line 46 of file pietc\&.f90\&.
+Definition at line \fB46\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::r3 =1\&.7320508075688772935274463415058723669428052538103806280558e0_dp"
 
 .PP
 Square root of 3\&. 
 .PP
-Definition at line 47 of file pietc\&.f90\&.
+Definition at line \fB47\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::r5 =2\&.2360679774997896964091736687312762354406183596115257242708e0_dp"
 
 .PP
 Square root of 5\&. 
 .PP
-Definition at line 48 of file pietc\&.f90\&.
+Definition at line \fB48\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::rpi =1\&.7724538509055160272981674833411451827975494561223871282138e0_dp"
 
 .PP
 square root of pi 
 .PP
-Definition at line 45 of file pietc\&.f90\&.
+Definition at line \fB45\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::rtod =180/\fBpi\fP"
 
 .PP
 radians to degrees 
 .PP
-Definition at line 55 of file pietc\&.f90\&.
+Definition at line \fB55\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pmat5::dctog(), pesg::get_meanqd(), pesg::guessak_map(), pesg::hgrid_ak_c(), pesg::hgrid_ak_dd(), pesg::hgrid_ak_dd_c(), regional_grid(), pesg::xmtog_ak_dd_g(), and pesg::xmtog_ak_dd_m()\&.
+Referenced by \fBpmat5::ctog::dctog()\fP, and \fBregional_grid()\fP\&.
 .SS "real(dp), parameter pietc::s10 =\&.173648177666930348851716626769314796000375677184069387236241e0_dp"
 
 .PP
 sine(10 deg) 
 .PP
-Definition at line 57 of file pietc\&.f90\&.
+Definition at line \fB57\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s11 =\&.195090322016128267848284868477022240927691617751954807754502e0_dp"
 
 .PP
 sine(90/8 deg) 
 .PP
-Definition at line 58 of file pietc\&.f90\&.
+Definition at line \fB58\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s13 =\&.222520933956314404288902564496794759466355568764544955311987e0_dp"
 
 .PP
 sine(90/7 deg) 
 .PP
-Definition at line 59 of file pietc\&.f90\&.
+Definition at line \fB59\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s15 =\&.258819045102520762348898837624048328349068901319930513814003e0_dp"
 
 .PP
 sine(15 deg) 
 .PP
-Definition at line 60 of file pietc\&.f90\&.
+Definition at line \fB60\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s18 =\&.309016994374947424102293417182819058860154589902881431067724e0_dp"
 
 .PP
 sine(18 deg) 
 .PP
-Definition at line 61 of file pietc\&.f90\&.
+Definition at line \fB61\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::s20 =\&.342020143325668733044099614682259580763083367514160628465048e0_dp"
 
 .PP
 sine(20 deg) 
 .PP
-Definition at line 62 of file pietc\&.f90\&.
+Definition at line \fB62\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s22 =\&.382683432365089771728459984030398866761344562485627041433800e0_dp"
 
 .PP
 sine(22\&.5 deg) 
 .PP
-Definition at line 63 of file pietc\&.f90\&.
+Definition at line \fB63\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s26 =\&.433883739117558120475768332848358754609990727787459876444547e0_dp"
 
 .PP
 sine(90*2/7 deg) 
 .PP
-Definition at line 64 of file pietc\&.f90\&.
+Definition at line \fB64\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s30 =\fBo2\fP"
 
 .PP
 sine(30 deg) 
 .PP
-Definition at line 65 of file pietc\&.f90\&.
+Definition at line \fB65\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s34 =\&.555570233019602224742830813948532874374937190754804045924153e0_dp"
 
 .PP
 sine(90*3/8 deg) 
 .PP
-Definition at line 66 of file pietc\&.f90\&.
+Definition at line \fB66\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s36 =\&.587785252292473129168705954639072768597652437643145991072272e0_dp"
 
 .PP
 sine(36 deg) 
 .PP
-Definition at line 67 of file pietc\&.f90\&.
+Definition at line \fB67\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::s39 =\&.623489801858733530525004884004239810632274730896402105365549e0_dp"
 
 .PP
 sine(90*3/7 deg) 
 .PP
-Definition at line 68 of file pietc\&.f90\&.
+Definition at line \fB68\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s40 =\&.642787609686539326322643409907263432907559884205681790324977e0_dp"
 
 .PP
 sine(40 deg) 
 .PP
-Definition at line 69 of file pietc\&.f90\&.
+Definition at line \fB69\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s45 =\fBor2\fP"
 
 .PP
 sine(45 deg) 
 .PP
-Definition at line 70 of file pietc\&.f90\&.
+Definition at line \fB70\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s50 =\&.766044443118978035202392650555416673935832457080395245854045e0_dp"
 
 .PP
 sine(50 deg) 
 .PP
-Definition at line 71 of file pietc\&.f90\&.
+Definition at line \fB71\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s51 =\&.781831482468029808708444526674057750232334518708687528980634e0_dp"
 
 .PP
 sine(90*4/7 deg) 
 .PP
-Definition at line 72 of file pietc\&.f90\&.
+Definition at line \fB72\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s54 =\&.809016994374947424102293417182819058860154589902881431067724e0_dp"
 
 .PP
 sine(54 deg) 
 .PP
-Definition at line 73 of file pietc\&.f90\&.
+Definition at line \fB73\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::s56 =\&.831469612302545237078788377617905756738560811987249963446124e0_dp"
 
 .PP
 sine(90*5/8 deg) 
 .PP
-Definition at line 74 of file pietc\&.f90\&.
+Definition at line \fB74\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s60 =\fBr3\fP*\fBo2\fP"
 
 .PP
 sine(60 deg) 
 .PP
-Definition at line 75 of file pietc\&.f90\&.
+Definition at line \fB75\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s64 =\&.900968867902419126236102319507445051165919162131857150053562e0_dp"
 
 .PP
 sine(90*5/7 deg) 
 .PP
-Definition at line 76 of file pietc\&.f90\&.
+Definition at line \fB76\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s68 =\&.923879532511286756128183189396788286822416625863642486115097e0_dp"
 
 .PP
 sine(67\&.5 deg) 
 .PP
-Definition at line 77 of file pietc\&.f90\&.
+Definition at line \fB77\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s70 =\&.939692620785908384054109277324731469936208134264464633090286e0_dp"
 
 .PP
 sine(70 deg) 
 .PP
-Definition at line 78 of file pietc\&.f90\&.
+Definition at line \fB78\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s72 =\&.951056516295153572116439333379382143405698634125750222447305e0_dp"
 
 .PP
 sine(72 deg) 
 .PP
-Definition at line 79 of file pietc\&.f90\&.
+Definition at line \fB79\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::s75 =\&.965925826289068286749743199728897367633904839008404550402343e0_dp"
 
 .PP
 sine(75 deg) 
 .PP
-Definition at line 80 of file pietc\&.f90\&.
+Definition at line \fB80\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s77 =\&.974927912181823607018131682993931217232785800619997437648079e0_dp"
 
 .PP
 sine(90*6/7 deg) 
 .PP
-Definition at line 81 of file pietc\&.f90\&.
+Definition at line \fB81\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s79 =\&.980785280403230449126182236134239036973933730893336095002916e0_dp"
 
 .PP
 sine(90*7/8 deg) 
 .PP
-Definition at line 82 of file pietc\&.f90\&.
+Definition at line \fB82\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::s80 =\&.984807753012208059366743024589523013670643251719842418790025e0_dp"
 
 .PP
 sine(80 deg) 
 .PP
-Definition at line 83 of file pietc\&.f90\&.
+Definition at line \fB83\fP of file \fBpietc\&.f90\fP\&.
 .SS "logical, parameter pietc::t =\&.true\&."
 
 .PP
 for pain-relief in logical ops 
 .PP
-Definition at line 17 of file pietc\&.f90\&.
+Definition at line \fB17\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pfun::ahav_s(), pfun::ahavh_s(), pfun::atanh_s(), pfun::hav_s(), pmat4::hav_s(), pfun::havh_s(), pmat::iinvf(), pmat5::plrot(), pmat5::plroti(), and pmat::sldumf()\&.
+Referenced by \fBpfun::ahav::ahav_d()\fP, \fBpfun::ahavh::ahavh_d()\fP, \fBpfun::atanh::atanh_d()\fP, \fBpmat::ldum::cldumf()\fP, \fBpmat::ldum::dldumf()\fP, \fBpfun::hav::hav_d()\fP, \fBpmat4::hav::hav_d()\fP, and \fBpfun::havh::havh_d()\fP\&.
 .SS "real(dp), parameter pietc::u0 =0_dp"
 
 .PP
 zero 
 .PP
-Definition at line 19 of file pietc\&.f90\&.
+Definition at line \fB19\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pmat2::avco(), pmat4::axial3_d(), psym2::chol2(), pmat::cldumf(), pmat2::clib_d(), pmat4::corral(), pmat4::ctoz(), pmat2::davco(), pmat5::dctocd(), pmat5::dctocdd(), pmat5::dctog(), pmat5::dctogr(), pmat2::ddfco(), pmat2::ddfco2(), pmat4::det_d(), pmat5::dgrtocd(), pmat5::dgrtocdd(), pmat5::dgtocd(), pmat5::dgtocdd(), pmat4::diagn_d(), pmat4::diagn_s(), pmat5::dininmap(), pmat5::dinivmap(), pmat::dinvl(), pmat::dl1lmf(), pmat2::dl1ubb(), pmat2::dl1ueb(), pmat::dldlmf(), pmat2::dldltb(), pmat2::dldub(), pmat::dldumf(), pmat4::dtarea_d(), psym2::eigensym2(), psym2::eigensym2d(), pmat4::expmat(), pmat4::expmatd(), pmat4::expmatdd(), psym2::expsym2d_e(), pesg::gaulegh(), pesg::get_edges(), pesg::get_meanqd(), pesg::get_meanqs(), pesg::get_qxd(), pmat4::gram_d(), pmat4::graml_d(), pmat5::gtoframev(), pesg::gtoxm_ak_rr_m(), pesg::hgrid_ak_rc(), pesg::hgrid_ak_rr(), pesg::hgrid_ak_rr_c(), psym2::logsym2(), psym2::logsym2d(), pmat4::normalize_d(), pmat4::normalized_d(), pmat4::plaingram_d(), pmat4::rottoq(), pmat4::rowgram(), pmat4::sarea_d(), psym2::sqrtsym2d_e(), psym2::sqrtsym2d_t(), pesg::xmtog_ak_rr_m(), pesg::xmtoxt(), pesg::xmtoxt1(), pesg::xstoxc1(), pesg::xttoxs(), pesg::xttoxs1(), pesg::zmtozt(), pmat4::znfun(), and pesg::zttozm()\&.
+Referenced by \fBpmat2::avco::avco()\fP, \fBpesg::bestesg_geo::bestesg_geo()\fP, \fBpesg::bestesg_map::bestesg_map()\fP, \fBpsym2::chol2::chol2()\fP, \fBpmat4::corral::corral()\fP, \fBpmat4::ctoz::ctoz()\fP, \fBpsym2::eigensym2::eigensym2()\fP, \fBpmat4::expmat::expmat()\fP, \fBpsym2::expsym2d_e::expsym2d_e()\fP, \fBpsym2::logsym2::logsym2()\fP, \fBpmat4::rottoq::rottoq()\fP, \fBpsym2::sqrtsym2d_e::sqrtsym2d_e()\fP, \fBpsym2::sqrtsym2d_t::sqrtsym2d_t()\fP, \fBpesg::xmtoxt::xmtoxt()\fP, \fBpesg::xttoxs::xttoxs()\fP, \fBpesg::zmtozt::zmtozt()\fP, \fBpmat4::znfun::znfun()\fP, \fBpesg::zttozm::zttozm()\fP, \fBpmat4::axial::axial3_d()\fP, \fBpmat::ldum::cldumf()\fP, \fBpmat2::clipb::clib_d()\fP, \fBpmat2::avco::davco()\fP, \fBpmat5::ctoc_schm::dctocd()\fP, \fBpmat5::ctoc_schm::dctocdd()\fP, \fBpmat5::ctog::dctog()\fP, \fBpmat5::ctogr::dctogr()\fP, \fBpmat2::dfco::ddfco()\fP, \fBpmat2::dfco2::ddfco2()\fP, \fBpmat4::det::det_d()\fP, \fBpmat5::grtoc::dgrtocd()\fP, \fBpmat5::grtoc::dgrtocdd()\fP, \fBpmat5::gtoc::dgtocd()\fP, \fBpmat5::gtoc::dgtocdd()\fP, \fBpmat4::diag::diagn_d()\fP, \fBpmat4::diag::diagn_s()\fP, \fBpmat5::ininmap::dininmap()\fP, \fBpmat5::inivmap::dinivmap()\fP, \fBpmat::invl::dinvl()\fP, \fBpmat::l1lm::dl1lmf()\fP, \fBpmat2::l1ubb::dl1ubb()\fP, \fBpmat2::l1ueb::dl1ueb()\fP, \fBpmat::ldlm::dldlmf()\fP, \fBpmat2::ldltb::dldltb()\fP, \fBpmat2::ldub::dldub()\fP, \fBpmat::ldum::dldumf()\fP, \fBpmat4::sarea::dtarea_d()\fP, \fBpsym2::eigensym2::eigensym2d()\fP, \fBpmat4::expmat::expmatd()\fP, \fBpmat4::expmat::expmatdd()\fP, \fBpmat4::gram::gram_d()\fP, \fBpmat4::gram::graml_d()\fP, \fBpmat5::gtoframe::gtoframev()\fP, \fBpsym2::logsym2::logsym2d()\fP, \fBpmat4::normalize::normalize_d()\fP, \fBpmat4::normalized::normalized_d()\fP, \fBpmat4::gram::plaingram_d()\fP, \fBpmat4::gram::rowgram()\fP, \fBpmat4::sarea::sarea_d()\fP, \fBpesg::xmtoxt::xmtoxt1()\fP, \fBpesg::xstoxc::xstoxc1()\fP, \fBpesg::xttoxs::xttoxs1()\fP, and \fBpesg::zmtozt::zmtozt1()\fP\&.
 .SS "real(dp), parameter pietc::u1 =1_dp"
 
 .PP
 one 
 .PP
-Definition at line 20 of file pietc\&.f90\&.
+Definition at line \fB20\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pfun::atanh_d(), pfun::atanh_s(), pmat2::avco(), pmat::cldumf(), pmat4::corral(), pmat4::ctoz(), pmat2::davco(), pmat5::dctoc(), pmat5::dctocd(), pmat5::dctocdd(), pmat2::ddfco(), pmat2::ddfco2(), pmat::dinvl(), pmat::dl1lmf(), pmat2::dl1ubb(), pmat2::dl1ueb(), pmat::dldlmf(), pmat2::dldltb(), pmat2::dldub(), pmat::dldumf(), pmat4::dtarea_d(), pmat::dudlmm(), pmat::dudlmv(), psym2::eigensym2(), psym2::eigensym2d(), pmat4::expmat(), pmat4::expmatd(), pmat4::expmatdd(), psym2::expsym2d_t(), pesg::gaulegh(), pesg::get_qofv(), pesg::get_qofvd(), pesg::get_qsofvs(), pmat4::gram_d(), pmat5::gtoframev(), pesg::gtoxm_ak_rr_m(), pesg::hgrid_ak_rc(), pesg::hgrid_ak_rr(), pesg::hgrid_ak_rr_c(), psym2::logsym2d(), pmat4::normalize_d(), pmat4::rottoq(), pmat4::rowgram(), pfun::sech_d(), pfun::sech_s(), pfun::sinhox_d(), pfun::sinhoxm_d(), pfun::sinox_d(), pfun::sinoxm_d(), psym2::sqrtsym2d(), psym2::sqrtsym2d_e(), psym2::sqrtsym2d_t(), pesg::xctoxs(), pesg::xmtog_ak_rr_m(), pesg::xstoxc(), pesg::xstoxc1(), pesg::xstoxt(), pesg::xttoxs(), pesg::xttoxs1(), pesg::zmtozt(), and pesg::zttozm()\&.
+Referenced by \fBpmat2::avco::avco()\fP, \fBpesg::bestesg_geo::bestesg_geo()\fP, \fBpesg::bestesg_map::bestesg_map()\fP, \fBpmat4::corral::corral()\fP, \fBpmat4::ctoz::ctoz()\fP, \fBpsym2::eigensym2::eigensym2()\fP, \fBpmat4::expmat::expmat()\fP, \fBpsym2::expsym2d_t::expsym2d_t()\fP, \fBpmat4::rottoq::rottoq()\fP, \fBpsym2::sqrtsym2d_e::sqrtsym2d_e()\fP, \fBpsym2::sqrtsym2d_t::sqrtsym2d_t()\fP, \fBpesg::xctoxs::xctoxs()\fP, \fBpesg::xstoxc::xstoxc()\fP, \fBpesg::xstoxt::xstoxt()\fP, \fBpesg::xttoxs::xttoxs()\fP, \fBpesg::zmtozt::zmtozt()\fP, \fBpesg::zttozm::zttozm()\fP, \fBpfun::atanh::atanh_d()\fP, \fBpmat::ldum::cldumf()\fP, \fBpmat2::avco::davco()\fP, \fBpmat5::ctoc_schm::dctoc()\fP, \fBpmat5::ctoc_schm::dctocd()\fP, \fBpmat5::ctoc_schm::dctocdd()\fP, \fBpmat2::dfco::ddfco()\fP, \fBpmat2::dfco2::ddfco2()\fP, \fBpmat::invl::dinvl()\fP, \fBpmat::l1lm::dl1lmf()\fP, \fBpmat2::l1ubb::dl1ubb()\fP, \fBpmat2::l1ueb::dl1ueb()\fP, \fBpmat::ldlm::dldlmf()\fP, \fBpmat2::ldltb::dldltb()\fP, \fBpmat2::ldub::dldub()\fP, \fBpmat::ldum::dldumf()\fP, \fBpmat4::sarea::dtarea_d()\fP, \fBpmat::udlmm::dudlmm()\fP, \fBpmat::udlmm::dudlmv()\fP, \fBpsym2::eigensym2::eigensym2d()\fP, \fBpmat4::expmat::expmatd()\fP, \fBpmat4::expmat::expmatdd()\fP, \fBpmat4::gram::gram_d()\fP, \fBpmat5::gtoframe::gtoframev()\fP, \fBpsym2::logsym2::logsym2d()\fP, \fBpmat4::normalize::normalize_d()\fP, \fBpmat4::gram::rowgram()\fP, \fBpmat4::sarea::sarea_d()\fP, \fBpfun::sech::sech_d()\fP, \fBpfun::sinhox::sinhox_d()\fP, \fBpfun::sinhoxm::sinhoxm_d()\fP, \fBpfun::sinox::sinox_d()\fP, \fBpfun::sinoxm::sinoxm_d()\fP, \fBpmat::inv::sinvmtf()\fP, \fBpsym2::sqrtsym2::sqrtsym2d()\fP, \fBpesg::xstoxc::xstoxc1()\fP, \fBpesg::xttoxs::xttoxs1()\fP, and \fBpesg::zmtozt::zmtozt1()\fP\&.
 .SS "real(dp), parameter pietc::u2 =2_dp"
 
 .PP
 two 
 .PP
-Definition at line 22 of file pietc\&.f90\&.
+Definition at line \fB22\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pfun::ahav_d(), pfun::ahav_s(), pfun::ahavh_d(), pfun::ahavh_s(), pmat5::dctoc(), pmat5::dctocd(), pmat5::dctocdd(), pmat4::dlltoxy_d(), pmat4::expmat(), pmat4::expmatd(), pmat4::expmatdd(), pesg::gaulegh(), pesg::get_qofvd(), pesg::get_qx(), pesg::get_qxd(), pmat4::rottoq(), pfun::sech_d(), pfun::sech_s(), pesg::xstoxc(), pesg::xstoxc1(), pesg::xstoxt(), pesg::xttoxs1(), pmat4::znfun(), and pmat4::zntay()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, \fBpesg::bestesg_map::bestesg_map()\fP, \fBpmat4::expmat::expmat()\fP, \fBpmat4::rottoq::rottoq()\fP, \fBpesg::xstoxc::xstoxc()\fP, \fBpesg::xstoxt::xstoxt()\fP, \fBpmat4::znfun::znfun()\fP, \fBpmat4::zntay::zntay()\fP, \fBpfun::ahav::ahav_d()\fP, \fBpfun::ahavh::ahavh_d()\fP, \fBpmat5::ctoc_schm::dctoc()\fP, \fBpmat5::ctoc_schm::dctocd()\fP, \fBpmat5::ctoc_schm::dctocdd()\fP, \fBpmat4::dlltoxy::dlltoxy_d()\fP, \fBpmat4::expmat::expmatd()\fP, \fBpmat4::expmat::expmatdd()\fP, \fBpmat4::sarea::sarea_d()\fP, \fBpfun::sech::sech_d()\fP, \fBpesg::xstoxc::xstoxc1()\fP, \fBpesg::xttoxs::xttoxs1()\fP, and \fBpesg::zmtozt::zmtozt1()\fP\&.
 .SS "real(dp), parameter pietc::u3 =3_dp"
 
 .PP
 three 
 .PP
-Definition at line 24 of file pietc\&.f90\&.
+Definition at line \fB24\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pmat4::znfun()\&.
+Referenced by \fBpmat4::znfun::znfun()\fP, and \fBpmat4::sarea::sarea_d()\fP\&.
 .SS "real(dp), parameter pietc::u4 =4_dp"
 
 .PP
 four 
 .PP
-Definition at line 26 of file pietc\&.f90\&.
+Definition at line \fB26\fP of file \fBpietc\&.f90\fP\&.
 .SS "real(dp), parameter pietc::u5 =5_dp"
 
 .PP
 five 
 .PP
-Definition at line 28 of file pietc\&.f90\&.
+Definition at line \fB28\fP of file \fBpietc\&.f90\fP\&.
 .PP
-Referenced by pesg::bestesg_geo(), and pesg::bestesg_map()\&.
+Referenced by \fBpesg::bestesg_geo::bestesg_geo()\fP, and \fBpesg::bestesg_map::bestesg_map()\fP\&.
 .SS "real(dp), parameter pietc::u6 =6_dp"
 
 .PP
 six 
 .PP
-Definition at line 30 of file pietc\&.f90\&.
+Definition at line \fB30\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z000 =\fBc1\fP"
 
 .PP
 exp(2*pi*i*0) 
 .PP
-Definition at line 119 of file pietc\&.f90\&.
+Definition at line \fB119\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z010 =( \fBs80\fP, \fBs10\fP)"
 
 .PP
 exp(2*pi*i/36) 
 .PP
-Definition at line 120 of file pietc\&.f90\&.
+Definition at line \fB120\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z011 =( \fBs79\fP, \fBs11\fP)"
 
 .PP
 exp(2*pi*i/32) 
 .PP
-Definition at line 121 of file pietc\&.f90\&.
+Definition at line \fB121\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z013 =( \fBs77\fP, \fBs13\fP)"
 
 .PP
 exp(2*pi*i/28) 
 .PP
-Definition at line 122 of file pietc\&.f90\&.
+Definition at line \fB122\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z015 =( \fBs75\fP, \fBs15\fP)"
 
 .PP
 exp(2*pi*i/24) 
 .PP
-Definition at line 123 of file pietc\&.f90\&.
+Definition at line \fB123\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z018 =( \fBs72\fP, \fBs18\fP)"
 
 .PP
 exp(2*pi*i/20) 
 .PP
-Definition at line 124 of file pietc\&.f90\&.
+Definition at line \fB124\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z020 =( \fBs70\fP, \fBs20\fP)"
 
 .PP
 exp(2*pi*i/18) 
 .PP
-Definition at line 125 of file pietc\&.f90\&.
+Definition at line \fB125\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z022 =( \fBs68\fP, \fBs22\fP)"
 
 .PP
 exp(2*pi*i/16) 
 .PP
-Definition at line 126 of file pietc\&.f90\&.
+Definition at line \fB126\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z026 =( \fBs64\fP, \fBs26\fP)"
 
 .PP
 exp(2*pi*i/14) 
 .PP
-Definition at line 127 of file pietc\&.f90\&.
+Definition at line \fB127\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z030 =( \fBs60\fP, \fBs30\fP)"
 
 .PP
 exp(2*pi*i/12) 
 .PP
-Definition at line 128 of file pietc\&.f90\&.
+Definition at line \fB128\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z034 =( \fBs56\fP, \fBs34\fP)"
 
 .PP
 exp(2*pi*i*3/32) 
 .PP
-Definition at line 129 of file pietc\&.f90\&.
+Definition at line \fB129\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z036 =( \fBs54\fP, \fBs36\fP)"
 
 .PP
 exp(2*pi*i/10) 
 .PP
-Definition at line 130 of file pietc\&.f90\&.
+Definition at line \fB130\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z039 =( \fBs51\fP, \fBs39\fP)"
 
 .PP
 exp(2*pi*i*3/28) 
 .PP
-Definition at line 131 of file pietc\&.f90\&.
+Definition at line \fB131\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z040 =( \fBs50\fP, \fBs40\fP)"
 
 .PP
 exp(2*pi*i/9) 
 .PP
-Definition at line 132 of file pietc\&.f90\&.
+Definition at line \fB132\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z045 =( \fBs45\fP, \fBs45\fP)"
 
 .PP
 exp(2*pi*i/8) 
 .PP
-Definition at line 133 of file pietc\&.f90\&.
+Definition at line \fB133\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z050 =( \fBs40\fP, \fBs50\fP)"
 
 .PP
 exp(2*pi*i*5/36) 
 .PP
-Definition at line 134 of file pietc\&.f90\&.
+Definition at line \fB134\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z051 =( \fBs39\fP, \fBs51\fP)"
 
 .PP
 exp(2*pi*i/7) 
 .PP
-Definition at line 135 of file pietc\&.f90\&.
+Definition at line \fB135\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z054 =( \fBs36\fP, \fBs54\fP)"
 
 .PP
 exp(2*pi*i*3/20) 
 .PP
-Definition at line 136 of file pietc\&.f90\&.
+Definition at line \fB136\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z056 =( \fBs34\fP, \fBs56\fP)"
 
 .PP
 exp(2*pi*i*5/32) 
 .PP
-Definition at line 137 of file pietc\&.f90\&.
+Definition at line \fB137\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z060 =( \fBs30\fP, \fBs60\fP)"
 
 .PP
 exp(2*pi*i/6) 
 .PP
-Definition at line 138 of file pietc\&.f90\&.
+Definition at line \fB138\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z064 =( \fBs26\fP, \fBs64\fP)"
 
 .PP
 exp(2*pi*i*5/28) 
 .PP
-Definition at line 139 of file pietc\&.f90\&.
+Definition at line \fB139\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z068 =( \fBs22\fP, \fBs68\fP)"
 
 .PP
 exp(2*pi*i*3/16) 
 .PP
-Definition at line 140 of file pietc\&.f90\&.
+Definition at line \fB140\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z070 =( \fBs20\fP, \fBs70\fP)"
 
 .PP
 exp(2*pi*i*7/36) 
 .PP
-Definition at line 141 of file pietc\&.f90\&.
+Definition at line \fB141\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z072 =( \fBs18\fP, \fBs72\fP)"
 
 .PP
 exp(2*pi*i/5) 
 .PP
-Definition at line 142 of file pietc\&.f90\&.
+Definition at line \fB142\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z075 =( \fBs15\fP, \fBs75\fP)"
 
 .PP
 exp(2*pi*i*5/24) 
 .PP
-Definition at line 143 of file pietc\&.f90\&.
+Definition at line \fB143\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z077 =( \fBs13\fP, \fBs77\fP)"
 
 .PP
 exp(2*pi*i*3/14) 
 .PP
-Definition at line 144 of file pietc\&.f90\&.
+Definition at line \fB144\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z079 =( \fBs11\fP, \fBs79\fP)"
 
 .PP
 exp(2*pi*i*7/32) 
 .PP
-Definition at line 145 of file pietc\&.f90\&.
+Definition at line \fB145\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z080 =( \fBs10\fP, \fBs80\fP)"
 
 .PP
 exp(2*pi*i*2/9) 
 .PP
-Definition at line 146 of file pietc\&.f90\&.
+Definition at line \fB146\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z090 =\fBci\fP"
 
 .PP
 exp(2*pi*i/4) 
 .PP
-Definition at line 147 of file pietc\&.f90\&.
+Definition at line \fB147\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z100 =(\fBms10\fP, \fBs80\fP)"
 
 .PP
 exp(2*pi*i*5/18) 
 .PP
-Definition at line 148 of file pietc\&.f90\&.
+Definition at line \fB148\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z101 =(\fBms11\fP, \fBs79\fP)"
 
 .PP
 exp(2*pi*i*9/32) 
 .PP
-Definition at line 149 of file pietc\&.f90\&.
+Definition at line \fB149\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z103 =(\fBms13\fP, \fBs77\fP)"
 
 .PP
 exp(2*pi*i*2/7) 
 .PP
-Definition at line 150 of file pietc\&.f90\&.
+Definition at line \fB150\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z105 =(\fBms15\fP, \fBs75\fP)"
 
 .PP
 exp(2*pi*i*7/24) 
 .PP
-Definition at line 151 of file pietc\&.f90\&.
+Definition at line \fB151\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z108 =(\fBms18\fP, \fBs72\fP)"
 
 .PP
 exp(2*pi*i*3/10) 
 .PP
-Definition at line 152 of file pietc\&.f90\&.
+Definition at line \fB152\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z110 =(\fBms20\fP, \fBs70\fP)"
 
 .PP
 exp(2*pi*i*11/36) 
 .PP
-Definition at line 153 of file pietc\&.f90\&.
+Definition at line \fB153\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z112 =(\fBms22\fP, \fBs68\fP)"
 
 .PP
 exp(2*pi*i*5/16) 
 .PP
-Definition at line 154 of file pietc\&.f90\&.
+Definition at line \fB154\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z116 =(\fBms26\fP, \fBs64\fP)"
 
 .PP
 exp(2*pi*i*9/28) 
 .PP
-Definition at line 155 of file pietc\&.f90\&.
+Definition at line \fB155\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z120 =(\fBms30\fP, \fBs60\fP)"
 
 .PP
 exp(2*pi*i/3) 
 .PP
-Definition at line 156 of file pietc\&.f90\&.
+Definition at line \fB156\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z124 =(\fBms34\fP, \fBs56\fP)"
 
 .PP
 exp(2*pi*i*11/32) 
 .PP
-Definition at line 157 of file pietc\&.f90\&.
+Definition at line \fB157\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z126 =(\fBms36\fP, \fBs54\fP)"
 
 .PP
 exp(2*pi*i*7/20) 
 .PP
-Definition at line 158 of file pietc\&.f90\&.
+Definition at line \fB158\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z129 =(\fBms39\fP, \fBs51\fP)"
 
 .PP
 exp(2*pi*i*5/14) 
 .PP
-Definition at line 159 of file pietc\&.f90\&.
+Definition at line \fB159\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z130 =(\fBms40\fP, \fBs50\fP)"
 
 .PP
 exp(2*pi*i*13/36) 
 .PP
-Definition at line 160 of file pietc\&.f90\&.
+Definition at line \fB160\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z135 =(\fBms45\fP, \fBs45\fP)"
 
 .PP
 exp(2*pi*i*3/8) 
 .PP
-Definition at line 161 of file pietc\&.f90\&.
+Definition at line \fB161\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z140 =(\fBms50\fP, \fBs40\fP)"
 
 .PP
 exp(2*pi*i*7/18) 
 .PP
-Definition at line 162 of file pietc\&.f90\&.
+Definition at line \fB162\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z141 =(\fBms51\fP, \fBs39\fP)"
 
 .PP
 exp(2*pi*i*11/28) 
 .PP
-Definition at line 163 of file pietc\&.f90\&.
+Definition at line \fB163\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z144 =(\fBms54\fP, \fBs36\fP)"
 
 .PP
 exp(2*pi*i*2/5) 
 .PP
-Definition at line 164 of file pietc\&.f90\&.
+Definition at line \fB164\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z146 =(\fBms56\fP, \fBs34\fP)"
 
 .PP
 exp(2*pi*i*13/32) 
 .PP
-Definition at line 165 of file pietc\&.f90\&.
+Definition at line \fB165\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z150 =(\fBms60\fP, \fBs30\fP)"
 
 .PP
 exp(2*pi*i*5/12) 
 .PP
-Definition at line 166 of file pietc\&.f90\&.
+Definition at line \fB166\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z154 =(\fBms64\fP, \fBs26\fP)"
 
 .PP
 exp(2*pi*i*3/7) 
 .PP
-Definition at line 167 of file pietc\&.f90\&.
+Definition at line \fB167\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z158 =(\fBms68\fP, \fBs22\fP)"
 
 .PP
 exp(2*pi*i*7/16) 
 .PP
-Definition at line 168 of file pietc\&.f90\&.
+Definition at line \fB168\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z160 =(\fBms70\fP, \fBs20\fP)"
 
 .PP
 exp(2*pi*i*4/9) 
 .PP
-Definition at line 169 of file pietc\&.f90\&.
+Definition at line \fB169\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z162 =(\fBms72\fP, \fBs18\fP)"
 
 .PP
 exp(2*pi*i*9/20) 
 .PP
-Definition at line 170 of file pietc\&.f90\&.
+Definition at line \fB170\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z165 =(\fBms75\fP, \fBs15\fP)"
 
 .PP
 exp(2*pi*i*11/24) 
 .PP
-Definition at line 171 of file pietc\&.f90\&.
+Definition at line \fB171\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z167 =(\fBms77\fP, \fBs13\fP)"
 
 .PP
 exp(2*pi*i*13/28) 
 .PP
-Definition at line 172 of file pietc\&.f90\&.
+Definition at line \fB172\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z169 =(\fBms79\fP, \fBs11\fP)"
 
 .PP
 exp(2*pi*i*15/32) 
 .PP
-Definition at line 173 of file pietc\&.f90\&.
+Definition at line \fB173\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z170 =(\fBms80\fP, \fBs10\fP)"
 
 .PP
 exp(2*pi*i*17/36) 
 .PP
-Definition at line 174 of file pietc\&.f90\&.
+Definition at line \fB174\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z180 =\-\fBz000\fP"
 
 .PP
 exp(2*pi*i/2) 
 .PP
-Definition at line 175 of file pietc\&.f90\&.
+Definition at line \fB175\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z190 =\-\fBz010\fP"
 
 .PP
 exp(2*pi*i*19/36) 
 .PP
-Definition at line 176 of file pietc\&.f90\&.
+Definition at line \fB176\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z191 =\-\fBz011\fP"
 
 .PP
 exp(2*pi*i*17/32) 
 .PP
-Definition at line 177 of file pietc\&.f90\&.
+Definition at line \fB177\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z193 =\-\fBz013\fP"
 
 .PP
 exp(2*pi*i*15/28) 
 .PP
-Definition at line 178 of file pietc\&.f90\&.
+Definition at line \fB178\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z195 =\-\fBz015\fP"
 
 .PP
 exp(2*pi*i*13/24) 
 .PP
-Definition at line 179 of file pietc\&.f90\&.
+Definition at line \fB179\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z198 =\-\fBz018\fP"
 
 .PP
 exp(2*pi*i*11/20) 
 .PP
-Definition at line 180 of file pietc\&.f90\&.
+Definition at line \fB180\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z200 =\-\fBz020\fP"
 
 .PP
 exp(2*pi*i*5/9) 
 .PP
-Definition at line 181 of file pietc\&.f90\&.
+Definition at line \fB181\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z202 =\-\fBz022\fP"
 
 .PP
 exp(2*pi*i*9/16) 
 .PP
-Definition at line 182 of file pietc\&.f90\&.
+Definition at line \fB182\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z206 =\-\fBz026\fP"
 
 .PP
 exp(2*pi*i*4/7) 
 .PP
-Definition at line 183 of file pietc\&.f90\&.
+Definition at line \fB183\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z210 =\-\fBz030\fP"
 
 .PP
 exp(2*pi*i*7/12) 
 .PP
-Definition at line 184 of file pietc\&.f90\&.
+Definition at line \fB184\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z214 =\-\fBz034\fP"
 
 .PP
 exp(2*pi*i*19/32) 
 .PP
-Definition at line 185 of file pietc\&.f90\&.
+Definition at line \fB185\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z216 =\-\fBz036\fP"
 
 .PP
 exp(2*pi*i*3/5) 
 .PP
-Definition at line 186 of file pietc\&.f90\&.
+Definition at line \fB186\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z219 =\-\fBz039\fP"
 
 .PP
 exp(2*pi*i*17/28) 
 .PP
-Definition at line 187 of file pietc\&.f90\&.
+Definition at line \fB187\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z220 =\-\fBz040\fP"
 
 .PP
 exp(2*pi*i*11/18) 
 .PP
-Definition at line 188 of file pietc\&.f90\&.
+Definition at line \fB188\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z225 =\-\fBz045\fP"
 
 .PP
 exp(2*pi*i*5/8) 
 .PP
-Definition at line 189 of file pietc\&.f90\&.
+Definition at line \fB189\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z230 =\-\fBz050\fP"
 
 .PP
 exp(2*pi*i*23/36) 
 .PP
-Definition at line 190 of file pietc\&.f90\&.
+Definition at line \fB190\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z231 =\-\fBz051\fP"
 
 .PP
 exp(2*pi*i*9/14) 
 .PP
-Definition at line 191 of file pietc\&.f90\&.
+Definition at line \fB191\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z234 =\-\fBz054\fP"
 
 .PP
 exp(2*pi*i*13/20) 
 .PP
-Definition at line 192 of file pietc\&.f90\&.
+Definition at line \fB192\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z236 =\-\fBz056\fP"
 
 .PP
 exp(2*pi*i*21/32) 
 .PP
-Definition at line 193 of file pietc\&.f90\&.
+Definition at line \fB193\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z240 =\-\fBz060\fP"
 
 .PP
 exp(2*pi*i*2/3) 
 .PP
-Definition at line 194 of file pietc\&.f90\&.
+Definition at line \fB194\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z244 =\-\fBz064\fP"
 
 .PP
 exp(2*pi*i*19/28) 
 .PP
-Definition at line 195 of file pietc\&.f90\&.
+Definition at line \fB195\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z248 =\-\fBz068\fP"
 
 .PP
 exp(2*pi*i*11/16) 
 .PP
-Definition at line 196 of file pietc\&.f90\&.
+Definition at line \fB196\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z250 =\-\fBz070\fP"
 
 .PP
 exp(2*pi*i*25/36) 
 .PP
-Definition at line 197 of file pietc\&.f90\&.
+Definition at line \fB197\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z252 =\-\fBz072\fP"
 
 .PP
 exp(2*pi*i*7/10) 
 .PP
-Definition at line 198 of file pietc\&.f90\&.
+Definition at line \fB198\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z255 =\-\fBz075\fP"
 
 .PP
 exp(2*pi*i*17/24) 
 .PP
-Definition at line 199 of file pietc\&.f90\&.
+Definition at line \fB199\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z257 =\-\fBz077\fP"
 
 .PP
 exp(2*pi*i*5/7) 
 .PP
-Definition at line 200 of file pietc\&.f90\&.
+Definition at line \fB200\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z259 =\-\fBz079\fP"
 
 .PP
 exp(2*pi*i*23/32) 
 .PP
-Definition at line 201 of file pietc\&.f90\&.
+Definition at line \fB201\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z260 =\-\fBz080\fP"
 
 .PP
 exp(2*pi*i*13/18) 
 .PP
-Definition at line 202 of file pietc\&.f90\&.
+Definition at line \fB202\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z270 =\-\fBz090\fP"
 
 .PP
 exp(2*pi*i*3/4) 
 .PP
-Definition at line 203 of file pietc\&.f90\&.
+Definition at line \fB203\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z280 =\-\fBz100\fP"
 
 .PP
 exp(2*pi*i*7/9) 
 .PP
-Definition at line 204 of file pietc\&.f90\&.
+Definition at line \fB204\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z281 =\-\fBz101\fP"
 
 .PP
 exp(2*pi*i*25/32) 
 .PP
-Definition at line 205 of file pietc\&.f90\&.
+Definition at line \fB205\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z283 =\-\fBz103\fP"
 
 .PP
 exp(2*pi*i*11/14) 
 .PP
-Definition at line 206 of file pietc\&.f90\&.
+Definition at line \fB206\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z285 =\-\fBz105\fP"
 
 .PP
 exp(2*pi*i*19/24) 
 .PP
-Definition at line 207 of file pietc\&.f90\&.
+Definition at line \fB207\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z288 =\-\fBz108\fP"
 
 .PP
 exp(2*pi*i*4/5) 
 .PP
-Definition at line 208 of file pietc\&.f90\&.
+Definition at line \fB208\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z290 =\-\fBz110\fP"
 
 .PP
 exp(2*pi*i*29/36) 
 .PP
-Definition at line 209 of file pietc\&.f90\&.
+Definition at line \fB209\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z292 =\-\fBz112\fP"
 
 .PP
 exp(2*pi*i*13/16) 
 .PP
-Definition at line 210 of file pietc\&.f90\&.
+Definition at line \fB210\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z296 =\-\fBz116\fP"
 
 .PP
 exp(2*pi*i*23/28) 
 .PP
-Definition at line 211 of file pietc\&.f90\&.
+Definition at line \fB211\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z300 =\-\fBz120\fP"
 
 .PP
 exp(2*pi*i*5/6) 
 .PP
-Definition at line 212 of file pietc\&.f90\&.
+Definition at line \fB212\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z304 =\-\fBz124\fP"
 
 .PP
 exp(2*pi*i*27/32) 
 .PP
-Definition at line 213 of file pietc\&.f90\&.
+Definition at line \fB213\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z306 =\-\fBz126\fP"
 
 .PP
 exp(2*pi*i*17/20) 
 .PP
-Definition at line 214 of file pietc\&.f90\&.
+Definition at line \fB214\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z309 =\-\fBz129\fP"
 
 .PP
 exp(2*pi*i*6/7) 
 .PP
-Definition at line 215 of file pietc\&.f90\&.
+Definition at line \fB215\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z310 =\-\fBz130\fP"
 
 .PP
 exp(2*pi*i*31/36) 
 .PP
-Definition at line 216 of file pietc\&.f90\&.
+Definition at line \fB216\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z315 =\-\fBz135\fP"
 
 .PP
 exp(2*pi*i*7/8) 
 .PP
-Definition at line 217 of file pietc\&.f90\&.
+Definition at line \fB217\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z320 =\-\fBz140\fP"
 
 .PP
 exp(2*pi*i*8/9) 
 .PP
-Definition at line 218 of file pietc\&.f90\&.
+Definition at line \fB218\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z321 =\-\fBz141\fP"
 
 .PP
 exp(2*pi*i*25/28) 
 .PP
-Definition at line 219 of file pietc\&.f90\&.
+Definition at line \fB219\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z324 =\-\fBz144\fP"
 
 .PP
 exp(2*pi*i*9/10) 
 .PP
-Definition at line 220 of file pietc\&.f90\&.
+Definition at line \fB220\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z326 =\-\fBz146\fP"
 
 .PP
 exp(2*pi*i*29/32) 
 .PP
-Definition at line 221 of file pietc\&.f90\&.
+Definition at line \fB221\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z330 =\-\fBz150\fP"
 
 .PP
 exp(2*pi*i*11/12) 
 .PP
-Definition at line 222 of file pietc\&.f90\&.
+Definition at line \fB222\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z334 =\-\fBz154\fP"
 
 .PP
 exp(2*pi*i*13/14) 
 .PP
-Definition at line 223 of file pietc\&.f90\&.
+Definition at line \fB223\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z338 =\-\fBz158\fP"
 
 .PP
 exp(2*pi*i*15/16) 
 .PP
-Definition at line 224 of file pietc\&.f90\&.
+Definition at line \fB224\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z340 =\-\fBz160\fP"
 
 .PP
 exp(2*pi*i*17/18) 
 .PP
-Definition at line 225 of file pietc\&.f90\&.
+Definition at line \fB225\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z342 =\-\fBz162\fP"
 
 .PP
 exp(2*pi*i*19/20) 
 .PP
-Definition at line 226 of file pietc\&.f90\&.
+Definition at line \fB226\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z345 =\-\fBz165\fP"
 
 .PP
 exp(2*pi*i*23/24) 
 .PP
-Definition at line 227 of file pietc\&.f90\&.
+Definition at line \fB227\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z347 =\-\fBz167\fP"
 
 .PP
 exp(2*pi*i*27/28) 
 .PP
-Definition at line 228 of file pietc\&.f90\&.
+Definition at line \fB228\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z349 =\-\fBz169\fP"
 
 .PP
 exp(2*pi*i*31/32) 
 .PP
-Definition at line 229 of file pietc\&.f90\&.
+Definition at line \fB229\fP of file \fBpietc\&.f90\fP\&.
 .SS "complex(dpc), parameter pietc::z350 =\-\fBz170\fP"
 
 .PP
 exp(2*pi*i*35/36) 
 .PP
-Definition at line 230 of file pietc\&.f90\&.
+Definition at line \fB230\fP of file \fBpietc\&.f90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

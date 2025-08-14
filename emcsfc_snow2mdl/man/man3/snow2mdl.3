@@ -1,4 +1,4 @@
-.TH "snow2mdl" 3 "Tue Jan 21 2025" "Version 1.13.0" "emcsfc_snow2mdl" \" -*- nroff -*-
+.TH "snow2mdl" 3 "Version 1.14.0" "emcsfc_snow2mdl" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -65,12 +65,12 @@ snow_cvr_mdl -
 snow_dep_mdl -
 .PP
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno org: w/np2 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2005-Dec-16 
 .RE
@@ -78,14 +78,14 @@ George Gayno org: w/np2
 
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine, public snow2mdl::interp ()"
+.SS "subroutine, public snow2mdl::interp"
 
 .PP
 Interpolate snow data to model grid\&. program history log: 2005-dec-16 gayno - initial version 2007-sep-20 gayno - tested for b-grids\&. added improved thinning for gfs grid\&. 2008-feb-04 gayno - add use of autosnow data 2014-sep-29 gayno - add option to output model snow data in grib2 format\&.
 .PP
 condition codes: all fatal 54 - selected input snow data not valid for model grid 55 - error in ipolates interpolating snow data
 .PP
-\fBNote:\fP
+\fBNote\fP
 .RS 4
 The determination of cover and depth on the model grid depends on the input snow data selected\&.
 .RE
@@ -106,29 +106,29 @@ gfs grid:
 .PP
 3) nesdis/ims, autosnow and afwa - An analysis of snow cover and depth on the model grid is produced\&. Cover is determined by the ims and autosnow data\&. If cover is greater than user-defined threshold (variable snow_cvr_threshold) the depth is set to the afwa value or a nominal value, whichever is greater\&. The nominal value is user-defined (varaible min_snow_depth)\&. If cover is less than user- defined threshold, the depth is set to 0, regardless of the afwa depth value\&.
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno org: w/np2 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2005-Dec-16 
 .RE
 .PP
 
 .PP
-Definition at line 158 of file snow2mdl\&.F90\&.
+Definition at line \fB157\fP of file \fBsnow2mdl\&.F90\fP\&.
 .PP
-References snowdat::afwa_res, snowdat::autosnow_res, snowdat::bitmap_afwa_global, snowdat::bitmap_afwa_nh, snowdat::bitmap_afwa_sh, snowdat::bitmap_autosnow, snowdat::bitmap_nesdis, snowdat::iafwa, snowdat::iautosnow, model_grid::ijmdl, model_grid::imdl, snowdat::inesdis, model_grid::ipts_mdl, snowdat::jafwa, snowdat::jautosnow, model_grid::jmdl, snowdat::jnesdis, model_grid::jpts_mdl, snowdat::kgds_afwa_global, snowdat::kgds_afwa_nh, snowdat::kgds_afwa_sh, snowdat::kgds_autosnow, model_grid::kgds_mdl, snowdat::kgds_nesdis, program_setup::lat_threshold, model_grid::lats_mdl, model_grid::lons_mdl, model_grid::lonsperlat_mdl, model_grid::lsmask_mdl, model_grid::lsmask_mdl_sav, program_setup::min_snow_depth, snowdat::nesdis_res, program_setup::output_grib2, model_grid::resol_mdl, snowdat::sea_ice_nesdis, snowdat::snow_cvr_autosnow, snow_cvr_mdl, snowdat::snow_cvr_nesdis, program_setup::snow_cvr_threshold, snowdat::snow_dep_afwa_global, snowdat::snow_dep_afwa_nh, snowdat::snow_dep_afwa_sh, snow_dep_mdl, model_grid::thinned, uninterpred(), snowdat::use_autosnow, snowdat::use_global_afwa, snowdat::use_nesdis, snowdat::use_nh_afwa, snowdat::use_sh_afwa, write_grib1(), and write_grib2()\&.
+References \fBsnowdat::afwa_res\fP, \fBsnowdat::autosnow_res\fP, \fBsnowdat::bitmap_afwa_global\fP, \fBsnowdat::bitmap_afwa_nh\fP, \fBsnowdat::bitmap_afwa_sh\fP, \fBsnowdat::bitmap_autosnow\fP, \fBsnowdat::bitmap_nesdis\fP, \fBsnowdat::iafwa\fP, \fBsnowdat::iautosnow\fP, \fBmodel_grid::ijmdl\fP, \fBmodel_grid::imdl\fP, \fBsnowdat::inesdis\fP, \fBmodel_grid::ipts_mdl\fP, \fBsnowdat::jafwa\fP, \fBsnowdat::jautosnow\fP, \fBmodel_grid::jmdl\fP, \fBsnowdat::jnesdis\fP, \fBmodel_grid::jpts_mdl\fP, \fBsnowdat::kgds_afwa_global\fP, \fBsnowdat::kgds_afwa_nh\fP, \fBsnowdat::kgds_afwa_sh\fP, \fBsnowdat::kgds_autosnow\fP, \fBmodel_grid::kgds_mdl\fP, \fBsnowdat::kgds_nesdis\fP, \fBprogram_setup::lat_threshold\fP, \fBmodel_grid::lats_mdl\fP, \fBmodel_grid::lons_mdl\fP, \fBmodel_grid::lonsperlat_mdl\fP, \fBmodel_grid::lsmask_mdl\fP, \fBmodel_grid::lsmask_mdl_sav\fP, \fBprogram_setup::min_snow_depth\fP, \fBsnowdat::nesdis_res\fP, \fBprogram_setup::output_grib2\fP, \fBmodel_grid::resol_mdl\fP, \fBsnowdat::sea_ice_nesdis\fP, \fBsnowdat::snow_cvr_autosnow\fP, \fBsnow_cvr_mdl\fP, \fBsnowdat::snow_cvr_nesdis\fP, \fBprogram_setup::snow_cvr_threshold\fP, \fBsnowdat::snow_dep_afwa_global\fP, \fBsnowdat::snow_dep_afwa_nh\fP, \fBsnowdat::snow_dep_afwa_sh\fP, \fBsnow_dep_mdl\fP, \fBmodel_grid::thinned\fP, \fBuninterpred()\fP, \fBsnowdat::use_autosnow\fP, \fBsnowdat::use_global_afwa\fP, \fBsnowdat::use_nesdis\fP, \fBsnowdat::use_nh_afwa\fP, \fBsnowdat::use_sh_afwa\fP, \fBwrite_grib1()\fP, and \fBwrite_grib2()\fP\&.
 .PP
-Referenced by driver()\&.
-.SS "subroutine snow2mdl::intlon (integer, intent(in) iord, integer, intent(in) imon, integer, intent(in) imsk, integer, intent(in) m1, integer, intent(in) m2, integer, dimension(m1), intent(in) k1, real, dimension(m1), intent(in) f1, real, dimension(m2), intent(out) f2)\fC [private]\fP"
+Referenced by \fBdriver()\fP\&.
+.SS "subroutine snow2mdl::intlon (integer, intent(in) iord, integer, intent(in) imon, integer, intent(in) imsk, integer, intent(in) m1, integer, intent(in) m2, integer, dimension(m1), intent(in) k1, real, dimension(m1), intent(in) f1, real, dimension(m2), intent(out) f2)\fR [private]\fP"
 
 .PP
 Convert data from the thinned (or reduced) to the full grid along a single row\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiord\fP Interpolation method\&. '1' neighbor; '2' bilinear\&. 
 .br
@@ -147,27 +147,27 @@ Convert data from the thinned (or reduced) to the full grid along a single row\&
 \fIf2\fP Data on the full grid\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno org: w/np2 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2005-Dec-16 
 .RE
 .PP
 
 .PP
-Definition at line 1167 of file snow2mdl\&.F90\&.
+Definition at line \fB1166\fP of file \fBsnow2mdl\&.F90\fP\&.
 .PP
-Referenced by uninterpred()\&.
-.SS "subroutine snow2mdl::uninterpred (integer, intent(in) iord, integer, dimension(lonl*latd), intent(in) kmsk, real, dimension(len), intent(in) fi, real, dimension(lonl,latd), intent(out) f, integer, intent(in) lonl, integer, intent(in) latd, integer, intent(in) len, integer, dimension(latd/2), intent(in) lonsperlat)\fC [private]\fP"
+Referenced by \fBuninterpred()\fP\&.
+.SS "subroutine snow2mdl::uninterpred (integer, intent(in) iord, integer, dimension(lonl*latd), intent(in) kmsk, real, dimension(len), intent(in) fi, real, dimension(lonl,latd), intent(out) f, integer, intent(in) lonl, integer, intent(in) latd, integer, intent(in) len, integer, dimension(latd/2), intent(in) lonsperlat)\fR [private]\fP"
 
 .PP
 Fills out full grid using thinned grid data\&. Use an iord of '1' to use a nearest neighbor approach\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiord\fP Interpolation method\&. '1' neighbor; '2' bilinear\&. 
 .br
@@ -186,24 +186,24 @@ Fills out full grid using thinned grid data\&. Use an iord of '1' to use a neare
 \fIlonsperlat\fP Definition of thinned (or reduced) grid\&. Number of 'i' points for each 'j' row\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno org: w/np2 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2005-Dec-16 
 .RE
 .PP
 
 .PP
-Definition at line 1116 of file snow2mdl\&.F90\&.
+Definition at line \fB1115\fP of file \fBsnow2mdl\&.F90\fP\&.
 .PP
-References intlon()\&.
+References \fBintlon()\fP\&.
 .PP
-Referenced by interp()\&.
-.SS "subroutine snow2mdl::write_grib1 ()"
+Referenced by \fBinterp()\fP\&.
+.SS "subroutine snow2mdl::write_grib1\fR [private]\fP"
 
 .PP
 Write grib1 snow cover and depth on the model grid\&. program history log: 2005-dec-16 gayno - Initial version 2014-sep-26 gayno - Rename as write_grib1 (was gribit)\&.
@@ -222,24 +222,24 @@ condition codes:
 59 - error opening model snow file
 .PP
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno org: w/np2 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2005-Dec-16 
 .RE
 .PP
 
 .PP
-Definition at line 1004 of file snow2mdl\&.F90\&.
+Definition at line \fB1003\fP of file \fBsnow2mdl\&.F90\fP\&.
 .PP
-References program_setup::grib_century, program_setup::grib_day, program_setup::grib_hour, program_setup::grib_month, program_setup::grib_year, model_grid::grid_id_mdl, model_grid::kgds_mdl, model_grid::lsmask_mdl, program_setup::model_snow_file, snow_cvr_mdl, snow_dep_mdl, snowdat::use_global_afwa, snowdat::use_nh_afwa, and snowdat::use_sh_afwa\&.
+References \fBprogram_setup::grib_century\fP, \fBprogram_setup::grib_day\fP, \fBprogram_setup::grib_hour\fP, \fBprogram_setup::grib_month\fP, \fBprogram_setup::grib_year\fP, \fBmodel_grid::grid_id_mdl\fP, \fBmodel_grid::kgds_mdl\fP, \fBmodel_grid::lsmask_mdl\fP, \fBprogram_setup::model_snow_file\fP, \fBsnow_cvr_mdl\fP, \fBsnow_dep_mdl\fP, \fBsnowdat::use_global_afwa\fP, \fBsnowdat::use_nh_afwa\fP, and \fBsnowdat::use_sh_afwa\fP\&.
 .PP
-Referenced by interp()\&.
-.SS "subroutine snow2mdl::write_grib2 ()"
+Referenced by \fBinterp()\fP\&.
+.SS "subroutine snow2mdl::write_grib2\fR [private]\fP"
 
 .PP
 Write grib2 snow cover and depth on the model grid\&. program history log: 2014-sep-26 gayno - initial version
@@ -256,41 +256,41 @@ condition codes: all fatal
 49 error opening model snow flie
 .PP
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno org: w/np2 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2014-Sep-26 
 .RE
 .PP
 
 .PP
-Definition at line 824 of file snow2mdl\&.F90\&.
+Definition at line \fB823\fP of file \fBsnow2mdl\&.F90\fP\&.
 .PP
-References grib2_check(), program_setup::grib_century, program_setup::grib_day, program_setup::grib_hour, program_setup::grib_month, program_setup::grib_year, model_grid::imdl, init_grib2(), model_grid::jmdl, model_grid::kgds_mdl, model_grid::lat11, model_grid::latlast, model_grid::lon11, model_grid::lonlast, model_grid::lsmask_mdl, program_setup::model_snow_file, snow_cvr_mdl, snow_dep_mdl, snowdat::use_global_afwa, snowdat::use_nh_afwa, and snowdat::use_sh_afwa\&.
+References \fBgrib2_check()\fP, \fBprogram_setup::grib_century\fP, \fBprogram_setup::grib_day\fP, \fBprogram_setup::grib_hour\fP, \fBprogram_setup::grib_month\fP, \fBprogram_setup::grib_year\fP, \fBmodel_grid::imdl\fP, \fBinit_grib2()\fP, \fBmodel_grid::jmdl\fP, \fBmodel_grid::kgds_mdl\fP, \fBmodel_grid::lat11\fP, \fBmodel_grid::latlast\fP, \fBmodel_grid::lon11\fP, \fBmodel_grid::lonlast\fP, \fBmodel_grid::lsmask_mdl\fP, \fBprogram_setup::model_snow_file\fP, \fBsnow_cvr_mdl\fP, \fBsnow_dep_mdl\fP, \fBsnowdat::use_global_afwa\fP, \fBsnowdat::use_nh_afwa\fP, and \fBsnowdat::use_sh_afwa\fP\&.
 .PP
-Referenced by interp()\&.
+Referenced by \fBinterp()\fP\&.
 .SH "Variable Documentation"
 .PP 
-.SS "real, dimension(:,:), allocatable snow2mdl::snow_cvr_mdl\fC [private]\fP"
+.SS "real, dimension(:,:), allocatable snow2mdl::snow_cvr_mdl\fR [private]\fP"
 
 .PP
 snow cover on model grid in percent 
 .PP
-Definition at line 85 of file snow2mdl\&.F90\&.
+Definition at line \fB85\fP of file \fBsnow2mdl\&.F90\fP\&.
 .PP
-Referenced by interp(), write_grib1(), and write_grib2()\&.
-.SS "real, dimension(:,:), allocatable snow2mdl::snow_dep_mdl\fC [private]\fP"
+Referenced by \fBinterp()\fP, \fBwrite_grib1()\fP, and \fBwrite_grib2()\fP\&.
+.SS "real, dimension(:,:), allocatable snow2mdl::snow_dep_mdl\fR [private]\fP"
 
 .PP
 snow depth on model grid in meters 
 .PP
-Definition at line 86 of file snow2mdl\&.F90\&.
+Definition at line \fB86\fP of file \fBsnow2mdl\&.F90\fP\&.
 .PP
-Referenced by interp(), write_grib1(), and write_grib2()\&.
+Referenced by \fBinterp()\fP, \fBwrite_grib1()\fP, and \fBwrite_grib2()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for emcsfc_snow2mdl from the source code\&.

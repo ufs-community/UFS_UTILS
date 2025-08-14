@@ -1,13 +1,13 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/filter_topo.fd/filter_topo.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/filter_topo.fd/filter_topo.F90" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/filter_topo.fd/filter_topo.F90 \- This program does ???  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/filter_topo.fd/filter_topo.F90 \- This program does ???  
 
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <netcdf\&.inc>\fP
+\fR#include <netcdf\&.inc>\fP
 .br
 
 .SS "Functions/Subroutines"
@@ -116,7 +116,7 @@ This program does ???
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
@@ -126,12 +126,12 @@ GFDL Programmer
 Definition in file \fBfilter_topo\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine filter_topo::cart_to_latlon (integer, intent(in) np, real, dimension(3,np), intent(inout) q, real, dimension(np), intent(inout) xs, real, dimension(np), intent(inout) ys)"
+.SS "subroutine filter_topo::cart_to_latlon (integer, intent(in) np, real, dimension(3,np), intent(inout) q, real, dimension(np), intent(inout) xs, real, dimension(np), intent(inout) ys)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fInp\fP ??? 
 .br
@@ -142,22 +142,22 @@ Definition in file \fBfilter_topo\&.F90\fP\&.
 \fIys\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 498 of file filter_topo\&.F90\&.
+Definition at line \fB497\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by cell_center2(), and mid_pt_sphere()\&.
-.SS "subroutine filter_topo::cell_center2 (real, dimension(2), intent(in) q1, real, dimension(2), intent(in) q2, real, dimension(2), intent(in) q3, real, dimension(2), intent(in) q4, real, dimension(2), intent(out) e2)"
+Referenced by \fBcell_center2()\fP, and \fBmid_pt_sphere()\fP\&.
+.SS "subroutine filter_topo::cell_center2 (real, dimension(2), intent(in) q1, real, dimension(2), intent(in) q2, real, dimension(2), intent(in) q3, real, dimension(2), intent(in) q4, real, dimension(2), intent(out) e2)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIq1\fP ??? 
 .br
@@ -170,59 +170,59 @@ Referenced by cell_center2(), and mid_pt_sphere()\&.
 \fIe2\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 599 of file filter_topo\&.F90\&.
+Definition at line \fB598\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References cart_to_latlon(), and latlon2xyz()\&.
+References \fBcart_to_latlon()\fP, and \fBlatlon2xyz()\fP\&.
 .PP
-Referenced by read_grid_file()\&.
-.SS "subroutine filter_topo::check (integer, intent(in) status)"
+Referenced by \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::check (integer, intent(in) status)\fR [private]\fP"
 
 .PP
 Check results of netCDF call\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIstatus\fP return code to check 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1999 of file filter_topo\&.F90\&.
+Definition at line \fB1998\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by global_equiv_resol(), regional_grid(), and shave_nc()\&.
-.SS "subroutine filter_topo::compute_filter_constants ()"
+Referenced by \fBglobal_equiv_resol()\fP, \fBregional_grid()\fP, and \fBshave_nc()\fP\&.
+.SS "subroutine filter_topo::compute_filter_constants\fR [private]\fP"
 
 .PP
 Compute resolution-dependent values for the filtering\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 2015 of file filter_topo\&.F90\&.
+Definition at line \fB2014\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by filter_topo()\&.
-.SS "real function filter_topo::cos_angle (real, dimension(3), intent(in) p1, real, dimension(3), intent(in) p2, real, dimension(3), intent(in) p3)"
+Referenced by \fBfilter_topo()\fP\&.
+.SS "real function filter_topo::cos_angle (real, dimension(3), intent(in) p1, real, dimension(3), intent(in) p2, real, dimension(3), intent(in) p3)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIp1\fP ??? 
 .br
@@ -231,27 +231,29 @@ Referenced by filter_topo()\&.
 \fIp3\fP ??? 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 545 of file filter_topo\&.F90\&.
+Definition at line \fB544\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by read_grid_file()\&.
-.SS "subroutine filter_topo::del2_cubed_sphere (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) isd, integer, intent(in) ied, integer, intent(in) jsd, integer, intent(in) jed, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) ntiles, real, dimension(is\-ng:ie+ng, js\-ng:je+ng, ntiles), intent(inout) q, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) area, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dx, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dy, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dxc, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dyc, real, dimension(4,isd:ied,jsd:jed, ntiles), intent(in) sin_sg, integer, intent(in) nmax, real, intent(in) cd, logical, intent(in) zero_ocean, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) mask, logical, intent(in) nested, logical, intent(in) regional)"
+References \fBcos_angle()\fP\&.
+.PP
+Referenced by \fBcos_angle()\fP, and \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::del2_cubed_sphere (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) isd, integer, intent(in) ied, integer, intent(in) jsd, integer, intent(in) jed, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) ntiles, real, dimension(is\-ng:ie+ng, js\-ng:je+ng, ntiles), intent(inout) q, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) area, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dx, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dy, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dxc, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dyc, real, dimension(4,isd:ied,jsd:jed, ntiles), intent(in) sin_sg, integer, intent(in) nmax, real, intent(in) cd, logical, intent(in) zero_ocean, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) mask, logical, intent(in) nested, logical, intent(in) regional)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIis\fP ??? 
 .br
@@ -302,22 +304,22 @@ Referenced by read_grid_file()\&.
 \fIregional\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1639 of file filter_topo\&.F90\&.
+Definition at line \fB1637\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References fill_cubic_grid_halo()\&.
-.SS "subroutine filter_topo::del4_cubed_sphere (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) isd, integer, intent(in) ied, integer, intent(in) jsd, integer, intent(in) jed, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) ntiles, real, dimension(isd:ied, jsd:jed, ntiles), intent(inout) q, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) area, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dx, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dy, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dxc, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dyc, real, dimension(4,isd:ied,jsd:jed, ntiles), intent(in) sin_sg, integer, intent(in) nmax, logical, intent(in) zero_ocean, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) mask, logical, intent(in) nested, logical, intent(in) regional)"
+References \fBfill_cubic_grid_halo()\fP\&.
+.SS "subroutine filter_topo::del4_cubed_sphere (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) isd, integer, intent(in) ied, integer, intent(in) jsd, integer, intent(in) jed, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) ntiles, real, dimension(isd:ied, jsd:jed, ntiles), intent(inout) q, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) area, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dx, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dy, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dxc, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dyc, real, dimension(4,isd:ied,jsd:jed, ntiles), intent(in) sin_sg, integer, intent(in) nmax, logical, intent(in) zero_ocean, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) mask, logical, intent(in) nested, logical, intent(in) regional)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIis\fP ??? 
 .br
@@ -366,24 +368,24 @@ References fill_cubic_grid_halo()\&.
 \fIregional\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1762 of file filter_topo\&.F90\&.
+Definition at line \fB1760\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References fill_cubic_grid_halo()\&.
+References \fBfill_cubic_grid_halo()\fP\&.
 .PP
-Referenced by fv3_zs_filter()\&.
-.SS "subroutine filter_topo::fill_agrid_scalar_corners (real, dimension(isd:,jsd:,:), intent(inout) q, integer, intent(in) ng, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) isd, integer, intent(in) jsd, integer, intent(in) fill)"
+Referenced by \fBfv3_zs_filter()\fP\&.
+.SS "subroutine filter_topo::fill_agrid_scalar_corners (real, dimension(isd:,jsd:,:), intent(inout) q, integer, intent(in) ng, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) isd, integer, intent(in) jsd, integer, intent(in) fill)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIq\fP ??? 
 .br
@@ -400,22 +402,22 @@ Referenced by fv3_zs_filter()\&.
 \fIfill\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 252 of file filter_topo\&.F90\&.
+Definition at line \fB251\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by read_grid_file()\&.
-.SS "subroutine filter_topo::fill_agrid_xy_corners (real, dimension(isd:,jsd:,:), intent(inout) x, real, dimension(isd:,jsd:,:), intent(inout) y, integer, intent(in) ng, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) isd, integer, intent(in) jsd)"
+Referenced by \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::fill_agrid_xy_corners (real, dimension(isd:,jsd:,:), intent(inout) x, real, dimension(isd:,jsd:,:), intent(inout) y, integer, intent(in) ng, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) isd, integer, intent(in) jsd)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIx\fP ??? 
 .br
@@ -432,22 +434,22 @@ Referenced by read_grid_file()\&.
 \fIjsd\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 353 of file filter_topo\&.F90\&.
+Definition at line \fB352\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by read_grid_file()\&.
-.SS "subroutine filter_topo::fill_bgrid_scalar_corners (real, dimension(isd:,jsd:,:), intent(inout) q, integer, intent(in) ng, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) isd, integer, intent(in) jsd, integer, intent(in) fill)"
+Referenced by \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::fill_bgrid_scalar_corners (real, dimension(isd:,jsd:,:), intent(inout) q, integer, intent(in) ng, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) isd, integer, intent(in) jsd, integer, intent(in) fill)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIq\fP ??? 
 .br
@@ -464,22 +466,22 @@ Referenced by read_grid_file()\&.
 \fIfill\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 302 of file filter_topo\&.F90\&.
+Definition at line \fB301\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by read_grid_file()\&.
-.SS "subroutine filter_topo::fill_cubic_grid_halo (real, dimension(1\-halo:,1\-halo:,:), intent(inout) data, real, dimension(1\-halo:,1\-halo:,:), intent(inout) data2, integer, intent(in) halo, integer, intent(in) ioff, integer, intent(in) joff, integer, intent(in) sign1, integer, intent(in) sign2)"
+Referenced by \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::fill_cubic_grid_halo (real, dimension(1\-halo:,1\-halo:,:), intent(inout) data, real, dimension(1\-halo:,1\-halo:,:), intent(inout) data2, integer, intent(in) halo, integer, intent(in) ioff, integer, intent(in) joff, integer, intent(in) sign1, integer, intent(in) sign2)\fR [private]\fP"
 
 .PP
 This routine fill the halo points for the cubic grid\&. ioff and joff is used to distinguish T, C, E, or N-cell\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIdata\fP ??? 
 .br
@@ -496,22 +498,22 @@ This routine fill the halo points for the cubic grid\&. ioff and joff is used to
 \fIsign2\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1156 of file filter_topo\&.F90\&.
+Definition at line \fB1155\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by del2_cubed_sphere(), del4_cubed_sphere(), read_grid_file(), read_topo_file(), and two_delta_filter()\&.
-.SS "subroutine filter_topo::fill_dgrid_xy_corners (real, dimension(isd:,jsd:,:), intent(inout) x, real, dimension(isd:,jsd:,:), intent(inout) y, integer, intent(in) ng, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) isd, integer, intent(in) jsd)"
+Referenced by \fBdel2_cubed_sphere()\fP, \fBdel4_cubed_sphere()\fP, \fBread_grid_file()\fP, \fBread_topo_file()\fP, and \fBtwo_delta_filter()\fP\&.
+.SS "subroutine filter_topo::fill_dgrid_xy_corners (real, dimension(isd:,jsd:,:), intent(inout) x, real, dimension(isd:,jsd:,:), intent(inout) y, integer, intent(in) ng, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) isd, integer, intent(in) jsd)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIx\fP ??? 
 .br
@@ -528,27 +530,27 @@ Referenced by del2_cubed_sphere(), del4_cubed_sphere(), read_grid_file(), read_t
 \fIjsd\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 385 of file filter_topo\&.F90\&.
+Definition at line \fB384\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by read_grid_file()\&.
-.SS "program filter_topo ()"
+Referenced by \fBread_grid_file()\fP\&.
+.SS "program filter_topo"
 
 .PP
 This program does ??? 
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 0 for success, error code otherwise\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 S-J Lin (GFDL) for filtering algorithm(s) 
 .PP
@@ -557,15 +559,15 @@ Zhi Liang (GFDL) who packaged it into a standalone application\&.
 .PP
 
 .PP
-Definition at line 10 of file filter_topo\&.F90\&.
+Definition at line \fB10\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References compute_filter_constants(), fv3_zs_filter(), utils::grid_type, utils::nested, read_grid_file(), utils::read_namelist(), read_topo_file(), utils::regional, utils::stretch_fac, and write_topo_file()\&.
-.SS "subroutine filter_topo::fv3_zs_filter (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) isd, integer, intent(in) ied, integer, intent(in) jsd, integer, intent(in) jed, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) npx_global, integer, intent(in) ntiles, integer, intent(in) grid_type, real, intent(in) stretch_fac, logical, intent(in) nested, real, dimension(isd:ied,jsd:jed, ntiles), intent(in) area, real, dimension(isd:ied,jsd:jed, ntiles), intent(in) dxa, real, dimension(isd:ied,jsd:jed, ntiles), intent(in) dya, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dx, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dy, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dxc, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dyc, real, dimension(4,isd:ied,jsd:jed,ntiles), intent(in) sin_sg, real, dimension(isd:ied,jsd:jed,ntiles), intent(inout) phis, logical, intent(in) regional)"
+References \fBcompute_filter_constants()\fP, \fBfv3_zs_filter()\fP, \fButils::grid_type\fP, \fButils::nested\fP, \fBread_grid_file()\fP, \fButils::read_namelist()\fP, \fBread_topo_file()\fP, \fButils::regional\fP, \fButils::stretch_fac\fP, and \fBwrite_topo_file()\fP\&.
+.SS "subroutine filter_topo::fv3_zs_filter (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) isd, integer, intent(in) ied, integer, intent(in) jsd, integer, intent(in) jed, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) npx_global, integer, intent(in) ntiles, integer, intent(in) grid_type, real, intent(in) stretch_fac, logical, intent(in) nested, real, dimension(isd:ied,jsd:jed, ntiles), intent(in) area, real, dimension(isd:ied,jsd:jed, ntiles), intent(in) dxa, real, dimension(isd:ied,jsd:jed, ntiles), intent(in) dya, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dx, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dy, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dxc, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dyc, real, dimension(4,isd:ied,jsd:jed,ntiles), intent(in) sin_sg, real, dimension(isd:ied,jsd:jed,ntiles), intent(inout) phis, logical, intent(in) regional)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIis\fP ??? 
 .br
@@ -618,24 +620,24 @@ References compute_filter_constants(), fv3_zs_filter(), utils::grid_type, utils:
 \fIregional\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1227 of file filter_topo\&.F90\&.
+Definition at line \fB1224\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References del4_cubed_sphere(), and two_delta_filter()\&.
+References \fBdel4_cubed_sphere()\fP, and \fBtwo_delta_filter()\fP\&.
 .PP
-Referenced by filter_topo()\&.
-.SS "real function filter_topo::get_area (real, dimension(2), intent(in) p1, real, dimension(2), intent(in) p4, real, dimension(2), intent(in) p2, real, dimension(2), intent(in) p3, real, intent(in), optional radius)"
+Referenced by \fBfilter_topo()\fP\&.
+.SS "real function filter_topo::get_area (real, dimension(2), intent(in) p1, real, dimension(2), intent(in) p4, real, dimension(2), intent(in) p2, real, dimension(2), intent(in) p3, real, intent(in), optional radius)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIp1\fP ??? 
 .br
@@ -648,29 +650,29 @@ Referenced by filter_topo()\&.
 \fIradius\fP ??? 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 area 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 199 of file filter_topo\&.F90\&.
+Definition at line \fB198\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References latlon2xyz(), and spherical_angle()\&.
+References \fBget_area()\fP, \fBlatlon2xyz()\fP, and \fBspherical_angle()\fP\&.
 .PP
-Referenced by read_grid_file()\&.
+Referenced by \fBget_area()\fP, and \fBread_grid_file()\fP\&.
 .SS "real function filter_topo::great_circle_dist (real, dimension(2), intent(in) q1, real, dimension(2), intent(in) q2, real, intent(in), optional radius)"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIq1\fP 
 .br
@@ -679,49 +681,51 @@ Referenced by read_grid_file()\&.
 \fIradius\fP 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 97 of file filter_topo\&.F90\&.
+Definition at line \fB96\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by read_grid_file()\&.
-.SS "subroutine filter_topo::latlon2xyz (real, dimension(2), intent(in) p, real, dimension(3), intent(out) e)"
+References \fBgreat_circle_dist()\fP\&.
+.PP
+Referenced by \fBgreat_circle_dist()\fP, and \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::latlon2xyz (real, dimension(2), intent(in) p, real, dimension(3), intent(out) e)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIp\fP ??? 
 .br
 \fIe\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 464 of file filter_topo\&.F90\&.
+Definition at line \fB463\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by cell_center2(), get_area(), mid_pt_sphere(), and read_grid_file()\&.
-.SS "subroutine filter_topo::mid_pt3_cart (real, dimension(3), intent(in) p1, real, dimension(3), intent(in) p2, real, dimension(3), intent(out) e)"
+Referenced by \fBcell_center2()\fP, \fBget_area()\fP, \fBmid_pt_sphere()\fP, and \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::mid_pt3_cart (real, dimension(3), intent(in) p1, real, dimension(3), intent(in) p2, real, dimension(3), intent(out) e)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIp1\fP ??? 
 .br
@@ -730,22 +734,22 @@ Referenced by cell_center2(), get_area(), mid_pt_sphere(), and read_grid_file()\
 \fIe\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 431 of file filter_topo\&.F90\&.
+Definition at line \fB430\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by mid_pt_sphere(), and read_grid_file()\&.
-.SS "subroutine filter_topo::mid_pt_sphere (real, dimension(2), intent(in) p1, real, dimension(2), intent(in) p2, real, dimension(2), intent(out) pm)"
+Referenced by \fBmid_pt_sphere()\fP, and \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::mid_pt_sphere (real, dimension(2), intent(in) p1, real, dimension(2), intent(in) p2, real, dimension(2), intent(out) pm)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIp1\fP ??? 
 .br
@@ -754,84 +758,81 @@ Referenced by mid_pt_sphere(), and read_grid_file()\&.
 \fIpm\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 412 of file filter_topo\&.F90\&.
+Definition at line \fB411\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References cart_to_latlon(), latlon2xyz(), and mid_pt3_cart()\&.
+References \fBcart_to_latlon()\fP, \fBlatlon2xyz()\fP, and \fBmid_pt3_cart()\fP\&.
 .PP
-Referenced by read_grid_file()\&.
-.SS "subroutine filter_topo::read_grid_file (logical, intent(in) regional)"
+Referenced by \fBread_grid_file()\fP\&.
+.SS "subroutine filter_topo::read_grid_file (logical, intent(in) regional)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIregional\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 630 of file filter_topo\&.F90\&.
+Definition at line \fB629\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References cell_center2(), cos_angle(), fill_agrid_scalar_corners(), fill_agrid_xy_corners(), fill_bgrid_scalar_corners(), fill_cubic_grid_halo(), fill_dgrid_xy_corners(), utils::fill_regional_halo(), get_area(), great_circle_dist(), utils::grid_file, utils::handle_err(), latlon2xyz(), mid_pt3_cart(), mid_pt_sphere(), utils::nested, and utils::regional\&.
+References \fBcell_center2()\fP, \fBcos_angle()\fP, \fBfill_agrid_scalar_corners()\fP, \fBfill_agrid_xy_corners()\fP, \fBfill_bgrid_scalar_corners()\fP, \fBfill_cubic_grid_halo()\fP, \fBfill_dgrid_xy_corners()\fP, \fBget_area()\fP, \fBgreat_circle_dist()\fP, \fBlatlon2xyz()\fP, \fBmid_pt3_cart()\fP, and \fBmid_pt_sphere()\fP\&.
 .PP
-Referenced by filter_topo()\&.
-.SS "subroutine filter_topo::read_topo_file (logical, intent(in) regional)"
+Referenced by \fBfilter_topo()\fP\&.
+.SS "subroutine filter_topo::read_topo_file (logical, intent(in) regional)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIregional\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1008 of file filter_topo\&.F90\&.
+Definition at line \fB1007\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References fill_cubic_grid_halo()\&.
+References \fBfill_cubic_grid_halo()\fP\&.
 .PP
-Referenced by filter_topo()\&.
-.SS "real function filter_topo::spherical_angle (real, dimension(3) p1, real, dimension(3) p2, real, dimension(3) p3)"
+Referenced by \fBfilter_topo()\fP\&.
+.SS "real function filter_topo::spherical_angle (real, dimension(3) p1, real, dimension(3) p2, real, dimension(3) p3)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
 .nf
 
-           p3
-         /
-        /
-       p1 ---> angle
+                 p3
+               /
+              /
+             p1 ---> angle
+               \\
+                \\
+                 p2
+       
 .fi
 .PP
 .PP
-.PP
-.nf
-           p2
- 
-.fi
-.PP
-.PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIp1\fP ??? 
 .br
@@ -840,27 +841,29 @@ Referenced by filter_topo()\&.
 \fIp3\fP ??? 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 138 of file filter_topo\&.F90\&.
+Definition at line \fB137\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by get_area()\&.
-.SS "subroutine filter_topo::two_delta_filter (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) isd, integer, intent(in) ied, integer, intent(in) jsd, integer, intent(in) jed, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) ntiles, real, dimension(isd:ied, jsd:jed,ntiles), intent(inout) q, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) area, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dx, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dy, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) dxa, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) dya, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dxc, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dyc, real, dimension(4,isd:ied,jsd:jed, ntiles), intent(in) sin_sg, real, intent(in) cd, logical, intent(in) zero_ocean, logical, intent(in) check_slope, integer, intent(in) filter_type, integer, intent(in) grid_type, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) mask, logical, intent(in) nested, integer, intent(in) ntmax, logical, intent(in) regional)"
+References \fBspherical_angle()\fP\&.
+.PP
+Referenced by \fBget_area()\fP, and \fBspherical_angle()\fP\&.
+.SS "subroutine filter_topo::two_delta_filter (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) isd, integer, intent(in) ied, integer, intent(in) jsd, integer, intent(in) jed, integer, intent(in) npx, integer, intent(in) npy, integer, intent(in) ntiles, real, dimension(isd:ied, jsd:jed,ntiles), intent(inout) q, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) area, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dx, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dy, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) dxa, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) dya, real, dimension(isd:ied+1,jsd:jed, ntiles), intent(in) dxc, real, dimension(isd:ied,  jsd:jed+1, ntiles), intent(in) dyc, real, dimension(4,isd:ied,jsd:jed, ntiles), intent(in) sin_sg, real, intent(in) cd, logical, intent(in) zero_ocean, logical, intent(in) check_slope, integer, intent(in) filter_type, integer, intent(in) grid_type, real, dimension(isd:ied,  jsd:jed, ntiles), intent(in) mask, logical, intent(in) nested, integer, intent(in) ntmax, logical, intent(in) regional)\fR [private]\fP"
 
 .PP
 ??? 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIis\fP ??? 
 .br
@@ -921,24 +924,24 @@ Referenced by get_area()\&.
 \fIregional\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1310 of file filter_topo\&.F90\&.
+Definition at line \fB1307\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-References fill_cubic_grid_halo()\&.
+References \fBfill_cubic_grid_halo()\fP\&.
 .PP
-Referenced by fv3_zs_filter()\&.
-.SS "subroutine filter_topo::write_topo_file (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) ntiles, real, dimension(is:ie,js:je,ntiles), intent(in) q, logical, intent(in) regional)"
+Referenced by \fBfv3_zs_filter()\fP\&.
+.SS "subroutine filter_topo::write_topo_file (integer, intent(in) is, integer, intent(in) ie, integer, intent(in) js, integer, intent(in) je, integer, intent(in) ntiles, real, dimension(is:ie,js:je,ntiles), intent(in) q, logical, intent(in) regional)\fR [private]\fP"
 
 .PP
 Replace the topo_field\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIis\fP ??? 
 .br
@@ -955,16 +958,16 @@ Replace the topo_field\&.
 \fIregional\fP ??? 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 GFDL Programmer 
 .RE
 .PP
 
 .PP
-Definition at line 1108 of file filter_topo\&.F90\&.
+Definition at line \fB1107\fP of file \fBfilter_topo\&.F90\fP\&.
 .PP
-Referenced by filter_topo()\&.
+Referenced by \fBfilter_topo()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

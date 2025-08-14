@@ -1,4 +1,4 @@
-.TH "utils_mod::dumpnc" 3 "Tue Jan 21 2025" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.TH "utils_mod::dumpnc" 3 "Version 1.14.0" "ocnice_prep" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ utils_mod::dumpnc
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -28,15 +28,15 @@ utils_mod::dumpnc
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 38 of file utils_mod\&.F90\&.
+Definition at line \fB38\fP of file \fButils_mod\&.F90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine utils_mod::dumpnc::dumpnc1d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(in) field)\fC [private]\fP"
+.SS "subroutine utils_mod::dumpnc::dumpnc1d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:), intent(in) field)"
 
 .PP
 Write a bare netcdf file of a unpacked 2D field\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing ESMF regridding weights 
 .br
@@ -47,20 +47,20 @@ Write a bare netcdf file of a unpacked 2D field\&.
 \fIfield\fP the field to write
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 673 of file utils_mod\&.F90\&.
-.SS "subroutine utils_mod::dumpnc::dumpnc2d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(in) field)\fC [private]\fP"
+Definition at line \fB674\fP of file \fButils_mod\&.F90\fP\&.
+.SS "subroutine utils_mod::dumpnc::dumpnc2d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(in) field)"
 
 .PP
 Write a bare netcdf file of a 2D packed field\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing ESMF regridding weights 
 .br
@@ -73,20 +73,20 @@ Write a bare netcdf file of a 2D packed field\&.
 \fIfield\fP the field to write
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 545 of file utils_mod\&.F90\&.
-.SS "subroutine utils_mod::dumpnc::dumpnc3d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, integer, intent(in) nk, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(in) field)\fC [private]\fP"
+Definition at line \fB546\fP of file \fButils_mod\&.F90\fP\&.
+.SS "subroutine utils_mod::dumpnc::dumpnc3d (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, integer, intent(in) nk, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(in) field)"
 
 .PP
 Write a bare netcdf file of a packed 3D field\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing ESMF regridding weights 
 .br
@@ -101,20 +101,20 @@ Write a bare netcdf file of a packed 3D field\&.
 \fIfield\fP the field to write
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 588 of file utils_mod\&.F90\&.
-.SS "subroutine utils_mod::dumpnc::dumpnc3dk (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(in) field)\fC [private]\fP"
+Definition at line \fB589\fP of file \fButils_mod\&.F90\fP\&.
+.SS "subroutine utils_mod::dumpnc::dumpnc3dk (character(len=*), intent(in) fname, character(len=*), intent(in) vname, integer, dimension(:), intent(in) dims, real(kind=8), dimension(:,:), intent(in) field)"
 
 .PP
 Write a bare netcdf file of an unpacked 3D field\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing ESMF regridding weights 
 .br
@@ -125,14 +125,14 @@ Write a bare netcdf file of an unpacked 3D field\&.
 \fIfield\fP the field to write
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 632 of file utils_mod\&.F90\&.
+Definition at line \fB633\fP of file \fButils_mod\&.F90\fP\&.
 
 .SH "Author"
 .PP 

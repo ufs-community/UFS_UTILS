@@ -1,4 +1,4 @@
-.TH "output_frac_cats" 3 "Tue Jan 21 2025" "Version 1.13.0" "sfc_climo_gen" \" -*- nroff -*-
+.TH "output_frac_cats" 3 "Version 1.14.0" "sfc_climo_gen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,12 +25,12 @@ Output categorical data such as vegetation type\&.
 
 Include percentage of each category within a model grid box and the dominant category\&.
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2022 
 .RE
@@ -43,7 +43,7 @@ George Gayno NCEP/EMC
 .PP
 Driver routine to output model categorical data\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIdata_one_tile\fP The percentage of each category within a model grid cell\&. 
 .br
@@ -62,29 +62,29 @@ Driver routine to output model categorical data\&.
 \fItile\fP Tile number\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 2022 
 .RE
 .PP
 
 .PP
-Definition at line 33 of file output_frac_cats\&.F90\&.
+Definition at line \fB31\fP of file \fBoutput_frac_cats\&.F90\fP\&.
 .PP
-References source_grid::field_names, model_grid::grid_tiles, program_setup::halo, and writeit()\&.
+References \fBsource_grid::field_names\fP, \fBmodel_grid::grid_tiles\fP, \fBprogram_setup::halo\fP, \fBmodel_grid::i_mdl\fP, \fBmodel_grid::j_mdl\fP, and \fBwriteit()\fP\&.
 .PP
-Referenced by interp_frac_cats()\&.
-.SS "subroutine output_frac_cats::writeit (character(len=*), intent(in) out_file, integer, intent(in) iout, integer, intent(in) jout, integer, intent(in) num_categories, real(esmf_kind_r4), dimension(iout,jout), intent(in) latitude, real(esmf_kind_r4), dimension(iout,jout), intent(in) longitude, real(esmf_kind_r4), dimension(iout,jout,num_categories), intent(in) data_pct, real(esmf_kind_r4), dimension(iout,jout), intent(in) dominant_cat)"
+Referenced by \fBinterp_frac_cats()\fP\&.
+.SS "subroutine output_frac_cats::writeit (character(len=*), intent(in) out_file, integer, intent(in) iout, integer, intent(in) jout, integer, intent(in) num_categories, real(esmf_kind_r4), dimension(iout,jout), intent(in) latitude, real(esmf_kind_r4), dimension(iout,jout), intent(in) longitude, real(esmf_kind_r4), dimension(iout,jout,num_categories), intent(in) data_pct, real(esmf_kind_r4), dimension(iout,jout), intent(in) dominant_cat)\fR [private]\fP"
 
 .PP
 Write data to a netcdf file\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIout_file\fP Output file name\&. 
 .br
@@ -105,11 +105,11 @@ Write data to a netcdf file\&.
 .PP
 
 .PP
-Definition at line 114 of file output_frac_cats\&.F90\&.
+Definition at line \fB112\fP of file \fBoutput_frac_cats\&.F90\fP\&.
 .PP
-References source_grid::day_of_rec, source_grid::field_names, utils::netcdf_err(), source_grid::num_time_recs, and source_grid::source\&.
+References \fBsource_grid::day_of_rec\fP, \fBsource_grid::field_names\fP, \fButils::netcdf_err()\fP, \fBsource_grid::num_time_recs\fP, and \fBsource_grid::source\fP\&.
 .PP
-Referenced by output_driver()\&.
+Referenced by \fBoutput_driver()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for sfc_climo_gen from the source code\&.

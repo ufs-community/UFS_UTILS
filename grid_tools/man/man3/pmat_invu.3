@@ -1,4 +1,4 @@
-.TH "pmat::invu" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::invu" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat::invu
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -28,85 +28,85 @@ pmat::invu
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 40 of file pmat\&.f90\&.
+Definition at line \fB40\fP of file \fBpmat\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat::invu::dinvu (real(dp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+.SS "subroutine pmat::invu::dinvu (real(dp), dimension(:,:), intent(inout) a)"
 
 .PP
 Invert the upper triangular matrix in place by transposing, calling invl, and transposing again\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP upper triangular matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1127 of file pmat\&.f90\&.
-.SS "subroutine pmat::invu::dlinuv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)\fC [private]\fP"
+Definition at line \fB1126\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::invu::dlinuv (real(dp), dimension(:,:), intent(in) a, real(dp), dimension(:), intent(inout) u)"
 
 .PP
 Solve linear system involving upper triangular system matrix\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP upper triangular matrix\&. 
 .br
 \fIu\fP input RHS vector, output solution vector\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1219 of file pmat\&.f90\&.
-.SS "subroutine pmat::invu::sinvu (real(sp), dimension(:,:), intent(inout) a)\fC [private]\fP"
+Definition at line \fB1218\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::invu::sinvu (real(sp), dimension(:,:), intent(inout) a)"
 
 .PP
 Invert the upper triangular matrix in place by transposing, calling invl, and transposing again\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP upper triangular matrix\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1117 of file pmat\&.f90\&.
-.SS "subroutine pmat::invu::slinuv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)\fC [private]\fP"
+Definition at line \fB1116\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::invu::slinuv (real(sp), dimension(:,:), intent(in) a, real(sp), dimension(:), intent(inout) u)"
 
 .PP
 Solve linear system involving upper triangular system matrix\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP upper triangular matrix\&. 
 .br
 \fIu\fP input RHS vector, output solution vector\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 1204 of file pmat\&.f90\&.
+Definition at line \fB1203\fP of file \fBpmat\&.f90\fP\&.
 
 .SH "Author"
 .PP 

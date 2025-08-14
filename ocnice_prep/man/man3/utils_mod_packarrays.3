@@ -1,4 +1,4 @@
-.TH "utils_mod::packarrays" 3 "Tue Jan 21 2025" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.TH "utils_mod::packarrays" 3 "Version 1.14.0" "ocnice_prep" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ utils_mod::packarrays
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ utils_mod::packarrays
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 22 of file utils_mod\&.F90\&.
+Definition at line \fB22\fP of file \fButils_mod\&.F90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine utils_mod::packarrays::packarrays2d (character(len=*), intent(in) filesrc, character(len=*), intent(in) wgtsdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, type(\fBvardefs\fP), dimension(:), intent(in) vars, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(out) fields)\fC [private]\fP"
+.SS "subroutine utils_mod::packarrays::packarrays2d (character(len=*), intent(in) filesrc, character(len=*), intent(in) wgtsdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, type(\fBvardefs\fP), dimension(:), intent(in) vars, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(out) fields)"
 
 .PP
 Pack 2D fields into arrays by mapping type\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfilesrc\fP the file containing the fields to retrieve 
 .br
@@ -47,20 +47,20 @@ Pack 2D fields into arrays by mapping type\&.
 \fIfields\fP the packed array
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 65 of file utils_mod\&.F90\&.
-.SS "subroutine utils_mod::packarrays::packarrays3d (character(len=*), intent(in) filesrc, character(len=*), intent(in) wgtsdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, type(\fBvardefs\fP), dimension(:), intent(in) vars, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(out) fields)\fC [private]\fP"
+Definition at line \fB66\fP of file \fButils_mod\&.F90\fP\&.
+.SS "subroutine utils_mod::packarrays::packarrays3d (character(len=*), intent(in) filesrc, character(len=*), intent(in) wgtsdir, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, type(\fBvardefs\fP), dimension(:), intent(in) vars, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(out) fields)"
 
 .PP
 Pack 3D fields into arrays by mapping type\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfilesrc\fP the file containing the fields to retrieve 
 .br
@@ -79,14 +79,14 @@ Pack 3D fields into arrays by mapping type\&.
 \fIfields\fP the packed array
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 127 of file utils_mod\&.F90\&.
+Definition at line \fB128\fP of file \fButils_mod\&.F90\fP\&.
 
 .SH "Author"
 .PP 

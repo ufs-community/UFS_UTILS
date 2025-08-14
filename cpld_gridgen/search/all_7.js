@@ -1,11 +1,6 @@
 var searchData=
 [
-  ['inputnml_2ef90',['inputnml.F90',['../inputnml_8F90.html',1,'']]],
-  ['int8_5fkind',['int8_kind',['../gengrid__kinds_8F90.html#a31b580be1664a7d63a0e3a24621dea7e',1,'gengrid_kinds']]],
-  ['int_5fkind',['int_kind',['../gengrid__kinds_8F90.html#abcad634e6a284e2c43c6c36912e8aa2c',1,'gengrid_kinds']]],
-  ['ipole',['ipole',['../grdvars_8F90.html#a7a38dda76b7f5fd076b5314492c14aa8',1,'grdvars']]],
-  ['ivertbu',['ivertbu',['../grdvars_8F90.html#a819746477399d85d393ed9e72da8d666',1,'grdvars']]],
-  ['ivertct',['ivertct',['../grdvars_8F90.html#a23f3aec46800e7bf9c1820825592d2e9',1,'grdvars']]],
-  ['ivertcu',['ivertcu',['../grdvars_8F90.html#ac9c4e94f20e8f58eea2f1b5dc1f6ba9e',1,'grdvars']]],
-  ['ivertcv',['ivertcv',['../grdvars_8F90.html#a3b2d0b559ca18e5809e16932c59d8e26',1,'grdvars']]]
+  ['history_0',['history',['../charstrings_8F90.html#a21e98a7c5d7f097bf9ef63e308f67405',1,'charstrings']]],
+  ['hte_1',['hte',['../grdvars_8F90.html#af22c09b727c538aaf830e64d928f2b7c',1,'grdvars']]],
+  ['htn_2',['htn',['../grdvars_8F90.html#a8bbd10e3ddfbb7fc72ae0f96b92da5fb',1,'grdvars']]]
 ];

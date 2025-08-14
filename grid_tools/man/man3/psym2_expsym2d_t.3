@@ -1,4 +1,4 @@
-.TH "psym2::expsym2d_t" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "psym2::expsym2d_t" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ psym2::expsym2d_t
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -16,15 +16,15 @@ psym2::expsym2d_t
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 28 of file psym2\&.f90\&.
+Definition at line \fB28\fP of file \fBpsym2\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine psym2::expsym2d_t::expsym2d_t (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+.SS "subroutine psym2::expsym2d_t::expsym2d_t (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)"
 
 .PP
 Use the Taylor-series method (eigenvalues both fairly close to zero)\&. For a 2*2 symmetric matrix x, try to get both the z=exp(x) and dz/dx using the Taylor series expansion method\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIx\fP symmetric 2*2 positive-definite matrix 
 .br
@@ -33,14 +33,16 @@ Use the Taylor-series method (eigenvalues both fairly close to zero)\&. For a 2*
 \fIzd\fP symmetric derivative 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 347 of file psym2\&.f90\&.
+Definition at line \fB346\fP of file \fBpsym2\&.f90\fP\&.
+.PP
+References \fBpsym2::id\fP, and \fBpietc::u1\fP\&.
 
 .SH "Author"
 .PP 

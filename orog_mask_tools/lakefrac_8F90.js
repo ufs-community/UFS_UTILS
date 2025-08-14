@@ -1,14 +1,13 @@
 var lakefrac_8F90 =
 [
-    [ "ADD_ATT_FOR_NEW_VAR", "lakefrac_8F90.html#a4fd8fd61f4f165ef35f148e8f1246cd8", null ],
-    [ "cal_lake_frac_depth", "lakefrac_8F90.html#a7a4e5a1364b5ca25a7e3265799710e7a", null ],
-    [ "include_exclude_lakes", "lakefrac_8F90.html#aae5dd71d00b4521996a3014fd7ea58c7", null ],
-    [ "lake_cell_comp", "lakefrac_8F90.html#a1bca1240f8c1b5fa76f0975fbfddab01", null ],
-    [ "lake_frac", "lakefrac_8F90.html#a563966340bfa6668f1c820c8a8c33464", null ],
-    [ "nc_opchk", "lakefrac_8F90.html#a371dafc6b513e49bf8b70cdd44056a47", null ],
-    [ "read_cubed_sphere_grid", "lakefrac_8F90.html#aa841d26daa073f2aabb69280f766116f", null ],
-    [ "read_cubed_sphere_reg_grid", "lakefrac_8F90.html#ab01a9f78d5379416b21c702586ceeb25", null ],
-    [ "read_lakedata", "lakefrac_8F90.html#a42212ca41cc31b8185941580e198a49c", null ],
-    [ "write_lakedata_to_orodata", "lakefrac_8F90.html#a112a771a17cd632ad6e86df6095fde92", null ],
-    [ "write_reg_lakedata_to_orodata", "lakefrac_8F90.html#a654cc9802a12e781ed1ef9e878ad0390", null ]
+    [ "__lakefrac_f90__", "lakefrac_8F90.html#ac9d5b857aa59d26d03123dc1ff72123b", null ],
+    [ "cal_lake_frac_depth", "lakefrac_8F90.html#a3d79e5119aa120e030a5f545fee900ae", null ],
+    [ "include_exclude_lakes", "lakefrac_8F90.html#a667b6aef35f869f07f433fd77ad80bf5", null ],
+    [ "lake_cell_comp", "lakefrac_8F90.html#a9f307b5a4d39cfb5a208f3f09812b884", null ],
+    [ "nc_opchk", "lakefrac_8F90.html#aa6e381ff1732feee0ffb997032f63fbe", null ],
+    [ "read_cubed_sphere_grid", "lakefrac_8F90.html#aa2388fc7e65995c15ae6c72784dad08a", null ],
+    [ "read_cubed_sphere_reg_grid", "lakefrac_8F90.html#a81a2b9ad6a03f65832a03f1c62d190e6", null ],
+    [ "read_lakedata", "lakefrac_8F90.html#a7fb7914116b61235c4a6b2360f177d44", null ],
+    [ "write_lakedata_to_orodata", "lakefrac_8F90.html#a6f8744eefebf8e77e0ec003bdac2494b", null ],
+    [ "write_reg_lakedata_to_orodata", "lakefrac_8F90.html#ab34777286d905f083528bcb932c3df52", null ]
 ];

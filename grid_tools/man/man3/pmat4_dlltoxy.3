@@ -1,4 +1,4 @@
-.TH "pmat4::dlltoxy" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat4::dlltoxy" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat4::dlltoxy
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ pmat4::dlltoxy
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 84 of file pmat4\&.f90\&.
+Definition at line \fB84\fP of file \fBpmat4\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat4::dlltoxy::dlltoxy_d (real(dp), intent(in) rlat, real(dp), intent(in) drlat, real(dp), intent(in) drlon, real(dp), dimension(2), intent(out) x2)\fC [private]\fP"
+.SS "subroutine pmat4::dlltoxy::dlltoxy_d (real(dp), intent(in) rlat, real(dp), intent(in) drlat, real(dp), intent(in) drlon, real(dp), dimension(2), intent(out) x2)"
 
 .PP
 From a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrlat\fP latitude 
 .br
@@ -39,20 +39,22 @@ From a reference latitude, and increments of latitude and longitude, return the 
 \fIx2\fP output 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 936 of file pmat4\&.f90\&.
-.SS "subroutine pmat4::dlltoxy::dlltoxy_s (real(sp), intent(in) rlat, real(sp), intent(in) drlat, real(sp), intent(in) drlon, real(sp), dimension(2), intent(out) x2)\fC [private]\fP"
+Definition at line \fB935\fP of file \fBpmat4\&.f90\fP\&.
+.PP
+References \fBpietc::u2\fP\&.
+.SS "subroutine pmat4::dlltoxy::dlltoxy_s (real(sp), intent(in) rlat, real(sp), intent(in) drlat, real(sp), intent(in) drlon, real(sp), dimension(2), intent(out) x2)"
 
 .PP
 From a reference latitude, and increments of latitude and longitude, return the local cartesian 2-vector corresponding to the projection of the increment onto the tangent plane of the reference point\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrlat\fP latitude 
 .br
@@ -63,14 +65,14 @@ From a reference latitude, and increments of latitude and longitude, return the 
 \fIx2\fP output 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 916 of file pmat4\&.f90\&.
+Definition at line \fB915\fP of file \fBpmat4\&.f90\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/grdvars.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/grdvars.F90" 3 "Version 1.14.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/grdvars.F90 \- Define and allocate required grid variables\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/grdvars.F90 \- Define and allocate required grid variables\&.  
 
 .SH SYNOPSIS
 .br
@@ -35,9 +35,9 @@
 .br
 .RI "The grid areas of the Ct grid cell in m2\&. "
 .ti -1c
-.RI "integer, dimension(nar), parameter \fBgrdvars::catm\fP = (/48, 96, 192, 384, 768, 1152/)"
+.RI "integer, dimension(:), allocatable \fBgrdvars::catm\fP"
 .br
-.RI "the ATM resolutions for mapped ocean masks "
+.RI "The ATM resolutions for mapped ocean masks\&. "
 .ti -1c
 .RI "logical \fBgrdvars::debug\fP"
 .br
@@ -87,35 +87,35 @@
 .br
 .RI "the i-index for both pole locations along the top-most row "
 .ti -1c
-.RI "integer, dimension(nv) \fBgrdvars::ivertbu\fP"
+.RI "integer, dimension(\fBnv\fP) \fBgrdvars::ivertbu\fP"
 .br
 .RI "The i-offsets of the Ct grid at each Bu(i,j) which determine the 4 vertices of each Bu grid point in i\&. "
 .ti -1c
-.RI "integer, dimension(nv), parameter \fBgrdvars::ivertct\fP = (/0, \-1, \-1, 0/)"
+.RI "integer, dimension(\fBnv\fP), parameter \fBgrdvars::ivertct\fP = (/0, \-1, \-1, 0/)"
 .br
 .RI "The i-offsets of the Bu grid at each Ct(i,j) which determine the 4 vertices of each Ct grid grid point in i\&. "
 .ti -1c
-.RI "integer, dimension(nv) \fBgrdvars::ivertcu\fP"
+.RI "integer, dimension(\fBnv\fP) \fBgrdvars::ivertcu\fP"
 .br
 .RI "The i-offsets of the Cv grid at each Cu(i,j) which determine the 4 vertices of each Cu grid point in i\&. "
 .ti -1c
-.RI "integer, dimension(nv) \fBgrdvars::ivertcv\fP"
+.RI "integer, dimension(\fBnv\fP) \fBgrdvars::ivertcv\fP"
 .br
 .RI "The i-offsets of the Cu grid at each Cv(i,j) which determine the 4 vertices of each Cv grid point in i\&. "
 .ti -1c
-.RI "integer, dimension(nv) \fBgrdvars::jvertbu\fP"
+.RI "integer, dimension(\fBnv\fP) \fBgrdvars::jvertbu\fP"
 .br
 .RI "The j-offsets of the Ct grid at each Bu(i,j) which determine the 4 vertices of each Bu grid point in j\&. "
 .ti -1c
-.RI "integer, dimension(nv), parameter \fBgrdvars::jvertct\fP = (/0, 0, \-1, \-1/)"
+.RI "integer, dimension(\fBnv\fP), parameter \fBgrdvars::jvertct\fP = (/0, 0, \-1, \-1/)"
 .br
 .RI "The j-offsets of the Bu grid at each Ct(i,j) which determine the 4 vertices of each Ct grid point in j\&. "
 .ti -1c
-.RI "integer, dimension(nv) \fBgrdvars::jvertcu\fP"
+.RI "integer, dimension(\fBnv\fP) \fBgrdvars::jvertcu\fP"
 .br
 .RI "The j-offsets of the Cv grid at each Cu(i,j) which determine the 4 vertices of each Cu grid point in j\&. "
 .ti -1c
-.RI "integer, dimension(nv) \fBgrdvars::jvertcv\fP"
+.RI "integer, dimension(\fBnv\fP) \fBgrdvars::jvertcv\fP"
 .br
 .RI "The j-offsets of the Cu grid at each Cv(i,j) which determine the 4 vertices of each Cv grid point in j\&. "
 .ti -1c
@@ -187,6 +187,10 @@
 .br
 .RI "The masking depth for MOM6\&. "
 .ti -1c
+.RI "integer, parameter \fBgrdvars::maxatmres\fP = 10"
+.br
+.RI "The maximum number of possible ATM resolutions\&. "
+.ti -1c
 .RI "real(kind=real_kind), parameter \fBgrdvars::maximum_depth\fP = 6500\&.0"
 .br
 .RI "The maximum depth for MOM6\&. "
@@ -198,10 +202,6 @@
 .RI "real(kind=real_kind), parameter \fBgrdvars::minimum_depth\fP = 9\&.5"
 .br
 .RI "The minimum depth for MOM6\&. "
-.ti -1c
-.RI "integer, parameter \fBgrdvars::nar\fP = 6"
-.br
-.RI "the number of possible ATM resolutions "
 .ti -1c
 .RI "integer, parameter \fBgrdvars::ncoord\fP = 2*4\&."
 .br
@@ -223,7 +223,7 @@
 .br
 .RI "the number of vertices for each stagger location "
 .ti -1c
-.RI "integer, parameter \fBgrdvars::nvars\fP = ncoord + nverts"
+.RI "integer, parameter \fBgrdvars::nvars\fP = \fBncoord\fP + \fBnverts\fP"
 .br
 .RI "the total number of cooridinate variables "
 .ti -1c
@@ -297,14 +297,14 @@ Define and allocate required grid variables\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov
 .RE
 .PP
 This module contains the grid variables 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
@@ -314,19 +314,19 @@ Denise.Worthen@noaa.gov
 Definition in file \fBgrdvars\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine grdvars::allocate_all ()"
+.SS "subroutine grdvars::allocate_all"
 
 .PP
 Allocate grid variables\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise Worthen 
 .RE
 .PP
 
 .PP
-Definition at line 175 of file grdvars\&.F90\&.
+Definition at line \fB175\fP of file \fBgrdvars\&.F90\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::angchk"
@@ -334,409 +334,409 @@ Definition at line 175 of file grdvars\&.F90\&.
 .PP
 The rotation angle on Ct points, as calculated by CICE internally using angle on Bu\&. 
 .PP
-Definition at line 99 of file grdvars\&.F90\&.
+Definition at line \fB99\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::angle"
 
 .PP
 The rotation angle on Bu points\&. 
 .PP
-Definition at line 98 of file grdvars\&.F90\&.
+Definition at line \fB98\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::anglet"
 
 .PP
 The rotation angle on Ct points (opposite sense from angle) 
 .PP
-Definition at line 96 of file grdvars\&.F90\&.
+Definition at line \fB96\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::areact"
 
 .PP
 The grid areas of the Ct grid cell in m2\&. 
 .PP
-Definition at line 95 of file grdvars\&.F90\&.
-.SS "integer, dimension(nar), parameter grdvars::catm = (/48, 96, 192, 384, 768, 1152/)"
+Definition at line \fB95\fP of file \fBgrdvars\&.F90\fP\&.
+.SS "integer, dimension(:), allocatable grdvars::catm"
 
 .PP
-the ATM resolutions for mapped ocean masks 
+The ATM resolutions for mapped ocean masks\&. 
 .PP
-Definition at line 167 of file grdvars\&.F90\&.
+Definition at line \fB168\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "logical grdvars::debug"
 
 .PP
 flag indicating whether grid information should be printed for debugging purposes Default is false 
 .PP
-Definition at line 23 of file grdvars\&.F90\&.
+Definition at line \fB23\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:), allocatable grdvars::dlatbu"
 
 .PP
 The latitude spacing between Bu points at the grid bottom\&. 
 .PP
-Definition at line 134 of file grdvars\&.F90\&.
+Definition at line \fB134\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:), allocatable grdvars::dlatcv"
 
 .PP
 The latitude spacing between Cv points at the grid bottom\&. 
 .PP
-Definition at line 136 of file grdvars\&.F90\&.
+Definition at line \fB136\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "logical grdvars::do_postwgts"
 
 .PP
 flag indicating whether then ESMF weights to regrid from the tripole grid to a rectilinear grid should be generated\&. Default is false\&. 
 .PP
-Definition at line 26 of file grdvars\&.F90\&.
+Definition at line \fB26\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(real_kind), dimension(:,:), allocatable grdvars::dp4"
 
 .PP
 The ocean depth from a MOM6 topog file, stored as real*4 (m) 
 .PP
-Definition at line 144 of file grdvars\&.F90\&.
+Definition at line \fB144\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::dp8"
 
 .PP
 The ocean depth from a MOM6 topog file, stored as real*8 (m) 
 .PP
-Definition at line 146 of file grdvars\&.F90\&.
+Definition at line \fB146\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::dx"
 
 .PP
 The grid cell width in meters of the supergrid in the x-direction (i-dimension) 
 .PP
-Definition at line 71 of file grdvars\&.F90\&.
+Definition at line \fB71\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::dy"
 
 .PP
 The grid cell width in meters of the supergrid in the y-direction (j-dimension) 
 .PP
-Definition at line 73 of file grdvars\&.F90\&.
+Definition at line \fB73\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "logical grdvars::editmask"
 
 .PP
 flag indicating whether the MOM6 land mask should be edited\&. Default is false 
 .PP
-Definition at line 21 of file grdvars\&.F90\&.
+Definition at line \fB21\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::hte"
 
 .PP
 The grid cell width in centimeters of the CICE6 grid in the y-direction (j-dimension) 
 .PP
-Definition at line 156 of file grdvars\&.F90\&.
+Definition at line \fB156\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::htn"
 
 .PP
 The grid cell width in centimeters of the CICE6 grid in the x-direction (i-dimension) 
 .PP
-Definition at line 154 of file grdvars\&.F90\&.
+Definition at line \fB154\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer(int_kind), dimension(2) grdvars::ipole"
 
 .PP
 the i-index for both pole locations along the top-most row 
 .PP
-Definition at line 41 of file grdvars\&.F90\&.
+Definition at line \fB41\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, dimension(nv) grdvars::ivertbu"
 
 .PP
 The i-offsets of the Ct grid at each Bu(i,j) which determine the 4 vertices of each Bu grid point in i\&. 
 .PP
-Definition at line 62 of file grdvars\&.F90\&.
+Definition at line \fB62\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, dimension(nv), parameter grdvars::ivertct = (/0, \-1, \-1, 0/)"
 
 .PP
 The i-offsets of the Bu grid at each Ct(i,j) which determine the 4 vertices of each Ct grid grid point in i\&. 
 .PP
-Definition at line 44 of file grdvars\&.F90\&.
+Definition at line \fB44\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, dimension(nv) grdvars::ivertcu"
 
 .PP
 The i-offsets of the Cv grid at each Cu(i,j) which determine the 4 vertices of each Cu grid point in i\&. 
 .PP
-Definition at line 56 of file grdvars\&.F90\&.
+Definition at line \fB56\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, dimension(nv) grdvars::ivertcv"
 
 .PP
 The i-offsets of the Cu grid at each Cv(i,j) which determine the 4 vertices of each Cv grid point in i\&. 
 .PP
-Definition at line 50 of file grdvars\&.F90\&.
+Definition at line \fB50\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, dimension(nv) grdvars::jvertbu"
 
 .PP
 The j-offsets of the Ct grid at each Bu(i,j) which determine the 4 vertices of each Bu grid point in j\&. 
 .PP
-Definition at line 65 of file grdvars\&.F90\&.
+Definition at line \fB65\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, dimension(nv), parameter grdvars::jvertct = (/0, 0, \-1, \-1/)"
 
 .PP
 The j-offsets of the Bu grid at each Ct(i,j) which determine the 4 vertices of each Ct grid point in j\&. 
 .PP
-Definition at line 47 of file grdvars\&.F90\&.
+Definition at line \fB47\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, dimension(nv) grdvars::jvertcu"
 
 .PP
 The j-offsets of the Cv grid at each Cu(i,j) which determine the 4 vertices of each Cu grid point in j\&. 
 .PP
-Definition at line 59 of file grdvars\&.F90\&.
+Definition at line \fB59\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, dimension(nv) grdvars::jvertcv"
 
 .PP
 The j-offsets of the Cu grid at each Cv(i,j) which determine the 4 vertices of each Cv grid point in j\&. 
 .PP
-Definition at line 53 of file grdvars\&.F90\&.
+Definition at line \fB53\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::latbu"
 
 .PP
 The latitude of the corner points on the C-grid\&. These are equivalent to u,v velocity grid points on the B-grid 
 .PP
-Definition at line 89 of file grdvars\&.F90\&.
+Definition at line \fB89\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:,:), allocatable grdvars::latbu_vert"
 
 .PP
 The latitudes of the 4 vertices of each Bu grid point\&. 
 .PP
-Definition at line 117 of file grdvars\&.F90\&.
+Definition at line \fB117\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::latct"
 
 .PP
 The latitude of the center (tracer) grid points on the C-grid\&. 
 .PP
-Definition at line 77 of file grdvars\&.F90\&.
+Definition at line \fB77\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:,:), allocatable grdvars::latct_vert"
 
 .PP
 The latitudes of the 4 vertices of each Ct grid point\&. 
 .PP
-Definition at line 102 of file grdvars\&.F90\&.
+Definition at line \fB102\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::latcu"
 
 .PP
 The latitude of the u-velocity grid points on the C-grid\&. 
 .PP
-Definition at line 85 of file grdvars\&.F90\&.
+Definition at line \fB85\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:,:), allocatable grdvars::latcu_vert"
 
 .PP
 The latitudes of the 4 vertices of each Cu grid point\&. 
 .PP
-Definition at line 112 of file grdvars\&.F90\&.
+Definition at line \fB112\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::latcv"
 
 .PP
 The latitude of the v-velocity grid points on the C-grid\&. 
 .PP
-Definition at line 81 of file grdvars\&.F90\&.
+Definition at line \fB81\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:,:), allocatable grdvars::latcv_vert"
 
 .PP
 The latitudes of the 4 vertices of each Cv grid point\&. 
 .PP
-Definition at line 107 of file grdvars\&.F90\&.
+Definition at line \fB107\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::lonbu"
 
 .PP
 The longitude of the corner points on the C-grid\&. These are equivalent to u,v velocity grid points on the B-grid 
 .PP
-Definition at line 92 of file grdvars\&.F90\&.
+Definition at line \fB92\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:,:), allocatable grdvars::lonbu_vert"
 
 .PP
 The longitudes of the 4 vertices of each Bu grid point\&. 
 .PP
-Definition at line 119 of file grdvars\&.F90\&.
+Definition at line \fB119\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::lonct"
 
 .PP
 The longitude of the center (tracer) grid points on the C-grid\&. 
 .PP
-Definition at line 79 of file grdvars\&.F90\&.
+Definition at line \fB79\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:,:), allocatable grdvars::lonct_vert"
 
 .PP
 The longitudes of the 4 vertices of each Ct grid point\&. 
 .PP
-Definition at line 104 of file grdvars\&.F90\&.
+Definition at line \fB104\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::loncu"
 
 .PP
 The longitude of the u-velocity grid points on the C-grid\&. 
 .PP
-Definition at line 87 of file grdvars\&.F90\&.
+Definition at line \fB87\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:,:), allocatable grdvars::loncu_vert"
 
 .PP
 The longitudes of the 4 vertices of each Cu grid point\&. 
 .PP
-Definition at line 114 of file grdvars\&.F90\&.
+Definition at line \fB114\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::loncv"
 
 .PP
 The longitude of the v-velocity grid points on the C-grid\&. 
 .PP
-Definition at line 83 of file grdvars\&.F90\&.
+Definition at line \fB83\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:,:), allocatable grdvars::loncv_vert"
 
 .PP
 The longitudes of the 4 vertices of each Cv grid point\&. 
 .PP
-Definition at line 109 of file grdvars\&.F90\&.
+Definition at line \fB109\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(kind=real_kind), parameter grdvars::masking_depth = 0\&.0"
 
 .PP
 The masking depth for MOM6\&. Depths shallower than minimum_depth but deeper than masking_depth are rounded to minimum_depth 
 .PP
-Definition at line 161 of file grdvars\&.F90\&.
+Definition at line \fB161\fP of file \fBgrdvars\&.F90\fP\&.
+.SS "integer, parameter grdvars::maxatmres = 10"
+
+.PP
+The maximum number of possible ATM resolutions\&. 
+.PP
+Definition at line \fB167\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(kind=real_kind), parameter grdvars::maximum_depth = 6500\&.0"
 
 .PP
 The maximum depth for MOM6\&. 
 .PP
-Definition at line 160 of file grdvars\&.F90\&.
+Definition at line \fB160\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(kind=real_kind), parameter grdvars::maximum_lat = 88\&.0"
 
 .PP
 The maximum latitude for water points for WW3\&. 
 .PP
-Definition at line 164 of file grdvars\&.F90\&.
+Definition at line \fB164\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(kind=real_kind), parameter grdvars::minimum_depth = 9\&.5"
 
 .PP
 The minimum depth for MOM6\&. 
 .PP
-Definition at line 159 of file grdvars\&.F90\&.
-.SS "integer, parameter grdvars::nar = 6"
-
-.PP
-the number of possible ATM resolutions 
-.PP
-Definition at line 166 of file grdvars\&.F90\&.
+Definition at line \fB159\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, parameter grdvars::ncoord = 2*4\&."
 
 .PP
 the number of coord pairs (lat,lon) for each of 4 stagger locations 
 .PP
-Definition at line 32 of file grdvars\&.F90\&.
+Definition at line \fB32\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer grdvars::ni"
 
 .PP
 i-dimension of output grid 
 .PP
-Definition at line 14 of file grdvars\&.F90\&.
+Definition at line \fB14\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer grdvars::nj"
 
 .PP
 j-dimension of output grid 
 .PP
-Definition at line 15 of file grdvars\&.F90\&.
+Definition at line \fB15\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer grdvars::npx"
 
 .PP
 i or j-dimension of fv3 tile 
 .PP
-Definition at line 16 of file grdvars\&.F90\&.
+Definition at line \fB16\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, parameter grdvars::nv = 4\&."
 
 .PP
 the number of vertices for each stagger location 
 .PP
-Definition at line 31 of file grdvars\&.F90\&.
+Definition at line \fB31\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, parameter grdvars::nvars = ncoord + nverts"
 
 .PP
 the total number of cooridinate variables 
 .PP
-Definition at line 36 of file grdvars\&.F90\&.
+Definition at line \fB36\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer, parameter grdvars::nverts = 2*4\&."
 
 .PP
 the number of coord pairs (lat,lon) for the vertices of each stagger location 
 .PP
-Definition at line 34 of file grdvars\&.F90\&.
+Definition at line \fB34\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer grdvars::nx"
 
 .PP
 i-dimension of MOM6 supergrid 
 .PP
-Definition at line 18 of file grdvars\&.F90\&.
+Definition at line \fB18\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "integer grdvars::ny"
 
 .PP
 j-dimension of MOM6 supergrid 
 .PP
-Definition at line 19 of file grdvars\&.F90\&.
+Definition at line \fB19\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "logical grdvars::roottask"
 
 .PP
 flag indicating whether this is the roottask 
 .PP
-Definition at line 29 of file grdvars\&.F90\&.
+Definition at line \fB29\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind) grdvars::sg_maxlat"
 
 .PP
 the maximum latitute present in the supergrid file 
 .PP
-Definition at line 39 of file grdvars\&.F90\&.
+Definition at line \fB39\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::ulat"
 
 .PP
 The latitude points (on the Bu grid) for CICE6 (radians) 
 .PP
-Definition at line 152 of file grdvars\&.F90\&.
+Definition at line \fB152\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::ulon"
 
 .PP
 The longitude points (on the Bu grid) for CICE6 (radians) 
 .PP
-Definition at line 150 of file grdvars\&.F90\&.
+Definition at line \fB150\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(real_kind), dimension(:,:), allocatable grdvars::wet4"
 
 .PP
 The ocean mask from a MOM6 mask file, stored as real*4 (nd) 
 .PP
-Definition at line 139 of file grdvars\&.F90\&.
+Definition at line \fB139\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::wet8"
 
 .PP
 The ocean mask from a MOM6 mask file, stored as real*8 (nd) 
 .PP
-Definition at line 141 of file grdvars\&.F90\&.
+Definition at line \fB141\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::x"
 
 .PP
 The longitudes of the MOM6 supergrid\&. 
 .PP
-Definition at line 69 of file grdvars\&.F90\&.
+Definition at line \fB69\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:), allocatable grdvars::xangct"
 
 .PP
 The rotation angle on the Ct grid points on the opposite side of the tripole seam\&. 
 .PP
-Definition at line 127 of file grdvars\&.F90\&.
+Definition at line \fB127\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:), allocatable grdvars::xlatct"
 
 .PP
 The latitude of the Ct grid points on the opposite side of the tripole seam\&. 
 .PP
-Definition at line 125 of file grdvars\&.F90\&.
+Definition at line \fB125\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:), allocatable grdvars::xlatcu"
 
 .PP
 The latitude of the Cu grid points on the opposite side of the tripole seam\&. 
 .PP
-Definition at line 132 of file grdvars\&.F90\&.
+Definition at line \fB132\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:), allocatable grdvars::xlonct"
 
 .PP
 The longitude of the Ct grid points on the opposite side of the tripole seam\&. 
 .PP
-Definition at line 123 of file grdvars\&.F90\&.
+Definition at line \fB123\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:), allocatable grdvars::xloncu"
 
 .PP
 The longitude of the Cu grid points on the opposite side of the tripole seam\&. 
 .PP
-Definition at line 130 of file grdvars\&.F90\&.
+Definition at line \fB130\fP of file \fBgrdvars\&.F90\fP\&.
 .SS "real(dbl_kind), dimension(:,:), allocatable grdvars::y"
 
 .PP
 The latitudes of the MOM6 supergrid\&. 
 .PP
-Definition at line 70 of file grdvars\&.F90\&.
+Definition at line \fB70\fP of file \fBgrdvars\&.F90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/vartypedefs.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/vartypedefs.F90" 3 "Version 1.14.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/vartypedefs.F90 \- Define the variables for output\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/vartypedefs.F90 \- Define the variables for output\&.  
 
 .SH SYNOPSIS
 .br
@@ -34,11 +34,11 @@
 
 .in +1c
 .ti -1c
-.RI "type(vardefs), dimension(maxvars) \fBvartypedefs::cicevars\fP"
+.RI "type(\fBvardefs\fP), dimension(\fBmaxvars\fP) \fBvartypedefs::cicevars\fP"
 .br
 .RI "Attribute definitions for the variables written to the CICE grid file\&. "
 .ti -1c
-.RI "type(vardefs), dimension(maxvars) \fBvartypedefs::fixvars\fP"
+.RI "type(\fBvardefs\fP), dimension(\fBmaxvars\fP) \fBvartypedefs::fixvars\fP"
 .br
 .RI "Attribute definitions for the variables written to the main tripole file\&. "
 .ti -1c
@@ -46,7 +46,7 @@
 .br
 .RI "The maximum number of variables written to a file\&. "
 .ti -1c
-.RI "type(vardefs), dimension(maxvars) \fBvartypedefs::scripvars\fP"
+.RI "type(\fBvardefs\fP), dimension(\fBmaxvars\fP) \fBvartypedefs::scripvars\fP"
 .br
 .RI "Attribute definitions for the variables written to any SCRIP file\&. "
 .in -1c
@@ -56,14 +56,14 @@ Define the variables for output\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov
 .RE
 .PP
 This module defines the attributes for variables written to the tripole, cice and scrip grid files 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
@@ -73,45 +73,45 @@ Denise.Worthen@noaa.gov
 Definition in file \fBvartypedefs\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine vartypedefs::cicevars_typedefine ()"
+.SS "subroutine vartypedefs::cicevars_typedefine"
 
 .PP
 Define the variables written to the CICE grid file\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 137 of file vartypedefs\&.F90\&.
-.SS "subroutine vartypedefs::fixvars_typedefine ()"
+Definition at line \fB136\fP of file \fBvartypedefs\&.F90\fP\&.
+.SS "subroutine vartypedefs::fixvars_typedefine"
 
 .PP
 Define the variables written to the tripole grid file\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 35 of file vartypedefs\&.F90\&.
-.SS "subroutine vartypedefs::scripvars_typedefine ()"
+Definition at line \fB34\fP of file \fBvartypedefs\&.F90\fP\&.
+.SS "subroutine vartypedefs::scripvars_typedefine"
 
 .PP
 Define the variables written to any SCRIP grid file\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 182 of file vartypedefs\&.F90\&.
+Definition at line \fB181\fP of file \fBvartypedefs\&.F90\fP\&.
 .SH "Variable Documentation"
 .PP 
 .SS "type(vardefs), dimension(maxvars) vartypedefs::cicevars"
@@ -119,25 +119,25 @@ Definition at line 182 of file vartypedefs\&.F90\&.
 .PP
 Attribute definitions for the variables written to the CICE grid file\&. 
 .PP
-Definition at line 25 of file vartypedefs\&.F90\&.
+Definition at line \fB25\fP of file \fBvartypedefs\&.F90\fP\&.
 .SS "type(vardefs), dimension(maxvars) vartypedefs::fixvars"
 
 .PP
 Attribute definitions for the variables written to the main tripole file\&. 
 .PP
-Definition at line 24 of file vartypedefs\&.F90\&.
+Definition at line \fB24\fP of file \fBvartypedefs\&.F90\fP\&.
 .SS "integer, parameter vartypedefs::maxvars = 20"
 
 .PP
 The maximum number of variables written to a file\&. 
 .PP
-Definition at line 14 of file vartypedefs\&.F90\&.
+Definition at line \fB14\fP of file \fBvartypedefs\&.F90\fP\&.
 .SS "type(vardefs), dimension(maxvars) vartypedefs::scripvars"
 
 .PP
 Attribute definitions for the variables written to any SCRIP file\&. 
 .PP
-Definition at line 26 of file vartypedefs\&.F90\&.
+Definition at line \fB26\fP of file \fBvartypedefs\&.F90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

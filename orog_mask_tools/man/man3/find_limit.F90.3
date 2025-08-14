@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/lake.fd/find_limit.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "orog_mask_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/orog_mask_tools.fd/lake.fd/find_limit.F90" 3 "Version 1.14.0" "orog_mask_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/orog_mask_tools.fd/lake.fd/find_limit.F90 \- Geo-reference utilities for a cubed-sphere grid\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/orog_mask_tools.fd/lake.fd/find_limit.F90 \- Geo-reference utilities for a cubed-sphere grid\&.  
 
 .SH SYNOPSIS
 .br
@@ -25,7 +25,7 @@ Geo-reference utilities for a cubed-sphere grid\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Ning Wang 
 .RE
@@ -40,7 +40,7 @@ Definition in file \fBfind_limit\&.F90\fP\&.
 .PP
 Given two points on a cubed-sphere grid, compute the maximum and minimum latitudinal extent of the resulting great circle\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIp1_in\fP Latitude and longitude of point 1\&. 
 .br
@@ -51,18 +51,18 @@ Given two points on a cubed-sphere grid, compute the maximum and minimum latitud
 \fIlatmax\fP Maximum latitudinal extent\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Ning Wang 
 .RE
 .PP
 
 .PP
-Definition at line 16 of file find_limit\&.F90\&.
+Definition at line \fB15\fP of file \fBfind_limit\&.F90\fP\&.
 .PP
-References middle()\&.
+References \fBmiddle()\fP\&.
 .PP
-Referenced by cal_lake_frac_depth()\&.
+Referenced by \fBcal_lake_frac_depth()\fP\&.
 .SS "subroutine middle (real*8, dimension(2), intent(in) p1, real*8, dimension(2), intent(in) p2, real*8, dimension(2), intent(out) p)"
 
 .PP
@@ -72,18 +72,18 @@ One derived from a more general m-sect formula:
 .PP
 .nf
 
-  xyz = sin((1-f)*theta) / sin(theta) * xyz1 +
-        sin(f*theta) /sin(theta) * xyz2 ;
-  where theta is the angle of xyz1, and xyz2\&.
-  
+      xyz = sin((1-f)*theta) / sin(theta) * xyz1 +
+            sin(f*theta) /sin(theta) * xyz2 ;
+      where theta is the angle of xyz1, and xyz2\&.
+      
 .fi
 .PP
 .PP
 .PP
 .nf
 
-  xyz = 0\&.5 / sqrt[(1+dot(xyz1,xyz2))/2] * (xyz1+xyz2)
-  
+      xyz = 0\&.5 / sqrt[(1+dot(xyz1,xyz2))/2] * (xyz1+xyz2)
+      
 .fi
 .PP
 .PP
@@ -92,12 +92,12 @@ and the other one is the normalized middle point of the two end points:
 .PP
 .nf
 
-  xyz = 0\&.5 * (xyz1+xyz2), xyz = xyz / sqrt(dot(xyz,xyz))
-  
+      xyz = 0\&.5 * (xyz1+xyz2), xyz = xyz / sqrt(dot(xyz,xyz))
+      
 .fi
 .PP
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIp1\fP Latitude/longitude of first end point\&. 
 .br
@@ -106,21 +106,21 @@ and the other one is the normalized middle point of the two end points:
 \fIp\fP Latitude/longitude of the mid-point\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Ning Wang 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 March, 2006 
 .RE
 .PP
 
 .PP
-Definition at line 80 of file find_limit\&.F90\&.
+Definition at line \fB79\fP of file \fBfind_limit\&.F90\fP\&.
 .PP
-Referenced by find_limit()\&.
+Referenced by \fBfind_limit()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for orog_mask_tools from the source code\&.

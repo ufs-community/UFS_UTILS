@@ -1,4 +1,4 @@
-.TH "pmat2::ltdlbv" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::ltdlbv" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat2::ltdlbv
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ pmat2::ltdlbv
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 68 of file pmat2\&.f90\&.
+Definition at line \fB68\fP of file \fBpmat2\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::ltdlbv::ltdlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(sp), dimension(m,\-mah1:0), intent(in) a, real(sp), dimension(m), intent(inout) v)\fC [private]\fP"
+.SS "subroutine pmat2::ltdlbv::ltdlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(sp), dimension(m,\-mah1:0), intent(in) a, real(sp), dimension(m), intent(inout) v)"
 
 .PP
 Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm\fP the number of rows assumed for A and for V 
 .br
@@ -39,27 +39,27 @@ Like udlbv, except assuming a is the ldlt decomposition of a SYMMETRIC banded ma
 \fIv\fP input as right-hand-side vector, output as solution vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 950 of file pmat2\&.f90\&.
+Definition at line \fB949\fP of file \fBpmat2\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::ltdlbv::dltdlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(dp), dimension(m,\-mah1:0), intent(in) a, real(dp), dimension(m), intent(inout) v)\fC [private]\fP"
+.SS "subroutine pmat2::ltdlbv::dltdlbv (integer(spi), intent(in) m, integer(spi), intent(in) mah1, real(dp), dimension(m,\-mah1:0), intent(in) a, real(dp), dimension(m), intent(inout) v)"
 
 .PP
 Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded matrix, with only the non-upper part provided (to avoid redundancy) 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm\fP the number of rows assumed for A and for V 
 .br
@@ -70,19 +70,19 @@ Like udlbv, except assuming a is the ltdl decomposition of a SYMMETRIC banded ma
 \fIv\fP input as right-hand-side vector, output as solution vector 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 980 of file pmat2\&.f90\&.
+Definition at line \fB979\fP of file \fBpmat2\&.f90\fP\&.
 
 .SH "Author"
 .PP 

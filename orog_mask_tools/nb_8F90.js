@@ -1,7 +1,7 @@
 var nb_8F90 =
 [
-    [ "nb_gp_idx", "structcs__nb_1_1nb__gp__idx.html", "structcs__nb_1_1nb__gp__idx" ],
-    [ "nb_tile_idx", "structcs__nb_1_1nb__tile__idx.html", "structcs__nb_1_1nb__tile__idx" ],
+    [ "cs_nb::nb_gp_idx", "structcs__nb_1_1nb__gp__idx.html", "structcs__nb_1_1nb__gp__idx" ],
+    [ "cs_nb::nb_tile_idx", "structcs__nb_1_1nb__tile__idx.html", "structcs__nb_1_1nb__tile__idx" ],
     [ "bndry", "nb_8F90.html#a7af27e607c043a485adf2649e56d66a9", null ],
     [ "bndry_reg", "nb_8F90.html#a99e73c2554abae50e5ed72d37368459c", null ],
     [ "idx_init", "nb_8F90.html#aaae14862ca35fcdae38da182a23a27e7", null ],

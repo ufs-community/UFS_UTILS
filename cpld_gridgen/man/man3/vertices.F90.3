@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/vertices.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/vertices.F90" 3 "Version 1.14.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/vertices.F90 \- Fill the vertices for any stagger location\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/vertices.F90 \- Fill the vertices for any stagger location\&.  
 
 .SH SYNOPSIS
 .br
@@ -11,15 +11,15 @@
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBvertices::fill_bottom\fP (iVert, jVert, lat, lon, latvert, lonvert, dlat)"
+.RI "subroutine \fBvertices::fill_bottom\fP (ivert, jvert, lat, lon, latvert, lonvert, dlat)"
 .br
 .RI "Fill the vertices for a stagger location along the bottom j-row\&. "
 .ti -1c
-.RI "subroutine \fBvertices::fill_top\fP (iVert, jVert, lat, lon, latvert, lonvert, xlat, xlon)"
+.RI "subroutine \fBvertices::fill_top\fP (ivert, jvert, lat, lon, latvert, lonvert, xlat, xlon)"
 .br
 .RI "Fill the vertices for a stagger location along the top j-row\&. "
 .ti -1c
-.RI "subroutine \fBvertices::fill_vertices\fP (jbeg, jend, iVert, jVert, lat, lon, latvert, lonvert)"
+.RI "subroutine \fBvertices::fill_vertices\fP (jbeg, jend, ivert, jvert, lat, lon, latvert, lonvert)"
 .br
 .RI "Fill the vertices for any stagger location between bounding j-rows\&. "
 .in -1c
@@ -29,14 +29,14 @@ Fill the vertices for any stagger location\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov
 .RE
 .PP
 This module fills the vertices for any stagger location\&. The i,j indices of the source lat and lon arrays are modified by the vertex offsets to give the latitudes and longitues of each vertex for the desired stagger lcation\&. The routine fill_vertices will fill the vertex values of all non-boundary rows for any stagger locations\&. For the Ct and Cu grids, the fill_bottom routine fills the bottom most vertex values\&. For the Cv and Bu grids, the routine fill_top fills the topmost vertex values using the values from across the tripole seam\&. 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
@@ -46,12 +46,12 @@ Denise.Worthen@noaa.gov
 Definition in file \fBvertices\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine vertices::fill_bottom (integer, dimension(nv), intent(in) iVert, integer, dimension(nv), intent(in) jVert, real(dbl_kind), dimension(ni,nj), intent(in) lat, real(dbl_kind), dimension(ni,nj), intent(in) lon, real(dbl_kind), dimension(ni,nj,nv), intent(out) latvert, real(dbl_kind), dimension(ni,nj,nv), intent(out) lonvert, real(dbl_kind), dimension(ni), intent(in) dlat)"
+.SS "subroutine vertices::fill_bottom (integer, dimension(nv), intent(in) ivert, integer, dimension(nv), intent(in) jvert, real(dbl_kind), dimension(ni,nj), intent(in) lat, real(dbl_kind), dimension(ni,nj), intent(in) lon, real(dbl_kind), dimension(ni,nj,nv), intent(out) latvert, real(dbl_kind), dimension(ni,nj,nv), intent(out) lonvert, real(dbl_kind), dimension(ni), intent(in) dlat)"
 
 .PP
 Fill the vertices for a stagger location along the bottom j-row\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiVert\fP the i-offset applied to the i-index of a stagger grid 
 .br
@@ -68,20 +68,20 @@ Fill the vertices for a stagger location along the bottom j-row\&.
 \fIlonvert\fP the longitudes of each vertex 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 69 of file vertices\&.F90\&.
-.SS "subroutine vertices::fill_top (integer, dimension(nv), intent(in) iVert, integer, dimension(nv), intent(in) jVert, real(dbl_kind), dimension(ni,nj), intent(in) lat, real(dbl_kind), dimension(ni,nj), intent(in) lon, real(dbl_kind), dimension(ni,nj,nv), intent(out) latvert, real(dbl_kind), dimension(ni,nj,nv), intent(out) lonvert, real(dbl_kind), dimension(ni), intent(in) xlat, real(dbl_kind), dimension(ni), intent(in) xlon)"
+Definition at line \fB68\fP of file \fBvertices\&.F90\fP\&.
+.SS "subroutine vertices::fill_top (integer, dimension(nv), intent(in) ivert, integer, dimension(nv), intent(in) jvert, real(dbl_kind), dimension(ni,nj), intent(in) lat, real(dbl_kind), dimension(ni,nj), intent(in) lon, real(dbl_kind), dimension(ni,nj,nv), intent(out) latvert, real(dbl_kind), dimension(ni,nj,nv), intent(out) lonvert, real(dbl_kind), dimension(ni), intent(in) xlat, real(dbl_kind), dimension(ni), intent(in) xlon)"
 
 .PP
 Fill the vertices for a stagger location along the top j-row\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiVert\fP the i-offset applied to the i-index of a stagger grid 
 .br
@@ -100,20 +100,20 @@ Fill the vertices for a stagger location along the top j-row\&.
 \fIlonvert\fP the longitudes of each vertex 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 115 of file vertices\&.F90\&.
-.SS "subroutine vertices::fill_vertices (integer, intent(in) jbeg, integer, intent(in) jend, integer, dimension(nv), intent(in) iVert, integer, dimension(nv), intent(in) jVert, real(dbl_kind), dimension(ni,nj), intent(in) lat, real(dbl_kind), dimension(ni,nj), intent(in) lon, real(dbl_kind), dimension(ni,nj,nv), intent(out) latvert, real(dbl_kind), dimension(ni,nj,nv), intent(out) lonvert)"
+Definition at line \fB114\fP of file \fBvertices\&.F90\fP\&.
+.SS "subroutine vertices::fill_vertices (integer, intent(in) jbeg, integer, intent(in) jend, integer, dimension(nv), intent(in) ivert, integer, dimension(nv), intent(in) jvert, real(dbl_kind), dimension(ni,nj), intent(in) lat, real(dbl_kind), dimension(ni,nj), intent(in) lon, real(dbl_kind), dimension(ni,nj,nv), intent(out) latvert, real(dbl_kind), dimension(ni,nj,nv), intent(out) lonvert)"
 
 .PP
 Fill the vertices for any stagger location between bounding j-rows\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIjbeg\fP the beginning row 
 .br
@@ -132,14 +132,14 @@ Fill the vertices for any stagger location between bounding j-rows\&.
 \fIlonvert\fP the longitudes of each vertex 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 34 of file vertices\&.F90\&.
+Definition at line \fB33\fP of file \fBvertices\&.F90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

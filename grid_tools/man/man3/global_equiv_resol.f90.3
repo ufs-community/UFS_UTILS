@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/global_equiv_resol.fd/global_equiv_resol.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/global_equiv_resol.fd/global_equiv_resol.f90" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/global_equiv_resol.fd/global_equiv_resol.f90 \- Compute the global equivalent resolution for regional grids\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/global_equiv_resol.fd/global_equiv_resol.f90 \- Compute the global equivalent resolution for regional grids\&.  
 
 .SH SYNOPSIS
 .br
@@ -25,7 +25,7 @@ Compute the global equivalent resolution for regional grids\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Gerard Ketefian NOAA/GSL 
 .RE
@@ -40,20 +40,20 @@ Definition in file \fBglobal_equiv_resol\&.f90\fP\&.
 .PP
 Check results of netCDF call\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIstatus\fP return code to check 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Gerard Ketefian NOAA/GSL 
 .RE
 .PP
 
 .PP
-Definition at line 193 of file global_equiv_resol\&.f90\&.
-.SS "program global_equiv_resol ()"
+Definition at line \fB192\fP of file \fBglobal_equiv_resol\&.f90\fP\&.
+.SS "program global_equiv_resol"
 
 .PP
 Compute the global equivalent resolution for regional grids using the average model grid cell size in meters squared\&. 
@@ -67,21 +67,21 @@ Using the average cell size the equivalent global resolution is:
 CRES = NINT((2*PI*RADIUS_OF_EARTH)/(4*AVG_CELL_SIZE)
 .PP
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Gerard Ketefian NOAA/GSL 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 0 for success, error code otherwise 
 .RE
 .PP
 
 .PP
-Definition at line 16 of file global_equiv_resol\&.f90\&.
+Definition at line \fB16\fP of file \fBglobal_equiv_resol\&.f90\fP\&.
 .PP
-References check()\&.
+References \fBcheck()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

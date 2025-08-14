@@ -1,4 +1,4 @@
-.TH "pesg::xmtoxc_ak" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::xmtoxc_ak" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pesg::xmtoxc_ak
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -24,15 +24,15 @@ pesg::xmtoxc_ak
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 34 of file pesg\&.f90\&.
+Definition at line \fB34\fP of file \fBpesg\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::xmtoxc_ak::xmtoxc_ak (real(dp), intent(in) a, real(dp), intent(in) k, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xmtoxc_ak::xmtoxc_ak (real(dp), intent(in) a, real(dp), intent(in) k, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)"
 
 .PP
 Assuming the A-K parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, jacobian matrix, xcd\&. If for any reason the mapping cannot be done, return a raised failure flag, FF\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP ESG mapping parameter for line spacing profile 
 .br
@@ -47,22 +47,22 @@ Assuming the A-K parameterization of the Extended Schmidt-transformed Gnomonic (
 \fIff\fP Failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 440 of file pesg\&.f90\&.
+Definition at line \fB439\fP of file \fBpesg\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::xmtoxc_ak::xmtoxc_vak (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xmtoxc_ak::xmtoxc_vak (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, logical, intent(out) ff)"
 
 .PP
 Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnomonic (ESG) mapping with parameter vector, and given a map-space 2-vector, xm, find the corresponding cartesian unit 3-vector and its derivative wrt xm, the Jacobian matrix, xcd\&. If for any reason the mapping cannot be done, return a raised failure flag,z FF\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIak\fP 2-vector parameterization of the ESG mapping 
 .br
@@ -75,20 +75,20 @@ Assuming the vector AK parameterization of the Extended Schmidt-transformed Gnom
 \fIff\fP Failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 381 of file pesg\&.f90\&.
-.SS "subroutine pesg::xmtoxc_ak::xmtoxc_vak1 (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, real(dp), dimension(3,2), intent(out) xc1, real(dp), dimension(3,2,2), intent(out) xcd1, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB380\fP of file \fBpesg\&.f90\fP\&.
+.SS "subroutine pesg::xmtoxc_ak::xmtoxc_vak1 (real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) xm, real(dp), dimension(3), intent(out) xc, real(dp), dimension(3,2), intent(out) xcd, real(dp), dimension(3,2), intent(out) xc1, real(dp), dimension(3,2,2), intent(out) xcd1, logical, intent(out) ff)"
 
 .PP
 Like xmtoxc_vak, _ak, but also return derivatives wrt ak\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIak\fP 2-vector parameterization of the ESG mapping 
 .br
@@ -105,14 +105,16 @@ Like xmtoxc_vak, _ak, but also return derivatives wrt ak\&.
 \fIff\fP Failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 400 of file pesg\&.f90\&.
+Definition at line \fB399\fP of file \fBpesg\&.f90\fP\&.
+.PP
+References \fBpesg::xmtoxt1()\fP, and \fBpesg::xttoxs1()\fP\&.
 
 .SH "Author"
 .PP 

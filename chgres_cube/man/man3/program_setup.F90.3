@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/program_setup.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/program_setup.F90" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/program_setup.F90 \- Set up program execution\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/program_setup.F90 \- Set up program execution\&.  
 
 .SH SYNOPSIS
 .br
@@ -247,11 +247,11 @@
 .br
 .RI "Path/name to the Thompson MP climatology file\&. "
 .ti -1c
-.RI "character(len=20), dimension(max_tracers), public \fBprogram_setup::tracers\fP ='NULL'"
+.RI "character(len=20), dimension(\fBmax_tracers\fP), public \fBprogram_setup::tracers\fP ='NULL'"
 .br
 .RI "Name of each atmos tracer to be processed\&. "
 .ti -1c
-.RI "character(len=20), dimension(max_tracers), public \fBprogram_setup::tracers_input\fP ='NULL'"
+.RI "character(len=20), dimension(\fBmax_tracers\fP), public \fBprogram_setup::tracers_input\fP ='NULL'"
 .br
 .RI "Name of each atmos tracer record in the input file\&. "
 .ti -1c
@@ -297,7 +297,7 @@ Set up program execution\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE

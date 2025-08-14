@@ -1,4 +1,4 @@
-.TH "psym2::invsym2" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "psym2::invsym2" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ psym2::invsym2
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,32 +20,32 @@ psym2::invsym2
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 22 of file psym2\&.f90\&.
+Definition at line \fB22\fP of file \fBpsym2\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine psym2::invsym2::invsym2 (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) z)\fC [private]\fP"
+.SS "subroutine psym2::invsym2::invsym2 (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) z)"
 
 .PP
 Get the inverse of a 2*2 matrix (need not be symmetric in this case)\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIem\fP 2*2 matrix 
 .br
 \fIz\fP inverse of a 2*2 matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 112 of file psym2\&.f90\&.
+Definition at line \fB111\fP of file \fBpsym2\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine psym2::invsym2::invsym2d (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+.SS "subroutine psym2::invsym2::invsym2d (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)"
 
 .PP
 Get the inverse, z,of a 2*2 symmetric matrix, em, and its derivative, zd, with respect to symmetric variations of its components\&. I\&.e\&., for a symmetric infinitesimal change, delta_em, in em, the resulting infinitesimal change in z would be: 
@@ -55,7 +55,7 @@ delta_z(i,j) = matmul(zd(i,j,:,:),delta_em)
 .fi
 .PP
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIem\fP 2*2 symmetric matrix 
 .br
@@ -64,14 +64,14 @@ delta_z(i,j) = matmul(zd(i,j,:,:),delta_em)
 \fIzd\fP derivative of the 2*2 symmetric matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 132 of file psym2\&.f90\&.
+Definition at line \fB131\fP of file \fBpsym2\&.f90\fP\&.
 
 .SH "Author"
 .PP 

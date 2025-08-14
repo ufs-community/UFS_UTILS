@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/kinds.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "fvcom_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/fvcom_tools.fd/kinds.f90" 3 "Version 1.14.0" "fvcom_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/fvcom_tools.fd/kinds.f90 \- Hold specification kinds for variable declaration\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/fvcom_tools.fd/kinds.f90 \- Hold specification kinds for variable declaration\&.  
 
 .SH SYNOPSIS
 .br
@@ -19,7 +19,7 @@
 
 .in +1c
 .ti -1c
-.RI "real(r_kind), parameter, public \fBkinds::drmissing\fP =\-99999\&.0"
+.RI "real(\fBr_kind\fP), parameter, public \fBkinds::drmissing\fP =\-99999\&.0"
 .br
 .RI "Fill value for double real missing data\&. "
 .ti -1c
@@ -35,7 +35,7 @@
 .br
 .RI "generic specification kind for default short\&. "
 .ti -1c
-.RI "real(i_kind), parameter, public \fBkinds::imissing\fP =\-99999"
+.RI "real(\fBi_kind\fP), parameter, public \fBkinds::imissing\fP =\-99999"
 .br
 .RI "Fill value for integer missing data\&. "
 .ti -1c
@@ -51,7 +51,7 @@
 .br
 .RI "specification kind for single precision (4-byte) real variable\&. "
 .ti -1c
-.RI "real(r_single), parameter, public \fBkinds::rmissing\fP =\-99999\&.0"
+.RI "real(\fBr_single\fP), parameter, public \fBkinds::rmissing\fP =\-99999\&.0"
 .br
 .RI "Fill value for single real missing data\&. "
 .in -1c
@@ -61,7 +61,7 @@ Hold specification kinds for variable declaration\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 David Wright, University of Michigan 
 .RE

@@ -1,4 +1,4 @@
-.TH "pmat2::clipb" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::clipb" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat2::clipb
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -24,15 +24,15 @@ pmat2::clipb
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 59 of file pmat2\&.f90\&.
+Definition at line \fB59\fP of file \fBpmat2\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "pure subroutine pmat2::clipb::clib (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+.SS "pure subroutine pmat2::clipb::clib (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(sp), dimension(m1,\-mah1:mah2), intent(inout) a)"
 
 .PP
 Clip (set to zero) the unused values in a banded matrix representation\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm1\fP number of matrix rows 
 .br
@@ -45,25 +45,25 @@ Clip (set to zero) the unused values in a banded matrix representation\&.
 \fIa\fP single precision matrix elements, stored compactly as rows 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 370 of file pmat2\&.f90\&.
-.SS "pure subroutine pmat2::clipb::clib_c (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, complex(dpc), dimension(m1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+Definition at line \fB369\fP of file \fBpmat2\&.f90\fP\&.
+.SS "pure subroutine pmat2::clipb::clib_c (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, complex(dpc), dimension(m1,\-mah1:mah2), intent(inout) a)"
 
 .PP
 Clip (set to zero) the unused values in a banded matrix representation\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm1\fP number of matrix rows 
 .br
@@ -76,25 +76,27 @@ Clip (set to zero) the unused values in a banded matrix representation\&.
 \fIa\fP complex matrix elements, stored compactly as rows 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 406 of file pmat2\&.f90\&.
-.SS "pure subroutine pmat2::clipb::clib_d (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m1,\-mah1:mah2), intent(inout) a)\fC [private]\fP"
+Definition at line \fB405\fP of file \fBpmat2\&.f90\fP\&.
+.PP
+References \fBpietc::c0\fP\&.
+.SS "pure subroutine pmat2::clipb::clib_d (integer(spi), intent(in) m1, integer(spi), intent(in) m2, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, real(dp), dimension(m1,\-mah1:mah2), intent(inout) a)"
 
 .PP
 Clip (set to zero) the unused values in a banded matrix representation\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm1\fP number of matrix rows 
 .br
@@ -107,19 +109,21 @@ Clip (set to zero) the unused values in a banded matrix representation\&.
 \fIa\fP double precision matrix elements, stored compactly as rows 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 388 of file pmat2\&.f90\&.
+Definition at line \fB387\fP of file \fBpmat2\&.f90\fP\&.
+.PP
+References \fBpietc::u0\fP\&.
 
 .SH "Author"
 .PP 

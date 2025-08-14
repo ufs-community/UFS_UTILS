@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/model_grid.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/model_grid.F90" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/model_grid.F90 \- Specify input and target model grids\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/model_grid.F90 \- Specify input and target model grids\&.  
 
 .SH SYNOPSIS
 .br
@@ -27,11 +27,11 @@
 .br
 .RI "Driver routine to setup the esmf grid object for the input grid\&. "
 .ti -1c
-.RI "subroutine \fBmodel_grid::define_input_grid_gaussian\fP (npets)"
+.RI "subroutine \fBmodel_grid::define_input_grid_gaussian\fP (localpet, npets)"
 .br
 .RI "Define grid object for input data on global gaussian grids\&. "
 .ti -1c
-.RI "subroutine \fBmodel_grid::define_input_grid_grib2\fP (npets)"
+.RI "subroutine \fBmodel_grid::define_input_grid_grib2\fP (localpet, npets)"
 .br
 .RI "Define input grid object for grib2 input data\&. "
 .ti -1c
@@ -189,7 +189,7 @@ Specify input and target model grids\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE

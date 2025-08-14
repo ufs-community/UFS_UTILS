@@ -1,4 +1,4 @@
-.TH "pmat2::avco" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::avco" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat2::avco
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -24,15 +24,15 @@ pmat2::avco
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 56 of file pmat2\&.f90\&.
+Definition at line \fB56\fP of file \fBpmat2\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::avco::avco (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(sp), dimension(na), intent(in) za, real(sp), dimension(nb), intent(in) zb, real(sp), intent(in) z0, real(sp), dimension(na), intent(out) a, real(sp), dimension(nb), intent(out) b)\fC [private]\fP"
+.SS "subroutine pmat2::avco::avco (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(sp), dimension(na), intent(in) za, real(sp), dimension(nb), intent(in) zb, real(sp), intent(in) z0, real(sp), dimension(na), intent(out) a, real(sp), dimension(nb), intent(out) b)"
 
 .PP
 Compute one row of the coefficients for the compact mid-interval interpolation scheme characterized by matrix equation of the form, A\&.t = B\&.s (*) Where s is the vector of 'source' values, t the staggered 'target' values\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIna\fP number of t-points operated on by this row of the A of (*) 
 .br
@@ -49,27 +49,29 @@ Compute one row of the coefficients for the compact mid-interval interpolation s
 \fIb\fP the NB coefficients B for this scheme 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 100 of file pmat2\&.f90\&.
+Definition at line \fB99\fP of file \fBpmat2\&.f90\fP\&.
+.PP
+References \fBpietc::u0\fP, and \fBpietc::u1\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::avco::davco (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)\fC [private]\fP"
+.SS "subroutine pmat2::avco::davco (integer(spi), intent(in) na, integer(spi), intent(in) nb, real(dp), dimension(na), intent(in) za, real(dp), dimension(nb), intent(in) zb, real(dp), intent(in) z0, real(dp), dimension(na), intent(out) a, real(dp), dimension(nb), intent(out) b)"
 
 .PP
 Double precision version of subroutine avco for midpoint interpolation\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIna\fP number of target points involved in formula 
 .br
@@ -86,25 +88,27 @@ Double precision version of subroutine avco for midpoint interpolation\&.
 \fIb\fP the coefficients B for this scheme 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 134 of file pmat2\&.f90\&.
-.SS "subroutine pmat2::avco::tavco (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)\fC [private]\fP"
+Definition at line \fB133\fP of file \fBpmat2\&.f90\fP\&.
+.PP
+References \fBpietc::u0\fP, and \fBpietc::u1\fP\&.
+.SS "subroutine pmat2::avco::tavco (real(dp), dimension(:), intent(in) xa, real(dp), dimension(:), intent(in) xb, real(dp), dimension(:), intent(out) a, real(dp), dimension(:), intent(out) b)"
 
 .PP
 Simplified computation of compact midpoint interpolation coefficients\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIxa\fP coordinates of target points relative to point of application 
 .br
@@ -115,19 +119,21 @@ Simplified computation of compact midpoint interpolation coefficients\&.
 \fIb\fP the coefficients B for this scheme 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 165 of file pmat2\&.f90\&.
+Definition at line \fB164\fP of file \fBpmat2\&.f90\fP\&.
+.PP
+References \fBpmat2::davco()\fP, and \fBpmat2::zero\fP\&.
 
 .SH "Author"
 .PP 

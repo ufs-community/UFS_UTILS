@@ -1,4 +1,4 @@
-.TH "utils_mod::remap" 3 "Tue Jan 21 2025" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.TH "utils_mod::remap" 3 "Version 1.14.0" "ocnice_prep" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ utils_mod::remap
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -24,15 +24,15 @@ utils_mod::remap
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 27 of file utils_mod\&.F90\&.
+Definition at line \fB27\fP of file \fButils_mod\&.F90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine utils_mod::remap::remap1d (character(len=*), intent(in) fname, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field)\fC [private]\fP"
+.SS "subroutine utils_mod::remap::remap1d (character(len=*), intent(in) fname, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field)"
 
 .PP
 Remap a 1-D vector array from source to destination\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing ESMF regridding weights 
 .br
@@ -41,20 +41,20 @@ Remap a 1-D vector array from source to destination\&.
 \fIdst_field\fP the destination field
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 376 of file utils_mod\&.F90\&.
-.SS "subroutine utils_mod::remap::remap2d (character(len=*), intent(in) fname, integer, intent(in) dim2, real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field)\fC [private]\fP"
+Definition at line \fB377\fP of file \fButils_mod\&.F90\fP\&.
+.SS "subroutine utils_mod::remap::remap2d (character(len=*), intent(in) fname, integer, intent(in) dim2, real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field)"
 
 .PP
 Remap a 2-D vector array of nflds or nlevs from source to destination\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing ESMF regridding weights 
 .br
@@ -65,20 +65,20 @@ Remap a 2-D vector array of nflds or nlevs from source to destination\&.
 \fIdst_field\fP the destination field
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 431 of file utils_mod\&.F90\&.
-.SS "subroutine utils_mod::remap::remap3d (character(len=*), intent(in) fname, integer, intent(in) nk, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(in) src_field, real(kind=8), dimension(:,:,:), intent(out) dst_field)\fC [private]\fP"
+Definition at line \fB432\fP of file \fButils_mod\&.F90\fP\&.
+.SS "subroutine utils_mod::remap::remap3d (character(len=*), intent(in) fname, integer, intent(in) nk, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(in) src_field, real(kind=8), dimension(:,:,:), intent(out) dst_field)"
 
 .PP
 Remap a field packed array of nk levels and nflds fields\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfname\fP the file containing ESMF regridding weights 
 .br
@@ -91,14 +91,14 @@ Remap a field packed array of nk levels and nflds fields\&.
 \fIdst_field\fP the destination field
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 488 of file utils_mod\&.F90\&.
+Definition at line \fB489\fP of file \fButils_mod\&.F90\fP\&.
 
 .SH "Author"
 .PP 

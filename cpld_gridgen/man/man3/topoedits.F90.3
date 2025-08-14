@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/topoedits.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/topoedits.F90" 3 "Version 1.14.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/topoedits.F90 \- Add required topo-edits to adjust the run-time MOM6 land mask\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/topoedits.F90 \- Add required topo-edits to adjust the run-time MOM6 land mask\&.  
 
 .SH SYNOPSIS
 .br
@@ -25,14 +25,14 @@ Add required topo-edits to adjust the run-time MOM6 land mask\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov
 .RE
 .PP
 This module adds the required topo edits to a file for use by MOM6 at run time
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
@@ -47,39 +47,39 @@ Definition in file \fBtopoedits\&.F90\fP\&.
 .PP
 Read the existing topoedits file, append required topoedits and write a new topoedits file\&. Use the new topoedits to adjust the land mask used in subsequent steps to match the land mask which will be created at run time
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfsrc\fP the existing topoedits file name 
 .br
 \fIfdst\fP the modified topoedits file name
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 33 of file topoedits\&.F90\&.
+Definition at line \fB32\fP of file \fBtopoedits\&.F90\fP\&.
 .SS "subroutine, public topoedits::apply_topoedits (character(len=*), intent(in) fsrc)"
 
 .PP
 Read the topoedits file and adjust the bathymetry\&. Apply limits to bathymetry\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfsrc\fP the topoedits file name
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 166 of file topoedits\&.F90\&.
+Definition at line \fB165\fP of file \fBtopoedits\&.F90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

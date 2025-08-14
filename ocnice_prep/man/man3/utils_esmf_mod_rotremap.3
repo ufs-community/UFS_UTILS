@@ -1,4 +1,4 @@
-.TH "utils_esmf_mod::rotremap" 3 "Tue Jan 21 2025" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.TH "utils_esmf_mod::rotremap" 3 "Version 1.14.0" "ocnice_prep" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ utils_esmf_mod::rotremap
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ utils_esmf_mod::rotremap
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 33 of file utils_esmf_mod\&.F90\&.
+Definition at line \fB33\fP of file \fButils_esmf_mod\&.F90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine utils_esmf_mod::rotremap::rotremap2d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(inout) fields)\fC [private]\fP"
+.SS "subroutine utils_esmf_mod::rotremap::rotremap2d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(inout) fields)"
 
 .PP
 Rotate 2D vectors from EN->IJ and map back to native staggers\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIwdir\fP the path to the required ESMF regridding weights 
 .br
@@ -45,20 +45,20 @@ Rotate 2D vectors from EN->IJ and map back to native staggers\&.
 \fIfields\fP the rotated and mapped fields
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 344 of file utils_esmf_mod\&.F90\&.
-.SS "subroutine utils_esmf_mod::rotremap::rotremap3d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(inout) fields)\fC [private]\fP"
+Definition at line \fB343\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "subroutine utils_esmf_mod::rotremap::rotremap3d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(inout) fields)"
 
 .PP
 Rotate 3D vectors on nlevs from EN->IJ and map back to native staggers\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIwdir\fP the path to the required ESMF regridding weights 
 .br
@@ -75,14 +75,14 @@ Rotate 3D vectors on nlevs from EN->IJ and map back to native staggers\&.
 \fIfields\fP the rotated and mapped fields
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 401 of file utils_esmf_mod\&.F90\&.
+Definition at line \fB400\fP of file \fButils_esmf_mod\&.F90\fP\&.
 
 .SH "Author"
 .PP 

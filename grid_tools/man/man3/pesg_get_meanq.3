@@ -1,4 +1,4 @@
-.TH "pesg::get_meanq" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::get_meanq" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pesg::get_meanq
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,10 +20,10 @@ pesg::get_meanq
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 39 of file pesg\&.f90\&.
+Definition at line \fB39\fP of file \fBpesg\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::get_meanq::get_meanqd (integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) ma, real(dp), intent(out) q, real(dp), dimension(2), intent(out) qdak, real(dp), dimension(2), intent(out) qdma, real(dp), dimension(2), intent(out) ga, real(dp), dimension(2,2), intent(out) gadak, real(dp), dimension(2,2), intent(out) gadma, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::get_meanq::get_meanqd (integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2), intent(in) ak, real(dp), dimension(2), intent(in) ma, real(dp), intent(out) q, real(dp), dimension(2), intent(out) qdak, real(dp), dimension(2), intent(out) qdma, real(dp), dimension(2), intent(out) ga, real(dp), dimension(2,2), intent(out) gadak, real(dp), dimension(2,2), intent(out) gadma, logical, intent(out) ff)"
 
 .PP
 For a parameter vector, ak and a map-space domain-parameter vector, ma, return the lambda-parameterized quality diagnostic, Q, and the geographic domain-parameter vector ga\&. Lambda is given by lam <1\&. Also, return the derivatives, qdak and qdma, of Q wrt ak and ma, and the derivatives gadak and gadma, of ga wrt ak and ma\&.
@@ -32,7 +32,7 @@ The domain averages of Q are accurately computed by bi-Gauss-Legendre quadrature
 .PP
 If a failure occurs, colmputations cease immediately and a failure flag, FF, is raised on return\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIngh\fP 
 .br
@@ -61,20 +61,20 @@ If a failure occurs, colmputations cease immediately and a failure flag, FF, is 
 \fIff\fP error flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 604 of file pesg\&.f90\&.
-.SS "subroutine pesg::get_meanq::get_meanqs (integer(spi), intent(in) n, integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2,n), intent(in) aks, real(dp), dimension(2,n), intent(in) mas, real(dp), dimension(n), intent(out) qs, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB602\fP of file \fBpesg\&.f90\fP\&.
+.SS "subroutine pesg::get_meanq::get_meanqs (integer(spi), intent(in) n, integer(spi), intent(in) ngh, real(dp), intent(in) lam, real(dp), dimension(ngh), intent(in) xg, real(dp), dimension(ngh), intent(in) wg, real(dp), dimension(2,n), intent(in) aks, real(dp), dimension(2,n), intent(in) mas, real(dp), dimension(n), intent(out) qs, logical, intent(out) ff)"
 
 .PP
 Like getmeanqd, except for n different values, aks, of ak and n different values, mas of ma, and without any of the derivatives\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIn\fP 
 .br
@@ -95,14 +95,14 @@ Like getmeanqd, except for n different values, aks, of ak and n different values
 \fIff\fP 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 682 of file pesg\&.f90\&.
+Definition at line \fB681\fP of file \fBpesg\&.f90\fP\&.
 
 .SH "Author"
 .PP 

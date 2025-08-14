@@ -1,6 +1,6 @@
 var vartypedefs_8F90 =
 [
-    [ "vardefs", "structvartypedefs_1_1vardefs.html", "structvartypedefs_1_1vardefs" ],
+    [ "vartypedefs::vardefs", "structvartypedefs_1_1vardefs.html", "structvartypedefs_1_1vardefs" ],
     [ "cicevars_typedefine", "vartypedefs_8F90.html#a70321bd88f309398f70f2ba4583a7f0c", null ],
     [ "fixvars_typedefine", "vartypedefs_8F90.html#ab61a40e833aaee54a06da3ecd063cb3c", null ],
     [ "scripvars_typedefine", "vartypedefs_8F90.html#a4e3c402f0de97609f86175bd7c2e6808", null ],

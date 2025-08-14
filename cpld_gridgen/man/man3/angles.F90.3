@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/angles.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "cpld_gridgen" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/angles.F90" 3 "Version 1.14.0" "cpld_gridgen" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/cpld_gridgen.fd/angles.F90 \- Determine the rotation angle on center and corner points\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/cpld_gridgen.fd/angles.F90 \- Determine the rotation angle on center and corner points\&.  
 
 .SH SYNOPSIS
 .br
@@ -11,7 +11,7 @@
 
 .in +1c
 .ti -1c
-.RI "subroutine \fBangles::find_ang\fP (iind, jind, lonBu, latBu, lonCt, anglet)"
+.RI "subroutine \fBangles::find_ang\fP (iind, jind, lonbu, latbu, lonct, anglet)"
 .br
 .RI "Find the rotation angle on center (Ct) grid points\&. "
 .ti -1c
@@ -19,11 +19,11 @@
 .br
 .RI "Verify the rotation angle on center (Ct) grid points using angle on corner (Bu) grid points\&. "
 .ti -1c
-.RI "subroutine \fBangles::find_angq\fP (iind, jind, xangCt, anglet, angle)"
+.RI "subroutine \fBangles::find_angq\fP (iind, jind, xangct, anglet, angle)"
 .br
 .RI "Find the rotation angle on center (Bu) grid points\&. "
 .ti -1c
-.RI "real(dbl_kind) function \fBangles::modulo_around_point\fP (x, xc, Lx)"
+.RI "real(dbl_kind) function \fBangles::modulo_around_point\fP (x, xc, lx)"
 .br
 .RI "Return the modulo value of x in an interval [xc-(Lx/2) xc+(Lx/2)] If Lx<=0, then it returns x without applying modulo arithmetic\&. "
 .in -1c
@@ -33,14 +33,14 @@ Determine the rotation angle on center and corner points\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov
 .RE
 .PP
 This module finds the rotation angle for at both center and corner points It utilizes the MOM6 function modulo_around_point 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
@@ -50,12 +50,12 @@ Denise.Worthen@noaa.gov
 Definition in file \fBangles\&.F90\fP\&.
 .SH "Function/Subroutine Documentation"
 .PP 
-.SS "subroutine angles::find_ang (integer, dimension(2), intent(in) iind, integer, dimension(2), intent(in) jind, real(dbl_kind), dimension(:,:), intent(in) lonBu, real(dbl_kind), dimension(:,:), intent(in) latBu, real(dbl_kind), dimension(:,:), intent(in) lonCt, real(dbl_kind), dimension(:,:), intent(out) anglet)"
+.SS "subroutine angles::find_ang (integer, dimension(2), intent(in) iind, integer, dimension(2), intent(in) jind, real(dbl_kind), dimension(:,:), intent(in) lonbu, real(dbl_kind), dimension(:,:), intent(in) latbu, real(dbl_kind), dimension(:,:), intent(in) lonct, real(dbl_kind), dimension(:,:), intent(out) anglet)"
 
 .PP
 Find the rotation angle on center (Ct) grid points\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiind\fP the start/end index in the i-dimension of the grid 
 .br
@@ -70,20 +70,20 @@ Find the rotation angle on center (Ct) grid points\&.
 \fIanglet\fP the rotation angle on Ct points 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 131 of file angles\&.F90\&.
+Definition at line \fB130\fP of file \fBangles\&.F90\fP\&.
 .SS "subroutine angles::find_angchk (integer, dimension(2), intent(in) iind, integer, dimension(2), intent(in) jind, real(dbl_kind), dimension(:,:), intent(in) angle, real(dbl_kind), dimension(:,:), intent(out) angchk)"
 
 .PP
 Verify the rotation angle on center (Ct) grid points using angle on corner (Bu) grid points\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiind\fP the start/end index in the i-dimension of the grid 
 .br
@@ -94,20 +94,20 @@ Verify the rotation angle on center (Ct) grid points using angle on corner (Bu) 
 \fIangchk\fP the rotation angle on Ct points 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 84 of file angles\&.F90\&.
-.SS "subroutine angles::find_angq (integer, dimension(2), intent(in) iind, integer, dimension(2), intent(in) jind, real(dbl_kind), dimension(:), intent(in) xangCt, real(dbl_kind), dimension(:,:), intent(in) anglet, real(dbl_kind), dimension(:,:), intent(out) angle)"
+Definition at line \fB83\fP of file \fBangles\&.F90\fP\&.
+.SS "subroutine angles::find_angq (integer, dimension(2), intent(in) iind, integer, dimension(2), intent(in) jind, real(dbl_kind), dimension(:), intent(in) xangct, real(dbl_kind), dimension(:,:), intent(in) anglet, real(dbl_kind), dimension(:,:), intent(out) angle)"
 
 .PP
 Find the rotation angle on center (Bu) grid points\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiind\fP the start/end index in the i-dimension of the grid 
 .br
@@ -120,20 +120,20 @@ Find the rotation angle on center (Bu) grid points\&.
 \fIangle\fP the rotation angle on Bu points 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 28 of file angles\&.F90\&.
-.SS "real(dbl_kind) function angles::modulo_around_point (real(dbl_kind), intent(in) x, real(dbl_kind), intent(in) xc, real(dbl_kind), intent(in) Lx)"
+Definition at line \fB27\fP of file \fBangles\&.F90\fP\&.
+.SS "real(dbl_kind) function angles::modulo_around_point (real(dbl_kind), intent(in) x, real(dbl_kind), intent(in) xc, real(dbl_kind), intent(in) lx)"
 
 .PP
 Return the modulo value of x in an interval [xc-(Lx/2) xc+(Lx/2)] If Lx<=0, then it returns x without applying modulo arithmetic\&. From src/initialization/MOM_shared_initialization\&.F90: 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIx\fP Value to which to apply modulo arithmetic 
 .br
@@ -142,14 +142,14 @@ Return the modulo value of x in an interval [xc-(Lx/2) xc+(Lx/2)] If Lx<=0, then
 \fILx\fP Modulo range width 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 x_mod Value x shifted by an integer multiple of Lx to be close to xc 
 .RE
 .PP
 
 .PP
-Definition at line 194 of file angles\&.F90\&.
+Definition at line \fB193\fP of file \fBangles\&.F90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for cpld_gridgen from the source code\&.

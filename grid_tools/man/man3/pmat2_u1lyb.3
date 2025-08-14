@@ -1,4 +1,4 @@
-.TH "pmat2::u1lyb" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::u1lyb" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat2::u1lyb
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -16,15 +16,15 @@ pmat2::u1lyb
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 81 of file pmat2\&.f90\&.
+Definition at line \fB81\fP of file \fBpmat2\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::u1lyb::u1lyb (integer(spi), intent(in) my, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mx, real(sp), dimension(mx,my), intent(inout) v, real(sp), dimension(my,\-mah1:mah2), intent(in) a)\fC [private]\fP"
+.SS "subroutine pmat2::u1lyb::u1lyb (integer(spi), intent(in) my, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mx, real(sp), dimension(mx,my), intent(inout) v, real(sp), dimension(my,\-mah1:mah2), intent(in) a)"
 
 .PP
 Special Back-substitution step of parallel linear inversion involving special Banded matrix and Y-left-Vectors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fImy\fP the number of rows assumed for A and length of Y-vectors stored in V 
 .br
@@ -39,19 +39,19 @@ Special Back-substitution step of parallel linear inversion involving special Ba
 \fIa\fP encodes the [L]*[U] factorization of the linear-system matrix, as supplied by subroutine L1UBB 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1996 
 .RE
 .PP
 
 .PP
-Definition at line 1299 of file pmat2\&.f90\&.
+Definition at line \fB1298\fP of file \fBpmat2\&.f90\fP\&.
 
 .SH "Author"
 .PP 

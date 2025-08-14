@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/wam_climo_data.f90" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/chgres_cube.fd/wam_climo_data.f90 \- Process vertical profile climatologic data for WAM\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/chgres_cube.fd/wam_climo_data.f90 \- Process vertical profile climatologic data for WAM\&.  
 
 .SH SYNOPSIS
 .br
@@ -25,7 +25,7 @@ Process vertical profile climatologic data for WAM\&.
 
 This software incorporates the MSIS empirical atmospheric model software designed and provided by NRL\&. Use is governed by the Open Source Academic research License Agreement contained in the file msis2\&.1/nrlmsis2\&.1_license\&.txt
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Adam Kubaryk NCEP/SWPC 
 .RE
@@ -40,7 +40,7 @@ Definition in file \fBwam_climo_data\&.f90\fP\&.
 .PP
 Routine that computes temperature and neutral density values utilizing MSIS 2\&.1\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIiday\fP Calendar day\&. 
 .br
@@ -61,24 +61,24 @@ Routine that computes temperature and neutral density values utilizing MSIS 2\&.
 \fIn_n2\fP Number density of n2
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Adam Kubaryk NCEP/SWPC 
 .RE
 .PP
 
 .PP
-Definition at line 24 of file wam_climo_data\&.f90\&.
+Definition at line \fB23\fP of file \fBwam_climo_data\&.f90\fP\&.
 .PP
-References ghp8()\&.
+References \fBghp8()\fP\&.
 .PP
-Referenced by atmosphere::vintg_wam()\&.
+Referenced by \fBatmosphere::vintg_wam()\fP\&.
 .SS "subroutine ghp8 (real(kind=rp), intent(in) day, real(kind=rp), intent(in) utsec, real(kind=rp), intent(in) z0, real(kind=rp), intent(in) glat, real(kind=rp), intent(in) glon, real(kind=rp), intent(in) f107a, real(kind=rp), intent(in) f107, real(kind=rp), dimension(7), intent(in) ap, real(kind=rp), intent(in) pres, real(kind=rp), intent(out) alt, real(kind=rp), dimension(10), intent(out) dn, real(kind=rp), intent(out) tn)"
 
 .PP
 Wrapper routine for calls to MSIS 2\&.1 for computing temperature and neutral density at a given pressure level\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIday\fP Calendar day\&. 
 .br
@@ -105,16 +105,16 @@ Wrapper routine for calls to MSIS 2\&.1 for computing temperature and neutral de
 \fItn\fP Temperature in K\&.
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Adam Kubaryk NCEP/SWPC 
 .RE
 .PP
 
 .PP
-Definition at line 86 of file wam_climo_data\&.f90\&.
+Definition at line \fB85\fP of file \fBwam_climo_data\&.f90\fP\&.
 .PP
-Referenced by gettemp()\&.
+Referenced by \fBgettemp()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

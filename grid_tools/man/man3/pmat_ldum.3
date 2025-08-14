@@ -1,4 +1,4 @@
-.TH "pmat::ldum" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat::ldum" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat::ldum
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -36,15 +36,15 @@ pmat::ldum
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 27 of file pmat\&.f90\&.
+Definition at line \fB27\fP of file \fBpmat\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat::ldum::cldum (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d)\fC [private]\fP"
+.SS "subroutine pmat::ldum::cldum (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d)"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Complex double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP input square matrix, output L,D,U factors 
 .br
@@ -53,20 +53,20 @@ Perform L*D*U decomposition, with pivoting, of square matrix\&. Complex double p
 \fIipiv\fP vector of pivots 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 509 of file pmat\&.f90\&.
-.SS "subroutine pmat::ldum::cldumf (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB508\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::ldum::cldumf (complex(dpc), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, complex(dpc), intent(out) d, logical, intent(out) ff)"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Complex double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -77,20 +77,22 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Complex
 \fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 660 of file pmat\&.f90\&.
-.SS "subroutine pmat::ldum::dldum (real(dp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(dp), intent(out) d)\fC [private]\fP"
+Definition at line \fB659\fP of file \fBpmat\&.f90\fP\&.
+.PP
+References \fBpietc::c0\fP, \fBpietc::c1\fP, \fBpietc::f\fP, \fBpietc::t\fP, \fBpietc::u0\fP, and \fBpietc::u1\fP\&.
+.SS "subroutine pmat::ldum::dldum (real(dp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(dp), intent(out) d)"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP input square matrix, output L,D,U factors 
 .br
@@ -99,20 +101,20 @@ Perform L*D*U decomposition, with pivoting, of square matrix\&. Double precision
 \fIipiv\fP vector of pivots 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 493 of file pmat\&.f90\&.
-.SS "subroutine pmat::ldum::dldumf (real(dp), dimension(:,:), intent(inout) a, integer, dimension(:), intent(out) ipiv, real(dp), intent(out) d, logical(spi), intent(out) ff)\fC [private]\fP"
+Definition at line \fB492\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::ldum::dldumf (real(dp), dimension(:,:), intent(inout) a, integer, dimension(:), intent(out) ipiv, real(dp), intent(out) d, logical(spi), intent(out) ff)"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Double precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -123,20 +125,22 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Double 
 \fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 593 of file pmat\&.f90\&.
-.SS "subroutine pmat::ldum::sldum (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d)\fC [private]\fP"
+Definition at line \fB592\fP of file \fBpmat\&.f90\fP\&.
+.PP
+References \fBpietc::f\fP, \fBpietc::t\fP, \fBpietc::u0\fP, and \fBpietc::u1\fP\&.
+.SS "subroutine pmat::ldum::sldum (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d)"
 
 .PP
 Perform L*D*U decomposition, with pivoting, of square matrix\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP input square matrix, output L,D,U factors 
 .br
@@ -145,20 +149,20 @@ Perform L*D*U decomposition, with pivoting, of square matrix\&. Single precision
 \fIipiv\fP vector of pivots 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 477 of file pmat\&.f90\&.
-.SS "subroutine pmat::ldum::sldumf (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d, logical, intent(out) ff)\fC [private]\fP"
+Definition at line \fB476\fP of file \fBpmat\&.f90\fP\&.
+.SS "subroutine pmat::ldum::sldumf (real(sp), dimension(:,:), intent(inout) a, integer(spi), dimension(:), intent(out) ipiv, real(sp), intent(out) d, logical, intent(out) ff)"
 
 .PP
 Perform l-d-u decomposition of square matrix a in place with pivoting\&. Single precision version\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP square matrix to be factorized 
 .br
@@ -169,14 +173,14 @@ Perform l-d-u decomposition of square matrix a in place with pivoting\&. Single 
 \fIff\fP failure flag, set to \&.true\&. when determinant of a vanishes\&. 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 526 of file pmat\&.f90\&.
+Definition at line \fB525\fP of file \fBpmat\&.f90\fP\&.
 
 .SH "Author"
 .PP 

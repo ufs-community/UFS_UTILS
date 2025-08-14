@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/utils_esmf_mod.F90" 3 "Tue Jan 21 2025" "Version 1.13.0" "ocnice_prep" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/ocnice_prep.fd/utils_esmf_mod.F90" 3 "Version 1.14.0" "ocnice_prep" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/ocnice_prep.fd/utils_esmf_mod.F90 \- Define a set of utilty procedures which use ESMF\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/ocnice_prep.fd/utils_esmf_mod.F90 \- Define a set of utilty procedures which use ESMF\&.  
 
 .SH SYNOPSIS
 .br
@@ -29,7 +29,7 @@
 .br
 .RI "Create a RH\&. "
 .ti -1c
-.RI "subroutine \fButils_esmf_mod::dynlevmaskproc\fP (dynamicMaskList, dynamicSrcMaskValue, dynamicDstMaskValue, rc)"
+.RI "subroutine \fButils_esmf_mod::dynlevmaskproc\fP (dynamicmasklist, dynamicsrcmaskvalue, dynamicdstmaskvalue, rc)"
 .br
 .RI "A dynamic mask procedure for ocean vertical levels\&. "
 .ti -1c
@@ -91,14 +91,14 @@ Define a set of utilty procedures which use ESMF\&.
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov
 .RE
 .PP
 This module defines the RouteHandle and mapping procedures 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
@@ -113,7 +113,7 @@ Definition in file \fButils_esmf_mod\&.F90\fP\&.
 .PP
 Handle ESMF errors\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIrc\fP return code to check 
 .br
@@ -122,25 +122,25 @@ Handle ESMF errors\&.
 \fIfile\fP user-provided source file name 
 .RE
 .PP
-\fBReturns:\fP
+\fBReturns\fP
 .RS 4
 ChkErr a logical indicating if an ESMF error was detected
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 504 of file utils_esmf_mod\&.F90\&.
+Definition at line \fB503\fP of file \fButils_esmf_mod\&.F90\fP\&.
 .SS "subroutine, public utils_esmf_mod::createrh (character(len=*), intent(in) srcmeshfile, character(len=*), intent(in) dstmeshfile, integer, intent(out) rc)"
 
 .PP
 Create a RH\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIsrcmeshfile\fP the file name of the source mesh 
 .br
@@ -149,20 +149,20 @@ Create a RH\&.
 \fIrc\fP an error return code
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 53 of file utils_esmf_mod\&.F90\&.
-.SS "subroutine utils_esmf_mod::dynlevmaskproc (type(esmf_dynamicmaskelementr8r8r8), dimension(:), pointer dynamicMaskList, real(esmf_kind_r8), intent(in), optional dynamicSrcMaskValue, real(esmf_kind_r8), intent(in), optional dynamicDstMaskValue, integer, intent(out) rc)\fC [private]\fP"
+Definition at line \fB52\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "subroutine utils_esmf_mod::dynlevmaskproc (type(esmf_dynamicmaskelementr8r8r8), dimension(:), pointer dynamicmasklist, real(esmf_kind_r8), intent(in), optional dynamicsrcmaskvalue, real(esmf_kind_r8), intent(in), optional dynamicdstmaskvalue, integer, intent(out) rc)\fR [private]\fP"
 
 .PP
 A dynamic mask procedure for ocean vertical levels\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIdynamicMaskList\fP an ESMF Dynamic Mask element list 
 .br
@@ -173,20 +173,20 @@ A dynamic mask procedure for ocean vertical levels\&.
 \fIrc\fP an error return code
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Adapted from example in ESMF Reference manual (37\&.2\&.6 Dynamic Masking) 
 .RE
 .PP
 
 .PP
-Definition at line 454 of file utils_esmf_mod\&.F90\&.
-.SS "subroutine utils_esmf_mod::remaprh1d (integer, intent(in) kk, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field, integer, intent(out) rc)\fC [private]\fP"
+Definition at line \fB453\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "subroutine utils_esmf_mod::remaprh1d (integer, intent(in) kk, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field, integer, intent(out) rc)\fR [private]\fP"
 
 .PP
 Remap a field of nlen via ESMF RH\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIkk\fP the vertical or category index 
 .br
@@ -197,20 +197,20 @@ Remap a field of nlen via ESMF RH\&.
 \fIrc\fP an error return code
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 129 of file utils_esmf_mod\&.F90\&.
-.SS "subroutine utils_esmf_mod::remaprh1ddyn (integer, intent(in) kk, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field, real(kind=8), dimension(:), intent(in) hmask, integer, intent(out) rc)\fC [private]\fP"
+Definition at line \fB128\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "subroutine utils_esmf_mod::remaprh1ddyn (integer, intent(in) kk, real(kind=8), dimension(:), intent(in) src_field, real(kind=8), dimension(:), intent(out) dst_field, real(kind=8), dimension(:), intent(in) hmask, integer, intent(out) rc)\fR [private]\fP"
 
 .PP
 Remap a field of nlen via ESMF RH with dynamic masking\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIkk\fP the vertical or category index 
 .br
@@ -223,20 +223,20 @@ Remap a field of nlen via ESMF RH with dynamic masking\&.
 \fIrc\fP an error return code
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 228 of file utils_esmf_mod\&.F90\&.
-.SS "subroutine utils_esmf_mod::remaprh2d (real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field, integer, intent(out) rc)\fC [private]\fP"
+Definition at line \fB227\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "subroutine utils_esmf_mod::remaprh2d (real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field, integer, intent(out) rc)\fR [private]\fP"
 
 .PP
 Remap a packed field of nflds,nlen via ESMF RH\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIsrc_field\fP the field on the source grid 
 .br
@@ -245,20 +245,20 @@ Remap a packed field of nflds,nlen via ESMF RH\&.
 \fIrc\fP an error return code
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 176 of file utils_esmf_mod\&.F90\&.
-.SS "subroutine utils_esmf_mod::remaprh2ddyn (integer, intent(in) kk, real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field, real(kind=8), dimension(:), intent(in) hmask, integer, intent(out) rc)\fC [private]\fP"
+Definition at line \fB175\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "subroutine utils_esmf_mod::remaprh2ddyn (integer, intent(in) kk, real(kind=8), dimension(:,:), intent(in) src_field, real(kind=8), dimension(:,:), intent(out) dst_field, real(kind=8), dimension(:), intent(in) hmask, integer, intent(out) rc)\fR [private]\fP"
 
 .PP
 Remap a packed field of nflds,nlen via ESMF RH with dyanmic masking\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIkk\fP the vertical or category index 
 .br
@@ -271,20 +271,20 @@ Remap a packed field of nflds,nlen via ESMF RH with dyanmic masking\&.
 \fIrc\fP an error return code
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 281 of file utils_esmf_mod\&.F90\&.
-.SS "subroutine utils_esmf_mod::rotremap2d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(inout) fields)\fC [private]\fP"
+Definition at line \fB280\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "subroutine utils_esmf_mod::rotremap2d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:), intent(inout) fields)\fR [private]\fP"
 
 .PP
 Rotate 2D vectors from EN->IJ and map back to native staggers\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIwdir\fP the path to the required ESMF regridding weights 
 .br
@@ -301,20 +301,20 @@ Rotate 2D vectors from EN->IJ and map back to native staggers\&.
 \fIfields\fP the rotated and mapped fields
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 344 of file utils_esmf_mod\&.F90\&.
-.SS "subroutine utils_esmf_mod::rotremap3d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(inout) fields)\fC [private]\fP"
+Definition at line \fB343\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "subroutine utils_esmf_mod::rotremap3d (character(len=*), intent(in) wdir, type(\fBvardefs\fP), dimension(:), intent(in) vars, real(kind=8), dimension(:), intent(in) cosrot, real(kind=8), dimension(:), intent(in) sinrot, integer, dimension(:), intent(in) dims, integer, intent(in) nflds, real(kind=8), dimension(:,:,:), intent(inout) fields)\fR [private]\fP"
 
 .PP
 Rotate 3D vectors on nlevs from EN->IJ and map back to native staggers\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIwdir\fP the path to the required ESMF regridding weights 
 .br
@@ -331,52 +331,52 @@ Rotate 3D vectors on nlevs from EN->IJ and map back to native staggers\&.
 \fIfields\fP the rotated and mapped fields
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 Denise.Worthen@noaa.gov 
 .RE
 .PP
 
 .PP
-Definition at line 401 of file utils_esmf_mod\&.F90\&.
+Definition at line \fB400\fP of file \fButils_esmf_mod\&.F90\fP\&.
 .SH "Variable Documentation"
 .PP 
-.SS "type(esmf_dynamicmask) utils_esmf_mod::dynamiclevmask\fC [private]\fP"
+.SS "type(esmf_dynamicmask) utils_esmf_mod::dynamiclevmask\fR [private]\fP"
 
 .PP
 an ESMF dynamicMask object 
 .PP
-Definition at line 20 of file utils_esmf_mod\&.F90\&.
-.SS "type(esmf_mesh) utils_esmf_mod::meshdst\fC [private]\fP"
+Definition at line \fB20\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "type(esmf_mesh) utils_esmf_mod::meshdst\fR [private]\fP"
 
 .PP
 an ESMF mesh for destination grids 
 .PP
-Definition at line 22 of file utils_esmf_mod\&.F90\&.
-.SS "type(esmf_mesh) utils_esmf_mod::meshsrc\fC [private]\fP"
+Definition at line \fB22\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "type(esmf_mesh) utils_esmf_mod::meshsrc\fR [private]\fP"
 
 .PP
 an ESMF mesh for the source grid 
 .PP
-Definition at line 21 of file utils_esmf_mod\&.F90\&.
-.SS "type(esmf_routehandle) utils_esmf_mod::rh\fC [private]\fP"
+Definition at line \fB21\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "type(esmf_routehandle) utils_esmf_mod::rh\fR [private]\fP"
 
 .PP
 an ESMF RouteHandle 
 .PP
-Definition at line 19 of file utils_esmf_mod\&.F90\&.
-.SS "integer utils_esmf_mod::srctermprocessing = 0\fC [private]\fP"
+Definition at line \fB19\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "integer utils_esmf_mod::srctermprocessing = 0\fR [private]\fP"
 
 .PP
 The source term processing flag, required for Dynamic Masking\&. 
 .PP
-Definition at line 24 of file utils_esmf_mod\&.F90\&.
-.SS "character(len=*), parameter utils_esmf_mod::u_file_u = __FILE__\fC [private]\fP"
+Definition at line \fB24\fP of file \fButils_esmf_mod\&.F90\fP\&.
+.SS "character(len=*), parameter utils_esmf_mod::u_file_u = __FILE__\fR [private]\fP"
 
 .PP
 a character string 
 .PP
-Definition at line 43 of file utils_esmf_mod\&.F90\&.
+Definition at line \fB43\fP of file \fButils_esmf_mod\&.F90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for ocnice_prep from the source code\&.

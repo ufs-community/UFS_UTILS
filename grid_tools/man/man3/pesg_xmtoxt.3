@@ -1,4 +1,4 @@
-.TH "pesg::xmtoxt" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::xmtoxt" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pesg::xmtoxt
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ pesg::xmtoxt
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 31 of file pesg\&.f90\&.
+Definition at line \fB31\fP of file \fBpesg\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::xmtoxt::xmtoxt (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xm, real(dp), dimension(2), intent(out) xt, real(dp), dimension(2,2), intent(out) xtd, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xmtoxt::xmtoxt (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xm, real(dp), dimension(2), intent(out) xt, real(dp), dimension(2,2), intent(out) xtd, logical, intent(out) ff)"
 
 .PP
 Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Mapping parameter controlling grid line spacing profile 
 .br
@@ -41,22 +41,24 @@ Like zmtozt, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd\&.
 \fIff\fP Failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 254 of file pesg\&.f90\&.
+Definition at line \fB253\fP of file \fBpesg\&.f90\fP\&.
+.PP
+References \fBpietc::u0\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::xmtoxt::xmtoxt1 (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xm, real(dp), dimension(2), intent(out) xt, real(dp), dimension(2,2), intent(out) xtd, real(dp), dimension(2), intent(out) xt1, real(dp), dimension(2,2), intent(out) xtd1, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xmtoxt::xmtoxt1 (real(dp), intent(in) a, real(dp), dimension(2), intent(in) xm, real(dp), dimension(2), intent(out) xt, real(dp), dimension(2,2), intent(out) xtd, real(dp), dimension(2), intent(out) xt1, real(dp), dimension(2,2), intent(out) xtd1, logical, intent(out) ff)"
 
 .PP
 Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, the derivatives, wrt a, of these quantities\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIa\fP Mapping parameter controlling grid line spacing profile 
 .br
@@ -73,14 +75,16 @@ Like zmtozt1, but for 2-vector xm and xt, and 2*2 diagonal Jacobian xtd Also, th
 \fIff\fP Failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 276 of file pesg\&.f90\&.
+Definition at line \fB275\fP of file \fBpesg\&.f90\fP\&.
+.PP
+References \fBpietc::u0\fP, and \fBpesg::zmtozt1()\fP\&.
 
 .SH "Author"
 .PP 

@@ -1,4 +1,4 @@
-.TH "psym2::chol2" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "psym2::chol2" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ psym2::chol2
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -16,15 +16,15 @@ psym2::chol2
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 31 of file psym2\&.f90\&.
+Definition at line \fB31\fP of file \fBpsym2\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine psym2::chol2::chol2 (real(dp), dimension(2,2), intent(in) s, real(dp), dimension(2,2), intent(out) c, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine psym2::chol2::chol2 (real(dp), dimension(2,2), intent(in) s, real(dp), dimension(2,2), intent(out) c, logical, intent(out) ff)"
 
 .PP
 Return the cholesky lower triangular factor, C, of the 2X2 symmetric matrix, S, or raise the failure flag, FF, if S is not positive-definite\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIs\fP 2X2 symmetric matrix 
 .br
@@ -33,14 +33,16 @@ Return the cholesky lower triangular factor, C, of the 2X2 symmetric matrix, S, 
 \fIff\fP raise the failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 458 of file psym2\&.f90\&.
+Definition at line \fB457\fP of file \fBpsym2\&.f90\fP\&.
+.PP
+References \fBpietc::u0\fP\&.
 
 .SH "Author"
 .PP 

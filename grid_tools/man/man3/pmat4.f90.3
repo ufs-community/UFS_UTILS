@@ -1,8 +1,8 @@
-.TH "/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/scratch1/NCEPDEV/da/George.Gayno/ufs_utils.git/UFS_UTILS.upstream/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90 \- Euclidean geometry, geometric (stereographic) projections, related transformations (Mobius)\&.  
+/scratch4/NCEPDEV/nems/Brian.Curtis/git/BrianCurtis-NOAA/UFS_UTILS/v1_14_0/sorc/grid_tools.fd/regional_esg_grid.fd/pmat4.f90 \- Euclidean geometry, geometric (stereographic) projections, related transformations (Mobius)\&.  
 
 .SH SYNOPSIS
 .br
@@ -270,11 +270,11 @@
 .br
 .RI "Like expmat, but for the 1st and 2nd derivatives also\&. "
 .ti -1c
-.RI "subroutine \fBpmat4::gram_d\fP (as, b, nrank, det)"
+.RI "subroutine \fBpmat4::gram_d\fP (as, b, nrank, \fBdet\fP)"
 .br
 .RI "Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. "
 .ti -1c
-.RI "subroutine \fBpmat4::gram_s\fP (as, b, nrank, det)"
+.RI "subroutine \fBpmat4::gram_s\fP (as, b, nrank, \fBdet\fP)"
 .br
 .RI "Apply a form of Gram-Schmidt orthogonalization process to return as many normalized orthogonal basis column vectors in matrix B as possible in the space spanned by the columns of matrix A\&. "
 .ti -1c
@@ -464,12 +464,12 @@ Euclidean geometry, geometric (stereographic) projections, related transformatio
 
 
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 Oct 2005 
 .RE
@@ -484,7 +484,7 @@ Definition in file \fBpmat4\&.f90\fP\&.
 .PP
 Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIu1\fP real vector to be shifted 
 .br
@@ -499,22 +499,22 @@ Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&.
 \fId3\fP real variable to be shifted 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 705 of file pmat4\&.f90\&.
+Definition at line \fB704\fP of file \fBpmat4\&.f90\fP\&.
 .PP
-Referenced by pmat4::sarea_d(), and pmat4::sarea_s()\&.
+Referenced by \fBpmat4::sarea::sarea_d()\fP, and \fBpmat4::sarea::sarea_s()\fP\&.
 .SS "subroutine sarea_d::cyclic (real(dp), dimension(3), intent(inout) u1, real(dp), dimension(3), intent(inout) u2, real(dp), dimension(3), intent(inout) u3, real(dp), intent(inout) d1, real(dp), intent(inout) d2, real(dp), intent(inout) d3)"
 
 .PP
 Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIu1\fP real vector to be shifted 
 .br
@@ -529,14 +529,14 @@ Cyclically permute real vectors, u1, u2, u3, and scalars, d1, d2, d3\&.
 \fId3\fP real variable to be shifted 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 760 of file pmat4\&.f90\&.
+Definition at line \fB759\fP of file \fBpmat4\&.f90\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for grid_tools from the source code\&.

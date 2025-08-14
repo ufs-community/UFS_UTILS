@@ -1,4 +1,4 @@
-.TH "pmat2::l1ubb" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pmat2::l1ubb" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pmat2::l1ubb
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ pmat2::l1ubb
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 66 of file pmat2\&.f90\&.
+Definition at line \fB66\fP of file \fBpmat2\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pmat2::l1ubb::l1ubb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m,\-mbh1:mbh2), intent(inout) b)\fC [private]\fP"
+.SS "subroutine pmat2::l1ubb::l1ubb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(sp), dimension(m,\-mah1:mah2), intent(inout) a, real(sp), dimension(m,\-mbh1:mbh2), intent(inout) b)"
 
 .PP
 [L]*[D]*[U] factoring of band-matrix [A], modify [B] --> [D**-1]*[B] [L] lower triangular with unit main diagonal [D] diagonal matrix [U] upper triangular with unit main diagonal [B] associated band matrix with same number of rows as [A] lower triangular elements of [A] by [D**-1]*[L]*[D], the upper by [U], replace matrix [B] by [D**-1]*[B]\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm\fP Number of rows of A and B 
 .br
@@ -45,27 +45,27 @@ Definition at line 66 of file pmat2\&.f90\&.
 \fIb\fP Input single precision band matrix B; output [D**-1 B] 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1996 
 .RE
 .PP
 
 .PP
-Definition at line 733 of file pmat2\&.f90\&.
+Definition at line \fB732\fP of file \fBpmat2\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pmat2::l1ubb::dl1ubb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a, real(dp), dimension(m,\-mbh1:mbh2), intent(inout) b)\fC [private]\fP"
+.SS "subroutine pmat2::l1ubb::dl1ubb (integer(spi), intent(in) m, integer(spi), intent(in) mah1, integer(spi), intent(in) mah2, integer(spi), intent(in) mbh1, integer(spi), intent(in) mbh2, real(dp), dimension(m,\-mah1:mah2), intent(inout) a, real(dp), dimension(m,\-mbh1:mbh2), intent(inout) b)"
 
 .PP
 Double precision version of L1UBB\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIm\fP Number of rows of A and B 
 .br
@@ -82,19 +82,21 @@ Double precision version of L1UBB\&.
 \fIb\fP Input double precision band matrix B; output [D**-1 B] 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser, Tsukasa Fujita (JMA) 
 .RE
 .PP
-\fBDate:\fP
+\fBDate\fP
 .RS 4
 1999 
 .RE
 .PP
 
 .PP
-Definition at line 771 of file pmat2\&.f90\&.
+Definition at line \fB770\fP of file \fBpmat2\&.f90\fP\&.
+.PP
+References \fBpietc::u0\fP, and \fBpietc::u1\fP\&.
 
 .SH "Author"
 .PP 

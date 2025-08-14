@@ -1,4 +1,4 @@
-.TH "psym2::expsym2" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "psym2::expsym2" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ psym2::expsym2
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,37 +20,37 @@ psym2::expsym2
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 26 of file psym2\&.f90\&.
+Definition at line \fB26\fP of file \fBpsym2\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine psym2::expsym2::expsym2 (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) expem)\fC [private]\fP"
+.SS "subroutine psym2::expsym2::expsym2 (real(dp), dimension(2,2), intent(in) em, real(dp), dimension(2,2), intent(out) expem)"
 
 .PP
 Get the exp of a symmetric 2*2 matrix\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIem\fP symmetric 2*2 matrix 
 .br
 \fIexpem\fP exp of a symmetric 2*2 matrix 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 277 of file psym2\&.f90\&.
+Definition at line \fB276\fP of file \fBpsym2\&.f90\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine psym2::expsym2::expsym2d (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)\fC [private]\fP"
+.SS "subroutine psym2::expsym2::expsym2d (real(dp), dimension(2,2), intent(in) x, real(dp), dimension(2,2), intent(out) z, real(dp), dimension(2,2,2,2), intent(out) zd)"
 
 .PP
 Get the exp of a symmetric 2*2 matrix, and its symmetric derivative\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIx\fP symmetric 2*2 positive-definite matrix 
 .br
@@ -59,14 +59,16 @@ Get the exp of a symmetric 2*2 matrix, and its symmetric derivative\&.
 \fIzd\fP symmetric derivative wrt x of exp of x 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 294 of file psym2\&.f90\&.
+Definition at line \fB293\fP of file \fBpsym2\&.f90\fP\&.
+.PP
+References \fBpietc::o2\fP\&.
 
 .SH "Author"
 .PP 

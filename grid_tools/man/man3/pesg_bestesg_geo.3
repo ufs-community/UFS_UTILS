@@ -1,4 +1,4 @@
-.TH "pesg::bestesg_geo" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::bestesg_geo" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pesg::bestesg_geo
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -16,10 +16,10 @@ pesg::bestesg_geo
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 42 of file pesg\&.f90\&.
+Definition at line \fB42\fP of file \fBpesg\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::bestesg_geo::bestesg_geo (real(dp), intent(in) lam, real(dp), intent(in) garcx, real(dp), intent(in) garcy, real(dp), intent(out) a, real(dp), intent(out) k, real(dp), intent(out) marcx, real(dp), intent(out) marcy, real(dp), intent(out) q, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::bestesg_geo::bestesg_geo (real(dp), intent(in) lam, real(dp), intent(in) garcx, real(dp), intent(in) garcy, real(dp), intent(out) a, real(dp), intent(out) k, real(dp), intent(out) marcx, real(dp), intent(out) marcy, real(dp), intent(out) q, logical, intent(out) ff)"
 
 .PP
 Get the best Extended Schmidt Gnomonic parameter, (a,k), for the given geographical half-spans, garcx and garcy, as well as the corresponding map-space half-spans, garcx and garcy (in degrees) and the quality diagnostic, Q(lam) for this optimal parameter choice\&. If this process fails for any reason, the failure is alerted by a raised flag, FF, and the other output arguments must then be taken to be meaningless\&.
@@ -28,7 +28,7 @@ The diagnostic Q measures the variance over the domain of a local measure of gri
 .PP
 The domain averages are computed by double Gauss-Legendre quadrature (i\&.e\&., in both the x and y directions), but restricted to a mere quadrant of the domain (since bilateral symmetry pertains across both domain medians, yielding a domain mean L that is strictly diagonal\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlam\fP 
 .br
@@ -49,14 +49,16 @@ The domain averages are computed by double Gauss-Legendre quadrature (i\&.e\&., 
 \fIff\fP failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 903 of file pesg\&.f90\&.
+Definition at line \fB902\fP of file \fBpesg\&.f90\fP\&.
+.PP
+References \fBpietc::dtor\fP, \fBpietc::ms18\fP, \fBpietc::ms36\fP, \fBpietc::ms54\fP, \fBpietc::ms72\fP, \fBpietc::o5\fP, \fBpietc::pi2\fP, \fBpietc::s18\fP, \fBpietc::s36\fP, \fBpietc::s54\fP, \fBpietc::s72\fP, \fBpietc::u0\fP, \fBpietc::u1\fP, \fBpietc::u2\fP, and \fBpietc::u5\fP\&.
 
 .SH "Author"
 .PP 

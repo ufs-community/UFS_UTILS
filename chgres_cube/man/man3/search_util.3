@@ -1,4 +1,4 @@
-.TH "search_util" 3 "Tue Jan 21 2025" "Version 1.13.0" "chgres_cube" \" -*- nroff -*-
+.TH "search_util" 3 "Version 1.14.0" "chgres_cube" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,7 +27,7 @@ This can happen for an isolated lake or island that is unresolved by the input g
 .PP
 Searches for the nearest valid land/non-land data where the input and target fv3 land-mask differ\&. Example: when the target FV3 grid depicts an island that is not resolved by the input data\&. If nearby valid data is not found, a default value is used\&.
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
@@ -44,7 +44,7 @@ Routine searches a neighborhood with a radius of 100 grid points\&. If no valid 
 .PP
 This routine works for one tile of a cubed sphere grid\&. It does not consider valid values at adjacent faces\&. That is a future upgrade\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIfield\fP On input/output, surface data with undefined/no undefined values\&. 
 .br
@@ -65,42 +65,42 @@ This routine works for one tile of a cubed sphere grid\&. It does not consider v
 \fIsoilt_climo\fP climatological soil type 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 47 of file search_util\&.F90\&.
+Definition at line \fB46\fP of file \fBsearch_util\&.F90\fP\&.
 .PP
-References sst_guess()\&.
+References \fBsst_guess()\fP\&.
 .PP
-Referenced by surface::interp(), sfc_input_data::read_input_sfc_grib2_file(), and surface::search_many()\&.
-.SS "subroutine search_util::sst_guess (real(esmf_kind_r8), intent(in) latitude, real(esmf_kind_r8), intent(out) sst)"
+Referenced by \fBsurface::interp()\fP, \fBsfc_input_data::read_input_sfc_grib2_file()\fP, and \fBsurface::search_many()\fP\&.
+.SS "subroutine search_util::sst_guess (real(esmf_kind_r8), intent(in) latitude, real(esmf_kind_r8), intent(out) sst)\fR [private]\fP"
 
 .PP
 Set default Sea Surface Temperature (SST) based on latitude\&. Based loosely on the average annual SST values from \&./am/cfs_oi2sst1x1monclim19822001\&.grb
 .PP
 The temperature in the polar and tropical regions is set to 273\&.16 and 300\&.0 Kelvin respectively\&. Polar regions are poleward of 60 degrees\&. Tropical regions are within 30 degrees of the equator\&. In mid-latitudes, a linear change with latitude is used\&.
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIlatitude\fP Latitude in decimal degrees 
 .br
 \fIsst\fP Default SST in Kelvin 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 George Gayno NCEP/EMC 
 .RE
 .PP
 
 .PP
-Definition at line 235 of file search_util\&.F90\&.
+Definition at line \fB234\fP of file \fBsearch_util\&.F90\fP\&.
 .PP
-Referenced by search()\&.
+Referenced by \fBsearch()\fP\&.
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for chgres_cube from the source code\&.

@@ -1,4 +1,4 @@
-.TH "pesg::xttoxs" 3 "Tue Jan 21 2025" "Version 1.13.0" "grid_tools" \" -*- nroff -*-
+.TH "pesg::xttoxs" 3 "Version 1.14.0" "grid_tools" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,7 +6,7 @@ pesg::xttoxs
 .SH SYNOPSIS
 .br
 .PP
-.SS "Private Member Functions"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
@@ -20,15 +20,15 @@ pesg::xttoxs
 .in -1c
 .SH "Detailed Description"
 .PP 
-Definition at line 28 of file pesg\&.f90\&.
+Definition at line \fB28\fP of file \fBpesg\&.f90\fP\&.
 .SH "Constructor & Destructor Documentation"
 .PP 
-.SS "subroutine pesg::xttoxs::xttoxs (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xttoxs::xttoxs (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, logical, intent(out) ff)"
 
 .PP
 Scaled gnomonic plane xt to standard stereographic plane xs\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIk\fP Gaussian curvature parameter of Schmidt mapping 
 .br
@@ -41,22 +41,24 @@ Scaled gnomonic plane xt to standard stereographic plane xs\&.
 \fIff\fP Failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 159 of file pesg\&.f90\&.
+Definition at line \fB158\fP of file \fBpesg\&.f90\fP\&.
+.PP
+References \fBpietc::u0\fP, and \fBpietc::u1\fP\&.
 .SH "Member Function/Subroutine Documentation"
 .PP 
-.SS "subroutine pesg::xttoxs::xttoxs1 (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, real(dp), dimension(2,2,2), intent(out) xsdd, real(dp), dimension(2), intent(out) xs1, real(dp), dimension(2,2), intent(out) xsd1, logical, intent(out) ff)\fC [private]\fP"
+.SS "subroutine pesg::xttoxs::xttoxs1 (real(dp), intent(in) k, real(dp), dimension(2), intent(in) xt, real(dp), dimension(2), intent(out) xs, real(dp), dimension(2,2), intent(out) xsd, real(dp), dimension(2,2,2), intent(out) xsdd, real(dp), dimension(2), intent(out) xs1, real(dp), dimension(2,2), intent(out) xsd1, logical, intent(out) ff)"
 
 .PP
 Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&. 
 .PP
-\fBParameters:\fP
+\fBParameters\fP
 .RS 4
 \fIk\fP Gaussian curvature parameter of the Schmidt mapping 
 .br
@@ -75,14 +77,16 @@ Like xttoxs, but also, return the derivatives, wrt K, of xs and xsd\&.
 \fIff\fP Failure flag 
 .RE
 .PP
-\fBAuthor:\fP
+\fBAuthor\fP
 .RS 4
 R\&. J\&. Purser 
 .RE
 .PP
 
 .PP
-Definition at line 193 of file pesg\&.f90\&.
+Definition at line \fB192\fP of file \fBpesg\&.f90\fP\&.
+.PP
+References \fBpietc::o2\fP, \fBpietc::u0\fP, \fBpietc::u1\fP, and \fBpietc::u2\fP\&.
 
 .SH "Author"
 .PP 

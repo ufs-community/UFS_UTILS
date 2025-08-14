@@ -1,14 +1,18 @@
 var surface_8F90 =
 [
-    [ "realptr_2d", "structsurface_1_1realptr__2d.html", "structsurface_1_1realptr__2d" ],
-    [ "realptr_3d", "structsurface_1_1realptr__3d.html", "structsurface_1_1realptr__3d" ],
+    [ "surface::realptr_2d", "namespacesurface.html#structsurface_1_1realptr__2d", [
+      [ "p", "namespacesurface.html#a8a75163487be30796f0e9623d3bdd0bf", null ]
+    ] ],
+    [ "surface::realptr_3d", "namespacesurface.html#structsurface_1_1realptr__3d", [
+      [ "p", "namespacesurface.html#aacdc1c26baef9f3b7d0ab829ad23a6f2", null ]
+    ] ],
     [ "adjust_soil_levels", "surface_8F90.html#ae4bf53bef0b16e89d6344df2b6aa1888", null ],
     [ "adjust_soilt_for_terrain", "surface_8F90.html#a7592ccae34fbacf04fe5f69ffac4aeb6", null ],
     [ "calc_liq_soil_moisture", "surface_8F90.html#ac5e2bc59e4d2fa0c063c0dff2d059111", null ],
     [ "cleanup_all_target_sfc_data", "surface_8F90.html#a7d2198fe7684f6f0da6f35863f90e931", null ],
     [ "create_nst_esmf_fields", "surface_8F90.html#a0072f75a8c94bd12bc0e84d392cec723", null ],
     [ "create_surface_esmf_fields", "surface_8F90.html#a0eeed6bc8807704d095c5356d5026518", null ],
-    [ "frh2o", "surface_8F90.html#a28f896df0eb043882b4758dfc9ae1aae", null ],
+    [ "frh2o", "surface_8F90.html#aac989248741a1a2ebec40ad4c0a35144", null ],
     [ "ij_to_i_j", "surface_8F90.html#a7a2257539e521c7e72bd2b3c76f72044", null ],
     [ "interp", "surface_8F90.html#ae8b708efb5c1abfda4a2efc48bef83dd", null ],
     [ "nst_land_fill", "surface_8F90.html#a37509f4fa66fcf75ee97f82cb99927b9", null ],
