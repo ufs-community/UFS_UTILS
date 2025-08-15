@@ -18,19 +18,22 @@ chgres_cube | George Gayno, Jeff Beck, Larissa Reames
 cpld_gridgen | Denise Worthen
 emcsfc_ice_blend | George Gayno
 emcsfc_snow2mdl | George Gayno
-fre-nctools | GFDL progammer
+fre-nctools | Zhi Liang GFDL
 fvcom_tools | David Wright, University of Michigan, Ming Hu, GSD/AMB
 gblevents | Hang Lei
 gdas_init | George Gayno
 global_cycle | George Gayno, Shrinivas Moorthi, Xu Li
-grid_tools | R. J. Purser (regional_esg_grid), Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), Tsukasa Fujita, JMA (pmat2), GFDL programmer (topo filtering code).
-orog_mask_tools | Ning Wang, Jordan Alpert, Shan Sun and Ning Wang
+grid_tools | R. J. Purser (regional_esg_grid), Tom Black, Ben Blake (shave.fd), Gerard Ketefian (global_equiv_resol), S-J Lin GFDL, Zhi Liang GFDL (filter_topo).
+lsm_routines | Clara Draper
+ocean_merge | Shan Sun, Rahul Mahajan
+ocnice_prep | Denise Worthen
+orog_mask_tools | Ning Wang, Shan Sun (inland, lake), Jordan Alpert, George Gayno (orog)
 regrid_sfc | Clara Draper
 sfc_climo_gen | George Gayno
 vcoord_gen | Fanglin Yang
 weight_gen | George Gayno
 
-UFS_UTILS Code managers: George Gayno, Jeff Beck, Larissa Reames
+UFS_UTILS Code managers: Brian Curtis, George Gayno
 
 ## Prerequisites
 
@@ -91,7 +94,7 @@ The `tests` directory contains unit tests.
 The `ush` directory contains scripts to run UFS_UTILS programs.  Most
 are called from driver scripts.
 
-The `util` directory contains utility scripts.
+The `util` directory contains utility programs and scripts.
 
 The `parm` directory contains parameter files used by
 the chgres_cube program.
@@ -133,4 +136,3 @@ Commerce. The Department of Commerce seal and logo, or the seal and
 logo of a DOC bureau, shall not be used in any manner to imply
 endorsement of any commercial product or activity by DOC or the United
 States Government.
-
