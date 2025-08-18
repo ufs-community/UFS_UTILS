@@ -241,7 +241,7 @@ The program reads the following parameters from standard input:
 
       * The path/name of the input 'grid' file.
       * The 'mask_only' flag - when true, compute and output land mask/fraction only. Default is false.
-      * Path/name of the external mask file. Optional. Used when the land mask/fraction was computed by another program. In this case, the 'orog' program computes all orography fields using the land mask/fraction from the file.
+      * Path/name of the external mask file. Optional. Used when the land mask/fraction was computed by another program. In this case, the 'orog' program computes all orography fields using the land mask/fraction from the file. Default is none.
 
 Program inputs and outputs
 --------------------------
@@ -255,6 +255,7 @@ Program inputs and outputs
              * topography.gmted2010.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
       * 30-arc-second RAMP Antarctic terrain data (Radarsat Antarctic Mapping Project)
              * topography.antarctica.ramp.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
+      * External mask file containing land mask, land fraction and lake fraction on the tile. (NetCDF). This file is optional. Instead of computing the mask and fraction, they may be read in from a file. The path/name of this file is read from standard input. See 'Program control options' for details.
 
 **Output data:**  
 
@@ -274,6 +275,8 @@ Orography files - one for each tile - oro.CRES.tile#.nc (NetCDF).  Contains thes
       * gamma - anisotropy (unitless)
       * sigma - slope of orography (unitless)
       * elvmax - maximum height above mean (meters)
+
+Optionally, the program may only compute and output the latitude, longitude, land mask and land fraction fields (when the 'mask_only' flag is set to true. See 'Program control options' for details). 
 
 orog_gsl
 ========
