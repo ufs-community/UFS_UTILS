@@ -234,6 +234,15 @@ The source code is located - ./sorc/orog_mask_tools.fd/orog.fd.  Some important 
       * MAKEPC2 - computes anisotropy (gamma), slope of orography (sigma) and mountain range angle (theta).
       * MAKEOA2 - computes maximum height (elvmax), orographic asymmetry (oa) and length scale (ol).
 
+Program control options
+-----------------------
+
+The program reads the following parameters from standard input: 
+
+      * The path/name of the input 'grid' file.
+      * The 'mask_only' flag - when true, compute and output land mask/fraction only. Default is false.
+      * Path/name of the external mask file. Optional. Used when the land mask/fraction was computed by another program. In this case, the 'orog' program computes all orography fields using the land mask/fraction from the file.
+
 Program inputs and outputs
 --------------------------
 
