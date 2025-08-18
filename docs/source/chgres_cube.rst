@@ -82,7 +82,7 @@ Users may create their own global grids, or use the pre-defined files located in
 	      * CRES.mxRES.slope_type.tileX.nc (slope type)
 	      * CRES.mxRES.snowfree_albedo.tileX.nc (snow-free albedo)
 	      * CRES.mxRES.soil_type.tileX.nc (soil type)
-	      * CRES.mxRES.subtrate_temperature.tileX.nc (soil substrate temperature)
+	      * CRES.mxRES.substrate_temperature.tileX.nc (soil substrate temperature)
 	      * CRES.mxRES.vegetation_greenness.tileX.nc (vegetation greenness)
 	      * CRES.mxRES.vegetation_type.tileX.nc (vegetation type)
 
@@ -253,7 +253,7 @@ The following four sets of files/directories should all be located in the same d
 	      * CRES.slope_type.tile7.halo4.nc (slope type)
 	      * CRES.snowfree_albedo.tile7.halo4.nc (snow-free albedo)
 	      * CRES.soil_type.tile7.halo4.nc (soil type)
-	      * CRES.subtrate_temperature.tile7.halo4.nc (soil substrate temperature)
+	      * CRES.substrate_temperature.tile7.halo4.nc (soil substrate temperature)
 	      * CRES.vegetation_greenness.tile7.halo4.nc (vegetation greenness)
 	      * CRES.vegetation_type.tile7.halo4.nc (vegetation type)
 
@@ -383,8 +383,6 @@ Namelist variables with “input” in their name refer to data input to chgres_
       * tg3_from_soil - Use tg3 from input soil. Valid options: .true. or .false. . Default: .false.
       * thomp_mp_climo_file - Location of Thompson aerosol climatology file. Provide only if you wish to use these aerosol variables.
       * wam_cold_start - Cold start for the Whole Atmosphere Model. Valid Options: .true. or .false. (Default: .false.)
-      * use_rh - Use relative humidity instead of specific humidity when reading in external model grib2 files (Default: .false.)
-      * calrh - Type of relative humidity to specific humidity calculation to use (Default: 0; use existing calculation, or 1; use calculation consistent with GFSv15/v16)
 
 Variable Mapping (VARMAP) table
 -------------------------------

@@ -229,7 +229,8 @@ Code structure
 
 The source code is located - ./sorc/orog_mask_tools.fd/orog.fd.  Some important subroutines:
 
-      * MAKEMT2 - computes land fraction, land-sea mask, orography, standard deviation of orography, and convexity.  
+      * MAKE_MASK - computes land fraction and land-sea mask.
+      * MAKEMT2 - computes orography, standard deviation of orography and convexity.  
       * MAKEPC2 - computes anisotropy (gamma), slope of orography (sigma) and mountain range angle (theta).
       * MAKEOA2 - computes maximum height (elvmax), orographic asymmetry (oa) and length scale (ol).
 
