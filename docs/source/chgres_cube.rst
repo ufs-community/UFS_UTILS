@@ -76,7 +76,7 @@ Users may create their own global grids, or use the pre-defined files located in
 	      * CRES.mxRES_oro_data.tile5.nc
 	      * CRES.mxRES_oro_data.tile6.nc
 
-      * FV3 surface climatological files - Located under the ./CRES/sfc subdirectories. `Example: <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/C192/sfc>`_. One file for each tile.  NetCDF format.
+      * FV3 surface climatological files - Located under the ./CRES/sfc subdirectories. `Example <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/C192/sfc/>`_. One file for each tile.  NetCDF format.
 	      * CRES.mxRES.facsf.tileX.nc (fractional coverage for strong/weak zenith angle dependent albedo)
 	      * CRES.mxRES.maximum_snow_albedo.tileX.nc (maximum snow albedo)
 	      * CRES.mxRES.slope_type.tileX.nc (slope type)
