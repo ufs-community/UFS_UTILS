@@ -409,7 +409,7 @@ ocean_merge
 Introduction
 ------------
 
-This program determines the water mask by merging the lake mask with the mapped ocean mask from MOM6.
+This program determines a water mask by merging an input lake mask with the mapped ocean mask from MOM6.
 
 Code structure
 --------------
@@ -439,12 +439,12 @@ Program inputs and outputs
 
 **Input data:**
 
-      * Model orography file (on model tile) (NetCDF)
-      * MOM6 ocean mask file (on model tile) (NetCDF). Located in ./fix/orog/CXXX/ocean_mask. `Example: <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/C384/ocean_mask>`_
+      * Model lake mask file (on model tile) (NetCDF)
+      * MOM6 ocean mask file (on model tile) (NetCDF). Located in ./fix/orog/CRES/ocean_mask. `Example<https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/C384/ocean_mask>`_
 
 **Output data:**
 
-      * blah
+      * File containing merged land mask/fraction and lake fraction/depth. (on model tile) (NetCDF) 
 
 filter_topo
 ===========
