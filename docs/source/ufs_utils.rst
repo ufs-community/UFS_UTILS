@@ -414,7 +414,7 @@ The FV3 terrain filtering algorithm has several unique properties compared to co
 Code structure
 --------------
 
-Location of source code: ./sorc/grid_tools.fd/filter_topo.fd. The entire program is contained in filter_topo.F90.
+Location of source code: ./sorc/grid_tools.fd/filter_topo.fd. The filtering component is contained in filter_topo.F90.
 
 Namelist options
 ----------------
@@ -428,6 +428,7 @@ Program execution is controlled via a namelist.  The namelist variables are:
       * zero_ocean - Flag to turn on the "island-preserving" property.  Default is true (logical)
       * stretch_fac - Stretching factor.  Equal to "1" for global uniform grids. Not applicable for ESG regional grids (floating point)
       * res - The "CRES" resolution (floating point)
+      * nested - When true, process a global grid with nest. Default is false. (logicial)
       * grid_type - 0 for a gnomonic grid (integer)
       * regional - True for an ESG regional grid (logical)
 
