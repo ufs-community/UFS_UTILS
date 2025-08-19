@@ -403,6 +403,49 @@ Program inputs and outputs
 
       * orography file - the orography file including records of lake fraction and lake depth - oro.CRES.tile#.nc (NetCDF)
 
+ocean_merge
+===========
+
+Introduction
+------------
+
+This program determines the water mask by merging the lake mask with the mapped ocean mask from MOM6.
+
+Code structure
+--------------
+
+Location of source code: ./sorc/ocean_merge.fd. Brief description of each module:
+
+      * merge.F90 - contains the routine that merges the masks.
+      * merge_lake_ocnmsk.F90 - driver routine.
+      * namelist.F90 - reads program namelist.
+      * read_write.F90 - contains routines to read/write files.
+      * utils.F90 - contains a utility for error handling.
+
+Program control options
+-----------------------
+
+The program reads the following namelist parameters: 
+
+      * ocean_mask_dir - Directory containing MOM6 ocean mask file.
+      * lake_mask_dir - Directory containing the lake mask file.
+      * atmres - Atmosphere grid resolution.
+      * ocnres - Ocean grid resolution.
+      * out_dir - Directory where output file will be written.
+      * binary_lake - When '1', treat lake fraction as either 0 or 1. Otherwise, it is a fraction.
+
+Program inputs and outputs
+--------------------------
+
+**Input data:**
+
+      * Model orography file (on model tile) (NetCDF)
+      * MOM6 ocean mask file (on model tile) (NetCDF). Located in ./fix/orog/CXXX/ocean_mask. `Example: <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/C384/ocean_mask>`_
+
+**Output data:**
+
+      * blah
+
 filter_topo
 ===========
 
