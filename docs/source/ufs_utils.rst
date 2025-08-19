@@ -440,7 +440,7 @@ Program inputs and outputs
 **Input data:**
 
       * Model lake mask file (on model tile) (NetCDF)
-      * MOM6 ocean mask file (on model tile) (NetCDF). Located in ./fix/orog/CRES/ocean_mask. `Example<https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/C384/ocean_mask>`_
+      * MOM6 ocean mask file (on model tile) (NetCDF). Located in ./fix/orog/CRES/ocean_mask. `Example<https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/C384/ocean_mask>`
 
 **Output data:**
 
