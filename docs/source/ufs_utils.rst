@@ -332,7 +332,7 @@ inland
 Introduction
 ------------
 
-This program reads an orography file, determines which points are inland from water, then writes out a mask record that identifies these points.
+This program reads an orography file, determines which points are inland from the ocean, then writes out a mask record that identifies these points.
 
 Code structure
 --------------
@@ -357,7 +357,7 @@ Program inputs and outputs
 
 **Output data:**
 
-      * orography file - The input file, but containing an additional 'inland' record - '1' inland, '0' coastal.
+      * orography file - The input file, but containing an additional 'inland' record - '1' inland, '0' ocean.
 
 lakefrac
 ========
@@ -379,7 +379,10 @@ The program reads the following parameters from standard input:
       * The tile number.
       * The resolution. Ex: '96' for C96.
       * The path to the global lake data.
-      * Minimum lake fraction in percent.
+      * The name of the lake status code file.
+      * The name of the lake depth file.
+      * Minimum lake fraction in percent. If less than minimum, fraction is zero.
+      * Binary lake flag. When '1', output lake fraction as '0' or '1'. Otherwise, output fraction. Default is '1'.
 
 Program inputs and outputs
 --------------------------
