@@ -99,7 +99,7 @@ regional_esg_grid
 Introduction
 ------------
 
-The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The ESG grid is designed to have nearly homogenous grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://dtcenter.org/sites/default/files/events/2020/2-purser-james.pdf>`_.
+The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The ESG grid is designed to have nearly homogenous grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://epic-dev.noaa.gov/wp-content/uploads/2023/08/UIFCW-2023-Tue-13.-Purser_UIFCW_2023.pdf>`_.
 
 Code Structure
 --------------
