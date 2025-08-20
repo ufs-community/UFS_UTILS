@@ -36,6 +36,8 @@ module use ../../modulefiles
 module load build.$target.$compiler
 module list
 
+ulimit -a
+
 export DATA="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/weight_gen"
 

@@ -13,7 +13,11 @@ wait_for_fin() {
   done
 }
 
-ulimit -s unlimited
+if [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then
+  ulimit -a
+else
+  ulimit -s unlimited
+fi
 
 export MAILTO=
 

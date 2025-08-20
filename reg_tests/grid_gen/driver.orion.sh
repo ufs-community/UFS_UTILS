@@ -27,7 +27,7 @@ module load build.$target.intelllvm
 module list
 
 set -x
-ulimit -s unlimited
+ulimit -a
 
 export WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
@@ -53,7 +53,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/grid_gen/baseline_data
+export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/grid_gen
 
 rm -fr $WORK_DIR
 

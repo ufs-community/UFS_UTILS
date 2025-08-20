@@ -86,7 +86,7 @@ elif [[ $target = orion ]]; then
     WLCLK=15
     export NCCMP=nccmp
     PARTITION=''
-    ulimit -s unlimited
+    ulimit -a
 elif [[ $target = hercules ]]; then
     STMP=${STMP:-/work2/noaa/stmp/$USER}
     BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/baseline_data
@@ -176,8 +176,7 @@ fi
 module use $PATHTR/modulefiles
 module load build.$target.$compiler
 if [[ $target = wcoss2 ]]; then
-  module load netcdf
-  module load nccmp/1.8.9.0
+  module load nccmp-D/1.9.0.1
 fi
 set +x
 module list

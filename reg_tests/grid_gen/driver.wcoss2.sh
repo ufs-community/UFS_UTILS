@@ -24,8 +24,7 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
-module load netcdf
-module load nccmp
+module load nccmp-D/1.9.0.1
 module list
 
 set -x
@@ -55,7 +54,7 @@ export APRUN_SFC="mpiexec -n 30 -ppn 30 -cpu-bind core"
 export OMP_STACKSIZE=2048m
 export OMP_NUM_THREADS=30 # orog code uses threads
 export OMP_PLACES=cores
-export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/grid_gen/baseline_data
+export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/grid_gen
 this_dir=$PWD
 
 ulimit -a

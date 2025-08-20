@@ -35,8 +35,7 @@ compiler=${compiler:-"intel"}
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.$compiler
-module load netcdf
-module load nccmp
+module load nccmp-D/1.9.0.1
 module list
 
 export DATA="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
