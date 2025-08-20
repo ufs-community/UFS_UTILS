@@ -11,29 +11,31 @@ The Unified Forecast Systems (UFS) Utilities repository contains pre-processing 
 Grid Generation
 ***********************************
 
-The following programs are used to create a grid.
+The following programs are used to create a grid. See below for details.
 
-      * make_hgrid
-      * regional_esg_grid
-      * make_solo_mosaic
-      * orog
-      * orog_gsl (optional)
-      * inland (optional)
-      * lakefrac (optional)
-      * global_equiv_resol
-      * shave
-      * filter_topo
-      * sfc_climo_gen
+      * make_hgrid (computes geo-reference parameters for all grids except ESG regional).
+      * regional_esg_grid (computes geo-reference parameters for ESG - Extended Schmidt Gnomonic - regional grids).
+      * make_solo_mosaic (creates the mosaic file).
+      * orog (creates the land-sea mask, terrain and EMC gravity wave drag fields).
+      * orog_gsl (creates GSL gravity wave drag fields).
+      * inland (determines non-ocean mask).
+      * lakefrac (add lakes and lake depth).
+      * ocean_merge (merges the lake and ocean masks).
+      * global_equiv_resol (computes the global equivalent resolution for regional grids).
+      * shave (removes the region outside the halo).
+      * filter_topo (filters the topography).
+      * sfc_climo_gen (creates climatological surface fields, such as soil type).
 
 The grid generation process is run by these scripts (located under ./ush)
 
-      * fv3gfs_grid_driver.sh  (driver script)
-      * fv3gfs_make_grid.sh (creates the geo-referencing for the grid)
-      * fv3gfs_make_orog.sh (creates the land-sea mask, terrain and EMC gravity wave drag fields)
-      * fv3gfs_make_orog_gsl.sh (creates GSL gravity wave drag fields)
-      * fv3gfs_make_lake.sh (adds lakes and lake depth. optional)
-      * fv3gfs_filter_topo.sh (filters the orography) 
-      * sfc_climo_gen.sh (creates climatological surface fields, such as soil type)
+      * fv3gfs_driver_grid.sh (driver script. runs shave.)
+      * fv3gfs_make_grid.sh (runs make_hgrid, regional_esg_grid, global_equiv_resol and make_solo_mosaic).
+      * fv3gfs_make_orog.sh (runs orog).
+      * fv3gfs_make_orog_gsl.sh (runs orog_gsl).
+      * fv3gfs_make_lake.sh (runs lakefrac and inland).
+      * fv3gfs_ocean_merge.sh (runs ocean_merge and orog code).
+      * fv3gfs_filter_topo.sh (runs filter_topo).
+      * sfc_climo_gen.sh (runs sfc_climo_gen).
 
 ***************************************************
 Description of each program
