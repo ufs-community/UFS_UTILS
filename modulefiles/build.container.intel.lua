@@ -2,7 +2,7 @@ help([[
 Load environment to compile UFS_UTILS in a container using Intel
 ]])
 
-prepend_path("MODULEPATH", "/opt/spack-stack/spack-stack-1.9.1/envs/unified-env/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/opt/spack-stack/spack-stack-1.9.2/envs/unified-env/install/modulefiles/Core")
 
 stack_oneapi_ver=os.getenv("stack_oneapi_ver") or "2024.2.0"
 stack_impi_ver=os.getenv("stack_impi_ver") or "2021.13"
