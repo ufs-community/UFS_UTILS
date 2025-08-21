@@ -605,6 +605,7 @@ END SUBROUTINE read_lakedata
 !! @author Ning Wang
 SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth) 
     USE netcdf 
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: cs_res
     REAL, INTENT(IN) :: cs_lakestat(:)
     REAL, INTENT(IN) :: cs_lakedpth(:)
@@ -740,8 +741,8 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
              start = (/ 1, 1 /), count = (/ cs_res, cs_res /) )
       CALL nc_opchk(stat, "nf90_get_var: inland")
 
-      lake_frac (:) = cs_lakestat ((tile_num-1)*tile_sz+1:tile_num*tile_sz)
-      lake_depth(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+      lake_frac (:) = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+      lake_depth(:) = cs_lakedpth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
 
 ! include Caspian Sea and Aral Sea if GLDB data set is used, and 
 ! exclude lakes in the coastal areas of Antarctica if MODIS data set is used  
@@ -822,6 +823,7 @@ END SUBROUTINE write_lakedata_to_orodata
 !! @author Ning Wang
 SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lakestat, cs_lakedpth) 
     USE netcdf 
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: cs_res, tile_x_dim, tile_y_dim
     REAL, INTENT(IN) :: cs_lakestat(:)
     REAL, INTENT(IN) :: cs_lakedpth(:)
@@ -842,7 +844,6 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
 
     INTEGER :: i
 
-!    include "netcdf.inc"
     tile_sz = tile_x_dim*tile_y_dim
 
     ALLOCATE(lake_frac(tile_sz), lake_depth(tile_sz))
@@ -969,7 +970,7 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
 
     tile_num = 1
     lake_frac(:)  = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
-    lake_depth(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+    lake_depth(:) = cs_lakedpth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
 
 ! include Caspian Sea and Aral Sea if GLDB data set is used, and 
 ! exclude lakes in the coastal areas of Antarctica if MODIS data set is used  
