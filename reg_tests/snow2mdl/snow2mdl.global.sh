@@ -1,25 +1,55 @@
 #!/bin/bash
 
 #--------------------------------------------------------------------------
-# Create a snow file from afwa global data and ims data.  This script 
+# Create a snow file from afwa global data and ims data.  This script
 # is run from its machine-specific driver.
+#
+# This test mimics current GFS OPS which uses the global afwa data.
+#
+# Note, this test uses the "snow2mdl.nml.tmpl" template to create
+# the fort.41 namelist as is done by the global workflow.
 #--------------------------------------------------------------------------
+
+echo "BEGIN SNOW2MDL GLOBAL TEST."
 
 set -x
 
-export IMS_FILE=$HOMEreg/input_data/global/gfs.t00z.imssnow96.grib2
-export AFWA_GLOBAL_FILE="$HOMEreg/input_data/global/gfs.t00z.snow.usaf.grib2"
+HOMEush="${HOMEgfs}/ush"
+HOMEparm="${HOMEgfs}/parm"
+HOMEexec="${HOMEgfs}/exec"
+HOMEfix="${HOMEgfs}/fix/am"
 
-export MODEL_LATITUDE_FILE=$HOMEgfs/fix/am/global_latitudes.t1534.3072.1536.grb
-export MODEL_LONGITUDE_FILE=$HOMEgfs/fix/am/global_longitudes.t1534.3072.1536.grb
-export MODEL_SLMASK_FILE=$HOMEgfs/fix/am/global_slmask.t1534.3072.1536.grb
-export GFS_LONSPERLAT_FILE=$HOMEgfs/fix/am/global_lonsperlat.t1534.3072.1536.txt
+source "${HOMEush}/atparse.bash"  # include function atparse for parsing @[XYZ] templated files
 
-export OMP_NUM_THREADS=1
-export OUTPUT_GRIB2=.false.
+SNOW2MDLNMLTMPL="${HOMEparm}/prep_sfc/snow2mdl.nml.tmpl"
 
-${HOMEgfs}/ush/emcsfc_snow.sh
+CLIMO_QC="${HOMEfix}/emcsfc_snow_cover_climo.grib2"
 
+MODEL_LATITUDE_FILE="${HOMEfix}/global_latitudes.t1534.3072.1536.grb"
+MODEL_LONGITUDE_FILE="${HOMEfix}/global_longitudes.t1534.3072.1536.grb"
+MODEL_SLMASK_FILE="${HOMEfix}/global_slmask.t1534.3072.1536.grb"
+GFS_LONSPERLAT_FILE="${HOMEfix}/global_lonsperlat.t1534.3072.1536.txt"
+
+MODEL_SNOW_FILE="snogrb_model"
+OUTPUT_GRIB2=".false."
+
+IMSYEAR=2025
+IMSMONTH=03
+IMSDAY=25
+IMSHOUR=0
+
+rm -fr $DATA
+mkdir -p $DATA
+cd $DATA
+
+cp "$HOMEreg/input_data/global/gfs.t00z.imssnow96.grib2" "./imssnow96.grib2"
+cp "$HOMEreg/input_data/global/gfs.t00z.snow.usaf.grib2" "./snow.usaf.grib2"
+
+atparse < "${SNOW2MDLNMLTMPL}" >> "./fort.41"
+echo "Rendered fort.41"
+cat "./fort.41"
+
+eval ${HOMEexec}/emcsfc_snow2mdl >> OUTPUT 2> errfile
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x

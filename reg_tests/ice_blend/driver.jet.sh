@@ -57,8 +57,6 @@ export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests
 
 export HOMEgfs=$PWD/../..
 
-rm -fr $DATA
-
 ./ice_blend.sh
 
 exit 0
