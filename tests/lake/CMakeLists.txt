@@ -12,4 +12,8 @@ endif()
 add_executable(ftst_enclosure_cnvx ftst_enclosure_cnvx.F90)
 target_link_libraries(ftst_enclosure_cnvx lakefrac_lib)
 
+add_executable(ftst_middle ftst_middle.F90)
+target_link_libraries(ftst_middle lakefrac_lib)
+
 add_test(NAME lake-ftst_enclosure_cnvx COMMAND ftst_enclosure_cnvx)
+add_test(NAME lake-ftst_middle COMMAND ftst_middle)
