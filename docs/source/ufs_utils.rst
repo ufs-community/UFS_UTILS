@@ -11,29 +11,31 @@ The Unified Forecast Systems (UFS) Utilities repository contains pre-processing 
 Grid Generation
 ***********************************
 
-The following programs are used to create a grid.
+The following programs are used to create a grid. See below for details.
 
-      * make_hgrid
-      * regional_esg_grid
-      * make_solo_mosaic
-      * orog
-      * orog_gsl (optional)
-      * inland (optional)
-      * lakefrac (optional)
-      * global_equiv_resol
-      * shave
-      * filter_topo
-      * sfc_climo_gen
+      * make_hgrid (computes geo-reference parameters for all grids except ESG regional).
+      * regional_esg_grid (computes geo-reference parameters for ESG - Extended Schmidt Gnomonic - regional grids).
+      * make_solo_mosaic (creates the mosaic file).
+      * orog (creates the land-sea mask, terrain and EMC gravity wave drag fields).
+      * orog_gsl (creates GSL gravity wave drag fields).
+      * inland (determines non-ocean mask).
+      * lakefrac (add lakes and lake depth).
+      * ocean_merge (merges the lake and ocean masks).
+      * global_equiv_resol (computes the global equivalent resolution for regional grids).
+      * shave (removes the region outside the halo).
+      * filter_topo (filters the topography).
+      * sfc_climo_gen (creates climatological surface fields, such as soil type).
 
 The grid generation process is run by these scripts (located under ./ush)
 
-      * fv3gfs_grid_driver.sh  (driver script)
-      * fv3gfs_make_grid.sh (creates the geo-referencing for the grid)
-      * fv3gfs_make_orog.sh (creates the land-sea mask, terrain and EMC gravity wave drag fields)
-      * fv3gfs_make_orog_gsl.sh (creates GSL gravity wave drag fields)
-      * fv3gfs_make_lake.sh (adds lakes and lake depth. optional)
-      * fv3gfs_filter_topo.sh (filters the orography) 
-      * sfc_climo_gen.sh (creates climatological surface fields, such as soil type)
+      * fv3gfs_driver_grid.sh (driver script. runs shave.)
+      * fv3gfs_make_grid.sh (runs make_hgrid, regional_esg_grid, global_equiv_resol and make_solo_mosaic).
+      * fv3gfs_make_orog.sh (runs orog).
+      * fv3gfs_make_orog_gsl.sh (runs orog_gsl).
+      * fv3gfs_make_lake.sh (runs lakefrac and inland).
+      * fv3gfs_ocean_merge.sh (runs ocean_merge and orog code).
+      * fv3gfs_filter_topo.sh (runs filter_topo).
+      * sfc_climo_gen.sh (runs sfc_climo_gen).
 
 ***************************************************
 Description of each program
@@ -97,7 +99,7 @@ regional_esg_grid
 Introduction
 ------------
 
-The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The ESG grid is designed to have nearly homogenous grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://dtcenter.org/sites/default/files/events/2020/2-purser-james.pdf>`_.
+The regional_esg_grid program computes geo-referencing parameters for the Extended Schmidt Gnomonic (ESG) regional grid.  The parameters include geographic latitude and longitude, and grid cell area.  See the output data section for a full list of parameters.  The ESG grid is designed to have nearly homogenous grid spacing.  Like the make_hgrid program, the parameters are computed on the staggered or "supergrid".  For more information on the Extended Schmidt Gnomonic, see: `Purser, et. al <https://epic-dev.noaa.gov/wp-content/uploads/2023/08/UIFCW-2023-Tue-13.-Purser_UIFCW_2023.pdf>`_.
 
 Code Structure
 --------------
@@ -229,9 +231,19 @@ Code structure
 
 The source code is located - ./sorc/orog_mask_tools.fd/orog.fd.  Some important subroutines:
 
-      * MAKEMT2 - computes land fraction, land-sea mask, orography, standard deviation of orography, and convexity.  
+      * MAKE_MASK - computes land fraction and land-sea mask.
+      * MAKEMT2 - computes orography, standard deviation of orography and convexity.  
       * MAKEPC2 - computes anisotropy (gamma), slope of orography (sigma) and mountain range angle (theta).
       * MAKEOA2 - computes maximum height (elvmax), orographic asymmetry (oa) and length scale (ol).
+
+Program control options
+-----------------------
+
+The program reads the following parameters from standard input: 
+
+      * The path/name of the input 'grid' file.
+      * The 'mask_only' flag - when true, compute and output land mask/fraction only. Default is false.
+      * Path/name of the external mask file. Optional. Used when the land mask/fraction was computed by another program. In this case, the 'orog' program computes all orography fields using the land mask/fraction from the file. Default is none.
 
 Program inputs and outputs
 --------------------------
@@ -245,6 +257,7 @@ Program inputs and outputs
              * topography.gmted2010.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
       * 30-arc-second RAMP Antarctic terrain data (Radarsat Antarctic Mapping Project)
              * topography.antarctica.ramp.30s.nc (NetCDF). Located here `./fix/orog <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/>`_.
+      * External mask file containing land mask, land fraction and lake fraction on the tile. (NetCDF). This file is optional. Instead of computing the mask and fraction, they may be read in from a file. The path/name of this file is read from standard input. See 'Program control options' for details.
 
 **Output data:**  
 
@@ -264,6 +277,8 @@ Orography files - one for each tile - oro.CRES.tile#.nc (NetCDF).  Contains thes
       * gamma - anisotropy (unitless)
       * sigma - slope of orography (unitless)
       * elvmax - maximum height above mean (meters)
+
+Optionally, the program may only compute and output the latitude, longitude, land mask and land fraction fields (when the 'mask_only' flag is set to true. See 'Program control options' for details). 
 
 orog_gsl
 ========
@@ -319,7 +334,7 @@ inland
 Introduction
 ------------
 
-This program reads an orography file, determines which points are inland from water, then writes out a mask record that identifies these points.
+This program reads an orography file, determines which points are inland from the ocean, then writes out a mask record that identifies these points.
 
 Code structure
 --------------
@@ -344,7 +359,7 @@ Program inputs and outputs
 
 **Output data:**
 
-      * orography file - The input file, but containing an additional 'inland' record - '1' inland, '0' coastal.
+      * orography file - The input file, but containing an additional 'inland' record - '1' inland, '0' ocean.
 
 lakefrac
 ========
@@ -366,7 +381,10 @@ The program reads the following parameters from standard input:
       * The tile number.
       * The resolution. Ex: '96' for C96.
       * The path to the global lake data.
-      * Minimum lake fraction in percent.
+      * The name of the lake status code file.
+      * The name of the lake depth file.
+      * Minimum lake fraction in percent. If less than minimum, fraction is zero.
+      * Binary lake flag. When '1', output lake fraction as '0' or '1'. Otherwise, output fraction. Default is '1'.
 
 Program inputs and outputs
 --------------------------
@@ -387,6 +405,49 @@ Program inputs and outputs
 
       * orography file - the orography file including records of lake fraction and lake depth - oro.CRES.tile#.nc (NetCDF)
 
+ocean_merge
+===========
+
+Introduction
+------------
+
+This program determines a water mask by merging an input lake mask with the mapped ocean mask from MOM6.
+
+Code structure
+--------------
+
+Location of source code: ./sorc/ocean_merge.fd. Brief description of each module:
+
+      * merge.F90 - contains the routine that merges the masks.
+      * merge_lake_ocnmsk.F90 - driver routine.
+      * namelist.F90 - reads program namelist.
+      * read_write.F90 - contains routines to read/write files.
+      * utils.F90 - contains a utility for error handling.
+
+Program control options
+-----------------------
+
+The program reads the following namelist parameters: 
+
+      * ocean_mask_dir - Directory containing MOM6 ocean mask file.
+      * lake_mask_dir - Directory containing the lake mask file.
+      * atmres - Atmosphere grid resolution.
+      * ocnres - Ocean grid resolution.
+      * out_dir - Directory where output file will be written.
+      * binary_lake - When '1', treat lake fraction as either 0 or 1. Otherwise, it is a fraction.
+
+Program inputs and outputs
+--------------------------
+
+**Input data:**
+
+      * Model lake mask file (on model tile) (NetCDF)
+      * MOM6 ocean mask file (on model tile) (NetCDF). Located in ./fix/orog/CRES/ocean_mask. `Example <https://noaa-nws-global-pds.s3.amazonaws.com/index.html#fix/orog/20240917/C384/ocean_mask>`_.
+
+**Output data:**
+
+      * File containing merged land mask/fraction and lake fraction/depth. (on model tile) (NetCDF) 
+
 filter_topo
 ===========
 
@@ -398,7 +459,7 @@ The FV3 terrain filtering algorithm has several unique properties compared to co
 Code structure
 --------------
 
-Location of source code: ./sorc/grid_tools.fd/filter_topo.fd. The entire program is contained in filter_topo.F90.
+Location of source code: ./sorc/grid_tools.fd/filter_topo.fd. The filtering component is contained in filter_topo.F90.
 
 Namelist options
 ----------------
@@ -412,6 +473,7 @@ Program execution is controlled via a namelist.  The namelist variables are:
       * zero_ocean - Flag to turn on the "island-preserving" property.  Default is true (logical)
       * stretch_fac - Stretching factor.  Equal to "1" for global uniform grids. Not applicable for ESG regional grids (floating point)
       * res - The "CRES" resolution (floating point)
+      * nested - When true, process a global grid with nest. Default is false. (logicial)
       * grid_type - 0 for a gnomonic grid (integer)
       * regional - True for an ESG regional grid (logical)
 
