@@ -49,7 +49,7 @@ cat << EOF > fort.41
  orog_files_target_grid="${ORO_NAME}.tile1.nc","${ORO_NAME}.tile2.nc","${ORO_NAME}.tile3.nc","${ORO_NAME}.tile4.nc","${ORO_NAME}.tile5.nc","${ORO_NAME}.tile6.nc"
  mosaic_file_input_grid="${FIX_ORO_INPUT}/${CINP}/${CINP}_mosaic.nc"
  orog_dir_input_grid="${FIX_ORO_INPUT}/${CINP}"
- orog_files_input_grid="${CINP}.mx${OCNRES}_oro_data.tile1.nc","${CINP}.mx${OCNRES}_oro_data.tile2.nc","${CINP}.mx${OCNRES}_oro_data.tile3.nc","${CINP}.mx${OCNRES}_oro_data.tile4.nc","${CINP}.mx${OCNRES}_oro_data.tile5.nc","${CINP}.mx${OCNRES}_oro_data.tile6.nc"
+ orog_files_input_grid="${CINP}_oro_data.tile1.nc","${CINP}_oro_data.tile2.nc","${CINP}_oro_data.tile3.nc","${CINP}_oro_data.tile4.nc","${CINP}_oro_data.tile5.nc","${CINP}_oro_data.tile6.nc"
  data_dir_input_grid="${INPUT_DATA_DIR}"
  atm_core_files_input_grid="${YMDH}.fv_core.res.tile1.nc","${YMDH}.fv_core.res.tile2.nc","${YMDH}.fv_core.res.tile3.nc","${YMDH}.fv_core.res.tile4.nc","${YMDH}.fv_core.res.tile5.nc","${YMDH}.fv_core.res.tile6.nc","${YMDH}.fv_core.res.nc"
  atm_tracer_files_input_grid="${YMDH}.fv_tracer.res.tile1.nc","${YMDH}.fv_tracer.res.tile2.nc","${YMDH}.fv_tracer.res.tile3.nc","${YMDH}.fv_tracer.res.tile4.nc","${YMDH}.fv_tracer.res.tile5.nc","${YMDH}.fv_tracer.res.tile6.nc"
