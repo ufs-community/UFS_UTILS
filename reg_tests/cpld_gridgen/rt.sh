@@ -214,7 +214,7 @@ while read -r line || [ "$line" ]; do
        -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
 
   else
-    tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 --mem=12GB -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+    tests[$i]=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
             $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
   fi
 
