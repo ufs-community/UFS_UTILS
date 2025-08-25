@@ -68,10 +68,8 @@ program gen_fixgrid
   character(len= 6) :: cnx
 
   !-------------------------------------------------------------------------
-  ! Initialize esmf environment.
-  ! Everthing except the generation of the weights to map the ocean mask to
-  ! the ATM tiles and generation of the tripole:tripole weights is done on
-  ! the root PE.
+  ! Initialize esmf environment. Everything except the generation of the 
+  ! ESMF weights is done on the root PE.
   !-------------------------------------------------------------------------
 
   call ESMF_Initialize()
@@ -84,7 +82,6 @@ program gen_fixgrid
   if (localPet == 0) maintask=.true.
   if (maintask) then
      print '(a,i4,a)','Running on = ',npet,' tasks'
-
      !---------------------------------------------------------------------
      !
      !---------------------------------------------------------------------
@@ -558,7 +555,6 @@ program gen_fixgrid
           netcdf4fileFlag=.true., tileFilePath=trim(fv3dir)//'/'//trim(atmres)//'/', rc=rc)
      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
           line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
-
   end do
 
   !---------------------------------------------------------------------
