@@ -27,7 +27,7 @@ module load build.$target.intelllvm
 module list
 
 set -x
-ulimit -s unlimited
+ulimit -a
 
 export WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"

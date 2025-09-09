@@ -33,8 +33,7 @@ if [[ "$compiler" == "intelllvm" ]]; then
 fi
 module load build.$target.$compiler
 if [[ "$target" == "wcoss2" ]];then
-  module load netcdf
-  module load nccmp
+  module load nccmp-D/1.9.0.1
 fi
 set +x
 module list
@@ -68,6 +67,7 @@ elif [[ "$target" == "orion" ]];then
   export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/regrid_sfc
   export APRUN_REGRID=srun
   PARTITION=''
+  ulimit -a
 elif [[ "$target" == "hercules" ]];then
   WORK_DIR="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
   PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"

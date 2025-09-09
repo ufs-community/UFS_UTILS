@@ -30,7 +30,7 @@ module use ../../modulefiles
 module load build.$target.intelllvm
 module list
 
-ulimit -s unlimited
+ulimit -a
 
 export OUTDIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
 export OUTDIR="${OUTDIR}/reg-tests/chgres-cube"

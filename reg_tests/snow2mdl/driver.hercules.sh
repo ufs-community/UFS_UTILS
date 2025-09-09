@@ -23,13 +23,12 @@ set -x
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.$target.intelllvm
-module load prod_util/2.1.1
 module list
 
 ulimit -s unlimited
 
-export DATA_ROOT="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
-export DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
+DATA_ROOT="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
+DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
 
 PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 QUEUE="${QUEUE:-batch}"
@@ -51,8 +50,6 @@ export OMP_NUM_THREADS=1
 
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
-export WGRIB=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/intel/2021.9.0/grib-util-1.3.0-wenl3in/bin/wgrib
-export WGRIB2=/work/noaa/epic/role-epic/spack-stack/hercules/spack-stack-1.5.0/envs/unified-env/install/intel/2021.9.0/wgrib2-3.1.1-v7xhwos/bin/wgrib2
 
 # The first test uses the hemispheric air force/afwa data, which was used in OPS.
 
