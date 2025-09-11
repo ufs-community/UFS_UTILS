@@ -39,8 +39,8 @@ set +x
 module list
 set -x
 
-export UPDATE_BASELINE="FALSE"
-#export UPDATE_BASELINE="TRUE"
+UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
+export UPDATE_BASELINE
 
 if [[ "$UPDATE_BASELINE" == "TRUE" ]]; then
   source ../get_hash.sh

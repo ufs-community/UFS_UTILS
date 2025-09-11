@@ -47,8 +47,8 @@ export APRUN_SFC=srun
 export OMP_STACKSIZE=2048m
 export OMP_NUM_THREADS=24
 
-export UPDATE_BASELINE="FALSE"
-#export UPDATE_BASELINE="TRUE"
+UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
+export UPDATE_BASELINE
 
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh

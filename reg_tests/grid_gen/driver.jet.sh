@@ -37,8 +37,8 @@ export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 # Should not have to change anything below here.
 #-----------------------------------------------------------------------------
 
-export UPDATE_BASELINE="FALSE"
-#export UPDATE_BASELINE="TRUE"
+UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
+export UPDATE_BASELINE
 
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh

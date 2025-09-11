@@ -47,8 +47,8 @@ export HDF5_DISABLE_VERSION_CHECK=2
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
 
-export UPDATE_BASELINE="FALSE"
-#export UPDATE_BASELINE="TRUE"
+UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
+export UPDATE_BASELINE
 
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
