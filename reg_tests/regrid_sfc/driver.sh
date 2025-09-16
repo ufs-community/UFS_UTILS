@@ -81,6 +81,13 @@ elif [[ "$target" == "wcoss2" ]];then
   QUEUE="${QUEUE:-dev}"
   export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/regrid_sfc
   export APRUN_REGRID="mpiexec -n 6 -ppn 6 --cpu-bind core"
+elif [[ "$target" == "noaacloud" ]];then
+  WORK_DIR="${WORK_DIR:-/contrib/$LOGNAME}/dev"
+  PROJECT_CODE="${PROJECT_CODE:-${USER}}"
+  QUEUE="${QUEUE:-batch}"
+  export HOMEreg=/contrib/ufs_utils/reg_tests/regrid_sfc/
+  export APRUN_REGRID=srun
+  PARTITION='process'
 fi
 
 DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc"

@@ -23,17 +23,52 @@ export MAILTO=
 
 # Directory to download UFS_UTILS to and run the consistency tests
 export WORK_DIR=
-
 export PROJECT_CODE=
 export QUEUE=
 TIMEOUT_LIMIT=3600
+repo=https://github.com/ufs-community/UFS_UTILS.git
+branch=develop
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    -w|--workdir)
+      WORK_DIR="$2"
+      shift 2
+      ;;
+    -m|--mailto)
+      MAILTO="$2"
+      shift 2
+      ;;
+    -r|--repo)
+      repo="$2"
+      shift 2
+      ;;
+    -b|--branch)
+      branch="$2"
+      shift 2
+      ;;
+    -q|--queue)
+      queue="$2"
+      shift 2
+      ;;
+    -v|--verbose)
+      verbose=true
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+done
 
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
 rm -f reg_test_results.txt
 rm -rf UFS_UTILS
 
-git clone https://github.com/ufs-community/UFS_UTILS.git
+#git clone https://github.com/ufs-community/UFS_UTILS.git
+git clone -b ${branch} --recursive ${repo} UFS_UTILS
 rc=$?
 
 # Check to see if the clone was successful. Previously, it has
@@ -49,11 +84,13 @@ else
     target=WCOSS2
   elif [[ -d /scratch3 ]] ; then
     target=Ursa
+  elif [[ -d /contrib ]] ; then
+    target=noaacloud
   fi
   echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
 fi
 
-cd UFS_UTILS
+cd ${WORK_DIR}/UFS_UTILS
 
 source sorc/machine-setup.sh
 
@@ -126,7 +163,7 @@ done
 
 for dir in weight_gen ice_blend; do
     cd $dir
-    if [[ $target == "ursa" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "hercules" ]] ; then
+    if [[ $target == "ursa" ]] || [[ $target == "jet" ]] || [[ $target == "orion" ]] || [[ $target == "hercules" || [[ $target == "noaacloud" ]] ; then
         sbatch -A ${PROJECT_CODE} ./driver.$target.sh
     elif [[ $target == "wcoss2" ]] ; then
         qsub -v WORK_DIR ./driver.$target.sh

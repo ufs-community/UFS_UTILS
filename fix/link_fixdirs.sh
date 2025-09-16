@@ -28,7 +28,7 @@ if [ $RUN_ENVIR != emc -a $RUN_ENVIR != nco ]; then
     exit 1
 fi
 
-if [ $machine != wcoss2 -a $machine != ursa -a $machine != jet -a $machine != orion -a $machine != hercules -a $machine != gaeac6 ]; then
+if [ $machine != wcoss2 -a $machine != ursa -a $machine != jet -a $machine != orion -a $machine != hercules -a $machine != gaeac6 -a $machine != noaaload ]; then
     set +x
     echo '***ERROR*** unsupported machine'
     echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | ursa | jet | orion | hercules | gaeac6 )'
@@ -54,6 +54,8 @@ elif [ $machine = "wcoss2" ]; then
     FIX_DIR="/lfs/h2/emc/global/noscrub/emc.global/FIX/fix"
 elif [ $machine = "gaeac6" ]; then
     FIX_DIR="/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix"
+elif [ $machine = "noaacloud" ]; then
+    FIX_DIR="/contrib/global-workflow-shared-data/fix"
 fi
 
 am_ver=${am_ver:-20220805}

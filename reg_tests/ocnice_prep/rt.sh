@@ -109,6 +109,16 @@ elif [[ $target = jet ]]; then
     export NCCMP=nccmp
     PARTITION="--partition=xjet"
     ulimit -s unlimited
+elif [[ $target = noaacloud ]]; then
+    STMP=${STMP:-/lustre/$USER/stmp}
+    BASELINE_ROOT=/contrib/ufs_utils/reg_tests/ocnice_prep/baseline_data
+    WEIGHTS_ROOT=/contrib/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    INPUT_ROOT=/contrib/ufs_utils/reg_tests/ocnice_prep/input_data
+    ACCOUNT=${ACCOUNT:-${USER}}
+    QUEUE=${QUEUE:-process}
+    WLCLK=10
+    export NCCMP=nccmp
+    PARTITION=''
 fi
 
 NEW_BASELINE_ROOT=$STMP/OCNICE_PREP/BASELINE
