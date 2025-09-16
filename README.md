@@ -114,6 +114,37 @@ ReadTheDocs documentation files.
 The `cmake` directory contains CMake package find utilities, and utilities to
 run units tests on some supported HPC platforms.
 
+## Compile ufs-utils with container on Ursa, and AWS
+container SIFs can be found:
+AWS: EPIC users: /contrib/containers/ubuntu22.04-intel-ufs-env-v1.9.2.img
+     NOAA users: /contrib-epic/containers/ubuntu22.04-intel-ufs-env-v1.9.2.img
+Ursa: /scratch3/NCEPDEV/nems/role.epic/containers/ubuntu22.04-intel-ufs-env-v1.9.2.img
+	(or at dir: /scratch4/NAGAPE/epic/Wei.Huang/containers)
+
+To compile use container:
+img=/path/to/ubuntu22.04-intel-ufs-env-v1.9.2.img
+
+on AWS:
+	singularity shell -e -B /contrib [-B /contrib-epic] $img
+        # now in singularity shell with prompt: Singularity>
+	cd /path/to/ufs-utils-source-code-dir
+        ./build_all.sh
+on Ursa:
+	singularity shell -e -B /scratch3 -B /scrathc4 $img
+        # now in singularity shell with prompt: Singularity>
+	cd /path/to/ufs-utils-source-code-dir
+        ./build_all.sh
+
+At Singularity prompt, type "exit" to quit from singularity.
+
+On other machines, need to copy SIF ubuntu22.04-intel-ufs-env-v1.9.2.img to the machine,
+if it is not available there.
+
+If run executables directly, just issue singularity command as above,
+and then run the executable. There is no experience/experiments to run batch jobs yet (outside Global-Workflow),
+please contact Wei.Huang@noaa.gov to discuss how to run batch jobs.
+	
+
 ## References
 
 Gayno G., Beck J., Carson L., [Pre-Processing:
