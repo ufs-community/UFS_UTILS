@@ -20,7 +20,8 @@
 
 set -x
 
-compiler=${compiler:-"intelllvm"}
+#compiler=${compiler:-"intelllvm"}
+compiler=${compiler:-"intel"}
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
@@ -35,6 +36,7 @@ rm -fr $DATA_ROOT
 PROJECT_CODE="${PROJECT_CODE:-${USER}}"
 QUEUE="${QUEUE:-process}"
 export APRUN="srun --mpi=pmi2 -l -n 1"
+export PARTITION='--partition process'
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -54,18 +56,18 @@ export HOMEgfs=$PWD/../..
 
 export DATA="${DATA_ROOT}/test.hemi"
 TEST1=$(sbatch --parsable -J snow.hemi -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
-      --ntasks=1 -q ${QUEUE} -t 00:03:00 ./snow2mdl.hemi.sh)
+      --ntasks=1 -q ${QUEUE} $PARTITION -t 00:03:00 ./snow2mdl.hemi.sh)
 
 # The second test mimics current OPS, which uses global afwa/airforce data.
 
 export DATA="${DATA_ROOT}/test.global"
 TEST2=$(sbatch --parsable -J snow.global -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
-      --ntasks=1 -q ${QUEUE} -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
+      --ntasks=1 -q ${QUEUE} $PARTITION -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
 
 # Create summary file.
 
 sbatch --nodes=1 -t 0:01:00 -A ${PROJECT_CODE} -J snow_summary -o consistency.log -e consistency.log \
-       --open-mode=append -q ${QUEUE} -d afterok:$TEST2 << EOF
+       $PARTITION --open-mode=append -q ${QUEUE} -d afterok:$TEST2 << EOF
 #!/bin/bash
 grep -a '<<<' consistency.log  > summary.log
 EOF

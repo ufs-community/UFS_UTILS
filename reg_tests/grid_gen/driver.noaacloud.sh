@@ -21,7 +21,8 @@
 #
 #-----------------------------------------------------------------------------
 
-compiler=${compiler:-"intelllvm"}
+#compiler=${compiler:-"intelllvm"}
+compiler=${compiler:-"intel"}
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
@@ -32,8 +33,8 @@ set -x
 
 export WORK_DIR="${WORK_DIR:-/lustre//$LOGNAME}/stmp"
 export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
-QUEUE="${QUEUE:-batch}"
-PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+QUEUE="${QUEUE:-process}"
+PROJECT_CODE="${PROJECT_CODE:-${USER}}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.
@@ -50,7 +51,8 @@ LOG_FILE=consistency.log
 SUM_FILE=summary.log
 export home_dir=$PWD/../..
 export APRUN=time
-export APRUN_SFC=srun
+export APRUN_SFC="srun --mpi=pmi2 -l -n 24"
+export PARTITION='--partition process'
 export OMP_STACKSIZE=2048m
 export HOMEreg=/contrib/ufs_utils/reg_tests/grid_gen
 
@@ -65,32 +67,32 @@ export OMP_NUM_THREADS=24
 #-----------------------------------------------------------------------------
 
 LOG_FILE1=${LOG_FILE}01
-TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
-      -o $LOG_FILE1 -e $LOG_FILE1 ./c96.uniform.sh)
+TEST1=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:45:00 -A $PROJECT_CODE -q $QUEUE -J c96.uniform \
+      -o $LOG_FILE1 -e $LOG_FILE1 $PARTITION ./c96.uniform.sh)
 
 #-----------------------------------------------------------------------------
 # C96 uniform grid using viirs vegetation and bnu soil data.
 #-----------------------------------------------------------------------------
 
 LOG_FILE2=${LOG_FILE}02
-TEST2=$(sbatch --parsable --ntasks-per-node=12 --nodes=2 --mem=300g -t 0:15:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.bnu \
-      -o $LOG_FILE2 -e $LOG_FILE2 ./c96.viirs.bnu.sh)
+TEST2=$(sbatch --parsable --ntasks-per-node=12 --nodes=2 -t 0:45:00 -A $PROJECT_CODE -q $QUEUE -J c96.viirs.bnu \
+      -o $LOG_FILE2 -e $LOG_FILE2 $PARTITION ./c96.viirs.bnu.sh)
 
 #-----------------------------------------------------------------------------
 # gfdl regional grid
 #-----------------------------------------------------------------------------
 
 LOG_FILE3=${LOG_FILE}03
-TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J gfdl.regional \
-      -o $LOG_FILE3 -e $LOG_FILE3 ./gfdl.regional.sh)
+TEST3=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:45:00 -A $PROJECT_CODE -q $QUEUE -J gfdl.regional \
+      -o $LOG_FILE3 -e $LOG_FILE3 $PARTITION ./gfdl.regional.sh)
 
 #-----------------------------------------------------------------------------
 # ESG regional grid (output dominant soil/vegetation type).
 #-----------------------------------------------------------------------------
 
 LOG_FILE4=${LOG_FILE}04
-TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
-      -o $LOG_FILE4 -e $LOG_FILE4 ./esg.regional.sh)
+TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:45:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional \
+      -o $LOG_FILE4 -e $LOG_FILE4 $PARTITION ./esg.regional.sh)
 
 #-----------------------------------------------------------------------------
 # ESG regional grid (output percent of each soil and vegetation type and
@@ -98,8 +100,8 @@ TEST4=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_
 #-----------------------------------------------------------------------------
 
 LOG_FILE5=${LOG_FILE}05
-TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional.pct.cat \
-      -o $LOG_FILE5 -e $LOG_FILE5 ./esg.regional.pct.cat.sh)
+TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:45:00 -A $PROJECT_CODE -q $QUEUE -J esg.regional.pct.cat \
+      -o $LOG_FILE5 -e $LOG_FILE5 $PARTITION ./esg.regional.pct.cat.sh)
 
 #-----------------------------------------------------------------------------
 # Regional GSL gravity wave drag test. This test is run with varying
@@ -108,20 +110,20 @@ TEST5=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_
 
 export nthreads=12
 LOG_FILE6=${LOG_FILE}06
-TEST6=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd.12 \
-      -o $LOG_FILE6 -e $LOG_FILE6 ./regional.gsl.gwd.sh)
+TEST6=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 0:45:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd.12 \
+      -o $LOG_FILE6 -e $LOG_FILE6 $PARTITION ./regional.gsl.gwd.sh)
 
 export nthreads=24
 LOG_FILE7=${LOG_FILE}07
-TEST7=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd.24 \
-      -o $LOG_FILE7 -e $LOG_FILE7 ./regional.gsl.gwd.sh)
+TEST7=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:45:00 -A $PROJECT_CODE -q $QUEUE -J reg.gsl.gwd.24 \
+      -o $LOG_FILE7 -e $LOG_FILE7 $PARTITION ./regional.gsl.gwd.sh)
 
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
 
 sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
-       --open-mode=append -q $QUEUE -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7 << EOF
+       $PARTITION --open-mode=append -q $QUEUE -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF

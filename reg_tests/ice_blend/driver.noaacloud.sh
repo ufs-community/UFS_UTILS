@@ -29,7 +29,8 @@
 
 set -x
 
-compiler=${compiler:-"intelllvm"}
+#compiler=${compiler:-"intelllvm"}
+compiler=${compiler:-"intel"}
 
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
