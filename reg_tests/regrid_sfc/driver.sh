@@ -84,10 +84,10 @@ elif [[ "$target" == "wcoss2" ]];then
 elif [[ "$target" == "noaacloud" ]];then
   WORK_DIR="${WORK_DIR:-/contrib/$LOGNAME}/dev/UFS_UTILS"
   PROJECT_CODE="${PROJECT_CODE:-${USER}}"
-  QUEUE="${QUEUE:-batch}"
+  QUEUE="${QUEUE:-process}"
   export HOMEreg=/contrib/ufs_utils/reg_tests/regrid_sfc/
-  export APRUN_REGRID=srun
-  PARTITION=''
+  export APRUN_REGRID="srun -n 6"
+  PARTITION='--partition process'
 fi
 
 DATA_DIR="${WORK_DIR}/reg-tests/regrid_sfc"
