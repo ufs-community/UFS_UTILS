@@ -18,9 +18,12 @@ module postwgts
 contains
   !> Create the ESMF weights file to remap from the Ct location to a rectilinear grid
   !!
+  !! @param[in]  maintask    !> logical flag for maintask
+  !!
   !! @author Denise.Worthen@noaa.gov
 
-  subroutine make_postwgts
+  subroutine make_postwgts(maintask)
+    logical, intent(in) :: maintask
 
     ! local variables
     character(len=CL) :: fsrc, fdst, fwgt
@@ -80,7 +83,7 @@ contains
           fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.Ct.to.rect.'//trim(destgrds(nd)) &
                //'.'//trim(methodname(k))//'.nc'
           logmsg = 'creating weight file '//trim(fwgt)
-          print '(a)',trim(logmsg)
+          if (maintask) print '(a)',trim(logmsg)
 
           call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
                weightFile=trim(fwgt), regridmethod=method,                 &
