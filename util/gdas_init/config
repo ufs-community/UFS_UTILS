@@ -52,18 +52,18 @@
 #-----------------------------------------------------------
 
 EXTRACT_DIR=/lfs/h2/emc/stmp/$USER/gdas.init/input
-EXTRACT_DATA=yes
+EXTRACT_DATA=no
 
 RUN_CHGRES=yes
 
-yy=2020
+yy=2022
 mm=01
 dd=01
 hh=06
 
 use_v16retro=no
 
-LEVS=65
+LEVS=128
 
 CDUMP=gfs
 
@@ -73,7 +73,6 @@ CRES_ENKF=C96
 UFS_DIR=$PWD/../..
 
 OUTDIR=/lfs/h2/emc/stmp/$USER/gdas.init/output
-
 #---------------------------------------------------------
 # Dont touch anything below here.
 #---------------------------------------------------------
@@ -127,4 +126,4 @@ else
 fi
 
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
-export LEVS gfs_ver EXEC_DIR GDAS_INIT_DIR
+export LEVS gfs_ver EXEC_DIR GDAS_INIT_DIR use_v16retro
