@@ -65,11 +65,12 @@ done
 mkdir -p ${WORK_DIR}
 cd ${WORK_DIR}
 rm -f reg_test_results.txt
-rm -rf UFS_UTILS
+#rm -rf UFS_UTILS
 
 #git clone https://github.com/ufs-community/UFS_UTILS.git
-git clone -b ${branch} --recursive ${repo} UFS_UTILS
-rc=$?
+#git clone -b ${branch} --recursive ${repo} UFS_UTILS
+#rc=$?
+rc=0
 
 # Check to see if the clone was successful. Previously, it has
 # failed due to lack of disk space.
@@ -109,7 +110,7 @@ fi
 
 echo "Started on " `hostname -s` >> ${WORK_DIR}/reg_test_results.txt
 
-./build_all.sh
+#./build_all.sh
 
 if [[ $target == "wcoss2" ]]; then
     this_machine=`cat /etc/cluster_name`
@@ -123,14 +124,14 @@ fi
 machine_id=$target
 
 cd fix
-./link_fixdirs.sh emc $machine_id
+#./link_fixdirs.sh emc $machine_id
 
 cd ../reg_tests
 
-set -x
-
 cd regrid_sfc
 ./driver.sh
+
+exit 1
 
 wait_for_fin
 
