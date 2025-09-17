@@ -118,7 +118,8 @@ elif [[ $target = noaacloud ]]; then
     QUEUE=${QUEUE:-process}
     WLCLK=10
     export NCCMP=nccmp
-    PARTITION=''
+    export APRUN="srun --mpi=pmi2 -l -n 1"
+    PARTITION='--partition process'
 fi
 
 NEW_BASELINE_ROOT=$STMP/OCNICE_PREP/BASELINE
@@ -244,6 +245,11 @@ while read -r line || [ "$line" ]; do
       tests[$i]=$(qsub -V -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
             -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME ./ocnice_prep.sh)
 
+    elif [[ $target = noaacloud ]]; then
+
+      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+                $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
+
     else
 
       tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 --mem=24g -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
@@ -264,6 +270,11 @@ if [[ $target = wcoss2 ]]; then
   qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
         -N summary -l select=1:ncpus=1:mem=100MB \
         -W depend=afterok${all_tests} ./rt.summary.sh
+
+elif [[ $target = noaacloud ]]; then
+
+  sbatch --ntasks=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
+       $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
 
 else
 

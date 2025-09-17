@@ -86,7 +86,7 @@ elif [[ "$target" == "noaacloud" ]];then
   PROJECT_CODE="${PROJECT_CODE:-${USER}}"
   QUEUE="${QUEUE:-process}"
   export HOMEreg=/contrib/ufs_utils/reg_tests/regrid_sfc/
-  export APRUN_REGRID="srun -n 6"
+  export APRUN_REGRID="srun --mpi=pmi2 -l -n 6"
   PARTITION='--partition process'
 fi
 

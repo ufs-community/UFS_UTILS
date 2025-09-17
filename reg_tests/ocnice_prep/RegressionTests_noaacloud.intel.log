@@ -1,0 +1,34 @@
+
+Working dir = /contrib/Wei.Huang/dev/UFS_UTILS/reg-tests/OCNICE_PREP/rt_51418/025_ice_050
+Baseline dir = /contrib/ufs_utils/reg_tests/ocnice_prep/baseline_data/025_ice_050
+
+Checking test 025_ice_050 results ....
+Comparing ice.mx050.nc........OK
+
+Elapsed time: 00h:01m:11s. Have a nice day!
+
+Working dir = /contrib/Wei.Huang/dev/UFS_UTILS/reg-tests/OCNICE_PREP/rt_51418/025_ice_100
+Baseline dir = /contrib/ufs_utils/reg_tests/ocnice_prep/baseline_data/025_ice_100
+
+Checking test 025_ice_100 results ....
+Comparing ice.mx100.nc........OK
+
+Elapsed time: 00h:00m:57s. Have a nice day!
+
+Working dir = /contrib/Wei.Huang/dev/UFS_UTILS/reg-tests/OCNICE_PREP/rt_51418/025_ocean_050
+Baseline dir = /contrib/ufs_utils/reg_tests/ocnice_prep/baseline_data/025_ocean_050
+
+Checking test 025_ocean_050 results ....
+Comparing ocean.mx050.nc........OK
+
+Elapsed time: 00h:05m:29s. Have a nice day!
+
+Working dir = /contrib/Wei.Huang/dev/UFS_UTILS/reg-tests/OCNICE_PREP/rt_51418/025_ocean_100
+Baseline dir = /contrib/ufs_utils/reg_tests/ocnice_prep/baseline_data/025_ocean_100
+
+Checking test 025_ocean_100 results ....
+Comparing ocean.mx100.nc........OK
+
+Elapsed time: 00h:04m:10s. Have a nice day!
+
+REGRESSION TEST WAS SUCCESSFUL
