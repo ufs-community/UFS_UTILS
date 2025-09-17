@@ -28,10 +28,10 @@ if [ $RUN_ENVIR != emc -a $RUN_ENVIR != nco ]; then
     exit 1
 fi
 
-if [ $machine != wcoss2 -a $machine != ursa -a $machine != jet -a $machine != orion -a $machine != hercules -a $machine != gaeac6 -a $machine != noaaload ]; then
+if [ $machine != wcoss2 -a $machine != ursa -a $machine != jet -a $machine != orion -a $machine != hercules -a $machine != gaeac6 -a $machine != noaacloud ]; then
     set +x
     echo '***ERROR*** unsupported machine'
-    echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | ursa | jet | orion | hercules | gaeac6 )'
+    echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | ursa | jet | orion | hercules | gaeac6 | noaacloud)'
     exit 1
 fi
 

@@ -100,7 +100,7 @@ elif [[  $target = wcoss2 ]]; then
   BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
   export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
   export NCCMP=nccmp
-elif [[ $target = ursa ]]; then
+elif [[ $target = noaacloud ]]; then
   STMP=${STMP:-/lustre/$USER/stmp}
   ACCOUNT=${ACCOUNT:-${USER}}
   QUEUE=${QUEUE:-process}
@@ -108,7 +108,8 @@ elif [[ $target = ursa ]]; then
   export MOM6_FIXDIR=/contrib/global-workflow-shared-data/fix/mom6/${MOM6_version}
   export NCCMP=nccmp
   BASELINE_ROOT=/contrib/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-  PARTITION='process'
+  export APRUN="srun --mpi=pmi2 -l -n 1"
+  PARTITION='--partition process'
 fi
 
 NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
@@ -221,6 +222,10 @@ while read -r line || [ "$line" ]; do
   if [[ $target = wcoss2 ]]; then
     tests[$i]=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
        -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=12GB -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
+
+  elif [[ $target = noaacloud ]]; then
+    tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+            $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
 
   else
     tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 --mem=12GB -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \

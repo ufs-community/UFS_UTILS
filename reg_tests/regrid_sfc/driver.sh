@@ -100,7 +100,6 @@ if [[ "$target" == "wcoss2" ]];then
   TEST1=$(qsub -V -o $LOG_FILE -e $LOG_FILE -q $QUEUE -A $PROJECT_CODE -l walltime=00:05:00 \
         -N gauss2fv3incr -l select=1:ncpus=6:ompthreads=1:mem=10GB ./gauss2fv3incr.sh)
 else
-  echo "PARTITION: $PARTITION"
   TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J gauss2fv3incr \
       $PARTITION -o $LOG_FILE -e $LOG_FILE ./gauss2fv3incr.sh)
 fi
@@ -120,7 +119,6 @@ EOF
 
 else
 
-  echo "PARTITION: $PARTITION"
 sbatch --nodes=1  -t 0:01:00 -A $PROJECT_CODE -J summary -o $LOG_FILE -e $LOG_FILE \
        $PARTITION --open-mode=append -q $QUEUE -d afterok:$TEST1 << EOF
 #!/bin/bash

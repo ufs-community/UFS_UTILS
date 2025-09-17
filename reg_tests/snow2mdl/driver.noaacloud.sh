@@ -32,8 +32,9 @@ DATA_ROOT="${DATA_ROOT}/reg-tests/snow2mdl"
 
 rm -fr $DATA_ROOT
 
-PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-QUEUE="${QUEUE:-batch}"
+PROJECT_CODE="${PROJECT_CODE:-${USER}}"
+QUEUE="${QUEUE:-process}"
+export APRUN="srun --mpi=pmi2 -l -n 1"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
@@ -46,20 +47,20 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
+export HOMEreg=/contrib/ufs_utils/reg_tests/snow2mdl
 export HOMEgfs=$PWD/../..
 
 # The first test uses hemispheric afwa/airforce data, as was done in OPS.
 
 export DATA="${DATA_ROOT}/test.hemi"
 TEST1=$(sbatch --parsable -J snow.hemi -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
-      --ntasks=1 --mem=5GB -q ${QUEUE} -t 00:03:00 ./snow2mdl.hemi.sh)
+      --ntasks=1 -q ${QUEUE} -t 00:03:00 ./snow2mdl.hemi.sh)
 
 # The second test mimics current OPS, which uses global afwa/airforce data.
 
 export DATA="${DATA_ROOT}/test.global"
 TEST2=$(sbatch --parsable -J snow.global -A ${PROJECT_CODE} -o consistency.log -e consistency.log \
-      --ntasks=1 --mem=5GB -q ${QUEUE} -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
+      --ntasks=1 -q ${QUEUE} -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
 
 # Create summary file.
 
