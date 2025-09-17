@@ -59,7 +59,7 @@ if [[ $target = ursa ]]; then
   WLCLK=40
   export MOM6_FIXDIR=/scratch3/NCEPDEV/global/role.glopara/fix/mom6/${MOM6_version}
   export NCCMP=nccmp
-  BASELINE_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  export BASELINE_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   PARTITION=''
 elif [[ $target = orion ]]; then
   STMP=${STMP:-/work/noaa/stmp/$USER}
@@ -68,7 +68,7 @@ elif [[ $target = orion ]]; then
   WLCLK=120
   export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
   export NCCMP=nccmp
-  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  export BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   PARTITION=''
   ulimit -a
 elif [[ $target = hercules ]]; then
@@ -77,7 +77,7 @@ elif [[ $target = hercules ]]; then
   QUEUE=${QUEUE:-batch}
   WLCLK=120
   export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
-  BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
+  export BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
   export NCCMP=nccmp
   PARTITION=''
   ulimit -s unlimited
@@ -87,7 +87,7 @@ elif [[ $target = jet ]]; then
   QUEUE=${QUEUE:-batch}
   WLCLK=60
   export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
-  BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+  export BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
   export NCCMP=nccmp
   PARTITION="--partition=xjet"
   ulimit -s unlimited
@@ -97,12 +97,12 @@ elif [[  $target = wcoss2 ]]; then
   QUEUE=${QUEUE:-dev}
   WLCLK=40
   export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
-  BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
+  export BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
   export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
   export NCCMP=nccmp
 fi
 
-NEW_BASELINE_ROOT=$STMP/CPLD_GRIDGEN/BASELINE
+NEW_BASELINE_ROOT=$STMP/cpld_gridgen/baseline_data
 
 BUILD_EXE=false
 CREATE_BASELINE=false

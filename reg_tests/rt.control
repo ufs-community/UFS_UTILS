@@ -7,7 +7,7 @@ WORK_DIR_URSA="/scratch4/NCEPDEV/stmp/${LOGNAME}/ufs_utils"
 WORK_DIR_HERCULES="/work2/noaa/stmp/${LOGNAME}/ufs_utils"
 WORK_DIR_ORION="/work/noaa/stmp/${LOGNAME}/ufs_utils"
 WORK_DIR_WCOSS2="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
-WORK_DIR_JET="/lfs5/HFIP/emcda/${LOGNAME}/stmp/ufs_utils"
+WORK_DIR_JET="/lfs5/HFIP/hfv3gfs/${LOGNAME}/stmp/ufs_utils"
 ##############
 
 ##### PROJECT CODES #########
@@ -15,7 +15,7 @@ PROJECT_CODE_URSA="nems"
 PROJECT_CODE_HERCULES="nems"
 PROJECT_CODE_ORION="nems"
 PROJECT_CODE_WCOSS2="GFS-DEV"
-PROJECT_CODE_JET="nggps_emc"
+PROJECT_CODE_JET="h-nems"
 ##############
 
 ##### QUEUE #########
@@ -41,7 +41,6 @@ RUN_WEIGHT_GEN="true"
 # Where to send mail when job is completed?
 # Please use quotes and put a space between multiple email addresses.
 MAILTO="brian.curtis@noaa.gov"
-# MAILTO="brian.curtis@noaa.gov"
 
 ### SYSTEM INFO ###
 #Detect the machine we're on
@@ -58,16 +57,19 @@ QUEUE=${!WHICH_QUEUE:-}
 ######
 
 ### RT SETTINGS ###
-TIMEOUT_LIMIT=7200
-UPDATE_BASELINES="FALSE"
+TIMEOUT_LIMIT=3600
+UPDATE_BASELINES="TRUE"
 ######
 
 ### REPO INFO ###
-REPO_BRANCH="develop"
-REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+# REPO_BRANCH="develop"
+REPO_BRANCH="rt_one_location"
+# REPO_LOC="https://github.com/ufs-community/UFS_UTILS.git"
+# REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+REPO_LOC="git@github.com:BrianCurtis-NOAA/UFS_UTILS.git"
 ######
 
-# If there are any test changes, this will need to be updated
+# If there are any major new additions or subtractions, this will need to be updated
 RUN_CATALOG=("RUN_CHGRES_CUBE" "RUN_CPLD_GRIDGEN" "RUN_GLOBAL_CYCLE" "RUN_GRID_GEN" "RUN_ICE_BLEND" "RUN_OCNICE_PREP"
 "RUN_REGRID_SFC" "RUN_SNOW2MDL" "RUN_WEIGHT_GEN")
 

@@ -94,7 +94,11 @@ export STMP=$WORK_DIR/reg-tests
 if [[ " ${RUN_SET[*]} " =~ " RUN_OCNICE_PREP " ]]; then
   echo "Running ocnice_prep tests"
   cd ocnice_prep || { echo "Can't change directory into 'ocnice_prep'.. exiting"; exit; }
-  (./rt.sh && wait_for_fin > ocnice_prep_rt.out 2>&1) &
+  if [[ ${UPDATE_BASELINES} == "TRUE" ]]; then
+      (./rt.sh -c && wait_for_fin > ocnice_prep_rt.out 2>&1) &
+  else
+    (./rt.sh && wait_for_fin > ocnice_prep_rt.out 2>&1) &
+  fi
   PID_LIST+=($!)
   cd ..
 fi
@@ -102,7 +106,11 @@ fi
 if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
   echo "Running cpld_gridgen tests"
   cd cpld_gridgen || { echo "Can't change directory into 'cpld_gridgen'.. exiting"; exit; }
-  (./rt.sh && wait_for_fin > cpld_gridgen_rt.out 2>&1) &
+  if [[ ${UPDATE_BASELINES} == "TRUE" ]]; then
+      (./rt.sh -c && wait_for_fin > cpld_gridgen_rt.out 2>&1) &
+  else
+    (./rt.sh && wait_for_fin > cpld_gridgen_rt.out 2>&1) &
+  fi
   PID_LIST+=($!)
   cd ..
 fi

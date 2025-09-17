@@ -50,6 +50,12 @@ check_results() {
                 fi
             fi
         done
+
+        if [[ "$UPDATE_BASELINE" == "TRUE" ]] && [[ "${test_status}" == "FAIL" ]]; then
+            source ${PATHTR}/reg_tests/get_hash.sh
+            ${PATHTR}/reg_tests/update_baseline.sh ${BASELINE_ROOT}/.. "${TEST_NAME}" $commit_num
+        fi
+
         echo | tee -a $PATHRT/$REGRESSIONTEST_LOG
         # baseline creation run
     else

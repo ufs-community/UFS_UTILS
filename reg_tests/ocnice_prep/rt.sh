@@ -111,8 +111,8 @@ elif [[ $target = jet ]]; then
     ulimit -s unlimited
 fi
 
-NEW_BASELINE_ROOT=$STMP/OCNICE_PREP/BASELINE
-RUNDIR_ROOT=$STMP/OCNICE_PREP/rt_$$
+NEW_BASELINE_ROOT=$STMP/ocnice_prep/baseline_data
+RUNDIR_ROOT=$STMP/ocnice_prep/rt_$$
 
 BUILD_EXE=false
 CREATE_BASELINE=false
