@@ -1,0 +1,39 @@
+
+Working dir = /contrib/Wei.Huang/dev/UFS_UTILS/reg-tests/CPLD_GRIDGEN/rt_416618/900
+Baseline dir = /contrib/ufs_utils/reg_tests/cpld_gridgen/baseline_data/900
+
+Checking test 900 results ....
+Comparing Bu.mx900_SCRIP.nc........OK
+Comparing C12.mx900.tile1.nc........OK
+Comparing C12.mx900.tile2.nc........OK
+Comparing C12.mx900.tile3.nc........OK
+Comparing C12.mx900.tile4.nc........OK
+Comparing C12.mx900.tile5.nc........OK
+Comparing C12.mx900.tile6.nc........OK
+Comparing C24.mx900.tile1.nc........OK
+Comparing C24.mx900.tile2.nc........OK
+Comparing C24.mx900.tile3.nc........OK
+Comparing C24.mx900.tile4.nc........OK
+Comparing C24.mx900.tile5.nc........OK
+Comparing C24.mx900.tile6.nc........OK
+Comparing Ct.mx900_SCRIP_land.nc........OK
+Comparing Ct.mx900_SCRIP.nc........OK
+Comparing Ct.mx900.to.C12.nc........OK
+Comparing Ct.mx900.to.C24.nc........OK
+Comparing Cu.mx900_SCRIP.nc........OK
+Comparing Cv.mx900_SCRIP.nc........OK
+Comparing grid_cice_NEMS_mx900.nc........OK
+Comparing kmtu_cice_NEMS_mx900.nc........OK
+Comparing mesh.mx900.nc........OK
+Comparing rect.9p00_SCRIP.nc........NOT OK
+Comparing tripole.mx900.Bu.to.Ct.bilinear.nc........OK
+Comparing tripole.mx900.Ct.to.Bu.bilinear.nc........OK
+Comparing tripole.mx900.Ct.to.Cu.bilinear.nc........OK
+Comparing tripole.mx900.Ct.to.Cv.bilinear.nc........OK
+Comparing tripole.mx900.Ct.to.rect.9p00.bilinear.nc........NOT OK
+Comparing tripole.mx900.Ct.to.rect.9p00.conserve.nc........OK
+Comparing tripole.mx900.Cu.to.Ct.bilinear.nc........OK
+Comparing tripole.mx900.Cv.to.Ct.bilinear.nc........OK
+Comparing tripole.mx900.nc........OK
+
+Elapsed time: 00h:00m:46s. Have a nice day!
