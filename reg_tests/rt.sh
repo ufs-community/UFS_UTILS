@@ -47,8 +47,12 @@ while [[ "$#" -gt 0 ]]; do
       branch="$2"
       shift 2
       ;;
+    -p|--PROJECT_CODE)
+      export PROJECT_CODE="$2"
+      shift 2
+      ;;
     -q|--queue)
-      queue="$2"
+      export QUEUE="$2"
       shift 2
       ;;
     -v|--verbose)

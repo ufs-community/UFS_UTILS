@@ -19,7 +19,7 @@
 #-----------------------------------------------------------------------------
 
 #SBATCH -J weight_gen
-#SBATCH -A fv3-cpu
+#SBATCH -A ${ACCOUNT:-fv3-cpu}
 #SBATCH --open-mode=truncate
 #SBATCH -o consistency.log
 #SBATCH -e consistency.log
