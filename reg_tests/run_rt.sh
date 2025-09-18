@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export MAILTO="wei.huang@noaa.edu"
+export MAILTO="wei.huang@noaa.gov"
 #repo=https://github.com/ufs-community/UFS_UTILS.git
 repo=git@github.com:NOAA-EPIC/UFS_UTILS-cloud.git
 branch=feature/reg_tests_on_cloud
