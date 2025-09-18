@@ -90,10 +90,6 @@ else
   echo "Clone Failed" | mail -s "UFS_UTILS Consistency Tests failed on ${target}" ${MAILTO}
 fi
 
-cd ${WORK_DIR}/UFS_UTILS
-
-source sorc/machine-setup.sh
-
 current_hash=$(git rev-parse HEAD)
 
 if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
@@ -108,6 +104,10 @@ if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
 fi
 
 echo "Started on " `hostname -s` >> ${WORK_DIR}/reg_test_results.txt
+
+cd ${WORK_DIR}/UFS_UTILS
+
+source sorc/machine-setup.sh
 
 ./build_all.sh
 
