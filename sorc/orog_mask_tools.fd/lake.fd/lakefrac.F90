@@ -22,7 +22,6 @@ PROGRAM lake_frac
     USE netcdf
     IMPLICIT NONE
 
-    CHARACTER(len=256) :: sfcdata_path
     INTEGER :: cs_res, ncsmp, ncscp, i
     INTEGER :: res_x, res_y
 
@@ -172,10 +171,9 @@ SUBROUTINE cal_lake_frac_depth(lakestat,cs_lakestat,lakedpth,cs_lakedpth)
     INTEGER*2, INTENT(IN) :: lakedpth(:)
     REAL, INTENT(OUT) :: cs_lakestat(:), cs_lakedpth(:)
 
-    REAL*8 lolf(2), lort(2), uplf(2), uprt(2), sd_ltmn(4), sd_ltmx(4)
+    REAL*8 lolf(2), lort(2), uplf(2), uprt(2)
     REAL*8 :: v(2,4), p(2)
-    REAL :: latmin1, latmax1
-    REAL :: latmin, latmax, lonmin, lonmax, lontmp, lat_sz_max, lon_sz_max
+    REAL :: latmin, latmax, lonmin, lonmax, lat_sz_max, lon_sz_max
     INTEGER :: tile_num, i, j, gp, row, col, cs_grid_idx, cs_data_idx
     INTEGER :: sidex_res, sidey_res, sidex_sz, sidey_sz 
     INTEGER :: stride_lat, stride_lon
@@ -490,7 +488,6 @@ SUBROUTINE read_cubed_sphere_reg_grid(res, grid, halo_depth, res_x, res_y)
     INTEGER :: x_start, y_start
     INTEGER :: nxp, nyp, stat 
     CHARACTER(len=256) :: gridfile_path,gridfile
-    CHARACTER(len=1) ich
     CHARACTER(len=4) res_ch
     CHARACTER(len=8) dimname
 
@@ -557,7 +554,7 @@ SUBROUTINE read_lakedata(lakedata_path,lake_stat,lake_dpth,nlat,nlon)
     INTEGER, INTENT(IN) :: nlat, nlon
 
     CHARACTER(len=256) lakefile
-    INTEGER :: data_sz, i
+    INTEGER :: data_sz
 
     data_sz = nlon*nlat
 
@@ -608,12 +605,13 @@ END SUBROUTINE read_lakedata
 !! @author Ning Wang
 SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth) 
     USE netcdf 
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: cs_res
     REAL, INTENT(IN) :: cs_lakestat(:)
     REAL, INTENT(IN) :: cs_lakedpth(:)
    
     INTEGER :: tile_sz, tile_num
-    INTEGER :: stat, ncid, x_dimid, y_dimid, varid, dimids(2)
+    INTEGER :: stat, ncid, x_dimid, y_dimid, dimids(2)
     INTEGER :: lake_frac_id, lake_depth_id
     INTEGER :: land_frac_id, slmsk_id, inland_id, geolon_id, geolat_id
     CHARACTER(len=256) :: filename,string,lakeinfo
@@ -625,7 +623,7 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
     real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
     real            :: land_cutoff=1.e-4 ! land_frac=0 if it is < land_cutoff
 
-    INTEGER :: i, j
+    INTEGER :: i
 
     tile_sz = cs_res*cs_res
 
@@ -743,8 +741,8 @@ SUBROUTINE write_lakedata_to_orodata(cs_res, cs_lakestat, cs_lakedpth)
              start = (/ 1, 1 /), count = (/ cs_res, cs_res /) )
       CALL nc_opchk(stat, "nf90_get_var: inland")
 
-      lake_frac (:) = cs_lakestat ((tile_num-1)*tile_sz+1:tile_num*tile_sz)
-      lake_depth(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+      lake_frac (:) = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+      lake_depth(:) = cs_lakedpth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
 
 ! include Caspian Sea and Aral Sea if GLDB data set is used, and 
 ! exclude lakes in the coastal areas of Antarctica if MODIS data set is used  
@@ -825,12 +823,13 @@ END SUBROUTINE write_lakedata_to_orodata
 !! @author Ning Wang
 SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lakestat, cs_lakedpth) 
     USE netcdf 
+    IMPLICIT NONE
     INTEGER, INTENT(IN) :: cs_res, tile_x_dim, tile_y_dim
     REAL, INTENT(IN) :: cs_lakestat(:)
     REAL, INTENT(IN) :: cs_lakedpth(:)
    
     INTEGER :: tile_sz, tile_num
-    INTEGER :: stat, ncid, x_dimid, y_dimid, varid, dimids(2)
+    INTEGER :: stat, ncid, x_dimid, y_dimid, dimids(2)
     INTEGER :: lake_frac_id, lake_depth_id
     INTEGER :: land_frac_id, slmsk_id, geolon_id, geolat_id, inland_id
     CHARACTER(len=256) :: filename,string
@@ -843,9 +842,8 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
     real, parameter :: epsil=1.e-6   ! numerical min for lake_frac/land_frac
     real            :: land_cutoff=1.e-6 ! land_frac=0 if it is < land_cutoff
 
-    INTEGER :: i, j, var_id
+    INTEGER :: i
 
-!    include "netcdf.inc"
     tile_sz = tile_x_dim*tile_y_dim
 
     ALLOCATE(lake_frac(tile_sz), lake_depth(tile_sz))
@@ -972,7 +970,7 @@ SUBROUTINE write_reg_lakedata_to_orodata(cs_res, tile_x_dim, tile_y_dim, cs_lake
 
     tile_num = 1
     lake_frac(:)  = cs_lakestat((tile_num-1)*tile_sz+1:tile_num*tile_sz)
-    lake_depth(:) = cs_lakedepth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
+    lake_depth(:) = cs_lakedpth((tile_num-1)*tile_sz+1:tile_num*tile_sz)
 
 ! include Caspian Sea and Aral Sea if GLDB data set is used, and 
 ! exclude lakes in the coastal areas of Antarctica if MODIS data set is used  
