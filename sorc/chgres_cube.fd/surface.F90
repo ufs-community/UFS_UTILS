@@ -2679,7 +2679,7 @@
  integer(esmf_kind_i8), pointer     :: mask_ptr(:,:)
  integer                            :: rc,i
  integer, PARAMETER                 :: num_nst_fields_minus2 = 16
- integer, PARAMETER                 :: xz_fill = 30.0
+ integer, PARAMETER                 :: xz_fill = 20.0
  integer, PARAMETER                 :: nst_fill = 0.0
 
  real(esmf_kind_r8), pointer        :: data_ptr(:,:)
@@ -2738,6 +2738,7 @@
 
  where(mask_ptr == 0) data_ptr = xz_fill ! all land
  where(fice_ptr > 0.0) data_ptr = xz_fill ! points with some ice
+ where(data_ptr > xz_fill ) data_ptr = xz_fill ! force xz = 20 when it is greater than 20 (due to fv3atm code change) 
 
  do i = 1,num_nst_fields_minus2
    
