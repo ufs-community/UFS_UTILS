@@ -278,7 +278,7 @@
  integer                         :: tt, id_var, ncid, ierr, &
                                     id_x, id_y, id_t, v, t
  character(len=1)                :: tchar
- character(len=3)                :: mchar
+ character(len=3)                :: memchar
  character(len=500)              :: fname
  real(esmf_kind_r8), allocatable :: array2D(:,:)
  real(esmf_kind_r8), allocatable :: array_out(:,:,:,:)
@@ -308,7 +308,8 @@
 
          ! open file, set dimensions
          write(tchar,'(i1)') tt
-         fname = dir_out//"/"//fname_out//".mem"//trim(adjustl(int2str(imem_ens)))//".tile"//tchar//".nc"
+         write(memchar,'(I3)') imem_ens
+         fname = dir_out//"/"//fname_out//".mem"//trim(adjustl(memchar))//".tile"//tchar//".nc"
 
          ierr = nf90_create(trim(fname), NF90_NETCDF4, ncid)
          call netcdf_err(ierr, 'creating file='//trim(fname) )
