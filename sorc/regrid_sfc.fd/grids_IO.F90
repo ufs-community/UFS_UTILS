@@ -368,6 +368,7 @@
 !! @param[in] dir_fix           orog fix directory
 !! @param[in] localpet          local pet
 !! @param[in] npets             total number of pets
+!! @param[in] imem_ens          ensemble member index
 !! @param[out] fv3_grid         output ESMF grid 
 
 
@@ -417,6 +418,7 @@
 !! @param[in] grid_setup        data structure with grid details 
 !! @param[in] npets             total number of pets
 !! @param[in] localpet          local pet
+!! @param[in] imem_ens          ensemble member index
 !! @param[out] gauss_grid       output ESMF grid 
 
  subroutine create_grid_gauss(grid_setup, npets, localpet, imem_ens, gauss_grid)
