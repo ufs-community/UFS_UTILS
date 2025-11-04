@@ -43,6 +43,7 @@
 !> Create ESMF grid objects, with mask if requested
 !! @param[in] localpet          local pet
 !! @param[in] npets             total number of pets
+!! @param[in] imem_ens          ensemble member index
 !! @param[in] grid_setup        data structure with grid details 
 !! @param[out] mod_grid         output esmf_grid structure 
 !! @param[in] timestamp      timestep of input file
