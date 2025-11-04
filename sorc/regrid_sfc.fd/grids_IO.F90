@@ -252,6 +252,7 @@
 
 !> write variables from ESMF Fields into netcdf restart-like file
 !! @param[in] localpet          local pet
+!! @param[in] imem_ens          ensemble member index
 !! @param[in] i_dim             longitudinal dimension
 !! @param[in] j_dim             latitudinal dimension
 !! @param[in] fname_out         file name to write to

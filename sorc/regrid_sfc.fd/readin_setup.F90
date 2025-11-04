@@ -9,6 +9,8 @@
 !! 
 !! @param[in] unt          file unit
 !! @param[in] namel        options: input or output
+!! @param[in] nmem_ens     number of ensemble members
+!! @param[in] imem_ens     ensemble member index
 !! @param[out] grid_setup  data structure with grid details
  subroutine readin_setup(unt,namel,nmem_ens,imem_ens,grid_setup)
 
