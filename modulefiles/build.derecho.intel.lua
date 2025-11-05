@@ -1,5 +1,5 @@
 help([[
-Load environment to compile UFS_UTILS on Ursa using Intelllvm
+Load environment to compile UFS_UTILS on Derecho using Intel Classic compilers
 ]])
 
 setenv("LMOD_TMOD_FIND_FIRST","yes")
