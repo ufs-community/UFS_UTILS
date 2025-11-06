@@ -59,6 +59,7 @@ cat << EOF > regrid.nml
   time_list=6,
   add_time_dim=.true.,
   extrap_levs=2,
+  nmem_ens=1,
  /
  &input
   gridtype="gau_inc",
