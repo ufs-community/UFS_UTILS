@@ -2,15 +2,11 @@ help([[
 Load environment to compile UFS_UTILS on Derecho using Intel Classic compilers
 ]])
 
-setenv("LMOD_TMOD_FIND_FIRST","yes")
 prepend_path("MODULEPATH", "/lustre/desc1/scratch/epicufsrt/contrib/modulefiles_extra")
 prepend_path("MODULEPATH", "/glade/work/epicufsrt/contrib/spack-stack/derecho/spack-stack-1.9.2/envs/ue-oneapi-2024.2.1/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_oneapi_ver") or "2024.2.1"
 load(pathJoin("stack-oneapi", stack_oneapi_ver))
-
--- stack_oneapi_mpi_ver=os.getenv("stack_oneapi_mpi_ver") or "2021.13"
--- load(pathJoin("stack-intel-oneapi-mpi", stack_oneapi_mpi_ver))
 
 stack_impi_ver=os.getenv("stack_cray_mpich_ver") or "8.1.29"
 load(pathJoin("stack-cray-mpich", stack_cray_mpich_ver))
@@ -57,9 +53,6 @@ load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.2.4"
 load(pathJoin("nco", nco_ver))
-
--- setenv("I_MPI_CC", "icx")
--- setenv("I_MPI_FC", "ifort")
 
 setenv("CC", "mpicc")
 setenv("FC", "mpifort")
