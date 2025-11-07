@@ -138,6 +138,8 @@ else
   htar -xvf $directory/$file -L ./list.hires3
   rc=$?
   [ $rc != 0 ] && exit $rc
+  find . -type f -name "*radstat*" -exec chgrp rstprod {} \
+  [ $rc != 0 ] && exit $rc
 
 fi # is this gdas or gfs CDUMP?
 

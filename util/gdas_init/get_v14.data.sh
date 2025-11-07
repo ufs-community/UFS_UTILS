@@ -26,6 +26,9 @@ if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ] ; then
     htar -xvf $directory/$file ./gdas.t${hh}z.radstat
     rc=$?
     [ $rc != 0 ] && exit $rc
+    chgrp rstprod gdas.t${hh}z.radstat
+    rc=$?
+    [ $rc != 0 ] && exit $rc
     htar -xvf $directory/$file ./gdas.t${hh}z.abias_air
     rc=$?
     [ $rc != 0 ] && exit $rc
