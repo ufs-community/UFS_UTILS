@@ -36,13 +36,15 @@ copy_data()
       base_radstat_name=$(basename ${radstat_file})
       if [[ "${base_radstat_name}" == *".tar" ]]; then
         cp ${INPUT_DATA_DIR}/${base_radstat_name} $SAVEDIR_ANALYSIS/${base_radstat_name}
+        final_name=${base_radstat_name}
       else
         cp ${INPUT_DATA_DIR}/${base_radstat_name} $SAVEDIR_ANALYSIS/${base_radstat_name}.tar
+        final_name=${base_radstat_name}.tar
       fi
       group=$(stat -c %G ${INPUT_DATA_DIR}/${base_radstat_name})
       if [[ "${group}" == "rstprod" ]]; then
-        chgrp rstprod $SAVEDIR_ANALYSIS/${base_radstat_name}.tar
-        chmod 640 $SAVEDIR_ANALYSIS/${base_radstat_name}.tar
+        chgrp rstprod $SAVEDIR_ANALYSIS/${final_name}
+        chmod 640 $SAVEDIR_ANALYSIS/${final_name}
       fi
     done
   fi
