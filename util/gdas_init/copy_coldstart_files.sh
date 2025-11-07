@@ -20,11 +20,23 @@ copy_data()
     cp out.sfc.${tile}.nc ${SAVEDIR_MODEL_DATA}/sfc_data.${tile}.nc
   done
 
+  # TODO: This will need to be updated for GFS v17 retros and/or operational tarballs.
   if [ ${MEM} == 'gdas' ]; then
     SAVEDIR_ANALYSIS=$SUBDIR/analysis/atmos
     mkdir -p $SAVEDIR_ANALYSIS
-    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR_ANALYSIS/
-    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR_ANALYSIS/
+    for abias_file in ${INPUT_DATA_DIR}/*abias*; do
+      base_abias_name=$(basename ${abias_file})
+      cp ${INPUT_DATA_DIR}/${base_abias_name} $SAVEDIR_ANALYSIS/${base_abias_name}.txt
+    done
+    for radstat_file in ${INPUT_DATA_DIR}/*radstat; do
+      base_radstat_name=$(basename ${radstat_file})
+      cp ${INPUT_DATA_DIR}/${base_radstat_name} $SAVEDIR_ANALYSIS/${base_radstat_name}.tar
+      group=$(stat -c %G ${INPUT_DATA_DIR}/${base_radstat_name})
+      if [[ "${group}" == "rstprod" ]]; then
+        chgrp rstprod $SAVEDIR_ANALYSIS/${base_radstat_name}.tar
+        chmod 640 $SAVEDIR_ANALYSIS/${base_radstat_name}.tar
+      fi
+    done
   fi
 }
 
