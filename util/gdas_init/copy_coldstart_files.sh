@@ -23,8 +23,30 @@ copy_data()
   if [ ${MEM} == 'gdas' ]; then
     SAVEDIR_ANALYSIS=$SUBDIR/analysis/atmos
     mkdir -p $SAVEDIR_ANALYSIS
-    cp ${INPUT_DATA_DIR}/*abias* $SAVEDIR_ANALYSIS/
-    cp ${INPUT_DATA_DIR}/*radstat $SAVEDIR_ANALYSIS/
+    for abias_file in ${INPUT_DATA_DIR}/*abias*; do
+      base_abias_name=$(basename ${abias_file})
+      # Test for v17 style abias file names
+      if [[ "${base_abias_name}" == *".txt" ]]; then
+        cp ${INPUT_DATA_DIR}/${base_abias_name} $SAVEDIR_ANALYSIS/${base_abias_name}
+      else
+        cp ${INPUT_DATA_DIR}/${base_abias_name} $SAVEDIR_ANALYSIS/${base_abias_name}.txt
+      fi
+    done
+    for radstat_file in ${INPUT_DATA_DIR}/*radstat; do
+      base_radstat_name=$(basename ${radstat_file})
+      if [[ "${base_radstat_name}" == *".tar" ]]; then
+        cp ${INPUT_DATA_DIR}/${base_radstat_name} $SAVEDIR_ANALYSIS/${base_radstat_name}
+        final_name=${base_radstat_name}
+      else
+        cp ${INPUT_DATA_DIR}/${base_radstat_name} $SAVEDIR_ANALYSIS/${base_radstat_name}.tar
+        final_name=${base_radstat_name}.tar
+      fi
+      group=$(stat -c %G ${INPUT_DATA_DIR}/${base_radstat_name})
+      if [[ "${group}" == "rstprod" ]]; then
+        chgrp rstprod $SAVEDIR_ANALYSIS/${final_name}
+        chmod 640 $SAVEDIR_ANALYSIS/${final_name}
+      fi
+    done
   fi
 }
 

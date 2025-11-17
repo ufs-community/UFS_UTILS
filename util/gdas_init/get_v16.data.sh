@@ -99,6 +99,9 @@ if [ "$bundle" = "gdas" ] || [ "$bundle" = "gfs" ]; then
     htar -xvf $directory/$file ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.radstat
     rc=$?
     [ $rc != 0 ] && exit $rc
+    chgrp rstprod ./gdas.${yy}${mm}${dd}/${hh}/atmos/gdas.t${hh}z.radstat
+    rc=$?
+    [ $rc != 0 ] && exit $rc
 
   fi
 
