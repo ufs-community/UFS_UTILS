@@ -53,7 +53,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran-2025.3 intel-oneapi-compiler-dpcpp-cpp-2025.3
           echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
-          find /opt/intel \( -name ifx -o -name ifort \)
 
       # Install dependencies using Spack
       - name: install-dependencies-with-spack
@@ -72,6 +71,9 @@ jobs:
           spack config add "packages:mpi:require:intel-oneapi-mpi"
           intel_mpi_version=$(basename $(realpath /opt/intel/oneapi/mpi/latest))
           sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${intel_mpi_version}\n        prefix: /opt/intel/oneapi|" $SPACK_ENV/spack.yaml
+          icx_path=$(grep -oP "/opt/intel/.*/icx" spack.yaml)
+          ifx_path=${icx_path/icx/ifx}
+          sed -i "s|fc:.*|fc: $ifx_path|;s|f77:.*|f77: $ifx_path|" spack.yaml
           spack config add "packages:python:require:'@3.11'"
           cat $SPACK_ENV/spack.yaml
           spack concretize
