@@ -71,9 +71,9 @@ jobs:
           spack config add "packages:mpi:require:intel-oneapi-mpi"
           intel_mpi_version=$(basename $(realpath /opt/intel/oneapi/mpi/latest))
           sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${intel_mpi_version}\n        prefix: /opt/intel/oneapi|" $SPACK_ENV/spack.yaml
-          icx_path=$(grep -oP "/opt/intel/.*/icx" spack.yaml)
+          icx_path=$(grep -oP "/opt/intel/.*/icx" $SPACK_ENV/spack.yaml)
           ifx_path=${icx_path/icx/ifx}
-          sed -i "s|fc:.*|fc: $ifx_path|;s|f77:.*|f77: $ifx_path|" spack.yaml
+          sed -i "s|fc:.*|fc: $ifx_path|;s|f77:.*|f77: $ifx_path|" $SPACK_ENV/spack.yaml
           spack config add "packages:python:require:'@3.11'"
           cat $SPACK_ENV/spack.yaml
           spack concretize
