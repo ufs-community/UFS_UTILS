@@ -53,6 +53,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install intel-oneapi-dev-utilities intel-oneapi-mpi-devel intel-oneapi-openmp intel-oneapi-compiler-fortran-2025.3 intel-oneapi-compiler-dpcpp-cpp-2025.3
           echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
+          find /opt/intel \( -name ifx -o -name ifort \)
 
       # Install dependencies using Spack
       - name: install-dependencies-with-spack
