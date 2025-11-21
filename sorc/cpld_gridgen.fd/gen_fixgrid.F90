@@ -484,6 +484,7 @@ program gen_fixgrid
 
      nvalid = size(catm)
   end if ! if (maintask)
+
   !---------------------------------------------------------------------
   ! set up for parallel work
   !---------------------------------------------------------------------
@@ -574,7 +575,7 @@ program gen_fixgrid
 
      call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
           weightFile=trim(fwgt), regridmethod=method,                 &
-          ignoreDegenerate=.true.,                                    &
+          ignoreDegenerate=.true., largeFileFlag=.true.,              &
           unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
           line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
@@ -597,7 +598,7 @@ program gen_fixgrid
 
      call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
           weightFile=trim(fwgt), regridmethod=method,                 &
-          ignoreDegenerate=.true.,                                    &
+          ignoreDegenerate=.true., largeFileFlag=.true.,              &
           unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
           line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
@@ -636,4 +637,5 @@ program gen_fixgrid
      deallocate(latCu, lonCu)
      deallocate(latBu, lonBu)
   endif ! if (maintask)
+
 end program gen_fixgrid
