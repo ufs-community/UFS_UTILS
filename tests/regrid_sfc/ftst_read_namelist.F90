@@ -19,7 +19,7 @@
  if (ierr /= 0) stop 66
 
  print*,'Read input namelist.'
- call readin_setup(12, "input", grid_setup_in)
+ call readin_setup(12, "input", 1, 1, grid_setup_in)
 
  if (trim(grid_setup_in%descriptor) /= "gau_inc") stop 2
  if (trim(grid_setup_in%dir) /= "./") stop 4
@@ -33,7 +33,7 @@
  if (grid_setup_in%jres /= 384) stop 20
 
  print*,'Read output namelist.'
- call readin_setup(12, "output", grid_setup_out)
+ call readin_setup(12, "output", 1, 1, grid_setup_out)
 
  if (trim(grid_setup_out%descriptor) /= "fv3_rst") stop 32
  if (trim(grid_setup_out%dir) /= "./") stop 34

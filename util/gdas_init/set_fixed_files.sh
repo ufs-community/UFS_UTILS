@@ -50,3 +50,10 @@ else
   echo ERROR machine $machine not supported.
   exit 3
 fi
+#
+#----------------------------------------------------------------------
+# Exports to enable saving all user inputs and directories that the orog is pointed to
+#----------------------------------------------------------------------
+#
+export FIX_ORO_INPUT
+
