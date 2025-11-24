@@ -175,8 +175,8 @@ if [ $RESNAME = 008 ]; then
     NI=4500
     NJ=3297
     DO_POSTWGTS=.false.
-    TOPOGFILE=topog.nc
-    EDITSFILE=All_edits.nc
+    TOPOGFILE=ocean_topog.nc
+    EDITSFILE=none
     if [ $DO_POSTWGTS == .true. ]; then
         #pre-generate SCRIP files for dst rectilinear grids using NCO
         $APRUN -n 1 ncremap -g ${OUTDIR_PATH}/rect.9p00_SCRIP.nc -G latlon=20,40#lon_typ=grn_ctr#lat_typ=cap
