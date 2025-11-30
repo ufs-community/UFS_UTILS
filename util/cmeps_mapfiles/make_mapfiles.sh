@@ -67,18 +67,6 @@ for exp in a2o_bilin a2o_consf a2o_patch a2w_bilin w2o o2w; do
     fi
 
     case $exp in
-        w2o)
-            mapindex=bilnr_nstod
-            ftag=${OUTPUT_DIR}/'map.'${WAVRES}'.to.mx'${OCNRES}'.'$mapindex'.nc'
-            mapping='-m bilinear -p none --extrap_method neareststod '
-            opts='-s '${fwavmesh}' -d '${focnmesh}' -w '${ftag}'  '${mapping}
-            ;;
-        o2w)
-            mapindex=bilnr_nstod
-            ftag=${OUTPUT_DIR}/'map.mx'${OCNRES}'.to.'${WAVRES}'.'$mapindex'.nc'
-            mapping='-m bilinear -p none --extrap_method neareststod '
-            opts='-s '${focnmesh}' -d '${fwavmesh}' -w '${ftag}'  '${mapping}
-            ;;
         a2o_bilin)
             mapindex=bilnr
             ftag=${OUTPUT_DIR}/'map.'${ATMRES}'.to.mx'${OCNRES}'.'$mapindex'.nc'
@@ -95,14 +83,26 @@ for exp in a2o_bilin a2o_consf a2o_patch a2w_bilin w2o o2w; do
             mapindex='patch'
             ftag=${OUTPUT_DIR}/'map.'${ATMRES}'.to.mx'${OCNRES}'.'$mapindex'.nc'
             mapping='-m patch -p all '
-	    opts="${srcopt} -d ${focnmesh} -w ${ftag} ${mapping}"
+            opts="${srcopt} -d ${focnmesh} -w ${ftag} ${mapping}"
             ;;
         a2w_bilin)
             mapindex=bilnr
             ftag=${OUTPUT_DIR}/'map.'${ATMRES}'.to.'${WAVRES}'.'$mapindex'.nc'
             mapping='-m bilinear -p none '
-	    opts="${srcopt} -d ${fwavmesh} -w ${ftag} ${mapping}"
-	    ;;
+            opts="${srcopt} -d ${fwavmesh} -w ${ftag} ${mapping}"
+            ;;
+        w2o)
+            mapindex=bilnr_nstod
+            ftag=${OUTPUT_DIR}/'map.'${WAVRES}'.to.mx'${OCNRES}'.'$mapindex'.nc'
+            mapping='-m bilinear -p none --extrap_method neareststod '
+            opts='-s '${fwavmesh}' -d '${focnmesh}' -w '${ftag}'  '${mapping}
+            ;;
+        o2w)
+            mapindex=bilnr_nstod
+            ftag=${OUTPUT_DIR}/'map.mx'${OCNRES}'.to.'${WAVRES}'.'$mapindex'.nc'
+            mapping='-m bilinear -p none --extrap_method neareststod '
+            opts='-s '${focnmesh}' -d '${fwavmesh}' -w '${ftag}'  '${mapping}
+            ;;
     esac
 
     ${APRUN} ESMF_RegridWeightGen ${opts} ${defaultopts}
