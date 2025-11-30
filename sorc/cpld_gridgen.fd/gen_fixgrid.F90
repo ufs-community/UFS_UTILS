@@ -484,7 +484,6 @@ program gen_fixgrid
 
      nvalid = size(catm)
   end if ! if (maintask)
-
   !---------------------------------------------------------------------
   ! set up for parallel work
   !---------------------------------------------------------------------
@@ -637,5 +636,4 @@ program gen_fixgrid
      deallocate(latCu, lonCu)
      deallocate(latBu, lonBu)
   endif ! if (maintask)
-
 end program gen_fixgrid
