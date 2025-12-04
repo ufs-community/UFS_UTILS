@@ -37,7 +37,7 @@ fi
 
 # Set ocean mesh if OCNRES is provided
 if [ -n "${OCNRES:-}" ]; then
-    focnmesh=$icedir/${OCNRES}/'mesh.mx'${OCNRES}'.nc'
+    focnmesh="${icedir}/${OCNRES}/mesh.mx${OCNRES}.nc"
 fi
 
 # Set wave mesh if WAVRES is provided
@@ -72,39 +72,39 @@ for exp in a2o_bilin a2o_consf a2o_patch a2w_bilin w2o o2w; do
     case $exp in
         a2o_bilin)
             mapindex=bilnr
-            ftag=${OUTPUT_DIR}/'map.'${ATMRES}'.to.mx'${OCNRES}'.'$mapindex'.nc'
+            ftag="${OUTPUT_DIR}/map.${ATMRES}.to.mx${OCNRES}.${mapindex}.nc"
             mapping='-m bilinear -p all '
             opts="${srcopt} -d ${focnmesh} -w ${ftag} ${mapping}"
             ;;
         a2o_consf)
             mapindex=consf
-            ftag=${OUTPUT_DIR}/'map.'${ATMRES}'.to.mx'${OCNRES}'.'$mapindex'.nc'
+            ftag="${OUTPUT_DIR}/map.${ATMRES}.to.mx${OCNRES}.${mapindex}.nc"
             mapping='-m conserve --norm_type fracarea '
             opts="${srcopt} -d ${focnmesh} -w ${ftag} ${mapping}"
             ;;
         a2o_patch)
             mapindex='patch'
-            ftag=${OUTPUT_DIR}/'map.'${ATMRES}'.to.mx'${OCNRES}'.'$mapindex'.nc'
+            ftag="${OUTPUT_DIR}/map.${ATMRES}.to.mx${OCNRES}.${mapindex}.nc"
             mapping='-m patch -p all '
             opts="${srcopt} -d ${focnmesh} -w ${ftag} ${mapping}"
             ;;
         a2w_bilin)
             mapindex=bilnr
-            ftag=${OUTPUT_DIR}/'map.'${ATMRES}'.to.'${WAVRES}'.'$mapindex'.nc'
+            ftag="${OUTPUT_DIR}/map.${ATMRES}.to.${WAVRES}.${mapindex}.nc"
             mapping='-m bilinear -p none '
             opts="${srcopt} -d ${fwavmesh} -w ${ftag} ${mapping}"
             ;;
         w2o)
             mapindex=bilnr_nstod
-            ftag=${OUTPUT_DIR}/'map.'${WAVRES}'.to.mx'${OCNRES}'.'$mapindex'.nc'
+            ftag="${OUTPUT_DIR}/map.${WAVRES}.to.mx${OCNRES}.${mapindex}.nc"
             mapping='-m bilinear -p none --extrap_method neareststod '
-            opts='-s '${fwavmesh}' -d '${focnmesh}' -w '${ftag}'  '${mapping}
+            opts="-s ${fwavmesh} -d ${focnmesh} -w ${ftag} ${mapping}"
             ;;
         o2w)
             mapindex=bilnr_nstod
-            ftag=${OUTPUT_DIR}/'map.mx'${OCNRES}'.to.'${WAVRES}'.'$mapindex'.nc'
+            ftag="${OUTPUT_DIR}/map.mx${OCNRES}.to.${WAVRES}.${mapindex}.nc"
             mapping='-m bilinear -p none --extrap_method neareststod '
-            opts='-s '${focnmesh}' -d '${fwavmesh}' -w '${ftag}'  '${mapping}
+            opts="-s ${focnmesh} -d ${fwavmesh} -w ${ftag} ${mapping}"
             ;;
     esac
 
