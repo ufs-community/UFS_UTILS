@@ -17,8 +17,14 @@
 #
 # Run the mapfile generation program on Ursa.
 #
-# Set the ATM resolution (either DATM mesh or ATM CSG), the
-# target ocean resolution and a target wave resolution (optional)
+# By default, the utility will generate mapfiles for multiple configurations of
+# CSG and DATM. Setting a WAVRES will also create mapfiles for to/from WW3
+#
+# For the unstructured WW3 meshes and the CSG, no nstod_bilnr mapping from WW3
+# should be used at runtime, since no destination mask is available in the CSG
+# atmmesh. This is an ESMF limitation because the mesh is created internally by ESMF
+# from the supergrid and mosaic files, and no capability exists to provide a mask
+# file for the reduced grid.
 #
 # To run this script, do: 'sbatch $script'
 #
@@ -41,35 +47,25 @@ export datm_ver=20220805
 export OUTPUT_DIR=/scratch4/NCEPDEV/stmp/$USER/cmeps_mapfiles
 mkdir -p "$OUTPUT_DIR"
 
-# currently supported DATM RTS
-# default cfsr
-export ATMRES=1760x880
-export OCNRES=100
-"${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
+# Set WAVRES, optionally
+# export WAVRES=270k
 
-# default gefs
-export ATMRES=1536x768
-export OCNRES=100
-"${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
+# Loop over DATM resolutions and ocean resolutions
+for ATMRES in 1760x880 1536x768 3072x1536; do
+    for OCNRES in 100 050 025; do
+        export ATMRES
+        export OCNRES
+        "${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
+    done
+done
 
-# 3072x1536_cfsr, gfs
-export ATMRES=3072x1536
-export OCNRES=100
-"${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
-
-# mx025_cfsr
-export ATMRES=1760x880
-export OCNRES=025
-"${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
-
-# mx025_gefs
-export ATMRES=1536x768
-export OCNRES=025
-"${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
-
-#RTOFSv3.0
-#export ATMRES=3072x1536
-#export OCNRES=008
-#"${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
+# Loop over FV3 cube-sphere resolutions and ocean resolutions
+for ATMRES in C96 C192 C384 C1152; do
+    for OCNRES in 100 050 025; do
+        export ATMRES
+        export OCNRES
+        "${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
+    done
+done
 
 exit
