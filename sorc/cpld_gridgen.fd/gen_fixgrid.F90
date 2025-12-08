@@ -68,7 +68,7 @@ program gen_fixgrid
   character(len= 6) :: cnx
 
   !-------------------------------------------------------------------------
-  ! Initialize esmf environment. Everything except the generation of the 
+  ! Initialize esmf environment. Everything except the generation of the
   ! ESMF weights is done on the root PE.
   !-------------------------------------------------------------------------
 
@@ -560,6 +560,7 @@ program gen_fixgrid
   !---------------------------------------------------------------------
   ! use ESMF to create positional weights for mapping a field from its
   ! native stagger location (Cu,Cv,Bu) onto the center (Ct) grid location
+  ! these are used for both post and downscaling
   !---------------------------------------------------------------------
 
   method=ESMF_REGRIDMETHOD_BILINEAR
@@ -573,7 +574,7 @@ program gen_fixgrid
 
      call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
           weightFile=trim(fwgt), regridmethod=method,                 &
-          ignoreDegenerate=.true.,                                    &
+          ignoreDegenerate=.true., largeFileFlag=.true.,              &
           unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
           line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
@@ -596,7 +597,7 @@ program gen_fixgrid
 
      call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst), &
           weightFile=trim(fwgt), regridmethod=method,                 &
-          ignoreDegenerate=.true.,                                    &
+          ignoreDegenerate=.true., largeFileFlag=.true.,              &
           unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, rc=rc)
      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
           line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
