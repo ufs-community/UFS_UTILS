@@ -134,7 +134,7 @@ program gen_fixgrid
      ! read the MOM6 land mask
      !---------------------------------------------------------------------
 
-     fsrc = trim(dirsrc)//'/'//trim(maskfile)
+     fsrc = trim(dirsrc)//trim(maskfile)
 
      rc = nf90_open(fsrc, nf90_nowrite, ncid)
      print '(a)', 'reading ocean mask from '//trim(fsrc)
@@ -153,7 +153,7 @@ program gen_fixgrid
      ! read the MOM6 depth file
      !---------------------------------------------------------------------
 
-     fsrc = trim(dirsrc)//'/'//trim(topofile)
+     fsrc = trim(dirsrc)//trim(topofile)
 
      rc = nf90_open(fsrc, nf90_nowrite, ncid)
      print '(a)', 'reading ocean topography from '//trim(fsrc)
@@ -179,15 +179,15 @@ program gen_fixgrid
            print '(a)', 'Need a valid editsfile to make mask edits '
            call abort()
         end if
-        inquire(file=trim(dirsrc)//'/'//trim(editsfile),exist=fexist)
+        inquire(file=trim(dirsrc)//trim(editsfile),exist=fexist)
         if (.not. fexist) then
            print '(a)', 'Required topoedits file '//trim(editsfile) &
                 //'for land mask changes is missing '
            call abort()
         end if
 
-        fsrc = trim(dirsrc)//'/'//trim(editsfile)
-        fdst = trim(dirout)//'/'//'ufs.'//trim(editsfile)
+        fsrc = trim(dirsrc)//trim(editsfile)
+        fdst = trim(dirout)//'ufs.'//trim(editsfile)
         call add_topoedits(fsrc,fdst)
      endif
 
@@ -200,8 +200,8 @@ program gen_fixgrid
      ! this modified topoedits file
      !---------------------------------------------------------------------
 
-     fsrc = trim(dirsrc)//'/'//trim(editsfile)
-     if(editmask)fsrc = trim(dirout)//'/'//'ufs.'//trim(editsfile)
+     fsrc = trim(dirsrc)//trim(editsfile)
+     if(editmask)fsrc = trim(dirout)//'ufs.'//trim(editsfile)
 
      if (trim(editsfile) /= 'none') then
         inquire(file=trim(fsrc),exist=fexist)
@@ -216,7 +216,7 @@ program gen_fixgrid
      ! read MOM6 supergrid file
      !---------------------------------------------------------------------
 
-     fsrc = trim(dirsrc)//'/'//'ocean_hgrid.nc'
+     fsrc = trim(dirsrc)//'ocean_hgrid.nc'
 
      rc = nf90_open(fsrc, nf90_nowrite, ncid)
      print '(a)', 'reading supergrid from '//trim(fsrc)
@@ -414,18 +414,18 @@ program gen_fixgrid
      history = 'created on '//trim(cdate)//' from '//trim(fsrc)
 
      ! write fix grid
-     fdst = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.nc'
+     fdst = trim(dirout)//'tripole.mx'//trim(res)//'.nc'
      call write_tripolegrid(trim(fdst))
 
      ! write cice grid
-     fdst = trim(dirout)//'/'//'grid_cice_NEMS_mx'//trim(res)//'.nc'
+     fdst = trim(dirout)//'grid_cice_NEMS_mx'//trim(res)//'.nc'
      call write_cicegrid(trim(fdst))
      deallocate(ulon, ulat, htn, hte)
 
      ! write SCRIP files for generation of positional weights
      do k = 1,nv
         cstagger = trim(staggerlocs(k))
-        fdst = trim(dirout)//'/'//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
+        fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
         logmsg = 'creating SCRIP file '//trim(fdst)
         print '(a)',trim(logmsg)
         call write_scripgrid(trim(fdst),trim(cstagger))
@@ -437,7 +437,7 @@ program gen_fixgrid
      ! write SCRIP file with land mask, used for mapped ocean mask
      ! and  mesh creation
      cstagger = trim(staggerlocs(1))
-     fdst= trim(dirout)//'/'//trim(cstagger)//'.mx'//trim(res)//'_SCRIP_land.nc'
+     fdst= trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP_land.nc'
      logmsg = 'creating SCRIP file '//trim(fdst)
      print '(a)',trim(logmsg)
      call write_scripgrid(trim(fdst),trim(cstagger),imask=int(wet4))
@@ -459,12 +459,12 @@ program gen_fixgrid
      !close last row
      ww3mask(:,nj) = 3
 
-     open(unit=21,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_x.inp',form='formatted')
-     open(unit=22,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_y.inp',form='formatted')
-     open(unit=23,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_bottom.inp',form='formatted')
-     open(unit=24,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_mapsta.inp',form='formatted')
+     open(unit=21,file=trim(dirout)//'ww3.mx'//trim(res)//'_x.inp',form='formatted')
+     open(unit=22,file=trim(dirout)//'ww3.mx'//trim(res)//'_y.inp',form='formatted')
+     open(unit=23,file=trim(dirout)//'ww3.mx'//trim(res)//'_bottom.inp',form='formatted')
+     open(unit=24,file=trim(dirout)//'ww3.mx'//trim(res)//'_mapsta.inp',form='formatted')
      ! cice0 .ne. cicen requires obstruction map, should be initialized as zeros (w3grid,ln3032)
-     open(unit=25,file=trim(dirout)//'/'//'ww3.mx'//trim(res)//'_obstr.inp',form='formatted')
+     open(unit=25,file=trim(dirout)//'ww3.mx'//trim(res)//'_obstr.inp',form='formatted')
 
      do j = 1,nj
         write( 21,trim(form1))lonCt(:,j)
@@ -543,16 +543,16 @@ program gen_fixgrid
      end if
 
      method=ESMF_REGRIDMETHOD_CONSERVE
-     fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP_land.nc'
-     fdst = trim(fv3dir)//'/'//trim(atmres)//'/'//trim(atmres)//'_mosaic.nc'
-     fwgt = trim(dirout)//'/'//'Ct.mx'//trim(res)//'.to.'//trim(atmres)//'.nc'
+     fsrc = trim(dirout)//'Ct.mx'//trim(res)//'_SCRIP_land.nc'
+     fdst = trim(fv3dir)//trim(atmres)//'/'//trim(atmres)//'_mosaic.nc'
+     fwgt = trim(dirout)//'Ct.mx'//trim(res)//'.to.'//trim(atmres)//'.nc'
      logmsg = 'creating weight file '//trim(fwgt)
      if (maintask) print '(a)',trim(logmsg)
 
      call ESMF_RegridWeightGen(srcFile=trim(fsrc),dstFile=trim(fdst),         &
           weightFile=trim(fwgt), regridmethod=method,                         &
           unmappedaction=ESMF_UNMAPPEDACTION_IGNORE, ignoreDegenerate=.true., &
-          netcdf4fileFlag=.true., tileFilePath=trim(fv3dir)//'/'//trim(atmres)//'/', rc=rc)
+          netcdf4fileFlag=.true., tileFilePath=trim(fv3dir)//trim(atmres)//'/', rc=rc)
      if (ESMF_LogFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, &
           line=__LINE__, file=__FILE__)) call ESMF_Finalize(endflag=ESMF_END_ABORT)
   end do
@@ -564,11 +564,11 @@ program gen_fixgrid
   !---------------------------------------------------------------------
 
   method=ESMF_REGRIDMETHOD_BILINEAR
-  fdst = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
+  fdst = trim(dirout)//'Ct.mx'//trim(res)//'_SCRIP.nc'
   do k = 2,nv
      cstagger = trim(staggerlocs(k))
-     fsrc = trim(dirout)//'/'//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
-     fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.'//trim(cstagger)//'.to.Ct.bilinear.nc'
+     fsrc = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
+     fwgt = trim(dirout)//'tripole.mx'//trim(res)//'.'//trim(cstagger)//'.to.Ct.bilinear.nc'
      logmsg = 'creating weight file '//trim(fwgt)
      if (maintask) print '(a)',trim(logmsg)
 
@@ -587,11 +587,11 @@ program gen_fixgrid
   !---------------------------------------------------------------------
 
   method=ESMF_REGRIDMETHOD_BILINEAR
-  fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
+  fsrc = trim(dirout)//'Ct.mx'//trim(res)//'_SCRIP.nc'
   do k = 2,nv
      cstagger = trim(staggerlocs(k))
-     fdst = trim(dirout)//'/'//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
-     fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.Ct.to.'//trim(cstagger)//'.bilinear.nc'
+     fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
+     fwgt = trim(dirout)//'tripole.mx'//trim(res)//'.Ct.to.'//trim(cstagger)//'.bilinear.nc'
      logmsg = 'creating weight file '//trim(fwgt)
      if (maintask) print '(a)',trim(logmsg)
 
@@ -618,8 +618,8 @@ program gen_fixgrid
         else
            write(atmres,'(a,i4)')'C',npx
         end if
-        fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP_land.nc'
-        fwgt = trim(dirout)//'/'//'Ct.mx'//trim(res)//'.to.'//trim(atmres)//'.nc'
+        fsrc = trim(dirout)//'Ct.mx'//trim(res)//'_SCRIP_land.nc'
+        fwgt = trim(dirout)//'Ct.mx'//trim(res)//'.to.'//trim(atmres)//'.nc'
         logmsg = 'creating mapped ocean mask for '//trim(atmres)
         print '(a)',trim(logmsg)
         call make_frac_land(trim(fsrc), trim(fwgt))

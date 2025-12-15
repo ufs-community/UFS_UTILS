@@ -51,6 +51,16 @@ contains
     end if
     close(iounit)
 
+    if (dirsrc(len_trim(dirsrc):len_trim(dirsrc)) /= '/') then
+       dirsrc = trim(dirsrc)//'/'
+    end if
+    if (dirout(len_trim(dirout):len_trim(dirout)) /= '/') then
+       dirout = trim(dirout)//'/'
+    end if
+    if (fv3dir(len_trim(fv3dir):len_trim(fv3dir)) /= '/') then
+       fv3dir = trim(fv3dir)//'/'
+    end if
+
     ! Set the desired ATM resolutions
     nvalid = 0
     do ii = 1,size(atmreslist)
