@@ -15,12 +15,9 @@ wav_ver=${wav_ver:-}
 datm_ver=${datm_ver:-}
 
 fv3dir="${FIX_DIR}/orog/${orog_ver}"
-#datmdir=/scratch4/NAGAPE/epic/role-epic/UFS-WM_RT/NEMSfv3gfs/input-data-20251015/DATM_CDEPS
 icedir="${FIX_DIR}/cice/${ice_ver}"
 wavdir="${FIX_DIR}/wav/${wav_ver}"
 datmdir="${FIX_DIR}/datm/${datm_ver}"
-
-#icedir=/scratch4/NCEPDEV/stmp/Denise.Worthen/CPLD_GRIDGEN/BASELINE
 
 # Set ATM mesh based on ATMRES
 if [[ $ATMRES == C* ]]; then

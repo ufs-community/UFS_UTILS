@@ -18,7 +18,7 @@
 # Run the mapfile generation program on Ursa.
 #
 # By default, the utility will generate mapfiles for multiple configurations of
-# CSG and DATM. Setting a WAVRES will also create mapfiles for to/from WW3
+# DATM and/or CSG. Setting a WAVRES will also create mapfiles for to/from WW3.
 #
 # For the unstructured WW3 meshes and the CSG, no nstod_bilnr mapping from WW3
 # should be used at runtime, since no destination mask is available in the CSG
@@ -59,13 +59,14 @@ for ATMRES in 1760x880 1536x768 3072x1536; do
     done
 done
 
+# Set CSG resolutions, optionally
 # Loop over FV3 cube-sphere resolutions and ocean resolutions
-for ATMRES in C96 C192 C384 C1152; do
-    for OCNRES in 100 050 025; do
-        export ATMRES
-        export OCNRES
-        "${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
-    done
-done
+#for ATMRES in C96 C192 C384 C1152; do
+#    for OCNRES in 100 050 025; do
+#        export ATMRES
+#        export OCNRES
+#        "${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
+#    done
+#done
 
 exit
