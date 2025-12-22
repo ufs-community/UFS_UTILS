@@ -20,7 +20,7 @@ wavdir="${FIX_DIR}/wav/${wav_ver}"
 datmdir="${FIX_DIR}/datm/${datm_ver}"
 
 # Set ATM mesh based on ATMRES
-if [[ $ATMRES == C* ]]; then
+if [[ "${ATMRES}" == C* ]]; then
     # FV3 cube-sphere grid
     fmosaic="${fv3dir}/${ATMRES}/${ATMRES}_mosaic.nc"
     ftilepath="${fv3dir}/${ATMRES}"
