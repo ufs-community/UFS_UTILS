@@ -52,7 +52,7 @@ mkdir -p "$OUTPUT_DIR"
 
 # Loop over DATM resolutions and ocean resolutions
 for ATMRES in 1760x880 1536x768 3072x1536; do
-    for OCNRES in 100 050 025; do
+    for OCNRES in 100 050 025 008; do
         export ATMRES
         export OCNRES
         "${UFS_DIR}"/util/cmeps_mapfiles/make_mapfiles.sh
