@@ -1,12 +1,113 @@
 #!/bin/bash
-
-#----------------------------------------------------------------------------
-# Script name:  chgres_cube.sh
+################################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:         chgres_cube.sh
+# Script description:  Initialize an FV3 run using chgres_cube
 #
-# Abstract:  Run the chgres program to initialize an FV3 run.
+# Abstract: This script converts atmospheric and surface data from various
+#           formats to FV3 tiled format for model initialization.
 #
-# See comments for variable definitions and setup information.
-#----------------------------------------------------------------------------
+# Usage:  chgres_cube.sh
+#
+#   Required Shell Variables:
+#     CDATE         Cycle date in YYYYMMDDHH format. REQUIRED.
+#
+#   Optional Shell Variables:
+#     CRES          Target grid resolution (e.g., 96, 384, 768).
+#                   Defaults to 96.
+#     ocn           Ocean grid resolution for coupled runs.
+#                   Choices: 025, 050, 100, 500. Defaults to empty (uncoupled).
+#
+#     Environment paths:
+#     HOMEufs       Location of ufs_utils root directory.
+#                   Defaults to /nw${envir}/ufs_util.${ufs_ver}
+#     EXECufs       Location of executables. Defaults to $HOMEufs/exec
+#     FIXufs        Location of fixed files. Defaults to $HOMEufs/fix
+#     FIXfv3        Location of target grid files. Defaults to $FIXufs/orog/C${CRES}
+#     FIXsfc        Location of surface climatology. Defaults to $FIXfv3/sfc
+#     FIXam         Location of vertical coordinate file. Defaults to $FIXufs/am
+#
+#     Input data configuration:
+#     INPUT_TYPE    Type of input data. Defaults to 'gaussian_nemsio'
+#                   Options: 'restart', 'history', 'gaussian_nemsio',
+#                   'gaussian_netcdf', 'grib2', 'gfs_gaussian_nemsio', 'gfs_sigio'
+#     COMIN         Location of input data. Defaults to $PWD
+#     CONVERT_ATM   Convert atmospheric fields. Defaults to .true.
+#     CONVERT_SFC   Convert surface fields. Defaults to .true.
+#     CONVERT_NST   Convert NST fields. Defaults to .true.
+#
+#     Input data files:
+#     ATM_FILES_INPUT         Atmospheric data files (not for 'restart'/'grib2')
+#     ATM_CORE_FILES_INPUT    Core files for 'restart' type
+#     ATM_TRACER_FILES_INPUT  Tracer files for 'restart' type
+#     SFC_FILES_INPUT         Surface data files (not for 'grib2')
+#     NST_FILES_INPUT         NST files ('gfs_gaussian_nemsio' only)
+#     GRIB2_FILE_INPUT        GRIB2 file ('grib2' type only)
+#     GEOGRID_FILE_INPUT      Geogrid file for 'grib2' type. Defaults to NULL
+#
+#     Target grid configuration:
+#     VCOORD_FILE             Vertical coordinate file.
+#                             Defaults to ${FIXam}/global_hyblev.l65.txt
+#     MOSAIC_FILE_TARGET_GRID Target grid mosaic file.
+#                             Defaults to ${FIXfv3}/C${CRES}_mosaic.nc
+#     OROG_FILES_TARGET_GRID  Target orography files. Auto-computed if NULL
+#
+#     Regional grid settings:
+#     REGIONAL      0=global, 1=regional with halo removal, 2=lateral boundary only.
+#                   Defaults to 0.
+#     HALO_BNDY     Rows/cols for lateral boundaries. Defaults to 0.
+#     HALO_BLEND    Rows/cols for blending zone. Defaults to 0.
+#
+#     Tracers:
+#     TRACERS_INPUT   Input tracer list (not for 'grib2').
+#                     Defaults to "spfh","clwmr","o3mr","icmr","rwmr","snmr","grle"
+#     TRACERS_TARGET  Target tracer list (not for 'grib2').
+#                     Defaults to "sphum","liq_wat","o3mr","ice_wat","rainwat","snowwat","graupel"
+#
+#     GRIB2-specific options:
+#     VARMAP_FILE     Variable mapping table for 'grib2' type. Defaults to NULL
+#     ST_CLIMO        Use soil type from climatology. Defaults to .true.
+#     VT_CLIMO        Use vegetation type from climatology. Defaults to .true.
+#     VF_CLIMO        Use vegetation fraction from climatology. Defaults to .true.
+#     TG3_SOIL        Use tg3 from input soil. Defaults to .false.
+#     LAI_CLIMO       Use LAI from climatology. Defaults to .true.
+#     EXTERNAL_MODEL  Source model for 'grib2' type.
+#                     Options: GFS, NAM, RAP, HRRR. Defaults to GFS
+#     NSOILL_OUT      Number of output soil levels (4 or 9). Defaults to 4.
+#
+#     Special configurations:
+#     THOMPSON_AEROSOL_FILE  Thompson aerosol climatology. Defaults to NULL
+#     WAM_COLD_START         Cold start for Whole Atmosphere Model. Defaults to .false.
+#     WAM_PARM_FILE          WAM parameter file. Defaults to NULL
+#
+#     Execution:
+#     APRUN         Command to run executable. Defaults to 'time'
+#     CHGRESEXEC    Path to chgres_cube executable.
+#                   Defaults to ${EXECufs}/chgres_cube
+#     OMP_NUM_THREADS_CH  OpenMP threads. Defaults to 1.
+#     DATA          Working directory. Defaults to $PWD/chgres
+#     PGMOUT        Standard output file. Defaults to 'out'
+#     PGMERR        Standard error file. Defaults to 'err'
+#
+#   Example:
+#     export CDATE=2023120100
+#     export CRES=96
+#     export INPUT_TYPE=grib2
+#     export GRIB2_FILE_INPUT=/path/to/gfs.t00z.pgrb2.0p25.f000
+#     ./chgres_cube.sh
+#
+# Remarks:
+#   - CDATE is the only required variable; all others have defaults
+#   - For 'grib2' INPUT_TYPE, set GRIB2_FILE_INPUT
+#   - For 'restart' INPUT_TYPE, set ATM_CORE_FILES_INPUT and ATM_TRACER_FILES_INPUT
+#   - For coupled runs, set ocn to ocean resolution (025, 050, 100, or 500)
+#   - Regional grids require REGIONAL=1 or 2, HALO_BNDY, and HALO_BLEND settings
+#
+# Attributes:
+#   Language: POSIX shell
+#
+################################################################################
 
 set -eux
 

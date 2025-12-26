@@ -16,7 +16,10 @@
 #
 # Usage:  global_cycle.sh 
 #
-#   Imported Shell Variables:
+#   Required Shell Variables:
+#     CDATE         Output analysis date in yyyymmddhh format. REQUIRED.
+#
+#   Optional Shell Variables:
 #     CASE          Model resolution.  Defaults to C768.
 #     JCAP_CASE     Spectral truncation of the global fixed climatology files
 #                   (such as albedo), which are on the old GFS gaussian grid.
@@ -104,7 +107,6 @@
 #                   defaults to 'eval [[ $err = 0 ]]'
 #     ENDSCRIPT     Postprocessing script
 #                   defaults to none
-#     CDATE         Output analysis date in yyyymmddhh format. Required.
 #     FHOUR         Output forecast hour.  Defaults to 00hr.
 #     LSOIL         Number of soil layers. Defaults to 4.
 #     FSMCL2        Scale in days to relax to soil moisture climatology.
@@ -227,8 +229,8 @@ OCNRES=${OCNRES:-100}
 
 #  Directories.
 gfs_ver=${gfs_ver:-v15.0.0}
-PACKAGEROOT=${PACKAGEROOT:-/lfs/h1/ops/prod/packages}
-HOMEgfs=${HOMEgfs:-${PACKAGEROOT}/gfs_ver.${gfs_ver}}
+PACKAGEROOT=${PACKAGEROOT:?"ERROR: PACKAGEROOT must be set to gfs package root directory"}
+HOMEgfs=${HOMEgfs:?"ERROR: HOMEgfs must be set to GFS installation directory"}
 EXECgfs=${EXECgfs:-$HOMEgfs/exec}
 FIXgfs=${FIXgfs:-$HOMEgfs/fix}
 FIXorog=${FIXorog:-$FIXgfs/orog}
@@ -242,7 +244,7 @@ PREINP=${PREINP:-" "}
 SUFINP=${SUFINP:-" "}
 CYCLEXEC=${CYCLEXEC:-$EXECgfs/global_cycle$XC}
 
-CDATE=${CDATE:?}
+CDATE=${CDATE:?"ERROR: CDATE is required. Format: YYYYMMDDHH (e.g., 2023120100)"}
 FHOUR=${FHOUR:-00}
 
 CRES=$(echo $CASE | cut -c2-)

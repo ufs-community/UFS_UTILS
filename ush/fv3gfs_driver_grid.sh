@@ -1,44 +1,88 @@
 #!/bin/bash
+################################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:         fv3gfs_driver_grid.sh
+# Script description:  Driver script to create cubic-sphere model grid
 #
-#-----------------------------------------------------------------------
-# Driver script to create a cubic-sphere based model grid.
+# Abstract: This driver script creates a cubic-sphere based model grid
+#           and associated fixed fields. Supports:
+#             1) Global uniform grid
+#             2) Global stretched grid
+#             3) Global stretched grid with nest
+#             4) Stand-alone GFDL regional grid
+#             5) Stand-alone Extended Schmidt Gnomonic (ESG) regional grid
 #
-# Supports the following grids:
-#   1) global uniform
-#   2) global stretched
-#   3) global stretched with nest
-#   4) stand-alone GFDL regional
-#   5) stand-alone extended Schmidt gnonomic (ESG) regional
+#           Produces mosaic/grid files, orography files, optional GSL drag
+#           suite orography files, and surface climatology fields.
 #
-# Produces the following files (netcdf, each tile in separate file):
-#   1) 'mosaic' and 'grid' files containing lat/lon and other
-#      records that describe the model grid.
-#   2) 'oro' files containing land mask, terrain and gravity
-#      wave drag fields.
-#   3) 'oro' files ('oro_data_ls' and 'oro_data_ss') specific to
-#      the GSL drag suite physics parameterization (only if
-#      flag make_gsl_orog = true)
-#   4) surface climo fields, such as soil type, vegetation
-#      greenness and albedo.
+#           Calls the following scripts:
+#             1) fv3gfs_make_grid.sh (make grid files)
+#             2) fv3gfs_make_lake.sh (add lakes)
+#             3) fv3gfs_make_orog.sh (make land mask and terrain)
+#             4) fv3gfs_ocean_merge.sh (merge ocean grid for uniform only)
+#             5) fv3gfs_make_orog_gsl.sh (make GSL drag orog files)
+#             6) fv3gfs_filter_topo.sh (filter topography)
+#             7) sfc_climo_gen.sh (create surface climo fields)
 #
-# Calls the following scripts
-#   1) fv3gfs_make_grid.sh (make 'grid' files)
-#   2) fv3gfs_make_lake.sh (adds lakes)
-#   3) fv3gfs_make_orog.sh (make land mask and exits for uniform grid type only, generates oro for other grid types)
-#   4) fv3gfs_ocean_merge.sh (Reads pre-generated ocean grid and merges them for uniform grid type only)
-#   5) fv3gfs_make_orog.sh (reads merged masks and makes 'oro' files for uniform grid type only)
-#   6) fv3gfs_make_orog_gsl.sh (make gsl drag 'oro' files for uniform grid type only)
-#   7) fv3gfs_filter_topo.sh (filter topography)
-#   8) sfc_climo_gen.sh (create surface climo fields)
-# 
-#    Note: The sfc_climo_gen program only runs with an
-#       mpi task count that is a multiple of six.  This is
-#       an ESMF library requirement.  Large grids may require
-#       tasks spread across multiple nodes.
+# Usage:  fv3gfs_driver_grid.sh
 #
-# This script is run by its machine-specific driver script in
-# ./driver_scripts.
-#-----------------------------------------------------------------------
+#   Required Shell Variables:
+#     (None - all have defaults)
+#
+#   Optional Shell Variables:
+#     Grid configuration:
+#     res               Resolution of tile (e.g., 48, 96, 192, 384, 768, 1152, 3072).
+#                       Defaults to 96.
+#     gtype             Grid type: 'uniform', 'stretch', 'nest', 'regional_gfdl',
+#                       or 'regional_esg'. Defaults to 'uniform'.
+#
+#     Stretched/nested grid parameters (gtype=stretch, nest, regional_gfdl):
+#     stretch_fac       Stretching factor. Defaults to 1.5.
+#     target_lon        Center longitude of highest resolution tile. Defaults to -97.5.
+#     target_lat        Center latitude of highest resolution tile. Defaults to 35.5.
+#     refine_ratio      Refinement ratio (nest/regional_gfdl). Defaults to 3.
+#     istart_nest       Starting i-index of nest in parent supergrid. Defaults to 27.
+#     jstart_nest       Starting j-index of nest in parent supergrid. Defaults to 37.
+#     iend_nest         Ending i-index of nest in parent supergrid. Defaults to 166.
+#     jend_nest         Ending j-index of nest in parent supergrid. Defaults to 164.
+#     halo              Halo size (regional grids). Defaults to 3.
+#
+#     ESG regional grid parameters (gtype=regional_esg):
+#     idim              Grid dimension in i-direction. Defaults to 200.
+#     jdim              Grid dimension in j-direction. Defaults to 200.
+#     delx              Grid spacing in degrees (i-direction, supergrid). Defaults to 0.0585.
+#     dely              Grid spacing in degrees (j-direction, supergrid). Defaults to 0.0585.
+#     pazi              Azimuthal rotation angle. Defaults to 0.
+#
+#     Processing options:
+#     add_lake          Add lake fraction and depth (uniform only). Defaults to false.
+#     lake_cutoff       Lake fraction threshold. Defaults to 0.50.
+#     binary_lake       Return 1 if lake_frac >= cutoff. Defaults to 1.
+#     lake_data_srce    Lake data source. Defaults to "MODISP_GLDBV3".
+#     make_gsl_orog     Create GSL drag suite orog files. Defaults to false.
+#     vegsoilt_frac     Output fractional vegetation/soil type. Defaults to .false.
+#     veg_type_src      Vegetation type source. Defaults to "modis.igbp.0.05".
+#     soil_type_src     Soil type source. Defaults to "statsgo.0.05".
+#     ocn               Ocean grid resolution (e.g., 025, 050, 100).
+#                       When set, uses coupled model orog files.
+#
+#   Example:
+#     export res=96
+#     export gtype=uniform
+#     ./fv3gfs_driver_grid.sh
+#
+# Remarks:
+#   - This is a driver script typically run by machine-specific drivers
+#     in ./driver_scripts
+#   - sfc_climo_gen requires MPI task count that is multiple of 6
+#   - Large grids may require tasks spread across multiple nodes
+#   - For individual component details, see the called scripts
+#
+# Attributes:
+#   Language: POSIX shell
+#
+################################################################################
 
 set -eux
 

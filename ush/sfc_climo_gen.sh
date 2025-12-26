@@ -1,48 +1,96 @@
 #!/bin/bash
-
-#-------------------------------------------------------------------------
-# Run sfc_climo_gen program to create surface fixed fields,
-# such as vegetation type.
+################################################################################
+####  UNIX Script Documentation Block
+#                      .                                             .
+# Script name:         sfc_climo_gen.sh
+# Script description:  Create surface climatology fixed fields
 #
-# Stand-alone regional grids may be run with any number of
-# tasks.  All other configurations must be run with a
-# MULTIPLE OF SIX MPI TASKS. 
+# Abstract: This script runs the sfc_climo_gen program to create surface
+#           climatology fixed fields such as vegetation type, soil type,
+#           substrate temperature, albedo, and other surface properties
+#           needed for model initialization.
 #
-# Some variable definitions:
+# Usage:  sfc_climo_gen.sh
 #
-# BASE_DIR                      Location of your repository.
-# input_sfc_climo_dir           Location of raw input surface climo data
-# exec_dir                      Location of program executable
-# FIX_DIR                       Location of 'grid' and 'orog' files
-# GRIDTYPE                      Flag to invoke logic for global nests
-#                               and regional grids.  Valid values are
-#                               'nest' and 'regional'.
-# HALO                          Number of halo row/cols to remove
-#                               for regional grid.
-# mosaic_file                   Path/name of mosaic file.
-# res                           Resolution of cubed-sphere grid
-# ocn                           Resolution of ocean grid. When declared,
-#                               use the 'orog' files for the coupled model.
-# SAVE_DIR                      Directory where output is saved
-# WORK_DIR                      Temporary working directory
-# SOIL_TYPE_FILE                Path/name of input soil type data.
-# VEG_TYPE_FILE                 Path/name of input vegetation type data.
-# vegsoilt_frac                 When true, outputs dominant soil and
-#                               vegetation type category and the 
-#                               fractional value of each category.
-#                               When false, outputs dominant category.
-#-------------------------------------------------------------------------
+#   Required Shell Variables:
+#     BASE_DIR          Location of UFS_UTILS repository. REQUIRED.
+#     input_sfc_climo_dir  Location of raw input surface climatology data.
+#                          REQUIRED.
+#     FIX_FV3           Location of grid and orog fixed files directory. REQUIRED.
+#
+#   Optional Shell Variables:
+#     Grid configuration:
+#     res               Resolution of cubed-sphere grid (e.g., 96, 384, 768).
+#                       Defaults to 96.
+#     GRIDTYPE          Grid type flag. Valid values: 'nest', 'regional', or NULL.
+#                       Defaults to NULL (global uniform).
+#     ocn               Ocean grid resolution (e.g., 025, 050, 100).
+#                       When declared, uses orog files for coupled model.
+#                       Defaults to undefined (atmosphere-only).
+#     HALO              Number of halo rows/cols for regional grids.
+#                       Defaults to 0.
+#
+#     Directory paths:
+#     WORK_DIR          Temporary working directory.
+#                       Defaults to /scratch3/NCEPDEV/stmp1/$LOGNAME/sfc_climo_gen.C${res}
+#     SAVE_DIR          Directory where output is saved.
+#                       Defaults to $WORK_DIR.
+#     exec_dir          Location of sfc_climo_gen executable.
+#                       Defaults to $BASE_DIR/exec
+#
+#     Input file configuration:
+#     mosaic_file       Path/name of mosaic file.
+#                       Defaults to $FIX_FV3/C${res}_mosaic.nc
+#     VEG_TYPE_FILE     Path/name of input vegetation type data.
+#                       Defaults to ${input_sfc_climo_dir}/vegetation_type.${veg_type_src}.nc
+#     SOIL_TYPE_FILE    Path/name of input soil type data.
+#                       Defaults to ${input_sfc_climo_dir}/soil_type.${soil_type_src}.nc
+#     veg_type_src      Vegetation type source identifier.
+#                       Defaults to "modis.igbp.0.05"
+#     soil_type_src     Soil type source identifier.
+#                       Defaults to "statsgo.0.05"
+#
+#     Processing options:
+#     vegsoilt_frac     When .true., outputs dominant soil/vegetation category AND
+#                       fractional values of each category. When .false., outputs
+#                       dominant category only. Defaults to .false.
+#
+#     Execution:
+#     APRUN_SFC         Command to run executable with MPI.
+#                       Defaults to "aprun -j 1 -n 6 -N 6"
+#                       NOTE: Must use task count that is MULTIPLE OF 6 (ESMF requirement).
+#
+#   Example:
+#     export BASE_DIR=/path/to/UFS_UTILS
+#     export input_sfc_climo_dir=/path/to/fix/sfc_climo
+#     export FIX_FV3=/path/to/fix/orog/C96
+#     export res=96
+#     ./sfc_climo_gen.sh
+#
+# Remarks:
+#   - Stand-alone regional grids may run with any number of MPI tasks
+#   - All other configurations MUST run with task count that is MULTIPLE OF 6
+#     (This is an ESMF library requirement for the sfc_climo_gen executable)
+#   - Large grids may require tasks spread across multiple nodes
+#   - For regional grids, script creates both halo and no-halo output versions
+#   - Output files are named: C${res}.${field_name}.tileX.nc (global)
+#     or C${res}.${field_name}.haloX.nc (regional)
+#
+# Attributes:
+#   Language: POSIX shell
+#
+################################################################################
 
 set -eux
 
 res=${res:-96}
 WORK_DIR=${WORK_DIR:-/scratch3/NCEPDEV/stmp1/$LOGNAME/sfc_climo_gen.C${res}}
 SAVE_DIR=${SAVE_DIR:-$WORK_DIR}
-BASE_DIR=${BASE_DIR:?}
+BASE_DIR=${BASE_DIR:?"ERROR: BASE_DIR is required. Location of UFS_UTILS repository"}
 exec_dir=${exec_dir:-$BASE_DIR/exec}
 GRIDTYPE=${GRIDTYPE:-NULL}
-FIX_FV3=${FIX_FV3:-/scratch4/NCEPDEV/global/save/glopara/git/fv3gfs/fix/fix_fv3_gmted2010/C${res}}
-input_sfc_climo_dir=${input_sfc_climo_dir:?}
+FIX_FV3=${FIX_FV3:?"ERROR: FIX_FV3 is required. Location of grid/orog fixed files directory"}
+input_sfc_climo_dir=${input_sfc_climo_dir:?"ERROR: input_sfc_climo_dir is required. Location of raw surface climatology data"}
 mosaic_file=${mosaic_file:-$FIX_FV3/C${res}_mosaic.nc}
 HALO=${HALO:-0}
 vegsoilt_frac=${vegsoilt_frac:-.false.}
