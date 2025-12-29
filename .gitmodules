@@ -1,3 +1,4 @@
 [submodule "ccpp"]
 	path = ccpp-physics
-	url = https://github.com/ufs-community/ccpp-physics.git
+  # Temporarily point to a fork until PRs are merged
+	url = https://github.com/DavidHuber-NOAA/ccpp-physics.git
