@@ -46,10 +46,10 @@ function get_res
 # Main script begins here.
 #-----------------------------------------------------------------------------------------
 
-gtype=${gtype:?}
-res=${res:?}
+gtype=${gtype:?"ERROR: gtype is required. Grid type: uniform, stretch, nest, regional_gfdl, or regional_esg"}
+res=${res:?"ERROR: res is required. Grid resolution (e.g., 96, 384, 768)"}
 outdir=${outdir:-$1}
-exec_dir=${exec_dir:?}
+exec_dir=${exec_dir:?"ERROR: exec_dir is required. Location of grid generation executables"}
 APRUN=${APRUN:-time}
 nx=`expr $res \* 2 `
 
@@ -79,22 +79,22 @@ if [ $gtype = uniform ]; then
   ntiles=6
   $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid
 elif  [ $gtype = stretch ]; then
-  stretch_fac=${stretch_fac:?}
-  target_lon=${target_lon:?}
-  target_lat=${target_lat:?}
+  stretch_fac=${stretch_fac:?"ERROR: stretch_fac is required for gtype=${gtype}. Stretching factor (e.g., 1.5)"}
+  target_lon=${target_lon:?"ERROR: target_lon is required for gtype=${gtype}. Center longitude (e.g., -97.5)"}
+  target_lat=${target_lat:?"ERROR: target_lat is required for gtype=${gtype}. Center latitude (e.g., 35.5)"}
   ntiles=6
   $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid \
                      --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} 
 elif  [ $gtype = nest ] || [ $gtype = regional_gfdl ] ; then
-  stretch_fac=${stretch_fac:?}
-  target_lon=${target_lon:?}
-  target_lat=${target_lat:?}
-  refine_ratio=${refine_ratio:?}
+  stretch_fac=${stretch_fac:?"ERROR: stretch_fac is required for gtype=${gtype}. Stretching factor (e.g., 1.5)"}
+  target_lon=${target_lon:?"ERROR: target_lon is required for gtype=${gtype}. Center longitude (e.g., -97.5)"}
+  target_lat=${target_lat:?"ERROR: target_lat is required for gtype=${gtype}. Center latitude (e.g., 35.5)"}
+  refine_ratio=${refine_ratio:?"ERROR: refine_ratio is required for gtype=${gtype}. Refinement ratio (e.g., 3)"}
   istart_nest=$2
   jstart_nest=$3
   iend_nest=$4
   jend_nest=$5
-  halo=${halo:?}
+  halo=${halo:?"ERROR: halo is required for gtype=${gtype}. Halo size (e.g., 3)"}
   if  [ $gtype = regional_gfdl ]; then
     ntiles=1
   else

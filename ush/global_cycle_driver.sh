@@ -19,9 +19,9 @@ export COMPONENT=${COMPONENT:-atmos}
 
 pwd=$(pwd)
 export DMPDIR=${DMPDIR:-$pwd}
-export PACKAGEROOT=${PACKAGEROOT:-/lfs/h1/ops/prod/packages}
+export PACKAGEROOT=${PACKAGEROOT:?"ERROR: PACKAGEROOT must be set to gfs package root directory"}
 export gfs_ver=${gfs_ver:-v15.0.0}
-export HOMEgfs=${HOMEgfs:-${PACKAGEROOT}/gfs.${gfs_ver}}
+export HOMEgfs=${HOMEgfs:?"ERROR: HOMEgfs must be set to GFS installation directory"}
 export FIXgfs=${FIXgfs:-$HOMEgfs/fix}   
 export FIXorog=${FIXorog:-$FIXgfs/orog}
 
