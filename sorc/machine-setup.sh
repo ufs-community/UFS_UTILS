@@ -59,6 +59,9 @@ elif [[ "$(hostname)" =~ "hercules" || "$(hostname)" =~ "Hercules" ]]; then
 elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
     target=stampede
     module purge
+elif [[ "$(hostname)" =~ "Derecho" || "$(hostname)" =~ "derecho" ]]; then
+    target="derecho"
+    module purge
 else
     if [[ ! -v PW_CSP ]]; then
         set +x

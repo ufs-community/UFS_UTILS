@@ -13,6 +13,7 @@ fix/sfc_climo
 *.so
 *.exe
 *.x
+*~
 
 *.swp
 *.o

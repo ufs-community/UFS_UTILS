@@ -95,7 +95,7 @@ elif [[  $target = wcoss2 ]]; then
   STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
   ACCOUNT=${ACCOUNT:-GFS-DEV}
   QUEUE=${QUEUE:-dev}
-  WLCLK=40
+  WLCLK=60
   export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
   export BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
   export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
@@ -198,6 +198,12 @@ while read -r line || [ "$line" ]; do
       ATMLIST=-1
   fi
 
+  if [[ ${TEST_NAME} == "008" ]]; then
+      NTASKS=24
+  else
+      NTASKS=12
+  fi
+
   export NEW_BASELINE=${NEW_BASELINE_ROOT}/$TEST_NAME
   RUNDIR=$RUNDIR_ROOT/$TEST_NAME
   mkdir -p $RUNDIR
@@ -211,10 +217,10 @@ while read -r line || [ "$line" ]; do
 
   if [[ $target = wcoss2 ]]; then
     tests[$i]=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-       -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=12 -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
+       -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=${NTASKS} -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
 
   else
-    tests[$i]=$(sbatch --parsable --ntasks-per-node=12 --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+    tests[$i]=$(sbatch --parsable --ntasks-per-node=${NTASKS} --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
             $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
   fi
 
