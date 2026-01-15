@@ -43,17 +43,18 @@
 !> Create ESMF grid objects, with mask if requested
 !! @param[in] localpet          local pet
 !! @param[in] npets             total number of pets
+!! @param[in] imem_ens          ensemble member index
 !! @param[in] grid_setup        data structure with grid details 
 !! @param[out] mod_grid         output esmf_grid structure 
 !! @param[in] timestamp      timestep of input file
 
- subroutine setup_grid(localpet, npets, grid_setup, mod_grid, timestamp )
+ subroutine setup_grid(localpet, npets, imem_ens, grid_setup, mod_grid, timestamp )
 
  implicit none
 
  ! INTENT IN
  type(grid_setup_type), intent(in)    :: grid_setup
- integer, intent(in)            :: localpet, npets
+ integer, intent(in)            :: localpet, npets, imem_ens
  integer, intent(in), optional  :: timestamp
 
  ! INTENT OUT
@@ -74,9 +75,9 @@
 
  select case (grid_setup%descriptor)
  case ('fv3_rst')
-     call create_grid_fv3(grid_setup%ires, trim(grid_setup%dir_coord), npets, localpet ,mod_grid)
+     call create_grid_fv3(grid_setup%ires, trim(grid_setup%dir_coord), npets, localpet, imem_ens, mod_grid)
  case ('gau_inc')
-     call create_grid_gauss(grid_setup, npets, localpet,  mod_grid)
+     call create_grid_gauss(grid_setup, npets, localpet,  imem_ens, mod_grid)
  case default
      call error_handler("unknown grid_setup%descriptor in setup_grid", 1)
  end select
@@ -251,6 +252,7 @@
 
 !> write variables from ESMF Fields into netcdf restart-like file
 !! @param[in] localpet          local pet
+!! @param[in] imem_ens          ensemble member index
 !! @param[in] i_dim             longitudinal dimension
 !! @param[in] j_dim             latitudinal dimension
 !! @param[in] fname_out         file name to write to
@@ -261,13 +263,13 @@
 !! @param[in] fields         fields to read variables into
 !! @param[in] add_time_dim      specify whether output file has time dimension
 
- subroutine write_from_fields(localpet, i_dim, j_dim , fname_out, dir_out, &
+ subroutine write_from_fields(localpet, imem_ens, i_dim, j_dim , fname_out, dir_out, &
                                 n_vars, n_tims, variable_list, fields, add_time_dim)
 
  implicit none
 
  ! INTENT IN
- integer, intent(in)             :: localpet, i_dim, j_dim,  n_vars, n_tims
+ integer, intent(in)             :: localpet, imem_ens, i_dim, j_dim,  n_vars, n_tims
  character(*), intent(in)        :: fname_out
  character(*), intent(in)        :: dir_out
  character(15), dimension(n_vars), intent(in)     :: variable_list
@@ -278,21 +280,18 @@
  integer                         :: tt, id_var, ncid, ierr, &
                                     id_x, id_y, id_t, v, t
  character(len=1)                :: tchar
+ character(len=3)                :: memchar
  character(len=500)              :: fname
  real(esmf_kind_r8), allocatable :: array2D(:,:)
  real(esmf_kind_r8), allocatable :: array_out(:,:,:,:)
 
  do v = 1, n_vars
-        if (localpet == 0)  print *, 'Writing ', trim(variable_list(v)), ' into field'
+        if (localpet == 0)  print *, 'Writing ', trim(variable_list(v)), ' into field for ensemble member', imem_ens
  enddo
 
- if (localpet==0) then
-     allocate(array_out(n_vars, i_dim, j_dim, n_tims))
-     allocate(array2D(i_dim, j_dim))
- else
-     allocate(array_out(0,0,0,0))
-     allocate(array2D(0,0))
- end if
+ ! All processes need properly sized arrays for FieldGather to work
+ allocate(array_out(n_vars, i_dim, j_dim, n_tims))
+ allocate(array2D(i_dim, j_dim))
 
  do tt = 1, n_tiles
 
@@ -311,7 +310,8 @@
 
          ! open file, set dimensions
          write(tchar,'(i1)') tt
-         fname = dir_out//"/"//fname_out//".tile"//tchar//".nc"
+         write(memchar,'(I3)') imem_ens
+         fname = dir_out//"/"//fname_out//".mem"//trim(adjustl(memchar))//".tile"//tchar//".nc"
 
          ierr = nf90_create(trim(fname), NF90_NETCDF4, ncid)
          call netcdf_err(ierr, 'creating file='//trim(fname) )
@@ -369,13 +369,14 @@
 !! @param[in] dir_fix           orog fix directory
 !! @param[in] localpet          local pet
 !! @param[in] npets             total number of pets
+!! @param[in] imem_ens          ensemble member index
 !! @param[out] fv3_grid         output ESMF grid 
 
 
- subroutine create_grid_fv3(res_atm, dir_fix, npets, localpet, fv3_grid)
+ subroutine create_grid_fv3(res_atm, dir_fix, npets, localpet, imem_ens, fv3_grid)
 
 ! INTENT IN
- integer, intent(in)    :: npets, localpet
+ integer, intent(in)    :: npets, localpet, imem_ens
  integer, intent(in)    :: res_atm
  character(*), intent(in)       :: dir_fix
 
@@ -388,7 +389,7 @@
  character(len=5)       :: rchar
  character(len=200)     :: fname
 
- if (localpet == 0) print*," creating fv3 grid for ", res_atm
+ if (localpet == 0) print*," creating fv3 grid for ", res_atm, " for ensemble member ", imem_ens
 
 ! pet distribution
  extra = npets / n_tiles
@@ -418,13 +419,14 @@
 !! @param[in] grid_setup        data structure with grid details 
 !! @param[in] npets             total number of pets
 !! @param[in] localpet          local pet
+!! @param[in] imem_ens          ensemble member index
 !! @param[out] gauss_grid       output ESMF grid 
 
- subroutine create_grid_gauss(grid_setup, npets, localpet, gauss_grid)
+ subroutine create_grid_gauss(grid_setup, npets, localpet, imem_ens, gauss_grid)
 
  ! INTENT IN
  type(grid_setup_type), intent(in) :: grid_setup
- integer, intent(in)   :: npets, localpet
+ integer, intent(in)   :: npets, localpet, imem_ens
 
  ! INTENT OUT
  type(esmf_grid)                   :: gauss_grid
@@ -434,7 +436,7 @@
 
  fname = trim(grid_setup%dir_coord)//trim(grid_setup%fname_coord)
 
- if (localpet == 0) print*," creating gauss grid for ", trim(fname)
+ if (localpet == 0) print*," creating gauss grid for ", trim(fname), " for ensemble member ", imem_ens
 
  fac = npets / n_tiles
  gauss_grid = ESMF_GridCreate(filename=trim(fname),  &
