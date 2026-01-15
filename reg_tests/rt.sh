@@ -120,7 +120,8 @@ for dir in snow2mdl global_cycle chgres_cube grid_gen; do
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"
     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-    (bash "./driver.${MACHINE_ID}.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
+    # (bash "./driver.${MACHINE_ID}.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
+    (bash "./driver.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
     PID_LIST+=($!)
     cd ..
   fi

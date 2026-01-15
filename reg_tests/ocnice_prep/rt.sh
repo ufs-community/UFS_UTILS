@@ -37,74 +37,88 @@ usage_and_exit() {
 # Execution starts here.
 
 set -x
-
-readonly program=$(basename $0)
+test_name="ocnice_prep"
+source ../rt.control
+readonly program
+program=$(basename $0)
 
 # PATHRT - Path to regression tests directory
-readonly PATHRT="$(cd $(dirname $0) && pwd -P)"
+readonly PATHRT
+PATHRT="$(cd "$(dirname $0)" && pwd -P)"
 export PATHRT
 
 # PATHTR - Path to the UFS UTILS directory
-readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
+readonly PATHTR
+PATHTR="$(cd "${PATHRT}/../.." && pwd)"
 
 TESTS_FILE="./rt.conf"
 
-source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
+source "${PATHTR}/sorc/machine-setup.sh" >/dev/null 2>&1
 set +x
 echo
 echo "Machine: $target"
 echo
 set -x
 
+BASELINE_ROOT=${HOMEreg}/${test_name}/baseline_data
+WEIGHTS_ROOT=${HOMEreg}/cpld_gridgen/baseline_data
+INPUT_ROOT=${HOMEreg}/${test_name}/input_data
+STMP=${WORK_DIR}
+ACCOUNT=${PROJECT_CODE}
+
 if [[ $target = wcoss2 ]]; then
-    STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
-    BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/baseline_data
-    WEIGHTS_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
-    INPUT_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/input_data
-    ACCOUNT=${ACCOUNT:-GFS-DEV}
+    #STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
+                  
+    #BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/baseline_data
+    
+    #WEIGHTS_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
+    
+    #INPUT_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/input_data
+    
+    #ACCOUNT=${ACCOUNT:-GFS-DEV}
     export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
-    QUEUE=${QUEUE:-dev}
+    #QUEUE=${QUEUE:-dev}
     WLCLK=15
     export NCCMP=nccmp
 elif [[ $target = ursa ]]; then
-    STMP=${STMP:-/scratch4/NCEPDEV/stmp/$USER}
-    BASELINE_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
-    WEIGHTS_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    INPUT_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
-    ACCOUNT=${ACCOUNT:-fv3-cpu}
-    QUEUE=${QUEUE:-batch}
+    #STMP=${STMP:-/scratch4/NCEPDEV/stmp/$USER}
+    #BASELINE_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
+    #WEIGHTS_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    #INPUT_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
+    #ACCOUNT=${ACCOUNT:-fv3-cpu}
+    #QUEUE=${QUEUE:-batch}
     WLCLK=10
     export NCCMP=nccmp
     PARTITION=''
 elif [[ $target = orion ]]; then
-    STMP=${STMP:-/work/noaa/stmp/$USER}
-    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/baseline_data
-    WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/input_data
-    ACCOUNT=${ACCOUNT:-nems}
-    QUEUE=${QUEUE:-batch}
+    #STMP=${STMP:-/work/noaa/stmp/$USER}
+    #BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/baseline_data
+    #WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    #INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/input_data
+    #ACCOUNT=${ACCOUNT:-nems}
+    #QUEUE=${QUEUE:-batch}
     WLCLK=15
     export NCCMP=nccmp
     PARTITION=''
     ulimit -a
 elif [[ $target = hercules ]]; then
-    STMP=${STMP:-/work2/noaa/stmp/$USER}
-    BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/baseline_data
-    WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
-    INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/input_data
-    ACCOUNT=${ACCOUNT:-fv3-cpu}
-    QUEUE=${QUEUE:-batch}
+    #STMP=${STMP:-/work2/noaa/stmp/$USER}
+    #BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/baseline_data
+    #WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
+    #INPUT_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/input_data
+    #ACCOUNT=${ACCOUNT:-fv3-cpu}
+    #QUEUE=${QUEUE:-batch}
     WLCLK=10
     export NCCMP=nccmp
     PARTITION=''
     ulimit -s unlimited
 elif [[ $target = jet ]]; then
-    STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
-    BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
-    WEIGHTS_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-    INPUT_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
-    ACCOUNT=${ACCOUNT:-h-nems}
-    QUEUE=${QUEUE:-batch}
+    #STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
+    #BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
+    #WEIGHTS_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
+    #INPUT_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/input_data
+    #ACCOUNT=${ACCOUNT:-h-nems}
+    #QUEUE=${QUEUE:-batch}
     WLCLK=10
     export NCCMP=nccmp
     PARTITION="--partition=xjet"

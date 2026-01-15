@@ -19,7 +19,7 @@
 #-----------------------------------------------------------------------------
 
 set -x
-
+test_name="regrid_sfc"
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 compiler=${compiler:-intelllvm}
@@ -39,47 +39,51 @@ set +x
 module list
 set -x
 
-UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
-export UPDATE_BASELINE
+source ../rt.control
+
+##UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
+##export UPDATE_BASELINE
 
 if [[ "$UPDATE_BASELINE" == "TRUE" ]]; then
   source ../get_hash.sh
 fi
 
+export HOMEreg="${HOMEreg}/${test_name}"
+
 if [[ "${target}" == "jet" ]];then
-  export WORK_DIR="${WORK_DIR:-/lfs5/HFIP/emcda/$LOGNAME/stmp}"
-  PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
-  QUEUE="${QUEUE:-batch}"
-  export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/regrid_sfc
+#  export WORK_DIR="${WORK_DIR:-/lfs5/HFIP/emcda/$LOGNAME/stmp}"
+#  PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
+#  QUEUE="${QUEUE:-batch}"
+#  export HOMEreg=${HOMEreg}/${test_name}
   export APRUN_REGRID=srun
   PARTITION="--partition=xjet"
 elif [[ "$target" == "ursa" ]];then
-  WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
-  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-  QUEUE="${QUEUE:-batch}"
-  export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/regrid_sfc/
+#  WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
+#  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+#  QUEUE="${QUEUE:-batch}"
+#  export HOMEreg=${HOMEreg}/${test_name}
   export APRUN_REGRID=srun
   PARTITION=''
 elif [[ "$target" == "orion" ]];then
-  WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
-  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-  QUEUE="${QUEUE:-batch}"
-  export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/regrid_sfc
+#  WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
+#  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+#  QUEUE="${QUEUE:-batch}"
+#  export HOMEreg=${HOMEreg}/${test_name}
   export APRUN_REGRID=srun
   PARTITION=''
   ulimit -a
 elif [[ "$target" == "hercules" ]];then
-  WORK_DIR="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
-  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-  QUEUE="${QUEUE:-batch}"
-  export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/regrid_sfc
+#  WORK_DIR="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
+#  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
+#  QUEUE="${QUEUE:-batch}"
+#  export HOMEreg=${HOMEreg}/${test_name}
   export APRUN_REGRID=srun
   PARTITION=''
 elif [[ "$target" == "wcoss2" ]];then
-  WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
-  PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
-  QUEUE="${QUEUE:-dev}"
-  export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/regrid_sfc
+#  WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
+#  PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
+#  QUEUE="${QUEUE:-dev}"
+#  export HOMEreg=${HOMEreg/$test_name}
   export APRUN_REGRID="mpiexec -n 6 -ppn 6 --cpu-bind core"
 fi
 

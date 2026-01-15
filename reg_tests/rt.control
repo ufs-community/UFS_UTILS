@@ -10,6 +10,14 @@ WORK_DIR_WCOSS2="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
 WORK_DIR_JET="/lfs5/HFIP/hfv3gfs/${LOGNAME}/stmp/ufs_utils"
 ##############
 
+##### HOME REG #########
+HOMEREG_URSA="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
+HOMEREG_HERCULES="/work/noaa/nems/role-nems/ufs_utils/reg_tests"
+HOMEREG_ORION="/work/noaa/nems/role-nems/ufs_utils/reg_tests"
+HOMEREG_WCOSS2="/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests"
+HOMEREG_JET="/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests"
+##############
+
 ##### PROJECT CODES #########
 PROJECT_CODE_URSA="nems"
 PROJECT_CODE_HERCULES="nems"
@@ -26,16 +34,24 @@ QUEUE_WCOSS2="dev"
 QUEUE_JET="batch"
 ##############
 
+##### SCHEDULER #########
+SCHEDULER_URSA="slurm"
+SCHEDULER_HERCULES="slurm"
+SCHEDULER_ORION="slurm"
+SCHEDULER_WCOSS2="pbs"
+SCHEDULER_JET="slurm"
+##############
+
 ##### TOGGLE JOBS #########
 RUN_CHGRES_CUBE="true"
-RUN_CPLD_GRIDGEN="false"
-RUN_GLOBAL_CYCLE="false"
-RUN_GRID_GEN="false"
-RUN_ICE_BLEND="false"
-RUN_OCNICE_PREP="false"
-RUN_REGRID_SFC="false"
-RUN_SNOW2MDL="false"
-RUN_WEIGHT_GEN="false"
+RUN_CPLD_GRIDGEN="true"
+RUN_GLOBAL_CYCLE="true"
+RUN_GRID_GEN="true"
+RUN_ICE_BLEND="true"
+RUN_OCNICE_PREP="true"
+RUN_REGRID_SFC="true"
+RUN_SNOW2MDL="true"
+RUN_WEIGHT_GEN="true"
 ##############
 
 # Where to send mail when job is completed?
@@ -44,21 +60,28 @@ MAILTO="brian.curtis@noaa.gov"
 
 ### SYSTEM INFO ###
 #Detect the machine we're on
-source detect_machine.sh
+echo "PWD: ${PWD}"
+source ${PWD}/detect_machine.sh
 
 WHICH_WORK_DIR=WORK_DIR_$(eval 'echo ${MACHINE_ID^^}')
 WORK_DIR=${!WHICH_WORK_DIR:-}
+
+WHICH_HOMEREG=HOMEREG_$(eval 'echo ${MACHINE_ID^^}')
+HOMEreg=${!WHICH_HOMEREG:-}
 
 WHICH_PROJECT_CODE=PROJECT_CODE_$(eval 'echo ${MACHINE_ID^^}')
 PROJECT_CODE=${!WHICH_PROJECT_CODE:-}
 
 WHICH_QUEUE=QUEUE_$(eval 'echo ${MACHINE_ID^^}')
 QUEUE=${!WHICH_QUEUE:-}
+
+WHICH_SCHEDULER=SCHEDULER_$(eval 'echo ${MACHINE_ID^^}')
+SCHEDULER=${!WHICH_SCHEDULER:-}
 ######
 
 ### RT SETTINGS ###
 TIMEOUT_LIMIT=3600
-UPDATE_BASELINE="TRUE"
+UPDATE_BASELINE="FALSE"
 ######
 
 ### REPO INFO ###
@@ -83,4 +106,5 @@ for var_name in "${RUN_CATALOG[@]}"; do
     fi
 done
 
-export MAILTO WORK_DIR PROJECT_CODE QUEUE TIMEOUT_LIMIT RUN_SET REPO_BRANCH REPO_LOC RTID MACHINE_ID UPDATE_BASELINE
+export MAILTO WORK_DIR HOMEreg PROJECT_CODE QUEUE SCHEDULER TIMEOUT_LIMIT
+export RUN_SET REPO_BRANCH REPO_LOC RTID MACHINE_ID UPDATE_BASELINE
