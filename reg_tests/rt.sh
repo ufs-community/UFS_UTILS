@@ -20,7 +20,9 @@ else
 fi
 
 # shellcheck source=./rt.control
-source ./rt.control
+RT_DIR=${PWD}
+export RT_DIR
+source "${RT_DIR}/rt.control"
 
 
 mkdir -p "${WORK_DIR}"
@@ -152,7 +154,10 @@ success=true
 for dir in regrid_sfc weight_gen ocnice_prep cpld_gridgen chgres_cube grid_gen global_cycle ice_blend snow2mdl; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
-    if grep -qi "FAILED" ${dir}/summary.log; then
+    if [[ ! -f ${dir}/summary.log ]]; then
+        success=false
+        echo "${dir} consistency tests FAILED: no summary.log" >> "${WORK_DIR}/reg_test_results.txt"
+    elif grep -qi "FAILED" ${dir}/summary.log; then
         success=false
         echo "${dir} consistency tests FAILED" >> "${WORK_DIR}/reg_test_results.txt"
     else

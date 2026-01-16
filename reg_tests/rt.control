@@ -43,15 +43,15 @@ SCHEDULER_JET="slurm"
 ##############
 
 ##### TOGGLE JOBS #########
-RUN_CHGRES_CUBE="true"
-RUN_CPLD_GRIDGEN="true"
-RUN_GLOBAL_CYCLE="true"
-RUN_GRID_GEN="true"
-RUN_ICE_BLEND="true"
-RUN_OCNICE_PREP="true"
+RUN_CHGRES_CUBE="false"
+RUN_CPLD_GRIDGEN="false"
+RUN_GLOBAL_CYCLE="false"
+RUN_GRID_GEN="false"
+RUN_ICE_BLEND="false"
+RUN_OCNICE_PREP="false"
 RUN_REGRID_SFC="true"
-RUN_SNOW2MDL="true"
-RUN_WEIGHT_GEN="true"
+RUN_SNOW2MDL="false"
+RUN_WEIGHT_GEN="false"
 ##############
 
 # Where to send mail when job is completed?
@@ -60,22 +60,30 @@ MAILTO="brian.curtis@noaa.gov"
 
 ### SYSTEM INFO ###
 #Detect the machine we're on
-echo "PWD: ${PWD}"
-source ${PWD}/detect_machine.sh
+RT_DIR=${RT_DIR:-${PWD}/..}
+if [[ -f "${RT_DIR}/detect_machine.sh" ]]; then
+    source "${RT_DIR}/detect_machine.sh"
+else
+    echo "ERROR: Cannot find detect_machine.sh script"
+    exit 1
+fi
 
-WHICH_WORK_DIR=WORK_DIR_$(eval 'echo ${MACHINE_ID^^}')
+HOMEUFSUTILS="${RT_DIR}/.."
+export HOMEUFSUTILS
+THISMACHINE=$(eval 'echo ${MACHINE_ID^^}')
+WHICH_WORK_DIR=WORK_DIR_${THISMACHINE}
 WORK_DIR=${!WHICH_WORK_DIR:-}
 
-WHICH_HOMEREG=HOMEREG_$(eval 'echo ${MACHINE_ID^^}')
+WHICH_HOMEREG=HOMEREG_${THISMACHINE}
 HOMEreg=${!WHICH_HOMEREG:-}
 
-WHICH_PROJECT_CODE=PROJECT_CODE_$(eval 'echo ${MACHINE_ID^^}')
+WHICH_PROJECT_CODE=PROJECT_CODE_${THISMACHINE}
 PROJECT_CODE=${!WHICH_PROJECT_CODE:-}
 
-WHICH_QUEUE=QUEUE_$(eval 'echo ${MACHINE_ID^^}')
+WHICH_QUEUE=QUEUE_${THISMACHINE}
 QUEUE=${!WHICH_QUEUE:-}
 
-WHICH_SCHEDULER=SCHEDULER_$(eval 'echo ${MACHINE_ID^^}')
+WHICH_SCHEDULER=SCHEDULER_${THISMACHINE}
 SCHEDULER=${!WHICH_SCHEDULER:-}
 ######
 
