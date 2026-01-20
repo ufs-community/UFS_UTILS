@@ -61,7 +61,7 @@ submit_test() {
     TEST_IDS+=(":${jobid}")
 }
 
-source ../rt.control
+source "${RT_DIR}/rt.control"
 source ../../sorc/machine-setup.sh > /dev/null 2>&1
 module use ../../modulefiles
 module load build.${MACHINE_ID,,}.intelllvm

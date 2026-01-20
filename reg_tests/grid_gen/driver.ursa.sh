@@ -23,9 +23,21 @@
 
 compiler=${compiler:-"intelllvm"}
 
-source ../../sorc/machine-setup.sh > /dev/null 2>&1
-module use ../../modulefiles
-module load build.$target.$compiler
+RT_DIR=${RT_DIR:-${PWD}/..}
+
+if [[ -f "${RT_DIR}/rt.control" ]]; then
+    source "${RT_DIR}/rt.control"
+else
+    echo "ERROR: Cannot find rt.control script"
+    exit 1
+fi
+
+source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
+module use ${HOMEUFSUTILS}/modulefiles
+
+# source ../../sorc/machine-setup.sh > /dev/null 2>&1
+# module use ../../modulefiles
+module load build.${MACHINE_ID}.$compiler
 module list
 
 set -x

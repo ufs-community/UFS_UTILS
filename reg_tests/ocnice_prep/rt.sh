@@ -38,25 +38,35 @@ usage_and_exit() {
 
 set -x
 test_name="ocnice_prep"
-source ../rt.control
-readonly program
+RT_DIR=${RT_DIR:-${PWD}/..}
+
+if [[ -f "${RT_DIR}/rt.control" ]]; then
+    source "${RT_DIR}/rt.control"
+else
+    echo "ERROR: Cannot find rt.control script"
+    exit 1
+fi
+
 program=$(basename $0)
+readonly program
 
 # PATHRT - Path to regression tests directory
-readonly PATHRT
+
 PATHRT="$(cd "$(dirname $0)" && pwd -P)"
+readonly PATHRT
 export PATHRT
 
 # PATHTR - Path to the UFS UTILS directory
-readonly PATHTR
+
 PATHTR="$(cd "${PATHRT}/../.." && pwd)"
+readonly PATHTR
 
 TESTS_FILE="./rt.conf"
 
-source "${PATHTR}/sorc/machine-setup.sh" >/dev/null 2>&1
+source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
 set +x
 echo
-echo "Machine: $target"
+echo "Machine: ${MACHINE_ID}"
 echo
 set -x
 
@@ -66,7 +76,7 @@ INPUT_ROOT=${HOMEreg}/${test_name}/input_data
 STMP=${WORK_DIR}
 ACCOUNT=${PROJECT_CODE}
 
-if [[ $target = wcoss2 ]]; then
+if [[ ${MACHINE_ID} = wcoss2 ]]; then
     #STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
                   
     #BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/ocnice_prep/baseline_data
@@ -80,7 +90,7 @@ if [[ $target = wcoss2 ]]; then
     #QUEUE=${QUEUE:-dev}
     WLCLK=15
     export NCCMP=nccmp
-elif [[ $target = ursa ]]; then
+elif [[ ${MACHINE_ID} = ursa ]]; then
     #STMP=${STMP:-/scratch4/NCEPDEV/stmp/$USER}
     #BASELINE_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
     #WEIGHTS_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
@@ -89,8 +99,8 @@ elif [[ $target = ursa ]]; then
     #QUEUE=${QUEUE:-batch}
     WLCLK=10
     export NCCMP=nccmp
-    PARTITION=''
-elif [[ $target = orion ]]; then
+    PARTITION='u1-compute'
+elif [[ ${MACHINE_ID} = orion ]]; then
     #STMP=${STMP:-/work/noaa/stmp/$USER}
     #BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ocnice_prep/baseline_data
     #WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
@@ -101,7 +111,7 @@ elif [[ $target = orion ]]; then
     export NCCMP=nccmp
     PARTITION=''
     ulimit -a
-elif [[ $target = hercules ]]; then
+elif [[ ${MACHINE_ID} = hercules ]]; then
     #STMP=${STMP:-/work2/noaa/stmp/$USER}
     #BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ocnice_prep/baseline_data
     #WEIGHTS_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
@@ -112,7 +122,7 @@ elif [[ $target = hercules ]]; then
     export NCCMP=nccmp
     PARTITION=''
     ulimit -s unlimited
-elif [[ $target = jet ]]; then
+elif [[ ${MACHINE_ID} = jet ]]; then
     #STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
     #BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ocnice_prep/baseline_data
     #WEIGHTS_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
@@ -153,7 +163,7 @@ done
 
 compiler=${compiler:-intelllvm}
 if [[ "$compiler" == "intelllvm" ]]; then
-  if [[ ! -f ${PATHTR}/modulefiles/build.$target.$compiler.lua ]];then
+  if [[ ! -f ${PATHTR}/modulefiles/build.${MACHINE_ID}.$compiler.lua ]];then
     set +x
     echo "IntelLLVM not available. Will use Intel Classic."
     set -x
@@ -188,8 +198,8 @@ else
 fi
 
 module use $PATHTR/modulefiles
-module load build.$target.$compiler
-if [[ $target = wcoss2 ]]; then
+module load build.${MACHINE_ID}.$compiler
+if [[ ${MACHINE_ID} = wcoss2 ]]; then
   module load nccmp-D/1.9.0.1
 fi
 set +x
@@ -205,7 +215,7 @@ fi
 declare -A tests
 all_tests=""
 
-rm -f nccmp_*.log summary.log run_*log RegressionTests_$target.$compiler.*.log
+rm -f nccmp_*.log summary.log run_*log RegressionTests_${MACHINE_ID}.$compiler.*.log
 
 # Run tests specified in $TESTS_FILE
 i=0
@@ -233,7 +243,7 @@ while read -r line || [ "$line" ]; do
     export DSTRES=$TEST_DEST
     export FTYPE=$TEST_FTYP
     export WEIGHTS=$WEIGHTS_ROOT
-    export REGRESSIONTEST_LOG=RegressionTests_$target.$compiler.${TEST_NAME}.log
+    export REGRESSIONTEST_LOG=RegressionTests_${MACHINE_ID}.$compiler.${TEST_NAME}.log
 
     cp $PATHTR/exec/oiprep $RUNDIR
     cp ./ocnice_prep.sh $RUNDIR
@@ -243,7 +253,7 @@ while read -r line || [ "$line" ]; do
     export RUNDIR
     export TEST_NAME
 
-    if [[ $target = wcoss2 ]]; then
+    if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
       tests[$i]=$(qsub -V -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
             -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME ./ocnice_prep.sh)
@@ -251,7 +261,7 @@ while read -r line || [ "$line" ]; do
     else
 
       tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 --mem=24g -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-                $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
+                -p $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
 
     fi
 
@@ -263,7 +273,7 @@ done <$TESTS_FILE
 
 export target
 
-if [[ $target = wcoss2 ]]; then
+if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
   qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
         -N summary -l select=1:ncpus=1:mem=100MB \
@@ -272,7 +282,7 @@ if [[ $target = wcoss2 ]]; then
 else
 
   sbatch --ntasks=1 --mem=25m -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
-       $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
+       -p $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
 
 fi
 
