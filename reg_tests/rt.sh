@@ -128,16 +128,14 @@ for dir in snow2mdl global_cycle grid_gen; do
   fi
 done
 
-for dir in chgres_cube; do
-  RUN_CHECK=RUN_${dir^^}
-  if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
-    echo "Running ${dir} tests"
-    cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-    (bash "./driver.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
-    PID_LIST+=($!)
-    cd ..
-  fi
-done
+RUN_CHECK=RUN_CHGRES_CUBE
+if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+  echo "Running chgres_cube tests"
+  cd "chgres_cube" || { echo "Can't change directory into 'chgres_cube'.. exiting"; exit; }
+  (bash "./driver.sh" && wait_for_fin > "chgres_cube_rt.out" 2>&1) &
+  PID_LIST+=($!)
+  cd ..
+fi
 
 for dir in weight_gen ice_blend; do
   RUN_CHECK=RUN_${dir^^}
