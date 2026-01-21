@@ -117,12 +117,22 @@ if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
   cd ..
 fi
 
-for dir in snow2mdl global_cycle chgres_cube grid_gen; do
+for dir in snow2mdl global_cycle grid_gen; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"
     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-    # (bash "./driver.${MACHINE_ID}.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
+    (bash "./driver.${MACHINE_ID}.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
+    PID_LIST+=($!)
+    cd ..
+  fi
+done
+
+for dir in chgres_cube; do
+  RUN_CHECK=RUN_${dir^^}
+  if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+    echo "Running ${dir} tests"
+    cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
     (bash "./driver.sh" && wait_for_fin > "${dir}_rt.out" 2>&1) &
     PID_LIST+=($!)
     cd ..
