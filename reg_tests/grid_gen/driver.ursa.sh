@@ -25,6 +25,10 @@ compiler=${compiler:-"intelllvm"}
 
 RT_DIR=${RT_DIR:-${PWD}/..}
 
+if [[ ! -v PID_LIST ]]; then
+  waitlocal=true
+fi
+
 if [[ -f "${RT_DIR}/rt.control" ]]; then
     source "${RT_DIR}/rt.control"
 else
@@ -67,6 +71,14 @@ export OMP_STACKSIZE=2048m
 export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/grid_gen
 
 ulimit -a
+
+if [[ -f ${LOG_FILE} ]]; then
+  rm -f ${LOG_FILE}*
+fi
+
+if [[ -f ${SUM_FILE} ]]; then
+  rm -f ${SUM_FILE}
+fi
 
 rm -fr $WORK_DIR
 
@@ -132,8 +144,24 @@ TEST7=$(sbatch --parsable --ntasks-per-node=24 --nodes=1 -t 0:07:00 -A $PROJECT_
 # Create summary log.
 #-----------------------------------------------------------------------------
 
-sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
+(sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF
+) &
+
+if [[ "${waitlocal}" == "true" ]]; then
+  sleep_time=0
+  echo "Waiting for GRID_GEN tests to complete..."
+  while [ ! -f "summary.log" ]; do
+    sleep 10
+    sleep_time=$((sleep_time+10))
+    if (( sleep_time > TIMEOUT_LIMIT )); then
+       mail -s "UFS_UTILS Consistency Test GRID_GEN timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+       exit 1
+    fi
+  done
+  mail -s "UFS_UTILS Consistency Test GRID_GEN COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+fi
+exit 0

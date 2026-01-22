@@ -19,6 +19,13 @@ else
   ulimit -s unlimited
 fi
 
+if [[ "$(hostname)" =~ "WCOSS2" ]]; then
+  compiler="intel"
+else
+  compiler="intelllvm"
+fi
+export compiler
+
 # shellcheck source=./rt.control
 RT_DIR=${PWD}
 export RT_DIR
@@ -83,10 +90,11 @@ cd ../reg_tests || { echo "Can't change directory into '../reg_tests'.. exiting"
 
 set -x
 PID_LIST=()
+global PID_LIST
 if [[ " ${RUN_SET[*]} " =~ " RUN_REGRID_SFC " ]]; then
   echo "Running regrid_sfc tests"
   cd regrid_sfc || { echo "Can't change directory into 'regrid_sfc'.. exiting"; exit; }
-  (./driver.sh > regrid_sfc_rt.out 2>&1) &
+  (bash ./driver.sh > regrid_sfc_rt.out 2>&1) &
   PID_LIST+=($!)
   cd ..
 fi
@@ -97,9 +105,9 @@ if [[ " ${RUN_SET[*]} " =~ " RUN_OCNICE_PREP " ]]; then
   echo "Running ocnice_prep tests"
   cd ocnice_prep || { echo "Can't change directory into 'ocnice_prep'.. exiting"; exit; }
   if [[ ${UPDATE_BASELINE} == "TRUE" ]]; then
-      (./rt.sh -c > ocnice_prep_rt.out 2>&1) &
+      (bash ./rt.sh -c > ocnice_prep_rt.out 2>&1) &
   else
-    (./rt.sh > ocnice_prep_rt.out 2>&1) &
+    (bash ./rt.sh > ocnice_prep_rt.out 2>&1) &
   fi
   PID_LIST+=($!)
   cd ..
@@ -109,9 +117,9 @@ if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
   echo "Running cpld_gridgen tests"
   cd cpld_gridgen || { echo "Can't change directory into 'cpld_gridgen'.. exiting"; exit; }
   if [[ ${UPDATE_BASELINE} == "TRUE" ]]; then
-      (./rt.sh -c > cpld_gridgen_rt.out 2>&1) &
+      (bash ./rt.sh -c > cpld_gridgen_rt.out 2>&1) &
   else
-    (./rt.sh > cpld_gridgen_rt.out 2>&1) &
+    (bash ./rt.sh > cpld_gridgen_rt.out 2>&1) &
   fi
   PID_LIST+=($!)
   cd ..
@@ -143,15 +151,16 @@ for dir in weight_gen ice_blend; do
     echo "Running ${dir} tests"
     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
     if [[ ${MACHINE_ID} == "ursa" ]] || [[ ${MACHINE_ID} == "jet" ]] || [[ ${MACHINE_ID} == "orion" ]] || [[ ${MACHINE_ID} == "hercules" ]] ; then
-        (sbatch -A "${PROJECT_CODE}" "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
+        (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
         PID_LIST+=($!)
     elif [[ ${MACHINE_ID} == "wcoss2" ]] ; then
-        (qsub -v WORK_DIR "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
+        (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
         PID_LIST+=($!)
     fi
     cd ..
   fi
 done
+
 echo "SUBMITTED ALL TASKS. Waiting for them to finish.."
 wait "${PID_LIST[@]}"
 

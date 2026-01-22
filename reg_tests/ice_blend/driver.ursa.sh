@@ -18,22 +18,29 @@
 #
 #-----------------------------------------------------------------------------
 
-#SBATCH -J ice_blend
-#SBATCH -A fv3-cpu
-#SBATCH --open-mode=truncate
-#SBATCH -o consistency.log
-#SBATCH -e consistency.log
-#SBATCH --ntasks=1
-#SBATCH -q debug
-#SBATCH -t 00:03:00
-
 set -x
+
+RT_DIR=${RT_DIR:-${PWD}/..}
+
+if [[ ! -v PID_LIST ]]; then
+  waitlocal=true
+fi
+
+if [[ -f "${RT_DIR}/rt.control" ]]; then
+    source "${RT_DIR}/rt.control"
+else
+    echo "ERROR: Cannot find rt.control script"
+    exit 1
+fi
+
+source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
+module use ${HOMEUFSUTILS}/modulefiles
 
 compiler=${compiler:-"intelllvm"}
 
-source ../../sorc/machine-setup.sh > /dev/null 2>&1
-module use ../../modulefiles
-module load build.$target.$compiler
+# source ../../sorc/machine-setup.sh > /dev/null 2>&1
+# module use ../../modulefiles
+module load build.${MACHINE_ID}.$compiler
 module load grib-util
 module load wgrib2/3.6.0
 module list
@@ -60,5 +67,19 @@ export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ice_blen
 export HOMEgfs=$PWD/../..
 
 ./ice_blend.sh
+
+if [[ "${waitlocal}" == "true" ]]; then
+  sleep_time=0
+  echo "Waiting for ice_blend test to complete..."
+  while [ ! -f "summary.log" ]; do
+    sleep 10
+    sleep_time=$((sleep_time+10))
+    if (( sleep_time > TIMEOUT_LIMIT )); then
+       mail -s "UFS_UTILS Consistency Test ICE_BLEND timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+       exit 1
+    fi
+  done
+  mail -s "UFS_UTILS Consistency Test ICE_BLEND COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+fi
 
 exit 0

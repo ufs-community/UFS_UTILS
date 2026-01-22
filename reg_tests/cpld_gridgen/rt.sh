@@ -43,7 +43,22 @@ export PATHRT
 readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
 
-source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
+RT_DIR=${RT_DIR:-${PWD}/..}
+
+if [[ ! -v PID_LIST ]]; then
+  waitlocal=true
+fi
+
+if [[ -f "${RT_DIR}/rt.control" ]]; then
+    source "${RT_DIR}/rt.control"
+else
+    echo "ERROR: Cannot find rt.control script"
+    exit 1
+fi
+
+source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
+
+# source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
 set +x
 echo "Machine: $target"
 set -x
@@ -166,8 +181,9 @@ else
     fi
 fi
 
-module use $PATHTR/modulefiles
-module load build.$target.$compiler
+# module use $PATHTR/modulefiles
+module use ${HOMEUFSUTILS}/modulefiles
+module load build.${MACHINE_ID,,}.$compiler
 if [[ $target = wcoss2 ]]; then
   module load nccmp-D/1.9.0.1
 fi
@@ -180,7 +196,7 @@ RUNDIR_ROOT=$STMP/CPLD_GRIDGEN/rt_$$
 declare -A tests
 all_tests=""
 
-rm -f fail_test* nccmp_*.log summary.log run_*log RegressionTests_$target.$compiler.*.log
+rm -f fail_test* nccmp_*.log summary.log run_*log RegressionTests_${MACHINE_ID,,}.$compiler.*.log
 
 # Kick off all tests.
 
@@ -236,14 +252,27 @@ export target
 
 if [[ $target = wcoss2 ]]; then
 
-  qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
+  (qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
         -N summary -l select=1:ncpus=1:mem=100MB \
-        -W depend=afterok${all_tests} ./rt.summary.sh
+        -W depend=afterok${all_tests} ./rt.summary.sh) &
 else
 
-  sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
-       $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh
+  (sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
+       $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh) &
 
 fi
 
-exit
+if [[ "${waitlocal}" == "true" ]]; then
+  sleep_time=0
+  echo "Waiting for cpld_gridgen tests to complete..."
+  while [ ! -f "summary.log" ]; do
+    sleep 10
+    sleep_time=$((sleep_time+10))
+    if (( sleep_time > TIMEOUT_LIMIT )); then
+       mail -s "UFS_UTILS Consistency Test CPLD_GRIDGEN timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+       exit 1
+    fi
+  done
+  mail -s "UFS_UTILS Consistency Test CPLD_GRIDGEN COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+fi
+exit 0

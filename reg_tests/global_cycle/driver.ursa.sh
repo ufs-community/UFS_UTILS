@@ -24,6 +24,10 @@ compiler=${compiler:-"intelllvm"}
 
 RT_DIR=${RT_DIR:-${PWD}/..}
 
+if [[ ! -v PID_LIST ]]; then
+  waitlocal=true
+fi
+
 if [[ -f "${RT_DIR}/rt.control" ]]; then
     source "${RT_DIR}/rt.control"
 else
@@ -36,7 +40,7 @@ module use ${HOMEUFSUTILS}/modulefiles
 
 # source ../../sorc/machine-setup.sh > /dev/null 2>&1
 # module use ../../modulefiles
-module load build.$MACHINE_ID.$compiler
+module load build.${MACHINE_ID,,}.$compiler
 module list
 
 WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
@@ -66,6 +70,14 @@ export APRUNCY="srun"
 export NWPROD=$PWD/../..
 
 reg_dir=$PWD
+
+if [[ -f "consistency.log" ]]; then
+  rm -f consistency.log*
+fi
+
+if [[ -f "summary.log" ]]; then
+  rm -f summary.log
+fi
 
 LOG_FILE=consistency.log01
 export DATA="${DATA_DIR}/test1"
@@ -104,11 +116,25 @@ TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_C
      -o $LOG_FILE -e $LOG_FILE ./C192.gsitile_lndincsoilnoahmp.sh)
 
 LOG_FILE=consistency.log
-sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
+(sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
       --open-mode=append -q $QUEUE -d\
       afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6 << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > summary.log
 EOF
+) &
 
-exit
+if [[ "${waitlocal}" == "true" ]]; then
+  sleep_time=0
+  echo "Waiting for global_cycle tests to complete..."
+  while [ ! -f "summary.log" ]; do
+    sleep 10
+    sleep_time=$((sleep_time+10))
+    if (( sleep_time > TIMEOUT_LIMIT )); then
+       mail -s "UFS_UTILS Consistency Test GLOBAL_CYCLE timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+       exit 1
+    fi
+  done
+  mail -s "UFS_UTILS Consistency Test GLOBAL_CYCLE COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+fi
+exit 0

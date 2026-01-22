@@ -23,6 +23,10 @@ test_name="regrid_sfc"
 
 RT_DIR=${RT_DIR:-${PWD}/..}
 
+if [[ ! -v PID_LIST ]]; then
+  waitlocal=true
+fi
+
 if [[ -f "${RT_DIR}/rt.control" ]]; then
     source "${RT_DIR}/rt.control"
 else
@@ -124,21 +128,35 @@ rm -f ${LOG_FILE} summary.log
 if [[ "${MACHINE_ID}" == "wcoss2" ]];then
 
 #this_dir=${PWD}
-  qsub -V -o "${LOG_FILE}" -e "${LOG_FILE}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=00:01:00 \
+  (qsub -V -o "${LOG_FILE}" -e "${LOG_FILE}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=00:01:00 \
         -N summary -l select=1:ncpus=1:mem=100MB -W "depend=afterok:${TEST1}" << EOF
 #!/bin/bash
 cd ${PWD}
 grep -a '<<<' ${LOG_FILE}?? | grep -v echo > ./summary.log
 EOF
-
+  ) &
+  
 else
 
-  sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
+  (sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
        -p "${PARTITION}" --open-mode=append -q "${QUEUE}" -d "afterok:${TEST1}" << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}* > ./summary.log
 EOF
-
+  ) &
 fi
 
-exit
+if [[ "${waitlocal}" == "true" ]]; then
+  sleep_time=0
+  echo "Waiting for regrid_sfc tests to complete..."
+  while [ ! -f "summary.log" ]; do
+    sleep 10
+    sleep_time=$((sleep_time+10))
+    if (( sleep_time > TIMEOUT_LIMIT )); then
+       mail -s "UFS_UTILS Consistency Test REGRID_SFC timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+       exit 1
+    fi
+  done
+  mail -s "UFS_UTILS Consistency Test REGRID_SFC COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+fi
+exit 0

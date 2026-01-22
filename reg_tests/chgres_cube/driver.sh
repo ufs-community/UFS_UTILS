@@ -57,11 +57,14 @@ submit_test() {
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
     fi
-
     TEST_IDS+=(":${jobid}")
 }
 
 RT_DIR=${RT_DIR:-${PWD}/..}
+
+if [[ ! -v PID_LIST ]]; then
+  waitlocal=true
+fi
 
 if [[ -f "${RT_DIR}/rt.control" ]]; then
     source "${RT_DIR}/rt.control"
@@ -222,11 +225,25 @@ esac
 # #!/bin/bash
 # grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 # EOF
-sbatch --nodes=1 -t 0:01:00 -A "${PROJECT_CODE}" -J chgres_summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
+(sbatch --nodes=1 -t 0:01:00 -A "${PROJECT_CODE}" -J chgres_summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
        --open-mode=append -q "${QUEUE}" \
        -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF
+) &
 
+if [[ "${waitlocal}" == "true" ]]; then
+  sleep_time=0
+  echo "Waiting for chgres_cube tests to complete..."
+  while [ ! -f "summary.log" ]; do
+    sleep 10
+    sleep_time=$((sleep_time+10))
+    if (( sleep_time > TIMEOUT_LIMIT )); then
+       mail -s "UFS_UTILS Consistency Test CHGRES_CUBE timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+       exit 1
+    fi
+  done
+  mail -s "UFS_UTILS Consistency Test CHGRES_CUBE COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+fi
 exit 0
