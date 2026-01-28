@@ -17,5 +17,6 @@ fix/sfc_climo
 
 *.swp
 *.o
+*.log*
 
 .vscode/

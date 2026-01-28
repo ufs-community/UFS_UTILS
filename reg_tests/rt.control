@@ -54,6 +54,13 @@ RUN_SNOW2MDL="true"
 RUN_WEIGHT_GEN="true"
 ##############
 
+##### COMPILER #####
+COMPILER_URSA="intelllvm"
+COMPILER_HERCULES="intelllvm"
+COMPILER_ORION="intelllvm"
+COMPILER_WCOSS2="intel"
+COMPILER_JET="intelllvm"
+
 # Where to send mail when job is completed?
 # Please use quotes and put a space between multiple email addresses.
 MAILTO="brian.curtis@noaa.gov"
@@ -85,6 +92,9 @@ QUEUE=${!WHICH_QUEUE:-}
 
 WHICH_SCHEDULER=SCHEDULER_${THISMACHINE}
 SCHEDULER=${!WHICH_SCHEDULER:-}
+
+WHICH_COMPILER=COMPILER_${THISMACHINE}
+COMPILER=${!WHICH_COMPILER:-}
 ######
 
 ### RT SETTINGS ###
@@ -100,13 +110,27 @@ REPO_BRANCH="rt_one_location"
 REPO_LOC="git@github.com:BrianCurtis-NOAA/UFS_UTILS.git"
 ######
 
+# Shouldn't need to edit below here #
+
+# shellcheck source=/dev/null
+source "${HOMEUFSUTILS}/sorc/machine-setup.sh" > /dev/null 2>&1
+module use "${HOMEUFSUTILS}/modulefiles"
+
+# source "${RT_DIR}/rt.control"
+# source ../../sorc/machine-setup.sh > /dev/null 2>&1
+# module use ../../modulefiles
+module load "build.${MACHINE_ID,,}.${COMPILER}"
+module list
+
+if [ "${MACHINE_ID,,}" == "hercules" ]; then
+    ulimit -s unlimited
+fi
+
 # If there are any major new additions or subtractions, this will need to be updated
 RUN_CATALOG=("RUN_CHGRES_CUBE" "RUN_CPLD_GRIDGEN" "RUN_GLOBAL_CYCLE" "RUN_GRID_GEN" "RUN_ICE_BLEND" "RUN_OCNICE_PREP"
 "RUN_REGRID_SFC" "RUN_SNOW2MDL" "RUN_WEIGHT_GEN")
 
-# Shouldn't need to edit below here #
 RUN_SET=()
-
 for var_name in "${RUN_CATALOG[@]}"; do
     value="${!var_name}"
     if [[ "$value" == "true" ]]; then
@@ -115,4 +139,4 @@ for var_name in "${RUN_CATALOG[@]}"; do
 done
 
 export MAILTO WORK_DIR HOMEreg PROJECT_CODE QUEUE SCHEDULER TIMEOUT_LIMIT
-export RUN_SET REPO_BRANCH REPO_LOC RTID MACHINE_ID UPDATE_BASELINE
+export RUN_SET REPO_BRANCH REPO_LOC RTID MACHINE_ID UPDATE_BASELINE compiler

@@ -12,6 +12,7 @@ wait_for_fin() {
     fi
   done
 }
+
 start_time=$SECONDS
 if [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then
   ulimit -a
@@ -90,42 +91,45 @@ cd ../reg_tests || { echo "Can't change directory into '../reg_tests'.. exiting"
 
 set -x
 PID_LIST=()
-global PID_LIST
-if [[ " ${RUN_SET[*]} " =~ " RUN_REGRID_SFC " ]]; then
-  echo "Running regrid_sfc tests"
-  cd regrid_sfc || { echo "Can't change directory into 'regrid_sfc'.. exiting"; exit; }
-  (bash ./driver.sh > regrid_sfc_rt.out 2>&1) &
-  PID_LIST+=($!)
-  cd ..
-fi
+export PID_LIST
+# if [[ " ${RUN_SET[*]} " =~ " RUN_REGRID_SFC " ]]; then
+#   echo "Running regrid_sfc tests"
+#   cd regrid_sfc || { echo "Can't change directory into 'regrid_sfc'.. exiting"; exit; }
+#   (bash ./driver.sh > regrid_sfc_rt.out 2>&1) &
+#   PID_LIST+=($!)
+#   cd ..
+# fi
 export ACCOUNT=$PROJECT_CODE
 export STMP=$WORK_DIR/reg-tests
 
-if [[ " ${RUN_SET[*]} " =~ " RUN_OCNICE_PREP " ]]; then
-  echo "Running ocnice_prep tests"
-  cd ocnice_prep || { echo "Can't change directory into 'ocnice_prep'.. exiting"; exit; }
-  if [[ ${UPDATE_BASELINE} == "TRUE" ]]; then
-      (bash ./rt.sh -c > ocnice_prep_rt.out 2>&1) &
-  else
-    (bash ./rt.sh > ocnice_prep_rt.out 2>&1) &
-  fi
+for dir in ocnice_prep cpld_gridgen; do
+  RUN_CHECK=RUN_${dir^^}
+  if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+    echo "Running ${dir} tests"
+    cd ${dir} || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
+    if [[ ${UPDATE_BASELINE} == "TRUE" ]]; then
+        (bash ./rt.sh -c > ${dir}_rt.out 2>&1) &
+    else
+      (bash ./rt.sh > ${dir}_rt.out 2>&1) &
+    fi
   PID_LIST+=($!)
   cd ..
-fi
-
-if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
-  echo "Running cpld_gridgen tests"
-  cd cpld_gridgen || { echo "Can't change directory into 'cpld_gridgen'.. exiting"; exit; }
-  if [[ ${UPDATE_BASELINE} == "TRUE" ]]; then
-      (bash ./rt.sh -c > cpld_gridgen_rt.out 2>&1) &
-  else
-    (bash ./rt.sh > cpld_gridgen_rt.out 2>&1) &
   fi
-  PID_LIST+=($!)
-  cd ..
 fi
 
-for dir in snow2mdl global_cycle grid_gen; do
+# if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
+#   echo "Running cpld_gridgen tests"
+#   cd cpld_gridgen || { echo "Can't change directory into 'cpld_gridgen'.. exiting"; exit; }
+#   if [[ ${UPDATE_BASELINE} == "TRUE" ]]; then
+#       (bash ./rt.sh -c > cpld_gridgen_rt.out 2>&1) &
+#   else
+#     (bash ./rt.sh > cpld_gridgen_rt.out 2>&1) &
+#   fi
+#   PID_LIST+=($!)
+#   cd ..
+# fi
+
+for dir in snow2mdl grid_gen; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"
@@ -136,27 +140,37 @@ for dir in snow2mdl global_cycle grid_gen; do
   fi
 done
 
-RUN_CHECK=RUN_CHGRES_CUBE
-if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
-  echo "Running chgres_cube tests"
-  cd "chgres_cube" || { echo "Can't change directory into 'chgres_cube'.. exiting"; exit; }
-  (bash "./driver.sh" > "chgres_cube_rt.out" 2>&1) &
-  PID_LIST+=($!)
-  cd ..
-fi
+for dir in regrid_sfc global_cycle chgres_cube; do
+  RUN_CHECK=RUN_${dir^^}
+  if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+    echo "Running ${dir} tests"
+    cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
+    (bash "./driver.sh" > "${dir}_rt.out" 2>&1) &
+    PID_LIST+=($!)
+    cd ..
+  fi
+done
+# RUN_CHECK=RUN_CHGRES_CUBE
+# if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+#   echo "Running chgres_cube tests"
+#   cd "chgres_cube" || { echo "Can't change directory into 'chgres_cube'.. exiting"; exit; }
+#   (bash "./driver.sh" > "chgres_cube_rt.out" 2>&1) &
+#   PID_LIST+=($!)
+#   cd ..
+# fi
 
 for dir in weight_gen ice_blend; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"
     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-    if [[ ${MACHINE_ID} == "ursa" ]] || [[ ${MACHINE_ID} == "jet" ]] || [[ ${MACHINE_ID} == "orion" ]] || [[ ${MACHINE_ID} == "hercules" ]] ; then
-        (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
-        PID_LIST+=($!)
-    elif [[ ${MACHINE_ID} == "wcoss2" ]] ; then
-        (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
-        PID_LIST+=($!)
-    fi
+    # if [[ ${MACHINE_ID} == "ursa" ]] || [[ ${MACHINE_ID} == "jet" ]] || [[ ${MACHINE_ID} == "orion" ]] || [[ ${MACHINE_ID} == "hercules" ]] ; then
+    (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
+    PID_LIST+=($!)
+    # elif [[ ${MACHINE_ID} == "wcoss2" ]] ; then
+        # (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
+        # PID_LIST+=($!)
+    # fi
     cd ..
   fi
 done

@@ -57,6 +57,10 @@ submit_test() {
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
     fi
+    if [[ "${jobid}" == "" ]]; then
+        echo "Error submitting job to slurm scheduler"
+        exit 1
+    fi
     TEST_IDS+=(":${jobid}")
 }
 
@@ -67,27 +71,29 @@ if [[ ! -v PID_LIST ]]; then
 fi
 
 if [[ -f "${RT_DIR}/rt.control" ]]; then
+    # shellcheck source=/dev/null
     source "${RT_DIR}/rt.control"
 else
     echo "ERROR: Cannot find rt.control script"
     exit 1
 fi
 
-source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-module use ${HOMEUFSUTILS}/modulefiles
+# shellcheck source=${HOMEUFSUTILS}/sorc/machine-setup.sh
+# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
+# module use "${HOMEUFSUTILS}/modulefiles"
 
-# source "${RT_DIR}/rt.control"
-# source ../../sorc/machine-setup.sh > /dev/null 2>&1
-# module use ../../modulefiles
-module load build.${MACHINE_ID,,}.$compiler
-module list
+# # source "${RT_DIR}/rt.control"
+# # source ../../sorc/machine-setup.sh > /dev/null 2>&1
+# # module use ../../modulefiles
+# module load build.${MACHINE_ID,,}.$compiler
+# module list
 
-if [ "${MACHINE_ID,,}" == "hercules" ]; then
-    ulimit -s unlimited
-fi
+# if [ "${MACHINE_ID,,}" == "hercules" ]; then
+#     ulimit -s unlimited
+# fi
 
 test_name="chgres_cube"
-export OUTDIR="${WORK_DIR}/reg-tests/chgres-cube"
+export OUTDIR="${WORK_DIR}/reg-tests/${test_name}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below here.  HOMEufs is the root
@@ -225,13 +231,33 @@ esac
 # #!/bin/bash
 # grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 # EOF
-(sbatch --nodes=1 -t 0:01:00 -A "${PROJECT_CODE}" -J chgres_summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
+if [[ "${SCHEDULER}" == "pbs" ]]; then
+    (qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
+        -N chgres_summary -l select=1:ncpus=1:mem=100MB \
+        -W depend="afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
+#!/bin/bash
+grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
+EOF
+    ) &
+elif [[ "${SCHEDULER}" == "slurm" ]]; then
+    (sbatch --nodes=1 -t 0:01:00 -A "${PROJECT_CODE}" -J chgres_summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
        --open-mode=append -q "${QUEUE}" \
        -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF
 ) &
+else
+    echo "Error: Unsupported scheduler '${SCHEDULER}'"
+    exit 1
+fi
+# (sbatch --nodes=1 -t 0:01:00 -A "${PROJECT_CODE}" -J chgres_summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
+#        --open-mode=append -q "${QUEUE}" \
+#        -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
+# #!/bin/bash
+# grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
+# EOF
+# ) &
 
 if [[ "${waitlocal}" == "true" ]]; then
   sleep_time=0
