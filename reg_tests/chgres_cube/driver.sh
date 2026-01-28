@@ -260,17 +260,33 @@ fi
 # EOF
 # ) &
 
-if [[ "${waitlocal}" == "true" ]]; then
-  sleep_time=0
-  echo "Waiting for chgres_cube tests to complete..."
-  while [ ! -f "summary.log" ]; do
+sleep_time=0
+echo "Waiting for ${test_name^^} tests to complete..."
+while [ ! -f "summary.log" ]; do
     sleep 10
     sleep_time=$((sleep_time+10))
     if (( sleep_time > TIMEOUT_LIMIT )); then
-       mail -s "UFS_UTILS Consistency Test CHGRES_CUBE timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
-       exit 1
+        if [[ "${waitlocal}" == "true" ]]; then
+            mail -s "UFS_UTILS Consistency Test ${test_name^^} timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+            exit 1
+        fi
     fi
-  done
-  mail -s "UFS_UTILS Consistency Test CHGRES_CUBE COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+done
+if [[ "${waitlocal}" == "true" ]]; then
+    mail -s "UFS_UTILS Consistency Test ${test_name^^} COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
 fi
-exit 0
+
+# if [[ "${waitlocal}" == "true" ]]; then
+#   sleep_time=0
+#   echo "Waiting for chgres_cube tests to complete..."
+#   while [ ! -f "summary.log" ]; do
+#     sleep 10
+#     sleep_time=$((sleep_time+10))
+#     if (( sleep_time > TIMEOUT_LIMIT )); then
+#        mail -s "UFS_UTILS Consistency Test CHGRES_CUBE timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+#        exit 1
+#     fi
+#   done
+#   mail -s "UFS_UTILS Consistency Test CHGRES_CUBE COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+# fi
+# exit 0
