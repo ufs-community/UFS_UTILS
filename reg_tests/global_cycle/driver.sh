@@ -103,7 +103,7 @@ DATA_DIR="${WORK_DIR}/reg-tests/${test_name}"
 
 # export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/global_cycle
 HOMEreg="${HOMEreg}/${test_name}"
-export HOMEreg
+
 
 # export OMP_NUM_THREADS_CY=2
 

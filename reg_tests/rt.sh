@@ -130,7 +130,7 @@ done
 #   cd ..
 # fi
 
-for dir in snow2mdl grid_gen; do
+for dir in grid_gen; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"
@@ -141,7 +141,7 @@ for dir in snow2mdl grid_gen; do
   fi
 done
 
-for dir in regrid_sfc global_cycle chgres_cube; do
+for dir in regrid_sfc global_cycle chgres_cube snow2mdl; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"
