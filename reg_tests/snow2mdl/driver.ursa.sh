@@ -24,7 +24,8 @@ compiler=${compiler:-"intelllvm"}
 
 RT_DIR=${RT_DIR:-${PWD}/..}
 
-if [[ ! -v PID_LIST ]]; then
+notlocal=${notlocal:-false}
+if [[ ${notlocal} == "false" ]]; then
   waitlocal=true
 fi
 

@@ -91,7 +91,8 @@ cd ../reg_tests || { echo "Can't change directory into '../reg_tests'.. exiting"
 
 set -x
 PID_LIST=()
-export PID_LIST
+notlocal=true
+export notlocal
 # if [[ " ${RUN_SET[*]} " =~ " RUN_REGRID_SFC " ]]; then
 #   echo "Running regrid_sfc tests"
 #   cd regrid_sfc || { echo "Can't change directory into 'regrid_sfc'.. exiting"; exit; }
@@ -115,7 +116,7 @@ for dir in ocnice_prep cpld_gridgen; do
   PID_LIST+=($!)
   cd ..
   fi
-fi
+done
 
 # if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
 #   echo "Running cpld_gridgen tests"
