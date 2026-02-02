@@ -141,7 +141,7 @@ done
 #   fi
 # done
 
-for dir in regrid_sfc global_cycle chgres_cube snow2mdl grid_gen; do
+for dir in regrid_sfc global_cycle chgres_cube snow2mdl grid_gen weight_gen ice_blend; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"
@@ -160,21 +160,21 @@ done
 #   cd ..
 # fi
 
-for dir in weight_gen ice_blend; do
-  RUN_CHECK=RUN_${dir^^}
-  if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
-    echo "Running ${dir} tests"
-    cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-    # if [[ ${MACHINE_ID} == "ursa" ]] || [[ ${MACHINE_ID} == "jet" ]] || [[ ${MACHINE_ID} == "orion" ]] || [[ ${MACHINE_ID} == "hercules" ]] ; then
-    (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
-    PID_LIST+=($!)
-    # elif [[ ${MACHINE_ID} == "wcoss2" ]] ; then
-        # (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
-        # PID_LIST+=($!)
-    # fi
-    cd ..
-  fi
-done
+# for dir in weight_gen ice_blend; do
+#   RUN_CHECK=RUN_${dir^^}
+#   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+#     echo "Running ${dir} tests"
+#     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
+#     # if [[ ${MACHINE_ID} == "ursa" ]] || [[ ${MACHINE_ID} == "jet" ]] || [[ ${MACHINE_ID} == "orion" ]] || [[ ${MACHINE_ID} == "hercules" ]] ; then
+#     (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
+#     PID_LIST+=($!)
+#     # elif [[ ${MACHINE_ID} == "wcoss2" ]] ; then
+#         # (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
+#         # PID_LIST+=($!)
+#     # fi
+#     cd ..
+#   fi
+# done
 
 echo "SUBMITTED ALL TASKS. Waiting for them to finish.."
 wait "${PID_LIST[@]}"
