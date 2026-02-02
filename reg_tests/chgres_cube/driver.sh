@@ -37,6 +37,7 @@ submit_test() {
     local exclusive="$1"; shift
     local jobname="$1"; shift
     local script="$1"; shift
+    local waitonjobid="$1"; shift
 
     local logfile="${LOG_FILE}${suffix}"
     export OMP_NUM_THREADS=1  # should match cpus-per-task
@@ -45,14 +46,21 @@ submit_test() {
         exclusive_flag="--exclusive"
     fi
 
+    if [[ "${waitonjobid}" != "false" ]]; then
+        dep_flag_slurm="--dependency=afterok:${waitonjobid}"
+        dep_flag_pbs="-W depend=afterok:${waitonjobid}"
+    fi
+
     if [[ "${SCHEDULER}" == "pbs" ]]; then
         export APRUN="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core"
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
-                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=10GB $PWD/${script})
+                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=10GB \
+                ${dep_flag_pbs:+"${dep_flag_pbs}"} ./${script})
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUN="srun"
         jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
-                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} -o "${logfile}" -e "${logfile}" "./${script}")
+                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
+                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
     else
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
@@ -137,84 +145,84 @@ declare -a TEST_IDS=()
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 6 1 75G 0:15:00 hercules false c96.fv3.restart c96.fv3.restart.sh
-        submit_test 02 6 1 75G 0:15:00 hercules false c192.fv3.history c192.fv3.history.sh
-        submit_test 03 6 2 75G 0:10:00 hercules false c96.fv3.netcdf c96.fv3.netcdf.sh
-        submit_test 04 6 1 75G 0:05:00 hercules false c192.gfs.grib2 c192.gfs.grib2.sh
-        submit_test 05 12 1 75G 0:10:00 hercules false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh
-        submit_test 06 6 1 75G 0:10:00 hercules false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh
-        submit_test 07 6 2 75G 0:10:00 hercules false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh
-        submit_test 08 12 1 75G 0:10:00 hercules false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh
-        submit_test 09 12 1 75G 0:10:00 hercules false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh
-        submit_test 10 12 1 75G 0:10:00 hercules false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh
-        submit_test 11 12 1 100G 0:15:00 hercules false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh
-        submit_test 12 12 1 75G 0:10:00 hercules false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh
-        submit_test 13 6 1 75G 0:05:00 hercules false c96.gefs.grib2 c96.gefs.grib2.sh
-        submit_test 14 12 1 75G 0:10:00 hercules false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh
+        submit_test 01 6 1 75G 0:15:00 hercules false c96.fv3.restart c96.fv3.restart.sh false
+        submit_test 02 6 1 75G 0:15:00 hercules false c192.fv3.history c192.fv3.history.sh false
+        submit_test 03 6 2 75G 0:10:00 hercules false c96.fv3.netcdf c96.fv3.netcdf.sh false
+        submit_test 04 6 1 75G 0:05:00 hercules false c192.gfs.grib2 c192.gfs.grib2.sh false
+        submit_test 05 12 1 75G 0:10:00 hercules false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
+        submit_test 06 6 1 75G 0:10:00 hercules false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
+        submit_test 07 6 2 75G 0:10:00 hercules false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh false
+        submit_test 08 12 1 75G 0:10:00 hercules false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
+        submit_test 09 12 1 75G 0:10:00 hercules false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
+        submit_test 10 12 1 75G 0:10:00 hercules false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
+        submit_test 11 12 1 100G 0:15:00 hercules false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
+        submit_test 12 12 1 75G 0:10:00 hercules false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
+        submit_test 13 6 1 75G 0:05:00 hercules false c96.gefs.grib2 c96.gefs.grib2.sh false
+        submit_test 14 12 1 75G 0:10:00 hercules false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
         ;;
     jet)
-        submit_test 01 6 1 75G 0:15:00 xjet true c96.fv3.restart c96.fv3.restart.sh
-        submit_test 02 6 1 75G 0:15:00 xjet true c192.fv3.history c192.fv3.history.sh
-        submit_test 03 6 2 75G 0:10:00 xjet true c96.fv3.netcdf c96.fv3.netcdf.sh
-        submit_test 04 6 1 75G 0:05:00 xjet true c192.gfs.grib2 c192.gfs.grib2.sh
-        submit_test 05 12 1 75G 0:10:00 xjet true 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh
-        submit_test 06 6 1 75G 0:10:00 xjet true 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh
-        submit_test 07 6 2 75G 0:10:00 xjet true 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh
-        submit_test 08 12 1 75G 0:10:00 xjet true 13km.conus.nam.grib2 13km.conus.nam.grib2.sh
-        submit_test 09 12 1 75G 0:10:00 xjet true 13km.conus.rap.grib2 13km.conus.rap.grib2.sh
-        submit_test 10 12 1 75G 0:10:00 xjet true 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh
-        submit_test 11 12 1 100G 0:15:00 xjet true c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh
-        submit_test 12 12 1 75G 0:10:00 xjet true 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh
-        submit_test 13 6 1 75G 0:05:00 xjet true c96.gefs.grib2 c96.gefs.grib2.sh
-        submit_test 14 12 1 75G 0:10:00 xjet true 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh
+        submit_test 01 6 1 75G 0:15:00 xjet true c96.fv3.restart c96.fv3.restart.sh false
+        submit_test 02 6 1 75G 0:15:00 xjet true c192.fv3.history c192.fv3.history.sh false
+        submit_test 03 6 2 75G 0:10:00 xjet true c96.fv3.netcdf c96.fv3.netcdf.sh false
+        submit_test 04 6 1 75G 0:05:00 xjet true c192.gfs.grib2 c192.gfs.grib2.sh false
+        submit_test 05 12 1 75G 0:10:00 xjet true 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
+        submit_test 06 6 1 75G 0:10:00 xjet true 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
+        submit_test 07 6 2 75G 0:10:00 xjet true 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh false
+        submit_test 08 12 1 75G 0:10:00 xjet true 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
+        submit_test 09 12 1 75G 0:10:00 xjet true 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
+        submit_test 10 12 1 75G 0:10:00 xjet true 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
+        submit_test 11 12 1 100G 0:15:00 xjet true c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
+        submit_test 12 12 1 75G 0:10:00 xjet true 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
+        submit_test 13 6 1 75G 0:05:00 xjet true c96.gefs.grib2 c96.gefs.grib2.sh false
+        submit_test 14 12 1 75G 0:10:00 xjet true 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
      ;;
     orion)
-        submit_test 01 6 1 75G 0:15:00 orion false c96.fv3.restart c96.fv3.restart.sh
-        submit_test 02 6 1 75G 0:15:00 orion false c192.fv3.history c192.fv3.history.sh
-        submit_test 03 6 2 75G 0:10:00 orion false c96.fv3.netcdf c96.fv3.netcdf.sh
-        submit_test 04 6 1 75G 0:05:00 orion false c192.gfs.grib2 c192.gfs.grib2.sh
-        submit_test 05 12 1 75G 0:10:00 orion false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh
-        submit_test 06 6 1 75G 0:10:00 orion false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh
-        submit_test 07 6 2 75G 0:10:00 orion false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh
-        submit_test 08 12 1 75G 0:10:00 orion false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh
-        submit_test 09 12 1 75G 0:10:00 orion false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh
-        submit_test 10 12 1 75G 0:10:00 orion false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh
-        submit_test 11 12 1 100G 0:15:00 orion false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh
-        submit_test 12 12 1 75G 0:10:00 orion false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh
-        submit_test 13 6 1 75G 0:05:00 orion false c96.gefs.grib2 c96.gefs.grib2.sh
-        submit_test 14 12 1 75G 0:10:00 orion false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh
+        submit_test 01 6 1 75G 0:15:00 orion false c96.fv3.restart c96.fv3.restart.sh false
+        submit_test 02 6 1 75G 0:15:00 orion false c192.fv3.history c192.fv3.history.sh false
+        submit_test 03 6 2 75G 0:10:00 orion false c96.fv3.netcdf c96.fv3.netcdf.sh false
+        submit_test 04 6 1 75G 0:05:00 orion false c192.gfs.grib2 c192.gfs.grib2.sh false
+        submit_test 05 12 1 75G 0:10:00 orion false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
+        submit_test 06 6 1 75G 0:10:00 orion false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
+        submit_test 07 6 2 75G 0:10:00 orion false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh false
+        submit_test 08 12 1 75G 0:10:00 orion false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
+        submit_test 09 12 1 75G 0:10:00 orion false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
+        submit_test 10 12 1 75G 0:10:00 orion false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
+        submit_test 11 12 1 100G 0:15:00 orion false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
+        submit_test 12 12 1 75G 0:10:00 orion false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
+        submit_test 13 6 1 75G 0:05:00 orion false c96.gefs.grib2 c96.gefs.grib2.sh false
+        submit_test 14 12 1 75G 0:10:00 orion false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
         ;;
     ursa)
-        submit_test 01 6 1 50G 0:15:00 u1-compute false c96.fv3.restart c96.fv3.restart.sh
-        submit_test 02 6 2 100G 0:15:00 u1-compute false c192.fv3.history c192.fv3.history.sh
-        submit_test 03 12 1 100G 0:15:00 u1-compute false c96.fv3.netcdf c96.fv3.netcdf.sh
-        submit_test 04 6 1 50G 0:05:00 u1-compute false c192.gfs.grib2 c192.gfs.grib2.sh
-        submit_test 05 6 1 50G 0:05:00 u1-compute false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh
-        submit_test 06 6 1 100G 0:10:00 u1-compute false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh
-        submit_test 07 6 2 100G 0:10:00 u1-compute false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh
-        submit_test 08 6 1 50G 0:05:00 u1-compute false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh
-        submit_test 09 6 1 100G 0:05:00 u1-compute false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh
-        submit_test 10 6 1 100G 0:05:00 u1-compute false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh
-        submit_test 11 12 1 100G 0:15:00 u1-compute false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh
-        submit_test 12 6 1 100G 0:05:00 u1-compute false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh
-        submit_test 13 6 1 50G 0:05:00 u1-compute false c96.gefs.grib2 c96.gefs.grib2.sh
-        submit_test 14 6 1 100G 0:05:00 u1-compute false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh
+        submit_test 01 6 1 50G 0:15:00 u1-compute false c96.fv3.restart c96.fv3.restart.sh false
+        submit_test 02 6 2 100G 0:15:00 u1-compute false c192.fv3.history c192.fv3.history.sh false
+        submit_test 03 12 1 100G 0:15:00 u1-compute false c96.fv3.netcdf c96.fv3.netcdf.s falseh
+        submit_test 04 6 1 50G 0:05:00 u1-compute false c192.gfs.grib2 c192.gfs.grib2.sh false
+        submit_test 05 6 1 50G 0:05:00 u1-compute false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
+        submit_test 06 6 1 100G 0:10:00 u1-compute false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
+        submit_test 07 6 2 100G 0:10:00 u1-compute false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh false
+        submit_test 08 6 1 50G 0:05:00 u1-compute false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
+        submit_test 09 6 1 100G 0:05:00 u1-compute false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
+        submit_test 10 6 1 100G 0:05:00 u1-compute false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
+        submit_test 11 12 1 100G 0:15:00 u1-compute false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
+        submit_test 12 6 1 100G 0:05:00 u1-compute false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
+        submit_test 13 6 1 50G 0:05:00 u1-compute false c96.gefs.grib2 c96.gefs.grib2.sh false
+        submit_test 14 6 1 100G 0:05:00 u1-compute false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
         ;;
     wcoss2)
-        submit_test 01 6 1 75G 0:15:00 dev false c96.fv3.restart c96.fv3.restart.sh
-        submit_test 02 6 1 75G 0:15:00 dev false c192.fv3.history c192.fv3.history.sh
-        submit_test 03 12 1 75G 0:10:00 dev false c96.fv3.netcdf c96.fv3.netcdf.sh
-        submit_test 04 6 1 75G 0:05:00 dev false c192.gfs.grib2 c192.gfs.grib2.sh
-        submit_test 05 6 1 75G 0:10:00 dev false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh
-        submit_test 06 6 1 75G 0:10:00 dev false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh
-        submit_test 07 12 1 75G 0:10:00 dev false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh
-        submit_test 08 6 1 75G 0:10:00 dev false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh
-        submit_test 09 6 1 75G 0:10:00 dev false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh
-        submit_test 10 6 1 75G 0:10:00 dev false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh
-        submit_test 11 12 1 100G 0:15:00 dev false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh
-        submit_test 12 6 1 75G 0:10:00 dev false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh
-        submit_test 13 6 1 75G 0:05:00 dev false c96.gefs.grib2 c96.gefs.grib2.sh
-        submit_test 14 6 1 75G 0:10:00 dev false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh
+        submit_test 01 6 1 75G 0:15:00 dev false c96.fv3.restart c96.fv3.restart.sh false
+        submit_test 02 6 1 75G 0:15:00 dev false c192.fv3.history c192.fv3.history.sh false
+        submit_test 03 12 1 75G 0:10:00 dev false c96.fv3.netcdf c96.fv3.netcdf.sh false
+        submit_test 04 6 1 75G 0:05:00 dev false c192.gfs.grib2 c192.gfs.grib2.sh false
+        submit_test 05 6 1 75G 0:10:00 dev false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
+        submit_test 06 6 1 75G 0:10:00 dev false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
+        submit_test 07 12 1 75G 0:10:00 dev false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh false
+        submit_test 08 6 1 75G 0:10:00 dev false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
+        submit_test 09 6 1 75G 0:10:00 dev false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
+        submit_test 10 6 1 75G 0:10:00 dev false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
+        submit_test 11 12 1 100G 0:15:00 dev false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
+        submit_test 12 6 1 75G 0:10:00 dev false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
+        submit_test 13 6 1 75G 0:05:00 dev false c96.gefs.grib2 c96.gefs.grib2.sh false
+        submit_test 14 6 1 75G 0:10:00 dev false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"

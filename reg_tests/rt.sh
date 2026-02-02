@@ -130,18 +130,18 @@ done
 #   cd ..
 # fi
 
-for dir in grid_gen; do
-  RUN_CHECK=RUN_${dir^^}
-  if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
-    echo "Running ${dir} tests"
-    cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-    (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
-    PID_LIST+=($!)
-    cd ..
-  fi
-done
+# for dir in grid_gen; do
+#   RUN_CHECK=RUN_${dir^^}
+#   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
+#     echo "Running ${dir} tests"
+#     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
+#     (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
+#     PID_LIST+=($!)
+#     cd ..
+#   fi
+# done
 
-for dir in regrid_sfc global_cycle chgres_cube snow2mdl; do
+for dir in regrid_sfc global_cycle chgres_cube snow2mdl grid_gen; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
     echo "Running ${dir} tests"

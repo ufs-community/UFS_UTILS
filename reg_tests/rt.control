@@ -46,11 +46,11 @@ SCHEDULER_JET="slurm"
 RUN_CHGRES_CUBE="false"
 RUN_CPLD_GRIDGEN="false"
 RUN_GLOBAL_CYCLE="false"
-RUN_GRID_GEN="false"
+RUN_GRID_GEN="true"
 RUN_ICE_BLEND="false"
 RUN_OCNICE_PREP="false"
 RUN_REGRID_SFC="false"
-RUN_SNOW2MDL="true"
+RUN_SNOW2MDL="false"
 RUN_WEIGHT_GEN="false"
 ##############
 
