@@ -99,8 +99,9 @@ fi
 set -x
 
 # export WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
-export WORK_DIR="${WORK_DIR}/reg-tests/grid-gen"
 test_name="grid_gen"
+export WORK_DIR="${WORK_DIR}/reg-tests/${test_name}"
+
 # QUEUE="${QUEUE:-batch}"
 # PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
 

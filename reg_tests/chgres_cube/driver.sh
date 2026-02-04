@@ -54,7 +54,7 @@ submit_test() {
     if [[ "${SCHEDULER}" == "pbs" ]]; then
         export APRUN="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core"
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
-                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=10GB \
+                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS}:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"} ./${script})
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUN="srun"
@@ -114,10 +114,13 @@ export OUTDIR="${WORK_DIR}/reg-tests/${test_name}"
 export HOMEreg=${HOMEreg}/${test_name}
 
 
-BASELINE_ROOT=${HOMEreg}/${test_name}/baseline_data
-WEIGHTS_ROOT=${HOMEreg}/cpld_gridgen/baseline_data
-INPUT_ROOT=${HOMEreg}/${test_name}/input_data
-STMP=${WORKDIR}
+# BASELINE_ROOT=${HOMEreg}/${test_name}/baseline_data
+BASELINE_ROOT=${HOMEreg}/baseline_data
+# WEIGHTS_ROOT=${HOMEreg}/cpld_gridgen/baseline_data
+WEIGHTS_ROOT=${HOMEreg}/../cpld_gridgen/baseline_data
+# INPUT_ROOT=${HOMEreg}/${test_name}/input_data
+INPUT_ROOT=${HOMEreg}/input_data
+# STMP=${WORKDIR}
 ACCOUNT=${PROJECT_CODE}
 
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
@@ -195,7 +198,7 @@ case ${MACHINE_ID,,} in
     ursa)
         submit_test 01 6 1 50G 0:15:00 u1-compute false c96.fv3.restart c96.fv3.restart.sh false
         submit_test 02 6 2 100G 0:15:00 u1-compute false c192.fv3.history c192.fv3.history.sh false
-        submit_test 03 12 1 100G 0:15:00 u1-compute false c96.fv3.netcdf c96.fv3.netcdf.s falseh
+        submit_test 03 12 1 100G 0:15:00 u1-compute false c96.fv3.netcdf c96.fv3.netcdf.sh false
         submit_test 04 6 1 50G 0:05:00 u1-compute false c192.gfs.grib2 c192.gfs.grib2.sh false
         submit_test 05 6 1 50G 0:05:00 u1-compute false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
         submit_test 06 6 1 100G 0:10:00 u1-compute false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
@@ -243,7 +246,7 @@ esac
 if [[ "${SCHEDULER}" == "pbs" ]]; then
     (qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
         -N chgres_summary -l select=1:ncpus=1:mem=100MB \
-        -W depend="afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
+        -W depend="afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF
@@ -251,7 +254,7 @@ EOF
 elif [[ "${SCHEDULER}" == "slurm" ]]; then
     (sbatch --nodes=1 -t 0:01:00 -A "${PROJECT_CODE}" -J chgres_summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
        --open-mode=append -q "${QUEUE}" \
-       -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
+       -d "afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF

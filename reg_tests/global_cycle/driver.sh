@@ -218,7 +218,7 @@ esac
 
 if [[ "${SCHEDULER}" == "pbs" ]]; then
   (qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
-        -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend="afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
+        -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend="afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 cd $reg_dir
 grep -a '<<<' ${LOG_FILE}?? | grep -v echo > summary.log
@@ -227,7 +227,7 @@ EOF
 elif [[ "${SCHEDULER}" == "slurm" ]]; then
   (sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
       --open-mode=append -q $QUEUE \
-      -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
+      -d "afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 grep -a '<<<' ${LOG_FILE}*  > summary.log
 EOF

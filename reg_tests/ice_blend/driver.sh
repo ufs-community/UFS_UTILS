@@ -49,7 +49,7 @@ submit_test() {
     if [[ "${SCHEDULER}" == "pbs" ]]; then
         export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS_CY}"
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
-                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
+                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS_CY}:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUNCY="srun"
@@ -128,7 +128,7 @@ export COPYGB=${GRIB_UTIL_ROOT}/bin/copygb
 export COPYGB2=${GRIB_UTIL_ROOT}/bin/copygb2
 
 # export DATA="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
-export DATA="${WORKDIR}/reg_tests/${test_name}"
+export DATA="${WORKDIR}/reg-tests/${test_name}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
