@@ -1791,21 +1791,23 @@
 !! ordered from bottom to top of atmosphere.
 !!
 !! @author Mark Iredell @date 92-10-31
- SUBROUTINE VINTG
+
+SUBROUTINE VINTG
  use mpi_f08
 
  IMPLICIT NONE
 
- REAL(ESMF_KIND_R8), PARAMETER   :: DLTDZ=-6.5E-3*287.05/9.80665
- REAL(ESMF_KIND_R8), PARAMETER   :: DLPVDRT=-2.5E6/461.50
- REAL(ESMF_KIND_R8), PARAMETER   :: ONE = 1.0_ESMF_KIND_R8
+ REAL(ESMF_KIND_R8), PARAMETER   :: DLTDZ   = -6.5E-3*287.05/9.80665
+ REAL(ESMF_KIND_R8), PARAMETER   :: DLPVDRT = -2.5E6/461.50
+ REAL(ESMF_KIND_R8), PARAMETER   :: ONE     = 1.0_ESMF_KIND_R8
 
  INTEGER                         :: I, J, K, CLB(3), CUB(3), RC
- INTEGER                         :: IM, KM1, KM2, NT, II
+ INTEGER                         :: IM, KM1, KM2, II
 
  REAL(ESMF_KIND_R8)              :: DZ
  REAL(ESMF_KIND_R8), ALLOCATABLE :: Z1(:,:,:), Z2(:,:,:)
- REAL(ESMF_KIND_R8), ALLOCATABLE :: C1(:,:,:,:),C2(:,:,:,:)
+ REAL(ESMF_KIND_R8), ALLOCATABLE :: QIN(:,:,:), QOUT(:,:,:)
+ REAL(ESMF_KIND_R8), ALLOCATABLE :: T1_SURF(:,:), Q1_SURF(:,:,:)
         
  REAL(ESMF_KIND_R8), POINTER     :: P1PTR(:,:,:)       ! input pressure
  REAL(ESMF_KIND_R8), POINTER     :: P2PTR(:,:,:)       ! output pressure
@@ -1815,16 +1817,16 @@
  REAL(ESMF_KIND_R8), POINTER     :: T2PTR(:,:,:)       ! output temperature
  REAL(ESMF_KIND_R8), POINTER     :: Q1PTR(:,:,:)       ! input tracer
  REAL(ESMF_KIND_R8), POINTER     :: Q2PTR(:,:,:)       ! output tracer
- REAL(ESMF_KIND_R8), POINTER     :: XWIND1PTR(:,:,:)  ! input wind (x component)
- REAL(ESMF_KIND_R8), POINTER     :: YWIND1PTR(:,:,:)  ! input wind (y component)
- REAL(ESMF_KIND_R8), POINTER     :: ZWIND1PTR(:,:,:)  ! input wind (z component)
- REAL(ESMF_KIND_R8), POINTER     :: XWIND2PTR(:,:,:)  ! output wind (x component)
- REAL(ESMF_KIND_R8), POINTER     :: YWIND2PTR(:,:,:)  ! output wind (y component)
- REAL(ESMF_KIND_R8), POINTER     :: ZWIND2PTR(:,:,:)  ! output wind (z component)
+ REAL(ESMF_KIND_R8), POINTER     :: XWIND1PTR(:,:,:)   ! input wind (x component)
+ REAL(ESMF_KIND_R8), POINTER     :: YWIND1PTR(:,:,:)   ! input wind (y component)
+ REAL(ESMF_KIND_R8), POINTER     :: ZWIND1PTR(:,:,:)   ! input wind (z component)
+ REAL(ESMF_KIND_R8), POINTER     :: XWIND2PTR(:,:,:)   ! output wind (x component)
+ REAL(ESMF_KIND_R8), POINTER     :: YWIND2PTR(:,:,:)   ! output wind (y component)
+ REAL(ESMF_KIND_R8), POINTER     :: ZWIND2PTR(:,:,:)   ! output wind (z component)
  
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  COMPUTE LOG PRESSURE INTERPOLATING COORDINATE
-!  AND COPY INPUT WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS
+!  AND PREPARE INPUT SURFACE VALUES FOR EXTRAPOLATION
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
  print*,"- VERTICALY INTERPOLATE FIELDS."
@@ -1834,190 +1836,255 @@
                     computationalLBound=clb, &
                     computationalUBound=cub, &
                     farrayPtr=p1ptr, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
-
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-! The '1'/'2' arrays hold fields before/after interpolation.  
-! Note the 'z' component of the horizontal wind will be treated as a
-! tracer.  So add one extra third dimension to these 3-d arrays.
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
  ALLOCATE(Z1(CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT))
  ALLOCATE(Z2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET))
- ALLOCATE(C1(CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT,NUM_TRACERS_INPUT+5))
- ALLOCATE(C2(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET,NUM_TRACERS_INPUT+5))
+ ALLOCATE(QIN (CLB(1):CUB(1),CLB(2):CUB(2),LEV_INPUT))
+ ALLOCATE(QOUT(CLB(1):CUB(1),CLB(2):CUB(2),LEV_TARGET))
+ ALLOCATE(T1_SURF(CLB(1):CUB(1),CLB(2):CUB(2)))
+ ALLOCATE(Q1_SURF(CLB(1):CUB(1),CLB(2):CUB(2),NUM_TRACERS_INPUT))
 
  Z1 = -LOG(P1PTR)
 
  print*,"- CALL FieldGet FOR 3-D ADJUSTED PRESS"
  call ESMF_FieldGet(pres_target_grid, &
                     farrayPtr=P2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
  Z2 = -LOG(P2PTR)
- 
+
+! Store input temperature surface for lapse-rate extrapolation.
+ print*,"- CALL FieldGet FOR 3-D TEMP (for surface cache)."
+ call ESMF_FieldGet(temp_b4adj_target_grid, &
+                    farrayPtr=T1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ DO J=CLB(2),CUB(2)
+   DO I=CLB(1),CUB(1)
+     T1_SURF(I,J) = T1PTR(I,J,1)
+   END DO
+ END DO
+
+! Store input tracer surface values for humidity extrapolation.
+ DO II = 1, NUM_TRACERS_INPUT
+   print*,"- CACHE SURFACE FOR 3-D TRACER ", trim(tracers(ii))
+   call ESMF_FieldGet(tracers_b4adj_target_grid(II), &
+                      farrayPtr=Q1PTR, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                         line=__LINE__,file=__FILE__)) &
+          call error_handler("IN FieldGet", rc)
+
+   DO J=CLB(2),CUB(2)
+     DO I=CLB(1),CUB(1)
+       Q1_SURF(I,J,II) = Q1PTR(I,J,1)
+     END DO
+   END DO
+ END DO
+
+! Common sizes for TERP3.
+ IM  = (CUB(1)-CLB(1)+1) * (CUB(2)-CLB(2)+1)
+ KM1 = LEV_INPUT
+ KM2 = LEV_TARGET
+
+!===============================================================
+! 1) WINDS: x, y, z
+!===============================================================
+
+!---- X WIND ----
  print*,"- CALL FieldGet FOR x WIND."
  call ESMF_FieldGet(xwind_b4adj_target_grid, &
                     farrayPtr=XWIND1PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
- C1(:,:,:,1) =  XWIND1PTR(:,:,:)
+ QIN = XWIND1PTR
 
- print*,"- CALL FieldGet FOR y WIND."
- call ESMF_FieldGet(ywind_b4adj_target_grid, &
-                    farrayPtr=YWIND1PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-         call error_handler("IN FieldGet", rc)
-
- C1(:,:,:,2) =  YWIND1PTR(:,:,:)
-
- print*,"- CALL FieldGet FOR z WIND."
- call ESMF_FieldGet(zwind_b4adj_target_grid, &
-                    farrayPtr=ZWIND1PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-         call error_handler("IN FieldGet", rc)
-
- C1(:,:,:,3) =  ZWIND1PTR(:,:,:)
-
- print*,"- CALL FieldGet FOR VERTICAL VELOCITY."
- call ESMF_FieldGet(dzdt_b4adj_target_grid, &
-                    farrayPtr=DZDT1PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-         call error_handler("IN FieldGet", rc)
-
- C1(:,:,:,4) =  DZDT1PTR(:,:,:)
- print*,"MIN MAX W TARGETB4 IN VINTG = ", minval(DZDT1PTR(:,:,:)), maxval(DZDT1PTR(:,:,:))
-
- print*,"- CALL FieldGet FOR 3-D TEMP."
- call ESMF_FieldGet(temp_b4adj_target_grid, &
-                    farrayPtr=T1PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-         call error_handler("IN FieldGet", rc)
-
- C1(:,:,:,5) =  T1PTR(:,:,:)
-
- DO I = 1, NUM_TRACERS_INPUT
-
-   print*,"- CALL FieldGet FOR 3-D TRACERS ", trim(tracers(i))
-   call ESMF_FieldGet(tracers_b4adj_target_grid(i), &
-                      farrayPtr=Q1PTR, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-          call error_handler("IN FieldGet", rc)
-
-   C1(:,:,:,5+I) =  Q1PTR(:,:,:)
-
- ENDDO
-
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!  PERFORM LAGRANGIAN ONE-DIMENSIONAL INTERPOLATION
-!  THAT IS 4TH-ORDER IN INTERIOR, 2ND-ORDER IN OUTSIDE INTERVALS
-!  AND 1ST-ORDER FOR EXTRAPOLATION.
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
- IM = (CUB(1)-CLB(1)+1) * (CUB(2)-CLB(2)+1)
- KM1= LEV_INPUT
- KM2= LEV_TARGET
- NT=  NUM_TRACERS_INPUT + 1 ! treat 'z' wind as tracer.
-
- CALL TERP3(IM,1,1,1,1,4+NT,(IM*KM1),(IM*KM2), &
-            KM1,IM,IM,Z1,C1,KM2,IM,IM,Z2,C2)
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-!  COPY OUTPUT WIND, TEMPERATURE, HUMIDITY AND OTHER TRACERS
-!  EXCEPT BELOW THE INPUT DOMAIN, LET TEMPERATURE INCREASE WITH A FIXED
-!  LAPSE RATE AND LET THE RELATIVE HUMIDITY REMAIN CONSTANT.
-! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
- print*,"- CALL FieldGet FOR 3-D ADJUSTED TEMP."
- call ESMF_FieldGet(temp_target_grid, &
-                    farrayPtr=T2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-         call error_handler("IN FieldGet", rc)
-
- print*,"- CALL FieldGet FOR ADJUSTED VERTICAL VELOCITY."
- call ESMF_FieldGet(dzdt_target_grid, &
-                    farrayPtr=DZDT2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
-         call error_handler("IN FieldGet", rc)
+ CALL TERP3(IM,1,1,1,1,1,(IM*KM1),(IM*KM2), &
+            KM1,IM,IM,Z1,QIN,KM2,IM,IM,Z2,QOUT)
 
  print*,"- CALL FieldGet FOR ADJUSTED xwind."
  call ESMF_FieldGet(xwind_target_grid, &
                     farrayPtr=XWIND2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
+
+ XWIND2PTR = QOUT
+
+!---- Y WIND ----
+ print*,"- CALL FieldGet FOR y WIND."
+ call ESMF_FieldGet(ywind_b4adj_target_grid, &
+                    farrayPtr=YWIND1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ QIN = YWIND1PTR
+
+ CALL TERP3(IM,1,1,1,1,1,(IM*KM1),(IM*KM2), &
+            KM1,IM,IM,Z1,QIN,KM2,IM,IM,Z2,QOUT)
 
  print*,"- CALL FieldGet FOR ADJUSTED ywind."
  call ESMF_FieldGet(ywind_target_grid, &
                     farrayPtr=YWIND2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
+
+ YWIND2PTR = QOUT
+
+!---- Z WIND ----
+ print*,"- CALL FieldGet FOR z WIND."
+ call ESMF_FieldGet(zwind_b4adj_target_grid, &
+                    farrayPtr=ZWIND1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ QIN = ZWIND1PTR
+
+ CALL TERP3(IM,1,1,1,1,1,(IM*KM1),(IM*KM2), &
+            KM1,IM,IM,Z1,QIN,KM2,IM,IM,Z2,QOUT)
 
  print*,"- CALL FieldGet FOR ADJUSTED zwind."
  call ESMF_FieldGet(zwind_target_grid, &
                     farrayPtr=ZWIND2PTR, rc=rc)
- if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldGet", rc)
 
- DO K=1,LEV_TARGET
-   DO I=CLB(1),CUB(1)
-   DO J=CLB(2),CUB(2)
-     XWIND2PTR(I,J,K)=C2(I,J,K,1)
-     YWIND2PTR(I,J,K)=C2(I,J,K,2)
-     ZWIND2PTR(I,J,K)=C2(I,J,K,3)
-     DZDT2PTR(I,J,K)=C2(I,J,K,4)
-     DZ=Z2(I,J,K)-Z1(I,J,1)
-     IF(DZ.GE.0) THEN
-       T2PTR(I,J,K)=C2(I,J,K,5)
-     ELSE
-       T2PTR(I,J,K)=C1(I,J,1,5)*EXP(DLTDZ*DZ)
-     ENDIF
-   ENDDO
-   ENDDO
- ENDDO
+ ZWIND2PTR = QOUT
+
+!===============================================================
+! 2) VERTICAL VELOCITY
+!===============================================================
+
+ print*,"- CALL FieldGet FOR VERTICAL VELOCITY."
+ call ESMF_FieldGet(dzdt_b4adj_target_grid, &
+                    farrayPtr=DZDT1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ print*,"MIN MAX W TARGETB4 IN VINTG = ", &
+        minval(DZDT1PTR), maxval(DZDT1PTR)
+
+ QIN = DZDT1PTR
+
+ CALL TERP3(IM,1,1,1,1,1,(IM*KM1),(IM*KM2), &
+            KM1,IM,IM,Z1,QIN,KM2,IM,IM,Z2,QOUT)
+
+ print*,"- CALL FieldGet FOR ADJUSTED VERTICAL VELOCITY."
+ call ESMF_FieldGet(dzdt_target_grid, &
+                    farrayPtr=DZDT2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ DZDT2PTR = QOUT
+
+!===============================================================
+! 3) TEMPERATURE WITH LAPSE-RATE EXTRAPOLATION BELOW DOMAIN
+!===============================================================
+
+ print*,"- CALL FieldGet FOR 3-D TEMP (for interpolation)."
+ call ESMF_FieldGet(temp_b4adj_target_grid, &
+                    farrayPtr=T1PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ QIN = T1PTR
+
+ CALL TERP3(IM,1,1,1,1,1,(IM*KM1),(IM*KM2), &
+            KM1,IM,IM,Z1,QIN,KM2,IM,IM,Z2,QOUT)
+
+ print*,"- CALL FieldGet FOR 3-D ADJUSTED TEMP."
+ call ESMF_FieldGet(temp_target_grid, &
+                    farrayPtr=T2PTR, rc=rc)
+ if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                       line=__LINE__,file=__FILE__)) &
+         call error_handler("IN FieldGet", rc)
+
+ DO K = 1, LEV_TARGET
+   DO J = CLB(2), CUB(2)
+     DO I = CLB(1), CUB(1)
+       DZ = Z2(I,J,K) - Z1(I,J,1)
+       IF (DZ .GE. 0.0_ESMF_KIND_R8) THEN
+         T2PTR(I,J,K) = QOUT(I,J,K)
+       ELSE
+         T2PTR(I,J,K) = T1_SURF(I,J) * EXP(DLTDZ * DZ)
+       END IF
+     END DO
+   END DO
+ END DO
+
+!===============================================================
+! 4) TRACERS, WITH SPECIAL HANDLING FOR "sphum"
+!===============================================================
 
  DO II = 1, NUM_TRACERS_INPUT
 
-   print*,"- CALL FieldGet FOR 3-D TRACER ", trim(tracers(ii))
-   call ESMF_FieldGet(tracers_target_grid(ii), &
+   print*,"- VERTICAL INTERPOLATION FOR 3-D TRACER ", trim(tracers(II))
+   call ESMF_FieldGet(tracers_b4adj_target_grid(II), &
+                      farrayPtr=Q1PTR, rc=rc)
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                         line=__LINE__,file=__FILE__)) &
+          call error_handler("IN FieldGet", rc)
+
+   QIN = Q1PTR
+
+   CALL TERP3(IM,1,1,1,1,1,(IM*KM1),(IM*KM2), &
+              KM1,IM,IM,Z1,QIN,KM2,IM,IM,Z2,QOUT)
+
+   print*,"- CALL FieldGet FOR 3-D TRACER TARGET ", trim(tracers(II))
+   call ESMF_FieldGet(tracers_target_grid(II), &
                       farrayPtr=Q2PTR, rc=rc)
-   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
+   if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
+                         line=__LINE__,file=__FILE__)) &
           call error_handler("IN FieldGet", rc)
 
    IF (TRIM(TRACERS(II)) == "sphum") THEN  ! specific humidity
 
-     DO K=1,LEV_TARGET
-       DO I=CLB(1),CUB(1)
-       DO J=CLB(2),CUB(2)
-         DZ=Z2(I,J,K)-Z1(I,J,1)
-         IF(DZ.GE.0) THEN
-           Q2PTR(I,J,K) = C2(I,J,K,5+II)
-         ELSE
-           Q2PTR(I,J,K) = C1(I,J,1,5+II)*EXP(DLPVDRT*(ONE/T2PTR(I,J,K)-ONE/T1PTR(I,J,1))-DZ)
-         ENDIF
-       ENDDO
-       ENDDO
-     ENDDO
+     DO K = 1, LEV_TARGET
+       DO J = CLB(2), CUB(2)
+         DO I = CLB(1), CUB(1)
+           DZ = Z2(I,J,K) - Z1(I,J,1)
+           IF (DZ .GE. 0.0_ESMF_KIND_R8) THEN
+             Q2PTR(I,J,K) = QOUT(I,J,K)
+           ELSE
+             Q2PTR(I,J,K) = Q1_SURF(I,J,II) * &
+                  EXP( DLPVDRT * (ONE / T2PTR(I,J,K) - ONE / T1_SURF(I,J)) - DZ )
+           END IF
+         END DO
+       END DO
+     END DO
 
-   ELSE ! all other tracers
+   ELSE  ! all other tracers: just use vertically interpolated values
 
-     DO K=1,LEV_TARGET
-       DO I=CLB(1),CUB(1)
-       DO J=CLB(2),CUB(2)
-         Q2PTR(I,J,K) = C2(I,J,K,5+II)
-       ENDDO
-       ENDDO
-     ENDDO
+     DO K = 1, LEV_TARGET
+       DO J = CLB(2), CUB(2)
+         DO I = CLB(1), CUB(1)
+           Q2PTR(I,J,K) = QOUT(I,J,K)
+         END DO
+       END DO
+     END DO
 
-   ENDIF
+   END IF
 
- ENDDO
+ END DO
 
- DEALLOCATE (Z1, Z2, C1, C2)
+ DEALLOCATE (Z1, Z2, QIN, QOUT, T1_SURF, Q1_SURF)
 
- END SUBROUTINE VINTG
-
+END SUBROUTINE VINTG
 !> Cubically interpolate in one dimension.
 !!                                                                       
 !! Interpolate field(s) in one dimension along the column(s). The
