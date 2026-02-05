@@ -44,6 +44,7 @@ readonly program=$(basename $0)
 RT_DIR=${RT_DIR:-${PWD}/..}
 
 notlocal=${notlocal:-false}
+waitlocal=false
 if [[ ${notlocal} == "false" ]]; then
   waitlocal=true
 fi
@@ -307,17 +308,19 @@ else
 
 fi
 
-if [[ "${waitlocal}" == "true" ]]; then
-  sleep_time=0
-  echo "Waiting for cpld_gridgen tests to complete..."
-  while [ ! -f "summary.log" ]; do
+sleep_time=0
+echo "Waiting for ${test_name^^} tests to complete..."
+while [ ! -f "summary.log" ]; do
     sleep 10
     sleep_time=$((sleep_time+10))
     if (( sleep_time > TIMEOUT_LIMIT )); then
-       mail -s "UFS_UTILS Consistency Test CPLD_GRIDGEN timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
-       exit 1
+        if [[ "${waitlocal}" == "true" ]]; then
+            mail -s "UFS_UTILS Consistency Test ${test_name^^} timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+            exit 1
+        fi
     fi
-  done
-  mail -s "UFS_UTILS Consistency Test CPLD_GRIDGEN COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+done
+if [[ "${waitlocal}" == "true" ]]; then
+    mail -s "UFS_UTILS Consistency Test ${test_name^^} COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
 fi
 exit 0

@@ -41,6 +41,7 @@ test_name="ocnice_prep"
 RT_DIR=${RT_DIR:-${PWD}/..}
 
 notlocal=${notlocal:-false}
+waitlocal=false
 if [[ ${notlocal} == "false" ]]; then
   waitlocal=true
 fi
