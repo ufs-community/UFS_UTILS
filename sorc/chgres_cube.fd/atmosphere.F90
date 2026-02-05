@@ -1874,7 +1874,7 @@ SUBROUTINE VINTG
 
 ! Store input tracer surface values for humidity extrapolation.
  DO II = 1, NUM_TRACERS_INPUT
-   print*,"- CACHE SURFACE FOR 3-D TRACER ", trim(tracers(ii))
+   print*,"- CACHE SURFACE FOR 3-D TRACER ", trim(tracers(II))
    call ESMF_FieldGet(tracers_b4adj_target_grid(II), &
                       farrayPtr=Q1PTR, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
