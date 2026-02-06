@@ -26,24 +26,19 @@
 !!     used to flag points that flipped from ice to open water.
 !!     To invoke this option, set DONST=.true. and NST_FILE="NULL".
 !!
-!!  INPUT FILES:
+!!  INPUT/OUTPUT FILES:
 !!  - fngrid.$NNN      The cubed-sphere grid file (contains
 !!                     grid point latitude and longitdue).
 !!  - fnorog.$NNN      The cubed-sphere orography file (contains
 !!                     land mask and orography).
-!!  - fnbgsi.$NNN      The cubed-sphere input sfc/nsst restart
-!!                     file.
+!!  - sfc_data_cycle.$NNN  The cubed-sphere sfc/nsst restart file
+!!                     (read and written in place).
 !!  - $NST_FILE        Gaussian GSI file which contains NSST
 !!                     TREF increments
-!!  - $sfcincr_gsi.$NNN    Gaussian GSI file which contains soil state
-!!                     increments
 !!  - snow_xainc.$NNN       The cubed-sphere snow increment file (on
 !!                     the native model grid). 
 !!  - soil_xainc.$NNN  The cubed-sphere soil increment file (on the 
 !!                     native model grid). 
-!!  
-!!  OUTPUT FILES:
-!!  - fnbgso.$NNN        The updated sfc/nsst restart file.
 !!
 !!  NOTE: $NNN corresponds to (mpi rank + 1)
 !!
@@ -67,8 +62,6 @@
 !!  -DO_SOILINCR    Apply increments to soil states. Requires DO_LANDINCR=.true.
 !!  -DO_SNOWINCR    Apply increments to snow states. Requires DO_LANDINCR=.true.
 !!                 (NOTE: oudated, coded here for Noah LSM only).
-!!  -INTERP_LANDINCR Land increment is on Gaussian grid (from GSI)  and should
-!!                 be regridded to the native model grid
 !!  -LSOIL_INCR    Number of soil layers (from top) to apply soil increments to.
 !!                 LSOIL_INCR is currently set to 3 by default.
 !!                 Extra cautions are needed on layer#3 across permafrost regions due to
@@ -397,22 +390,22 @@
  INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
  REAL, DIMENSION(LENSFC,LSOIL) :: STCINC, SLCINC 
 
- LOGICAL :: FILE_EXISTS, DO_SOILINCR, INTERP_LANDINCR, DO_SNOWINCR
+ LOGICAL :: FILE_EXISTS, DO_SOILINCR, DO_SNOWINCR
  CHARACTER(LEN=3)       :: RANKCH
  INTEGER :: lsoil_incr
+ INTEGER :: NCID  ! NetCDF file ID for sfc_data_cycle file
 
 !--------------------------------------------------------------------------------
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
 ! increments.
 !--------------------------------------------------------------------------------
  
- NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNOWINCR, DO_SOILINCR, INTERP_LANDINCR
+ NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNOWINCR, DO_SOILINCR
 
  DATA NST_FILE/'NULL'/
 
  DO_SNOWINCR = .FALSE.
  DO_SOILINCR      = .FALSE.
- INTERP_LANDINCR   = .FALSE.
  lsoil_incr = 3 !default
  
  SIG1T = 0.0            ! Not a dead start!
@@ -527,7 +520,7 @@ ENDIF
 ! READ THE INPUT SURFACE DATA ON THE CUBED-SPHERE TILE.
 !--------------------------------------------------------------------------------
 
- CALL READ_DATA(LSOIL,LENSFC,DO_NSST,IS_NOAHMP=IS_NOAHMP, &
+ CALL READ_DATA(LSOIL,LENSFC,DO_NSST,NCID_OUT=NCID,IS_NOAHMP=IS_NOAHMP, &
                 TSFFCS=TSFFCS,SMCFCS=SMCFCS,   &
                 SWEFCS=SWEFCS,STCFCS=STCFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS,  &
                 CVFCS=CVFCS,  CVBFCS=CVBFCS,CVTFCS=CVTFCS,ALBFCS=ALBFCS,  &
@@ -544,7 +537,7 @@ ENDIF
    call MPI_ABORT(MPI_COMM_WORLD, 18, IERR)
  ENDIF
 
- IF ( (IS_NOAHMP .OR. INTERP_LANDINCR) .AND. DO_SNOWINCR) THEN
+ IF ( IS_NOAHMP  .AND. DO_SNOWINCR) THEN
    print *, 'FATAL ERROR: Snow increment update does not work with NOAH_MP/with interp'
    call MPI_ABORT(MPI_COMM_WORLD, 29, IERR)
  ENDIF
@@ -745,20 +738,20 @@ ENDIF
     ! SNOW INCREMENTS
     ! do snow first, as temperature updates will use snow analaysis
     IF (DO_SNOWINCR) THEN
-    ! updates are made to snow depth only over land (and not-land ice).
-    ! SWE is then updated from the snow depth analysis, using the model
-    ! forecast density
+        ! updates are made to snow depth only over land (and not-land ice).
+        ! SWE is then updated from the snow depth analysis, using the model
+        ! forecast density
 
-    ! make sure incr. files exist
-    WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-    FNAME_INC = "snow_xainc." //  RANKCH
+        ! make sure incr. files exist
+        WRITE(RANKCH, '(I3.3)') (MYRANK+1)
+        FNAME_INC = "snow_xainc." //  RANKCH
 
-    INQUIRE(FILE=trim(FNAME_INC), EXIST=file_exists)
-    IF (.not. file_exists) then
-       print *, 'FATAL ERROR: snow increment (fv3 grid) update requested, &
-                but file does not exist : ', trim(FNAME_INC)
-    call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-    ENDIF 
+        INQUIRE(FILE=trim(FNAME_INC), EXIST=file_exists)
+        IF (.not. file_exists) then
+           print *, 'FATAL ERROR: snow increment (fv3 grid) update requested, &
+                    but file does not exist : ', trim(FNAME_INC)
+        call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+        ENDIF 
 
        !--------------------------------------------------------------------------------
        ! read increments in
@@ -800,59 +793,24 @@ ENDIF
 
     ! SOIL INCREMENTS
     IF ( DO_SOILINCR ) THEN
-        IF ( INTERP_LANDINCR ) THEN
 
-           !--------------------------------------------------------------------------------
-           ! read increments in
-           !--------------------------------------------------------------------------------
-           ! make sure incr. files exist
-           WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-           FNAME_INC = "sfcincr_gsi." //  RANKCH
+       !--------------------------------------------------------------------------------
+       ! read increments in
+       !--------------------------------------------------------------------------------
+       ! make sure incr. files exist
+        WRITE(RANKCH, '(I3.3)') (MYRANK+1)
+        FNAME_INC = "soil_xainc." //  RANKCH
 
-           INQUIRE(FILE=trim(FNAME_INC), EXIST=file_exists)
-           IF (.not. file_exists) then
-              print *, 'FATAL ERROR: gsi soil increment (gaussian grid) update requested, &
-                        but file does not exist : ', trim(FNAME_INC)
-              call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-           ENDIF
+        INQUIRE(FILE=trim(FNAME_INC), EXIST=file_exists)
+        IF (.not. file_exists) then
+            print *, 'FATAL ERROR: soil increment (fv3 grid) update requested, but file &
+                     does not exist: ', trim(FNAME_INC)
+            call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
+        ENDIF
 
-            CALL READ_GSI_DATA(FNAME_INC, 'LND', LSOIL=LSOIL)
-
-            !--------------------------------------------------------------------------------
-            ! interpolate increments to cubed sphere tiles
-            !--------------------------------------------------------------------------------
-
-            CALL GAUSSIAN_TO_FV3_INTERP(LSOIL_INCR,RLA,RLO,&
-                    STCINC,SLCINC,LANDINC_MASK,LENSFC,LSOIL,IDIM,JDIM,LSM,MYRANK)
-
-            !--------------------------------------------------------------------------------
-            ! save interpolated increments
-            !-------------------------------------------------------------------------------- 
-
-            CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
-                            STCINC=STCINC,SLCINC=SLCINC)
-
-        ELSE  ! if interp_landincr
-
-           !--------------------------------------------------------------------------------
-           ! read increments in
-           !--------------------------------------------------------------------------------
-           ! make sure incr. files exist
-            WRITE(RANKCH, '(I3.3)') (MYRANK+1)
-            FNAME_INC = "soil_xainc." //  RANKCH
-
-            INQUIRE(FILE=trim(FNAME_INC), EXIST=file_exists)
-            IF (.not. file_exists) then
-                print *, 'FATAL ERROR: soil increment (fv3 grid) update requested, but file &
-                         does not exist: ', trim(FNAME_INC)
-                call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-            ENDIF
-
-            CALL READ_DATA(LSOIL,LENSFC,.false.,FNAME_INC=FNAME_INC, &
-                          LSOIL_INCR=LSOIL_INCR, IS_NOAHMP=IS_NOAHMP,  &
-                          STCINC=STCINC,SLCINC=SLCINC)
-
-        ENDIF ! end reading soil increments
+        CALL READ_DATA(LSOIL,LENSFC,.false.,FNAME_INC=FNAME_INC, &
+                      LSOIL_INCR=LSOIL_INCR, IS_NOAHMP=IS_NOAHMP,  &
+                      STCINC=STCINC,SLCINC=SLCINC)
 
         !--------------------------------------------------------------------------------
         ! add increments to state vars
@@ -893,20 +851,20 @@ ENDIF
 
  IF (DO_LANDINCR) THEN
 
-   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.false.,NSST,VEGFCS=VEGFCS, &
+   CALL WRITE_DATA(NCID,LENSFC,IDIM,JDIM,LSOIL,DO_NSST,NSST,VEGFCS=VEGFCS, &
                    SWEFCS=SWEFCS,SWDFCS=SNDFCS,SLCFCS=SLCFCS,SMCFCS=SMCFCS,STCFCS=STCFCS,&
                    SICFCS=SICFCS,SIHFCS=SIHFCS)
 
  ELSEIF (LSM==LSM_NOAHMP .OR. COUPLED) THEN
 
-   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.false.,NSST,SLIFCS=SLIFCS,VEGFCS=VEGFCS, &
+   CALL WRITE_DATA(NCID,LENSFC,IDIM,JDIM,LSOIL,DO_NSST,NSST,SLIFCS=SLIFCS,VEGFCS=VEGFCS, &
                    SLCFCS=SLCFCS,SMCFCS=SMCFCS,STCFCS=STCFCS,&
                    SICFCS=SICFCS,SIHFCS=SIHFCS,SITFCS=SITFCS)
 
  ELSEIF (LSM==LSM_NOAH) THEN
 
-   CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL, &
-                   DO_NSST,.false.,NSST,SLIFCS=SLIFCS,TSFFCS=TSFFCS,VEGFCS=VEGFCS, &
+   CALL WRITE_DATA(NCID,LENSFC,IDIM,JDIM,LSOIL, &
+                   DO_NSST,NSST,SLIFCS=SLIFCS,TSFFCS=TSFFCS,VEGFCS=VEGFCS, &
                    SWEFCS=SWEFCS,TG3FCS=TG3FCS,ZORFCS=ZORFCS, &
                    ALBFCS=ALBFCS,ALFFCS=ALFFCS,CNPFCS=CNPFCS, &
                    F10M=F10M,T2M=T2M,Q2M=Q2M,VETFCS=VETFCS, &
