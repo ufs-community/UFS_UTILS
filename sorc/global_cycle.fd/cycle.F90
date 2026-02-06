@@ -125,10 +125,11 @@
 
  NUM_THREADS = NUM_PARTHDS()
 
- PRINT*
- PRINT*,"STARTING CYCLE PROGRAM ON RANK ", MYRANK
- PRINT*,"RUNNING WITH ", NPROCS, "TASKS"
- PRINT*,"AND WITH ", NUM_THREADS, " THREADS."
+ if (myrank==0) then
+         PRINT*
+         PRINT*,"RUNNING WITH ", NPROCS, "TASKS"
+         PRINT*,"AND WITH ", NUM_THREADS, " THREADS."
+ endif
 
  USE_UFO = .FALSE.
  DONST   = "NO"
@@ -136,9 +137,6 @@
  DO_SFCCYCLE = .TRUE.
  FRAC_GRID = .FALSE.
  COUPLED = .FALSE.
-
- PRINT*
- PRINT*,"READ NAMCYC NAMELIST."
 
  CALL BAOPENR(36, "fort.36", IERR)
  IF (IERR /= 0) THEN
@@ -153,8 +151,6 @@
 !IF (MYRANK==0) WRITE(6,NAMCYC)
 
  IF (MAX_TASKS < 99999 .AND. MYRANK > (MAX_TASKS - 1)) THEN
-   PRINT*,"USER SPECIFIED MAX NUMBER OF TASKS: ", MAX_TASKS
-   PRINT*,"WILL NOT RUN CYCLE PROGRAM ON RANK: ", MYRANK
    GOTO 333
  ENDIF
 
@@ -169,7 +165,6 @@
    DO_NSST=.FALSE.
  ENDIF
 
- PRINT*
  IF (MYRANK==0) PRINT*,"LUGB,IDIM,JDIM,ISOT,IVEGSRC,LSOIL,DELTSFC,IY,IM,ID,IH,FH: ", &
               LUGB,IDIM,JDIM,ISOT,IVEGSRC,LSOIL,DELTSFC,IY,IM,ID,IH,FH
  IF (MYRANK==0) PRINT*,"DO_LANDINCR,FRAC_GRID,COUPLED: ", DO_LANDINCR,FRAC_GRID,COUPLED
@@ -179,9 +174,6 @@
              USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LANDINCR, &
              FRAC_GRID,COUPLED,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
  
- PRINT*
- PRINT*,'CYCLE PROGRAM COMPLETED NORMALLY ON RANK: ', MYRANK
-
  333 CONTINUE
 
  CALL MPI_BARRIER(MPI_COMM_WORLD, IERR)
@@ -423,8 +415,7 @@
    CALL MPI_ABORT(MPI_COMM_WORLD, 31, IERR) 
  ENDIF
 
- PRINT*
- PRINT*,'IN ROUTINE SFCDRV,IDIM=',IDIM,'JDIM=',JDIM,'FH=',FH
+ IF (MYRANK==0) PRINT*,'IN ROUTINE SFCDRV,IDIM=',IDIM,'JDIM=',JDIM,'FH=',FH
 
 !--------------------------------------------------------------------------------
 ! READ THE OROGRAPHY AND GRID POINT LAT/LONS FOR THE CUBED-SPHERE TILE.
@@ -435,7 +426,6 @@
  ALLOCATE(LANDFRAC(LENSFC))
  ALLOCATE(LAKEFRAC(LENSFC))
  IF(FRAC_GRID .OR. COUPLED) THEN
-   PRINT*,'- RUNNING WITH FRACTIONAL GRID.'
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC,& 
         LANDFRAC=LANDFRAC,LAKEFRAC=LAKEFRAC)
  ELSE
@@ -457,8 +447,6 @@
  J_INDEX = RESHAPE(IDUM, (/LENSFC/) )
 
  IF (DO_NSST) THEN
-   PRINT*
-   PRINT*,"WILL PROCESS NSST RECORDS."
    ALLOCATE(NSST%C_0(LENSFC))
    ALLOCATE(NSST%C_D(LENSFC))
    ALLOCATE(NSST%D_CONV(LENSFC))
@@ -493,8 +481,6 @@
 IF (DO_LANDINCR) THEN
    ! identify variables to be updated, and allocate arrays.
    IF  (DO_SOILINCR ) THEN
-       PRINT*
-       PRINT*," APPLYING SOIL INCREMENTS"
        ALLOCATE(STC_BCK(LENSFC, LSOIL), SMC_BCK(LENSFC, LSOIL), SLC_BCK(LENSFC,LSOIL))
        ALLOCATE(LANDINC_MASK_FG(LENSFC))
    ENDIF
@@ -503,8 +489,6 @@ IF (DO_LANDINCR) THEN
        ! ideally, would check here that sfcsub snow DA update is not also requested
        ! but latter is controlled by fnsol, which is read in within that routine.
        ! should be done at script level.
-       PRINT*
-       PRINT*," APPLYING SNOW INCREMENTS"
        ALLOCATE(SND_BCK(LENSFC), SND_INC(LENSFC), SWE_BCK(LENSFC))
    ENDIF
    ! set-up land mask info
@@ -548,10 +532,7 @@ ENDIF
         LSM=LSM_NOAH
  ENDIF
 
- IF (USE_UFO) THEN
-   PRINT*
-   PRINT*,'USE UNFILTERED OROGRAPHY.'
- ELSE
+ IF (.NOT. USE_UFO) THEN
    OROG_UF = 0.0
  ENDIF
  
@@ -566,13 +547,9 @@ ENDIF
 
  IF (DO_NSST) THEN
    IF (.NOT. DO_SFCCYCLE ) THEN
-     PRINT*
-     PRINT*,"FIRST GUESS MASK ADJUSTED BY IFD RECORD"
      SLIFCS_FG = SLIFCS
      WHERE(NINT(NSST%IFD) == 3) SLIFCS_FG = 2.0
    ELSE
-     PRINT*
-     PRINT*,"SAVE FIRST GUESS MASK"
      SLIFCS_FG = SLIFCS
    ENDIF
  ENDIF
@@ -646,8 +623,6 @@ ENDIF
    SOCFCS=0 ! Soil color. Not used yet.
 
    num_threads = num_parthds()
-   PRINT*
-   PRINT*,"CALL SFCCYCLE TO UPDATE SURFACE FIELDS."
    CALL SFCCYCLE(LUGB,LENSFC,LSOIL,SIG1T,DELTSFC,          &
                IY,IM,ID,IH,FH,RLA,RLO,                   &
                SLMASKL,SLMASKW, OROG, OROG_UF, USE_UFO, DO_NSST,   &
@@ -672,8 +647,6 @@ ENDIF
 
  IF (DO_NSST) THEN
    IF (NST_FILE == "NULL") THEN
-     PRINT*
-     PRINT*,"NO GSI FILE.  ADJUST IFD FOR FORMER ICE POINTS."
      DO I = 1, LENSFC
        IF (SICFCS_FG(I) > 0.0 .AND. SICFCS(I) == 0) THEN
          NSST%IFD(I) = 3.0
@@ -681,8 +654,6 @@ ENDIF
      ENDDO
      NSST%TFINC = 0.0
    ELSE
-     PRINT*
-     PRINT*,"ADJUST TREF FROM GSI INCREMENT"
 !
 !    Get tf climatology at the time
 !
@@ -857,7 +828,7 @@ ENDIF
 
  ELSEIF (LSM==LSM_NOAHMP .OR. COUPLED) THEN
 
-   CALL WRITE_DATA(NCID,LENSFC,IDIM,JDIM,LSOIL,DO_NSST,NSST,SLIFCS=SLIFCS,VEGFCS=VEGFCS, &
+   CALL WRITE_DATA(NCID,LENSFC,IDIM,JDIM,LSOIL,.true.,NSST,SLIFCS=SLIFCS,VEGFCS=VEGFCS, &
                    SLCFCS=SLCFCS,SMCFCS=SMCFCS,STCFCS=STCFCS,&
                    SICFCS=SICFCS,SIHFCS=SIHFCS,SITFCS=SITFCS)
 
@@ -1010,8 +981,6 @@ ENDIF
  KGDS_GAUS(12) = 255        ! OCT 29 - RESERVED
  KGDS_GAUS(20) = 255        ! OCT 5  - NOT USED, SET TO 255
 
- PRINT*
- PRINT*,'ADJUST NSST USING GSI INCREMENTS ON GAUSSIAN GRID'
 
 !----------------------------------------------------------------------
 ! CALL GDSWZD TO COMPUTE THE LAT/LON OF EACH GSI GAUSSIAN GRID POINT.
@@ -1081,10 +1050,6 @@ ENDIF
 
  GAUS_RES_KM = 360.0 / IDIM_GAUS * 111.0
  MAX_SEARCH  = CEILING(500.0/GAUS_RES_KM)
-
- PRINT*
- PRINT*,'MAXIMUM SEARCH IS ',MAX_SEARCH, ' GAUSSIAN POINTS.'
- PRINT*
 
 !
 ! Initialize variables for counts statitics to be zeros
@@ -1353,14 +1318,6 @@ ENDIF
    ENDIF  ! NEARBY GAUSSIAN POINTS ARE OPEN WATER?
 
  ENDDO IJ_LOOP
-
- write(*,'(a)') 'statistics of grids number processed for tile : '
- write(*,'(a,I8)') ' nintp = ',nintp
- write(*,'(a,4I8)') 'nset_thaw,nset_thaw_s,nset_thaw_i,nset_thaw_c =',nset_thaw,nset_thaw_s,nset_thaw_i,nset_thaw_c
- write(*,'(a,I8)') ' nsearched = ',nsearched
- write(*,'(a,3I6)') ' nfill,nfill_tice,nfill_clm = ',nfill,nfill_tice,nfill_clm
- write(*,'(a,I8)') ' nice = ',nice
- write(*,'(a,I8)') ' nland = ',nland
 
  DEALLOCATE(ID1, ID2, JDC, S2C, mask_tile, mask_fg_tile)
 
@@ -1659,7 +1616,6 @@ ENDIF
                 if (mask(iii,jjj) == 0) then
                    tf_thaw = tf(iii,jjj)
                    nset_thaw_s = nset_thaw_s + 1
-                   write(*,'(a,I4,2F9.3)') 'nset_thaw_s,tf(iii,jjj),tclm : ',nset_thaw_s,tf(iii,jjj),tclm
                    go to 100
                 endif ! tile mask is open water
 
@@ -1675,11 +1631,9 @@ ENDIF
     if (is_ice) then
        tf_thaw = tice
        nset_thaw_i = nset_thaw_i + 1
-       write(*,'(a,I4,F9.3)') 'nset_thaw_i,tf_ice : ',nset_thaw_i,tice
     else
        tf_thaw = 0.8*tice+0.2*tclm
        nset_thaw_c = nset_thaw_c + 1
-       write(*,'(a,I4,2F9.3)') 'nset_thaw_c,tf_ice,tclm : ',nset_thaw_c,tice,tclm
     endif
  endif
 
@@ -1839,8 +1793,6 @@ subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,
 !
    tf_clm_trend(:,:) = (tf_clm2(:,:)-tf_clm1(:,:))/120.0
 
-   write(*,'(a,2f9.3)') 'tf_clm_ta, min, max : ',minval(tf_clm_ta),maxval(tf_clm_ta)
-   write(*,'(a,2f9.3)') 'tf_clm_trend, min, max : ',minval(tf_clm_trend),maxval(tf_clm_trend)
  end subroutine get_tf_clm_ta
 
  !> Get salinity climatology at the valid time on the target grid.
@@ -1943,7 +1895,6 @@ subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
 !  sal_clim at the analysis time
 !
    sal_clm_ta(:,:) = wei1*sal_clm1(:,:)+wei2*sal_clm2(:,:)
-   write(*,'(a,2f9.3)') 'sal_clm_ta, min, max : ',minval(sal_clm_ta),maxval(sal_clm_ta)
  end subroutine get_sal_clm_ta
 
  !> Interpolate lon/lat grid data to the fv3 native grid (tf_lalo => tf_tile). Does not
@@ -1987,9 +1938,6 @@ subroutine intp_tile(tf_lalo,dlats_lalo,dlons_lalo,jdim_lalo,idim_lalo, &
 
  integer, allocatable, dimension(:,:)   :: id1,id2,jdc
  real,    allocatable, dimension(:,:,:) :: agrid,s2c
-
- print*
- print*,'interpolate from lat/lon grids to any one grid with known lat/lon'
 
  xlats_lalo = dlats_lalo*deg2rad
  xlons_lalo = dlons_lalo*deg2rad
@@ -2102,8 +2050,6 @@ subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
  wei2 = (rjday-dayhf(mon1))/(dayhf(mon2)-dayhf(mon1))
 
  if( mon2 == 13 ) mon2=1
-
- write(*,'(a,2i4,3f9.3)') 'mon1,mon2,rjday,wei1,wei2=',mon1,mon2,rjday,wei1,wei2
 
  end subroutine get_tim_wei
 
