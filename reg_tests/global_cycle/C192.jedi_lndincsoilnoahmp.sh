@@ -40,7 +40,6 @@ export use_ufo=.true.
 
 export DO_SFCCYCLE=".FALSE." 
 export GCYCLE_DO_SOILINCR=".true."
-export GCYCLE_INTERP_LANDINCR=".false."
 export SOILINCR_FNAME="soil_sfcincr_jedi"
 export LSOIL_INCR=3
 
