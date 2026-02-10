@@ -57,7 +57,6 @@ fi
 export DO_SFCCYLE=${DO_SFCCYCLE:-".true."}
 export GCYCLE_DO_SOILINCR=${GCYCLE_DO_SOILINCR:-".false."}
 export GCYCLE_DO_SNOWINCR=${GCYCLE_DO_SNOWINCR:-".false."}
-export GCYCLE_INTERP_LANDINCR=${GCYCLE_INTERP_LANDINCR:-".false."}
 SOILINCR_FNAME=${SOILINCR_FNAME:-"soil_xainc"}
 export FRAC_GRID=${FRAC_GRID:-".false."}
 
@@ -77,19 +76,14 @@ export DATA=${DATA:-$pwd/rundir$$}
 rm -fr $DATA
 mkdir -p $DATA
 
-# Make a copy of the input restart file as fnbgso. For fractional grids,
-# only a few fields will be updated by sfcsub.F. Only these records
-# will be overwritten in fnbgso.
-
 for n in $(seq 1 $ntiles); do
-  ln -fs $COMIN/$PDY.${cyc}0000.sfc_data.tile${n}.nc      $DATA/fnbgsi.00$n
 
 # Make a copy of the input restart file in the working directory.
 # global_cycle will update the required records for noah-mp.
 
   cp $COMIN/$PDY.${cyc}0000.sfc_data.tile${n}.nc $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
   chmod 644  $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc
-  ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/fnbgso.00$n
+  ln -fs $COMOUT/$PDY.${cyc}0000.sfcanl_data.tile${n}.nc  $DATA/sfc_data_cycle.00$n
 
   ln -fs $FIXorog/${CASE}/C${CRES}_grid.tile${n}.nc       $DATA/fngrid.00$n
   if (( OCNRES > 9999 ));then
@@ -102,13 +96,10 @@ for n in $(seq 1 $ntiles); do
         ln -fs $COMIN/$PDY.${cyc}0000.xainc.tile${n}.nc      $DATA/snow_xainc.00$n
   fi
 
-  if [ "$GCYCLE_DO_SOILINCR" == ".true." ] && [ "$GCYCLE_INTERP_LANDINCR" == ".false." ] ; then
+  if [[ "$GCYCLE_DO_SOILINCR" == ".true." ]]  ; then
         ln -fs $COMIN/${SOILINCR_FNAME}.00${n} $DATA/soil_xainc.00$n
   fi
 
-  if [ "$GCYCLE_DO_SOILINCR" == ".true." ] && [ "$GCYCLE_INTERP_LANDINCR" == ".true." ] ; then
-        ln -fs $COMIN/sfcincr_gsi.00$n $DATA/sfcincr_gsi.00$n
-  fi
 done
 
 $CYCLESH
