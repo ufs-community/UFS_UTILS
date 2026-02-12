@@ -177,6 +177,37 @@ The mosaic file - CRES_mosaic.nc (NetCDF).  Contains these records
       * Contacts - list of tile contact regions - global grids only (character array)
       * Contact_index - list of contact regions as specified by i/j index - global grids only (character array).
 
+mppnccombine
+============
+
+Introduction
+------------
+
+This utility joins together an arbitrary number of NetCDF input files, each containing parts
+of a decomposed domain, into a single unified NetCDF output file.
+It is commonly used to post-process output from FMS based models like the [MOM6](https://github.com/mom-ocean/MOM6) ocean model,
+where domain decomposition results in hundreds of partial output files by setting
+a non-default value for [IO_LAYOUT.](https://github.com/ufs-community/ufs-weather-model/blob/d02da020420df8ec2992533999109ccd0f415acc/tests/parm/MOM_input_025.IN#L38-L40)
+
+Code structure
+--------------
+
+Location of source code ./sorc/fre-nctools.fd/tools/mppnccombine. Relevant routines:
+
+      * mppnccombine.c - Contains the entire program.
+
+
+Program inputs and outputs
+--------------------------
+
+**Input data:**
+
+The input file names that are to be combined, typically named as: `output_file.nc.0000`, `output_file.nc.0001`, etc; all NetCDF files.
+
+**Output data:**
+
+The output file name that is to contain the full domain of your simulation, typically named as: `output_file.nc`; also a NetCDF file.
+
 global_equiv_resol
 ==================
 
