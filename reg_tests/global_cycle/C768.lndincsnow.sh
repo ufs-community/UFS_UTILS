@@ -32,7 +32,6 @@ export FNACNA=$COMIN/gdas.t00z.seaice.5min.blend.grb
 export NST_FILE=$COMIN/gdas.t00z.dtfanl.nc
 
 export GCYCLE_DO_SNOWINCR=.true. # must be lower-case.
-export GCYCLE_INTERP_LANDINCR=.false.
 export JCAP=1534
 export LONB=3072
 export LATB=1536
