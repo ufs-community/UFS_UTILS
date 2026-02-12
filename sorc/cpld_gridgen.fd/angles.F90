@@ -26,7 +26,7 @@ contains
 
   subroutine find_angq(iind,jind,xangCt,anglet,angle)
 
-    integer       , intent(in)  :: iind(2),jind(2)
+    integer       , intent(in)  :: iind(:),jind(:)
     real(dbl_kind), intent(in)  :: xangCt(:)
     real(dbl_kind), intent(in)  :: anglet(:,:)
     real(dbl_kind), intent(out) :: angle(:,:)
@@ -82,7 +82,7 @@ contains
   !! @author Denise.Worthen@noaa.gov
   subroutine find_angchk(iind,jind,angle,angchk)
 
-    integer       , intent(in)  :: iind(2),jind(2)
+    integer       , intent(in)  :: iind(:),jind(:)
     real(dbl_kind), intent(in)  :: angle(:,:)
     real(dbl_kind), intent(out) :: angchk(:,:)
 
@@ -129,7 +129,7 @@ contains
 
   subroutine find_ang(iind,jind,lonBu,latBu,lonCt,anglet)
 
-    integer       , intent(in)  :: iind(2),jind(2)
+    integer       , intent(in)  :: iind(:),jind(:)
     real(dbl_kind), intent(in)  :: lonBu(:,:)
     real(dbl_kind), intent(in)  :: latBu(:,:)
     real(dbl_kind), intent(in)  :: lonCt(:,:)
