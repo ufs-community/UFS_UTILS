@@ -14,9 +14,9 @@ NCCMP=${NCCMP:-$(which nccmp)}
 
 export MAX_TASKS_CY=6
 
-export HOMEgfs=$NWPROD
+export HOMEglobal=$NWPROD
 
-export CYCLEXEC=$HOMEgfs/exec/global_cycle
+export CYCLEXEC=$HOMEglobal/exec/global_cycle
 
 export CDATE=2021032406
 export FHOUR=00
@@ -35,7 +35,7 @@ export JCAP=1534
 export LONB=3072
 export LATB=1536
 
-export FNAISC=$HOMEgfs/fix/am/IMS-NIC.blended.ice.monthly.clim.grb
+export FNAISC=$HOMEglobal/fix/am/IMS-NIC.blended.ice.monthly.clim.grb
 
 export DONST="YES"
 export use_ufo=.true.
@@ -48,7 +48,7 @@ export CYCLVARS=FSNOL=99999.,FSNOS=99999.,
 export PGMOUT='out'
 export PGMERR='err'
 
-$HOMEgfs/ush/global_cycle_driver.sh
+$HOMEglobal/ush/global_cycle_driver.sh
 
 iret=$?
 
@@ -84,7 +84,7 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< C48 NOAHMP COUPLED GRID TEST FAILED. >>>"
   echo "******************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c48.noahmp.coupled" $commit_num
+    $HOMEglobal/reg_tests/update_baseline.sh $HOMEreg "c48.noahmp.coupled" $commit_num
   fi
 else
   echo

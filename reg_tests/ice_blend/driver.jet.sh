@@ -55,7 +55,7 @@ export WGRIB=/apps/wgrib/1.8.1.0b/bin/wgrib
 
 export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/ice_blend
 
-export HOMEgfs=$PWD/../..
+export HOMEglobal=$PWD/../..
 
 ./ice_blend.sh
 
