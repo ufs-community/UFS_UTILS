@@ -33,7 +33,7 @@ submit_test() {
     local waitonjobid="$1"; shift
 
     local logfile="${LOG_FILE}${suffix}"
-    export OMP_NUM_THREADS_CY=2
+    export OMP_NUM_THREADS=1
 
     if [[ "${exclusive}" == "true" ]]; then
         exclusive_flag="--exclusive"
@@ -47,9 +47,9 @@ submit_test() {
     export DATA="${DATA_ROOT}/test${suffix}"
 
     if [[ "${SCHEDULER}" == "pbs" ]]; then
-        export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS_CY}"
+        export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS}"
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
-                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
+                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS}:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUNCY="srun"
@@ -115,7 +115,8 @@ fi
 
 # export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 HOMEreg="${HOMEreg}/${test_name}"
-export HOMEgfs=$PWD/../..
+HOMEgfs=$PWD/../..
+export HOMEreg HOMEgfs
 
 # The first test uses hemispheric afwa/airforce data, as was done in OPS.
 

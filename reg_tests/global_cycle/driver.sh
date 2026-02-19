@@ -120,7 +120,8 @@ HOMEreg="${HOMEreg}/${test_name}"
 DATA_DIR="${WORK_DIR}/reg-tests/${test_name}"
 OMP_NUM_THREADS_CY=2
 OMP_PLACES=cores
-NWPROD="$PWD/../.."
+# NWPROD="$PWD/../.."
+NWPROD="${HOMEUFSUTILS}"
 export DATA_DIR OMP_NUM_THREADS_CY OMP_PLACES HOMEreg NWPROD
 LOG_FILE=consistency.log
 reg_dir=$PWD

@@ -59,16 +59,16 @@ source sorc/machine-setup.sh
 
 current_hash=$(git rev-parse HEAD)
 
-if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
-    prev_hash=$(cat "${WORK_DIR}/prev_hash.txt")
-    if [[ "${current_hash}" == "${prev_hash}" ]]; then
-        date
-        echo ""
-        echo "UFS_UTILS has not changed since last time. Not building."
-        echo "UFS_UTILS hash: ${current_hash}"
-        exit 0
-    fi
-fi
+# if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
+#     prev_hash=$(cat "${WORK_DIR}/prev_hash.txt")
+#     if [[ "${current_hash}" == "${prev_hash}" ]]; then
+#         date
+#         echo ""
+#         echo "UFS_UTILS has not changed since last time. Not building."
+#         echo "UFS_UTILS hash: ${current_hash}"
+#         exit 0
+#     fi
+# fi
 
 echo "Started on $(hostname -s)" >> "${WORK_DIR}/reg_test_results.txt"
 
