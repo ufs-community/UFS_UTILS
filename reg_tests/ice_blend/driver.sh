@@ -44,7 +44,7 @@ submit_test() {
         dep_flag_pbs="-W depend=afterok:${waitonjobid}"
     fi
 
-    export DATA="${DATA_ROOT}/test${suffix}"
+    # export DATA=${DATA:-"${DATA_ROOT}/test${suffix}"}
 
     if [[ "${SCHEDULER}" == "pbs" ]]; then
         export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS_CY}"
