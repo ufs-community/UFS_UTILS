@@ -144,7 +144,8 @@ export DATA="${WORKDIR}/reg-tests/${test_name}"
 
 # export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ice_blend
 HOMEreg="${HOMEreg}/${test_name}"
-export HOMEgfs=$PWD/../..
+HOMEgfs=$PWD/../..
+export HOMEreg HOMEgfs
 
 case ${MACHINE_ID,,} in
     hercules)

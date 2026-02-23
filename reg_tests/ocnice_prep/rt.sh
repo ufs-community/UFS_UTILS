@@ -115,7 +115,7 @@ elif [[ ${MACHINE_ID} = orion ]]; then
     #QUEUE=${QUEUE:-batch}
     WLCLK=15
     export NCCMP=nccmp
-    PARTITION=''
+    PARTITION='orion'
     ulimit -a
 elif [[ ${MACHINE_ID} = hercules ]]; then
     #STMP=${STMP:-/work2/noaa/stmp/$USER}
@@ -126,7 +126,7 @@ elif [[ ${MACHINE_ID} = hercules ]]; then
     #QUEUE=${QUEUE:-batch}
     WLCLK=10
     export NCCMP=nccmp
-    PARTITION=''
+    PARTITION='hercules'
     ulimit -s unlimited
 elif [[ ${MACHINE_ID} = jet ]]; then
     #STMP=${STMP:-/lfs5/HFIP/h-nems/$USER}
