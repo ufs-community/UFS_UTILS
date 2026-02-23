@@ -119,10 +119,10 @@ case ${MACHINE_ID,,} in
         ;;
 esac
 
-export COPYGB2=${GRIB_UTIL_ROOT}/bin/copygb2
-export WGRIB2=${wgrib2_ROOT}/bin/wgrib2
-export CNVGRIB=${GRIB_UTIL_ROOT}/bin/cnvgrib
-export COPYGB=${GRIB_UTIL_ROOT}/bin/copygb
+export COPYGB2=${COPYGB2:-${GRIB_UTIL_ROOT}/bin/copygb2}
+export WGRIB2=${WGRIB2:-${wgrib2_ROOT}/bin/wgrib2}
+export CNVGRIB=${CNVGRIB:-${GRIB_UTIL_ROOT}/bin/cnvgrib}
+export COPYGB=${COPYGB:-${GRIB_UTIL_ROOT}/bin/copygb}
 
 case ${MACHINE_ID,,} in
     hercules)
