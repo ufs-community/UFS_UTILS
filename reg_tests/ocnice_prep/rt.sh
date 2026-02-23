@@ -141,8 +141,8 @@ elif [[ ${MACHINE_ID} = jet ]]; then
     ulimit -s unlimited
 fi
 
-NEW_BASELINE_ROOT=$STMP/ocnice_prep/baseline_data
-RUNDIR_ROOT=$STMP/ocnice_prep/rt_$$
+NEW_BASELINE_ROOT=$STMP/reg-tests/ocnice_prep/baseline_data
+RUNDIR_ROOT=$STMP/reg-tests/ocnice_prep/rt_$$
 
 BUILD_EXE=false
 CREATE_BASELINE=false
