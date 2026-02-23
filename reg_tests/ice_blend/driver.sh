@@ -44,8 +44,6 @@ submit_test() {
         dep_flag_pbs="-W depend=afterok:${waitonjobid}"
     fi
 
-    # export DATA=${DATA:-"${DATA_ROOT}/test${suffix}"}
-
     if [[ "${SCHEDULER}" == "pbs" ]]; then
         export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS_CY}"
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
@@ -65,7 +63,7 @@ submit_test() {
         exit 1
     fi
     TEST_IDS+=(":${jobid}")
-    echo ${jobid}
+    echo "${jobid}"
 }
 
 RT_DIR=${RT_DIR:-${PWD}/..}
@@ -83,92 +81,63 @@ else
     exit 1
 fi
 
-# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-# module use ${HOMEUFSUTILS}/modulefiles
-
-# compiler=${compiler:-"intelllvm"}
-
-# source ../../sorc/machine-setup.sh > /dev/null 2>&1
-# module use ../../modulefiles
-# module load build.${MACHINE_ID}.$compiler
-case ${MACHINE_ID} in
-    "ursa" )
-        module load grib-util
-        module load wgrib2/3.6.0
-        ;;
-    "hercules" )
-        module load grib-util/1.4.0
-        module load wgrib2/3.6.0
-        ;;
-    "orion" )
-        module load grib-util/1.4.0
-        module load wgrib2/3.6.0
-        ;;
-    "jet" )
-        module load wgrib2/2.0.8
-        module load grib-util/1.3.0
-        ;;
-    "wcoss2" )
-        module load grib_util/1.2.3
-        module load wgrib2/2.0.8
-        ;;
-    * )
-        echo "ERROR: Unsupported MACHINE_ID '${MACHINE_ID}'"
-        exit 1
-        ;;
-esac
-# module load grib-util
-# module load wgrib2/3.6.0
-# module list
-
 test_name="ice_blend"
 LOG_FILE=consistency.log
 
-export CNVGRIB=${GRIB_UTIL_ROOT}/bin/cnvgrib
-export COPYGB=${GRIB_UTIL_ROOT}/bin/copygb
-export COPYGB2=${GRIB_UTIL_ROOT}/bin/copygb2
+DATA="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
+export DATA="${DATA}/reg-tests/ice_blend"
 
-# export DATA="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
-export DATA="${WORK_DIR}/reg-tests/${test_name}"
-
-#-----------------------------------------------------------------------------
-# Should not have to change anything below.
-#-----------------------------------------------------------------------------
-
-# UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
-# export UPDATE_BASELINE
-
-# if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-#   source ../get_hash.sh
-# fi
-
-# export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/ice_blend
+# export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ice_blend
 HOMEreg="${HOMEreg}/${test_name}"
 HOMEgfs=$PWD/../..
 export HOMEreg HOMEgfs
 
 case ${MACHINE_ID,,} in
+    ursa)
+        module load grib-util
+        module load wgrib2/3.6.0
+        ;;
     hercules)
-        # jobkeep=$(submit_test 01 1 1 5G 0:03:00 hercules false snow.hemi snow2mdl.hemi.sh false)
-        # submit_test 02 1 1 5G 0:03:00 hercules false snow.global snow2mdl.global.sh "${jobkeep}"
+        module load grib-util/1.4.0
+        module load wgrib2/3.6.0
+        ;;
+    orion)
+        module load grib-util/1.4.0
+        module load wgrib2/3.6.0
+        ;;
+    jet)
+        module load wgrib2/2.0.8
+        module load grib-util/1.3.0
+        ;;
+    wcoss2)
+        module load grib_util/1.2.3
+        module load wgrib2/2.0.8
+        ;;
+    *)
+        echo "ERROR: Unsupported MACHINE_ID '${MACHINE_ID}'"
+        exit 1
+        ;;
+esac
+
+export COPYGB2=${GRIB_UTIL_ROOT}/bin/copygb2
+export WGRIB2=${wgrib2_ROOT}/bin/wgrib2
+export CNVGRIB=${GRIB_UTIL_ROOT}/bin/cnvgrib
+export COPYGB=${GRIB_UTIL_ROOT}/bin/copygb
+
+case ${MACHINE_ID,,} in
+    hercules)
         submit_test 01 1 1 5G 0:01:00 hercules false ice_blend ice_blend.sh false
         ;;
     jet)
-        # jobkeep=$(submit_test 01 1 1 5G 0:03:00 xjet true snow.hemi snow2mdl.hemi.sh false)
-        # submit_test 02 1 1 5G 0:03:00 xjet true snow.global snow2mdl.global.sh "${jobkeep}"
         submit_test 01 1 1 5G 0:01:00 xjet true ice_blend ice_blend.sh false
         ;;
     orion)
-        # jobkeep=$(submit_test 01 1 1 5G 0:03:00 orion false snow.hemi snow2mdl.hemi.sh false)
-        # submit_test 02 1 1 5G 0:03:00 orion false snow.global snow2mdl.global.sh "${jobkeep}"
         submit_test 01 1 1 5G 0:01:00 orion false ice_blend ice_blend.sh false
         ;;
     ursa)
         submit_test 01 1 1 5G 0:01:00 u1-compute false ice_blend ice_blend.sh false
         ;;
     wcoss2)
-        # jobkeep=$(submit_test 01 1 1 5G 0:03:00 dev false snow.hemi snow2mdl.hemi.sh false)
-        # submit_test 02 1 1 5G 0:03:00 dev false snow.global snow2mdl.global.sh "${jobkeep}"
         submit_test 01 1 1 5G 0:01:00 dev false ice_blend ice_blend.sh false
         ;;
     *)
@@ -176,7 +145,6 @@ case ${MACHINE_ID,,} in
         exit 1
         ;;
 esac
-# ./ice_blend.sh
 
 sleep_time=0
 echo "Waiting for ${test_name^^} tests to complete..."

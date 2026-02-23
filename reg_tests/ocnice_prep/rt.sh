@@ -69,12 +69,12 @@ readonly PATHTR
 
 TESTS_FILE="./rt.conf"
 
-source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-set +x
-echo
-echo "Machine: ${MACHINE_ID}"
-echo
-set -x
+# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
+# set +x
+# echo
+# echo "Machine: ${MACHINE_ID}"
+# echo
+# set -x
 
 BASELINE_ROOT=${HOMEreg}/${test_name}/baseline_data
 WEIGHTS_ROOT=${HOMEreg}/cpld_gridgen/baseline_data
@@ -204,14 +204,14 @@ else
 fi
 
 # module use $PATHTR/modulefiles
-module use ${HOMEUFSUTILS}/modulefiles
-module load build.${MACHINE_ID}.$compiler
+# module use ${HOMEUFSUTILS}/modulefiles
+# module load build.${MACHINE_ID}.$compiler
 if [[ ${MACHINE_ID} = wcoss2 ]]; then
   module load nccmp-D/1.9.0.1
 fi
-set +x
-module list
-set -x
+# set +x
+# module list
+# set -x
 
 export CREATE_BASELINE
 if [[ $CREATE_BASELINE = true ]]; then
@@ -278,7 +278,7 @@ while read -r line || [ "$line" ]; do
 
 done <$TESTS_FILE
 
-export target
+export target=${MACHINE_ID,,}
 
 if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
@@ -293,17 +293,34 @@ else
 
 fi
 
-if [[ "${waitlocal}" == "true" ]]; then
-  sleep_time=0
-  echo "Waiting for OCNICE_PREP tests to complete..."
-  while [ ! -f "summary.log" ]; do
+sleep_time=0
+echo "Waiting for ${test_name^^} testing to complete..."
+while [ ! -f "summary.log" ]; do
     sleep 10
     sleep_time=$((sleep_time+10))
     if (( sleep_time > TIMEOUT_LIMIT )); then
-       mail -s "UFS_UTILS Consistency Test OCNICE_PREP timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
-       exit 1
+        if [[ "${waitlocal}" == "true" ]]; then
+            mail -s "UFS_UTILS Consistency Test ${test_name^^} timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+            exit 1
+        fi
     fi
-  done
-  mail -s "UFS_UTILS Consistency Test OCNICE_PREP COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+done
+if [[ "${waitlocal}" == "true" ]]; then
+    mail -s "UFS_UTILS Consistency Test ${test_name^^} COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
 fi
 exit 0
+
+# if [[ "${waitlocal}" == "true" ]]; then
+#   sleep_time=0
+#   echo "Waiting for OCNICE_PREP tests to complete..."
+#   while [ ! -f "summary.log" ]; do
+#     sleep 10
+#     sleep_time=$((sleep_time+10))
+#     if (( sleep_time > TIMEOUT_LIMIT )); then
+#        mail -s "UFS_UTILS Consistency Test OCNICE_PREP timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+#        exit 1
+#     fi
+#   done
+#   mail -s "UFS_UTILS Consistency Test OCNICE_PREP COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
+# fi
+# exit 0
