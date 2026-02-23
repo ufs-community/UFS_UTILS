@@ -129,7 +129,7 @@ export COPYGB=${GRIB_UTIL_ROOT}/bin/copygb
 export COPYGB2=${GRIB_UTIL_ROOT}/bin/copygb2
 
 # export DATA="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
-export DATA="${WORKDIR}/reg-tests/${test_name}"
+export DATA="${WORK_DIR}/reg-tests/${test_name}"
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.
