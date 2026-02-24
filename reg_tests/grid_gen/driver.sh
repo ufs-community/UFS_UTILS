@@ -163,7 +163,7 @@ case ${MACHINE_ID,,} in
         ;;
     orion)
         submit_test 01 24 1 50G 0:20:00 orion false c96.uniform c96.uniform.sh false
-        submit_test 02 15 2 300G 0:20:00 orion false c96.viirs.bnu c96.viirs.bnu.sh false
+        submit_test 02 15 2 96G 0:20:00 orion false c96.viirs.bnu c96.viirs.bnu.sh false
         submit_test 03 24 1 50G 0:10:00 orion false gfdl.regional gfdl.regional.sh false
         submit_test 04 24 1 50G 0:10:00 orion false esg.regional esg.regional.sh false
         submit_test 05 24 1 50G 0:10:00 orion false esg.regional.pct.cat esg.regional.pct.cat.sh false
