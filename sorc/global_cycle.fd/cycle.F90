@@ -316,7 +316,7 @@
                    FRAC_GRID,COUPLED,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
- use sfccyc_module, only: sfccycl
+ use sfccyc_module, only: sfccycle
  use machine
  USE MPI
  USE LAND_INCREMENTS, ONLY: GAUSSIAN_TO_FV3_INTERP,     &
