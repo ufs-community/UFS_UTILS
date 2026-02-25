@@ -101,6 +101,7 @@ case ${MACHINE_ID} in
     PARTITION=xjet
     ;;
   wcoss2)
+    export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
     export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
     WLCLK=60
     PARTITION=dev

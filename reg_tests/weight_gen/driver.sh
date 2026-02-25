@@ -115,26 +115,18 @@ export HOMEufs=$PWD/../..
 
 case ${MACHINE_ID,,} in
     hercules)
-        # jobkeep=$(submit_test 01 1 1 5G 0:03:00 hercules false snow.hemi snow2mdl.hemi.sh false)
-        # submit_test 02 1 1 5G 0:03:00 hercules false snow.global snow2mdl.global.sh "${jobkeep}"
         submit_test 01 1 1 5G 0:03:00 hercules false weight_gen weight_gen.sh false
         ;;
     jet)
-        # jobkeep=$(submit_test 01 1 1 5G 0:03:00 xjet true snow.hemi snow2mdl.hemi.sh false)
-        # submit_test 02 1 1 5G 0:03:00 xjet true snow.global snow2mdl.global.sh "${jobkeep}"
         submit_test 01 1 1 5G 0:03:00 xjet true weight_gen weight_gen.sh false
         ;;
     orion)
-        # jobkeep=$(submit_test 01 1 1 5G 0:03:00 orion false snow.hemi snow2mdl.hemi.sh false)
-        # submit_test 02 1 1 5G 0:03:00 orion false snow.global snow2mdl.global.sh "${jobkeep}"
         submit_test 01 1 1 5G 0:03:00 orion false weight_gen weight_gen.sh false
         ;;
     ursa)
         submit_test 01 1 1 5G 0:03:00 u1-compute false weight_gen weight_gen.sh false
         ;;
     wcoss2)
-        # jobkeep=$(submit_test 01 1 1 5G 0:03:00 dev false snow.hemi snow2mdl.hemi.sh false)
-        # submit_test 02 1 1 5G 0:03:00 dev false snow.global snow2mdl.global.sh "${jobkeep}"
         submit_test 01 1 1 5G 0:03:00 dev false weight_gen weight_gen.sh false
         ;;
     *)

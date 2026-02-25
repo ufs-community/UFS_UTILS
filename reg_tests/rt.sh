@@ -13,6 +13,13 @@ wait_for_fin() {
   done
 }
 
+if [[ $# -gt 0 ]] && [[ $# -lt 2 ]]; then
+    SCRIPT_LOGGER=$1
+else
+    SCRIPT_LOGGER="rtsh.log"
+fi
+exec 2> "${SCRIPT_LOGGER}"
+
 start_time=$SECONDS
 if [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then
   ulimit -a
