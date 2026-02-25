@@ -125,13 +125,7 @@ SUM_FILE=summary.log
 
 declare -a TEST_IDS=()
 
-if [[ -f ${LOG_FILE} ]]; then
-  rm -f ${LOG_FILE}*
-fi
-
-if [[ -f ${SUM_FILE} ]]; then
-  rm -f ${SUM_FILE}
-fi
+rm -f ${LOG_FILE}* ${SUM_FILE}
 
 # export DATA="${DATA_ROOT}/test.hemi"
 # TEST1=$(sbatch --parsable -J snow.hemi -A ${PROJECT_CODE} -o ${LOG_FILE}01 -e ${LOG_FILE}01 \

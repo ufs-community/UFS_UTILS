@@ -83,6 +83,9 @@ fi
 
 test_name="ice_blend"
 LOG_FILE=consistency.log
+SUM_FILE=summary.log
+
+rm -f ${LOG_FILE}* ${SUM_FILE}
 
 DATA="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice_blend"

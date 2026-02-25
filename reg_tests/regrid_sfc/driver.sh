@@ -166,7 +166,8 @@ export NWPROD=${HOMEUFSUTILS}
 export DATA="${DATA_DIR}/test1"
 
 LOG_FILE=consistency.log
-rm -f ${LOG_FILE}* summary.log
+SUM_FILE=summary.log
+rm -f ${LOG_FILE}* ${SUM_FILE}
 
 case ${MACHINE_ID,,} in
     hercules)

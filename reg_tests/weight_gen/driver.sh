@@ -97,6 +97,9 @@ fi
 test_name="weight_gen"
 export DATA="${WORK_DIR}/reg_tests/${test_name}"
 LOG_FILE=consistency.log
+SUM_FILE=summary.log
+
+rm -f ${LOG_FILE}* ${SUM_FILE}
 
 #-----------------------------------------------------------------------------
 # Should not have to change anything below.

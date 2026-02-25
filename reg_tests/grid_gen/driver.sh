@@ -130,15 +130,9 @@ ulimit -a
 
 declare -a TEST_IDS=()
 
-if [[ -f ${LOG_FILE} ]]; then
-  rm -f ${LOG_FILE}*
-fi
+rm -f ${LOG_FILE}* ${SUM_FILE}
 
-if [[ -f ${SUM_FILE} ]]; then
-  rm -f ${SUM_FILE}
-fi
-
-rm -fr $WORK_DIR
+rm -fr "${WORK_DIR}"
 
 # export OMP_NUM_THREADS=24
 

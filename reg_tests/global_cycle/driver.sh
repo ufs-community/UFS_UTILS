@@ -124,15 +124,10 @@ OMP_PLACES=cores
 NWPROD="${HOMEUFSUTILS}"
 export DATA_DIR OMP_NUM_THREADS_CY OMP_PLACES HOMEreg NWPROD
 LOG_FILE=consistency.log
+SUM_FILE=summary.log
 reg_dir=$PWD
 
-if [[ -f "consistency.log" ]]; then
-  rm -f consistency.log*
-fi
-
-if [[ -f "summary.log" ]]; then
-  rm -f summary.log
-fi
+rm -f ${LOG_FILE}* ${SUM_FILE}
 
 declare -a TEST_IDS=()
 
