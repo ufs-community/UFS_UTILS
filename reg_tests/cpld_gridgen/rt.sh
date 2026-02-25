@@ -287,7 +287,7 @@ while read -r line || [ "$line" ]; do
             --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
   fi
 
-  all_tests=${all_tests}":"${tests[$i]}
+  all_tests=${all_tests}":"${tests[$i]%.*}
 
   ((i=i+1))
 

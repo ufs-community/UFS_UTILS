@@ -56,11 +56,13 @@ submit_test() {
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS}:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"} ./${script})
+        jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUN="srun"
         jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                 -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                 ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
+        jobid=${jobid%.*}
     else
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
@@ -264,7 +266,7 @@ else
     echo "Error: Unsupported scheduler '${SCHEDULER}'"
     exit 1
 fi
-makesummary=$!
+
 # (sbatch --nodes=1 -t 0:01:00 -A "${PROJECT_CODE}" -J chgres_summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
 #        --open-mode=append -q "${QUEUE}" \
 #        -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
@@ -273,7 +275,6 @@ makesummary=$!
 # EOF
 # ) &
 echo "Waiting for summary log to get generated..."
-wait ${makesummary}
 sleep_time=0
 echo "Waiting for ${test_name^^} tests to complete..."
 while [ ! -f "summary.log" ]; do

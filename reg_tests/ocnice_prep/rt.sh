@@ -272,7 +272,7 @@ while read -r line || [ "$line" ]; do
 
     fi
 
-    all_tests=${all_tests}":"${tests[$i]}
+    all_tests=${all_tests}":"${tests[$i]%.*}
 
     ((i=i+1))
 
