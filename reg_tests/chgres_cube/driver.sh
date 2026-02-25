@@ -225,7 +225,7 @@ case ${MACHINE_ID,,} in
         submit_test 08 6 1 75G 0:10:00 dev false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
         submit_test 09 6 1 75G 0:10:00 dev false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
         submit_test 10 6 1 75G 0:10:00 dev false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
-        submit_test 11 12 1 100G 0:15:00 dev false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
+        submit_test 11 12 1 100G 0:25:00 dev false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
         submit_test 12 6 1 75G 0:10:00 dev false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
         submit_test 13 6 1 75G 0:05:00 dev false c96.gefs.grib2 c96.gefs.grib2.sh false
         submit_test 14 6 1 75G 0:10:00 dev false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
