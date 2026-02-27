@@ -85,17 +85,6 @@ else
     exit 1
 fi
 
-# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-# module use ${HOMEUFSUTILS}/modulefiles
-
-# compiler=${compiler:-"intelllvm"}
-
-# source ../../sorc/machine-setup.sh > /dev/null 2>&1
-# module use ../../modulefiles
-# module load build.${MACHINE_ID}.$compiler
-# module list
-
-# export DATA="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 test_name="weight_gen"
 export DATA="${WORK_DIR}/reg_tests/${test_name}"
 LOG_FILE=consistency.log
@@ -103,18 +92,6 @@ SUM_FILE=summary.log
 
 rm -f ${LOG_FILE}* ${SUM_FILE}
 
-#-----------------------------------------------------------------------------
-# Should not have to change anything below.
-#-----------------------------------------------------------------------------
-
-# UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
-# export UPDATE_BASELINE
-
-# if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-#   source ../get_hash.sh
-# fi
-
-# export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/weight_gen
 export HOMEreg="${HOMEreg}/${test_name}"
 export HOMEufs=$PWD/../..
 
@@ -139,8 +116,6 @@ case ${MACHINE_ID,,} in
         exit 1
         ;;
 esac
-
-# ./weight_gen.sh
 
 sleep_time=0
 echo "Waiting for ${test_name^^} tests to complete..."

@@ -90,20 +90,6 @@ else
     exit 1
 fi
 
-# shellcheck source=${HOMEUFSUTILS}/sorc/machine-setup.sh
-# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-# module use "${HOMEUFSUTILS}/modulefiles"
-
-# # source "${RT_DIR}/rt.control"
-# # source ../../sorc/machine-setup.sh > /dev/null 2>&1
-# # module use ../../modulefiles
-# module load build.${MACHINE_ID,,}.$compiler
-# module list
-
-# if [ "${MACHINE_ID,,}" == "hercules" ]; then
-#     ulimit -s unlimited
-# fi
-
 test_name="chgres_cube"
 export OUTDIR="${WORK_DIR}/reg-tests/${test_name}"
 
@@ -112,18 +98,11 @@ export OUTDIR="${WORK_DIR}/reg-tests/${test_name}"
 # directory of your UFS_UTILS clone.  HOMEreg contains the input data
 # and baseline data for each test.
 #-----------------------------------------------------------------------------
-
-#export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/chgres_cube
 export HOMEreg=${HOMEreg}/${test_name}
 
-
-# BASELINE_ROOT=${HOMEreg}/${test_name}/baseline_data
 BASELINE_ROOT=${HOMEreg}/baseline_data
-# WEIGHTS_ROOT=${HOMEreg}/cpld_gridgen/baseline_data
 WEIGHTS_ROOT=${HOMEreg}/../cpld_gridgen/baseline_data
-# INPUT_ROOT=${HOMEreg}/${test_name}/input_data
 INPUT_ROOT=${HOMEreg}/input_data
-# STMP=${WORKDIR}
 ACCOUNT=${PROJECT_CODE}
 
 if [ "$UPDATE_BASELINE" = "TRUE" ]; then
@@ -139,10 +118,6 @@ SUM_FILE=summary.log
 rm -f $SUM_FILE ${LOG_FILE}*
 
 export OMP_STACKSIZE=1024M
-
-# export APRUN=srun
-
-# export machine=${MACHINE_ID,,}
 
 export NCCMP=${NCCMP:-nccmp}
 
@@ -240,13 +215,6 @@ esac
 #-----------------------------------------------------------------------------
 # Create summary log.
 #-----------------------------------------------------------------------------
-
-# sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J chgres_summary -o $LOG_FILE -e $LOG_FILE \
-#        --open-mode=append -q $QUEUE \
-#        -d afterok:$TEST1:$TEST2:$TEST3:$TEST4:$TEST5:$TEST6:$TEST7:$TEST8:$TEST9:$TEST10:$TEST11:$TEST12:$TEST13:$TEST14 << EOF
-# #!/bin/bash
-# grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
-# EOF
 if [[ "${SCHEDULER}" == "pbs" ]]; then
     (qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
         -N chgres_summary -l select=1:ncpus=1:mem=100MB \
@@ -269,13 +237,6 @@ else
     exit 1
 fi
 
-# (sbatch --nodes=1 -t 0:01:00 -A "${PROJECT_CODE}" -J chgres_summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
-#        --open-mode=append -q "${QUEUE}" \
-#        -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
-# #!/bin/bash
-# grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
-# EOF
-# ) &
 echo "Waiting for summary log to get generated..."
 TIMEOUT_LIMIT=${TIMEOUT_LIMIT:?}  # default to 1 hour
 sleep_time=0

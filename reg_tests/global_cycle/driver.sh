@@ -70,8 +70,6 @@ submit_test() {
     TEST_IDS+=(":${jobid}")
 }
 
-#compiler=${compiler:-"intelllvm"}
-
 RT_DIR=${RT_DIR:-${PWD}/..}
 notlocal=${notlocal:-false}
 waitlocal=false
@@ -86,44 +84,13 @@ else
     exit 1
 fi
 
-# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-# module use ${HOMEUFSUTILS}/modulefiles
-
-# # source ../../sorc/machine-setup.sh > /dev/null 2>&1
-# # module use ../../modulefiles
-# module load build.${MACHINE_ID,,}.$compiler
-# module list
-
-# WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
-
-# PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-# QUEUE="${QUEUE:-batch}"
-
-#-----------------------------------------------------------------------------
-# Should not have to change anything below.
-#-----------------------------------------------------------------------------
-
-# UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
-# export UPDATE_BASELINE
-
-# if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-#   source ../get_hash.sh
-# fi
 test_name="global_cycle"
-
-
-# export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/global_cycle
 HOMEreg="${HOMEreg}/${test_name}"
 
-
-# export OMP_NUM_THREADS_CY=2
-
-# export APRUNCY="srun"
 # EXPORTED VARIABLES
 DATA_DIR="${WORK_DIR}/reg-tests/${test_name}"
 OMP_NUM_THREADS_CY=2
 OMP_PLACES=cores
-# NWPROD="$PWD/../.."
 NWPROD="${HOMEUFSUTILS}"
 export DATA_DIR OMP_NUM_THREADS_CY OMP_PLACES HOMEreg NWPROD
 LOG_FILE=consistency.log
@@ -180,48 +147,13 @@ case ${MACHINE_ID,,} in
         exit 1
         ;;
 esac
-# LOG_FILE=consistency.log01
-# export DATA="${DATA_DIR}/test1"
-# export COMOUT=$DATA
-# TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.fv3gfs \
-#       -o $LOG_FILE -e $LOG_FILE ./C768.fv3gfs.sh)
-
-# LOG_FILE=consistency.log02
-# export DATA="${DATA_DIR}/test2"
-# export COMOUT=$DATA
-# TEST2=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.gsi_lndincsoilnoahmp \
-#      -o $LOG_FILE -e $LOG_FILE ./C192.gsi_lndincsoilnoahmp.sh)
-
-# LOG_FILE=consistency.log03
-# export DATA="${DATA_DIR}/test3"
-# export COMOUT=$DATA
-# TEST3=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c768.lndincsnow \
-#      -o $LOG_FILE -e $LOG_FILE ./C768.lndincsnow.sh)
-
-# LOG_FILE=consistency.log04
-# export DATA="${DATA_DIR}/test4"
-# export COMOUT=$DATA
-# TEST4=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c48.noahmp.coupled \
-#       -o $LOG_FILE -e $LOG_FILE ./C48.noahmp.coupled.sh)
-
-# LOG_FILE=consistency.log05
-# export DATA="${DATA_DIR}/test5"
-# export COMOUT=$DATA
-# TEST5=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J c192.jedi_lndincsoilnoahmp \
-#      -o $LOG_FILE -e $LOG_FILE ./C192.jedi_lndincsoilnoahmp.sh)
-
-# LOG_FILE=consistency.log06
-# export DATA="${DATA_DIR}/test6"
-# export COMOUT=$DATA
-# TEST6=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A $PROJECT_CODE -q $QUEUE -J C192.gsitile_lndincsoilnoahmp \
-#      -o $LOG_FILE -e $LOG_FILE ./C192.gsitile_lndincsoilnoahmp.sh)
 
 if [[ "${SCHEDULER}" == "pbs" ]]; then
   (qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
         -N cycle_summary -l select=1:ncpus=1:mem=100MB -W depend="afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 cd $reg_dir
-grep -a '<<<' ${LOG_FILE}?? | grep -v echo > summary.log
+grep -a '^<<<' ${LOG_FILE}* | grep -v echo > summary.log
 EOF
   ) &
 elif [[ "${SCHEDULER}" == "slurm" ]]; then
@@ -229,7 +161,7 @@ elif [[ "${SCHEDULER}" == "slurm" ]]; then
       --open-mode=append -q $QUEUE \
       -d "afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
-grep -a '<<<' ${LOG_FILE}*  > summary.log
+grep -a '^<<<' ${LOG_FILE}*  > summary.log
 EOF
   ) &
 else
@@ -237,7 +169,6 @@ else
     exit 1
 fi
 
-# if [[ "${waitlocal}" == "true" ]]; then
 sleep_time=0
 echo "Waiting for ${test_name^^} tests to complete..."
 while [ ! -f "summary.log" ]; do

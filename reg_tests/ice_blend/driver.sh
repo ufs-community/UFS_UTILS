@@ -92,7 +92,6 @@ rm -f ${LOG_FILE}* ${SUM_FILE}
 DATA="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice_blend"
 
-# export HOMEreg=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/ice_blend
 HOMEreg="${HOMEreg}/${test_name}"
 HOMEgfs=$PWD/../..
 export HOMEreg HOMEgfs

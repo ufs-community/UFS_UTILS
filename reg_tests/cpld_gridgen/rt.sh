@@ -32,14 +32,6 @@ usage_and_exit() {
 }
 
 readonly program=$(basename $0)
-# PATHRT - Path to regression tests directory
-# readonly PATHRT="$(cd $(dirname $0) && pwd -P)"
-# export PATHRT
-# # PATHTR - Path to the UFS UTILS directory
-# readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
-# export PATHTR
-
-
 
 RT_DIR=${RT_DIR:-${PWD}/..}
 
@@ -62,9 +54,6 @@ export PATHRT
 readonly PATHTR="${HOMEUFSUTILS}"
 export PATHTR
 
-# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-
-# source $PATHTR/sorc/machine-setup.sh >/dev/null 2>&1
 set +x
 echo "Machine: ${MACHINE_ID}"
 set -x
@@ -74,7 +63,6 @@ MOM6_version=20250128
 # Adjust STMP, ACCOUNT and QUEUE as needed.
 test_name=cpld_gridgen
 STMP=${WORK_DIR:-?}
-# export BASELINE_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
 export BASELINE_ROOT=${HOMEreg}/${test_name}/baseline_data
 export NCCMP=nccmp
 ACCOUNT=${PROJECT_CODE:?}
@@ -112,58 +100,6 @@ case ${MACHINE_ID} in
 
 esac
 
-# if [[ $MACHINE_ID = ursa ]]; then
-#   STMP=${STMP:-/scratch4/NCEPDEV/stmp/$USER}
-#                /scratch4/NCEPDEV/stmp/${LOGNAME}/ufs_utils
-#   ACCOUNT=${ACCOUNT:-fv3-cpu}
-#   QUEUE=${QUEUE:-batch}
-#   WLCLK=40
-#   export MOM6_FIXDIR=/scratch3/NCEPDEV/global/role.glopara/fix/mom6/${MOM6_version}
-#   export NCCMP=nccmp
-#   export BASELINE_ROOT=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-#                        /scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests
-#   PARTITION=''
-# elif [[ $MACHINE_ID = orion ]]; then
-#   STMP=${STMP:-/work/noaa/stmp/$USER}
-#   ACCOUNT=${ACCOUNT:-fv3-cpu}
-#   QUEUE=${QUEUE:-batch}
-#   WLCLK=120
-#   export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
-#   export NCCMP=nccmp
-#   export BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-#   PARTITION=''
-#   ulimit -a
-# elif [[ $MACHINE_ID = hercules ]]; then
-#   STMP=${STMP:-/work2/noaa/stmp/$USER}
-#   ACCOUNT=${ACCOUNT:-fv3-cpu}
-#   QUEUE=${QUEUE:-batch}
-#   WLCLK=120
-#   export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
-#   export BASELINE_ROOT=/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests/cpld_gridgen/baseline_data
-#   export NCCMP=nccmp
-#   PARTITION=''
-#   ulimit -s unlimited
-# elif [[ $MACHINE_ID = jet ]]; then
-#   STMP=${STMP:-/lfs5/HFIP/emcda/$USER/stmp}
-#   ACCOUNT=${ACCOUNT:-hfv3gfs}
-#   QUEUE=${QUEUE:-batch}
-#   WLCLK=60
-#   export MOM6_FIXDIR=/lfs5/HFIP/hfv3gfs/glopara/FIX/fix/mom6/${MOM6_version}
-#   export BASELINE_ROOT=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/cpld_gridgen/baseline_data
-#   export NCCMP=nccmp
-#   PARTITION="--partition=xjet"
-#   ulimit -s unlimited
-# elif [[  $MACHINE_ID = wcoss2 ]]; then
-#   STMP=${STMP:-/lfs/h2/emc/stmp/$USER}
-#   ACCOUNT=${ACCOUNT:-GFS-DEV}
-#   QUEUE=${QUEUE:-dev}
-#   WLCLK=60
-#   export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
-#   export BASELINE_ROOT=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/cpld_gridgen/baseline_data
-#   export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
-#   export NCCMP=nccmp
-# fi
-
 NEW_BASELINE_ROOT=$STMP/${test_name}/baseline_data
 
 BUILD_EXE=false
@@ -194,20 +130,6 @@ if [[ $CREATE_BASELINE = true ]]; then
     mkdir -p $NEW_BASELINE_ROOT
 fi
 
-# compiler=${compiler:-intelllvm}
-# if [[ "$compiler" == "intelllvm" ]]; then
-#   if [[ ! -f ${PATHTR}/modulefiles/build.$MACHINE_ID.$compiler.lua ]];then
-#     set +x
-#     echo "IntelLLVM not available. Will use Intel Classic."
-#     set -x
-#     compiler=intel
-#   fi
-# fi
-# export compiler
-# set +x
-# echo "Compiler: $compiler"
-# set -x
-
 # Build the executable file
 if [[ $BUILD_EXE = true ]]; then
     COMPILE_LOG=compile.log
@@ -228,9 +150,6 @@ else
     fi
 fi
 
-# module use $PATHTR/modulefiles
-# module use ${HOMEUFSUTILS}/modulefiles
-# module load build.${MACHINE_ID,,}.$compiler
 if [[ $MACHINE_ID = wcoss2 ]]; then
   module load nccmp-D/1.9.0.1
 fi
@@ -292,8 +211,6 @@ while read -r line || [ "$line" ]; do
   ((i=i+1))
 
 done < ./rt.conf
-
-# export target
 
 # Once all the jobs are finished, this summary job will run.
 

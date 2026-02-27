@@ -70,8 +70,6 @@ submit_test() {
     echo ${jobid}
 }
 
-# compiler=${compiler:-"intelllvm"}
-
 RT_DIR=${RT_DIR:-${PWD}/..}
 
 notlocal=${notlocal:-false}
@@ -88,25 +86,11 @@ else
 fi
 
 test_name="snow2mdl"
-# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-# module use ${HOMEUFSUTILS}/modulefiles
-
-# #source ../../sorc/machine-setup.sh > /dev/null 2>&1
-# #module use ../../modulefiles
-# module load build.${MACHINE_ID,,}.$compiler
-# module list
 
 DATA_ROOT="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
 DATA_ROOT="${DATA_ROOT}/reg-tests/${test_name}"
 
 rm -fr $DATA_ROOT
-
-# PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-# QUEUE="${QUEUE:-batch}"
-
-#-----------------------------------------------------------------------------
-# Should not have to change anything below.
-#-----------------------------------------------------------------------------
 
 UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
 export UPDATE_BASELINE
@@ -115,29 +99,17 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
   source ../get_hash.sh
 fi
 
-# export HOMEreg=/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests/snow2mdl
 HOMEreg="${HOMEreg}/${test_name}"
 HOMEgfs=$PWD/../..
 export HOMEreg HOMEgfs
 
 # The first test uses hemispheric afwa/airforce data, as was done in OPS.
-
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
 
 declare -a TEST_IDS=()
 
 rm -f ${LOG_FILE}* ${SUM_FILE}
-
-# export DATA="${DATA_ROOT}/test.hemi"
-# TEST1=$(sbatch --parsable -J snow.hemi -A ${PROJECT_CODE} -o ${LOG_FILE}01 -e ${LOG_FILE}01 \
-#       --ntasks=1 --mem=5GB -q ${QUEUE} -t 00:03:00 ./snow2mdl.hemi.sh)
-
-# # The second test mimics current OPS, which uses global afwa/airforce data.
-
-# export DATA="${DATA_ROOT}/test.global"
-# TEST2=$(sbatch --parsable -J snow.global -A ${PROJECT_CODE} -o ${LOG_FILE}02 -e ${LOG_FILE}02 \
-#       --ntasks=1 --mem=5GB -q ${QUEUE} -t 00:03:00 -d afterok:$TEST1 ./snow2mdl.global.sh)
 
 case ${MACHINE_ID,,} in
     hercules)

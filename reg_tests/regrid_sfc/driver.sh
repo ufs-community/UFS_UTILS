@@ -87,30 +87,9 @@ else
     exit 1
 fi
 
-# source ${HOMEUFSUTILS}/sorc/machine-setup.sh > /dev/null 2>&1
-# module use ${HOMEUFSUTILS}/modulefiles
-# compiler=${compiler:-intelllvm}
-# if [[ "${compiler}" == "intelllvm" ]]; then
-#   if [[ ! -f ${HOMEUFSUTILS}/modulefiles/build.$MACHINE_ID.$compiler.lua ]];then
-#      set +x
-#      echo "IntelLLVM not available. Will use Intel Classic."
-#      set -x
-#     compiler=intel
-#   fi
-# fi
-
-# module load "build.${MACHINE_ID}.${compiler}"
 if [[ "${MACHINE_ID}" == "wcoss2" ]];then
   module load nccmp-D/1.9.0.1
 fi
-# set +x
-# module list
-# set -x
-
-
-
-##UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
-##export UPDATE_BASELINE
 
 if [[ "$UPDATE_BASELINE" == "TRUE" ]]; then
   if [[ -f "${RT_DIR}/get_hash.sh" ]]; then
@@ -123,48 +102,8 @@ fi
 
 export HOMEreg="${HOMEreg}/${test_name}"
 
-# if [[ "${MACHINE_ID}" == "jet" ]];then
-#  export WORK_DIR="${WORK_DIR:-/lfs5/HFIP/emcda/$LOGNAME/stmp}"
-#  PROJECT_CODE="${PROJECT_CODE:-hfv3gfs}"
-#  QUEUE="${QUEUE:-batch}"
-#  export HOMEreg=${HOMEreg}/${test_name}
-  # export APRUN_REGRID=srun
-  # PARTITION="xjet"
-# elif [[ "$MACHINE_ID" == "ursa" ]];then
-#  WORK_DIR="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
-#  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-#  QUEUE="${QUEUE:-batch}"
-#  export HOMEreg=${HOMEreg}/${test_name}
-  # export APRUN_REGRID=srun
-  # PARTITION='u1-compute'
-# elif [[ "$MACHINE_ID" == "orion" ]];then
-#  WORK_DIR="${WORK_DIR:-/work/noaa/stmp/$LOGNAME}"
-#  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-#  QUEUE="${QUEUE:-batch}"
-#  export HOMEreg=${HOMEreg}/${test_name}
-  # export APRUN_REGRID=srun
-  # PARTITION='orion'
-  # ulimit -a
-# elif [[ "$MACHINE_ID" == "hercules" ]];then
-#  WORK_DIR="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
-#  PROJECT_CODE="${PROJECT_CODE:-fv3-cpu}"
-#  QUEUE="${QUEUE:-batch}"
-#  export HOMEreg=${HOMEreg}/${test_name}
-  # export APRUN_REGRID=srun
-  # PARTITION='hercules'
-# elif [[ "$MACHINE_ID" == "wcoss2" ]];then
-#  WORK_DIR="${WORK_DIR:-/lfs/h2/emc/stmp/$LOGNAME}"
-#  PROJECT_CODE="${PROJECT_CODE:-GFS-DEV}"
-#  QUEUE="${QUEUE:-dev}"
-#  export HOMEreg=${HOMEreg/$test_name}
-  # PARTITION='dev'
-  # export APRUN_REGRID="mpiexec -n 6 -ppn 6 --cpu-bind core"
-# fi
-
 DATA_DIR="${WORK_DIR}/reg-tests/${test_name}"
 export NWPROD=${HOMEUFSUTILS}
-
-# LOG_FILE=consistency.log01
 export DATA="${DATA_DIR}/test1"
 
 LOG_FILE=consistency.log
@@ -192,15 +131,6 @@ case ${MACHINE_ID,,} in
         exit 1
         ;;
 esac
-
-# if [[ "$MACHINE_ID" == "wcoss2" ]];then
-#   TEST1=$(qsub -V -o "${LOG_FILE}" -e "${LOG_FILE}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=00:05:00 \
-#         -N gauss2fv3incr -l select=1:ncpus=6:ompthreads=1:mem=10GB ./gauss2fv3incr.sh)
-# else
-#   TEST1=$(sbatch --parsable --ntasks-per-node=6 --nodes=1 -t 0:05:00 -A "${PROJECT_CODE}" -q "${QUEUE}" -J gauss2fv3incr \
-#       -p "${PARTITION}" -o "${LOG_FILE}" -e "${LOG_FILE}" ./gauss2fv3incr.sh)
-# fi
-
 
 
 if [[ "${MACHINE_ID}" == "wcoss2" ]];then

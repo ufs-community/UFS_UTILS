@@ -66,16 +66,16 @@ source sorc/machine-setup.sh
 
 current_hash=$(git rev-parse HEAD)
 
-# if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
-#     prev_hash=$(cat "${WORK_DIR}/prev_hash.txt")
-#     if [[ "${current_hash}" == "${prev_hash}" ]]; then
-#         date
-#         echo ""
-#         echo "UFS_UTILS has not changed since last time. Not building."
-#         echo "UFS_UTILS hash: ${current_hash}"
-#         exit 0
-#     fi
-# fi
+if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
+    prev_hash=$(cat "${WORK_DIR}/prev_hash.txt")
+    if [[ "${current_hash}" == "${prev_hash}" ]]; then
+        date
+        echo ""
+        echo "UFS_UTILS has not changed since last time. Not building."
+        echo "UFS_UTILS hash: ${current_hash}"
+        exit 0
+    fi
+fi
 
 echo "Started on $(hostname -s)" >> "${WORK_DIR}/reg_test_results.txt"
 
@@ -100,13 +100,6 @@ set -x
 PID_LIST=()
 notlocal=true
 export notlocal
-# if [[ " ${RUN_SET[*]} " =~ " RUN_REGRID_SFC " ]]; then
-#   echo "Running regrid_sfc tests"
-#   cd regrid_sfc || { echo "Can't change directory into 'regrid_sfc'.. exiting"; exit; }
-#   (bash ./driver.sh > regrid_sfc_rt.out 2>&1) &
-#   PID_LIST+=($!)
-#   cd ..
-# fi
 export ACCOUNT=$PROJECT_CODE
 export STMP=$WORK_DIR/reg-tests
 
@@ -125,29 +118,6 @@ for dir in ocnice_prep cpld_gridgen; do
   fi
 done
 
-# if [[ " ${RUN_SET[*]} " =~ " RUN_CPLD_GRIDGEN " ]]; then
-#   echo "Running cpld_gridgen tests"
-#   cd cpld_gridgen || { echo "Can't change directory into 'cpld_gridgen'.. exiting"; exit; }
-#   if [[ ${UPDATE_BASELINE} == "TRUE" ]]; then
-#       (bash ./rt.sh -c > cpld_gridgen_rt.out 2>&1) &
-#   else
-#     (bash ./rt.sh > cpld_gridgen_rt.out 2>&1) &
-#   fi
-#   PID_LIST+=($!)
-#   cd ..
-# fi
-
-# for dir in grid_gen; do
-#   RUN_CHECK=RUN_${dir^^}
-#   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
-#     echo "Running ${dir} tests"
-#     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-#     (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
-#     PID_LIST+=($!)
-#     cd ..
-#   fi
-# done
-
 for dir in regrid_sfc global_cycle chgres_cube snow2mdl grid_gen weight_gen ice_blend; do
   RUN_CHECK=RUN_${dir^^}
   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
@@ -158,30 +128,6 @@ for dir in regrid_sfc global_cycle chgres_cube snow2mdl grid_gen weight_gen ice_
     cd ..
   fi
 done
-# RUN_CHECK=RUN_CHGRES_CUBE
-# if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
-#   echo "Running chgres_cube tests"
-#   cd "chgres_cube" || { echo "Can't change directory into 'chgres_cube'.. exiting"; exit; }
-#   (bash "./driver.sh" > "chgres_cube_rt.out" 2>&1) &
-#   PID_LIST+=($!)
-#   cd ..
-# fi
-
-# for dir in weight_gen ice_blend; do
-#   RUN_CHECK=RUN_${dir^^}
-#   if [[ " ${RUN_SET[*]} " =~ ${RUN_CHECK} ]]; then
-#     echo "Running ${dir} tests"
-#     cd "${dir}" || { echo "Can't change directory into '${dir}'.. exiting"; exit; }
-#     # if [[ ${MACHINE_ID} == "ursa" ]] || [[ ${MACHINE_ID} == "jet" ]] || [[ ${MACHINE_ID} == "orion" ]] || [[ ${MACHINE_ID} == "hercules" ]] ; then
-#     (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
-#     PID_LIST+=($!)
-#     # elif [[ ${MACHINE_ID} == "wcoss2" ]] ; then
-#         # (bash "./driver.${MACHINE_ID}.sh" > "${dir}_rt.out" 2>&1) &
-#         # PID_LIST+=($!)
-#     # fi
-#     cd ..
-#   fi
-# done
 
 echo "SUBMITTED ALL TASKS. Waiting for them to finish.."
 wait "${PID_LIST[@]}"
