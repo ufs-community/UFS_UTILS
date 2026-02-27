@@ -304,4 +304,4 @@ fi
 #   done
 #   mail -s "UFS_UTILS Consistency Test CHGRES_CUBE COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
 # fi
-# exit 0
+exit 0
