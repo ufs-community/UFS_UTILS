@@ -251,7 +251,7 @@ if [[ "${SCHEDULER}" == "pbs" ]]; then
         -N chgres_summary -l select=1:ncpus=1:mem=100MB \
         -W depend="afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
-grep -a '<<<' ${LOG_FILE}?? | grep -v echo > ${SUM_FILE}
+grep -a '^<<<' ${LOG_FILE}?? | grep -v echo > ${SUM_FILE}
 EOF
 ) &
 elif [[ "${SCHEDULER}" == "slurm" ]]; then
@@ -259,7 +259,7 @@ elif [[ "${SCHEDULER}" == "slurm" ]]; then
        --open-mode=append -q "${QUEUE}" \
        -d "afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
-grep -a '<<<' ${LOG_FILE}*  > ${SUM_FILE}
+grep -a '^<<<' ${LOG_FILE}*  > ${SUM_FILE}
 EOF
 ) &
 else
@@ -280,7 +280,7 @@ echo "Waiting for ${test_name^^} tests to complete..."
 while [ ! -f "summary.log" ]; do
     sleep 10
     sleep_time=$((sleep_time+10))
-    if (( sleep_time > TIMEOUT_LIMIT )); then
+    if (( ${sleep_time} > ${TIMEOUT_LIMIT} )); then
         if [[ "${waitlocal}" == "true" ]]; then
             mail -s "UFS_UTILS Consistency Test ${test_name^^} timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
             exit 1
@@ -291,17 +291,4 @@ if [[ "${waitlocal}" == "true" ]]; then
     mail -s "UFS_UTILS Consistency Test ${test_name^^} COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
 fi
 
-# if [[ "${waitlocal}" == "true" ]]; then
-#   sleep_time=0
-#   echo "Waiting for chgres_cube tests to complete..."
-#   while [ ! -f "summary.log" ]; do
-#     sleep 10
-#     sleep_time=$((sleep_time+10))
-#     if (( sleep_time > TIMEOUT_LIMIT )); then
-#        mail -s "UFS_UTILS Consistency Test CHGRES_CUBE timed out on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
-#        exit 1
-#     fi
-#   done
-#   mail -s "UFS_UTILS Consistency Test CHGRES_CUBE COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
-# fi
 exit 0
