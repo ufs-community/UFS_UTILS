@@ -132,6 +132,7 @@ fi
 
 HOMEufs=$PWD/../..
 export HOMEufs
+this_dir=$PWD
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
@@ -251,6 +252,7 @@ if [[ "${SCHEDULER}" == "pbs" ]]; then
         -N chgres_summary -l select=1:ncpus=1:mem=100MB \
         -W depend="afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
+cd ${this_dir}
 grep -a '^<<<' ${LOG_FILE}* | grep -v echo > ${SUM_FILE}
 EOF
 ) &
