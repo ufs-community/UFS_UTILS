@@ -1,7 +1,7 @@
 !> @file
 !! @brief Update surface and NSST fields
 !! @author Mark Iredell NCEP/EMC
-  
+
 !>  Stand alone surface/NSST cycle driver for the cubed-sphere grid.
 !!  Each cubed-sphere tile runs independently on its own mpi task.
 !!  The surface update component runs with threads.  The NSST
@@ -38,10 +38,10 @@
 !!  - $sfcincr_gsi.$NNN    Gaussian GSI file which contains soil state
 !!                     increments
 !!  - snow_xainc.$NNN       The cubed-sphere snow increment file (on
-!!                     the native model grid). 
-!!  - soil_xainc.$NNN  The cubed-sphere soil increment file (on the 
-!!                     native model grid). 
-!!  
+!!                     the native model grid).
+!!  - soil_xainc.$NNN  The cubed-sphere soil increment file (on the
+!!                     native model grid).
+!!
 !!  OUTPUT FILES:
 !!  - fnbgso.$NNN        The updated sfc/nsst restart file.
 !!
@@ -73,16 +73,16 @@
 !!                 LSOIL_INCR is currently set to 3 by default.
 !!                 Extra cautions are needed on layer#3 across permafrost regions due to
 !!                 over sensitivity of moisture change when temperature approaches tfreez.
-!!                 Please feel free to contact Yuan Xue (yuan.xue@noaa.gov) for further 
+!!                 Please feel free to contact Yuan Xue (yuan.xue@noaa.gov) for further
 !!                 concerns regarding this issue.
 !!  - ISOT         Use statsgo soil type when '1'. Use zobler when '0'.
 !!  - IVEGSRC      Use igbp veg type when '1'.  Use sib when '2'.
 !!  - ZSEA1/2_MM   When running with NSST model, this is the lower/
 !!                 upper bound of depth of sea temperature.  In
 !!                 whole mm.
-!!  - MAX_TASKS    Normally, program should be run with a number of mpi 
-!!                 tasks equal to the number of cubed-sphere tiles 
-!!                 being processed. However, the current parallel 
+!!  - MAX_TASKS    Normally, program should be run with a number of mpi
+!!                 tasks equal to the number of cubed-sphere tiles
+!!                 being processed. However, the current parallel
 !!                 scripts may over-specify the number of tasks.
 !!                 Set this variable to not process any ranks >
 !!                 (max_tasks-1).
@@ -150,12 +150,12 @@
  CALL BAOPENR(36, "fort.36", IERR)
  IF (IERR /= 0) THEN
    PRINT*,'FATAL ERROR READING FORT.36 NAMELIST. IERR: ', IERR
-   CALL MPI_ABORT(MPI_COMM_WORLD, 32, IERR) 
+   CALL MPI_ABORT(MPI_COMM_WORLD, 32, IERR)
  ENDIF
  READ(36, NML=NAMCYC, IOSTAT=IERR)
  IF (IERR /= 0) THEN
    PRINT*,'FATAL ERROR READING FORT.36 NAMELIST. IERR: ', IERR
-   CALL MPI_ABORT(MPI_COMM_WORLD, 33, IERR) 
+   CALL MPI_ABORT(MPI_COMM_WORLD, 33, IERR)
  ENDIF
 !IF (MYRANK==0) WRITE(6,NAMCYC)
 
@@ -185,7 +185,7 @@
              IY,IM,ID,IH,FH,IALB,                  &
              USE_UFO,DO_NSST,DO_SFCCYCLE,DO_LANDINCR, &
              FRAC_GRID,COUPLED,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
- 
+
  PRINT*
  PRINT*,'CYCLE PROGRAM COMPLETED NORMALLY ON RANK: ', MYRANK
 
@@ -208,20 +208,20 @@
  !!  1.  Analysis mode (FH=0.)
  !!
  !!      This program merges climatology, analysis and forecast guess to create
- !!      new surface fields.  If analysis file is given, the program 
+ !!      new surface fields.  If analysis file is given, the program
  !!      uses it if date of the analysis matches with IY,IM,ID,IH (see Note
  !!      below).
  !!
  !!  2.  Forecast mode (FH.GT.0.)
- !!   
- !!      This program interpolates climatology to the date corresponding to the 
+ !!
+ !!      This program interpolates climatology to the date corresponding to the
  !!      forecast hour.  If surface analysis file is given, for the corresponding
  !!      dates, the program will use it.  This is forcing-by-observation experiment.
  !!
  !!  If the date of the analysis does not match given IY,IM,ID,IH, (and FH),
  !!  the program searches an old analysis by going back 6 hours, then 12 hours,
- !!  then one day upto NREPMX days (parameter statement in the SUBROTINE FIXRD. 
- !!  Now defined as 15).  This allows the user to provide non-daily analysis to 
+ !!  then one day upto NREPMX days (parameter statement in the SUBROTINE FIXRD.
+ !!  Now defined as 15).  This allows the user to provide non-daily analysis to
  !!  be used.  If matching field is not found, the forecast guess will be used.
  !!
  !!  Variable naming convention for this program:
@@ -316,6 +316,7 @@
                    FRAC_GRID,COUPLED,ZSEA1,ZSEA2,ISOT,IVEGSRC,MYRANK)
 !
  USE READ_WRITE_DATA
+ use sfccyc_module, only: sfccycle
  use machine
  USE MPI
  USE LAND_INCREMENTS, ONLY: GAUSSIAN_TO_FV3_INTERP,     &
@@ -334,7 +335,7 @@
 
  LOGICAL, INTENT(IN) :: USE_UFO, DO_NSST,DO_SFCCYCLE
  LOGICAL, INTENT(IN) :: DO_LANDINCR, FRAC_GRID, COUPLED
- 
+
  REAL, INTENT(IN)    :: FH, DELTSFC, ZSEA1, ZSEA2
 
  INTEGER, PARAMETER  :: NLUNIT=35
@@ -395,7 +396,7 @@
  real, dimension(lensfc)    :: tf_clm_tile,tf_trd_tile,sal_clm_tile
  INTEGER             :: veg_type_landice
  INTEGER, DIMENSION(LENSFC) :: STC_UPDATED, SLC_UPDATED
- REAL, DIMENSION(LENSFC,LSOIL) :: STCINC, SLCINC 
+ REAL, DIMENSION(LENSFC,LSOIL) :: STCINC, SLCINC
 
  LOGICAL :: FILE_EXISTS, DO_SOILINCR, INTERP_LANDINCR, DO_SNOWINCR
  CHARACTER(LEN=3)       :: RANKCH
@@ -405,7 +406,7 @@
 ! NST_FILE is the path/name of the gaussian GSI file which contains NSST
 ! increments.
 !--------------------------------------------------------------------------------
- 
+
  NAMELIST/NAMSFCD/ NST_FILE, lsoil_incr, DO_SNOWINCR, DO_SOILINCR, INTERP_LANDINCR
 
  DATA NST_FILE/'NULL'/
@@ -414,7 +415,7 @@
  DO_SOILINCR      = .FALSE.
  INTERP_LANDINCR   = .FALSE.
  lsoil_incr = 3 !default
- 
+
  SIG1T = 0.0            ! Not a dead start!
 
  INPUT_NML_FILE = "NULL"
@@ -422,12 +423,12 @@
  CALL BAOPENR(37, "fort.37", IERR)
  IF (IERR /= 0) THEN
    PRINT*,'FATAL ERROR OPENING FORT.37 NAMELIST. IERR: ', IERR
-   CALL MPI_ABORT(MPI_COMM_WORLD, 30, IERR) 
+   CALL MPI_ABORT(MPI_COMM_WORLD, 30, IERR)
  ENDIF
  READ (37, NML=NAMSFCD, IOSTAT=IERR)
  IF (IERR /= 0) THEN
    PRINT*,'FATAL ERROR READING FORT.37 NAMELIST. IERR: ', IERR
-   CALL MPI_ABORT(MPI_COMM_WORLD, 31, IERR) 
+   CALL MPI_ABORT(MPI_COMM_WORLD, 31, IERR)
  ENDIF
 
  PRINT*
@@ -443,7 +444,7 @@
  ALLOCATE(LAKEFRAC(LENSFC))
  IF(FRAC_GRID .OR. COUPLED) THEN
    PRINT*,'- RUNNING WITH FRACTIONAL GRID.'
-   CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC,& 
+   CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC,&
         LANDFRAC=LANDFRAC,LAKEFRAC=LAKEFRAC)
  ELSE
    CALL READ_LAT_LON_OROG(RLA,RLO,OROG,OROG_UF,TILE_NUM,IDIM,JDIM,LENSFC)
@@ -491,7 +492,7 @@
  IF (DO_NSST .OR. COUPLED) THEN
    ALLOCATE(SICFCS_FG(LENSFC))
  ENDIF
-  
+
  IF (COUPLED) THEN
    ALLOCATE(SIHFCS_FG(LENSFC))
    ALLOCATE(SITFCS_FG(LENSFC))
@@ -549,7 +550,7 @@ ENDIF
    call MPI_ABORT(MPI_COMM_WORLD, 29, IERR)
  ENDIF
 
- IF (IS_NOAHMP) THEN 
+ IF (IS_NOAHMP) THEN
         LSM=LSM_NOAHMP
  ELSE
         LSM=LSM_NOAH
@@ -561,7 +562,7 @@ ENDIF
  ELSE
    OROG_UF = 0.0
  ENDIF
- 
+
  DO I=1,LENSFC
    AISFCS(I) = 0.
    IF(NINT(SLIFCS(I)).EQ.2) AISFCS(I) = 1.
@@ -583,7 +584,7 @@ ENDIF
      SLIFCS_FG = SLIFCS
    ENDIF
  ENDIF
- 
+
  IF (COUPLED) THEN
    SIHFCS_FG=SIHFCS
    SITFCS_FG=SITFCS
@@ -637,7 +638,7 @@ ENDIF
          SLMASKL(I) = 0.0_KIND_io8
          SLMASKW(I) = 0.0_KIND_io8
        ENDIF
-     ENDDO  
+     ENDDO
 
    ENDIF SET_MASK
 
@@ -758,7 +759,7 @@ ENDIF
        print *, 'FATAL ERROR: snow increment (fv3 grid) update requested, &
                 but file does not exist : ', trim(FNAME_INC)
     call MPI_ABORT(MPI_COMM_WORLD, 10, IERR)
-    ENDIF 
+    ENDIF
 
        !--------------------------------------------------------------------------------
        ! read increments in
@@ -827,7 +828,7 @@ ENDIF
 
             !--------------------------------------------------------------------------------
             ! save interpolated increments
-            !-------------------------------------------------------------------------------- 
+            !--------------------------------------------------------------------------------
 
             CALL WRITE_DATA(LENSFC,IDIM,JDIM,LSOIL,DO_NSST,.true.,NSST, &
                             STCINC=STCINC,SLCINC=SLCINC)
@@ -948,7 +949,7 @@ ENDIF
  RETURN
 
  END SUBROUTINE SFCDRV
- 
+
  !> Read in gsi file with the updated reference temperature increments (on the gaussian
  !! grid), interpolate increments to the cubed-sphere tile, and
  !! perform required nsst adjustments and qc.
@@ -1029,7 +1030,7 @@ ENDIF
  INTEGER, ALLOCATABLE     :: ID1(:,:), ID2(:,:), JDC(:,:)
 
  LOGICAL                  :: IS_ICE
- 
+
  real                     :: tfreez
  REAL                     :: TREF_SAVE,WSUM,tf_ice,tf_thaw
  REAL                     :: FILL, DTZM, GAUS_RES_KM, DTREF
@@ -1150,7 +1151,7 @@ ENDIF
 
  allocate(mask_tile(lensfc))
  allocate(mask_fg_tile(lensfc))
- 
+
  IF(.NOT. FRAC_GRID) THEN
    MASK_TILE    = NINT(SLMSK_TILE)
    MASK_FG_TILE = NINT(SLMSK_FG_TILE)
@@ -1182,7 +1183,7 @@ ENDIF
 
    IF (MASK_TILE(ij) == 1) THEN
      nland = nland + 1
-     CYCLE IJ_LOOP  
+     CYCLE IJ_LOOP
    ENDIF
 
 !
@@ -1227,7 +1228,7 @@ ENDIF
 ! OPEN WATER POINTS.
 !----------------------------------------------------------------------
 !----------------------------------------------------------------------
-! SEE IF ANY OF THE NEAREST GSI POINTS MASK AREA OPEN WATER.  
+! SEE IF ANY OF THE NEAREST GSI POINTS MASK AREA OPEN WATER.
 ! IF SO, APPLY NSST INCREMENT USING BILINEAR INTERPOLATION.
 !----------------------------------------------------------------------
 
@@ -1290,7 +1291,7 @@ ENDIF
 ! FIND NEAREST NON-LAND POINT ON GSI/GAUSSIAN GRID.
 !----------------------------------------------------------------------
 
-   ELSE  
+   ELSE
 
      IS_ICE = .FALSE.
 
@@ -1451,7 +1452,7 @@ ENDIF
 
  DATA NUM_DAYS  /31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/
 
- DATA SST_80_90 /271.466, 271.458, 271.448, 271.445, 271.519, 271.636, & 
+ DATA SST_80_90 /271.466, 271.458, 271.448, 271.445, 271.519, 271.636, &
                  272.023, 272.066, 272.001, 271.698, 271.510, 271.472/
 
  DATA SST_70_80 /272.149, 272.103, 272.095, 272.126, 272.360, 272.988, &
@@ -1561,7 +1562,7 @@ ENDIF
  END SUBROUTINE CLIMO_TREND
 
  !> Compute the vertical mean of the NSST t-profile.
- !!                                                                 
+ !!
  !! @param[in] xt Heat content in the diurnal thermocline layer.
  !! @param[in] xz Thickness of the diurnal thermocline layer.
  !! @param[in] dt_cool Skin-layer cooling amount.
@@ -1640,7 +1641,7 @@ ENDIF
  !! via a search.
  !! @param[inout] nset_thaw_i Number of ice points filled with a calculated
  !! tice.
- !! @param[inout] nset_thaw_c Number of points filled with a weighted 
+ !! @param[inout] nset_thaw_c Number of points filled with a weighted
  !! average of tice and tclm.
  !! @author Xu Li
  subroutine tf_thaw_set(tf_ij,mask_ij,itile,jtile,tice,tclm,tf_thaw,nx,ny, &
@@ -1729,7 +1730,7 @@ ENDIF
 
  !> If the first guess was sea ice, but the analysis is open water,
  !! reset all nsst variables.
- !! 
+ !!
  !! @param[inout] nsst Data structure that holds the nsst fields
  !! @param[in] ij Index of point to be updated
  !! @param[in] tf_thaw Reference temperature for former ice points
@@ -1772,7 +1773,7 @@ ENDIF
  !! @param[in] xlons_ij longitude of target grid
  !! @param[in] ny 'j' dimension of target grid
  !! @param[in] nx 'i' dimension of target grid
- !! @param[in] iy Year 
+ !! @param[in] iy Year
  !! @param[in] im Month
  !! @param[in] id Day
  !! @param[in] ih Hour
@@ -1785,10 +1786,10 @@ subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
 
  implicit none
 
- real,    dimension(nx*ny), intent(in)  :: xlats_ij 
- real,    dimension(nx*ny), intent(in)  :: xlons_ij 
- real,    dimension(nx,ny), intent(out) :: tf_clm   
- real,    dimension(nx,ny), intent(out) :: tf_trd   
+ real,    dimension(nx*ny), intent(in)  :: xlats_ij
+ real,    dimension(nx*ny), intent(in)  :: xlons_ij
+ real,    dimension(nx,ny), intent(out) :: tf_clm
+ real,    dimension(nx,ny), intent(out) :: tf_trd
  integer, intent(in) :: iy,im,id,ih,nx,ny
 ! local declare
  real,    allocatable, dimension(:,:)   :: tf_clm0    ! sst climatology at the valid time (nxc,nyc)
@@ -1797,7 +1798,7 @@ subroutine get_tf_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,tf_clm,tf_trd)
  real,    allocatable, dimension(:)     :: cxlons     ! longitudes of sst climatology
 
  real,    dimension(nx*ny)  :: tf_clm_ij  ! sst climatology at target grids (nx*ny)
- real,    dimension(nx*ny)  :: tf_trd_ij  ! 6-hourly sst climatology tendency 
+ real,    dimension(nx*ny)  :: tf_trd_ij  ! 6-hourly sst climatology tendency
  real :: wei1,wei2
  integer :: nxc,nyc,mon1,mon2
  character (len=6), parameter :: fin_tf_clm='sstclm' ! sst climatology file name
@@ -1848,7 +1849,7 @@ end subroutine get_tf_clm
 !! @param[in] mon2 Second bounding month
 !! @param[in] wei1 Weighting of first bounding month
 !! @param[in] wei2 Weighting of second bounding month
-!! @author Xu Li @date March 2019 
+!! @author Xu Li @date March 2019
 subroutine get_tf_clm_ta(tf_clm_ta,tf_clm_trend,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
  use read_write_data, only : read_tf_clim_grb
  implicit none
@@ -1901,9 +1902,9 @@ subroutine get_sal_clm(xlats_ij,xlons_ij,ny,nx,iy,im,id,ih,sal_clm)
  use read_write_data, only : get_dim_nc
  implicit none
 
- real,    dimension(nx*ny), intent(in)  :: xlats_ij   ! 
- real,    dimension(nx*ny), intent(in)  :: xlons_ij   ! 
- real,    dimension(nx,ny), intent(out) :: sal_clm    ! 
+ real,    dimension(nx*ny), intent(in)  :: xlats_ij   !
+ real,    dimension(nx*ny), intent(in)  :: xlons_ij   !
+ real,    dimension(nx,ny), intent(out) :: sal_clm    !
  integer, intent(in) :: iy,im,id,ih,nx,ny
 ! local declare
  real,    allocatable, dimension(:,:)   :: sal_clm0   ! salinity climatology at the valid time
@@ -1956,7 +1957,7 @@ end subroutine get_sal_clm
 !! @param[out] sal_clm_ta Climatological salinity at the analysis time
 !! @param[out] xlats Latitudes on the climatological grid
 !! @param[out] xlons Longitudes on the climatological grid
-!! @author Xu Li @date March 2019 
+!! @author Xu Li @date March 2019
 subroutine get_sal_clm_ta(sal_clm_ta,xlats,xlons,nlat,nlon,mon1,mon2,wei1,wei2)
 
  use read_write_data, only : read_salclm_gfs_nc
@@ -2090,7 +2091,7 @@ end subroutine intp_tile
 !! @param[out] mon2 Second bounding month
 !! @param[out] wei1 Weighting of first bounding month
 !! @param[out] wei2 Weighting of second bounding month
-!! @author Xu Li @date March 2019 
+!! @author Xu Li @date March 2019
 subroutine get_tim_wei(iy,im,id,ih,mon1,mon2,wei1,wei2)
  implicit none
 
