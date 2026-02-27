@@ -2,45 +2,62 @@
 
 RTID=$$
 
-##### WORK DIRS #########
-WORK_DIR_URSA="/scratch4/NCEPDEV/stmp/${LOGNAME}/ufs_utils"
-WORK_DIR_HERCULES="/work2/noaa/stmp/${LOGNAME}/ufs_utils"
-WORK_DIR_ORION="/work/noaa/stmp/${LOGNAME}/ufs_utils"
-WORK_DIR_WCOSS2="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
-WORK_DIR_JET="/lfs5/HFIP/hfv3gfs/${LOGNAME}/stmp/ufs_utils"
-##############
+### SYSTEM INFO ###
+#Detect the machine we're on
+RT_DIR=${RT_DIR:-${PWD}/..}
+if [[ -f "${RT_DIR}/detect_machine.sh" ]]; then
+    source "${RT_DIR}/detect_machine.sh"
+else
+    echo "ERROR: Cannot find detect_machine.sh script"
+    exit 1
+fi
 
-##### HOME REG #########
-HOMEREG_URSA="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
-HOMEREG_HERCULES="/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests"
-HOMEREG_ORION="/work/noaa/nems/role-nems/ufs_utils/reg_tests"
-HOMEREG_WCOSS2="/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests"
-HOMEREG_JET="/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests"
-##############
-
-##### PROJECT CODES #########
-PROJECT_CODE_URSA="nems"
-PROJECT_CODE_HERCULES="nems"
-PROJECT_CODE_ORION="nems"
-PROJECT_CODE_WCOSS2="GFS-DEV"
-PROJECT_CODE_JET="h-nems"
-##############
-
-##### QUEUE #########
-QUEUE_URSA="batch"
-QUEUE_HERCULES="batch"
-QUEUE_ORION="batch"
-QUEUE_WCOSS2="dev"
-QUEUE_JET="batch"
-##############
-
-##### SCHEDULER #########
-SCHEDULER_URSA="slurm"
-SCHEDULER_HERCULES="slurm"
-SCHEDULER_ORION="slurm"
-SCHEDULER_WCOSS2="pbs"
-SCHEDULER_JET="slurm"
-##############
+case ${MACHINE_ID,,} in
+    hercules)
+        WORK_DIR="/work2/noaa/stmp/${LOGNAME}/ufs_utils"
+        HOMEreg="/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests"
+        PROJECT_CODE="nems"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
+    jet)
+        WORK_DIR="/lfs5/HFIP/hfv3gfs/${LOGNAME}/stmp/ufs_utils"
+        HOMEreg="/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests"
+        PROJECT_CODE="h-nems"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
+    orion)
+        WORK_DIR="/work/noaa/stmp/${LOGNAME}/ufs_utils"
+        HOMEreg="/work/noaa/nems/role-nems/ufs_utils/reg_tests"
+        PROJECT_CODE="nems"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
+    ursa)
+        WORK_DIR="/scratch4/NCEPDEV/stmp/${LOGNAME}/ufs_utils"
+        HOMEreg="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
+        PROJECT_CODE="nems"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
+    wcoss2)
+        WORK_DIR="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
+        HOMEreg="/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests"
+        PROJECT_CODE="GFS-DEV"
+        QUEUE="dev"
+        SCHEDULER="pbs"
+        COMPILER="intel"
+        ;;
+    *)
+        echo "Error: Unsupported machine '${MACHINE_ID}'"
+        exit 1
+        ;;
+esac
 
 ##### TOGGLE JOBS #########
 RUN_CHGRES_CUBE="true"
@@ -54,48 +71,12 @@ RUN_SNOW2MDL="true"
 RUN_WEIGHT_GEN="true"
 ##############
 
-##### COMPILER #####
-COMPILER_URSA="intelllvm"
-COMPILER_HERCULES="intelllvm"
-COMPILER_ORION="intelllvm"
-COMPILER_WCOSS2="intel"
-COMPILER_JET="intelllvm"
-
 # Where to send mail when job is completed?
 # Please use quotes and put a space between multiple email addresses.
 MAILTO="brian.curtis@noaa.gov"
 
-### SYSTEM INFO ###
-#Detect the machine we're on
-RT_DIR=${RT_DIR:-${PWD}/..}
-if [[ -f "${RT_DIR}/detect_machine.sh" ]]; then
-    source "${RT_DIR}/detect_machine.sh"
-else
-    echo "ERROR: Cannot find detect_machine.sh script"
-    exit 1
-fi
-
 HOMEUFSUTILS="${RT_DIR}/.."
 export HOMEUFSUTILS
-THISMACHINE=$(eval 'echo ${MACHINE_ID^^}')
-WHICH_WORK_DIR=WORK_DIR_${THISMACHINE}
-WORK_DIR=${!WHICH_WORK_DIR:-}
-
-WHICH_HOMEREG=HOMEREG_${THISMACHINE}
-HOMEreg=${!WHICH_HOMEREG:-}
-
-WHICH_PROJECT_CODE=PROJECT_CODE_${THISMACHINE}
-PROJECT_CODE=${!WHICH_PROJECT_CODE:-}
-
-WHICH_QUEUE=QUEUE_${THISMACHINE}
-QUEUE=${!WHICH_QUEUE:-}
-
-WHICH_SCHEDULER=SCHEDULER_${THISMACHINE}
-SCHEDULER=${!WHICH_SCHEDULER:-}
-
-WHICH_COMPILER=COMPILER_${THISMACHINE}
-COMPILER=${!WHICH_COMPILER:-}
-######
 
 ### RT SETTINGS ###
 TIMEOUT_LIMIT=3600
@@ -115,10 +96,6 @@ REPO_LOC="git@github.com:BrianCurtis-NOAA/UFS_UTILS.git"
 # shellcheck source=/dev/null
 source "${HOMEUFSUTILS}/sorc/machine-setup.sh" > /dev/null 2>&1
 module use "${HOMEUFSUTILS}/modulefiles"
-
-# source "${RT_DIR}/rt.control"
-# source ../../sorc/machine-setup.sh > /dev/null 2>&1
-# module use ../../modulefiles
 module load "build.${MACHINE_ID,,}.${COMPILER}"
 module list
 

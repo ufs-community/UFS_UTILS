@@ -161,6 +161,7 @@ elif [[ "${SCHEDULER}" == "slurm" ]]; then
       --open-mode=append -q $QUEUE \
       -d "afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
+cd $reg_dir
 grep -a '^<<<' ${LOG_FILE}*  > summary.log
 EOF
   ) &

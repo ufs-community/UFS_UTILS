@@ -229,6 +229,7 @@ elif [[ "${SCHEDULER}" == "slurm" ]]; then
        --open-mode=append -q "${QUEUE}" \
        -d "afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
+cd ${this_dir}
 grep -a '^<<<' ${LOG_FILE}*  > ${SUM_FILE}
 EOF
 ) &

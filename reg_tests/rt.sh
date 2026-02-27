@@ -18,7 +18,7 @@ if [[ $# -gt 0 ]] && [[ $# -lt 2 ]]; then
 else
     SCRIPT_LOGGER="rtsh.log"
 fi
-exec 2> "${SCRIPT_LOGGER}"
+exec > "${SCRIPT_LOGGER}" 2>&1
 
 start_time=$SECONDS
 if [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then

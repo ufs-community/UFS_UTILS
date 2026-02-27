@@ -145,14 +145,15 @@ if [[ "${SCHEDULER}" == "pbs" ]]; then
           -N snow_summary -l select=1:ncpus=1:mem=100MB -W depend="afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 cd ${this_dir}
-grep -a '<<<' $LOG_FILE?? | grep -v echo > $SUM_FILE
+grep -a '<<<' $LOG_FILE* | grep -v echo > $SUM_FILE
 EOF
   ) &
 elif [[ "${SCHEDULER}" == "slurm" ]]; then
   (sbatch --nodes=1 -t 0:01:00 -A ${PROJECT_CODE} -J snow_summary -o ${LOG_FILE} -e ${LOG_FILE} \
         --open-mode=append -q ${QUEUE} -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
-grep -a '<<<' ${LOG_FILE}??  > summary.log
+cd ${this_dir}
+grep -a '<<<' ${LOG_FILE}*  > summary.log
 EOF
   ) &
 else

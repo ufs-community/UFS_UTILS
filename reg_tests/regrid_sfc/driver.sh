@@ -140,7 +140,7 @@ if [[ "${MACHINE_ID}" == "wcoss2" ]];then
         -N summary -l select=1:ncpus=1:mem=100MB -W "depend=afterany${TEST_IDS[*]}" << EOF
 #!/bin/bash
 cd ${PWD}
-grep -a '<<<' ${LOG_FILE}?? | grep -v echo > ./summary.log
+grep -a '<<<' ${LOG_FILE}* | grep -v echo > ./summary.log
 EOF
   ) &
   
@@ -149,6 +149,7 @@ else
   (sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
        -p "${PARTITION}" --open-mode=append -q "${QUEUE}" -d "afterany${TEST_IDS[*]}" << EOF
 #!/bin/bash
+cd ${PWD}
 grep -a '<<<' ${LOG_FILE}* > ./summary.log
 EOF
   ) &

@@ -179,6 +179,7 @@ elif [[ "${SCHEDULER}" == "slurm" ]]; then
   (sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]') << EOF
 #!/bin/bash
+cd ${this_dir}
 grep -a '<<<' ${LOG_FILE}*  > $SUM_FILE
 EOF
   ) &
