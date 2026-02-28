@@ -138,9 +138,9 @@ case ${MACHINE_ID,,} in
         ;;
 esac
 
-# Create summary file.
+# Create summary file from logs.
+this_dir=$PWD
 if [[ "${SCHEDULER}" == "pbs" ]]; then
-  this_dir=$PWD
   (qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
           -N snow_summary -l select=1:ncpus=1:mem=100MB -W depend="afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
