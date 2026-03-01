@@ -52,7 +52,7 @@ contains
     integer(int_kind), intent(out) :: cnmask(:)
     real(dbl_kind),    intent(out) :: crlons(:,:), crlats(:,:)
 
-    integer :: idim, jdim, n
+    integer :: idim, jdim
     integer :: ib, ie, jb, je
 
     ib = iind(1); ie = iind(2)

@@ -83,9 +83,8 @@ contains
 
     integer, parameter :: grid_rank = 2
 
-    integer :: ii, n, id, rc, ncid, dim2(2), dim1(1)
+    integer :: ii, id, rc, ncid, dim2(2), dim1(1)
     integer :: idimid, jdimid, kdimid
-    integer :: ib, ie, jb, je
 
     integer, dimension(grid_rank) :: gdims
     character(len=2)  :: vtype
