@@ -1,14 +1,15 @@
 module gengrid_utils
 
-  use gengrid_kinds, only : dbl_kind, int_kind
+  use gengrid_kinds, only : dbl_kind, int_kind, real_kind
   use grdvars      , only : deg2rad, rearth, nv
 
-implicit none
+  implicit none
 
-private
+  private
 
-public calc_dist
-public reshape_staggers
+  public calc_dist
+  public reshape_staggers
+  public allocate_all
 
 contains
   !> Calculate the distance between two lat/lon points
@@ -32,7 +33,7 @@ contains
 
     distance = rearth * c
   end function calc_dist
-    !> Get center and corner grid points for a given stagger location
+  !> Get center and corner grid points for a given stagger location
   !!
   !! @param[in]  iind                    the start/end index in the i-dimension
   !! @param[in]  jind                    the start/end index in the j-dimension
@@ -66,4 +67,71 @@ contains
     crlons = reshape(lonvert(ib:ie, jb:je, :), (/nv, idim*jdim/), order=(/2,1/))
 
   end subroutine reshape_staggers
+  !> Allocate grid variables
+  !!
+  !! @param[in]     idim, jdim    the domain size
+  !! @param[inout]  G             the domain
+  !!
+  !! @author Denise Worthen
+  subroutine allocate_all(idim,jdim,G)
+
+    use grdvars, only : nv, grid_type
+
+    integer, intent(in) :: idim,jdim
+    type(grid_type), intent(inout) :: G
+
+    allocate(G%Ct%lat(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%Ct%lon(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%Cu%lat(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%Cu%lon(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%Cv%lat(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%Cv%lon(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%Bu%lat(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%Bu%lon(idim,jdim), source=0.0_dbl_kind)
+
+    allocate(G%Ct%iVert(nv), source=0)
+    allocate(G%Ct%jVert(nv), source=0)
+    allocate(G%Cu%iVert(nv), source=0)
+    allocate(G%Cu%jVert(nv), source=0)
+    allocate(G%Cv%iVert(nv), source=0)
+    allocate(G%Cv%jVert(nv), source=0)
+    allocate(G%Bu%iVert(nv), source=0)
+    allocate(G%Bu%jVert(nv), source=0)
+
+    allocate(G%Ct%latvert(idim,jdim,nv), source=0.0_dbl_kind)
+    allocate(G%Ct%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
+    allocate(G%Cu%latvert(idim,jdim,nv), source=0.0_dbl_kind)
+    allocate(G%Cu%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
+    allocate(G%Cv%latvert(idim,jdim,nv), source=0.0_dbl_kind)
+    allocate(G%Cv%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
+    allocate(G%Bu%latvert(idim,jdim,nv), source=0.0_dbl_kind)
+    allocate(G%Bu%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
+
+    allocate(G%Ct%xlon(idim), source=0.0_dbl_kind)
+    allocate(G%Ct%xlat(idim), source=0.0_dbl_kind)
+    allocate(G%Cu%xlon(idim), source=0.0_dbl_kind)
+    allocate(G%Cu%xlat(idim), source=0.0_dbl_kind)
+    allocate(G%Cv%xlon(idim), source=0.0_dbl_kind)
+    allocate(G%Cv%xlat(idim), source=0.0_dbl_kind)
+    allocate(G%Bu%xlon(idim), source=0.0_dbl_kind)
+    allocate(G%Bu%xlat(idim), source=0.0_dbl_kind)
+
+    allocate(G%areaCt(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%anglet(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%angle(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%angchk(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%xangCt(idim), source=0.0_dbl_kind)
+
+    allocate(G%wet4(idim,jdim), source=0.0_real_kind)
+    allocate(G%wet8(idim,jdim), source=0.0_dbl_kind)
+
+    allocate(G%dp4(idim,jdim), source=0.0_real_kind)
+    allocate(G%dp8(idim,jdim), source=0.0_dbl_kind)
+
+    allocate(G%ulon(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%ulat(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%htn(idim,jdim), source=0.0_dbl_kind)
+    allocate(G%hte(idim,jdim), source=0.0_dbl_kind)
+
+  end subroutine allocate_all
 end module gengrid_utils

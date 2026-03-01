@@ -18,7 +18,9 @@ program gen_fixgrid
   use ESMF
   use mpi_f08
 
-  use grdvars,           only: ni,nj,grid
+  use grdvars,           only: ni,nj,nv,deg2rad,sg_maxlat,iVertNE,jVertNE,maximum_lat
+  use grdvars,           only: grid
+  use gengrid_utils,     only: allocate_all
   use inputnml
   use gengrid_kinds,     only: CL, CS, dbl_kind, real_kind, int_kind
   use angles,            only: find_ang, find_angq, find_angchk
@@ -39,6 +41,7 @@ program gen_fixgrid
   type(MPI_Comm) :: mpic  ! mpi_f08
   real(dbl_kind) :: dxT, dyT
 
+  integer(int_kind)  :: ipole(2)
 
   real(real_kind),   allocatable, dimension(:,:) :: ww3dpth
   integer(int_kind), allocatable, dimension(:,:) :: ww3mask
@@ -104,35 +107,36 @@ program gen_fixgrid
      print *,'do_postwgts flag ',do_postwgts
      print *
 
-     call allocate_all()
+     call allocate_all(ni,nj,grid)
 
      call ESMF_LogWrite("Starting gen_fixgrid", ESMF_LOGMSG_INFO)
      !---------------------------------------------------------------------
      ! set up the arrays to retrieve the vertices
      !---------------------------------------------------------------------
 
-   grid%Ct%iVert = iVertNE     ; grid%Ct%jVert = jVertNE
-   grid%Cu%iVert = grid%Ct%iVert + 1; grid%Cu%jVert = grid%Ct%jvert + 0
-   grid%Cv%iVert = grid%Ct%iVert + 0; grid%Cv%jVert = grid%Ct%jVert + 1
-   grid%Bu%iVert = grid%Ct%iVert + 1; grid%Bu%jVert = grid%Ct%jVert + 1
+     grid%Ct%iVert = iVertNE
+     grid%Ct%jVert = jVertNE
+     grid%Cu%iVert = grid%Ct%iVert + 1; grid%Cu%jVert = grid%Ct%jvert + 0
+     grid%Cv%iVert = grid%Ct%iVert + 0; grid%Cv%jVert = grid%Ct%jVert + 1
+     grid%Bu%iVert = grid%Ct%iVert + 1; grid%Bu%jVert = grid%Ct%jVert + 1
 
-   print '(a8,4i6)','iVertCt ',(grid%Ct%iVert(i),i=1,4)
-   print '(a8,4i6)','jVertCt ',(grid%Ct%jVert(i),i=1,4)
-   print *
-   print '(a8,4i6)','iVertCu ',(grid%Cu%iVert(i),i=1,4)
-   print '(a8,4i6)','jVertCu ',(grid%Cu%jVert(i),i=1,4)
-   print *
-   print '(a8,4i6)','iVertCv ',(grid%Cv%iVert(i),i=1,4)
-   print '(a8,4i6)','jVertCv ',(grid%Cv%jVert(i),i=1,4)
-   print *
-   print '(a8,4i6)','iVertBu ',(grid%Bu%iVert(i),i=1,4)
-   print '(a8,4i6)','jVertBu ',(grid%Bu%jVert(i),i=1,4)
-   print *
+     print '(a8,4i6)','iVertCt ',(grid%Ct%iVert(i),i=1,4)
+     print '(a8,4i6)','jVertCt ',(grid%Ct%jVert(i),i=1,4)
+     print *
+     print '(a8,4i6)','iVertCu ',(grid%Cu%iVert(i),i=1,4)
+     print '(a8,4i6)','jVertCu ',(grid%Cu%jVert(i),i=1,4)
+     print *
+     print '(a8,4i6)','iVertCv ',(grid%Cv%iVert(i),i=1,4)
+     print '(a8,4i6)','jVertCv ',(grid%Cv%jVert(i),i=1,4)
+     print *
+     print '(a8,4i6)','iVertBu ',(grid%Bu%iVert(i),i=1,4)
+     print '(a8,4i6)','jVertBu ',(grid%Bu%jVert(i),i=1,4)
+     print *
 
-   grid%Ct%latvert = -9999.0; grid%Ct%lonvert = -9999.0
-   grid%Cu%latvert = -9999.0; grid%Cu%lonvert = -9999.0
-   grid%Cv%latvert = -9999.0; grid%Cv%lonvert = -9999.0
-   grid%Bu%latvert = -9999.0; grid%Bu%lonvert = -9999.0
+     grid%Ct%latvert = -9999.0; grid%Ct%lonvert = -9999.0
+     grid%Cu%latvert = -9999.0; grid%Cu%lonvert = -9999.0
+     grid%Cv%latvert = -9999.0; grid%Cv%lonvert = -9999.0
+     grid%Bu%latvert = -9999.0; grid%Bu%lonvert = -9999.0
 
      !---------------------------------------------------------------------
      ! read the MOM6 land mask
@@ -192,7 +196,7 @@ program gen_fixgrid
 
         fsrc = trim(dirsrc)//trim(editsfile)
         fdst = trim(dirout)//'ufs.'//trim(editsfile)
-        call add_topoedits(fsrc,fdst)
+        call add_topoedits(fsrc,fdst,grid%wet4)
      endif
 
      !---------------------------------------------------------------------
@@ -214,7 +218,7 @@ program gen_fixgrid
            call abort()
         end if
      end if
-     call apply_topoedits(fsrc)
+     call apply_topoedits(fsrc,grid%dp4)
 
      !---------------------------------------------------------------------
      ! read MOM6 supergrid file
@@ -254,11 +258,11 @@ program gen_fixgrid
         do i = 1,ni
            i2 = 2*i ; j2 = 2*j
            !deg->rad
-           ulon(i,j) =     x(i2,j2)*deg2rad
-           ulat(i,j) =     y(i2,j2)*deg2rad
+           grid%ulon(i,j) =     x(i2,j2)*deg2rad
+           grid%ulat(i,j) =     y(i2,j2)*deg2rad
            !m->cm
-           htn(i,j) = (dx(i2-1,j2) + dx(i2,j2))*100._dbl_kind
-           hte(i,j) = (dy(i2,j2-1) + dy(i2,j2))*100._dbl_kind
+           grid%htn(i,j) = (dx(i2-1,j2) + dx(i2,j2))*100._dbl_kind
+           grid%hte(i,j) = (dy(i2,j2-1) + dy(i2,j2))*100._dbl_kind
            !deg
            grid%Bu%lon(i,j) =     x(i2,j2)
            grid%Bu%lat(i,j) =     y(i2,j2)
@@ -285,20 +289,20 @@ program gen_fixgrid
      ipole = -1
      j = nj
      do i = 1,ni/2
-        if(Bu%lat(i,j) .eq. sg_maxlat)ipole(1) = i
+        if(grid%Bu%lat(i,j) .eq. sg_maxlat)ipole(1) = i
      enddo
      do i = ni/2+1,ni
-        if(Bu%lat(i,j) .eq. sg_maxlat)ipole(2) = i
+        if(grid%Bu%lat(i,j) .eq. sg_maxlat)ipole(2) = i
      enddo
      write(logmsg,'(a,2i6,2f12.2)')'poles found at i = ',ipole, &
-          Bu%lat(ipole(1),nj), Bu%lat(ipole(2),nj)
+          grid%Bu%lat(ipole(1),nj), grid%Bu%lat(ipole(2),nj)
      print '(a)',trim(logmsg)
 
      !---------------------------------------------------------------------
      ! find the angle on centers using the same procedure as MOM6
      !---------------------------------------------------------------------
 
-     call find_ang((/1,ni/),(/1,nj/),Bu%lon,Bu%lat,Ct%lon,grid%anglet)
+     call find_ang((/1,ni/),(/1,nj/),grid%Bu%lon,grid%Bu%lat,grid%Ct%lon,grid%anglet)
      write(logmsg,'(a,2f12.2)')'ANGLET min,max: ',minval(grid%anglet),maxval(grid%anglet)
      print '(a)',trim(logmsg)
      write(logmsg,'(a,2f12.2)')'ANGLET edges i=1,i=ni: ',grid%anglet(1,nj),grid%anglet(ni,nj)
@@ -331,9 +335,9 @@ program gen_fixgrid
      grid%angchk(1,:) = -grid%angchk(ni,:)
      ! reverse angle for MOM6
      grid%angchk = -grid%angchk
-     write(logmsg,'(a,2f12.2)')'ANGCHK min,max: ',minval(angchk),maxval(angchk)
+     write(logmsg,'(a,2f12.2)')'ANGCHK min,max: ',minval(grid%angchk),maxval(grid%angchk)
      print '(a)',trim(logmsg)
-     write(logmsg,'(a,2f12.2)')'ANGCHK edges i=1,i=ni: ',angchk(1,nj),angchk(ni,nj)
+     write(logmsg,'(a,2f12.2)')'ANGCHK edges i=1,i=ni: ',grid%angchk(1,nj),grid%angchk(ni,nj)
      print '(a)',trim(logmsg)
 
      !---------------------------------------------------------------------
@@ -344,15 +348,15 @@ program gen_fixgrid
      ! hte < 1.0
      !---------------------------------------------------------------------
 
-     write(logmsg,'(a,2e12.5)')'min vals of hte at folds ', minval(hte(ni/2,:)),minval(hte(ni,:))
+     write(logmsg,'(a,2e12.5)')'min vals of hte at folds ', minval(grid%hte(ni/2,:)),minval(grid%hte(ni,:))
      print '(a)',trim(logmsg)
      do j = 1,nj
         ii = ni/2
-        if(hte(ii,j) .le. 1.0)hte(ii,j) = 0.5*(hte(ii-1,j) + hte(ii+1,j))
+        if(grid%hte(ii,j) .le. 1.0)grid%hte(ii,j) = 0.5*(grid%hte(ii-1,j) + grid%hte(ii+1,j))
         ii = ni
-        if(hte(ii,j) .le. 1.0)hte(ii,j) = 0.5*(hte(ii-1,j) + hte(   1,j))
+        if(grid%hte(ii,j) .le. 1.0)grid%hte(ii,j) = 0.5*(grid%hte(ii-1,j) + grid%hte(   1,j))
      enddo
-     write(logmsg,'(a,2e12.5)')'min vals of hte at folds ', minval(hte(ni/2,:)),minval(hte(ni,:))
+     write(logmsg,'(a,2e12.5)')'min vals of grid%hte at folds ', minval(grid%hte(ni/2,:)),minval(grid%hte(ni,:))
      print '(a)',trim(logmsg)
 
      !---------------------------------------------------------------------
@@ -388,25 +392,22 @@ program gen_fixgrid
      ! fill grid vertices variables
      !---------------------------------------------------------------------
 
-   call fill_vertices(grid%Ct%iVert, grid%Ct%jVert, grid%Bu%lat, grid%Bu%lon, grid%Bu%xlat, grid%Bu%xlon, grid%Ct%latvert, grid%Ct%lonvert, 0)
-
-   call fill_vertices(grid%Cu%iVert, grid%Cu%jVert, grid%Cv%lat, grid%Cv%lon, grid%Cv%xlat, grid%Cv%xlon, grid%Cu%latvert, grid%Cu%lonvert, 0)
-
-   call fill_vertices(grid%Cv%iVert, grid%Cv%jVert, grid%Cu%lat, grid%Cu%lon, grid%Cu%xlat, grid%Cu%xlon, grid%Cv%latvert, grid%Cv%lonvert)
-
-   call fill_vertices(grid%Bu%iVert, grid%Bu%jVert, grid%Ct%lat, grid%Ct%lon, grid%Ct%xlat, grid%Ct%xlon, grid%Bu%latvert, grid%Bu%lonvert)
+     call fill_vertices(grid%Ct%iVert, grid%Ct%jVert, grid%Bu%lat, grid%Bu%lon, grid%Bu%xlat, grid%Bu%xlon, grid%Ct%latvert, grid%Ct%lonvert, 0)
+     call fill_vertices(grid%Cu%iVert, grid%Cu%jVert, grid%Cv%lat, grid%Cv%lon, grid%Cv%xlat, grid%Cv%xlon, grid%Cu%latvert, grid%Cu%lonvert, 0)
+     call fill_vertices(grid%Cv%iVert, grid%Cv%jVert, grid%Cu%lat, grid%Cu%lon, grid%Cu%xlat, grid%Cu%xlon, grid%Cv%latvert, grid%Cv%lonvert)
+     call fill_vertices(grid%Bu%iVert, grid%Bu%jVert, grid%Ct%lat, grid%Ct%lon, grid%Ct%xlat, grid%Ct%xlon, grid%Bu%latvert, grid%Bu%lonvert)
 
      !if(debug)call checkpoint
 
-   if(minval(grid%Ct%latvert) .lt. -1.e3)stop
-   if(minval(grid%Ct%lonvert) .lt. -1.e3)stop
-   if(minval(grid%Cu%latvert) .lt. -1.e3)stop
-   if(minval(grid%Cu%lonvert) .lt. -1.e3)stop
-   if(minval(grid%Cv%latvert) .lt. -1.e3)stop
-   if(minval(grid%Cv%lonvert) .lt. -1.e3)stop
-   if(minval(grid%Bu%latvert) .lt. -1.e3)stop
-   if(minval(grid%Bu%lonvert) .lt. -1.e3)stop
-   deallocate(grid%Ct%xlon, grid%Ct%xlat, grid%Cu%xlon, grid%Cu%xlat, grid%Bu%xlat, grid%Bu%xlon, grid%Cv%xlat, grid%Cv%xlon)
+     if(minval(grid%Ct%latvert) .lt. -1.e3)stop
+     if(minval(grid%Ct%lonvert) .lt. -1.e3)stop
+     if(minval(grid%Cu%latvert) .lt. -1.e3)stop
+     if(minval(grid%Cu%lonvert) .lt. -1.e3)stop
+     if(minval(grid%Cv%latvert) .lt. -1.e3)stop
+     if(minval(grid%Cv%lonvert) .lt. -1.e3)stop
+     if(minval(grid%Bu%latvert) .lt. -1.e3)stop
+     if(minval(grid%Bu%lonvert) .lt. -1.e3)stop
+     deallocate(grid%Ct%xlon, grid%Ct%xlat, grid%Cu%xlon, grid%Cu%xlat, grid%Bu%xlat, grid%Bu%xlon, grid%Cv%xlat, grid%Cv%xlon)
 
      !---------------------------------------------------------------------
      ! write out grid file files
@@ -418,33 +419,33 @@ program gen_fixgrid
 
      ! write fix grid
      fdst = trim(dirout)//'tripole.mx'//trim(res)//'.nc'
-     call write_tripolegrid(trim(fdst), grid)
+     call write_tripolegrid(trim(fdst),(/1,ni/),(/1,nj/),grid)
 
      ! write cice grid
      fdst = trim(dirout)//'grid_cice_NEMS_mx'//trim(res)//'.nc'
-     call write_cicegrid(trim(fdst), grid%ulon, grid%ulat, grid%htn, grid%hte, )
-     deallocate(ulon, ulat, htn, hte)
+     call write_cicegrid(trim(fdst),(/1,ni/),(/1,nj/),grid)
+     deallocate(grid%ulon, grid%ulat, grid%htn, grid%hte)
 
      ! write SCRIP files for generation of positional weights
      cstagger = 'Ct'
-        fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
-   call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Ct%lon,grid%Ct%lat,grid%Ct%lonvert,grid%Ct%latvert)
+     fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
+     call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Ct%lon,grid%Ct%lat,grid%Ct%lonvert,grid%Ct%latvert)
+     fdst= trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP_land.nc'
+     call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Ct%lon,grid%Ct%lat,grid%Ct%lonvert,grid%Ct%latvert,imask=int(grid%wet4))
 
-   fdst= trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP_land.nc'
-   call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Ct%lon,grid%Ct%lat,grid%Ct%lonvert,grid%Ct%latvert,imask=int(wet4))
-   cstagger = 'Cu'
-   fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
-   call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Cu%lon,grid%Cu%lat,grid%Cu%lonvert,grid%Cu%latvert)
-   cstagger = 'Cv'
-   fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
-   call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Cv%lon,grid%Cv%lat,grid%Cv%lonvert,grid%Cv%latvert)
-   cstagger = 'Bu'
-   fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
-   call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Bu%lon,grid%Bu%lat,grid%Bu%lonvert,grid%Bu%latvert)
-   deallocate(grid%Ct%latvert, grid%Ct%lonvert)
-   deallocate(grid%Cv%latvert, grid%Cv%lonvert)
-   deallocate(grid%Cu%latvert, grid%Cu%lonvert)
-   deallocate(grid%Bu%latvert, grid%Bu%lonvert)
+     cstagger = 'Cu'
+     fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
+     call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Cu%lon,grid%Cu%lat,grid%Cu%lonvert,grid%Cu%latvert)
+     cstagger = 'Cv'
+     fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
+     call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Cv%lon,grid%Cv%lat,grid%Cv%lonvert,grid%Cv%latvert)
+     cstagger = 'Bu'
+     fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
+     call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Bu%lon,grid%Bu%lat,grid%Bu%lonvert,grid%Bu%latvert)
+     deallocate(grid%Ct%latvert, grid%Ct%lonvert)
+     deallocate(grid%Cv%latvert, grid%Cv%lonvert)
+     deallocate(grid%Cu%latvert, grid%Cu%lonvert)
+     deallocate(grid%Bu%latvert, grid%Bu%lonvert)
 
      !---------------------------------------------------------------------
      ! write lat,lon,depth and mask arrays required by ww3 in creating
@@ -455,10 +456,10 @@ program gen_fixgrid
      write(form1,'(a)')'('//trim(cnx)//'f14.8)'
      write(form2,'(a)')'('//trim(cnx)//'i2)'
 
-     allocate(ww3mask(1:ni,1:nj)); ww3mask = int(wet4)
-     allocate(ww3dpth(1:ni,1:nj)); ww3dpth = dp4
+     allocate(ww3mask(1:ni,1:nj), source=0); ww3mask = int(grid%wet4)
+     allocate(ww3dpth(1:ni,1:nj), source=0.0_real_kind); ww3dpth = grid%dp4
 
-     where(Ct%lat .ge. maximum_lat)ww3mask = 3
+     where(grid%Ct%lat .ge. maximum_lat)ww3mask = 3
      !close last row
      ww3mask(:,nj) = 3
 
@@ -470,8 +471,8 @@ program gen_fixgrid
      open(unit=25,file=trim(dirout)//'ww3.mx'//trim(res)//'_obstr.inp',form='formatted')
 
      do j = 1,nj
-        write( 21,trim(form1))Ct%lon(:,j)
-        write( 22,trim(form1))Ct%lat(:,j)
+        write( 21,trim(form1))grid%Ct%lon(:,j)
+        write( 22,trim(form1))grid%Ct%lat(:,j)
      end do
      do j = 1,nj
         write( 23,trim(form1))ww3dpth(:,j)
@@ -483,7 +484,7 @@ program gen_fixgrid
 
      close(21); close(22); close(23); close(24); close(25)
      deallocate(ww3mask); deallocate(ww3dpth)
-     deallocate(wet4, wet8)
+     deallocate(grid%wet4, grid%wet8)
 
      nvalid = size(catm)
   end if ! if (maintask)
@@ -633,10 +634,10 @@ program gen_fixgrid
      !---------------------------------------------------------------------
 
      deallocate(x, y, dx, dy)
-     deallocate(areaCt, anglet, angle, angchk)
-     deallocate(Ct%lat, Ct%lon)
-     deallocate(Cv%lat, Cv%lon)
-     deallocate(Cu%lat, Cu%lon)
-     deallocate(Bu%lat, Bu%lon)
+     deallocate(grid%areaCt, grid%anglet, grid%angle, grid%angchk)
+     deallocate(grid%Ct%lat, grid%Ct%lon)
+     deallocate(grid%Cv%lat, grid%Cv%lon)
+     deallocate(grid%Cu%lat, grid%Cu%lon)
+     deallocate(grid%Bu%lat, grid%Bu%lon)
   endif ! if (maintask)
 end program gen_fixgrid

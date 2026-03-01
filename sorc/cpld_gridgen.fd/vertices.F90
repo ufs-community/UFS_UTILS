@@ -70,7 +70,7 @@ contains
   !! @param[in] lattop,lontop      the lats and lons outside the top edge of the grid
   !! @param[out] latvert,latvert   the lats and lons of each vertex
   !! @author Denise.Worthen@noaa.gov
-    subroutine fill_vertices_top(iVert,jVert,lat,lon,lattop,lontop,latvert,lonvert)
+  subroutine fill_vertices_top(iVert,jVert,lat,lon,lattop,lontop,latvert,lonvert)
 
     integer,        intent(in)  :: iVert(nv), jVert(nv)
     real(dbl_kind), intent(in)  :: lat(:,:), lon(:,:)

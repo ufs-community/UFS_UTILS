@@ -10,7 +10,7 @@ module topoedits
 
   use gengrid_kinds, only: real_kind,int_kind
   use grdvars,       only: ni,nj
-  use grdvars,       only: wet4,dp4,minimum_depth,maximum_depth,masking_depth
+  use grdvars,       only: minimum_depth,maximum_depth,masking_depth
   use charstrings,   only: logmsg,history
   use netcdf
 
@@ -24,14 +24,14 @@ contains
   !> Read the existing topoedits file, append required topoedits and write a new topoedits file. Use the new topoedits
   !! to adjust the land mask used in subsequent steps to match the land mask which will be created at run time
   !!
-  !! @param[in]  fsrc the existing topoedits file name
-  !! @param[out] fdst the modified topoedits file name
-  !!
+  !! @param[in]  fsrc    the existing topoedits file name
+  !! @param[out] fdst    the modified topoedits file name
+  !! @param[inout] mask  the land mask
   !! @author Denise.Worthen@noaa.gov
+  subroutine add_topoedits(fsrc,fdst,mask)
 
-  subroutine add_topoedits(fsrc,fdst)
-
-    character(len=*), intent(in) :: fsrc, fdst
+    character(len=*), intent(in)    :: fsrc, fdst
+    real(real_kind),  intent(inout) :: mask(:,:)
 
     ! local variables
     integer :: rc,id,i,j,ii,jj,ncid,dimid,idimid,dim1(1)
@@ -72,7 +72,7 @@ contains
     icnt = 0
     j = 1
     do i = 1,ni
-       if(wet4(i,j) .eq. 1.0)icnt = icnt+1
+       if(mask(i,j) .eq. 1.0)icnt = icnt+1
     end do
     cnt2 = cnt2+icnt
     print '(a,i4,a,i4)', 'found ',icnt,' open water points at j=1 , cnt2 = ',cnt2
@@ -94,7 +94,7 @@ contains
     icnt = cnt1
     j = 1
     do i = 1,ni
-       if(wet4(i,j) .eq. 1.0)then
+       if(mask(i,j) .eq. 1.0)then
           icnt = icnt+1
           ii = i-1; jj = j-1
           ieds2(icnt) = ii
@@ -142,12 +142,12 @@ contains
 
     do i = 1,cnt2
        ii = ieds2(i); jj = jeds2(i)
-       if(wet4(ii+1,jj+1) .eq. 0.0 .and. zeds2(i) .gt. 0.0) then
-          wet4(ii+1,jj+1) = 1.0
+       if(mask(ii+1,jj+1) .eq. 0.0 .and. zeds2(i) .gt. 0.0) then
+          mask(ii+1,jj+1) = 1.0
           print '(a,2i4,a)', 'switch point ',ii+1,jj+1,' from land->ocean at runtime'
        end if
-       if(wet4(ii+1,jj+1) .eq. 1.0 .and. zeds2(i) .eq. 0.0) then
-          wet4(ii+1,jj+1) = 0.0
+       if(mask(ii+1,jj+1) .eq. 1.0 .and. zeds2(i) .eq. 0.0) then
+          mask(ii+1,jj+1) = 0.0
           print '(a,2i4,a)', 'switch point ',ii+1,jj+1,' from ocean->land at runtime'
        end if
     end do
@@ -158,13 +158,14 @@ contains
 
   !> Read the topoedits file and adjust the bathymetry. Apply limits to bathymetry.
   !!
-  !! @param[in]  fsrc the topoedits file name
-  !!
+  !! @param[in]    fsrc   the topoedits file name
+  !! @param[inout] depth  the depth array
   !! @author Denise.Worthen@noaa.gov
 
-  subroutine apply_topoedits(fsrc)
+  subroutine apply_topoedits(fsrc, depth)
 
-    character(len=*), intent(in) :: fsrc
+    character(len=*), intent(in)    :: fsrc
+    real(real_kind),  intent(inout) :: depth(:,:)
 
     ! local variables
     integer :: rc,ncid,id,dimid,i,j,ii,jj,cnt1
@@ -202,8 +203,8 @@ contains
        ! apply topo edits from file
        do i = 1,cnt1
           ii = ieds1(i); jj = jeds1(i)
-          print '(a,3i5,f8.2,a,f8.2)', 'Ocean topography edit: ', i, ii+1, jj+1 , dp4(ii+1,jj+1), '->', abs(zeds1(i))
-          dp4(ii+1,jj+1) = abs(zeds1(i))
+          print '(a,3i5,f8.2,a,f8.2)', 'Ocean topography edit: ', i, ii+1, jj+1 , depth(ii+1,jj+1), '->', abs(zeds1(i))
+          depth(ii+1,jj+1) = abs(zeds1(i))
        end do
        deallocate(ieds1, jeds1, zeds1)
     end if
@@ -217,8 +218,8 @@ contains
     print '(a, f8.2)', 'Using max_depth = ',maximum_depth
     do j = 1,nj
        do i = 1,ni
-          if(dp4(i,j) > min(minimum_depth,masking_depth))then
-             dp4(i,j) = min( max(dp4(i,j), minimum_depth), maximum_depth)
+          if(depth(i,j) > min(minimum_depth,masking_depth))then
+             depth(i,j) = min( max(depth(i,j), minimum_depth), maximum_depth)
           end if
        end do
     end do

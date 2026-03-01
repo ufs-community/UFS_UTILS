@@ -22,6 +22,7 @@ module scripgrid
 contains
   !> Reshape center and corner grid points for a given stagger location and write a SCRIP file
   !! @param[in]  fname             the file name to write
+  !! @param[in]  iind,jjind        the grid domain bounds
   !! @param[out] lon,lat           2D center global lon,lat for a given stagger
   !! @param[out] lonvert, latvert  3D corner (vertices) global lon and lat for a given stagger
   !! @param[in]  imask (optional)  the land mask values
@@ -144,20 +145,20 @@ contains
     enddo
     rc = nf90_enddef(ncid)
 
-    rc = nf90_inq_varid(ncid,  'grid_dims',        id)
-    rc = nf90_put_var(ncid,             id,     gdims)
-    rc = nf90_inq_varid(ncid, 'grid_imask',        id)
-    rc = nf90_put_var(ncid,             id,    cnmask)
+    rc = nf90_inq_varid(ncid, 'grid_dims', id)
+    rc = nf90_put_var(ncid,            id, gdims)
+    rc = nf90_inq_varid(ncid, 'grid_imask', id)
+    rc = nf90_put_var(ncid,            id, cnmask)
 
-    rc = nf90_inq_varid(ncid,  'grid_center_lon',        id)
-    rc = nf90_put_var(ncid,                   id,    cnlons)
-    rc = nf90_inq_varid(ncid,  'grid_center_lat',        id)
-    rc = nf90_put_var(ncid,                   id,    cnlats)
+    rc = nf90_inq_varid(ncid, 'grid_center_lon', id)
+    rc = nf90_put_var(ncid,                  id, cnlons)
+    rc = nf90_inq_varid(ncid, 'grid_center_lat', id)
+    rc = nf90_put_var(ncid,                  id, cnlats)
 
-    rc = nf90_inq_varid(ncid,  'grid_corner_lon',        id)
-    rc = nf90_put_var(ncid,                   id,    crlons)
-    rc = nf90_inq_varid(ncid,  'grid_corner_lat',        id)
-    rc = nf90_put_var(ncid,                   id,    crlats)
+    rc = nf90_inq_varid(ncid, 'grid_corner_lon', id)
+    rc = nf90_put_var(ncid,                  id, crlons)
+    rc = nf90_inq_varid(ncid, 'grid_corner_lat', id)
+    rc = nf90_put_var(ncid,                  id, crlats)
 
     rc = nf90_close(ncid)
 
