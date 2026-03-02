@@ -39,7 +39,8 @@ case ${MACHINE_ID,,} in
         ;;
     ursa)
         WORK_DIR="/scratch4/NCEPDEV/stmp/${LOGNAME}/ufs_utils"
-        HOMEreg="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
+        # HOMEreg="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
+        HOMEreg="/scratch4/NCEPDEV/stmp/Brian.Curtis/ufs_utils_baselines/reg_tests"
         PROJECT_CODE="nems"
         QUEUE="batch"
         SCHEDULER="slurm"
