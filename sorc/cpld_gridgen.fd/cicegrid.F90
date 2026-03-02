@@ -6,7 +6,7 @@
 !! @author Denise.Worthen@noaa.gov
 module cicegrid
 
-  use charstrings,   only: history, logmsg
+  use charstrings,   only: history
   use vartypedefs,   only: maxvars, cicevars, cicevars_typedefine
   use gengrid_kinds, only: CM
   use netcdf
@@ -56,8 +56,6 @@ contains
     call cicevars_typedefine
 
     rc = nf90_create(fname, nf90_write, ncid)
-    logmsg = '==> writing CICE grid to '//trim(fname)
-    print '(a)', trim(logmsg)
     if(rc .ne. 0)print '(a)', 'nf90_create = '//trim(nf90_strerror(rc))
 
     rc = nf90_def_dim(ncid, 'ni', idim, idimid)

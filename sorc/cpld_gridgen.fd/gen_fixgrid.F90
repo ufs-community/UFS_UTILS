@@ -419,10 +419,14 @@ program gen_fixgrid
 
      ! write fix grid
      fdst = trim(dirout)//'tripole.mx'//trim(res)//'.nc'
+     logmsg = '==> writing tripole grid to '//trim(fdst)
+     print '(a)', trim(logmsg)
      call write_tripolegrid(trim(fdst),(/1,ni/),(/1,nj/),grid)
 
      ! write cice grid
      fdst = trim(dirout)//'grid_cice_NEMS_mx'//trim(res)//'.nc'
+     logmsg = '==> writing CICE grid to '//trim(fdst)
+     print '(a)', trim(logmsg)
      call write_cicegrid(trim(fdst),(/1,ni/),(/1,nj/),grid)
      deallocate(grid%ulon, grid%ulat, grid%htn, grid%hte)
 
@@ -442,6 +446,7 @@ program gen_fixgrid
      cstagger = 'Bu'
      fdst = trim(dirout)//trim(cstagger)//'.mx'//trim(res)//'_SCRIP.nc'
      call write_staggers(trim(fdst),(/1,ni/),(/1,nj/),grid%Bu%lon,grid%Bu%lat,grid%Bu%lonvert,grid%Bu%latvert)
+
      deallocate(grid%Ct%latvert, grid%Ct%lonvert)
      deallocate(grid%Cv%latvert, grid%Cv%lonvert)
      deallocate(grid%Cu%latvert, grid%Cu%lonvert)

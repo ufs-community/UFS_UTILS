@@ -7,7 +7,7 @@
 module tripolegrid
 
   use gengrid_kinds, only: dbl_kind,int_kind,CM
-  use charstrings,   only: logmsg,history
+  use charstrings,   only: history
   use vartypedefs,   only: maxvars, fixvars, fixvars_typedefine
   use netcdf
 
@@ -53,8 +53,6 @@ contains
     ! 64_bit offset reqd for 008 grid
     ! produces b4b results for smaller grids
     rc = nf90_create(trim(fname), nf90_64bit_offset, ncid)
-    logmsg = '==> writing tripole grid to '//trim(fname)
-    print '(a)', trim(logmsg)
     if(rc .ne. 0)print '(a)', 'nf90_create = '//trim(nf90_strerror(rc))
 
     rc = nf90_def_dim(ncid, 'ni', idim, idimid)

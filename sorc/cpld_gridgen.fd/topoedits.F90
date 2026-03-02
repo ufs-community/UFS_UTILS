@@ -11,7 +11,7 @@ module topoedits
   use gengrid_kinds, only: real_kind,int_kind
   use grdvars,       only: ni,nj
   use grdvars,       only: minimum_depth,maximum_depth,masking_depth
-  use charstrings,   only: logmsg,history
+  use charstrings,   only: history
   use netcdf
 
   implicit none

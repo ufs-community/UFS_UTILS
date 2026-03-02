@@ -120,38 +120,14 @@ contains
 
     allocate(staggerloc%lat(idim,jdim), source=0.0_dbl_kind)
     allocate(staggerloc%lon(idim,jdim), source=0.0_dbl_kind)
-    !allocate(Cu%lat(idim,jdim), source=0.0_dbl_kind)
-    !allocate(Cu%lon(idim,jdim), source=0.0_dbl_kind)
-    !allocate(Cv%lat(idim,jdim), source=0.0_dbl_kind)
-    !allocate(Cv%lon(idim,jdim), source=0.0_dbl_kind)
-    !allocate(Bu%lat(idim,jdim), source=0.0_dbl_kind)
-    !allocate(Bu%lon(idim,jdim), source=0.0_dbl_kind)
 
     allocate(staggerloc%iVert(nv), source=0)
     allocate(staggerloc%jVert(nv), source=0)
-    !allocate(Cu%iVert(nv), source=0)
-    !allocate(Cu%jVert(nv), source=0)
-    !allocate(Cv%iVert(nv), source=0)
-    !allocate(Cv%jVert(nv), source=0)
-    !allocate(Bu%iVert(nv), source=0)
-    !allocate(Bu%jVert(nv), source=0)
 
     allocate(staggerloc%latvert(idim,jdim,nv), source=0.0_dbl_kind)
     allocate(staggerloc%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
-    !allocate(Cu%latvert(idim,jdim,nv), source=0.0_dbl_kind)
-    !allocate(Cu%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
-    !allocate(Cv%latvert(idim,jdim,nv), source=0.0_dbl_kind)
-    !allocate(Cv%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
-    !allocate(Bu%latvert(idim,jdim,nv), source=0.0_dbl_kind)
-    !allocate(Bu%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
 
     allocate(staggerloc%xlon(idim), source=0.0_dbl_kind)
     allocate(staggerloc%xlat(idim), source=0.0_dbl_kind)
-    !allocate(Cu%xlon(idim), source=0.0_dbl_kind)
-    !allocate(Cu%xlat(idim), source=0.0_dbl_kind)
-    !allocate(Cv%xlon(idim), source=0.0_dbl_kind)
-    !allocate(Cv%xlat(idim), source=0.0_dbl_kind)
-    !allocate(Bu%xlon(idim), source=0.0_dbl_kind)
-    !allocate(Bu%xlat(idim), source=0.0_dbl_kind)
   end subroutine allocate_staggers
 end module gengrid_utils
