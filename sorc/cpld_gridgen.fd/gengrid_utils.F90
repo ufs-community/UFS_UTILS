@@ -10,6 +10,7 @@ module gengrid_utils
   public calc_dist
   public reshape_staggers
   public allocate_all
+  public allocate_staggers
 
 contains
   !> Calculate the distance between two lat/lon points
@@ -19,6 +20,7 @@ contains
   function calc_dist(lat1, lon1, lat2, lon2) result(distance)
 
     real(dbl_kind), intent(in) :: lat1, lon1, lat2, lon2
+
     real(dbl_kind) :: distance
     real(dbl_kind) :: dlat, dlon, a, c, phi1, phi2
 
@@ -70,51 +72,20 @@ contains
   !> Allocate grid variables
   !!
   !! @param[in]     idim, jdim    the domain size
-  !! @param[inout]  G             the domain
+  !! @param[inout]  G             the domain type
   !!
   !! @author Denise Worthen
   subroutine allocate_all(idim,jdim,G)
 
-    use grdvars, only : nv, grid_type
+    use grdvars, only: nv, grid_type
 
-    integer, intent(in) :: idim,jdim
-    type(grid_type), intent(inout) :: G
+    integer,            intent(in)    :: idim,jdim
+    type(grid_type),    intent(inout) :: G
 
-    allocate(G%Ct%lat(idim,jdim), source=0.0_dbl_kind)
-    allocate(G%Ct%lon(idim,jdim), source=0.0_dbl_kind)
-    allocate(G%Cu%lat(idim,jdim), source=0.0_dbl_kind)
-    allocate(G%Cu%lon(idim,jdim), source=0.0_dbl_kind)
-    allocate(G%Cv%lat(idim,jdim), source=0.0_dbl_kind)
-    allocate(G%Cv%lon(idim,jdim), source=0.0_dbl_kind)
-    allocate(G%Bu%lat(idim,jdim), source=0.0_dbl_kind)
-    allocate(G%Bu%lon(idim,jdim), source=0.0_dbl_kind)
-
-    allocate(G%Ct%iVert(nv), source=0)
-    allocate(G%Ct%jVert(nv), source=0)
-    allocate(G%Cu%iVert(nv), source=0)
-    allocate(G%Cu%jVert(nv), source=0)
-    allocate(G%Cv%iVert(nv), source=0)
-    allocate(G%Cv%jVert(nv), source=0)
-    allocate(G%Bu%iVert(nv), source=0)
-    allocate(G%Bu%jVert(nv), source=0)
-
-    allocate(G%Ct%latvert(idim,jdim,nv), source=0.0_dbl_kind)
-    allocate(G%Ct%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
-    allocate(G%Cu%latvert(idim,jdim,nv), source=0.0_dbl_kind)
-    allocate(G%Cu%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
-    allocate(G%Cv%latvert(idim,jdim,nv), source=0.0_dbl_kind)
-    allocate(G%Cv%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
-    allocate(G%Bu%latvert(idim,jdim,nv), source=0.0_dbl_kind)
-    allocate(G%Bu%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
-
-    allocate(G%Ct%xlon(idim), source=0.0_dbl_kind)
-    allocate(G%Ct%xlat(idim), source=0.0_dbl_kind)
-    allocate(G%Cu%xlon(idim), source=0.0_dbl_kind)
-    allocate(G%Cu%xlat(idim), source=0.0_dbl_kind)
-    allocate(G%Cv%xlon(idim), source=0.0_dbl_kind)
-    allocate(G%Cv%xlat(idim), source=0.0_dbl_kind)
-    allocate(G%Bu%xlon(idim), source=0.0_dbl_kind)
-    allocate(G%Bu%xlat(idim), source=0.0_dbl_kind)
+    call allocate_staggers(idim,jdim,G%Ct)
+    call allocate_staggers(idim,jdim,G%Cu)
+    call allocate_staggers(idim,jdim,G%Cv)
+    call allocate_staggers(idim,jdim,G%Bu)
 
     allocate(G%areaCt(idim,jdim), source=0.0_dbl_kind)
     allocate(G%anglet(idim,jdim), source=0.0_dbl_kind)
@@ -134,4 +105,53 @@ contains
     allocate(G%hte(idim,jdim), source=0.0_dbl_kind)
 
   end subroutine allocate_all
+  !> Allocate stagger type variables
+  !!
+  !! @param[in]     idim, jdim    the domain size
+  !! @param[inout]  Ct,Cu,Cv,Bu   the stagger grids
+  !!
+  !! @author Denise Worthen
+  subroutine allocate_staggers(idim,jdim,staggerloc)
+
+    use grdvars, only: nv, stagger_type
+
+    integer,            intent(in)    :: idim,jdim
+    type(stagger_type), intent(inout) :: staggerloc
+
+    allocate(staggerloc%lat(idim,jdim), source=0.0_dbl_kind)
+    allocate(staggerloc%lon(idim,jdim), source=0.0_dbl_kind)
+    !allocate(Cu%lat(idim,jdim), source=0.0_dbl_kind)
+    !allocate(Cu%lon(idim,jdim), source=0.0_dbl_kind)
+    !allocate(Cv%lat(idim,jdim), source=0.0_dbl_kind)
+    !allocate(Cv%lon(idim,jdim), source=0.0_dbl_kind)
+    !allocate(Bu%lat(idim,jdim), source=0.0_dbl_kind)
+    !allocate(Bu%lon(idim,jdim), source=0.0_dbl_kind)
+
+    allocate(staggerloc%iVert(nv), source=0)
+    allocate(staggerloc%jVert(nv), source=0)
+    !allocate(Cu%iVert(nv), source=0)
+    !allocate(Cu%jVert(nv), source=0)
+    !allocate(Cv%iVert(nv), source=0)
+    !allocate(Cv%jVert(nv), source=0)
+    !allocate(Bu%iVert(nv), source=0)
+    !allocate(Bu%jVert(nv), source=0)
+
+    allocate(staggerloc%latvert(idim,jdim,nv), source=0.0_dbl_kind)
+    allocate(staggerloc%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
+    !allocate(Cu%latvert(idim,jdim,nv), source=0.0_dbl_kind)
+    !allocate(Cu%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
+    !allocate(Cv%latvert(idim,jdim,nv), source=0.0_dbl_kind)
+    !allocate(Cv%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
+    !allocate(Bu%latvert(idim,jdim,nv), source=0.0_dbl_kind)
+    !allocate(Bu%lonvert(idim,jdim,nv), source=0.0_dbl_kind)
+
+    allocate(staggerloc%xlon(idim), source=0.0_dbl_kind)
+    allocate(staggerloc%xlat(idim), source=0.0_dbl_kind)
+    !allocate(Cu%xlon(idim), source=0.0_dbl_kind)
+    !allocate(Cu%xlat(idim), source=0.0_dbl_kind)
+    !allocate(Cv%xlon(idim), source=0.0_dbl_kind)
+    !allocate(Cv%xlat(idim), source=0.0_dbl_kind)
+    !allocate(Bu%xlon(idim), source=0.0_dbl_kind)
+    !allocate(Bu%xlat(idim), source=0.0_dbl_kind)
+  end subroutine allocate_staggers
 end module gengrid_utils

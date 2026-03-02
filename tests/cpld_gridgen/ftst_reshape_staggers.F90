@@ -1,7 +1,7 @@
 !> Unit test for reshape_staggers routine
 !!
-!! This test checks the reshaping of staggered grid points for both a global domain
-!! and an extracted subdomain
+!! This test checks the reshaping of staggered grid points from (i,j) or (i,j,nv)
+!! to vector equivalents for both a global domain and an extracted subdomain
 !!
 !! @author Denise.Worthen@noaa.gov
 program ftst_reshape_staggers
@@ -23,9 +23,9 @@ program ftst_reshape_staggers
 
   integer           :: iind(2), jind(2)
   ! test data
-  real(dbl_kind)    :: lon(nx, ny), lat(nx, ny)
-  integer(int_kind) :: mask(nx, ny)
-  real(dbl_kind)    :: lonvert(nx, ny, nv), latvert(nx, ny, nv)
+  real(dbl_kind)    :: lon(nx,ny), lat(nx,ny)
+  integer(int_kind) :: mask(nx,ny)
+  real(dbl_kind)    :: lonvert(nx,ny,nv), latvert(nx,ny,nv)
   ! result data
   real(dbl_kind), allocatable    :: cnlons(:), cnlats(:)
   integer(int_kind), allocatable :: cnmask(:)

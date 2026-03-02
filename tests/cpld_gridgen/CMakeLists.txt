@@ -25,6 +25,11 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 add_executable(ftst_find_angq ftst_find_angq.F90)
 add_test(NAME cpld_gridgen-ftst_find_angq COMMAND ftst_find_angq)
 target_link_libraries(ftst_find_angq cpld_gridgen_lib)
+
 add_executable(ftst_reshape_staggers ftst_reshape_staggers.F90 assertion_mod.F90)
 add_test(NAME cpld_gridgen-ftst_reshape_staggers COMMAND ftst_reshape_staggers)
 target_link_libraries(ftst_reshape_staggers cpld_gridgen_lib)
+
+add_executable(ftst_fill_vertices ftst_fill_vertices.F90 assertion_mod.F90)
+add_test(NAME cpld_gridgen-ftst_fill_vertices COMMAND ftst_fill_vertices)
+target_link_libraries(ftst_fill_vertices cpld_gridgen_lib)
