@@ -22,7 +22,7 @@ module scripgrid
 contains
   !> Reshape center and corner grid points for a given stagger location and write a SCRIP file
   !! @param[in]  fname             the file name to write
-  !! @param[in]  iind,jjind        the grid domain bounds
+  !! @param[in]  iind,jind         the grid domain bounds
   !! @param[out] lon,lat           2D center global lon,lat for a given stagger
   !! @param[out] lonvert, latvert  3D corner (vertices) global lon and lat for a given stagger
   !! @param[in]  imask (optional)  the land mask values

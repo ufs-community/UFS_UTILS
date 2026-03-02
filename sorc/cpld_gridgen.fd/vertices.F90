@@ -22,17 +22,19 @@ module vertices
      module procedure fill_vertices_top
   end interface fill_vertices
 
-  ! module local variables
-  integer :: ib,ie,jb,je
-  integer :: i,j,n,ii,jj
 
 contains
   !> Fill the vertices for any stagger location, inclusive of bottom-most row
   !!
-  !! @param[in] iVert,jVert        the i and j-offset applied to the indices of a stagger grid
-  !! @param[in] lat,lon            the lats and lons of the stagger grid which define each vertex
-  !! @param[in] latbot,lonbot      the lats and lons outside the bottom edge of the grid
-  !! @param[out] latvert,latvert   the lats and lons of each vertex
+  !! @param[in] iVert              the i-offset applied to the indices of a stagger grid
+  !! @param[in] jVert              the j-offset applied to the indices of a stagger grid
+  !! @param[in] lat                the lat of the stagger grid which define each vertex
+  !! @param[in] lon                the lon of the stagger grid which define each vertex
+  !! @param[in] latbot             the lat outside the bottom edge of the grid
+  !! @param[in] lonbot             the lon outside the bottom edge of the grid
+  !! @param[in] lb                 the expected lower bound
+  !! @param[out] latvert           the lats of each vertex
+  !! @param[out] lonvert           the lons of each vertex
   !! @author Denise.Worthen@noaa.gov
   subroutine fill_vertices_bottom(iVert,jVert,lat,lon,latbot,lonbot,latvert,lonvert,lb)
 
@@ -41,6 +43,10 @@ contains
     real(dbl_kind), intent(in)  :: lat(:,:), lon(:,:)
     real(dbl_kind), intent(in)  :: latbot(:), lonbot(:)
     real(dbl_kind), intent(out) :: latvert(:,:,:), lonvert(:,:,:)
+
+    ! local variables
+    integer :: ib,ie,jb,je
+    integer :: i,j,n,ii,jj
 
     ib = lbound(lat,1); ie = ubound(lat,1)
     jb = lbound(lat,2); je = ubound(lat,2)
@@ -65,10 +71,14 @@ contains
 
   !> Fill the vertices for any stagger location, inclusive of top-most row
   !!
-  !! @param[in] iVert,jVert        the i and j-offset applied to the indices of a stagger grid
-  !! @param[in] lat,lon            the lats and lons of the stagger grid which define each vertex
-  !! @param[in] lattop,lontop      the lats and lons outside the top edge of the grid
-  !! @param[out] latvert,latvert   the lats and lons of each vertex
+  !! @param[in] iVert              the i-offset applied to the indices of a stagger grid
+  !! @param[in] jVert              the j-offset applied to the indices of a stagger grid
+  !! @param[in] lat                the lat of the stagger grid which define each vertex
+  !! @param[in] lon                the lon of the stagger grid which define each vertex
+  !! @param[in] lattop             the lat outside the top edge of the grid
+  !! @param[in] lontop             the lon outside the top edge of the grid
+  !! @param[out] latvert           the lats of each vertex
+  !! @param[out] lonvert           the lons of each vertex
   !! @author Denise.Worthen@noaa.gov
   subroutine fill_vertices_top(iVert,jVert,lat,lon,lattop,lontop,latvert,lonvert)
 
@@ -76,6 +86,10 @@ contains
     real(dbl_kind), intent(in)  :: lat(:,:), lon(:,:)
     real(dbl_kind), intent(in)  :: lattop(:), lontop(:)
     real(dbl_kind), intent(out) :: latvert(:,:,:),lonvert(:,:,:)
+
+    ! local variables
+    integer :: ib,ie,jb,je
+    integer :: i,j,n,ii,jj
 
     ib = lbound(lat,1); ie = ubound(lat,1)
     jb = lbound(lat,2); je = ubound(lat,2)

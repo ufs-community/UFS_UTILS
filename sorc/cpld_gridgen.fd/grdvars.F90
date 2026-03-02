@@ -56,19 +56,23 @@ module grdvars
      real(dbl_kind), allocatable :: xlat(:)        !< The latitude of a stagger location at either j=0 or j=jmax+1
      real(dbl_kind), allocatable :: xlon(:)        !< The longitude of a stagger location at either j=0 or j=jmax+1
      integer, allocatable        :: iVert(:)       !< The i-index off-set array defining the indices on the stagger grid
-                                                   ! which provides the vertices.
+                                                   !! which provides the vertices.
      integer, allocatable        :: jVert(:)       !< The j-index off-set array defining the indices on the stagger grid
-                                                   ! which provides the vertices
-                                                   ! Bu grid->Ct vertices, Ct grid->Bu vertices
-                                                   ! Cu grid->Cv vertices, Cv grid->Cu vertices
+                                                   !! which provides the vertices
+                                                   !! Bu grid->Ct vertices, Ct grid->Bu vertices
+                                                   !! Cu grid->Cv vertices, Cv grid->Cu vertices
   end type stagger_type
-  type(stagger_type) :: Ct, Cu, Cv, Bu
+
+  type(stagger_type) :: Ct                         !< stagger_type object for Ct grid
+  type(stagger_type) :: Cu                         !< stagger_type object for Cu grid
+  type(stagger_type) :: Cv                         !< stagger_type object for Cv grid
+  type(stagger_type) :: Bu                         !< stagger_type object for Bu grid
 
   type :: grid_type
-     type(stagger_type) :: Ct
-     type(stagger_type) :: Cu
-     type(stagger_type) :: Cv
-     type(stagger_type) :: Bu
+     type(stagger_type) :: Ct                               !< stagger_type object for Ct grid
+     type(stagger_type) :: Cu                               !< stagger_type object for Cu grid
+     type(stagger_type) :: Cv                               !< stagger_type object for Cv grid
+     type(stagger_type) :: Bu                               !< stagger_type object for Bu grid
      ! MOM6 fields
      real(dbl_kind),  allocatable, dimension(:,:) :: areaCt !< The grid areas of the Ct grid cell in m2
      real(dbl_kind),  allocatable, dimension(:,:) :: anglet !< The rotation angle on Ct points (opposite sense from angle)
@@ -91,7 +95,8 @@ module grdvars
      real(dbl_kind),  allocatable, dimension(:,:) ::  hte   !< The grid cell width in centimeters of the CICE6
                                                             !! grid in the y-direction (j-dimension)
   end type grid_type
-  type(grid_type) :: grid
+
+  type(grid_type) :: grid                                   !< grid_type object for the grid
 
   real(kind=real_kind), parameter :: minimum_depth = 9.5    !< The minimum depth for MOM6
   real(kind=real_kind), parameter :: maximum_depth = 6500.0 !< The maximum depth for MOM6
@@ -100,7 +105,7 @@ module grdvars
                                                             !! rounded to minimum_depth
   real(kind=real_kind), parameter :: maximum_lat = 88.0     !< The maximum latitude for water points for WW3
 
-                                                            ! ATM resolutions
+ ! ATM resolutions
   integer, parameter :: maxatmres = 10                      !< The maximum number of possible ATM resolutions
   integer, allocatable, dimension(:) :: catm                !< The ATM resolutions for mapped ocean masks
 
