@@ -75,6 +75,7 @@ INPUT_ROOT=${HOMEreg}/${test_name}/input_data
 STMP=${WORK_DIR}
 ACCOUNT=${PROJECT_CODE}
 
+export APRUN="srun"
 case ${MACHINE_ID,,} in 
     ursa)
         WLCLK=10
@@ -94,7 +95,6 @@ case ${MACHINE_ID,,} in
         ulimit -a
         ;;
     jet)
-        export APRUN="srun"
         WLCLK=10
         export NCCMP=nccmp
         PARTITION="--partition=xjet"
@@ -269,6 +269,7 @@ while [ ! -f "summary.log" ]; do
         fi
     fi
 done
+
 if [[ "${waitlocal}" == "true" ]]; then
     mail -s "UFS_UTILS Consistency Test ${test_name^^} COMPLETED on ${MACHINE_ID}" "${MAILTO}" < "./summary.log"
 fi
