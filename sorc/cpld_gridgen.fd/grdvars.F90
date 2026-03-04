@@ -24,9 +24,6 @@ module grdvars
 
   logical :: editmask                            !< flag indicating whether the MOM6 land mask
                                                  !! should be edited. Default is false.
-  logical :: debug                               !< flag indicating whether grid information
-                                                 !! should be printed for debugging purposes
-                                                 !! Default is false.
   logical :: do_postwgts                         !< flag indicating whether then ESMF weights to
                                                  !! regrid from the tripole grid to a rectilinear
                                                  !! grid should be generated. Default is false.

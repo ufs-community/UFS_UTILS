@@ -51,9 +51,9 @@ contains
     rc = nf90_close(ncid)
 
     ! return the existing values
-    allocate(ieds1(cnt1)); ieds1 = 0
-    allocate(jeds1(cnt1)); jeds1 = 0
-    allocate(zeds1(cnt1)); zeds1 = 0.0
+    allocate(ieds1(cnt1), source=0)
+    allocate(jeds1(cnt1), source=0)
+    allocate(zeds1(cnt1), source=0.0_real_kind)
 
     rc = nf90_open(fsrc, nf90_nowrite, ncid)
     rc = nf90_inq_varid(ncid, 'iEdit', id)
@@ -79,9 +79,9 @@ contains
 
     cnt2 = cnt1 + cnt2
     ! allocate space for existing+new values and copy in original values
-    allocate(ieds2(cnt2)); ieds2 = 0
-    allocate(jeds2(cnt2)); jeds2 = 0
-    allocate(zeds2(cnt2)); zeds2 = 0.0
+    allocate(ieds2(cnt2), source=0)
+    allocate(jeds2(cnt2), source=0)
+    allocate(zeds2(cnt2), source=0.0_real_kind)
 
     ieds2(1:cnt1) = ieds1(1:cnt1)
     jeds2(1:cnt1) = jeds1(1:cnt1)

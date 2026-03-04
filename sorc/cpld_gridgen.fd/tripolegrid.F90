@@ -61,23 +61,23 @@ contains
 
     !mask
     dim2(:) = (/idimid, jdimid/)
-    rc = nf90_def_var(ncid, 'wet',     nf90_int,   dim2, id)
-    rc = nf90_put_att(ncid, id,     'units',           'nd')
+    rc = nf90_def_var(ncid, 'wet', nf90_int, dim2, id)
+    rc = nf90_put_att(ncid, id, 'units', 'nd')
     !area
-    rc = nf90_def_var(ncid, 'area', nf90_double,   dim2, id)
-    rc = nf90_put_att(ncid, id,     'units',           'm2')
+    rc = nf90_def_var(ncid, 'area', nf90_double, dim2, id)
+    rc = nf90_put_att(ncid, id, 'units', 'm2')
     !angleT
     rc = nf90_def_var(ncid, 'anglet', nf90_double, dim2, id)
-    rc = nf90_put_att(ncid, id,     'units',      'radians')
+    rc = nf90_put_att(ncid, id, 'units', 'radians')
     !angle (angBu)
-    rc = nf90_def_var(ncid,  'angle', nf90_double, dim2, id)
-    rc = nf90_put_att(ncid, id,     'units',      'radians')
+    rc = nf90_def_var(ncid, 'angle', nf90_double, dim2, id)
+    rc = nf90_put_att(ncid, id, 'units', 'radians')
     !angchk
     rc = nf90_def_var(ncid, 'angchk', nf90_double, dim2, id)
-    rc = nf90_put_att(ncid, id,     'units',      'radians')
+    rc = nf90_put_att(ncid, id, 'units', 'radians')
     !bathymetry
-    rc = nf90_def_var(ncid,  'depth', nf90_float,  dim2, id)
-    rc = nf90_put_att(ncid, id,     'units',            'm')
+    rc = nf90_def_var(ncid, 'depth', nf90_float, dim2, id)
+    rc = nf90_put_att(ncid, id, 'units', 'm')
 
     dim2(:) = (/idimid, jdimid/)
     do ii = 1,ncoord

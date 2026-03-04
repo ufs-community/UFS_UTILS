@@ -103,7 +103,6 @@ program gen_fixgrid
      print '(a)',' MOM6 topography file '//trim(topofile)
      print '(a)',' MOM6 edits file '//trim(editsfile)
      print *,'editmask flag ',editmask
-     print *,'debug flag ',debug
      print *,'do_postwgts flag ',do_postwgts
      print *
 
@@ -363,8 +362,6 @@ program gen_fixgrid
      ! find required extended values for setting all vertices
      !---------------------------------------------------------------------
 
-     !if(debug)call checkseam
-
      do i = 1,ni
         i2 = ipole(2)+(ipole(1)-i)+1
         grid%Ct%xlon(i) = grid%Ct%lon(i2,nj)
@@ -377,8 +374,6 @@ program gen_fixgrid
         grid%Cu%xlon(i) = grid%Cu%lon(i2,nj)
         grid%Cu%xlat(i) = grid%Cu%lat(i2,nj)
      enddo
-
-     !if(debug)call checkxlatlon
 
      ! values outside grid(j=0)
      do i = 1,ni
@@ -396,8 +391,6 @@ program gen_fixgrid
      call fill_vertices(grid%Cu%iVert, grid%Cu%jVert, grid%Cv%lat, grid%Cv%lon, grid%Cv%xlat, grid%Cv%xlon, grid%Cu%latvert, grid%Cu%lonvert, 0)
      call fill_vertices(grid%Cv%iVert, grid%Cv%jVert, grid%Cu%lat, grid%Cu%lon, grid%Cu%xlat, grid%Cu%xlon, grid%Cv%latvert, grid%Cv%lonvert)
      call fill_vertices(grid%Bu%iVert, grid%Bu%jVert, grid%Ct%lat, grid%Ct%lon, grid%Ct%xlat, grid%Ct%xlon, grid%Bu%latvert, grid%Bu%lonvert)
-
-     !if(debug)call checkpoint
 
      if(minval(grid%Ct%latvert) .lt. -1.e3)stop
      if(minval(grid%Ct%lonvert) .lt. -1.e3)stop

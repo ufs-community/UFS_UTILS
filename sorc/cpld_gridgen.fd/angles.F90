@@ -10,7 +10,6 @@
 module angles
 
   use gengrid_kinds, only : dbl_kind, int_kind
-  use grdvars,       only : debug
 
   implicit none
 

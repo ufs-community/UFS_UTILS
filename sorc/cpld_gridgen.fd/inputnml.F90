@@ -8,7 +8,7 @@
 module inputnml
 
   use grdvars,     only : nx,ny,ni,nj,npx,maxatmres,catm
-  use grdvars,     only : editmask, debug, do_postwgts
+  use grdvars,     only : editmask, do_postwgts
   use charstrings, only : dirsrc, dirout, fv3dir, res, topofile, editsfile
 
   implicit none
@@ -31,7 +31,7 @@ contains
     character(len=6)   :: atmreslist(maxatmres) = ''
 
     namelist /grid_nml/ ni, nj, dirsrc, dirout, fv3dir,  topofile, editsfile, &
-         res, editmask, debug, do_postwgts, atmreslist
+         res, editmask, do_postwgts, atmreslist
 
     ! Check whether file exists.
     inquire (file=trim(fname), iostat=rc)
