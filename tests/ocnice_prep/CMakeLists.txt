@@ -37,6 +37,7 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 
 add_executable(ocnice_ftst_program_setup ftst_program_setup.F90)
 add_test(NAME ocnice_ftst_program_setup COMMAND ocnice_ftst_program_setup)
+set_tests_properties(ocnice_ftst_program_setup PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data)
 target_link_libraries(ocnice_ftst_program_setup ocnice_prep_lib)
 
 add_executable(ocnice_ftst_qcice ftst_qcice.F90)
