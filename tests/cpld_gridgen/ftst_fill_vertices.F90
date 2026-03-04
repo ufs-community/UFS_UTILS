@@ -67,14 +67,6 @@ program ftst_fill_vertices
   Cv%iVert = Ct%iVert + 0; Cv%jVert = Ct%jVert + 1
   Bu%iVert = Ct%iVert + 1; Bu%jVert = Ct%jVert + 1
 
-  ! do j = ny,1,-1
-  !    print '(i3,5f8.2)',j,(Ct%lon(i,j),i=1,nx)
-  ! end do
-  ! print *
-  ! do j = ny,1,-1
-  !    print '(i3,5f8.2)',j,(Ct%lat(i,j),i=1,nx)
-  ! end do
-  ! print *
   nt = 0; testverts = 0.0_dbl_kind
 
   !------ Ct vertices from Bu grid ------!
@@ -255,10 +247,6 @@ program ftst_fill_vertices
   testmsg(nt) = 'Expected '//trim(msg_out)
 
   ntests = nt
-  ! do nt = 1,ntests
-  !    print '(i5,a)',nt,' '//trim(testmsg(nt))
-  ! end do
-
   if (all(ispassing(1:ntests))) then
      print '(a)', 'All unit tests passed '
   else

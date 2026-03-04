@@ -55,18 +55,6 @@ program ftst_reshape_staggers
      mask(:,3) = 0_int_kind
   end do
 
-  ! do j = 1,ny
-  !    print '(i3,5f8.2)',j,(lon(i,j),i=1,nx)
-  ! end do
-  ! print *
-  ! do j = 1,ny
-  !    print '(i3,5f8.2)',j,(lat(i,j),i=1,nx)
-  ! end do
-  ! print *
-  ! do j = 1,ny
-  !    print '(i3,5i4)',j,(mask(i,j),i=1,nx)
-  ! end do
-
   nt = 0
   ispassing = .false.
   do ng = 1,ngrids
@@ -202,10 +190,6 @@ program ftst_reshape_staggers
   end do
 
   ntests = nt
-  !do nt = 1,ntests
-  !   print '(i5,a)',nt,' '//trim(testmsg(nt))
-  !end do
-
   if (all(ispassing(1:ntests))) then
      print '(a)', 'All unit tests passed '
   else
