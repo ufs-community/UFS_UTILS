@@ -19,25 +19,25 @@ execute_process( COMMAND ${CMAKE_COMMAND} -E copy
 # Copy necessary test files from the source data directory to the
 # build data directory.
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.model.nml ${CMAKE_CURRENT_BINARY_DIR}/data/invalid.model.nml)
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.model.nml ${CMAKE_CURRENT_BINARY_DIR}/invalid.model.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.srcdim.nml ${CMAKE_CURRENT_BINARY_DIR}/data/invalid.srcdim.nml)
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.srcdim.nml ${CMAKE_CURRENT_BINARY_DIR}/invalid.srcdim.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.dstdim.nml ${CMAKE_CURRENT_BINARY_DIR}/data/invalid.dstdim.nml)
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.dstdim.nml ${CMAKE_CURRENT_BINARY_DIR}/invalid.dstdim.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.dst5p00.nml ${CMAKE_CURRENT_BINARY_DIR}/data/invalid.dst5p00.nml)
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/invalid.dst5p00.nml ${CMAKE_CURRENT_BINARY_DIR}/invalid.dst5p00.nml)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/data/ice.badvecpairs.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ice.badvecpairs.csv)
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/ice.badvecpairs.csv ${CMAKE_CURRENT_BINARY_DIR}/ice.badvecpairs.csv)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/data/ocean.badvecpairs.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ocean.badvecpairs.csv)
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/ocean.badvecpairs.csv ${CMAKE_CURRENT_BINARY_DIR}/ocean.badvecpairs.csv)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/data/ice.badvecgrid.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ice.badvecgrid.csv)
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/ice.badvecgrid.csv ${CMAKE_CURRENT_BINARY_DIR}/ice.badvecgrid.csv)
 execute_process( COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/data/ocean.badvecgrid.csv ${CMAKE_CURRENT_BINARY_DIR}/data/ocean.badvecgrid.csv)
+  ${CMAKE_CURRENT_SOURCE_DIR}/data/ocean.badvecgrid.csv ${CMAKE_CURRENT_BINARY_DIR}/ocean.badvecgrid.csv)
 
 add_executable(ocnice_ftst_program_setup ftst_program_setup.F90)
 add_test(NAME ocnice_ftst_program_setup COMMAND ocnice_ftst_program_setup)
-set_tests_properties(ocnice_ftst_program_setup PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data)
+set_tests_properties(ocnice_ftst_program_setup PROPERTIES WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(ocnice_ftst_program_setup ocnice_prep_lib)
 
 add_executable(ocnice_ftst_qcice ftst_qcice.F90)

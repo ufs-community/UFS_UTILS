@@ -13,7 +13,6 @@ program ftst_program_setup
 
   implicit none
 
-  character(len=120) :: testpath
   character(len=120) :: errmsg
   integer :: rc
   integer :: passed, ntests
@@ -21,43 +20,42 @@ program ftst_program_setup
 
   ntests = 9
   passed = 0
-  testpath = 'tests/ocnice_prep/'
 
   ! test nml files
-  call readnml(trim(testpath)//'data/input.nml',errmsg, rc)
+  call readnml('input.nml',errmsg, rc)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
-  call readnml(trim(testpath)//'data/invalid.model.nml', errmsg, rc)
+  call readnml('invalid.model.nml', errmsg, rc)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
-  call readnml(trim(testpath)//'data/invalid.srcdim.nml',errmsg, rc)
+  call readnml('invalid.srcdim.nml',errmsg, rc)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
-  call readnml(trim(testpath)//'data/invalid.dstdim.nml',errmsg, rc)
+  call readnml('invalid.dstdim.nml',errmsg, rc)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
-  call readnml(trim(testpath)//'data/invalid.dst5p00.nml',errmsg, rc)
+  call readnml('invalid.dst5p00.nml',errmsg, rc)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
   ! test csv files
-  call readcsv(trim(testpath)//'data/ice.badvecpairs.csv',errmsg,rc,nvalid)
+  call readcsv('ice.badvecpairs.csv',errmsg,rc,nvalid)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
-  call readcsv(trim(testpath)//'data/ocean.badvecpairs.csv',errmsg,rc,nvalid)
+  call readcsv('ocean.badvecpairs.csv',errmsg,rc,nvalid)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
-  call readcsv(trim(testpath)//'data/ice.badvecgrid.csv',errmsg,rc,nvalid)
+  call readcsv('ice.badvecgrid.csv',errmsg,rc,nvalid)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
-  call readcsv(trim(testpath)//'data/ocean.badvecgrid.csv',errmsg,rc,nvalid)
+  call readcsv('ocean.badvecgrid.csv',errmsg,rc,nvalid)
   print *,trim(errmsg),rc
   if (rc .eq. 1)passed = passed+1
 
