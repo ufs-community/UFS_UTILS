@@ -14,10 +14,10 @@ echo "BEGIN SNOW2MDL GLOBAL TEST."
 
 set -x
 
-HOMEush="${HOMEgfs}/ush"
-HOMEparm="${HOMEgfs}/parm"
-HOMEexec="${HOMEgfs}/exec"
-HOMEfix="${HOMEgfs}/fix/am"
+HOMEush="${HOMEglobal}/ush"
+HOMEparm="${HOMEglobal}/parm"
+HOMEexec="${HOMEglobal}/exec"
+HOMEfix="${HOMEglobal}/fix/am"
 
 source "${HOMEush}/atparse.bash"  # include function atparse for parsing @[XYZ] templated files
 
@@ -73,7 +73,7 @@ if [ $test_failed -ne 0 ]; then
   echo "*********************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
     cd $DATA
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "t1534.global" $commit_num
+    $HOMEglobal/reg_tests/update_baseline.sh $HOMEreg "t1534.global" $commit_num
   fi
 else
   echo

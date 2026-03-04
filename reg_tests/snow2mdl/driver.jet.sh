@@ -46,7 +46,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
 fi
 
 export HOMEreg=/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests/snow2mdl
-export HOMEgfs=$PWD/../..
+export HOMEglobal=$PWD/../..
 
 rm -fr $DATA_ROOT
 

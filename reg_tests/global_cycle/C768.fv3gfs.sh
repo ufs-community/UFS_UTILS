@@ -11,11 +11,11 @@ NCCMP=${NCCMP:-$(which nccmp)}
 
 export MAX_TASKS_CY=6
 
-export HOMEgfs=$NWPROD
+export HOMEglobal=$NWPROD
 
-export CYCLEXEC=$HOMEgfs/exec/global_cycle
+export CYCLEXEC=$HOMEglobal/exec/global_cycle
 
-export FIXgfs=$HOMEreg/fix
+export FIXglobal=$HOMEreg/fix
 
 export CDATE=2019073000
 export FHOUR=00
@@ -34,25 +34,25 @@ export JCAP=1534
 export LONB=3072
 export LATB=1536
 
-export FNALBC2=$HOMEgfs/fix/am/global_albedo4.1x1.grb
-export FNALBC=$HOMEgfs/fix/am/global_snowfree_albedo.bosu.t1534.3072.1536.rg.grb
-export FNALBC=$HOMEgfs/fix/am/global_snowfree_albedo.bosu.t1534.3072.1536.rg.grb
-export FNTG3C=$HOMEgfs/fix/am/global_tg3clim.2.6x1.5.grb
-export FNVETC=$HOMEgfs/fix/am/global_vegtype.igbp.t1534.3072.1536.rg.grb
-export FNSOTC=$HOMEgfs/fix/am/global_soiltype.statsgo.t1534.3072.1536.rg.grb
-export FNVEGC=$HOMEgfs/fix/am/global_vegfrac.0.144.decpercent.grb
-export FNVMNC=$HOMEgfs/fix/am/global_shdmin.0.144x0.144.grb
-export FNVMXC=$HOMEgfs/fix/am/global_shdmax.0.144x0.144.grb
-export FNSLPC=$HOMEgfs/fix/am/global_slope.1x1.grb
-export FNABSC=$HOMEgfs/fix/am/global_mxsnoalb.uariz.t1534.3072.1536.rg.grb
-export FNAISC=$HOMEgfs/fix/am/CFSR.SEAICE.1982.2012.monthly.clim.grb
-export FNMSKH=$HOMEgfs/fix/am/global_slmask.t1534.3072.1536.grb
-export FNGLAC=$HOMEgfs/fix/am/global_glacier.2x2.grb
-export FNMXIC=$HOMEgfs/fix/am/global_maxice.2x2.grb
-export FNTSFC=$HOMEgfs/fix/am/RTGSST.1982.2012.monthly.clim.grb
-export FNSALC=$HOMEgfs/fix/am/global_salclm.t1534.3072.1536.nc
-export FNSNOC=$HOMEgfs/fix/am/global_snoclim.1.875.grb
-export FNSMCC=$HOMEgfs/fix/am/global_soilmgldas.statsgo.t1534.3072.1536.grb
+export FNALBC2=$HOMEglobal/fix/am/global_albedo4.1x1.grb
+export FNALBC=$HOMEglobal/fix/am/global_snowfree_albedo.bosu.t1534.3072.1536.rg.grb
+export FNALBC=$HOMEglobal/fix/am/global_snowfree_albedo.bosu.t1534.3072.1536.rg.grb
+export FNTG3C=$HOMEglobal/fix/am/global_tg3clim.2.6x1.5.grb
+export FNVETC=$HOMEglobal/fix/am/global_vegtype.igbp.t1534.3072.1536.rg.grb
+export FNSOTC=$HOMEglobal/fix/am/global_soiltype.statsgo.t1534.3072.1536.rg.grb
+export FNVEGC=$HOMEglobal/fix/am/global_vegfrac.0.144.decpercent.grb
+export FNVMNC=$HOMEglobal/fix/am/global_shdmin.0.144x0.144.grb
+export FNVMXC=$HOMEglobal/fix/am/global_shdmax.0.144x0.144.grb
+export FNSLPC=$HOMEglobal/fix/am/global_slope.1x1.grb
+export FNABSC=$HOMEglobal/fix/am/global_mxsnoalb.uariz.t1534.3072.1536.rg.grb
+export FNAISC=$HOMEglobal/fix/am/CFSR.SEAICE.1982.2012.monthly.clim.grb
+export FNMSKH=$HOMEglobal/fix/am/global_slmask.t1534.3072.1536.grb
+export FNGLAC=$HOMEglobal/fix/am/global_glacier.2x2.grb
+export FNMXIC=$HOMEglobal/fix/am/global_maxice.2x2.grb
+export FNTSFC=$HOMEglobal/fix/am/RTGSST.1982.2012.monthly.clim.grb
+export FNSALC=$HOMEglobal/fix/am/global_salclm.t1534.3072.1536.nc
+export FNSNOC=$HOMEglobal/fix/am/global_snoclim.1.875.grb
+export FNSMCC=$HOMEglobal/fix/am/global_soilmgldas.statsgo.t1534.3072.1536.grb
 
 export DONST="YES"
 export use_ufo=.true.
@@ -63,7 +63,7 @@ export CYCLVARS=FSNOL=-2.,FSNOS=99999.,
 export PGMOUT='out'
 export PGMERR='err'
 
-$HOMEgfs/ush/global_cycle_driver.sh
+$HOMEglobal/ush/global_cycle_driver.sh
 
 iret=$?
 
@@ -99,7 +99,7 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< C768 GLOBAL CYCLE TEST FAILED. >>>"
   echo "*********************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c768.fv3gfs" $commit_num
+    $HOMEglobal/reg_tests/update_baseline.sh $HOMEreg "c768.fv3gfs" $commit_num
   fi
 else
   echo

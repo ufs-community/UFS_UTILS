@@ -43,7 +43,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
 fi
 
 export HOMEreg=/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests/snow2mdl
-export HOMEgfs=$PWD/../..
+export HOMEglobal=$PWD/../..
 
 LOG_FILE=consistency.log
 SUM_FILE=summary.log

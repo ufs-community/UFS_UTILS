@@ -25,13 +25,13 @@ cat << EOF > ./fort.41
   afwa_lsmask_sh_file=""
  /
  &qc
-  climo_qc_file="$HOMEgfs/fix/am/emcsfc_snow_cover_climo.grib2"
+  climo_qc_file="$HOMEglobal/fix/am/emcsfc_snow_cover_climo.grib2"
  /
  &model_specs
-  model_lat_file="$HOMEgfs/fix/am/global_latitudes.t1534.3072.1536.grb"
-  model_lon_file="$HOMEgfs/fix/am/global_longitudes.t1534.3072.1536.grb"
-  model_lsmask_file="$HOMEgfs/fix/am/global_slmask.t1534.3072.1536.grb"
-  gfs_lpl_file="$HOMEgfs/fix/am/global_lonsperlat.t1534.3072.1536.txt"
+  model_lat_file="$HOMEglobal/fix/am/global_latitudes.t1534.3072.1536.grb"
+  model_lon_file="$HOMEglobal/fix/am/global_longitudes.t1534.3072.1536.grb"
+  model_lsmask_file="$HOMEglobal/fix/am/global_slmask.t1534.3072.1536.grb"
+  gfs_lpl_file="$HOMEglobal/fix/am/global_lonsperlat.t1534.3072.1536.txt"
   /
  &output_data
   model_snow_file="./snogrb_model"
@@ -50,7 +50,7 @@ cat << EOF > ./fort.41
  /
 EOF
 
-eval $HOMEgfs/exec/emcsfc_snow2mdl >> OUTPUT 2> errfile
+eval $HOMEglobal/exec/emcsfc_snow2mdl >> OUTPUT 2> errfile
 iret=$?
 if [ $iret -ne 0 ]; then
   set +x
@@ -74,7 +74,7 @@ if [ $test_failed -ne 0 ]; then
   echo "*********************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
     cd $DATA
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "t1534.hemi" $commit_num
+    $HOMEglobal/reg_tests/update_baseline.sh $HOMEreg "t1534.hemi" $commit_num
   fi
 else
   echo

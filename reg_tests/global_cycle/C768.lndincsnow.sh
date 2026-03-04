@@ -12,11 +12,11 @@ NCCMP=${NCCMP:-$(which nccmp)}
 
 export MAX_TASKS_CY=6
 
-export HOMEgfs=$NWPROD
+export HOMEglobal=$NWPROD
 
-export FIXgfs=$HOMEreg/fix
+export FIXglobal=$HOMEreg/fix
 
-export CYCLEXEC=$HOMEgfs/exec/global_cycle
+export CYCLEXEC=$HOMEglobal/exec/global_cycle
 
 export CDATE=2019073000
 export FHOUR=00
@@ -47,7 +47,7 @@ export CYCLVARS=FSNOL=99999.,FSNOS=99999.,
 export PGMOUT='out'
 export PGMERR='err'
 
-$HOMEgfs/ush/global_cycle_driver.sh
+$HOMEglobal/ush/global_cycle_driver.sh
 
 iret=$?
 
@@ -83,7 +83,7 @@ if [ $test_failed -ne 0 ]; then
   echo "<<< C768 LANDINC SNOW CYCLE TEST FAILED. >>>"
   echo "****************************************"
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEgfs/reg_tests/update_baseline.sh $HOMEreg "c768.lndincsnow" $commit_num
+    $HOMEglobal/reg_tests/update_baseline.sh $HOMEreg "c768.lndincsnow" $commit_num
   fi
 else
   echo
