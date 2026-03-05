@@ -21,17 +21,17 @@ pwd=$(pwd)
 export DMPDIR=${DMPDIR:-$pwd}
 export PACKAGEROOT=${PACKAGEROOT:-/lfs/h1/ops/prod/packages}
 export gfs_ver=${gfs_ver:-v15.0.0}
-export HOMEgfs=${HOMEgfs:-${PACKAGEROOT}/gfs.${gfs_ver}}
-export FIXgfs=${FIXgfs:-$HOMEgfs/fix}   
-export FIXorog=${FIXorog:-$FIXgfs/orog}
+export HOMEglobal=${HOMEglobal:-${PACKAGEROOT}/gfs.${gfs_ver}}
+export FIXglobal=${FIXglobal:-$HOMEglobal/fix}   
+export FIXorog=${FIXorog:-$FIXglobal/orog}
 
 ntiles=${ntiles:-6}
 DONST=${DONST:-"NO"}
 COMIN=${COMIN:-$pwd}
 COMOUT=${COMOUT:-$pwd}
 
-CYCLESH=${CYCLESH:-$HOMEgfs/ush/global_cycle.sh}
-export CYCLEXEC=${CYCLEXEC:-$HOMEgfs/exec/global_cycle}
+CYCLESH=${CYCLESH:-$HOMEglobal/ush/global_cycle.sh}
+export CYCLEXEC=${CYCLEXEC:-$HOMEglobal/exec/global_cycle}
 export OMP_NUM_THREADS_CY=${OMP_NUM_THREADS_CY:-24}
 export APRUNCY=${APRUNCY:-"time"}
 export VERBOSE=${VERBOSE:-"YES"}
