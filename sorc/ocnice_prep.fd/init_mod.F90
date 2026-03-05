@@ -88,9 +88,12 @@ contains
        close (iounit)
     end if
 
-    ! append slash to wgtsdir and griddir
-    wgtsdir = trim(wgtsdir)//'/'
-    griddir = trim(griddir)//'/'
+    if (wgtsdir(len_trim(wgtsdir):len_trim(wgtsdir)) /= '/') then
+       wgtsdir = trim(wgtsdir)//'/'
+    end if
+    if (griddir(len_trim(griddir):len_trim(griddir)) /= '/') then
+       griddir = trim(griddir)//'/'
+    end if
 
     ! check that model is either ocean or ice
     if (trim(ftype) /= 'ocean' .and. trim(ftype) /= 'ice') then
