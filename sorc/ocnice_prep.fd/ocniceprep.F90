@@ -101,8 +101,8 @@ program ocniceprep
   ! create a regrid RH from source to destination
   ! -----------------------------------------------------------------------------
 
-  meshfsrc = trim(griddir)//fsrc(3:5)//'/'//'mesh.'//trim(fsrc)//'.nc'
-  meshfdst = trim(griddir)//fdst(3:5)//'/'//'mesh.'//trim(fdst)//'.nc'
+  meshfsrc = trim(griddir)//fsrc(3:5)//'/mesh.'//trim(fsrc)//'.nc'
+  meshfdst = trim(griddir)//fdst(3:5)//'/mesh.'//trim(fdst)//'.nc'
   write(logunit,'(a)')'mesh src: '//trim(meshfsrc)
   write(logunit,'(a)')'mesh dst: '//trim(meshfdst)
   call createRH(trim(meshfsrc),trim(meshfdst),rc=rc)
@@ -118,14 +118,14 @@ program ocniceprep
   allocate(bathysrc(nxt*nyt)); bathysrc = 0.0
   allocate(bathydst(nxr*nyr)); bathydst = 0.0
 
-  gridfile = trim(griddir)//fsrc(3:5)//'/'//'tripole.'//trim(fsrc)//'.nc'
+  gridfile = trim(griddir)//fsrc(3:5)//'/tripole.'//trim(fsrc)//'.nc'
   call nf90_err(nf90_open(trim(gridfile), nf90_nowrite, ncid), &
        'open: '//trim(gridfile))
   call getfield(trim(gridfile), 'anglet', dims=(/nxt,nyt/), field=angsrc)
   call getfield(trim(gridfile),  'depth', dims=(/nxt,nyt/), field=bathysrc)
   call nf90_err(nf90_close(ncid), 'close: '//trim(gridfile))
 
-  gridfile = trim(griddir)//fdst(3:5)//'/'//'tripole.'//trim(fdst)//'.nc'
+  gridfile = trim(griddir)//fdst(3:5)//'/tripole.'//trim(fdst)//'.nc'
   call nf90_err(nf90_open(trim(gridfile), nf90_nowrite, ncid), &
        'open: '//trim(gridfile))
   call getfield(trim(gridfile), 'anglet', dims=(/nxr,nyr/), field=angdst)
@@ -142,7 +142,7 @@ program ocniceprep
 
      ! obtain the land mask for the source grid
      vname = 'wet'
-     gridfile = trim(griddir)//fsrc(3:5)//'/'//'tripole.'//trim(fsrc)//'.nc'
+     gridfile = trim(griddir)//fsrc(3:5)//'/tripole.'//trim(fsrc)//'.nc'
      call nf90_err(nf90_open(trim(gridfile), nf90_nowrite, ncid), &
           'open: '//trim(gridfile))
      call nf90_err(nf90_inq_varid(ncid, trim(vname), varid), 'get variable ID: '//trim(vname))

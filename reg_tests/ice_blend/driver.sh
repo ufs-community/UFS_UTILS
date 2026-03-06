@@ -93,8 +93,8 @@ DATA="${WORK_DIR:-/work2/noaa/stmp/$LOGNAME}"
 export DATA="${DATA}/reg-tests/ice_blend"
 
 HOMEreg="${HOMEreg}/${test_name}"
-HOMEgfs=$PWD/../..
-export HOMEreg HOMEgfs
+HOMEglobal=$PWD/../..
+export HOMEreg HOMEglobal
 
 case ${MACHINE_ID,,} in
     ursa)

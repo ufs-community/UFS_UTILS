@@ -73,14 +73,14 @@ contains
     !---------------------------------------------------------------------
 
     do nd = 1,ndest
-       fsrc = trim(dirout)//'/'//'Ct.mx'//trim(res)//'_SCRIP.nc'
+       fsrc = trim(dirout)//'Ct.mx'//trim(res)//'_SCRIP.nc'
        fdst = trim(dirout)//'/rect.'//trim(destgrds(nd))//'_SCRIP.nc'
 
        do k = 1,size(methodname)
           if(trim(methodname(k)) .eq. 'bilinear')method=ESMF_REGRIDMETHOD_BILINEAR
           if(trim(methodname(k)) .eq. 'conserve')method=ESMF_REGRIDMETHOD_CONSERVE
 
-          fwgt = trim(dirout)//'/'//'tripole.mx'//trim(res)//'.Ct.to.rect.'//trim(destgrds(nd)) &
+          fwgt = trim(dirout)//'tripole.mx'//trim(res)//'.Ct.to.rect.'//trim(destgrds(nd)) &
                //'.'//trim(methodname(k))//'.nc'
           logmsg = 'creating weight file '//trim(fwgt)
           if (maintask) print '(a)',trim(logmsg)

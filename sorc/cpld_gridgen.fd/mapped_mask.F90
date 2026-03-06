@@ -60,12 +60,12 @@ contains
     rc = nf90_inq_dimid(ncid, 'n_b', id)
     rc = nf90_inquire_dimension(ncid, id, len=n_b)
 
-    allocate(col(1:n_s))
-    allocate(row(1:n_s))
-    allocate(  S(1:n_s))
+    allocate(col(1:n_s), source=0)
+    allocate(row(1:n_s), source=0)
+    allocate(  S(1:n_s), source=0.0_dbl_kind)
 
-    allocate(lat1d(1:n_b))
-    allocate(lon1d(1:n_b))
+    allocate(lat1d(1:n_b), source=0.0_dbl_kind)
+    allocate(lon1d(1:n_b), source=0.0_dbl_kind)
 
     rc = nf90_inq_varid(ncid, 'col', id)
     rc = nf90_get_var(ncid,     id, col)
@@ -85,8 +85,8 @@ contains
     ! retrieve 1-d land mask from the SCRIP file and map it
     !---------------------------------------------------------------------
 
-    allocate(src_field(1:n_a))
-    allocate(dst_field(1:n_b))
+    allocate(src_field(1:n_a), source=0)
+    allocate(dst_field(1:n_b), source=0.0_dbl_kind)
 
     rc = nf90_open(trim(src), nf90_nowrite, ncid)
 
@@ -95,7 +95,6 @@ contains
     rc = nf90_get_var(ncid,     id,  src_field)
     rc = nf90_close(ncid)
 
-    dst_field = 0.0
     do i = 1,n_s
        ii = row(i); jj = col(i)
        dst_field(ii) = dst_field(ii) + S(i)*real(src_field(jj),dbl_kind)
@@ -105,8 +104,9 @@ contains
     !
     !---------------------------------------------------------------------
 
-    allocate(dst2d(npx,npx))
-    allocate(lon2d(npx,npx)); allocate(lat2d(npx,npx))
+    allocate(dst2d(npx,npx), source=0.0_dbl_kind)
+    allocate(lon2d(npx,npx), source=0.0_dbl_kind)
+    allocate(lat2d(npx,npx), source=0.0_dbl_kind)
 
     do i = 0,ntile-1
        istr = i*npx*npx+1
@@ -114,7 +114,7 @@ contains
        !print *,i,istr,iend
 
        write(ctile,'(a5,i1)')'.tile',i+1
-       fdst = trim(dirout)//'/'//trim(atmres)//'.mx'//trim(res)//trim(ctile)//'.nc'
+       fdst = trim(dirout)//trim(atmres)//'.mx'//trim(res)//trim(ctile)//'.nc'
        logmsg = 'creating mapped ocean mask file '//trim(fdst)
        print '(a)',trim(logmsg)
 

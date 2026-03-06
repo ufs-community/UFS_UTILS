@@ -100,8 +100,8 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
 fi
 
 HOMEreg="${HOMEreg}/${test_name}"
-HOMEgfs=$PWD/../..
-export HOMEreg HOMEgfs
+HOMEglobal=$PWD/../..
+export HOMEreg HOMEglobal
 
 # The first test uses hemispheric afwa/airforce data, as was done in OPS.
 LOG_FILE=consistency.log
