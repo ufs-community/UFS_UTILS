@@ -4,9 +4,7 @@
 #
 # Run grid generation consistency tests on Ursa.
 #
-# Set WORK_DIR to your working directory. Set the PROJECT_CODE and QUEUE
-# as appropriate.  To see which projects you are authorized to use,
-# type "account_params".
+# Set ../rt.control variables to specify the number of tasks, memory, and walltime
 #
 # Invoke the script with no arguments.  A set of tests will
 # be submitted to run in parallel.  To check the queue, type:

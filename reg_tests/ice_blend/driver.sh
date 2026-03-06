@@ -4,10 +4,9 @@
 #
 # Run ice_blend consistency test on Ursa.
 #
-# Set $DATA to your working directory.  Set the project code (SBATCH -A)
-# and queue (SBATCH -q) as appropriate.
+# Invoke the script from command line as follows:  ./$script
 #
-# Invoke the script as follows:  sbatch $script
+# Set ../rt.control variables to specify the number of tasks, memory, and walltime
 #
 # Log output is placed in consistency.log.  A summary is
 # placed in summary.log

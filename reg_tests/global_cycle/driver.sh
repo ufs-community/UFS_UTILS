@@ -4,8 +4,7 @@
 #
 # Run global_cycle consistency test on Ursa.
 #
-# Set $WORK_DIR to your working directory.  Set the project code 
-# and queue as appropriate.
+# Set ../rt.control variables to specify the number of tasks, memory, and walltime
 #
 # Invoke the script from the command line as follows:  ./$script
 #

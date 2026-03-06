@@ -4,8 +4,7 @@
 #
 # Run snow2mdl consistency tests on Ursa.
 #
-# Set $DATA_ROOT to your working directory.  Set the project code (SBATCH -A)
-# and queue (SBATCH -q) as appropriate.
+# Set ../rt.control variables to specify the number of tasks, memory, and walltime
 #
 # Invoke the script from the command line as follows:  ./$script
 #
