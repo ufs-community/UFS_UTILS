@@ -4,8 +4,7 @@
 #
 # Run regrid_sfc consistency tests.
 #
-# Set $WORK_DIR to your working directory. 
-# Set the $PROJECT_CODE and $QUEUE as appropriate.
+# Set ../rt.control variables to specify the number of tasks, memory, and walltime
 #
 # Invoke the script from command line as follows:  ./$script
 #
