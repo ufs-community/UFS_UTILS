@@ -21,7 +21,7 @@ grid173="0 0 0 0 0 0 0 0 4320 2160 0 0 89958000 42000 48 -89958000 359958000 830
 $COPYGB2 -x -i3 -g "$grid173" ims.icec.grib2 ims.icec.5min.grib2
 
 FIVE_MIN_ICE_FILE=${HOMEreg}/input_data/seaice.5min.grib2.gdas.2018120618
-FIVE_MIN_ICE_MASK_FILE=${HOMEgfs}/fix/am/emcsfc_gland5min.grib2
+FIVE_MIN_ICE_MASK_FILE=${HOMEglobal}/fix/am/emcsfc_gland5min.grib2
 BLENDED_ICE_FILE="seaice.5min.blend"
 
 # These are input files.
@@ -33,13 +33,13 @@ export FORT15="$FIVE_MIN_ICE_FILE"
 export FORT51=${BLENDED_ICE_FILE}
 
 # Run the emcsfc_ice_blend executable.
-${HOMEgfs}/exec/emcsfc_ice_blend >> OUTPUT 2> errfile
+${HOMEglobal}/exec/emcsfc_ice_blend >> OUTPUT 2> errfile
 iret=$?
 
 if [ $iret -ne 0 ]; then
   set +x
   echo "<<< ICE_BLEND TEST FAILED. <<<"
-  echo "<<< ICE_BLEND TEST FAILED. <<<"  > ${HOMEgfs}/reg_tests/ice_blend/summary.log
+  echo "<<< ICE_BLEND TEST FAILED. <<<"  > ${HOMEglobal}/reg_tests/ice_blend/summary.log
   exit $iret
 else
 # Follow the OPS procedure by converting the output to grib1 and replace the
@@ -63,16 +63,16 @@ if [ $test_failed -ne 0 ]; then
   echo "*********************************"
   echo "<<< ICE BLEND TEST FAILED. >>>"
   echo "*********************************"
-  echo "<<< ICE BLEND TEST FAILED. >>>" > ${HOMEgfs}/reg_tests/ice_blend/summary.log
+  echo "<<< ICE BLEND TEST FAILED. >>>" > ${HOMEglobal}/reg_tests/ice_blend/summary.log
   if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    ${HOMEgfs}/reg_tests/update_baseline.sh $HOMEreg "t1534" $commit_num
+    ${HOMEglobal}/reg_tests/update_baseline.sh $HOMEreg "t1534" $commit_num
   fi
 else
   echo
   echo "*********************************"
   echo "<<< ICE BLEND TEST PASSED. >>>"
   echo "*********************************"
-  echo "<<< ICE BLEND TEST PASSED. >>>" > ${HOMEgfs}/reg_tests/ice_blend/summary.log
+  echo "<<< ICE BLEND TEST PASSED. >>>" > ${HOMEglobal}/reg_tests/ice_blend/summary.log
 fi
 
 exit 0

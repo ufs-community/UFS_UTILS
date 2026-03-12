@@ -14,7 +14,6 @@ function edit_namelist {
 	-e "s/EDITSFILE/$EDITSFILE/g" \
 	-e "s/RESNAME/$RESNAME/g" \
 	-e "s/DO_MASKEDIT/$MASKEDIT/g" \
-	-e "s/DO_DEBUG/$DEBUG/g" \
 	-e "s/DO_POSTWGTS/$DO_POSTWGTS/g" \
 	-e "s/ATMRESLIST/$ATMRESLIST/g"
 }
@@ -90,7 +89,6 @@ cd $RUNDIR
 RESNAME=${RESNAME:-$1}
 TEST_NAME=$RESNAME
 ATMLIST=${ATMLIST:-$2}
-DEBUG=.false.
 MASKEDIT=.false.
 DO_POSTWGTS=.true.
 MOSAICDIR_PATH=${MOSAICDIR_PATH:-$PATHTR/fix/orog}

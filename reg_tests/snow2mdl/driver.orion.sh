@@ -49,7 +49,7 @@ export OMP_NUM_THREADS=1
 rm -fr $DATA_ROOT
 
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/snow2mdl
-export HOMEgfs=$PWD/../..
+export HOMEglobal=$PWD/../..
 
 # The first test uses the hemispheric afwa/air force data, which was used in OPS.
 

@@ -53,7 +53,7 @@ if [ "$UPDATE_BASELINE" = "TRUE" ]; then
 fi
 
 export HOMEreg=/work/noaa/nems/role-nems/ufs_utils/reg_tests/ice_blend
-export HOMEgfs=$PWD/../..
+export HOMEglobal=$PWD/../..
 
 ./ice_blend.sh
 
