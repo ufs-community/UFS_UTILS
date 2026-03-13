@@ -65,8 +65,9 @@ MODULE READ_WRITE_DATA
  CONTAINS
 
    !> Update surface records - and nsst records if selected -
-   !! on a single cubed-sphere tile to a pre-existing model 
-   !! restart file (in netcdf).
+   !! on a single cubed-sphere tile. Writes to a pre-existing model 
+   !! restart file (in netcdf) that was opened by read_data. Closes
+   !! the file after writing.
    !! 
    !! @note The model restart files contain an additional snow field -
    !! snow cover (snocvr). That field is required for bit identical
@@ -74,12 +75,12 @@ MODULE READ_WRITE_DATA
    !! compute it as an initialization step. Because this program does not
    !! contain the snow cover algorithm, it will let the model compute it.
    !!
+   !! @param[in] ncid NetCDF file id (from read_data).
+   !! @param[in] lensfc Total number of points on a tile.
    !! @param[in] idim 'i' dimension of a tile.
    !! @param[in] jdim 'j' dimension of a tile.
-   !! @param[in] lensfc Total number of points on a tile.
    !! @param[in] lsoil Number of soil layers.
    !! @param[in] do_nsst When true, nsst fields were processed.
-   !! @param[in] inc_file When true, write out increments to files
    !! @param[in] nsst Data structure containing nsst fields.
    !! @param[in] slifcs Land-sea mask.
    !! @param[in] tsffcs Skin temperature.
@@ -115,30 +116,27 @@ MODULE READ_WRITE_DATA
    !! @param[in] slcfcs Liquid portion of volumetric soil moisture.
    !! @param[in] smcfcs Total volumetric soil moisture.
    !! @param[in] stcfcs Soil temperature.
-   !! @param[in] stcinc Soil temperature increments on the cubed-sphere tiles
-   !! @param[in] slcinc Liquid soil moisture increments on the cubed-sphere tiles
    !!
    !! @author George Gayno NOAA/EMC
 
- subroutine write_data(lensfc,idim,jdim,lsoil, &
-                       do_nsst,inc_file,nsst,slifcs,tsffcs,vegfcs,swefcs, &
+ subroutine write_data(ncid,lensfc,idim,jdim,lsoil, &
+                       do_nsst,nsst,slifcs,tsffcs,vegfcs,swefcs, &
                        tg3fcs,zorfcs,albfcs,alffcs, &
                        cnpfcs,f10m,t2m,q2m,vetfcs, &
                        sotfcs,ustar,fmm,fhh,sicfcs, &
                        sihfcs,sitfcs,tprcp,srflag,  &
                        swdfcs,vmnfcs,vmxfcs,slpfcs, &
-                       absfcs,slcfcs,smcfcs,stcfcs, &
-                       stcinc, slcinc)
+                       absfcs,slcfcs,smcfcs,stcfcs)
 
  use mpi
 
  implicit none
 
+ integer, intent(in)              :: ncid
  integer, intent(in)              :: lensfc, lsoil
  integer, intent(in)              :: idim, jdim
 
  logical, intent(in)              :: do_nsst
- logical, intent(in)              :: inc_file
 
  real, intent(in), optional       :: slifcs(lensfc),tsffcs(lensfc)
  real, intent(in), optional       :: swefcs(lensfc),tg3fcs(lensfc)
@@ -155,34 +153,17 @@ MODULE READ_WRITE_DATA
  real, intent(in), optional       :: vmxfcs(lensfc), slpfcs(lensfc)
  real, intent(in), optional       :: absfcs(lensfc), slcfcs(lensfc,lsoil)
  real, intent(in), optional       :: smcfcs(lensfc,lsoil), stcfcs(lensfc,lsoil)
- real, intent(in), optional       :: stcinc(lensfc,lsoil)
- real, intent(in), optional       :: slcinc(lensfc,lsoil)
 
  type(nsst_data), intent(in)      :: nsst
 
- integer :: dim_x, dim_y, dim_soil, dim_time, dims_3d(3)
+ integer :: dim_x, dim_y, dim_time, dims_3d(3)
 
  real :: dum2d(idim,jdim), dum3d(idim,jdim,lsoil)
- 
- character(len=50) :: fnbgso
- character(len=3)  :: rankch
 
- integer           :: myrank, error, ncid, id_var
- integer           :: varid_stc, varid_slc
-
- call mpi_comm_rank(mpi_comm_world, myrank, error)
-
- write(rankch, '(i3.3)') (myrank+1)
-
- if (.NOT.(inc_file)) then
-
- fnbgso = "./fnbgso." // rankch
+ integer           :: error, id_var
 
  print*
- print*,"update OUTPUT SFC DATA TO: ",trim(fnbgso)
-
- ERROR=NF90_OPEN(TRIM(fnbgso),NF90_WRITE,NCID)
- CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(fnbgso) )
+ print*,"WRITE UPDATED SFC DATA"
 
  if(present(slifcs)) then
    error=nf90_inq_varid(ncid, "slmsk", id_var)
@@ -480,47 +461,6 @@ MODULE READ_WRITE_DATA
    error = nf90_put_var( ncid, id_var, dum3d)
    call netcdf_err(error, 'writing stc record' )
    call remove_checksum(ncid, id_var)
- endif
-
- else
-
-    fnbgso = "./gaussian_interp." // rankch
-    print*
-    print*,"Write increments onto cubed sphere tiles to: ", trim(fnbgso)
-
-    error=nf90_create(trim(fnbgso),NF90_64BIT_OFFSET,ncid)
-    CALL netcdf_err(error, 'OPENING FILE: '//trim(fnbgso) )
-
-    ! Define dimensions in the file.
-    error = nf90_def_dim(ncid, "xaxis_1", idim, dim_x)
-    call netcdf_err(error, 'defining xaxis_1')
-
-    error = nf90_def_dim(ncid, "yaxis_1", jdim, dim_y)
-    call netcdf_err(error, 'defining yaxis_1')
-
-    error = nf90_def_dim(ncid, "soil_levels",lsoil, dim_soil)
-    call netcdf_err(error, 'defining soil_levels')
-
-   ! Define variables in the file.
-   error=nf90_def_var(ncid, "slc_inc", NF90_DOUBLE, &
-       (/dim_x,dim_y,dim_soil/),varid_slc)
-   call netcdf_err(error, 'defining slc_inc');
-
-   error=nf90_def_var(ncid, "stc_inc", NF90_DOUBLE, &
-       (/dim_x,dim_y,dim_soil/),varid_stc)
-   call netcdf_err(error, 'defining stc_inc');
-
-   error = nf90_enddef(ncid)
-
-   ! Put variables in the file.
-   dum3d = reshape(stcinc, (/idim,jdim,lsoil/))
-   error = nf90_put_var( ncid, varid_stc, dum3d)
-   call netcdf_err(error, 'writing stc_inc record' )
-
-   dum3d = reshape(slcinc, (/idim,jdim,lsoil/))
-   error = nf90_put_var( ncid, varid_slc, dum3d)
-   call netcdf_err(error, 'writing slc_inc record' )
-
  endif
 
  if(do_nsst) then
@@ -1040,13 +980,18 @@ MODULE READ_WRITE_DATA
  END SUBROUTINE READ_GSI_DATA
 
  !> Read the first guess surface records and nsst records (if
- !! selected) for a single cubed-sphere tile.
+ !! selected) for a single cubed-sphere tile. Opens the file
+ !! sfc_data_cycle.$NNN in read/write mode and returns the
+ !! file handle for subsequent writing by write_data.
+ !! If FNAME_INC is provided, reads from that increment file
+ !! in read-only mode instead.
  !!
  !! @param[in] LSOIL Number of soil layers.
  !! @param[in] LENSFC Total number of points on a tile.
  !! @param[in] DO_NSST When true, nsst fields are read.
+ !! @param[out] NCID_OUT NetCDF file id (returned for main sfc file only).
  !! @param[out] IS_NOAHMP When true, process for the Noah-MP LSM.
- !! @param[in] FNAME_INC Name of the increment file.
+ !! @param[in] FNAME_INC Name of the increment file (optional).
  !! @param[out] TSFFCS Skin Temperature.
  !! @param[out] SMCFCS Total volumetric soil moisture.
  !! @param[out] SWEFCS Snow water equivalent.
@@ -1091,7 +1036,7 @@ MODULE READ_WRITE_DATA
  !! @author George Gayno NOAA/EMC
  !! @author Yuan Xue: add capability to read soil related increments on the
  !! cubed-sphere tiles directly
- SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,IS_NOAHMP, &
+ SUBROUTINE READ_DATA(LSOIL,LENSFC,DO_NSST,NCID_OUT,IS_NOAHMP, &
                       FNAME_INC, &
                       TSFFCS,SMCFCS,SWEFCS,STCFCS, &
                       TG3FCS,ZORFCS, &
@@ -1111,9 +1056,10 @@ MODULE READ_WRITE_DATA
 
  INTEGER, INTENT(IN)       :: LSOIL, LENSFC
  LOGICAL, INTENT(IN)       :: DO_NSST
+ INTEGER, OPTIONAL, INTENT(OUT) :: NCID_OUT
 
- CHARACTER(LEN=50), OPTIONAL, INTENT(IN)     :: FNAME_INC
- INTEGER, OPTIONAL, INTENT(IN)       :: LSOIL_INCR
+ CHARACTER(LEN=50), OPTIONAL, INTENT(IN) :: FNAME_INC
+ INTEGER, OPTIONAL, INTENT(IN)           :: LSOIL_INCR
 
  LOGICAL, OPTIONAL, INTENT(OUT)      :: IS_NOAHMP
 
@@ -1151,24 +1097,30 @@ MODULE READ_WRITE_DATA
  INTEGER                   :: ID_VAR, IERR, TEST, K
 
  LOGICAL                   :: JEDI_INCR_FILE
+ LOGICAL                   :: IS_INCREMENT_FILE
 
  REAL(KIND=8), ALLOCATABLE :: DUMMY(:,:), DUMMY3D(:,:,:)
- 
- IF (PRESENT(FNAME_INC)) THEN 
-        FNAME = FNAME_INC
- ELSE 
-     CALL MPI_COMM_RANK(MPI_COMM_WORLD, MYRANK, ERROR)
 
-     WRITE(RANKCH, '(I3.3)') (MYRANK+1)
+ CALL MPI_COMM_RANK(MPI_COMM_WORLD, MYRANK, ERROR)
+ WRITE(RANKCH, '(I3.3)') (MYRANK+1)
 
-     FNAME = "./fnbgsi." // RANKCH
+! Determine if reading from increment file or main sfc data file
+ IF (PRESENT(FNAME_INC)) THEN
+   FNAME = FNAME_INC
+   IS_INCREMENT_FILE = .TRUE.
+   PRINT*
+   PRINT*, "READ INCREMENT DATA FROM: "//TRIM(FNAME)
+   ERROR=NF90_OPEN(TRIM(FNAME),NF90_NOWRITE,NCID)
+   CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(FNAME) )
+ ELSE
+   FNAME = "./sfc_data_cycle." // RANKCH
+   IS_INCREMENT_FILE = .FALSE.
+   PRINT*
+   PRINT*, "READ/WRITE SFC DATA FROM: "//TRIM(FNAME)
+   ERROR=NF90_OPEN(TRIM(FNAME),NF90_WRITE,NCID)
+   CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(FNAME) )
+   IF (PRESENT(NCID_OUT)) NCID_OUT = NCID
  ENDIF
-
- PRINT*
- PRINT*, "READ INPUT SFC DATA FROM: "//TRIM(FNAME)
-
- ERROR=NF90_OPEN(TRIM(FNAME),NF90_NOWRITE,NCID)
- CALL NETCDF_ERR(ERROR, 'OPENING FILE: '//TRIM(FNAME) )
 
 ! Use the coordinate names to test whether this is
 ! a JEDI increment file
@@ -1685,7 +1637,10 @@ MODULE READ_WRITE_DATA
  ZSOIL(4) = -2.0
  ENDIF
 
- ERROR = NF90_CLOSE(NCID)
+! Close file only if reading increment file (main sfc file stays open for write)
+ IF (IS_INCREMENT_FILE) THEN
+   ERROR = NF90_CLOSE(NCID)
+ ENDIF
 
  END SUBROUTINE READ_DATA
  
