@@ -2331,7 +2331,6 @@ END SUBROUTINE VINTG
   
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  FIND THE SURROUNDING INPUT INTERVAL FOR EACH OUTPUT POINT.          
-! Replace the loops in SUBROUTINE RSEARCH with this:
 DO I=1,IM 
 ! Determine if ascending or descending once per column
   IF (Z1(1+(I-1)*IXZ1) .LE. Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1)) THEN 
