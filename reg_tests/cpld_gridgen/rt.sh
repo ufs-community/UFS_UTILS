@@ -51,7 +51,7 @@ fi
 readonly PATHRT="$(cd $(dirname $0) && pwd -P)"
 export PATHRT
 # PATHTR - Path to the UFS UTILS directory
-readonly PATHTR="${HOMEUFSUTILS}"
+readonly PATHTR="$(cd $PATHRT/../.. && pwd)"
 export PATHTR
 
 set +x

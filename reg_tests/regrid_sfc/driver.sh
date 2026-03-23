@@ -102,7 +102,7 @@ fi
 export HOMEreg="${HOMEreg}/${test_name}"
 
 DATA_DIR="${WORK_DIR}/reg-tests/${test_name}"
-export NWPROD=${HOMEUFSUTILS}
+export NWPROD="${WORK_DIR}/UFS_UTILS"
 export DATA="${DATA_DIR}/test1"
 
 LOG_FILE=consistency.log

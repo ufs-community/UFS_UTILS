@@ -79,7 +79,7 @@ fi
 
 echo "Started on $(hostname -s)" >> "${WORK_DIR}/reg_test_results.txt"
 
-./build_all.sh
+./build_all.sh || { echo "ERROR: Failed to build UFS_UTILS"; exit; }
 
 if [[ ${MACHINE_ID} == "wcoss2" ]]; then
     this_machine=$(cat /etc/cluster_name)
