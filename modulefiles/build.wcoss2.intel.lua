@@ -82,4 +82,7 @@ load(pathJoin("nco", nco_ver))
 esmf_ver=os.getenv("esmf_ver") or "8.8.0"
 load(pathJoin("esmf-D", esmf_ver))
 
+nccmp_ver=os.getenv("nccmp_ver") or "1.9.0.1"
+load(pathJoin("nccmp-D", nccmp_ver))
+
 whatis("Description: UFS_UTILS build environment")
