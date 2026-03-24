@@ -9,18 +9,18 @@
 
 set -x
 
-export DATA=$OUTDIR/c96_gfs_nemsio
-rm -fr $DATA
+export DATA=${OUTDIR}/c96_gfs_nemsio
+rm -fr ${DATA}
 
 export CRES=96
 export ocn=100
-export FIXfv3=${HOMEreg}/fix/C${CRES}
+export FIXfv3="${HOMEreg}/fix/C${CRES}"
 
-export COMIN=${HOMEreg}/input_data/gfs.nemsio
+export COMIN="${HOMEreg}/input_data/gfs.nemsio"
 export ATM_FILES_INPUT=gfnanl.gdas.2017071700
 export SFC_FILES_INPUT=sfnanl.gdas.2017071700
 export NST_FILES_INPUT=nsnanl.gdas.2017071700
-export VCOORD_FILE=${HOMEufs}/fix/am/global_hyblev.l64.txt
+export VCOORD_FILE="${HOMEufs}/fix/am/global_hyblev.l64.txt"
 export INPUT_TYPE="gfs_gaussian_nemsio"
 
 # dont start/end with double quotes.
@@ -38,24 +38,24 @@ export PGMERR=err
 # Invoke chgres program.
 #-----------------------------------------------------------------------------
 
-echo "Starting at: " `date`
+echo "Starting at: $(date)"
 
-${HOMEufs}/ush/chgres_cube.sh
+"${HOMEufs}/ush/chgres_cube.sh"
 
 iret=$?
 
-cd $DATA
+cd "${DATA}" || { echo "Can't change directory into '${DATA}'.. exiting"; exit 1; }
 
-cat $PGMOUT
-cat $PGMERR
+cat ${PGMOUT}
+cat ${PGMERR}
 
-if [ $iret -ne 0 ]; then
+if [ ${iret} -ne 0 ]; then
   set +x
   echo "<<< C96 GFS GAUSSIAN NEMSIO TEST FAILED. <<<"
-  exit $iret
+  exit ${iret}
 fi
 
-echo "Ending at: " `date`
+echo "Ending at: $(date)"
 
 #-----------------------------------------------------------------------------
 # Compare output from chgres to baseline set of data.
@@ -64,21 +64,21 @@ echo "Ending at: " `date`
 test_failed=0
 for files in *.nc
 do
-  if [ -f $files ]; then
-    echo CHECK $files
-    $NCCMP -dmfqS $files $HOMEreg/baseline_data/c96_gfs_nemsio/$files
+  if [ -f ${files} ]; then
+    echo CHECK ${files}
+    ${NCCMP} -dmfqS ${files} "${HOMEreg}/baseline_data/c96_gfs_nemsio/${files}
     iret=$?
-    if [ $iret -ne 0 ]; then
+    if [ ${iret} -ne 0 ]; then
       test_failed=1
     fi
   fi
 done
 
 set +x
-if [ $test_failed -ne 0 ]; then
+if [ ${test_failed} -ne 0 ]; then
   echo "<<< C96 GFS GAUSSIAN NEMSIO TEST FAILED. >>>"
-  if [ "$UPDATE_BASELINE" = "TRUE" ]; then
-    $HOMEufs/reg_tests/update_baseline.sh $HOMEreg "c96_gfs_nemsio" $commit_num
+  if [ "${UPDATE_BASELINE}" = "TRUE" ]; then
+    "${HOMEufs}/reg_tests/update_baseline.sh" "${HOMEreg}" "c96_gfs_nemsio" "${commit_num}"
   fi
 else
   echo "<<< C96 GFS GAUSSIAN NEMSIO TEST PASSED. >>>"

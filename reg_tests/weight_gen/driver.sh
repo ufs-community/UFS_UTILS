@@ -2,17 +2,17 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run regrid_sfc consistency tests.
+# Run weight_gen consistency test on Ursa.
 #
 # Set ../rt.control variables to specify the number of tasks, memory, and walltime
 #
-# Invoke the script from command line as follows:  ./$script
+# Invoke the script as follows:  sbatch $script
 #
-# Log output is placed in consistency.log??.  A summary is
+# Log output is placed in consistency.log.  A summary is
 # placed in summary.log
 #
-# A test fails when its output does not match the baseline files
-# as determined by the 'nccmp' utility. The baseline files are
+# The test fails when its output does not match the baseline files
+# as determined by the 'nccmp' command.  The baseline file is
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
@@ -32,10 +32,7 @@ submit_test() {
     local waitonjobid="$1"; shift
 
     local logfile="${LOG_FILE}${suffix}"
-    
-    export DATA="${DATA_DIR}/test${suffix}"
-    export COMOUT=$DATA
-    export PARTITION="${partition}"
+    export OMP_NUM_THREADS_CY=2
 
     if [[ "${exclusive}" == "true" ]]; then
         exclusive_flag="--exclusive"
@@ -46,14 +43,16 @@ submit_test() {
         dep_flag_pbs="-W depend=afterok:${waitonjobid}"
     fi
 
+    export DATA="${DATA_ROOT}/test${suffix}"
+
     if [[ "${SCHEDULER}" == "pbs" ]]; then
-        export APRUN_REGRID="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core"
+        export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS_CY}"
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
-                ${dep_flag_pbs:+"${dep_flag_pbs}"}"./${script}")
+                ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
         jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
-        export APRUN_REGRID="srun"
+        export APRUNCY="srun"
         jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
@@ -67,9 +66,8 @@ submit_test() {
         exit 1
     fi
     TEST_IDS+=(":${jobid}")
+    echo ${jobid}
 }
-
-test_name="regrid_sfc"
 
 RT_DIR=${RT_DIR:-${PWD}/..}
 
@@ -86,44 +84,31 @@ else
     exit 1
 fi
 
-if [[ "${MACHINE_ID}" == "wcoss2" ]];then
-  module load nccmp-D/1.9.0.1
-fi
-
-if [[ "$UPDATE_BASELINE" == "TRUE" ]]; then
-  if [[ -f "${RT_DIR}/get_hash.sh" ]]; then
-    source "${RT_DIR}/get_hash.sh"
-  else
-    echo "ERROR: Cannot find detect_machine.sh script"
-    exit 1
-  fi
-fi
-
-export HOMEreg="${HOMEreg}/${test_name}"
-
-DATA_DIR="${WORK_DIR}/reg-tests/${test_name}"
-export NWPROD="${WORK_DIR}/UFS_UTILS"
-export DATA="${DATA_DIR}/test1"
-
+test_name="weight_gen"
+export DATA="${WORK_DIR}/reg_tests/${test_name}"
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
+
 rm -f ${LOG_FILE}* ${SUM_FILE}
+
+export HOMEreg="${HOMEreg}/${test_name}"
+export HOMEufs=$PWD/../..
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 6 1 10G 0:05:00 hercules false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 1 1 5G 0:03:00 hercules false weight_gen weight_gen.sh false
         ;;
     jet)
-        submit_test 01 6 1 10G 0:05:00 xjet true gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 1 1 5G 0:03:00 xjet true weight_gen weight_gen.sh false
         ;;
     orion)
-        submit_test 01 6 1 10G 0:05:00 orion false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 1 1 5G 0:03:00 orion false weight_gen weight_gen.sh false
         ;;
     ursa)
-        submit_test 01 6 1 10G 0:05:00 u1-compute false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 1 1 5G 0:03:00 u1-compute false weight_gen weight_gen.sh false
         ;;
     wcoss2)
-        submit_test 01 6 1 10G 0:05:00 dev false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 1 1 5G 0:03:00 dev false weight_gen weight_gen.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
@@ -131,31 +116,8 @@ case ${MACHINE_ID,,} in
         ;;
 esac
 
-
-if [[ "${MACHINE_ID}" == "wcoss2" ]];then
-
-  this_dir=${PWD}
-  (qsub -V -o "${LOG_FILE}" -e "${LOG_FILE}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=00:01:00 \
-        -N summary -l select=1:ncpus=1:mem=100MB -W "depend=afterany${TEST_IDS[*]}" << EOF
-#!/bin/bash
-cd ${PWD}
-grep -a '<<<' ${LOG_FILE}* | grep -v echo > ./summary.log
-EOF
-  ) &
-  
-else
-
-  (sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
-       -p "${PARTITION}" --open-mode=append -q "${QUEUE}" -d "afterany${TEST_IDS[*]}" << EOF
-#!/bin/bash
-cd ${PWD}
-grep -a '<<<' ${LOG_FILE}* > ./summary.log
-EOF
-  ) &
-fi
-
 sleep_time=0
-echo "Waiting for ${test_name^^} testing to complete..."
+echo "Waiting for ${test_name^^} tests to complete..."
 while [ ! -f "summary.log" ]; do
     sleep 10
     sleep_time=$((sleep_time+10))

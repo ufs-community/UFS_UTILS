@@ -1,0 +1,119 @@
+#!/bin/bash
+
+RTID=$$
+
+### SYSTEM INFO ###
+#Detect the machine we're on
+RT_DIR=${RT_DIR:-${PWD}/..}
+if [[ -f "${RT_DIR}/detect_machine.sh" ]]; then
+    source "${RT_DIR}/detect_machine.sh"
+else
+    echo "ERROR: Cannot find detect_machine.sh script"
+    exit 1
+fi
+
+case ${MACHINE_ID,,} in
+    hercules)
+        WORK_DIR="/work2/noaa/stmp/${LOGNAME}/ufs_utils"
+        HOMEreg="/work/noaa/nems/role-nems/ufs_utils.hercules/reg_tests"
+        PROJECT_CODE="nems"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
+    jet)
+        WORK_DIR="/lfs5/HFIP/hfv3gfs/${LOGNAME}/stmp/ufs_utils"
+        HOMEreg="/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests"
+        PROJECT_CODE="h-nems"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
+    orion)
+        WORK_DIR="/work/noaa/stmp/${LOGNAME}/ufs_utils"
+        HOMEreg="/work/noaa/nems/role-nems/ufs_utils/reg_tests"
+        PROJECT_CODE="nems"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
+    ursa)
+        WORK_DIR="/scratch4/NCEPDEV/stmp/${LOGNAME}/ufs_utils"
+        HOMEreg="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
+        PROJECT_CODE="nems"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
+    wcoss2)
+        WORK_DIR="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
+        HOMEreg="/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests"
+        PROJECT_CODE="GFS-DEV"
+        QUEUE="dev"
+        SCHEDULER="pbs"
+        COMPILER="intel"
+        ;;
+    *)
+        echo "Error: Unsupported machine '${MACHINE_ID}'"
+        exit 1
+        ;;
+esac
+
+##### TOGGLE JOBS #########
+RUN_CHGRES_CUBE="true"
+RUN_CPLD_GRIDGEN="true"
+RUN_GLOBAL_CYCLE="true"
+RUN_GRID_GEN="true"
+RUN_ICE_BLEND="true"
+RUN_OCNICE_PREP="true"
+RUN_REGRID_SFC="true"
+RUN_SNOW2MDL="true"
+RUN_WEIGHT_GEN="true"
+##############
+
+# Where to send mail when job is completed?
+# Please use quotes and put a space between multiple email addresses.
+MAILTO=""
+
+HOMEUFSUTILS="${RT_DIR}/.."
+export HOMEUFSUTILS
+
+### RT SETTINGS ###
+TIMEOUT_LIMIT=3600
+UPDATE_BASELINE="FALSE"
+######
+
+### REPO INFO ###
+REPO_BRANCH="develop"
+# REPO_LOC="https://github.com/ufs-community/UFS_UTILS.git"
+REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+######
+
+# Shouldn't need to edit below here #
+
+# shellcheck source=/dev/null
+source "${HOMEUFSUTILS}/sorc/machine-setup.sh" > /dev/null 2>&1
+module use "${HOMEUFSUTILS}/modulefiles"
+module load "build.${MACHINE_ID,,}.${COMPILER}"
+module list
+
+if [ "${MACHINE_ID,,}" == "hercules" ]; then
+    ulimit -s unlimited
+fi
+
+# If there are any major new additions or subtractions, this will need to be updated
+RUN_CATALOG=("RUN_CHGRES_CUBE" "RUN_CPLD_GRIDGEN" "RUN_GLOBAL_CYCLE" "RUN_GRID_GEN" "RUN_ICE_BLEND" "RUN_OCNICE_PREP"
+"RUN_REGRID_SFC" "RUN_SNOW2MDL" "RUN_WEIGHT_GEN")
+
+RUN_SET=()
+for var_name in "${RUN_CATALOG[@]}"; do
+    value="${!var_name}"
+    if [[ "$value" == "true" ]]; then
+        RUN_SET+=("$var_name")
+    fi
+done
+
+compiler=${COMPILER}
+
+export MAILTO WORK_DIR HOMEreg PROJECT_CODE QUEUE SCHEDULER TIMEOUT_LIMIT
+export RUN_SET REPO_BRANCH REPO_LOC RTID MACHINE_ID UPDATE_BASELINE compiler
