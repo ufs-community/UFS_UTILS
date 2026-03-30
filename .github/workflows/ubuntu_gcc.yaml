@@ -47,12 +47,11 @@ jobs:
         run: |
           git clone -c feature.manyFiles=true https://github.com/spack/spack.git
           source spack/share/spack/setup-env.sh
-          sed "s/\[oneapi, gcc@13:13, apple-clang@14\]/\[gcc@13:13\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
-          spack env create ufs_utils-env spack_ci.yaml
+          spack env create ufs_utils-env ufs_utils/ci/spack.yaml
           spack env activate ufs_utils-env
           spack config add "packages:all:prefer:['%gcc']"
           sudo apt install cmake
-          spack external find
+          spack external find`
           spack add mpich@3.4.2
           spack concretize
           spack install -v --fail-fast --dirty
