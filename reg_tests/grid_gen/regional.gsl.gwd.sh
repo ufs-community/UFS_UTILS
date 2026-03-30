@@ -8,8 +8,8 @@
 
 set -x
 
-nthreads=${nthreads:-6}
-export OMP_NUM_THREADS=$nthreads
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-6}
+nthreads=${OMP_NUM_THREADS}
 
 export TEMP_DIR=${WORK_DIR}/regional.gsl.gwd.${nthreads}.work
 export out_dir=${WORK_DIR}/regional.gsl.gwd.${nthreads}

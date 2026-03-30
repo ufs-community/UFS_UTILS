@@ -2,17 +2,17 @@
 
 #-----------------------------------------------------------------------------
 #
-# Run regrid_sfc consistency tests.
+# Run snow2mdl consistency tests on Ursa.
 #
 # Set ../rt.control variables to specify the number of tasks, memory, and walltime
 #
-# Invoke the script from command line as follows:  ./$script
+# Invoke the script from the command line as follows:  ./$script
 #
-# Log output is placed in consistency.log??.  A summary is
+# Log output is placed in consistency.log.  A summary is
 # placed in summary.log
 #
-# A test fails when its output does not match the baseline files
-# as determined by the 'nccmp' utility. The baseline files are
+# The test fails when its output does not match the baseline file
+# as determined by the 'cmp' command.  The baseline file is
 # stored in HOMEreg.
 #
 #-----------------------------------------------------------------------------
@@ -32,10 +32,7 @@ submit_test() {
     local waitonjobid="$1"; shift
 
     local logfile="${LOG_FILE}${suffix}"
-    
-    export DATA="${DATA_DIR}/test${suffix}"
-    export COMOUT=$DATA
-    export PARTITION="${partition}"
+    export OMP_NUM_THREADS=1
 
     if [[ "${exclusive}" == "true" ]]; then
         exclusive_flag="--exclusive"
@@ -46,14 +43,16 @@ submit_test() {
         dep_flag_pbs="-W depend=afterok:${waitonjobid}"
     fi
 
+    export DATA="${DATA_ROOT}/test${suffix}"
+
     if [[ "${SCHEDULER}" == "pbs" ]]; then
-        export APRUN_REGRID="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core"
+        export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS}"
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
-                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
-                ${dep_flag_pbs:+"${dep_flag_pbs}"}"./${script}")
+                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS}:mem=${mem} \
+                ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
         jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
-        export APRUN_REGRID="srun"
+        export APRUNCY="srun"
         jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
@@ -67,9 +66,8 @@ submit_test() {
         exit 1
     fi
     TEST_IDS+=(":${jobid}")
+    echo ${jobid}
 }
-
-test_name="regrid_sfc"
 
 RT_DIR=${RT_DIR:-${PWD}/..}
 
@@ -86,44 +84,52 @@ else
     exit 1
 fi
 
-if [[ "${MACHINE_ID}" == "wcoss2" ]];then
-  module load nccmp-D/1.9.0.1
+test_name="snow2mdl"
+
+DATA_ROOT="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
+DATA_ROOT="${DATA_ROOT}/reg-tests/${test_name}"
+
+rm -fr $DATA_ROOT
+
+UPDATE_BASELINE="${UPDATE_BASELINE:-FALSE}"
+export UPDATE_BASELINE
+
+if [ "$UPDATE_BASELINE" = "TRUE" ]; then
+  source ../get_hash.sh
 fi
 
-if [[ "$UPDATE_BASELINE" == "TRUE" ]]; then
-  if [[ -f "${RT_DIR}/get_hash.sh" ]]; then
-    source "${RT_DIR}/get_hash.sh"
-  else
-    echo "ERROR: Cannot find detect_machine.sh script"
-    exit 1
-  fi
-fi
+HOMEreg="${HOMEreg}/${test_name}"
+HOMEglobal=$PWD/../..
+export HOMEreg HOMEglobal
 
-export HOMEreg="${HOMEreg}/${test_name}"
-
-DATA_DIR="${WORK_DIR}/reg-tests/${test_name}"
-export NWPROD="${WORK_DIR}/UFS_UTILS"
-export DATA="${DATA_DIR}/test1"
-
+# The first test uses hemispheric afwa/airforce data, as was done in OPS.
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
+
+declare -a TEST_IDS=()
+
 rm -f ${LOG_FILE}* ${SUM_FILE}
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 6 1 10G 0:05:00 hercules false gauss2fv3incr gauss2fv3incr.sh false
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 hercules false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 hercules false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     jet)
-        submit_test 01 6 1 10G 0:05:00 xjet true gauss2fv3incr gauss2fv3incr.sh false
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 xjet true snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 xjet true snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     orion)
-        submit_test 01 6 1 10G 0:05:00 orion false gauss2fv3incr gauss2fv3incr.sh false
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 orion false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 orion false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     ursa)
-        submit_test 01 6 1 10G 0:05:00 u1-compute false gauss2fv3incr gauss2fv3incr.sh false
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 u1-compute false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 u1-compute false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     wcoss2)
-        submit_test 01 6 1 10G 0:05:00 dev false gauss2fv3incr gauss2fv3incr.sh false
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 dev false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 dev false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
@@ -131,31 +137,31 @@ case ${MACHINE_ID,,} in
         ;;
 esac
 
-
-if [[ "${MACHINE_ID}" == "wcoss2" ]];then
-
-  this_dir=${PWD}
-  (qsub -V -o "${LOG_FILE}" -e "${LOG_FILE}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=00:01:00 \
-        -N summary -l select=1:ncpus=1:mem=100MB -W "depend=afterany${TEST_IDS[*]}" << EOF
+# Create summary file from logs.
+this_dir=$PWD
+if [[ "${SCHEDULER}" == "pbs" ]]; then
+  (qsub -V -o ${LOG_FILE} -e ${LOG_FILE} -q $QUEUE -A $PROJECT_CODE -l walltime=00:01:00 \
+          -N snow_summary -l select=1:ncpus=1:mem=100MB -W depend="afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
-cd ${PWD}
-grep -a '<<<' ${LOG_FILE}* | grep -v echo > ./summary.log
+cd ${this_dir}
+grep -a '<<<' $LOG_FILE* | grep -v echo > $SUM_FILE
 EOF
   ) &
-  
+elif [[ "${SCHEDULER}" == "slurm" ]]; then
+  (sbatch --nodes=1 -t 0:01:00 -A ${PROJECT_CODE} -J snow_summary -o ${LOG_FILE} -e ${LOG_FILE} \
+        --open-mode=append -q ${QUEUE} -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
+#!/bin/bash
+cd ${this_dir}
+grep -a '<<<' ${LOG_FILE}*  > summary.log
+EOF
+  ) &
 else
-
-  (sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
-       -p "${PARTITION}" --open-mode=append -q "${QUEUE}" -d "afterany${TEST_IDS[*]}" << EOF
-#!/bin/bash
-cd ${PWD}
-grep -a '<<<' ${LOG_FILE}* > ./summary.log
-EOF
-  ) &
+    echo "Error: Unsupported scheduler '${SCHEDULER}'"
+    exit 1
 fi
 
 sleep_time=0
-echo "Waiting for ${test_name^^} testing to complete..."
+echo "Waiting for ${test_name^^} tests to complete..."
 while [ ! -f "summary.log" ]; do
     sleep 10
     sleep_time=$((sleep_time+10))
