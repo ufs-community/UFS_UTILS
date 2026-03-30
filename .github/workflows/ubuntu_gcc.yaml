@@ -50,6 +50,7 @@ jobs:
           sed "s/\[oneapi, gcc@13:13, apple-clang@14\]/\[gcc@13:13\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
           spack env create ufs_utils-env spack_ci.yaml
           spack env activate ufs_utils-env
+          spack config add "packages:all:prefer:['%gcc']"
           sudo apt install cmake
           spack external find
           spack add mpich@3.4.2
