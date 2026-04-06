@@ -1,8 +1,5 @@
 # Spack environment file to build UFS utilities dependencies
 spack:
-  packages:
-    all:
-      compiler: [oneapi, gcc@13:13, apple-clang@14]
   specs:
   - netcdf-c@4.9.2
   - netcdf-fortran@4.6.1
@@ -10,7 +7,7 @@ spack:
   - g2@3.5.1
   - ip@5.1.0 precision=d
   - sp@2.5.0
-  - nemsio@2.5.4
+  - nemsio@2.5.5
   - w3emc@2.10.0
   - sigio@2.3.3
   - nccmp@1.9.0.1
