@@ -35,7 +35,7 @@ elif [[ -d /lfs5 ]] ; then
 elif [[ -d /lfs/h1 ]] ; then
     target=wcoss2
     module reset
-elif [[ -d /opt/spack-stack ]]; then
+elif [[ -d /opt/spack-stack && -d /lustre ]]; then
     # We are in a aws-ec2 cluster
     source /usr/share/lmod/lmod/init/$__ms_shell
     target=aws-ec2
@@ -65,6 +65,9 @@ elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
     target=stampede
     module purge
 elif [[ "$(hostname)" =~ "Derecho" || "$(hostname)" =~ "derecho" ]]; then
+    target="derecho"
+    module purge
+elif [[ "$(hostname)" =~ "ip-"* || "$(hostname)" =~ "compute-dy-"* || "$(hostname)" =~ "precessing-dy-"* ]]; then
     target="derecho"
     module purge
 else
