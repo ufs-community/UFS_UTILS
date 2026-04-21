@@ -64,7 +64,7 @@ elif [[ "$(hostname)" =~ "hercules" || "$(hostname)" =~ "Hercules" ]]; then
 elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
     target=stampede
     module purge
-elif [[ "$(hostname)" =~ "Derecho" || "$(hostname)" =~ "derecho" ]]; then
+elif [[ -d /glade/derecho ]]; then
     target="derecho"
     module purge
 elif [[ "$(hostname)" =~ "ip-"* || "$(hostname)" =~ "compute-dy-"* || "$(hostname)" =~ "precessing-dy-"* ]]; then
