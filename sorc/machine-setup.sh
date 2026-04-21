@@ -68,7 +68,7 @@ elif [[ -d /glade/derecho ]]; then
     target="derecho"
     module purge
 elif [[ "$(hostname)" =~ "ip-"* || "$(hostname)" =~ "compute-dy-"* || "$(hostname)" =~ "precessing-dy-"* ]]; then
-    target="derecho"
+    target="aws-ec2"
     module purge
 else
     if [[ ! -v PW_CSP ]]; then
