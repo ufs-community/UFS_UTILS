@@ -27,9 +27,9 @@ done
 # Combine the run logs for each test into one log.
 #--------------------------------------------------------------------------
 
-LOG_FILE=RegressionTests_${target}.${compiler}.log
+LOG_FILE=RegressionTests_${MACHINE_ID}.${compiler}.log
 rm -f $LOG_FILE
-for file in RegressionTests_$target.${compiler}.*.log
+for file in RegressionTests_${MACHINE_ID}.${compiler}.*.log
 do
   if [[ -f "$file" ]]; then
     cat "$file" >> $LOG_FILE
