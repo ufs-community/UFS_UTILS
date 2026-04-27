@@ -1874,7 +1874,7 @@ SUBROUTINE VINTG
 
 ! Store input tracer surface values for humidity extrapolation.
  DO II = 1, NUM_TRACERS_INPUT
-   print*,"- CACHE SURFACE FOR 3-D TRACER ", trim(tracers(II))
+   print*,"- CACHE SURFACE FOR 3-D TRACER ", trim(tracers(ii))
    call ESMF_FieldGet(tracers_b4adj_target_grid(II), &
                       farrayPtr=Q1PTR, rc=rc)
    if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU, &
@@ -2324,41 +2324,64 @@ END SUBROUTINE VINTG
  REAL(ESMF_KIND_R8),INTENT(IN) :: Z1(1+(IM-1)*IXZ1+(KM1-1)*KXZ1) 
  REAL(ESMF_KIND_R8),INTENT(IN) :: Z2(1+(IM-1)*IXZ2+(KM2-1)*KXZ2) 
 
- INTEGER                       :: I,K2,L
+ INTEGER                       :: I,K2,L, LOW,HIGH,MID
 
  REAL(ESMF_KIND_R8)            :: Z 
 
   
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !  FIND THE SURROUNDING INPUT INTERVAL FOR EACH OUTPUT POINT.          
- DO I=1,IM 
-   IF (Z1(1+(I-1)*IXZ1).LE.Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1)) THEN 
-!  INPUT COORDINATE IS MONOTONICALLY ASCENDING.                        
-     DO K2=1,KM2
-       Z=Z2(1+(I-1)*IXZ2+(K2-1)*KXZ2)
-       L=0 
-       DO 
-         IF(Z.LT.Z1(1+(I-1)*IXZ1+L*KXZ1)) EXIT 
-         L=L+1 
-         IF(L.EQ.KM1) EXIT 
-       ENDDO
-       L2(1+(I-1)*IXL2+(K2-1)*KXL2)=L 
-     ENDDO 
-   ELSE 
-!   INPUT COORDINATE IS MONOTONICALLY DESCENDING.                       
-     DO K2=1,KM2 
-       Z=Z2(1+(I-1)*IXZ2+(K2-1)*KXZ2) 
-       L=0 
-       DO 
-         IF(Z.GT.Z1(1+(I-1)*IXZ1+L*KXZ1)) EXIT 
-         L=L+1 
-         IF(L.EQ.KM1) EXIT 
-       ENDDO
-       L2(1+(I-1)*IXL2+(K2-1)*KXL2)=L 
-     ENDDO 
-   ENDIF 
- ENDDO 
-                                                                        
+DO I=1,IM 
+! Determine if ascending or descending once per column
+  IF (Z1(1+(I-1)*IXZ1) .LE. Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1)) THEN 
+! ASCENDING BINARY SEARCH
+    DO K2=1,KM2
+      Z = Z2(1+(I-1)*IXZ2+(K2-1)*KXZ2)
+      IF (Z .LT. Z1(1+(I-1)*IXZ1)) THEN
+        L = 0
+      ELSE IF (Z .GE. Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1)) THEN
+        L = KM1
+      ELSE
+! Binary search core
+        LOW = 0
+        HIGH = KM1 - 1
+        DO WHILE (HIGH - LOW > 1)
+          MID = (LOW + HIGH) / 2
+          IF (Z .GE. Z1(1+(I-1)*IXZ1+MID*KXZ1)) THEN
+            LOW = MID
+          ELSE
+            HIGH = MID
+          ENDIF
+        ENDDO
+        L = HIGH
+      ENDIF
+      L2(1+(I-1)*IXL2+(K2-1)*KXL2) = L 
+    ENDDO 
+  ELSE 
+! DESCENDING BINARY SEARCH
+    DO K2=1,KM2 
+      Z = Z2(1+(I-1)*IXZ2+(K2-1)*KXZ2) 
+      IF (Z .GT. Z1(1+(I-1)*IXZ1)) THEN
+        L = 0
+      ELSE IF (Z .LE. Z1(1+(I-1)*IXZ1+(KM1-1)*KXZ1)) THEN
+        L = KM1
+      ELSE
+        LOW = 0
+        HIGH = KM1 - 1
+        DO WHILE (HIGH - LOW > 1)
+          MID = (LOW + HIGH) / 2
+          IF (Z .LE. Z1(1+(I-1)*IXZ1+MID*KXZ1)) THEN
+            LOW = MID
+          ELSE
+            HIGH = MID
+          ENDIF
+        ENDDO
+        L = HIGH
+      ENDIF
+      L2(1+(I-1)*IXL2+(K2-1)*KXL2) = L 
+    ENDDO 
+  ENDIF 
+ENDDO 
  END SUBROUTINE RSEARCH 
 
 !> Compute vertical level height
