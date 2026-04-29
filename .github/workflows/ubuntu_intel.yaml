@@ -64,6 +64,7 @@ jobs:
           sed "s/\[oneapi, gcc@10:10, apple-clang@14\]/\[oneapi\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
           spack env create ufs_utils-env spack_ci.yaml
           spack env activate ufs_utils-env
+          spack load esmf
           spack compiler find
           sudo apt install cmake
           spack external find --not-buildable gmake
