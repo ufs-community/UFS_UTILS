@@ -62,6 +62,8 @@ jobs:
         run: |
           # Clear any potentially corrupted Python virtual environment
           rm -rf spack/opt/spack/linux-icelake/python-venv-* || true
+          # Remove any existing spack view symlinks that may cause conflicts
+          rm -rf spack/var/spack/environments/ufs_utils-env/.spack-env/view || true
           sudo mv /usr/local /usr/local_mv
           git clone -c feature.manyFiles=true https://github.com/spack/spack.git
           source spack/share/spack/setup-env.sh
