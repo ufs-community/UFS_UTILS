@@ -9,7 +9,7 @@ defaults:
 
 # Set I_MPI_CC/F90 so IntelLLVM is used.
 env:
-  cache_key: intel-20260430
+  cache_key: intel-20260430-v2
   CC: mpiicx
   FC: mpiifx
   CXX: mpiicpx
@@ -60,6 +60,8 @@ jobs:
       - name: install-dependencies-with-spack
         if: steps.cache-env.outputs.cache-hit != 'true'
         run: |
+          # Clear any potentially corrupted Python virtual environment
+          rm -rf spack/opt/spack/linux-icelake/python-venv-* || true
           sudo mv /usr/local /usr/local_mv
           git clone -c feature.manyFiles=true https://github.com/spack/spack.git
           source spack/share/spack/setup-env.sh
@@ -73,8 +75,6 @@ jobs:
           spack config add "packages:fortran:require:'intel-oneapi-compilers'"
           spack config add "packages:mpi:require:intel-oneapi-mpi"
           spack config add "packages:mpi:buildable:false"
-          # Add explicit Python configuration to avoid virtual env issues
-          spack config add "packages:python:buildable:false"
           intel_mpi_version=$(basename $(realpath /opt/intel/oneapi/mpi/latest))
           sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${intel_mpi_version}\n        prefix: /opt/intel/oneapi|" $SPACK_ENV/spack.yaml
           spack config add "packages:python:require:'@3.11'"
