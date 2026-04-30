@@ -27,14 +27,14 @@ jobs:
 
     steps:
       - name: checkout  # this is to get the ci/spack.yaml file
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
             path: ufs_utils
 
       # Cache spack, compiler and dependencies
       - name: cache-env
         id: cache-env
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: |
             spack
@@ -64,14 +64,14 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
             path: ufs_utils
             submodules: recursive
 
       - name: cache-env
         id: cache-env
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: |
             spack
