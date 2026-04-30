@@ -52,7 +52,6 @@ jobs:
           echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
           sudo apt-get update
           sudo apt-get install intel-oneapi-mpi-devel intel-oneapi-openmp-2024.1 intel-oneapi-compiler-fortran-2024.1 intel-oneapi-compiler-dpcpp-cpp-2024.1
-          sudo apt-get install python3-distutils
           echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
 
       # Install dependencies using Spack
