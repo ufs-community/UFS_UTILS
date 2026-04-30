@@ -9,7 +9,7 @@ defaults:
     shell: bash -leo pipefail {0}
 
 env:
-  cache_key: gcc
+  cache_key: gcc-20260430
   CC: gcc-13
   FC: gfortran-13
   CXX: g++-13

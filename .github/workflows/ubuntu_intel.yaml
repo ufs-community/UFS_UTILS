@@ -9,7 +9,7 @@ defaults:
 
 # Set I_MPI_CC/F90 so IntelLLVM is used.
 env:
-  cache_key: intel
+  cache_key: intel-20260430
   CC: mpiicx
   FC: mpiifx
   CXX: mpiicpx
