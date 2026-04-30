@@ -39,6 +39,7 @@ target_include_directories(cpld_gridgen_lib INTERFACE ${mod_dir})
 target_link_libraries(
   cpld_gridgen_lib
   PUBLIC
+  PIO::PIO_C
   esmf
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)
