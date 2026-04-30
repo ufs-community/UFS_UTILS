@@ -52,17 +52,19 @@ jobs:
           echo "deb https://apt.repos.intel.com/oneapi all main" | sudo tee /etc/apt/sources.list.d/oneAPI.list
           sudo apt-get update
           sudo apt-get install intel-oneapi-mpi-devel intel-oneapi-openmp-2024.1 intel-oneapi-compiler-fortran-2024.1 intel-oneapi-compiler-dpcpp-cpp-2024.1
+          sudo apt-get install python3-distutils
           echo "source /opt/intel/oneapi/setvars.sh" >> ~/.bash_profile
 
       # Install dependencies using Spack
+      #           sed "s/\[oneapi, gcc@10:10, apple-clang@14\]/\[oneapi\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
+
       - name: install-dependencies-with-spack
         if: steps.cache-env.outputs.cache-hit != 'true'
         run: |
           sudo mv /usr/local /usr/local_mv
           git clone -c feature.manyFiles=true https://github.com/spack/spack.git
           source spack/share/spack/setup-env.sh
-          sed "s/\[oneapi, gcc@10:10, apple-clang@14\]/\[oneapi\]/g" ufs_utils/ci/spack.yaml > spack_ci.yaml
-          spack env create ufs_utils-env spack_ci.yaml
+          spack env create ufs_utils-env ufs_utils/ci/spack.yaml
           spack env activate ufs_utils-env
           spack compiler find
           sudo apt install cmake
@@ -72,13 +74,14 @@ jobs:
           spack config add "packages:fortran:require:'intel-oneapi-compilers'"
           spack config add "packages:mpi:require:intel-oneapi-mpi"
           spack config add "packages:mpi:buildable:false"
-          spack config add "packages:mpi:require:intel-oneapi-mpi"
+          # Add explicit Python configuration to avoid virtual env issues
+          spack config add "packages:python:buildable:false"
           intel_mpi_version=$(basename $(realpath /opt/intel/oneapi/mpi/latest))
           sed -i "s|^  packages:|  packages:\n    intel-oneapi-mpi:\n      buildable: false\n      externals:\n      - spec: intel-oneapi-mpi@${intel_mpi_version}\n        prefix: /opt/intel/oneapi|" $SPACK_ENV/spack.yaml
           spack config add "packages:python:require:'@3.11'"
           cat $SPACK_ENV/spack.yaml
           spack concretize
-          spack install --dirty --show-log-on-error --fail-fast
+          spack install -j4 --dirty --show-log-on-error --fail-fast
           spack clean --all
 
   ufs_utils:
@@ -116,7 +119,7 @@ jobs:
           cd ufs_utils
           mkdir -p build && cd build
           cmake -DCMAKE_INSTALL_PREFIX=../install ..
-          make -j2 VERBOSE=1
+          make -j4 VERBOSE=1
           make install
 
       - name: ctest
