@@ -31,6 +31,7 @@ target_include_directories(ocnice_prep_lib INTERFACE ${mod_dir})
 target_link_libraries(
   ocnice_prep_lib
   PUBLIC
+  PIO::PIO_C
   esmf
   NetCDF::NetCDF_Fortran)
 

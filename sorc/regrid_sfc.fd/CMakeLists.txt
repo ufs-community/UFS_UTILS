@@ -28,6 +28,7 @@ target_include_directories(regrid_lib INTERFACE ${mod_dir})
 target_link_libraries(
   regrid_lib
   PUBLIC
+  PIO::PIO_C
   esmf
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)

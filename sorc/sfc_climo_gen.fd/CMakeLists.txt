@@ -35,6 +35,7 @@ target_include_directories(sfc_climo_gen_lib INTERFACE ${mod_dir})
 target_link_libraries(
   sfc_climo_gen_lib
   PUBLIC
+  PIO::PIO_C
   esmf
   MPI::MPI_Fortran
   NetCDF::NetCDF_Fortran)

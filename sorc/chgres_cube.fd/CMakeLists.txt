@@ -60,6 +60,7 @@ target_link_libraries(
   bacio::bacio_4
   ip::ip_d
   w3emc::w3emc_d
+  PIO::PIO_C
   esmf
   msis2
   MPI::MPI_Fortran
