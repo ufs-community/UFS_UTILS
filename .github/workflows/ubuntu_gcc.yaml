@@ -82,6 +82,7 @@ jobs:
         run: |
           source spack/share/spack/setup-env.sh
           spack env activate ufs_utils-env
+          spack load esmf
           export CC=mpicc
           export FC=mpif90
           cd ufs_utils
