@@ -1581,6 +1581,7 @@ ENDIF
  tf(:,:)   = reshape(tf_ij,(/nx,ny/) )
 
  tf_thaw = bmiss
+ is_ice = .false.
 
  do krad = 1, max_search
 
