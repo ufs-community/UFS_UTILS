@@ -19,13 +19,18 @@ fi
 target=""
 USERNAME=`echo $LOGNAME | awk '{ print tolower($0)'}`
 
-if [[ -d /lfs/h1 ]] ; then
-    target=wcoss2
-    module reset
-elif [[ -d /opt/spack-stack && -v SINGULARITY_CONTAINER ]]; then
+if [[ -v SINGULARITY_CONTAINER ]]; then
     # We are in a container
     source /usr/lmod/lmod/init/$__ms_shell
     target=container
+    module purge
+elif [[ -d /lfs/h1 ]] ; then
+    target=wcoss2
+    module reset
+elif [[ -d /opt/spack-stack && -d /lustre ]]; then
+    # We are in a aws-ec2 cluster
+    source /usr/share/lmod/lmod/init/$__ms_shell
+    target=aws-ec2
     module purge
 elif [[ -d /scratch3 ]]; then
     # We are on NOAA Hera or Ursa
@@ -53,6 +58,9 @@ elif [[ -d /work/00315 && -d /scratch/00315 ]] ; then
     module purge
 elif [[ -d /glade/derecho ]]; then
     target="derecho"
+    module purge
+elif [[ "$(hostname)" =~ "ip-"* || "$(hostname)" =~ "compute-dy-"* || "$(hostname)" =~ "precessing-dy-"* ]]; then
+    target="aws-ec2"
     module purge
 else
     if [[ ! -v PW_CSP ]]; then
