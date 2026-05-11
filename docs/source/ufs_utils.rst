@@ -772,7 +772,6 @@ Introduction
 The gdas_init utility is used to create coldstart initial conditions for global cycled and forecast-only experiments using the chgres_cube program.  It has two components: one that pulls the input data required by chgres_cube from HPSS, and one that runs chgres_cube. The utility is only supported on machines with access to HPSS:
 
      * Ursa
-     * Jet
      * WCOSS2
      * Gaea C6
 
@@ -790,7 +789,7 @@ Invoke the build script from the root directory:
 
   ./build_all.sh
 
-Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is "wcoss2", "ursa", "jet", "orion", "hercules", or "gaeac6"):
+Set the 'fixed' directories using the script in the './fix' subdirectory (where $MACHINE is "wcoss2", "ursa", "orion", "hercules", or "gaeac6"):
 
 ::
 
