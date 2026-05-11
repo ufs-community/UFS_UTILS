@@ -98,9 +98,6 @@ case ${MACHINE_ID,,} in
     hercules)
         submit_test 01 1 1 5G 0:03:00 hercules false weight_gen weight_gen.sh false
         ;;
-    jet)
-        submit_test 01 1 1 5G 0:03:00 xjet true weight_gen weight_gen.sh false
-        ;;
     orion)
         submit_test 01 1 1 5G 0:03:00 orion false weight_gen weight_gen.sh false
         ;;

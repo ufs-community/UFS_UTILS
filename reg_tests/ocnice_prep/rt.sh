@@ -94,12 +94,6 @@ case ${MACHINE_ID,,} in
         PARTITION='orion'
         ulimit -a
         ;;
-    jet)
-        WLCLK=10
-        export NCCMP=nccmp
-        PARTITION="--partition=xjet"
-        ulimit -s unlimited
-        ;;
     wcoss2)
         export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
         WLCLK=15

@@ -133,22 +133,6 @@ case ${MACHINE_ID,,} in
         submit_test 13 6 1 75G 0:05:00 hercules false c96.gefs.grib2 c96.gefs.grib2.sh false
         submit_test 14 12 1 75G 0:10:00 hercules false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
         ;;
-    jet)
-        submit_test 01 6 1 75G 0:15:00 xjet true c96.fv3.restart c96.fv3.restart.sh false
-        submit_test 02 6 1 75G 0:15:00 xjet true c192.fv3.history c192.fv3.history.sh false
-        submit_test 03 6 2 75G 0:10:00 xjet true c96.fv3.netcdf c96.fv3.netcdf.sh false
-        submit_test 04 6 1 75G 0:05:00 xjet true c192.gfs.grib2 c192.gfs.grib2.sh false
-        submit_test 05 12 1 75G 0:10:00 xjet true 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
-        submit_test 06 6 1 75G 0:10:00 xjet true 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
-        submit_test 07 6 2 75G 0:10:00 xjet true 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh false
-        submit_test 08 12 1 75G 0:10:00 xjet true 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
-        submit_test 09 12 1 75G 0:10:00 xjet true 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
-        submit_test 10 12 1 75G 0:10:00 xjet true 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
-        submit_test 11 12 1 100G 0:15:00 xjet true c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
-        submit_test 12 12 1 75G 0:10:00 xjet true 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
-        submit_test 13 6 1 75G 0:05:00 xjet true c96.gefs.grib2 c96.gefs.grib2.sh false
-        submit_test 14 12 1 75G 0:10:00 xjet true 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
-     ;;
     orion)
         submit_test 01 6 1 75G 0:15:00 orion false c96.fv3.restart c96.fv3.restart.sh false
         submit_test 02 6 1 75G 0:15:00 orion false c192.fv3.history c192.fv3.history.sh false
