@@ -24,14 +24,6 @@ if [[ -v SINGULARITY_CONTAINER ]]; then
     source /usr/lmod/lmod/init/$__ms_shell
     target=container
     module purge
-elif [[ -d /lfs5 ]] ; then
-    # We are on NOAA Jet
-    if ( ! eval module help > /dev/null 2>&1 ) ; then
-        echo load the module command 1>&2
-        source /apps/lmod/lmod/init/$__ms_shell
-    fi
-    target=jet
-    module purge
 elif [[ -d /lfs/h1 ]] ; then
     target=wcoss2
     module reset
