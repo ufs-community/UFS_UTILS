@@ -50,5 +50,5 @@ jobs:
           ############################
           cmake -S ufs_utils -B build -DCMAKE_INSTALL_PREFIX=install
           cmake --build build --parallel 4 --verbose
-          cmake --install build
           ctest --test-dir build --parallel 4 --output-on-failure
+          cmake --install build
