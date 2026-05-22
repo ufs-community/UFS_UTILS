@@ -31,7 +31,6 @@ jobs:
         shell: bash
         run: |
           . /entrypoint.sh
-          spack uninstall --force --yes-to-all gcc-runtime intel-oneapi-runtime # prevents CMake config warnings
           ############################
           ## Modify Spack installation, if needed
           ##
@@ -48,6 +47,7 @@ jobs:
           #spack concretize --fresh
           #spack install --only-concrete
           ############################
+          spack uninstall --force --yes-to-all gcc-runtime intel-oneapi-runtime # prevents CMake config warnings
           cmake -S ufs_utils -B build -DCMAKE_INSTALL_PREFIX=install
           cmake --build build --parallel 4 --verbose
           ctest --test-dir build --parallel 4 --output-on-failure

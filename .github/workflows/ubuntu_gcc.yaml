@@ -20,7 +20,6 @@ jobs:
         shell: bash
         run: |
           . /entrypoint.sh
-          spack uninstall --force --yes-to-all gcc-runtime # prevents CMake config warnings
           ############################
           ## Modify Spack installation, if needed
           ##
@@ -37,6 +36,7 @@ jobs:
           #spack concretize --fresh
           #spack install --only-concrete
           ############################
+          spack uninstall --force --yes-to-all gcc-runtime # prevents CMake config warnings
           export CC=mpicc
           export FC=mpif90
           cmake -S ufs_utils -B build -DCMAKE_INSTALL_PREFIX=install
