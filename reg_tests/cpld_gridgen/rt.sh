@@ -86,7 +86,7 @@ case ${MACHINE_ID} in
   gaeac6)
     export MOM6_FIXDIR=/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix/mom6/${MOM6_version}
     WLCLK=40
-    PARTITION=normal
+    PARTITION=batch
     QUEUE=normal
     ;;
   wcoss2)
