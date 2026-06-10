@@ -125,7 +125,7 @@ case ${MACHINE_ID,,} in
         submit_test 01 6 1 10G 0:05:00 u1-compute false false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     gaeac6)
-        submit_test 01 6 1 10G 0:05:00 batch c6 false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 normal c6 false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     wcoss2)
         submit_test 01 6 1 10G 0:05:00 dev false false gauss2fv3incr gauss2fv3incr.sh false

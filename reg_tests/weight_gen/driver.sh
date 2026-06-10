@@ -110,7 +110,7 @@ case ${MACHINE_ID,,} in
         submit_test 01 1 1 5G 0:03:00 u1-compute false false weight_gen weight_gen.sh false
         ;;
     gaeac6)
-        submit_test 01 1 1 5G 0:03:00 batch c6 false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 normal c6 false weight_gen weight_gen.sh false
         ;;
     wcoss2)
         submit_test 01 1 1 5G 0:03:00 dev false false weight_gen weight_gen.sh false

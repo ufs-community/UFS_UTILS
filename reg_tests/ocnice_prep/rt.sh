@@ -85,7 +85,8 @@ case ${MACHINE_ID,,} in
     gaeac6)
         WLCLK=10
         export NCCMP=nccmp
-        PARTITION='batch'
+        PARTITION='normal'
+        QUEUE='normal'
         ;;
     hercules)
         WLCLK=10
