@@ -143,7 +143,7 @@ case ${MACHINE_ID,,} in
         submit_test 01 1 1 5G 0:01:00 u1-compute false false ice_blend ice_blend.sh false
         ;;
     gaeac6)
-        submit_test 01 1 1 5G 0:01:00 normal c6 false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 batch c6 false ice_blend ice_blend.sh false
         ;;
     wcoss2)
         submit_test 01 1 1 5G 0:01:00 dev false false ice_blend ice_blend.sh false
