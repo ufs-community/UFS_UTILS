@@ -45,6 +45,14 @@ case ${MACHINE_ID,,} in
         SCHEDULER="slurm"
         COMPILER="intelllvm"
         ;;
+    gaeac6)
+        WORK_DIR="/gpfs/f6/infra-cpu/scratch/${LOGNAME}/ufs_utils"
+        HOMEreg="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
+        PROJECT_CODE="infra-cpu"
+        QUEUE="batch"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
     wcoss2)
         WORK_DIR="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
         HOMEreg="/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests"
