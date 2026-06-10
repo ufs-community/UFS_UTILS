@@ -126,6 +126,14 @@ case ${MACHINE_ID,,} in
         submit_test 05 6 1 50G 0:05:00 u1-compute false C192.jedi_lndincsoilnoahmp C192.jedi_lndincsoilnoahmp.sh false
         submit_test 06 6 1 50G 0:05:00 u1-compute false C192.gsitile_lndincsoilnoahmp C192.gsitile_lndincsoilnoahmp.sh false
         ;;
+    gaeac6)
+        submit_test 01 6 1 50G 0:05:00 c6 false C768.fv3gfs C768.fv3gfs.sh false
+        #submit_test 02 6 1 50G 0:05:00 c6 false C192.gsi_lndincsoilnoahmp C192.gsi_lndincsoilnoahmp.sh false
+        submit_test 03 6 1 50G 0:05:00 c6 false C768.lndincsnow C768.lndincsnow.sh false
+        submit_test 04 6 1 50G 0:05:00 c6 false C48.noahmp.coupled C48.noahmp.coupled.sh false
+        submit_test 05 6 1 50G 0:05:00 c6 false C192.jedi_lndincsoilnoahmp C192.jedi_lndincsoilnoahmp.sh false
+        submit_test 06 6 1 50G 0:05:00 c6 false C192.gsitile_lndincsoilnoahmp C192.gsitile_lndincsoilnoahmp.sh false
+        ;;
     wcoss2)
         submit_test 01 12 1 15G 0:05:00 dev false C768.fv3gfs C768.fv3gfs.sh false
         #submit_test 02 12 1 15G 0:05:00 dev false C192.gsi_lndincsoilnoahmp C192.gsi_lndincsoilnoahmp.sh false

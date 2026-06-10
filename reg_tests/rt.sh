@@ -13,12 +13,12 @@ wait_for_fin() {
   done
 }
 
-if [[ $# -gt 0 ]] && [[ $# -lt 2 ]]; then
-    SCRIPT_LOGGER=$1
-else
-    SCRIPT_LOGGER="rtsh.log"
-fi
-exec > "${SCRIPT_LOGGER}" 2>&1
+# if [[ $# -gt 0 ]] && [[ $# -lt 2 ]]; then
+#     SCRIPT_LOGGER=$1
+# else
+#     SCRIPT_LOGGER="rtsh.log"
+# fi
+# exec > "${SCRIPT_LOGGER}" 2>&1
 
 start_time=$SECONDS
 if [[ "$(hostname)" =~ "Orion" || "$(hostname)" =~ "orion" ]]; then

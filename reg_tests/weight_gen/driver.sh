@@ -104,6 +104,9 @@ case ${MACHINE_ID,,} in
     ursa)
         submit_test 01 1 1 5G 0:03:00 u1-compute false weight_gen weight_gen.sh false
         ;;
+    gaeac6)
+        submit_test 01 1 1 5G 0:03:00 c6 false weight_gen weight_gen.sh false
+        ;;
     wcoss2)
         submit_test 01 1 1 5G 0:03:00 dev false weight_gen weight_gen.sh false
         ;;

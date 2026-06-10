@@ -39,7 +39,8 @@ case ${MACHINE_ID,,} in
         ;;
     gaeac6)
         WORK_DIR="/gpfs/f6/infra-cpu/scratch/${LOGNAME}/ufs_utils"
-        HOMEreg="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
+        #HOMEreg="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
+        HOMEreg="/gpfs/f6/infra-cpu/world-shared/Brian.Curtis/ufs_utils/reg_tests"
         PROJECT_CODE="infra-cpu"
         QUEUE="batch"
         SCHEDULER="slurm"
@@ -80,13 +81,16 @@ export HOMEUFSUTILS
 
 ### RT SETTINGS ###
 TIMEOUT_LIMIT=3600
-UPDATE_BASELINE="FALSE"
+UPDATE_BASELINE="TRUE"
 ######
 
 ### REPO INFO ###
-REPO_BRANCH="develop"
+# REPO_BRANCH="develop"
+# # REPO_LOC="https://github.com/ufs-community/UFS_UTILS.git"
+# REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+REPO_BRANCH="gaeac6_support"
 # REPO_LOC="https://github.com/ufs-community/UFS_UTILS.git"
-REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+REPO_LOC="git@github.com:BrianCurtis-NOAA/UFS_UTILS.git"
 ######
 
 # Shouldn't need to edit below here #

@@ -82,6 +82,11 @@ case ${MACHINE_ID,,} in
         export NCCMP=nccmp
         PARTITION='u1-compute'
         ;;
+    gaeac6)
+        WLCLK=10
+        export NCCMP=nccmp
+        PARTITION='c6'
+        ;;
     hercules)
         WLCLK=10
         export NCCMP=nccmp

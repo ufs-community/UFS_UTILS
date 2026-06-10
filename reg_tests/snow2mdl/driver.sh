@@ -123,6 +123,10 @@ case ${MACHINE_ID,,} in
         jobkeep=$(submit_test 01 1 1 5G 0:03:00 u1-compute false snow.hemi snow2mdl.hemi.sh false)
         submit_test 02 1 1 5G 0:03:00 u1-compute false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
+    gaeac6)
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 c6 false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 c6 false snow.global snow2mdl.global.sh "${jobkeep}"
+        ;;
     wcoss2)
         jobkeep=$(submit_test 01 1 1 5G 0:03:00 dev false snow.hemi snow2mdl.hemi.sh false)
         submit_test 02 1 1 5G 0:03:00 dev false snow.global snow2mdl.global.sh "${jobkeep}"

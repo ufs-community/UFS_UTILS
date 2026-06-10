@@ -83,6 +83,11 @@ case ${MACHINE_ID} in
     WLCLK=40
     PARTITION=u1-compute
     ;;
+  gaeac6)
+    export MOM6_FIXDIR=/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix/mom6/${MOM6_version}
+    WLCLK=40
+    PARTITION=c6
+    ;;
   wcoss2)
     export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
     export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
