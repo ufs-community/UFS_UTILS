@@ -86,7 +86,7 @@ case ${MACHINE_ID} in
   gaeac6)
     export MOM6_FIXDIR=/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix/mom6/${MOM6_version}
     WLCLK=40
-    PARTITION=c6
+    PARTITION=batch
     ;;
   wcoss2)
     export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
@@ -197,12 +197,16 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cp $PATHTR/exec/cpld_gridgen $RUNDIR
 
+  if [[ ${MACHINE_ID} = gaeac6 ]]; then
+    slurmflag="--clusters=c6"
+  fi
+
   if [[ $MACHINE_ID = wcoss2 ]]; then
     tests[$i]=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
        -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=${NTASKS} -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
 
   else
-    tests[$i]=$(sbatch --parsable --ntasks-per-node=${NTASKS} --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+    tests[$i]=$(sbatch --parsable --ntasks-per-node=${NTASKS} ${slurmflag:+"${slurmflag}"} --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
             --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
   fi
 
@@ -221,7 +225,7 @@ if [[ $MACHINE_ID = wcoss2 ]]; then
         -W depend=afterany${all_tests} ./rt.summary.sh) &
 else
 
-  (sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
+  (sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT ${slurmflag:+"${slurmflag}"} -J summary -o /dev/null -e /dev/null \
        --partition=$PARTITION --open-mode=append -q $QUEUE -d afterany${all_tests} ./rt.summary.sh) &
 
 fi

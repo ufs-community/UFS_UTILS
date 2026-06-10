@@ -26,6 +26,7 @@ submit_test() {
     local mem="$1"; shift
     local walltime="$1"; shift
     local partition="$1"; shift
+    local slurmcluster="$1"; shift
     local exclusive="$1"; shift
     local jobname="$1"; shift
     local script="$1"; shift
@@ -36,6 +37,10 @@ submit_test() {
 
     if [[ "${exclusive}" == "true" ]]; then
         exclusive_flag="--exclusive"
+    fi
+
+    if [[ "${slurmcluster}" != "false" ]]; then
+        slurmflag="--clusters=${slurmcluster}"
     fi
 
     if [[ "${waitonjobid}" != "false" ]]; then
@@ -51,7 +56,7 @@ submit_test() {
         jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUNCY="srun"
-        jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
+        jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" ${slurmflag:+"${slurmflag}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
         jobid=${jobid%.*}
@@ -129,19 +134,19 @@ export COPYGB=${COPYGB:-${GRIB_UTIL_ROOT}/bin/copygb}
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 1 1 5G 0:01:00 hercules false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 hercules false false ice_blend ice_blend.sh false
         ;;
     orion)
-        submit_test 01 1 1 5G 0:01:00 orion false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 orion false false ice_blend ice_blend.sh false
         ;;
     ursa)
-        submit_test 01 1 1 5G 0:01:00 u1-compute false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 u1-compute false false ice_blend ice_blend.sh false
         ;;
     gaeac6)
-        submit_test 01 1 1 5G 0:01:00 c6 false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 batch c6 false ice_blend ice_blend.sh false
         ;;
     wcoss2)
-        submit_test 01 1 1 5G 0:01:00 dev false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 dev false false ice_blend ice_blend.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"

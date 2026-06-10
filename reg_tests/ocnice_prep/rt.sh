@@ -85,7 +85,7 @@ case ${MACHINE_ID,,} in
     gaeac6)
         WLCLK=10
         export NCCMP=nccmp
-        PARTITION='c6'
+        PARTITION='batch'
         ;;
     hercules)
         WLCLK=10
@@ -223,6 +223,10 @@ while read -r line || [ "$line" ]; do
     export RUNDIR
     export TEST_NAME
 
+    if [[ ${MACHINE_ID} = gaeac6 ]]; then
+      slurmflag="--clusters=c6"
+    fi
+
     if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
       tests[$i]=$(qsub -V -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
@@ -230,7 +234,7 @@ while read -r line || [ "$line" ]; do
 
     else
 
-      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 --mem=24g -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 ${slurmflag:+"${slurmflag}"} --mem=24g -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
                 -p $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
 
     fi
@@ -251,7 +255,7 @@ if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
 else
 
-  (sbatch --ntasks=1 --mem=25m -t 0:01:00 -A $ACCOUNT -J summary -o /dev/null -e /dev/null \
+  (sbatch --ntasks=1 --mem=25m -t 0:01:00 -A $ACCOUNT ${slurmflag:+"${slurmflag}"} -J summary -o /dev/null -e /dev/null \
        -p $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh) &
 
 fi

@@ -26,6 +26,7 @@ submit_test() {
     local mem="$1"; shift
     local walltime="$1"; shift
     local partition="$1"; shift
+    local slurmcluster="$1"; shift
     local exclusive="$1"; shift
     local jobname="$1"; shift
     local script="$1"; shift
@@ -36,6 +37,10 @@ submit_test() {
 
     if [[ "${exclusive}" == "true" ]]; then
         exclusive_flag="--exclusive"
+    fi
+
+    if [[ "${slurmcluster}" != "false" ]]; then
+        slurmflag="--clusters=${slurmcluster}"
     fi
 
     if [[ "${waitonjobid}" != "false" ]]; then
@@ -55,7 +60,7 @@ submit_test() {
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUNCY="srun"
         export APRUN_SFC=${APRUNCY}
-        jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
+        jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                --export=ALL,OMP_NUM_THREADS=${OMP_NUM_THREADS} ${dep_flag_slurm:+"${dep_flag_slurm}"} \
                -o "${logfile}" -e "${logfile}" "./${script}")
@@ -112,49 +117,49 @@ rm -fr "${WORK_DIR}"
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 24 1 50G 0:15:00 hercules false c96.uniform c96.uniform.sh false
-        submit_test 02 15 2 300G 0:15:00 hercules false c96.viirs.bnu c96.viirs.bnu.sh false
-        submit_test 03 24 1 50G 0:10:00 hercules false gfdl.regional gfdl.regional.sh false
-        submit_test 04 24 1 50G 0:10:00 hercules false esg.regional esg.regional.sh false
-        submit_test 05 24 1 50G 0:10:00 hercules false esg.regional.pct.cat esg.regional.pct.cat.sh false
-        submit_test 06 12 1 50G 0:10:00 hercules false reg.gsl.gwd.12 regional.gsl.gwd.sh false
-        submit_test 07 24 1 50G 0:10:00 hercules false reg.gsl.gwd.24 regional.gsl.gwd.sh false
+        submit_test 01 24 1 50G 0:15:00 hercules false false c96.uniform c96.uniform.sh false
+        submit_test 02 15 2 300G 0:15:00 hercules false false c96.viirs.bnu c96.viirs.bnu.sh false
+        submit_test 03 24 1 50G 0:10:00 hercules false false gfdl.regional gfdl.regional.sh false
+        submit_test 04 24 1 50G 0:10:00 hercules false false esg.regional esg.regional.sh false
+        submit_test 05 24 1 50G 0:10:00 hercules false false esg.regional.pct.cat esg.regional.pct.cat.sh false
+        submit_test 06 12 1 50G 0:10:00 hercules false false reg.gsl.gwd.12 regional.gsl.gwd.sh false
+        submit_test 07 24 1 50G 0:10:00 hercules false false reg.gsl.gwd.24 regional.gsl.gwd.sh false
         ;;
     orion)
-        submit_test 01 24 1 50G 0:20:00 orion false c96.uniform c96.uniform.sh false
-        submit_test 02 15 2 96G 0:20:00 orion false c96.viirs.bnu c96.viirs.bnu.sh false
-        submit_test 03 24 1 50G 0:10:00 orion false gfdl.regional gfdl.regional.sh false
-        submit_test 04 24 1 50G 0:10:00 orion false esg.regional esg.regional.sh false
-        submit_test 05 24 1 50G 0:10:00 orion false esg.regional.pct.cat esg.regional.pct.cat.sh false
-        submit_test 06 12 1 50G 0:10:00 orion false reg.gsl.gwd.12 regional.gsl.gwd.sh false
-        submit_test 07 24 1 50G 0:10:00 orion false reg.gsl.gwd.24 regional.gsl.gwd.sh false
+        submit_test 01 24 1 50G 0:20:00 orion false false c96.uniform c96.uniform.sh false
+        submit_test 02 15 2 96G 0:20:00 orion false false c96.viirs.bnu c96.viirs.bnu.sh false
+        submit_test 03 24 1 50G 0:10:00 orion false false gfdl.regional gfdl.regional.sh false
+        submit_test 04 24 1 50G 0:10:00 orion false false esg.regional esg.regional.sh false
+        submit_test 05 24 1 50G 0:10:00 orion false false esg.regional.pct.cat esg.regional.pct.cat.sh false
+        submit_test 06 12 1 50G 0:10:00 orion false false reg.gsl.gwd.12 regional.gsl.gwd.sh false
+        submit_test 07 24 1 50G 0:10:00 orion false false reg.gsl.gwd.24 regional.gsl.gwd.sh false
         ;;
     ursa)
-        submit_test 01 24 1 50G 0:15:00 u1-compute false c96.uniform c96.uniform.sh false
-        submit_test 02 12 2 300G 0:15:00 u1-compute false c96.viirs.bnu c96.viirs.bnu.sh false
-        submit_test 03 24 1 50G 0:07:00 u1-compute false gfdl.regional gfdl.regional.sh false
-        submit_test 04 24 1 50G 0:07:00 u1-compute false esg.regional esg.regional.sh false
-        submit_test 05 24 1 50G 0:07:00 u1-compute false esg.regional.pct.cat esg.regional.pct.cat.sh false
-        submit_test 06 12 1 50G 0:07:00 u1-compute false reg.gsl.gwd.12 regional.gsl.gwd.sh false
-        submit_test 07 24 1 50G 0:07:00 u1-compute false reg.gsl.gwd.24 regional.gsl.gwd.sh false
+        submit_test 01 24 1 50G 0:15:00 u1-compute false false c96.uniform c96.uniform.sh false
+        submit_test 02 12 2 300G 0:15:00 u1-compute false false c96.viirs.bnu c96.viirs.bnu.sh false
+        submit_test 03 24 1 50G 0:07:00 u1-compute false false gfdl.regional gfdl.regional.sh false
+        submit_test 04 24 1 50G 0:07:00 u1-compute false false esg.regional esg.regional.sh false
+        submit_test 05 24 1 50G 0:07:00 u1-compute false false esg.regional.pct.cat esg.regional.pct.cat.sh false
+        submit_test 06 12 1 50G 0:07:00 u1-compute false false reg.gsl.gwd.12 regional.gsl.gwd.sh false
+        submit_test 07 24 1 50G 0:07:00 u1-compute false false reg.gsl.gwd.24 regional.gsl.gwd.sh false
         ;;
     gaeac6)
-        submit_test 01 24 1 50G 0:15:00 c6 false c96.uniform c96.uniform.sh false
-        submit_test 02 12 2 300G 0:15:00 c6 false c96.viirs.bnu c96.viirs.bnu.sh false
-        submit_test 03 24 1 50G 0:07:00 c6 false gfdl.regional gfdl.regional.sh false
-        submit_test 04 24 1 50G 0:07:00 c6 false esg.regional esg.regional.sh false
-        submit_test 05 24 1 50G 0:07:00 c6 false esg.regional.pct.cat esg.regional.pct.cat.sh false
-        submit_test 06 12 1 50G 0:07:00 c6 false reg.gsl.gwd.12 regional.gsl.gwd.sh false
-        submit_test 07 24 1 50G 0:07:00 c6 false reg.gsl.gwd.24 regional.gsl.gwd.sh false
+        submit_test 01 24 1 50G 0:15:00 batch c6 false c96.uniform c96.uniform.sh false
+        submit_test 02 12 2 300G 0:15:00 batch c6 false c96.viirs.bnu c96.viirs.bnu.sh false
+        submit_test 03 24 1 50G 0:07:00 batch c6 false gfdl.regional gfdl.regional.sh false
+        submit_test 04 24 1 50G 0:07:00 batch c6 false esg.regional esg.regional.sh false
+        submit_test 05 24 1 50G 0:07:00 batch c6 false esg.regional.pct.cat esg.regional.pct.cat.sh false
+        submit_test 06 12 1 50G 0:07:00 batch c6 false reg.gsl.gwd.12 regional.gsl.gwd.sh false
+        submit_test 07 24 1 50G 0:07:00 batch c6 false reg.gsl.gwd.24 regional.gsl.gwd.sh false
         ;;
     wcoss2)
-        submit_test 01 30 1 40G 0:15:00 dev false c96.uniform c96.uniform.sh false
-        submit_test 02 30 1 250G 0:15:00 dev false c96.viirs.bnu c96.viirs.bnu.sh false
-        submit_test 03 30 1 40G 0:07:00 dev false gfdl.regional gfdl.regional.sh false
-        submit_test 04 30 1 40G 0:07:00 dev false esg.regional esg.regional.sh false
-        submit_test 05 30 1 40G 0:07:00 dev false esg.regional.pct.cat esg.regional.pct.cat.sh false
-        submit_test 06 15 1 40G 0:07:00 dev false reg.gsl.gwd.12 regional.gsl.gwd.sh false
-        submit_test 07 30 1 40G 0:07:00 dev false reg.gsl.gwd.24 regional.gsl.gwd.sh false
+        submit_test 01 30 1 40G 0:15:00 dev false false c96.uniform c96.uniform.sh false
+        submit_test 02 30 1 250G 0:15:00 dev false false c96.viirs.bnu c96.viirs.bnu.sh false
+        submit_test 03 30 1 40G 0:07:00 dev false false gfdl.regional gfdl.regional.sh false
+        submit_test 04 30 1 40G 0:07:00 dev false false esg.regional esg.regional.sh false
+        submit_test 05 30 1 40G 0:07:00 dev false false esg.regional.pct.cat esg.regional.pct.cat.sh false
+        submit_test 06 15 1 40G 0:07:00 dev false false reg.gsl.gwd.12 regional.gsl.gwd.sh false
+        submit_test 07 30 1 40G 0:07:00 dev false false reg.gsl.gwd.24 regional.gsl.gwd.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
@@ -174,7 +179,7 @@ grep -a '<<<' ${LOG_FILE}* | grep -v echo > $SUM_FILE
 EOF
   ) &
 elif [[ "${SCHEDULER}" == "slurm" ]]; then
-  (sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary -o $LOG_FILE -e $LOG_FILE \
+  (sbatch --nodes=1 -t 0:01:00 -A $PROJECT_CODE -J grid_summary ${slurmflag:+"${slurmflag}"} -o $LOG_FILE -e $LOG_FILE \
        --open-mode=append -q $QUEUE -d afterany$(echo "${TEST_IDS[*]}" | tr -d '[:space:]') << EOF
 #!/bin/bash
 cd ${this_dir}

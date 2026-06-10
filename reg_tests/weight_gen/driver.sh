@@ -26,6 +26,7 @@ submit_test() {
     local mem="$1"; shift
     local walltime="$1"; shift
     local partition="$1"; shift
+    local slurmcluster="$1"; shift
     local exclusive="$1"; shift
     local jobname="$1"; shift
     local script="$1"; shift
@@ -36,6 +37,10 @@ submit_test() {
 
     if [[ "${exclusive}" == "true" ]]; then
         exclusive_flag="--exclusive"
+    fi
+
+    if [[ "${slurmcluster}" != "false" ]]; then
+        slurmflag="--clusters=${slurmcluster}"
     fi
 
     if [[ "${waitonjobid}" != "false" ]]; then
@@ -53,7 +58,7 @@ submit_test() {
         jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUNCY="srun"
-        jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
+        jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
         jobid=${jobid%.*}
@@ -96,19 +101,19 @@ export HOMEufs=$PWD/../..
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 1 1 5G 0:03:00 hercules false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 hercules false false weight_gen weight_gen.sh false
         ;;
     orion)
-        submit_test 01 1 1 5G 0:03:00 orion false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 orion false false weight_gen weight_gen.sh false
         ;;
     ursa)
-        submit_test 01 1 1 5G 0:03:00 u1-compute false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 u1-compute false false weight_gen weight_gen.sh false
         ;;
     gaeac6)
-        submit_test 01 1 1 5G 0:03:00 c6 false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 batch c6 false weight_gen weight_gen.sh false
         ;;
     wcoss2)
-        submit_test 01 1 1 5G 0:03:00 dev false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 dev false false weight_gen weight_gen.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
