@@ -64,20 +64,6 @@ function (platform_name RETURN_VARIABLE)
       SITENAME MATCHES "^gaea16.ncrc.gov")
 
     set (${RETURN_VARIABLE} "gaea" PARENT_SCOPE)
-    
-  # jet 
-  elseif (SITENAME MATCHES "^fe1" OR
-      SITENAME MATCHES "^fe2" OR
-      SITENAME MATCHES "^fe3" OR
-      SITENAME MATCHES "^fe4" OR
-      SITENAME MATCHES "^fe5" OR
-      SITENAME MATCHES "^fe6" OR
-      SITENAME MATCHES "^fe7" OR
-      SITENAME MATCHES "^fe8" OR
-      SITENAME MATCHES "^tfe1" OR
-      SITENAME MATCHES "^tfe2")
-
-    set (${RETURN_VARIABLE} "jet" PARENT_SCOPE)
 
   elseif (SITENAME MATCHES "^Orion-login-1.HPC.MsState.Edu" OR
       SITENAME MATCHES "^Orion-login-2.HPC.MsState.Edu" OR

@@ -113,9 +113,6 @@ case ${MACHINE_ID,,} in
     hercules)
         submit_test 01 6 1 10G 0:05:00 hercules false gauss2fv3incr gauss2fv3incr.sh false
         ;;
-    jet)
-        submit_test 01 6 1 10G 0:05:00 xjet true gauss2fv3incr gauss2fv3incr.sh false
-        ;;
     orion)
         submit_test 01 6 1 10G 0:05:00 orion false gauss2fv3incr gauss2fv3incr.sh false
         ;;

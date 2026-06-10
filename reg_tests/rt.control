@@ -21,14 +21,6 @@ case ${MACHINE_ID,,} in
         SCHEDULER="slurm"
         COMPILER="intelllvm"
         ;;
-    jet)
-        WORK_DIR="/lfs5/HFIP/hfv3gfs/${LOGNAME}/stmp/ufs_utils"
-        HOMEreg="/lfs5/HFIP/hfv3gfs/emc.nemspara/role.ufsutils/ufs_utils/reg_tests"
-        PROJECT_CODE="h-nems"
-        QUEUE="batch"
-        SCHEDULER="slurm"
-        COMPILER="intelllvm"
-        ;;
     orion)
         WORK_DIR="/work/noaa/stmp/${LOGNAME}/ufs_utils"
         HOMEreg="/work/noaa/nems/role-nems/ufs_utils/reg_tests"

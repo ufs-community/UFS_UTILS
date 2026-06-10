@@ -108,10 +108,6 @@ case ${MACHINE_ID,,} in
         module load grib-util/1.4.0
         module load wgrib2/3.6.0
         ;;
-    jet)
-        module load wgrib2/2.0.8
-        module load grib-util/1.3.0
-        ;;
     wcoss2)
         module load grib_util/1.2.3
         module load wgrib2/2.0.8
@@ -130,9 +126,6 @@ export COPYGB=${COPYGB:-${GRIB_UTIL_ROOT}/bin/copygb}
 case ${MACHINE_ID,,} in
     hercules)
         submit_test 01 1 1 5G 0:01:00 hercules false ice_blend ice_blend.sh false
-        ;;
-    jet)
-        submit_test 01 1 1 5G 0:01:00 xjet true ice_blend ice_blend.sh false
         ;;
     orion)
         submit_test 01 1 1 5G 0:01:00 orion false ice_blend ice_blend.sh false

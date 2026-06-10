@@ -120,15 +120,6 @@ case ${MACHINE_ID,,} in
         submit_test 06 12 1 50G 0:10:00 hercules false reg.gsl.gwd.12 regional.gsl.gwd.sh false
         submit_test 07 24 1 50G 0:10:00 hercules false reg.gsl.gwd.24 regional.gsl.gwd.sh false
         ;;
-    jet)
-        submit_test 01 24 1 50G 0:20:00 xjet true c96.uniform c96.uniform.sh false
-        submit_test 02 12 4 300G 0:15:00 xjet true c96.viirs.bnu c96.viirs.bnu.sh false
-        submit_test 03 24 1 50G 0:07:00 xjet true gfdl.regional gfdl.regional.sh false
-        submit_test 04 24 1 50G 0:07:00 xjet true esg.regional esg.regional.sh false
-        submit_test 05 24 1 50G 0:07:00 xjet true esg.regional.pct.cat esg.regional.pct.cat.sh false
-        submit_test 06 12 1 50G 0:07:00 xjet true reg.gsl.gwd.12 regional.gsl.gwd.sh false
-        submit_test 07 24 1 50G 0:07:00 xjet true reg.gsl.gwd.24 regional.gsl.gwd.sh false
-        ;;
     orion)
         submit_test 01 24 1 50G 0:20:00 orion false c96.uniform c96.uniform.sh false
         submit_test 02 15 2 96G 0:20:00 orion false c96.viirs.bnu c96.viirs.bnu.sh false
