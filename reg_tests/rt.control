@@ -42,7 +42,7 @@ case ${MACHINE_ID,,} in
         #HOMEreg="/scratch3/NCEPDEV/nems/role.ufsutils/ufs_utils/reg_tests"
         HOMEreg="/gpfs/f6/infra-cpu/world-shared/Brian.Curtis/ufs_utils/reg_tests"
         PROJECT_CODE="infra-cpu"
-        QUEUE="normal"
+        QUEUE="batch"
         SCHEDULER="slurm"
         COMPILER="intelllvm"
         ;;
