@@ -209,7 +209,11 @@ while read -r line || [ "$line" ]; do
     tests[$i]=$(sbatch --parsable --ntasks-per-node=${NTASKS} ${slurmflag:+"${slurmflag}"} --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
             --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
   fi
-
+  status=$?
+  if [ $status -ne 0 ]; then
+      echo "Error submitting job: $output"
+      exit 1
+  fi
   all_tests=${all_tests}":"${tests[$i]%.*}
 
   ((i=i+1))
@@ -229,7 +233,11 @@ else
        --partition=$PARTITION --open-mode=append -q $QUEUE -d afterany${all_tests} ./rt.summary.sh) &
 
 fi
-
+status=$?
+if [ $status -ne 0 ]; then
+    echo "Error submitting summary job: $output"
+    exit 1
+fi
 sleep_time=0
 echo "Waiting for ${test_name^^} tests to complete..."
 while [ ! -f "summary.log" ]; do

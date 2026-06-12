@@ -86,6 +86,7 @@ case ${MACHINE_ID,,} in
         WLCLK=10
         export NCCMP=nccmp
         PARTITION='batch'
+        MEM_GAEA=0
         ;;
     hercules)
         WLCLK=10
@@ -225,6 +226,9 @@ while read -r line || [ "$line" ]; do
 
     if [[ ${MACHINE_ID} = gaeac6 ]]; then
       slurmflag="--clusters=c6"
+      SLURM_MEM=${MEM_GAEA}
+    else
+      SLURM_MEM=24g
     fi
 
     if [[ ${MACHINE_ID} = wcoss2 ]]; then
@@ -234,11 +238,15 @@ while read -r line || [ "$line" ]; do
 
     else
 
-      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 ${slurmflag:+"${slurmflag}"} --mem=24g -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 ${slurmflag:+"${slurmflag}"} --mem=${SLURM_MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
                 -p $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
 
     fi
-
+    status=$?
+    if [ $status -ne 0 ]; then
+        echo "Error submitting job: $output"
+        exit 1
+    fi
     all_tests=${all_tests}":"${tests[$i]%.*}
 
     ((i=i+1))
@@ -246,7 +254,12 @@ while read -r line || [ "$line" ]; do
 done <$TESTS_FILE
 
 export target=${MACHINE_ID,,}
-
+if [[ ${MACHINE_ID} = gaeac6 ]]; then
+    slurmflag="--clusters=c6"
+    SLURM_MEM=${MEM_GAEA}
+else
+    SLURM_MEM=25m
+fi
 if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
   (qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
@@ -255,11 +268,15 @@ if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
 else
 
-  (sbatch --ntasks=1 --mem=25m -t 0:01:00 -A $ACCOUNT ${slurmflag:+"${slurmflag}"} -J summary -o /dev/null -e /dev/null \
+  (sbatch --ntasks=1 --mem=${SLURM_MEM} -t 0:01:00 -A $ACCOUNT ${slurmflag:+"${slurmflag}"} -J summary -o /dev/null -e /dev/null \
        -p $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh) &
 
 fi
-
+status=$?
+if [ $status -ne 0 ]; then
+    echo "Error submitting job: $output"
+    exit 1
+fi
 sleep_time=0
 echo "Waiting for ${test_name^^} testing to complete..."
 while [ ! -f "summary.log" ]; do

@@ -62,8 +62,14 @@ submit_test() {
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
         jobid=${jobid%.*}
+        jobid=${jobid%%;*}
     else
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
+        exit 1
+    fi
+    status=$?
+    if [ $status -ne 0 ]; then
+        echo "Error submitting job: $jobid"
         exit 1
     fi
     if [[ "${jobid}" == "" ]]; then
