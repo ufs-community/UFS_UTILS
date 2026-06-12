@@ -70,7 +70,7 @@ RUN_OCNICE_PREP="true"
 RUN_REGRID_SFC="true"
 RUN_SNOW2MDL="true"
 RUN_WEIGHT_GEN="true"
-##############
+###############
 
 # Where to send mail when job is completed?
 # Please use quotes and put a space between multiple email addresses.
