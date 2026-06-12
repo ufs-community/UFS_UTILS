@@ -56,7 +56,7 @@ submit_test() {
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS}:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
-        jobid=${jobid%.*}
+        # jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUNCY="srun"
         export APRUN_SFC=${APRUNCY}
@@ -64,12 +64,14 @@ submit_test() {
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                --export=ALL,OMP_NUM_THREADS=${OMP_NUM_THREADS} ${dep_flag_slurm:+"${dep_flag_slurm}"} \
                -o "${logfile}" -e "${logfile}" "./${script}")
-        jobid=${jobid%.*}
-        jobid=${jobid%%;*}
+        # jobid=${jobid%.*}
+        # jobid=${jobid%%;*}
     else
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
     fi
+    jobid=${jobid%.*}
+    jobid=${jobid%%;*}
     if [[ "${jobid}" == "" ]]; then
         echo "Error submitting job to slurm scheduler"
         exit 1

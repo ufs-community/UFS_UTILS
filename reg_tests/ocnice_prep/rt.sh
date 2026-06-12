@@ -247,6 +247,8 @@ while read -r line || [ "$line" ]; do
         echo "Error submitting job: $output"
         exit 1
     fi
+    tests[$i]=${tests[$i]%.*}
+    tests[$i]=${tests[$i]%%;*}
     all_tests=${all_tests}":"${tests[$i]%.*}
 
     ((i=i+1))

@@ -52,14 +52,14 @@ submit_test() {
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS}:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"} ./${script})
-        jobid=${jobid%.*}
+        # jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUN="srun"
         jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                 -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                 ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
-        jobid=${jobid%.*}
-        jobid=${jobid%%;*}
+        # jobid=${jobid%.*}
+        # jobid=${jobid%%;*}
     else
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
@@ -69,6 +69,8 @@ submit_test() {
         echo "Error submitting job: $output"
         exit 1
     fi
+    jobid=${jobid%.*}
+    jobid=${jobid%%;*}
     if [[ "${jobid}" == "" ]]; then
         echo "Error submitting job to slurm scheduler"
         exit 1
@@ -177,20 +179,20 @@ case ${MACHINE_ID,,} in
         submit_test 14 6 1 100G 0:05:00 u1-compute false false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
         ;;
     gaeac6)
-        submit_test 01 6 1 0 batch c6 false c96.fv3.restart c96.fv3.restart.sh false
-        submit_test 02 6 2 0 batch c6 false c192.fv3.history c192.fv3.history.sh false
-        submit_test 03 12 1 0 batch c6 false c96.fv3.netcdf c96.fv3.netcdf.sh false
-        submit_test 04 6 1 0 batch c6 false c192.gfs.grib2 c192.gfs.grib2.sh false
-        submit_test 05 6 1 0 batch c6 false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
-        submit_test 06 6 1 0 batch c6 false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
-        submit_test 07 6 2 0 batch c6 false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh false
-        submit_test 08 6 1 0 batch c6 false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
-        submit_test 09 6 1 0 batch c6 false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
-        submit_test 10 6 1 0 batch c6 false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
-        submit_test 11 12 1 0 batch c6 false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
-        submit_test 12 6 1 0 batch c6 false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
-        submit_test 13 6 1 0 batch c6 false c96.gefs.grib2 c96.gefs.grib2.sh false
-        submit_test 14 6 1 0 batch c6 false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
+        submit_test 01 6 1 0 0:15:00 batch c6 false c96.fv3.restart c96.fv3.restart.sh false
+        submit_test 02 6 2 0 0:15:00 batch c6 false c192.fv3.history c192.fv3.history.sh false
+        submit_test 03 12 1 0 0:15:00 batch c6 false c96.fv3.netcdf c96.fv3.netcdf.sh false
+        submit_test 04 6 1 0 0:05:00 batch c6 false c192.gfs.grib2 c192.gfs.grib2.sh false
+        submit_test 05 6 1 0 0:05:00 batch c6 false 25km.conus.gfs.grib2 25km.conus.gfs.grib2.sh false
+        submit_test 06 6 1 0 0:10:00 batch c6 false 3km.conus.hrrr.gfssdf.grib2 3km.conus.hrrr.gfssdf.grib2.sh false
+        submit_test 07 6 2 0 0:10:00 batch c6 false 3km.conus.hrrr.newsfc.grib2 3km.conus.hrrr.newsfc.grib2.sh false
+        submit_test 08 6 1 0 0:05:00 batch c6 false 13km.conus.nam.grib2 13km.conus.nam.grib2.sh false
+        submit_test 09 6 1 0 0:05:00 batch c6 false 13km.conus.rap.grib2 13km.conus.rap.grib2.sh false
+        submit_test 10 6 1 0 0:05:00 batch c6 false 13km.na.gfs.ncei.grib2 13km.na.gfs.ncei.grib2.sh false
+        submit_test 11 12 1 0 0:15:00 batch c6 false c96.fv3.netcdf2wam c96.fv3.netcdf2wam.sh false
+        submit_test 12 6 1 0 0:05:00 batch c6 false 25km.conus.gfs.pbgrib2 25km.conus.gfs.pbgrib2.sh false
+        submit_test 13 6 1 0 0:05:00 batch c6 false c96.gefs.grib2 c96.gefs.grib2.sh false
+        submit_test 14 6 1 0 0:05:00 batch c6 false 13km.conus.rap-smoke.grib2 13km.conus.rap-smoke.grib2.sh false
         ;;
     wcoss2)
         submit_test 01 6 1 75G 0:15:00 dev false false c96.fv3.restart c96.fv3.restart.sh false
