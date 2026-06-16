@@ -32,6 +32,7 @@
 - [ ] Compile branch using Intel:
   - [ ] Orion
   - [ ] Ursa
+  - [ ] Gaea C6
   - [ ] Hercules
   - [ ] WCOSS2
 - [ ] Compile branch using GNU:
@@ -43,6 +44,7 @@
 - [ ] Run relevant consistency tests:
   - [ ] Orion
   - [ ] Ursa
+  - [ ] Gaea C6
   - [ ] Hercules
   - [ ] WCOSS2
 
