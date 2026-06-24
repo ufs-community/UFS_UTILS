@@ -13,6 +13,11 @@
 ## DESCRIPTION OF CHANGES: 
 <!--One or more paragraphs describing the problem, solution, and required changes.-->
 
+## GENERATIVE AI USAGE
+Transparency in the use of generative AI is required by NOAA policy.
+[ ] GenAI is used in this work: (INSERT GENERATIVE AI TOOL HERE)
+[ ] The code has been reviewed, edited, and validated by NWS staff.
+
 ## TESTING
 
 ### WHICH CONSISTENCY TESTS TO RUN:
