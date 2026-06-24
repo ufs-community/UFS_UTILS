@@ -15,8 +15,9 @@
 
 ## GENERATIVE AI USAGE
 Transparency in the use of generative AI is required by NOAA policy.
+[ ] GenAI is NOT used in this work
 [ ] GenAI is used in this work: (INSERT GENERATIVE AI TOOL HERE)
-[ ] The code has been reviewed, edited, and validated by NWS staff.
+  [ ] The code has been reviewed, edited, and validated by NWS staff.
 
 ## TESTING
 
