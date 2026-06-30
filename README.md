@@ -151,7 +151,11 @@ Gayno G., Beck J., Carson L., [Pre-Processing:
 chgres_cube](./docs/20201105-0945a-pre-processing-chgres-cube-gayno-final.pdf),
 UFS MRW App Training, 5 November 2020.
 
-## Disclaimer
+## Disclaimers
+
+Generative AI tools are used to assist with developing this code.
+
+The code has been reviewed, edited, and validated by NWS staff.
 
 The United States Department of Commerce (DOC) GitHub project code is
 provided on an "as is" basis and the user assumes responsibility for
