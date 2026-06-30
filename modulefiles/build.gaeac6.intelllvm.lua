@@ -7,7 +7,7 @@ load("hsi")
 
 prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/c6/spack-stack-1.9.2/envs/ue-oneapi-2024.2.1/install/modulefiles/Core")
 
-stack_intel_ver=os.getenv("stack_oneapi_ver") or "2024.2.1"
+stack_oneapi_ver=os.getenv("stack_oneapi_ver") or "2024.2.1"
 load(pathJoin("stack-oneapi", stack_oneapi_ver))
 
 intel_oneapi_ver=os.getenv("intel_oneapi_ver") or "2024.2"
