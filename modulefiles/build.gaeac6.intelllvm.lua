@@ -5,7 +5,6 @@ Load environment to compile UFS_UTILS on Gaea C6 using Intel
 prepend_path("MODULEPATH", "/usw/hpss/modulefiles")
 load("hsi")
 
--- prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/c6/spack-stack-1.9.2/envs/ue-intel-2023.2.0/install/modulefiles/Core")
 prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/c6/spack-stack-1.9.2/envs/ue-oneapi-2024.2.1/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_oneapi_ver") or "2024.2.1"
@@ -65,8 +64,6 @@ load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.2.4"
 load(pathJoin("nco", nco_ver))
-
--- unload("cray-libsci")
 
 whatis("Description: UFS_UTILS build environment")
 
