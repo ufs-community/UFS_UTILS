@@ -1,5 +1,5 @@
 help([[
-Load environment to compile UFS_UTILS on Gaea C6 using Intel
+Load environment to compile UFS_UTILS on Gaea C6 using IntelLLVM
 ]])
 
 prepend_path("MODULEPATH", "/usw/hpss/modulefiles")
