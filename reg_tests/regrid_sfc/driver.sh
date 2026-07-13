@@ -26,6 +26,7 @@ submit_test() {
     local mem="$1"; shift
     local walltime="$1"; shift
     local partition="$1"; shift
+    local slurmcluster="$1"; shift
     local exclusive="$1"; shift
     local jobname="$1"; shift
     local script="$1"; shift
@@ -41,6 +42,10 @@ submit_test() {
         exclusive_flag="--exclusive"
     fi
 
+    if [[ "${slurmcluster}" != "false" ]]; then
+        slurmflag="--clusters=${slurmcluster}"
+    fi
+
     if [[ "${waitonjobid}" != "false" ]]; then
         dep_flag_slurm="--dependency=afterok:${waitonjobid}"
         dep_flag_pbs="-W depend=afterok:${waitonjobid}"
@@ -51,17 +56,22 @@ submit_test() {
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"}"./${script}")
-        jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUN_REGRID="srun"
-        jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
+        jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
-        jobid=${jobid%.*}
     else
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
     fi
+    status=$?
+    if [ $status -ne 0 ]; then
+        echo "Error submitting job: $output"
+        exit 1
+    fi
+    jobid=${jobid%.*}
+    jobid=${jobid%%;*}
     if [[ "${jobid}" == "" ]]; then
         echo "Error submitting job to slurm scheduler"
         exit 1
@@ -111,16 +121,19 @@ rm -f ${LOG_FILE}* ${SUM_FILE}
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 6 1 10G 0:05:00 hercules false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 hercules false false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     orion)
-        submit_test 01 6 1 10G 0:05:00 orion false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 orion false false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     ursa)
-        submit_test 01 6 1 10G 0:05:00 u1-compute false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 u1-compute false false gauss2fv3incr gauss2fv3incr.sh false
+        ;;
+    gaeac6)
+        submit_test 01 6 1 0 0:05:00 batch c6 false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     wcoss2)
-        submit_test 01 6 1 10G 0:05:00 dev false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 dev false false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
@@ -142,7 +155,7 @@ EOF
   
 else
 
-  (sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
+  (sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" ${slurmflag:+"${slurmflag}"} -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
        -p "${PARTITION}" --open-mode=append -q "${QUEUE}" -d "afterany${TEST_IDS[*]}" << EOF
 #!/bin/bash
 cd ${PWD}

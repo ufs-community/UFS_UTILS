@@ -1,16 +1,19 @@
 help([[
-Load environment to compile UFS_UTILS on Gaea C6 using Intel
+Load environment to compile UFS_UTILS on Gaea C6 using IntelLLVM
 ]])
 
 prepend_path("MODULEPATH", "/usw/hpss/modulefiles")
 load("hsi")
 
-prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/c6/spack-stack-1.9.2/envs/ue-intel-2023.2.0/install/modulefiles/Core")
+prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/c6/spack-stack-1.9.2/envs/ue-oneapi-2024.2.1/install/modulefiles/Core")
 
-stack_intel_ver=os.getenv("stack_intel_ver") or "2023.2.0"
-load(pathJoin("stack-intel", stack_intel_ver))
+stack_oneapi_ver=os.getenv("stack_oneapi_ver") or "2024.2.1"
+load(pathJoin("stack-oneapi", stack_oneapi_ver))
 
-stack_cray_mpich_ver=os.getenv("stack_cray_mpich_ver") or "8.1.30"
+intel_oneapi_ver=os.getenv("intel_oneapi_ver") or "2024.2"
+load(pathJoin("intel-oneapi", intel_oneapi_ver))
+
+stack_cray_mpich_ver=os.getenv("stack_cray_mpich_ver") or "8.1.32"
 load(pathJoin("stack-cray-mpich", stack_cray_mpich_ver))
 
 cmake_ver=os.getenv("cmake_ver") or "3.27.9"
@@ -61,8 +64,6 @@ load(pathJoin("esmf", esmf_ver))
 
 nco_ver=os.getenv("nco_ver") or "5.2.4"
 load(pathJoin("nco", nco_ver))
-
-unload("cray-libsci")
 
 whatis("Description: UFS_UTILS build environment")
 

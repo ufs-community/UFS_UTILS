@@ -38,6 +38,7 @@ Transparency in the use of generative AI is required by NOAA policy.
 - [ ] Compile branch using Intel:
   - [ ] Orion
   - [ ] Ursa
+  - [ ] Gaea C6
   - [ ] Hercules
   - [ ] WCOSS2
 - [ ] Compile branch using GNU:
@@ -49,6 +50,7 @@ Transparency in the use of generative AI is required by NOAA policy.
 - [ ] Run relevant consistency tests:
   - [ ] Orion
   - [ ] Ursa
+  - [ ] Gaea C6
   - [ ] Hercules
   - [ ] WCOSS2
 

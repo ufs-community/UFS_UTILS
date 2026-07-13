@@ -37,6 +37,14 @@ case ${MACHINE_ID,,} in
         SCHEDULER="slurm"
         COMPILER="intelllvm"
         ;;
+    gaeac6)
+        WORK_DIR="/gpfs/f6/infra-cpu/scratch/${LOGNAME}/ufs_utils"
+        HOMEreg="/gpfs/f6/infra-cpu/world-shared/emc.nemspara/ufs_utils/reg_tests"
+        PROJECT_CODE="infra-cpu"
+        QUEUE="normal"
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        ;;
     wcoss2)
         WORK_DIR="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
         HOMEreg="/lfs/h2/emc/nems/noscrub/emc.nems/UFS_UTILS/reg_tests"
@@ -61,11 +69,11 @@ RUN_OCNICE_PREP="true"
 RUN_REGRID_SFC="true"
 RUN_SNOW2MDL="true"
 RUN_WEIGHT_GEN="true"
-##############
+###############
 
 # Where to send mail when job is completed?
 # Please use quotes and put a space between multiple email addresses.
-MAILTO=""
+MAILTO="brian.curtis@noaa.gov"
 
 HOMEUFSUTILS="${RT_DIR}/.."
 export HOMEUFSUTILS
@@ -76,9 +84,12 @@ UPDATE_BASELINE="FALSE"
 ######
 
 ### REPO INFO ###
-REPO_BRANCH="develop"
+# REPO_BRANCH="develop"
+# # REPO_LOC="https://github.com/ufs-community/UFS_UTILS.git"
+# REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+REPO_BRANCH="gaeac6_support"
 # REPO_LOC="https://github.com/ufs-community/UFS_UTILS.git"
-REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+REPO_LOC="git@github.com:BrianCurtis-NOAA/UFS_UTILS.git"
 ######
 
 # Shouldn't need to edit below here #

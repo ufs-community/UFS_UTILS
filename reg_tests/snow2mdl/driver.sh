@@ -26,6 +26,7 @@ submit_test() {
     local mem="$1"; shift
     local walltime="$1"; shift
     local partition="$1"; shift
+    local slurmcluster="$1"; shift
     local exclusive="$1"; shift
     local jobname="$1"; shift
     local script="$1"; shift
@@ -36,6 +37,10 @@ submit_test() {
 
     if [[ "${exclusive}" == "true" ]]; then
         exclusive_flag="--exclusive"
+    fi
+
+    if [[ "${slurmcluster}" != "false" ]]; then
+        slurmflag="--clusters=${slurmcluster}"
     fi
 
     if [[ "${waitonjobid}" != "false" ]]; then
@@ -50,17 +55,22 @@ submit_test() {
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS}:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
-        jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUNCY="srun"
-        jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
+        jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
-        jobid=${jobid%.*}
     else
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
     fi
+    status=$?
+    if [ $status -ne 0 ]; then
+        echo "Error submitting job: $output"
+        exit 1
+    fi
+    obid=${jobid%.*}
+    jobid=${jobid%%;*}
     if [[ "${jobid}" == "" ]]; then
         echo "Error submitting job to slurm scheduler"
         exit 1
@@ -112,20 +122,24 @@ rm -f ${LOG_FILE}* ${SUM_FILE}
 
 case ${MACHINE_ID,,} in
     hercules)
-        jobkeep=$(submit_test 01 1 1 5G 0:03:00 hercules false snow.hemi snow2mdl.hemi.sh false)
-        submit_test 02 1 1 5G 0:03:00 hercules false snow.global snow2mdl.global.sh "${jobkeep}"
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 hercules false false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 hercules false false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     orion)
-        jobkeep=$(submit_test 01 1 1 5G 0:03:00 orion false snow.hemi snow2mdl.hemi.sh false)
-        submit_test 02 1 1 5G 0:03:00 orion false snow.global snow2mdl.global.sh "${jobkeep}"
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 orion false false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 orion false false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     ursa)
-        jobkeep=$(submit_test 01 1 1 5G 0:03:00 u1-compute false snow.hemi snow2mdl.hemi.sh false)
-        submit_test 02 1 1 5G 0:03:00 u1-compute false snow.global snow2mdl.global.sh "${jobkeep}"
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 u1-compute false false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 u1-compute false false snow.global snow2mdl.global.sh "${jobkeep}"
+        ;;
+    gaeac6)
+        jobkeep=$(submit_test 01 1 1 0 0:03:00 batch c6 false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 0 0:03:00 batch c6 false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     wcoss2)
-        jobkeep=$(submit_test 01 1 1 5G 0:03:00 dev false snow.hemi snow2mdl.hemi.sh false)
-        submit_test 02 1 1 5G 0:03:00 dev false snow.global snow2mdl.global.sh "${jobkeep}"
+        jobkeep=$(submit_test 01 1 1 5G 0:03:00 dev false false snow.hemi snow2mdl.hemi.sh false)
+        submit_test 02 1 1 5G 0:03:00 dev false false snow.global snow2mdl.global.sh "${jobkeep}"
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
@@ -144,7 +158,7 @@ grep -a '<<<' $LOG_FILE* | grep -v echo > $SUM_FILE
 EOF
   ) &
 elif [[ "${SCHEDULER}" == "slurm" ]]; then
-  (sbatch --nodes=1 -t 0:01:00 -A ${PROJECT_CODE} -J snow_summary -o ${LOG_FILE} -e ${LOG_FILE} \
+  (sbatch --nodes=1 -t 0:01:00 -A ${PROJECT_CODE} ${slurmflag:+"${slurmflag}"} -J snow_summary -o ${LOG_FILE} -e ${LOG_FILE} \
         --open-mode=append -q ${QUEUE} -d "afterok$(echo "${TEST_IDS[*]}" | tr -d '[:space:]')" << EOF
 #!/bin/bash
 cd ${this_dir}

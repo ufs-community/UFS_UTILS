@@ -26,6 +26,7 @@ submit_test() {
     local mem="$1"; shift
     local walltime="$1"; shift
     local partition="$1"; shift
+    local slurmcluster="$1"; shift
     local exclusive="$1"; shift
     local jobname="$1"; shift
     local script="$1"; shift
@@ -38,6 +39,10 @@ submit_test() {
         exclusive_flag="--exclusive"
     fi
 
+    if [[ "${slurmcluster}" != "false" ]]; then
+        slurmflag="--clusters=${slurmcluster}"
+    fi
+
     if [[ "${waitonjobid}" != "false" ]]; then
         dep_flag_slurm="--dependency=afterok:${waitonjobid}"
         dep_flag_pbs="-W depend=afterok:${waitonjobid}"
@@ -48,23 +53,28 @@ submit_test() {
         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=${OMP_NUM_THREADS_CY}:mem=${mem} \
                 ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
-        jobid=${jobid%.*}
     elif [[ "${SCHEDULER}" == "slurm" ]]; then
         export APRUNCY="srun"
-        jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
+        jobid=$(sbatch --parsable --partition="${partition}" --ntasks-per-node="${ntasks_per_node}" ${slurmflag:+"${slurmflag}"} --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
-        jobid=${jobid%.*}
     else
         echo "Error: Unsupported scheduler '${SCHEDULER}'"
         exit 1
     fi
+    status=$?
+    if [ $status -ne 0 ]; then
+        echo "Error submitting job: ${jobid}"
+        exit 1
+    fi
+    jobid=${jobid%.*}
+    jobid=${jobid%%;*}
     if [[ "${jobid}" == "" ]]; then
         echo "Error submitting job to slurm scheduler"
         exit 1
     fi
     TEST_IDS+=(":${jobid}")
-    echo "${jobid}"
+    echo "JOBID: ${jobid}"
 }
 
 RT_DIR=${RT_DIR:-${PWD}/..}
@@ -108,6 +118,10 @@ case ${MACHINE_ID,,} in
         module load grib-util/1.4.0
         module load wgrib2/3.6.0
         ;;
+    gaeac6)
+        module load grib-util/1.4.0
+        module load wgrib2/3.6.0
+        ;;
     wcoss2)
         module load grib_util/1.2.3
         module load wgrib2/2.0.8
@@ -125,16 +139,19 @@ export COPYGB=${COPYGB:-${GRIB_UTIL_ROOT}/bin/copygb}
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 1 1 5G 0:01:00 hercules false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 hercules false false ice_blend ice_blend.sh false
         ;;
     orion)
-        submit_test 01 1 1 5G 0:01:00 orion false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 orion false false ice_blend ice_blend.sh false
         ;;
     ursa)
-        submit_test 01 1 1 5G 0:01:00 u1-compute false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 u1-compute false false ice_blend ice_blend.sh false
+        ;;
+    gaeac6)
+        submit_test 01 1 1 0 0:01:00 batch c6 false ice_blend ice_blend.sh false
         ;;
     wcoss2)
-        submit_test 01 1 1 5G 0:01:00 dev false ice_blend ice_blend.sh false
+        submit_test 01 1 1 5G 0:01:00 dev false false ice_blend ice_blend.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
