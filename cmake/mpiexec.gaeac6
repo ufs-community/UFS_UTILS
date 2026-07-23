@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Arguments:
+#
+#   $1  - Number of MPI Tasks
+#   $2+ - Executable and its arguments
+#
+
+ACCOUNT=infra-cpu
+QOS=batch
+CLUSTER=c6
+
+NP=$1
+shift
+
+srun -A $ACCOUNT -M $CLUSTER -q $QOS -t 0:01 -n $NP $@
