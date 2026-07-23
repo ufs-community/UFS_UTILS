@@ -1,5 +1,5 @@
 help([[
-Load environment to compile UFS_UTILS on Gaea C6 using IntelLLVM
+Load environment to compile UFS_UTILS on Gaea C6 using Intel Classic
 ]])
 
 prepend_path("MODULEPATH", "/usw/hpss/modulefiles")
@@ -8,7 +8,7 @@ load("hsi")
 prepend_path("MODULEPATH", "/ncrc/proj/epic/spack-stack/c6/spack-stack-1.9.2/envs/ue-intel-2023.2.0-g2tmpl-1.16.0/install/modulefiles/Core")
 
 stack_intel_ver=os.getenv("stack_intel_ver") or "2023.2.0"
-load(pathJoin("stack-intel", stack_oneapi_ver))
+load(pathJoin("stack-intel", stack_intel_ver))
 
 -- intel_oneapi_ver=os.getenv("intel_oneapi_ver") or "2024.2"
 -- load(pathJoin("intel-oneapi", intel_oneapi_ver))
