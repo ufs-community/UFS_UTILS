@@ -45,25 +45,45 @@ function (platform_name RETURN_VARIABLE)
 
     set (${RETURN_VARIABLE} "wcoss2" PARENT_SCOPE)
 
-  # gaea
-  elseif (SITENAME MATCHES "^gaea9" OR
-      SITENAME MATCHES "^gaea10" OR
-      SITENAME MATCHES "^gaea11" OR
-      SITENAME MATCHES "^gaea12" OR
-      SITENAME MATCHES "^gaea13" OR
-      SITENAME MATCHES "^gaea14" OR
-      SITENAME MATCHES "^gaea15" OR
-      SITENAME MATCHES "^gaea16" OR
-      SITENAME MATCHES "^gaea9.ncrc.gov" OR
-      SITENAME MATCHES "^gaea10.ncrc.gov" OR
-      SITENAME MATCHES "^gaea11.ncrc.gov" OR
-      SITENAME MATCHES "^gaea12.ncrc.gov" OR
-      SITENAME MATCHES "^gaea13.ncrc.gov" OR
-      SITENAME MATCHES "^gaea14.ncrc.gov" OR
-      SITENAME MATCHES "^gaea15.ncrc.gov" OR
-      SITENAME MATCHES "^gaea16.ncrc.gov")
+  # gaea c5
+  elseif (SITENAME MATCHES "^gaea51" OR
+      SITENAME MATCHES "^gaea52" OR
+      SITENAME MATCHES "^gaea53" OR
+      SITENAME MATCHES "^gaea54" OR
+      SITENAME MATCHES "^gaea55" OR
+      SITENAME MATCHES "^gaea56" OR
+      SITENAME MATCHES "^gaea57" OR
+      SITENAME MATCHES "^gaea58" OR
+      SITENAME MATCHES "^gaea51.ncrc.gov" OR
+      SITENAME MATCHES "^gaea52.ncrc.gov" OR
+      SITENAME MATCHES "^gaea52.ncrc.gov" OR
+      SITENAME MATCHES "^gaea54.ncrc.gov" OR
+      SITENAME MATCHES "^gaea55.ncrc.gov" OR
+      SITENAME MATCHES "^gaea56.ncrc.gov" OR
+      SITENAME MATCHES "^gaea57.ncrc.gov" OR
+      SITENAME MATCHES "^gaea58.ncrc.gov")
 
-    set (${RETURN_VARIABLE} "gaea" PARENT_SCOPE)
+    set (${RETURN_VARIABLE} "gaeac5" PARENT_SCOPE)
+  
+  # gaea c6
+  elseif (SITENAME MATCHES "^gaea61" OR
+      SITENAME MATCHES "^gaea62" OR
+      SITENAME MATCHES "^gaea63" OR
+      SITENAME MATCHES "^gaea64" OR
+      SITENAME MATCHES "^gaea65" OR
+      SITENAME MATCHES "^gaea66" OR
+      SITENAME MATCHES "^gaea67" OR
+      SITENAME MATCHES "^gaea68" OR
+      SITENAME MATCHES "^gaea61.ncrc.gov" OR
+      SITENAME MATCHES "^gaea62.ncrc.gov" OR
+      SITENAME MATCHES "^gaea62.ncrc.gov" OR
+      SITENAME MATCHES "^gaea64.ncrc.gov" OR
+      SITENAME MATCHES "^gaea65.ncrc.gov" OR
+      SITENAME MATCHES "^gaea66.ncrc.gov" OR
+      SITENAME MATCHES "^gaea67.ncrc.gov" OR
+      SITENAME MATCHES "^gaea68.ncrc.gov")
+
+    set (${RETURN_VARIABLE} "gaeac6" PARENT_SCOPE)
 
   elseif (SITENAME MATCHES "^Orion-login-1.HPC.MsState.Edu" OR
       SITENAME MATCHES "^Orion-login-2.HPC.MsState.Edu" OR
