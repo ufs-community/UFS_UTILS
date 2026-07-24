@@ -73,7 +73,7 @@ RUN_WEIGHT_GEN="true"
 
 # Where to send mail when job is completed?
 # Please use quotes and put a space between multiple email addresses.
-MAILTO="brian.curtis@noaa.gov"
+MAILTO=""
 
 HOMEUFSUTILS="${RT_DIR}/.."
 export HOMEUFSUTILS
