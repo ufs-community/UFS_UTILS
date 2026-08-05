@@ -202,9 +202,9 @@
 
          if ( n_files > 1) then
              write(tchar,'(i1)') tt
-             fname = dir_read//"/"//fname_read//".tile"//tchar//".nc"
+             fname = dir_read//fname_read//".tile"//tchar//".nc"
          else
-             fname = dir_read//"/"//fname_read
+             fname = dir_read//fname_read
          endif
 
          print *, 'Reading ', trim(fname)
