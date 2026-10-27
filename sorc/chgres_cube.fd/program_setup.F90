@@ -58,6 +58,9 @@
 !!                                    gaussian nemsio files
 !!                                 - "gfs_sigio" for spectral gfs
 !!                                    gfs sigio/sfcio files.
+ character(len=25),  public      :: output_soiltype="statsgo_noahmp" !< Output soil type:
+!!                                 - "statsgo_noah" for GFSv16 using Noah model
+!!                                 - default for GFSv17 using Noahmp model
  character(len=20),  public      :: external_model="GFS"  !< The model that the input data is derived from. Current 
                                                           !! supported options are: "GFS", "HRRR", "NAM", "RAP", "RRFS".
                                                           !! Default: "GFS"
@@ -200,6 +203,7 @@
                    minmax_vgfrc_from_climo, &
                    lai_from_climo, tg3_from_soil, &
                    regional, input_type, &
+                   output_soiltype, &
                    external_model, &
                    wam_parm_file, &
                    atm_weight_file, tracers, &
@@ -268,6 +272,7 @@
  call mpi_bcast(tg3_from_soil,1,MPI_LOGICAL,0,MPI_COMM_WORLD,ierr)
  call mpi_bcast(regional,1,MPI_INTEGER,0,MPI_COMM_WORLD,ierr)
  call mpi_bcast(input_type,len(input_type),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
+ call mpi_bcast(output_soiltype,len(output_soiltype),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
  call mpi_bcast(external_model,len(external_model),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
  call mpi_bcast(wam_parm_file,len(wam_parm_file),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
  call mpi_bcast(atm_weight_file,len(atm_weight_file),MPI_CHARACTER,0,MPI_COMM_WORLD,ierr)
@@ -665,10 +670,21 @@ end subroutine get_var_cond
 
  integer                   :: num_soil_cats
 
- real                      :: bb_statsgo(num_statsgo)
- real                      :: maxsmc_statsgo(num_statsgo)
- real                      :: satdk_statsgo(num_statsgo)
- real                      :: satpsi_statsgo(num_statsgo)
+ real                      :: bb_statsgo_noah(num_statsgo)
+ real                      :: maxsmc_statsgo_noah(num_statsgo)
+ real                      :: refsmc_statsgo_noah(num_statsgo)
+ real                      :: wltsmc_statsgo_noah(num_statsgo)
+ real                      :: drysmc_statsgo_noah(num_statsgo)
+ real                      :: satdk_statsgo_noah(num_statsgo)
+ real                      :: satpsi_statsgo_noah(num_statsgo)
+
+ real                      :: bb_statsgo_noahmp(num_statsgo)
+ real                      :: maxsmc_statsgo_noahmp(num_statsgo)
+ real                      :: refsmc_statsgo_noahmp(num_statsgo)
+ real                      :: wltsmc_statsgo_noahmp(num_statsgo)
+ real                      :: drysmc_statsgo_noahmp(num_statsgo)
+ real                      :: satdk_statsgo_noahmp(num_statsgo)
+ real                      :: satpsi_statsgo_noahmp(num_statsgo)
 
  real                      :: bb_zobler(num_zobler)
  real                      :: maxsmc_zobler(num_zobler)
@@ -682,23 +698,50 @@ end subroutine get_var_cond
  real, allocatable         :: satdw(:)
 
 ! using stasgo table
- data bb_statsgo /4.05, 4.26, 4.74, 5.33, 5.33, 5.25, &
+ data bb_statsgo_noah /4.05, 4.26, 4.74, 5.33, 5.33, 5.25, &
             6.77, 8.72, 8.17, 10.73, 10.39, 11.55, &
             5.25, -9.99, 4.05, 4.26/
 
- data maxsmc_statsgo /0.395, 0.421, 0.434, 0.476, 0.476, 0.439, &
+ data maxsmc_statsgo_noah /0.395, 0.421, 0.434, 0.476, 0.476, 0.439, &
               0.404, 0.464, 0.465, 0.406, 0.468, 0.457, &
               0.464, -9.99, 0.200, 0.421/
 
- data satdk_statsgo /1.7600e-4, 1.4078e-5, 5.2304e-6, 2.8089e-6, 2.8089e-6, &
+ data satdk_statsgo_noah /1.7600e-4, 1.4078e-5, 5.2304e-6, 2.8089e-6, 2.8089e-6, &
              3.3770e-6, 4.4518e-6, 2.0348e-6, 2.4464e-6, 7.2199e-6, &
              1.3444e-6, 9.7384e-7, 3.3770e-6,     -9.99, 1.4078e-5, &
              1.4078e-5/
 
- data satpsi_statsgo /0.0350, 0.0363, 0.1413, 0.7586, 0.7586, 0.3548, &
+ data satpsi_statsgo_noah /0.0350, 0.0363, 0.1413, 0.7586, 0.7586, 0.3548, &
               0.1349, 0.6166, 0.2630, 0.0977, 0.3236, 0.4677, &
               0.3548, -9.99,  0.0350, 0.0363/
+ data bb_statsgo_noahmp /2.79, 4.26, 4.74, 5.33, 3.86, 5.25, &
+            6.77, 8.72, 8.17, 10.73, 10.39, 11.55, &
+            5.25, 0.00, 2.79, 4.26/
 
+ data maxsmc_statsgo_noahmp /0.339, 0.421, 0.434, 0.476, 0.484, 0.439, &
+              0.404, 0.464, 0.465, 0.406, 0.468, 0.468, &
+              0.439, 1.00, 0.20, 0.421/
+
+ data refsmc_statsgo_noahmp /0.192, 0.283, 0.312, 0.360, 0.347, 0.329, &
+              0.315, 0.387, 0.382, 0.338, 0.404, 0.412, &
+              0.329, 0.00, 0.170, 0.283/
+
+ data wltsmc_statsgo_noahmp /0.010, 0.028, 0.047, 0.084, 0.061, 0.066, &
+              0.069, 0.120, 0.103, 0.100, 0.126, 0.138, &
+              0.066, 0.00, 0.006, 0.028/
+
+ data drysmc_statsgo_noahmp /0.010, 0.028, 0.047, 0.084, 0.061, 0.066, &
+              0.069, 0.120, 0.103, 0.100, 0.126, 0.138, &
+              0.066, 0.00, 0.006, 0.028/
+
+ data satdk_statsgo_noahmp /4.6600e-5, 1.4078e-5, 5.2304e-6, 2.8089e-6, 2.18e-6, &
+             3.3770e-6, 4.4518e-6, 2.0348e-6, 2.4464e-6, 7.2199e-6, &
+             1.3444e-6, 9.7384e-7, 3.3770e-6, 0.00e+00, 1.4078e-5, &
+             1.4078e-5/
+
+ data satpsi_statsgo_noahmp /0.0690, 0.0363, 0.1413, 0.7586, 0.955, 0.3548, &
+              0.1349, 0.6166, 0.2630, 0.0977, 0.3236, 0.4677, &
+              0.3548, 0.00,  0.0690, 0.0363/
  data bb_zobler /4.26,  8.72, 11.55,  4.74, 10.73,  8.17, &
                  6.77,  5.25,  4.26/
 
@@ -744,10 +787,10 @@ end subroutine get_var_cond
    case default
      smlow  = smlow_statsgo
      smhigh = smhigh_statsgo
-     maxsmc_input = maxsmc_statsgo
-     bb     = bb_statsgo
-     satdk  = satdk_statsgo
-     satpsi = satpsi_statsgo
+     maxsmc_input = maxsmc_statsgo_noah
+     bb     = bb_statsgo_noah
+     satdk  = satdk_statsgo_noah
+     satpsi = satpsi_statsgo_noah
  end select
 
  call calc_soil_params(num_soil_cats, smlow, smhigh, satdk, maxsmc_input, &
@@ -777,18 +820,29 @@ end subroutine get_var_cond
 
  smlow  = smlow_statsgo
  smhigh = smhigh_statsgo
- maxsmc_target = maxsmc_statsgo
- bb_target     = bb_statsgo
- satdk  = satdk_statsgo
- satpsi_target = satpsi_statsgo
 
- call calc_soil_params(num_soil_cats, smlow, smhigh, satdk, maxsmc_target, &
+ select case (trim(output_soiltype))
+   case ("statsgo_noah")
+     maxsmc_target = maxsmc_statsgo_noah
+     bb_target     = bb_statsgo_noah
+     satdk  = satdk_statsgo_noah
+     satpsi_target = satpsi_statsgo_noah
+     call calc_soil_params(num_soil_cats, smlow, smhigh, satdk, maxsmc_target, &
                        bb_target, satpsi_target, satdw, refsmc_target, drysmc_target, wltsmc_target)
+   case default
+     maxsmc_target = maxsmc_statsgo_noahmp
+     refsmc_target = refsmc_statsgo_noahmp
+     wltsmc_target = wltsmc_statsgo_noahmp
+     drysmc_target = drysmc_statsgo_noahmp
+     bb_target     = bb_statsgo_noahmp
+     satdk  = satdk_statsgo_noahmp
+     satpsi_target = satpsi_statsgo_noahmp
+ end select
 
  deallocate(satdk, satdw)
 
  if (localpet == 0) print*,'maxsmc target grid ',maxsmc_target
- if (localpet == 0) print*,'wltsmc input grid ',wltsmc_target
+ if (localpet == 0) print*,'wltsmc target grid ',wltsmc_target
 
  end subroutine calc_soil_params_driver
 
@@ -838,7 +892,7 @@ end subroutine get_var_cond
 
  do i = 1, num_soil_cats
 
-   if (maxsmc(i) > 0.0) then
+   if (maxsmc(i) > 0.0 .and. maxsmc(i) < 1.0) then
 
    SATDW(I)  = BB(I)*SATDK(I)*(SATPSI(I)/MAXSMC(I))
    REFSMC1 = MAXSMC(I)*(5.79E-9/SATDK(I)) **(1.0/(2.0*BB(I)+3.0))

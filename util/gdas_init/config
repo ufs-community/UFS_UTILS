@@ -48,6 +48,8 @@
 #                or incomplete. So this option may not
 #                always work. Contact george.gayno@noaa.gov
 #                if you encounter problems.
+# OUTPUT_SFC_VERSION - Output surface file version format ('v16' or 'v17').
+#                      Defaults to 'v17'.
 #
 #-----------------------------------------------------------
 
@@ -62,6 +64,9 @@ dd=01
 hh=06
 
 use_v16retro=no
+
+# Output surface file version (v16 or v17)
+OUTPUT_SFC_VERSION=v17
 
 LEVS=128
 
@@ -126,4 +131,5 @@ else
 fi
 
 export EXTRACT_DIR yy mm dd hh UFS_DIR OUTDIR CRES_HIRES CRES_ENKF
-export LEVS gfs_ver EXEC_DIR GDAS_INIT_DIR use_v16retro
+export LEVS gfs_ver EXEC_DIR GDAS_INIT_DIR use_v16retro OUTPUT_SFC_VERSION
+
