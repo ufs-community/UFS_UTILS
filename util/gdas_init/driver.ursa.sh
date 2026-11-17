@@ -126,6 +126,24 @@ if [ $RUN_CHGRES == yes ]; then
     NODES=4
     WALLT="0:20:00"
   fi
+
+  # Select the appropriate chgres script based on input/output versions.
+  # Default: read v16 input and write v17 output.
+  CHGRES_SCRIPT="run_v16_to_v17.chgres.sh"
+  if [ "$gfs_ver" = "v16" ] && [ "$OUTPUT_SFC_VERSION" = "v16" ]; then
+    CHGRES_SCRIPT="run_v16.chgres.sh"
+  elif [ "$gfs_ver" = "v15" ]; then
+    CHGRES_SCRIPT="run_v15.chgres.sh"
+  elif [ "$gfs_ver" = "v14" ]; then
+    CHGRES_SCRIPT="run_v14.chgres.sh"
+  elif [ "$gfs_ver" = "v16retro" ]; then
+    CHGRES_SCRIPT="run_v16retro.chgres.sh"
+  elif [ "$gfs_ver" = "v17" ]; then
+    CHGRES_SCRIPT="run_v17.chgres.sh"
+  fi
+
+  echo "Using CHGRES_SCRIPT=${CHGRES_SCRIPT}"
+
   case $gfs_ver in
     v12 | v13)
       export OMP_NUM_THREADS=4
@@ -153,7 +171,7 @@ if [ $RUN_CHGRES == yes ]; then
       ;;
     v16)
       sbatch --parsable --ntasks-per-node=6 --nodes=${NODES} --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${CDUMP} \
-      -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} run_v16.chgres.sh ${CDUMP}
+      -o log.${CDUMP} -e log.${CDUMP} ${DEPEND} ${CHGRES_SCRIPT} ${CDUMP}
       ;;
   esac
 
@@ -193,7 +211,7 @@ if [ $RUN_CHGRES == yes ]; then
             ;;
           v16)
               sbatch --parsable --ntasks-per-node=12 --nodes=1 --mem=$MEM -t $WALLT -A $PROJECT_CODE -q $QUEUE -J chgres_${MEMBER_CH} \
-              -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} run_v16.chgres.sh ${MEMBER_CH}
+              -o log.${MEMBER_CH} -e log.${MEMBER_CH} ${DEPEND} ${CHGRES_SCRIPT} ${MEMBER_CH}
             ;;
         esac
         MEMBER=$(( $MEMBER + 1 ))
@@ -204,3 +222,4 @@ if [ $RUN_CHGRES == yes ]; then
   fi  # which CDUMP?
 
 fi  # run chgres?
+
