@@ -2,6 +2,12 @@ help([[
 Load environment to compile UFS_UTILS on NIMBUS
 ]])
 
+source_sh("bash", "/opt/intel/oneapi/setvars.sh")
+source_sh("bash", "/opt/intel/oneapi/compiler/2026.1/env/vars.sh")
+source_sh("bash", "/opt/intel/oneapi/mpi/2021.18/env/vars.sh")
+source_sh("bash", "/opt/intel/oneapi/mkl/2026.1/env/vars.sh")
+
+
 append_path("MODULEPATH","/lfs/work/alexander_richert/stack/spack-stack/envs/nco-sci-oneapi-2026.1.0/modules_flat/Core")
 
 cmake_ver=os.getenv("cmake_ver") or "3.31.11"

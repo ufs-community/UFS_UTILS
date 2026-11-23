@@ -30,12 +30,12 @@ fi
 # shellcheck source=../sorc/machine-setup.sh
 source ../sorc/machine-setup.sh
 
-# if [[ "$(hostname)" =~ "WCOSS2" ]]; then
-#   compiler="intel"
-# else
-#   compiler="intelllvm"
-# fi
-# export compiler
+#if [[ "$(hostname)" =~ "WCOSS2" ]]; then
+#  compiler="intel"
+#else
+#  compiler="intelllvm"
+#fi
+#export compiler
 
 # shellcheck source=./rt.control
 RT_DIR=${PWD}
@@ -44,16 +44,16 @@ source "${RT_DIR}/rt.control"
 
 compiler=${COMPILER}
 
-if [[ $MACHINE_ID == "nimbus" ]]; then
-  if [[ ${compiler} == "intelllvm" ]]; then
-    echo "COMPILER IS INTELLLVM"
-    . /opt/intel/oneapi/compiler/2026.1/env/vars.sh
-  elif [[ ${compiler} == "intel" ]]; then
-    echo "COMPILER IS INTEL"
-    . /opt/intel/oneapi/compiler/2023.2.1/env/vars.sh
-  fi
-  . /opt/intel/oneapi/mpi/2021.18/env/vars.sh
-fi
+#if [[ $MACHINE_ID == "nimbus" ]]; then
+#  if [[ ${compiler} == "intelllvm" ]]; then
+#    echo "COMPILER IS INTELLLVM"
+#    . /opt/intel/oneapi/compiler/2026.1/env/vars.sh
+#  elif [[ ${compiler} == "intel" ]]; then
+#    echo "COMPILER IS INTEL"
+#    . /opt/intel/oneapi/compiler/2023.2.1/env/vars.sh
+#  fi
+#  . /opt/intel/oneapi/mpi/2021.18/env/vars.sh
+#fi
 
 mkdir -p "${WORK_DIR}"
 cd "${WORK_DIR}" || { echo "Can't change directory to '${WORK_DIR}'.. exiting"; exit; }
@@ -62,7 +62,7 @@ rm -rf UFS_UTILS
 
 git clone -b "${REPO_BRANCH}" "${REPO_LOC}"
 rc=$?
-
+#
 ### Check to see if the clone was successful.
 ### Previously, it has failed due to lack of disk space.
 
@@ -90,7 +90,6 @@ if [[ -f "${WORK_DIR}/prev_hash.txt" ]]; then
 fi
 
 echo "Started on $(hostname -s)" >> "${WORK_DIR}/reg_test_results.txt"
-
 ./build_all.sh || { echo "ERROR: Failed to build UFS_UTILS"; exit; }
 
 if [[ ${MACHINE_ID} == "wcoss2" ]]; then

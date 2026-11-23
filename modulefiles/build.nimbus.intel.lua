@@ -2,6 +2,11 @@ help([[
 Load environment to compile UFS_UTILS on NIMBUS
 ]])
 
+
+source_sh("bash", "/opt/intel/oneapi/setvars.sh")
+source_sh("bash", "/opt/intel/oneapi/compiler/2023.2.1/env/vars.sh")
+source_sh("bash", "/opt/intel/oneapi/mpi/2021.18/env/vars.sh")
+
 --append_path("MODULEPATH","/lfs/work/alexander_richert/stack/spack/var/spack/environments/nco-sci-intel-2021.10.0-v2/modules_flat/linux-rocky9-x86_64/Core")
 append_path("MODULEPATH","/lfs/work/alexander_richert/stack/spack-stack/envs/nco-sci-intel-2021.10.0/modules_flat/Core")
 
