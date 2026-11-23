@@ -35,6 +35,7 @@ usage_and_exit() {
 }
 
 # Execution starts here.
+source ../scheduler_submit.sh
 
 set -x
 test_name="ocnice_prep"
@@ -80,28 +81,28 @@ case ${MACHINE_ID,,} in
     ursa)
         WLCLK=10
         export NCCMP=nccmp
-        PARTITION='u1-compute'
         ;;
     gaeac6)
         WLCLK=10
         export NCCMP=nccmp
-        PARTITION='batch'
         MEM_GAEA=0
         ;;
     hercules)
         WLCLK=10
         export NCCMP=nccmp
-        PARTITION='hercules'
         ulimit -s unlimited
         ;;
     orion)
         WLCLK=15
         export NCCMP=nccmp
-        PARTITION='orion'
         ulimit -a
         ;;
     wcoss2)
         export APRUN="mpiexec -n 1 -ppn 1 --cpu-bind core"
+        WLCLK=15
+        export NCCMP=nccmp
+        ;;
+    nimbus)
         WLCLK=15
         export NCCMP=nccmp
         ;;
@@ -231,25 +232,26 @@ while read -r line || [ "$line" ]; do
       SLURM_MEM=24g
     fi
 
-    if [[ ${MACHINE_ID} = wcoss2 ]]; then
+    submit_test ${i} 1 1 24G 0:${WLCLK}:00 false ${TEST_NAME} ocnice_prep.sh false
+    # if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
-      tests[$i]=$(qsub -V -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-            -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME ./ocnice_prep.sh)
+    #   tests[$i]=$(qsub -V -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+    #         -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=1:mem=24GB -v RESNAME=$TEST_NAME ./ocnice_prep.sh)
 
-    else
+    # else
 
-      tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 ${slurmflag:+"${slurmflag}"} --mem=${SLURM_MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-                -p $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
+    #   tests[$i]=$(sbatch --parsable --ntasks-per-node=1 --nodes=1 ${slurmflag:+"${slurmflag}"} --mem=${SLURM_MEM} -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+    #             -p $PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./ocnice_prep.sh "$TEST_NAME")
 
-    fi
-    status=$?
-    if [ $status -ne 0 ]; then
-        echo "Error submitting job: $output"
-        exit 1
-    fi
-    tests[$i]=${tests[$i]%.*}
-    tests[$i]=${tests[$i]%%;*}
-    all_tests=${all_tests}":"${tests[$i]%.*}
+    # fi
+    # status=$?
+    # if [ $status -ne 0 ]; then
+    #     echo "Error submitting job: $output"
+    #     exit 1
+    # fi
+    # tests[$i]=${tests[$i]%.*}
+    # tests[$i]=${tests[$i]%%;*}
+    # all_tests=${all_tests}":"${tests[$i]%.*}
 
     ((i=i+1))
 
@@ -262,23 +264,24 @@ if [[ ${MACHINE_ID} = gaeac6 ]]; then
 else
     SLURM_MEM=25m
 fi
-if [[ ${MACHINE_ID} = wcoss2 ]]; then
+submit_test end 1 1 100M 00:01:00 false cpld_gridgen_summary rt.summary.sh "${TEST_IDS[@]}"
+# if [[ ${MACHINE_ID} = wcoss2 ]]; then
 
-  (qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
-        -N summary -l select=1:ncpus=1:mem=100MB \
-        -W depend=afterok${all_tests} ./rt.summary.sh) &
+#   (qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
+#         -N summary -l select=1:ncpus=1:mem=100MB \
+#         -W depend=afterok${all_tests} ./rt.summary.sh) &
 
-else
+# else
 
-  (sbatch --ntasks=1 --mem=${SLURM_MEM} -t 0:01:00 -A $ACCOUNT ${slurmflag:+"${slurmflag}"} -J summary -o /dev/null -e /dev/null \
-       -p $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh) &
+#   (sbatch --ntasks=1 --mem=${SLURM_MEM} -t 0:01:00 -A $ACCOUNT ${slurmflag:+"${slurmflag}"} -J summary -o /dev/null -e /dev/null \
+#        -p $PARTITION --open-mode=append -q $QUEUE -d afterok${all_tests} ./rt.summary.sh) &
 
-fi
-status=$?
-if [ $status -ne 0 ]; then
-    echo "Error submitting job: $output"
-    exit 1
-fi
+# fi
+# status=$?
+# if [ $status -ne 0 ]; then
+#     echo "Error submitting job: $output"
+#     exit 1
+# fi
 sleep_time=0
 echo "Waiting for ${test_name^^} testing to complete..."
 while [ ! -f "summary.log" ]; do

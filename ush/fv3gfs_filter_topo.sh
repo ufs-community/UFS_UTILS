@@ -1,6 +1,16 @@
 #!/bin/bash
 set -eux
 
+run_aprun() {
+  local launcher="$1"
+  shift
+  if [ "$launcher" = time ]; then
+    time "$@"
+  else
+    $launcher "$@"
+  fi
+}
+
 #-----------------------------------------------------------------------------------------
 #
 # Script name: fv3gfs_filter_topo.sh
@@ -68,7 +78,7 @@ cat > input.nml <<EOF
   /
 EOF
 
-$APRUN $executable
+run_aprun "$APRUN" "$executable"
 
 if [ $? -ne 0 ]; then
   set +x

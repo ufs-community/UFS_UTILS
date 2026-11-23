@@ -51,7 +51,18 @@ res=${res:?}
 outdir=${outdir:-$1}
 exec_dir=${exec_dir:?}
 APRUN=${APRUN:-time}
+APRUN_GRID=${APRUN_GRID:-$APRUN}
 nx=`expr $res \* 2 `
+
+run_aprun() {
+  local launcher="$1"
+  shift
+  if [ "$launcher" = time ]; then
+    time "$@"
+  else
+    $launcher "$@"
+  fi
+}
 
 if [ ! -s $outdir ]; then  mkdir -p $outdir ;fi
 cd $outdir
@@ -77,14 +88,14 @@ fi
 
 if [ $gtype = uniform ]; then
   ntiles=6
-  $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid
+  run_aprun "$APRUN_GRID" "$executable" --grid_type gnomonic_ed --nlon "$nx" --grid_name "C${res}_grid"
 elif  [ $gtype = stretch ]; then
   stretch_fac=${stretch_fac:?}
   target_lon=${target_lon:?}
   target_lat=${target_lat:?}
   ntiles=6
-  $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid \
-                     --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} 
+  run_aprun "$APRUN_GRID" "$executable" --grid_type gnomonic_ed --nlon "$nx" --grid_name "C${res}_grid" \
+                     --do_schmidt --stretch_factor "$stretch_fac" --target_lon "$target_lon" --target_lat "$target_lat"
 elif  [ $gtype = nest ] || [ $gtype = regional_gfdl ] ; then
   stretch_fac=${stretch_fac:?}
   target_lon=${target_lon:?}
@@ -100,10 +111,10 @@ elif  [ $gtype = nest ] || [ $gtype = regional_gfdl ] ; then
   else
     ntiles=7
   fi
-  $APRUN $executable --grid_type gnomonic_ed --nlon $nx --grid_name C${res}_grid \
-                     --do_schmidt --stretch_factor ${stretch_fac} --target_lon ${target_lon} --target_lat ${target_lat} \
-                     --nest_grid --parent_tile 6 --refine_ratio $refine_ratio --istart_nest $istart_nest --jstart_nest $jstart_nest \
-                     --iend_nest $iend_nest --jend_nest $jend_nest --halo $halo --great_circle_algorithm
+  run_aprun "$APRUN_GRID" "$executable" --grid_type gnomonic_ed --nlon "$nx" --grid_name "C${res}_grid" \
+                     --do_schmidt --stretch_factor "$stretch_fac" --target_lon "$target_lon" --target_lat "$target_lat" \
+                     --nest_grid --parent_tile 6 --refine_ratio "$refine_ratio" --istart_nest "$istart_nest" --jstart_nest "$jstart_nest" \
+                     --iend_nest "$iend_nest" --jend_nest "$jend_nest" --halo "$halo" --great_circle_algorithm
 
 elif [ $gtype = regional_esg ] ; then
 
@@ -122,7 +133,7 @@ elif [ $gtype = regional_esg ] ; then
     /
 EOF
 
-  $APRUN $executable
+  run_aprun "$APRUN_GRID" "$executable"
 
 fi
 
@@ -154,9 +165,9 @@ if [ $gtype = regional_gfdl ] || [ $gtype = regional_esg ]; then
     exit 1 
   fi
   if [ $gtype = regional_esg ]; then
-    $APRUN $executable  regional_grid.nc
+    run_aprun "$APRUN" "$executable" regional_grid.nc
   elif [ $gtype = regional_gfdl ]; then
-    $APRUN $executable  C${res}_grid.tile7.nc
+    run_aprun "$APRUN" "$executable" "C${res}_grid.tile7.nc"
   fi
   if [ $? -ne 0 ]; then
     set +x
@@ -193,31 +204,31 @@ fi
 
 if [ $gtype = uniform ] || [ $gtype = stretch ] ; then
 
-  $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file \
-     C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc
+  run_aprun "$APRUN" "$executable" --num_tiles "$ntiles" --dir "$outdir" --mosaic "C${res}_mosaic" --tile_file \
+     "C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc"
 
 elif [ $gtype = nest ]; then
 
-  $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file \
-     C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc,C${res}_grid.tile7.nc    
+  run_aprun "$APRUN" "$executable" --num_tiles "$ntiles" --dir "$outdir" --mosaic "C${res}_mosaic" --tile_file \
+     "C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc,C${res}_grid.tile7.nc"
 
-  $APRUN $executable --num_tiles 6 --dir $outdir --mosaic C${res}_coarse_mosaic --tile_file \
-     C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc
+  run_aprun "$APRUN" "$executable" --num_tiles 6 --dir "$outdir" --mosaic "C${res}_coarse_mosaic" --tile_file \
+     "C${res}_grid.tile1.nc,C${res}_grid.tile2.nc,C${res}_grid.tile3.nc,C${res}_grid.tile4.nc,C${res}_grid.tile5.nc,C${res}_grid.tile6.nc"
 
-  $APRUN $executable --num_tiles 1 --dir $outdir --mosaic C${res}_nested_mosaic --tile_file C${res}_grid.tile7.nc 
+  run_aprun "$APRUN" "$executable" --num_tiles 1 --dir "$outdir" --mosaic "C${res}_nested_mosaic" --tile_file "C${res}_grid.tile7.nc"
 
 elif [ $gtype = regional_gfdl ];then
 
   res_save=$res
   get_res C${res}_grid.tile7.nc
   mv C${res_save}_grid.tile7.nc  C${res}_grid.tile7.nc
-  $APRUN $executable --num_tiles $ntiles --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
+  run_aprun "$APRUN" "$executable" --num_tiles "$ntiles" --dir "$outdir" --mosaic "C${res}_mosaic" --tile_file "C${res}_grid.tile7.nc"
 
 elif [ $gtype = regional_esg ]; then
 
   get_res regional_grid.nc
   mv regional_grid.nc C${res}_grid.tile7.nc
-  $APRUN $executable --num_tiles 1 --dir $outdir --mosaic C${res}_mosaic --tile_file C${res}_grid.tile7.nc
+  run_aprun "$APRUN" "$executable" --num_tiles 1 --dir "$outdir" --mosaic "C${res}_mosaic" --tile_file "C${res}_grid.tile7.nc"
 
 fi
 

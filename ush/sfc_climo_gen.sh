@@ -35,6 +35,16 @@
 
 set -eux
 
+run_aprun() {
+  local launcher="$1"
+  shift
+  if [ "$launcher" = time ]; then
+    time "$@"
+  else
+    $launcher "$@"
+  fi
+}
+
 res=${res:-96}
 WORK_DIR=${WORK_DIR:-/scratch3/NCEPDEV/stmp1/$LOGNAME/sfc_climo_gen.C${res}}
 SAVE_DIR=${SAVE_DIR:-$WORK_DIR}
@@ -97,7 +107,7 @@ EOF
 
 
 APRUN_SFC=${APRUN_SFC:-"aprun -j 1 -n 6 -N 6"}
-$APRUN_SFC $exec_dir/sfc_climo_gen
+run_aprun "$APRUN_SFC" "$exec_dir/sfc_climo_gen"
 
 rc=$?
 

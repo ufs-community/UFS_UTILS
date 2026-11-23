@@ -31,6 +31,8 @@ usage_and_exit() {
     exit $1
 }
 
+source ../scheduler_submit.sh
+
 readonly program=$(basename $0)
 
 RT_DIR=${RT_DIR:-${PWD}/..}
@@ -65,34 +67,39 @@ test_name=cpld_gridgen
 STMP=${WORK_DIR:-?}
 export BASELINE_ROOT=${HOMEreg}/${test_name}/baseline_data
 export NCCMP=nccmp
-ACCOUNT=${PROJECT_CODE:?}
+ACCOUNT=${PROJECT_CODE:-}
 
 case ${MACHINE_ID} in
   orion)
     export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
     WLCLK=120
-    PARTITION=orion
+    #PARTITION=orion
     ;;
   hercules)
     export MOM6_FIXDIR=/work/noaa/global/glopara/fix/mom6/${MOM6_version}
     WLCLK=120
-    PARTITION=hercules
+    #PARTITION=hercules
     ;;
   ursa)
     export MOM6_FIXDIR=/scratch3/NCEPDEV/global/role.glopara/fix/mom6/${MOM6_version}
     WLCLK=40
-    PARTITION=u1-compute
+    #PARTITION=u1-compute
     ;;
   gaeac6)
     export MOM6_FIXDIR=/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix/mom6/${MOM6_version}
     WLCLK=40
-    PARTITION=batch
+    #PARTITION=batch
     ;;
   wcoss2)
     export APRUN="mpiexec -n 12 -ppn 12 --cpu-bind core"
     export MOM6_FIXDIR=/lfs/h2/emc/global/noscrub/emc.global/FIX/fix/mom6/${MOM6_version}
     WLCLK=60
-    PARTITION=dev
+    #PARTITION=dev
+    ;;
+  nimbus)
+    export MOM6_FIXDIR=/home/${LOGNAME}/ufs_utils/fix/mom6/${MOM6_version}
+    WLCLK=60
+    #PARTITION=compute
     ;;
   *)
     error "Unknown machine ${MACHINE_ID}"
@@ -165,8 +172,13 @@ all_tests=""
 rm -f fail_test* nccmp_*.log summary.log run_*log RegressionTests_${MACHINE_ID,,}.$compiler.*.log
 
 # Kick off all tests.
+if [[ ${MACHINE_ID} = gaeac6 ]]; then
+  slurmflag=${"c6":-false}
+else
+  slurmflag=false
+fi
 
-i=0
+i=1
 while read -r line || [ "$line" ]; do
 
   line="${line#"${line%%[![:space:]]*}"}"
@@ -197,26 +209,27 @@ while read -r line || [ "$line" ]; do
   cp $PATHRT/parm/grid.nml.IN $RUNDIR
   cp $PATHTR/exec/cpld_gridgen $RUNDIR
 
-  if [[ ${MACHINE_ID} = gaeac6 ]]; then
-    slurmflag="--clusters=c6"
-  fi
+  RESNAME=${TEST_NAME}
+  export RESNAME ATMLIST
+  submit_test ${i} ${NTASKS} 1 100G 0:${WLCLK}:00 false ${TEST_NAME} cpld_gridgen.sh false
+#   if [[ $MACHINE_ID = wcoss2 ]]; then
+    
+    
+#     tests[$i]=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
+#        -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=${NTASKS} -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
 
-  if [[ $MACHINE_ID = wcoss2 ]]; then
-    tests[$i]=$(qsub -V -o $PATHRT/run_${TEST_NAME}.log -e $PATHRT/run_${TEST_NAME}.log -q $QUEUE  -A $ACCOUNT \
-       -l walltime=00:${WLCLK}:00 -N $TEST_NAME -l select=1:ncpus=${NTASKS} -v RESNAME=$TEST_NAME,ATMLIST="'$ATMLIST'" ./cpld_gridgen.sh)
-
-  else
-    tests[$i]=$(sbatch --parsable --ntasks-per-node=${NTASKS} ${slurmflag:+"${slurmflag}"} --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
-            --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
-  fi
-  status=$?
-  if [ $status -ne 0 ]; then
-      echo "Error submitting job: $output"
-      exit 1
-  fi
-  tests[$i]=${tests[$i]%.*}
-  tests[$i]=${tests[$i]%%;*}
-  all_tests=${all_tests}":"${tests[$i]%.*}
+#   else
+#     tests[$i]=$(sbatch --parsable --ntasks-per-node=${NTASKS} ${slurmflag:+"${slurmflag}"} --nodes=1 -t 00:${WLCLK}:00 -A $ACCOUNT -q $QUEUE -J $TEST_NAME \
+#             --partition=$PARTITION -o run_${TEST_NAME}.log -e run_${TEST_NAME}.log ./cpld_gridgen.sh "$TEST_NAME" "$ATMLIST")
+#   fi
+#   status=$?
+#   if [ $status -ne 0 ]; then
+#       echo "Error submitting job: $output"
+#       exit 1
+#   fi
+#   tests[$i]=${tests[$i]%.*}
+#   tests[$i]=${tests[$i]%%;*}
+#   all_tests=${all_tests}":"${tests[$i]%.*}
 
   ((i=i+1))
 
@@ -224,22 +237,25 @@ done < ./rt.conf
 
 # Once all the jobs are finished, this summary job will run.
 
-if [[ $MACHINE_ID = wcoss2 ]]; then
+submit_test end 1 1 100M 00:01:00 false cpld_gridgen_summary rt.summary.sh "${TEST_IDS[@]}"
 
-  (qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
-        -N summary -l select=1:ncpus=1:mem=100MB \
-        -W depend=afterany${all_tests} ./rt.summary.sh) &
-else
 
-  (sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT ${slurmflag:+"${slurmflag}"} -J summary -o /dev/null -e /dev/null \
-       --partition=$PARTITION --open-mode=append -q $QUEUE -d afterany${all_tests} ./rt.summary.sh) &
+# if [[ $MACHINE_ID = wcoss2 ]]; then
 
-fi
-status=$?
-if [ $status -ne 0 ]; then
-    echo "Error submitting summary job: $output"
-    exit 1
-fi
+#   (qsub -V -o /dev/null -e /dev/null -q $QUEUE -A $ACCOUNT -l walltime=00:01:00 \
+#         -N summary -l select=1:ncpus=1:mem=100MB \
+#         -W depend=afterany${all_tests} ./rt.summary.sh) &
+# else
+
+#   (sbatch --nodes=1 -t 0:01:00 -A $ACCOUNT ${slurmflag:+"${slurmflag}"} -J summary -o /dev/null -e /dev/null \
+#        --partition=$PARTITION --open-mode=append -q $QUEUE -d afterany${all_tests} ./rt.summary.sh) &
+
+# fi
+# status=$?
+# if [ $status -ne 0 ]; then
+#     echo "Error submitting summary job: $output"
+#     exit 1
+# fi
 sleep_time=0
 echo "Waiting for ${test_name^^} tests to complete..."
 while [ ! -f "summary.log" ]; do

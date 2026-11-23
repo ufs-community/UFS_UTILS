@@ -5,6 +5,7 @@
 #
 #
 # George Gayno
+# Brian Curtis
 
 set -eux
 
@@ -73,7 +74,7 @@ cmake ${CMAKE_FLAGS} ${CMAKE_OPTS} "${DIR_ROOT}"
 make -j "${BUILD_JOBS:-8}" VERBOSE="${BUILD_VERBOSE:-}"
 make install
 
-#ctest
+ctest
 #ctest -I 4,5
 
 exit 0

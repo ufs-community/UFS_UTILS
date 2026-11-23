@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+# Arguments:
+#
+#   $1  - Number of MPI Tasks
+#   $2+ - Executable and its arguments
+#
+
+PARTITION=compute
+#QOS=debug
+
+NP=$1
+shift
+
+# srun -A $ACCOUNT -q $QOS -t 0:01 -n $NP $@
+srun --mpi=pmi2 --partition=$PARTITION -t 0:01 -n $NP $@

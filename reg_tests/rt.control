@@ -20,6 +20,8 @@ case ${MACHINE_ID,,} in
         QUEUE="batch"
         SCHEDULER="slurm"
         COMPILER="intelllvm"
+        PARTITION="hercules"
+        APRUN_ADDITIONS=""
         ;;
     orion)
         WORK_DIR="/work/noaa/stmp/${LOGNAME}/ufs_utils"
@@ -28,6 +30,8 @@ case ${MACHINE_ID,,} in
         QUEUE="batch"
         SCHEDULER="slurm"
         COMPILER="intelllvm"
+        PARTITION="orion"
+        APRUN_ADDITIONS=""
         ;;
     ursa)
         WORK_DIR="/scratch4/NCEPDEV/stmp/${LOGNAME}/ufs_utils"
@@ -36,6 +40,8 @@ case ${MACHINE_ID,,} in
         QUEUE="batch"
         SCHEDULER="slurm"
         COMPILER="intelllvm"
+        PARTITION="u1-compute"
+        APRUN_ADDITIONS=""
         ;;
     gaeac6)
         WORK_DIR="/gpfs/f6/infra-cpu/scratch/${LOGNAME}/ufs_utils"
@@ -44,6 +50,9 @@ case ${MACHINE_ID,,} in
         QUEUE="normal"
         SCHEDULER="slurm"
         COMPILER="intelllvm"
+        PARTITION="c6"
+        SLURM_CLUSTER="c6"
+        APRUN_ADDITIONS=""
         ;;
     wcoss2)
         WORK_DIR="/lfs/h2/emc/stmp/${LOGNAME}/ufs_utils"
@@ -52,6 +61,43 @@ case ${MACHINE_ID,,} in
         QUEUE="dev"
         SCHEDULER="pbs"
         COMPILER="intel"
+        PARTITION="dev"
+        APRUN_ADDITIONS=""
+        ;;
+    nimbus)
+        WORK_DIR="/home/${LOGNAME}/ufs_utils"
+        HOMEreg="/home/${LOGNAME}/ufs_utils/reg_tests"
+        PROJECT_CODE=""
+        QUEUE=""
+        SCHEDULER="slurm"
+        COMPILER="intelllvm"
+        PARTITION="compute"
+        APRUN_ADDITIONS="--mpi=pmi2"
+
+        if [[ ${COMPILER} == "intelllvm" ]]; then
+            # module load pmix/5.0.11
+
+            export I_MPI_HYDRA_IFACE=rdma0
+            export FI_OFI_RXM_USE_ENV_ANY=1
+            export FI_TCP_IFACE=rdma0
+            export FI_VERBS_IFACE=rdma0
+
+            export FI_PROVIDER="verbs;ofi_rxm"
+
+            export FI_VERBS_INLINE_SIZE=39
+            export FI_OFI_RXM_BUFFER_SIZE=4096
+            # export FI_UNIVERSE_SIZE=$SLURM_NTASKS
+            export FI_OFI_RXM_SAR_LIMIT=2147483648
+
+            export I_MPI_PIN_DOMAIN=numa
+
+            export I_MPI_DEBUG=5
+            
+            # export I_MPI_PMI_LIBRARY=/usr/lib64/libpmi2.so
+            # export I_MPI_OFI_PROVIDER=tcp
+        fi
+
+        
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
@@ -73,7 +119,7 @@ RUN_WEIGHT_GEN="true"
 
 # Where to send mail when job is completed?
 # Please use quotes and put a space between multiple email addresses.
-MAILTO=""
+MAILTO="brian.curtis@noaa.gov"
 
 HOMEUFSUTILS="${RT_DIR}/.."
 export HOMEUFSUTILS
@@ -84,18 +130,21 @@ UPDATE_BASELINE="FALSE"
 ######
 
 ### REPO INFO ###
-REPO_BRANCH="develop"
+# REPO_BRANCH="develop"
+# # REPO_LOC="https://github.com/ufs-community/UFS_UTILS.git"
+# REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+REPO_BRANCH="nimbus"
 # REPO_LOC="https://github.com/ufs-community/UFS_UTILS.git"
-REPO_LOC="git@github.com:ufs-community/UFS_UTILS.git"
+REPO_LOC="git@github.com:BrianCurtis-NOAA/UFS_UTILS.git"
 ######
 
 # Shouldn't need to edit below here #
 
 # shellcheck source=/dev/null
 source "${HOMEUFSUTILS}/sorc/machine-setup.sh" > /dev/null 2>&1
-module use "${HOMEUFSUTILS}/modulefiles"
-module load "build.${MACHINE_ID,,}.${COMPILER}"
-module list
+#module use "${HOMEUFSUTILS}/modulefiles"
+#module load "build.${MACHINE_ID,,}.${COMPILER}"
+#module list
 
 if [ "${MACHINE_ID,,}" == "hercules" ]; then
     ulimit -s unlimited

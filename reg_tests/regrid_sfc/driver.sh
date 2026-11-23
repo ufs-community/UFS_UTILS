@@ -18,66 +18,67 @@
 #-----------------------------------------------------------------------------
 
 set -x
+source ../scheduler_submit.sh
 
-submit_test() {
-    local suffix="$1"; shift
-    local ntasks_per_node="$1"; shift
-    local nodes="$1"; shift
-    local mem="$1"; shift
-    local walltime="$1"; shift
-    local partition="$1"; shift
-    local slurmcluster="$1"; shift
-    local exclusive="$1"; shift
-    local jobname="$1"; shift
-    local script="$1"; shift
-    local waitonjobid="$1"; shift
+# submit_test() {
+#     local suffix="$1"; shift
+#     local ntasks_per_node="$1"; shift
+#     local nodes="$1"; shift
+#     local mem="$1"; shift
+#     local walltime="$1"; shift
+#     local partition="$1"; shift
+#     local slurmcluster="$1"; shift
+#     local exclusive="$1"; shift
+#     local jobname="$1"; shift
+#     local script="$1"; shift
+#     local waitonjobid="$1"; shift
 
-    local logfile="${LOG_FILE}${suffix}"
+#     local logfile="${LOG_FILE}${suffix}"
     
-    export DATA="${DATA_DIR}/test${suffix}"
-    export COMOUT=$DATA
-    export PARTITION="${partition}"
+#     export DATA="${DATA_DIR}/test${suffix}"
+#     export COMOUT=$DATA
+#     export PARTITION="${partition}"
 
-    if [[ "${exclusive}" == "true" ]]; then
-        exclusive_flag="--exclusive"
-    fi
+#     if [[ "${exclusive}" == "true" ]]; then
+#         exclusive_flag="--exclusive"
+#     fi
 
-    if [[ "${slurmcluster}" != "false" ]]; then
-        slurmflag="--clusters=${slurmcluster}"
-    fi
+#     if [[ "${slurmcluster}" != "false" ]]; then
+#         slurmflag="--clusters=${slurmcluster}"
+#     fi
 
-    if [[ "${waitonjobid}" != "false" ]]; then
-        dep_flag_slurm="--dependency=afterok:${waitonjobid}"
-        dep_flag_pbs="-W depend=afterok:${waitonjobid}"
-    fi
+#     if [[ "${waitonjobid}" != "false" ]]; then
+#         dep_flag_slurm="--dependency=afterok:${waitonjobid}"
+#         dep_flag_pbs="-W depend=afterok:${waitonjobid}"
+#     fi
 
-    if [[ "${SCHEDULER}" == "pbs" ]]; then
-        export APRUN_REGRID="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core"
-        jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
-                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
-                ${dep_flag_pbs:+"${dep_flag_pbs}"}"./${script}")
-    elif [[ "${SCHEDULER}" == "slurm" ]]; then
-        export APRUN_REGRID="srun"
-        jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
-               -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
-               ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
-    else
-        echo "Error: Unsupported scheduler '${SCHEDULER}'"
-        exit 1
-    fi
-    status=$?
-    if [ $status -ne 0 ]; then
-        echo "Error submitting job: $output"
-        exit 1
-    fi
-    jobid=${jobid%.*}
-    jobid=${jobid%%;*}
-    if [[ "${jobid}" == "" ]]; then
-        echo "Error submitting job to slurm scheduler"
-        exit 1
-    fi
-    TEST_IDS+=(":${jobid}")
-}
+#     if [[ "${SCHEDULER}" == "pbs" ]]; then
+#         export APRUN_REGRID="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core"
+#         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
+#                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
+#                 ${dep_flag_pbs:+"${dep_flag_pbs}"}"./${script}")
+#     elif [[ "${SCHEDULER}" == "slurm" ]]; then
+#         export APRUN_REGRID="srun"
+#         jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
+#                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
+#                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
+#     else
+#         echo "Error: Unsupported scheduler '${SCHEDULER}'"
+#         exit 1
+#     fi
+#     status=$?
+#     if [ $status -ne 0 ]; then
+#         echo "Error submitting job: $output"
+#         exit 1
+#     fi
+#     jobid=${jobid%.*}
+#     jobid=${jobid%%;*}
+#     if [[ "${jobid}" == "" ]]; then
+#         echo "Error submitting job to slurm scheduler"
+#         exit 1
+#     fi
+#     TEST_IDS+=(":${jobid}")
+# }
 
 test_name="regrid_sfc"
 
@@ -121,19 +122,24 @@ rm -f ${LOG_FILE}* ${SUM_FILE}
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 6 1 10G 0:05:00 hercules false false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     orion)
-        submit_test 01 6 1 10G 0:05:00 orion false false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     ursa)
-        submit_test 01 6 1 10G 0:05:00 u1-compute false false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     gaeac6)
-        submit_test 01 6 1 0 0:05:00 batch c6 false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 0 0:05:00 false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     wcoss2)
-        submit_test 01 6 1 10G 0:05:00 dev false false gauss2fv3incr gauss2fv3incr.sh false
+        submit_test 01 6 1 10G 0:05:00 false gauss2fv3incr gauss2fv3incr.sh false
+        ;;
+    nimbus)
+        export DATA="${DATA_DIR}/test${suffix}"
+        export COMOUT=$DATA
+        submit_test 01 6 1 10G 0:05:00 false gauss2fv3incr gauss2fv3incr.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"
@@ -145,24 +151,28 @@ esac
 if [[ "${MACHINE_ID}" == "wcoss2" ]];then
 
   this_dir=${PWD}
-  (qsub -V -o "${LOG_FILE}" -e "${LOG_FILE}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=00:01:00 \
-        -N summary -l select=1:ncpus=1:mem=100MB -W "depend=afterany${TEST_IDS[*]}" << EOF
+#   (qsub -V -o "${LOG_FILE}" -e "${LOG_FILE}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=00:01:00 \
+#         -N summary -l select=1:ncpus=1:mem=100MB -W "depend=afterany${TEST_IDS[*]}"
+    cat << EOF > tmp_sub.sh
 #!/bin/bash
 cd ${PWD}
 grep -a '<<<' ${LOG_FILE}* | grep -v echo > ./summary.log
 EOF
-  ) &
+#   ) &
   
 else
 
-  (sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" ${slurmflag:+"${slurmflag}"} -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
-       -p "${PARTITION}" --open-mode=append -q "${QUEUE}" -d "afterany${TEST_IDS[*]}" << EOF
+#   (sbatch --nodes=1  -t 0:01:00 -A "${PROJECT_CODE}" ${slurmflag:+"${slurmflag}"} -J summary -o "${LOG_FILE}" -e "${LOG_FILE}" \
+#        -p "${PARTITION}" --open-mode=append -q "${QUEUE}" -d "afterany${TEST_IDS[*]}"
+    cat << EOF > tmp_sub.sh
 #!/bin/bash
 cd ${PWD}
 grep -a '<<<' ${LOG_FILE}* > ./summary.log
 EOF
-  ) &
+#   ) &
 fi
+
+submit_test end 1 1 100M 00:01:00 false summary tmp_sub.sh "${TEST_IDS[@]}"
 
 sleep_time=0
 echo "Waiting for ${test_name^^} testing to complete..."

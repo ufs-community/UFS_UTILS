@@ -18,66 +18,67 @@
 #-----------------------------------------------------------------------------
 
 set -x
+source ../scheduler_submit.sh
 
-submit_test() {
-    local suffix="$1"; shift
-    local ntasks_per_node="$1"; shift
-    local nodes="$1"; shift
-    local mem="$1"; shift
-    local walltime="$1"; shift
-    local partition="$1"; shift
-    local slurmcluster="$1"; shift
-    local exclusive="$1"; shift
-    local jobname="$1"; shift
-    local script="$1"; shift
-    local waitonjobid="$1"; shift
+# submit_test() {
+#     local suffix="$1"; shift
+#     local ntasks_per_node="$1"; shift
+#     local nodes="$1"; shift
+#     local mem="$1"; shift
+#     local walltime="$1"; shift
+#     local partition="$1"; shift
+#     local slurmcluster="$1"; shift
+#     local exclusive="$1"; shift
+#     local jobname="$1"; shift
+#     local script="$1"; shift
+#     local waitonjobid="$1"; shift
 
-    local logfile="${LOG_FILE}${suffix}"
-    export OMP_NUM_THREADS_CY=2
+#     local logfile="${LOG_FILE}${suffix}"
+#     export OMP_NUM_THREADS_CY=2
 
-    if [[ "${exclusive}" == "true" ]]; then
-        exclusive_flag="--exclusive"
-    fi
+#     if [[ "${exclusive}" == "true" ]]; then
+#         exclusive_flag="--exclusive"
+#     fi
 
-    if [[ "${slurmcluster}" != "false" ]]; then
-        slurmflag="--clusters=${slurmcluster}"
-    fi
+#     if [[ "${slurmcluster}" != "false" ]]; then
+#         slurmflag="--clusters=${slurmcluster}"
+#     fi
 
-    if [[ "${waitonjobid}" != "false" ]]; then
-        dep_flag_slurm="--dependency=afterok:${waitonjobid}"
-        dep_flag_pbs="-W depend=afterok:${waitonjobid}"
-    fi
+#     if [[ "${waitonjobid}" != "false" ]]; then
+#         dep_flag_slurm="--dependency=afterok:${waitonjobid}"
+#         dep_flag_pbs="-W depend=afterok:${waitonjobid}"
+#     fi
 
-    export DATA="${DATA_ROOT}/test${suffix}"
+#     export DATA="${DATA_ROOT}/test${suffix}"
 
-    if [[ "${SCHEDULER}" == "pbs" ]]; then
-        export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS_CY}"
-        jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
-                -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
-                ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
-    elif [[ "${SCHEDULER}" == "slurm" ]]; then
-        export APRUNCY="srun"
-        jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
-               -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
-               ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
-    else
-        echo "Error: Unsupported scheduler '${SCHEDULER}'"
-        exit 1
-    fi
-    status=$?
-    if [ $status -ne 0 ]; then
-        echo "Error submitting job: $jobid"
-        exit 1
-    fi
-    jobid=${jobid%.*}
-    jobid=${jobid%%;*}
-    if [[ "${jobid}" == "" ]]; then
-        echo "Error submitting job to slurm scheduler"
-        exit 1
-    fi
-    TEST_IDS+=(":${jobid}")
-    echo ${jobid}
-}
+#     if [[ "${SCHEDULER}" == "pbs" ]]; then
+#         export APRUNCY="mpiexec -n ${ntasks_per_node} -ppn ${ntasks_per_node} --cpu-bind core --depth ${OMP_NUM_THREADS_CY}"
+#         jobid=$(qsub -V -o "${logfile}" -e "${logfile}" -q "${QUEUE}" -A "${PROJECT_CODE}" -l walltime=${walltime} \
+#                 -N "${jobname}" -l select=${nodes}:ncpus=${ntasks_per_node}:ompthreads=1:mem=${mem} \
+#                 ${dep_flag_pbs:+"${dep_flag_pbs}"} "./${script}")
+#     elif [[ "${SCHEDULER}" == "slurm" ]]; then
+#         export APRUNCY="srun"
+#         jobid=$(sbatch --parsable --partition="${partition}" ${slurmflag:+"${slurmflag}"} --ntasks-per-node="${ntasks_per_node}" --nodes="${nodes}" --mem="${mem}" -t "${walltime}" \
+#                -A "${PROJECT_CODE}" -q "${QUEUE}" -J "${jobname}" --open-mode=append ${exclusive_flag:+"${exclusive_flag}"} \
+#                ${dep_flag_slurm:+"${dep_flag_slurm}"} -o "${logfile}" -e "${logfile}" "./${script}")
+#     else
+#         echo "Error: Unsupported scheduler '${SCHEDULER}'"
+#         exit 1
+#     fi
+#     status=$?
+#     if [ $status -ne 0 ]; then
+#         echo "Error submitting job: $jobid"
+#         exit 1
+#     fi
+#     jobid=${jobid%.*}
+#     jobid=${jobid%%;*}
+#     if [[ "${jobid}" == "" ]]; then
+#         echo "Error submitting job to slurm scheduler"
+#         exit 1
+#     fi
+#     TEST_IDS+=(":${jobid}")
+#     echo ${jobid}
+# }
 
 RT_DIR=${RT_DIR:-${PWD}/..}
 
@@ -95,7 +96,11 @@ else
 fi
 
 test_name="weight_gen"
-export DATA="${WORK_DIR}/reg_tests/${test_name}"
+# export DATA="${WORK_DIR}/reg_tests/${test_name}"
+DATA_ROOT="${WORK_DIR:-/scratch4/NCEPDEV/stmp/$LOGNAME}"
+DATA_ROOT="${DATA_ROOT}/reg-tests/${test_name}"
+
+rm -fr $DATA_ROOT
 LOG_FILE=consistency.log
 SUM_FILE=summary.log
 
@@ -106,19 +111,22 @@ export HOMEufs=$PWD/../..
 
 case ${MACHINE_ID,,} in
     hercules)
-        submit_test 01 1 1 5G 0:03:00 hercules false false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 false weight_gen weight_gen.sh false
         ;;
     orion)
-        submit_test 01 1 1 5G 0:03:00 orion false false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 false weight_gen weight_gen.sh false
         ;;
     ursa)
-        submit_test 01 1 1 5G 0:03:00 u1-compute false false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 false weight_gen weight_gen.sh false
         ;;
     gaeac6)
-        submit_test 01 1 1 0 0:03:00 batch c6 false weight_gen weight_gen.sh false
+        submit_test 01 1 1 0 0:03:00 false weight_gen weight_gen.sh false
         ;;
     wcoss2)
-        submit_test 01 1 1 5G 0:03:00 dev false false weight_gen weight_gen.sh false
+        submit_test 01 1 1 5G 0:03:00 false weight_gen weight_gen.sh false
+        ;;
+    nimbus)
+        submit_test 01 1 1 5G 0:03:00 false weight_gen weight_gen.sh false
         ;;
     *)
         echo "Error: Unsupported machine '${MACHINE_ID}'"

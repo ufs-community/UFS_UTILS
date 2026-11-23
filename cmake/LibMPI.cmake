@@ -45,6 +45,10 @@ function (platform_name RETURN_VARIABLE)
 
     set (${RETURN_VARIABLE} "wcoss2" PARENT_SCOPE)
 
+  elseif (SITENAME MATCHES "^wcoss3")
+    
+    set (${RETURN_VARIABLE} "nimbus" PARENT_SCOPE)
+
   # gaea c5
   elseif (SITENAME MATCHES "^gaea51" OR
       SITENAME MATCHES "^gaea52" OR

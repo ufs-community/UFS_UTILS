@@ -6,6 +6,16 @@ echo
 
 set -eux
 
+run_aprun() {
+  local launcher="$1"
+  shift
+  if [ "$launcher" = time ]; then
+    time "$@"
+  else
+    $launcher "$@"
+  fi
+}
+
 outdir=$orog_dir
 indir=$topo
 
@@ -90,13 +100,13 @@ fi
 cutoff=0.75
 rd=7
 if [ $gtype == uniform ]; then
-  $APRUN $exe_inland $res $cutoff $rd g
+  run_aprun "$APRUN" "$exe_inland" "$res" "$cutoff" "$rd" g
 fi
 if [ $gtype == regional_gfdl ]; then
-  $APRUN $exe_inland $res $cutoff $rd r
+  run_aprun "$APRUN" "$exe_inland" "$res" "$cutoff" "$rd" r
 fi
 if [ $gtype == regional_esg ]; then
-  $APRUN $exe_inland $res $cutoff $rd r
+  run_aprun "$APRUN" "$exe_inland" "$res" "$cutoff" "$rd" r
 fi
 err=$?
 if [ $err != 0 ]; then
@@ -110,7 +120,7 @@ fi
 tile=$tile_beg
 while [ $tile -le $tile_end ]; do
   outfile=oro.C${res}.tile${tile}.nc
-  $APRUN $exe_add_lake ${tile} ${res} ${indir} ${lakestatusrc} ${lakedepthsrc} ${lake_cutoff} ${binary_lake}
+  run_aprun "$APRUN" "$exe_add_lake" "$tile" "$res" "$indir" "$lakestatusrc" "$lakedepthsrc" "$lake_cutoff" "$binary_lake"
   err=$?
   if [ $err != 0 ]; then
     set +x

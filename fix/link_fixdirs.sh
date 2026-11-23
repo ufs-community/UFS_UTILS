@@ -9,7 +9,7 @@ set -ex
 #               'nco' (copies data).
 #
 #  $machine - is the machine. Choices are:
-#             'wcoss2', 'ursa', 'orion', 'hercules', 'gaeac6'
+#             'wcoss2', 'ursa', 'orion', 'hercules', 'gaeac6', 'nimbus'
 
 RUN_ENVIR=${1}
 machine=${2}
@@ -17,7 +17,7 @@ machine=${2}
 if [ $# -lt 2 ]; then
     set +x
     echo '***ERROR*** must specify two arguements: (1) RUN_ENVIR, (2) machine'
-    echo ' Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 |  ursa  | orion | hercules | gaeac6 )'
+    echo ' Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 |  ursa  | orion | hercules | gaeac6 | nimbus )'
     exit 1
 fi
 
@@ -28,10 +28,10 @@ if [ $RUN_ENVIR != emc -a $RUN_ENVIR != nco ]; then
     exit 1
 fi
 
-if [ $machine != wcoss2 -a $machine != ursa -a $machine != orion -a $machine != hercules -a $machine != gaeac6 ]; then
+if [ $machine != wcoss2 -a $machine != ursa -a $machine != orion -a $machine != hercules -a $machine != gaeac6 -a $machine != nimbus ]; then
     set +x
     echo '***ERROR*** unsupported machine'
-    echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | ursa | orion | hercules | gaeac6 )'
+    echo 'Syntax: link_fv3gfs.sh ( nco | emc ) ( wcoss2 | ursa | orion | hercules | gaeac6 | nimbus )'
     exit 1
 fi
 
@@ -52,6 +52,8 @@ elif [ $machine = "wcoss2" ]; then
     FIX_DIR="/lfs/h2/emc/global/noscrub/emc.global/FIX/fix"
 elif [ $machine = "gaeac6" ]; then
     FIX_DIR="/gpfs/f6/drsa-precip3/world-shared/role.glopara/fix"
+elif [ $machine = "nimbus" ]; then
+    FIX_DIR="/work/data/fix_test"
 fi
 
 am_ver=${am_ver:-20220805}
