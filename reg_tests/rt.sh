@@ -37,9 +37,9 @@ source ../sorc/machine-setup.sh
 #fi
 #export compiler
 
-# shellcheck source=./rt.control
 RT_DIR=${PWD}
 export RT_DIR
+# shellcheck source=./rt.control
 source "${RT_DIR}/rt.control"
 
 compiler=${COMPILER}
